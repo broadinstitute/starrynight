@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pipecraft"
+version = "0.1.0"
+description = ""
+authors = ["Ankur Kumar <ank@leoank.me>"]
+readme = "README.md"
+packages = [{ include = "pipecraft", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^2.6"
+networkx = "^3.2"
+matplotlib = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
