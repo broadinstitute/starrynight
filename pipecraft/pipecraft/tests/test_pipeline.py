@@ -1,6 +1,7 @@
 from pathlib import Path
-from pipecraft.pipeline import Parallel, Seq, PyFunction
+from pipecraft.pipeline import Parallel, Pipeline, Seq, PyFunction
 from pipecraft.utils import save_pipeline_plot
+from pydantic import BaseModel
 
 
 def get_test_out_path() -> Path:
@@ -124,3 +125,28 @@ def test_seq_par():
     assert len(pipe.pipeline.nodes) == 11
     print(pipe.pipeline.nodes)
     save_pipeline_plot(pipe.pipeline, get_test_out_path().joinpath("test_seq_par"))
+
+
+class PCPImageProcessingPipeline(BaseModel):
+    param1: str
+    param2: int
+    param3: dict
+
+    def gen_pipe(self: "PCPImageProcessingPipeline") -> Pipeline:
+        PCP_1 = Seq(
+            [
+                PyFunction("PCP1", ["in path"], ["out_path"]),
+                PyFunction("Illum", ["in_path"], ["out"]),
+            ]
+        )
+        PCP_2 = Seq([PyFunction("PCP2", ["in path"], ["out_path"])])
+        PCP_3 = Seq([PyFunction("PCP3", ["in path"], ["out_path"])])
+        pipe = Seq([PCP_1, Parallel([PCP_2, PCP_3])])
+        return pipe
+
+
+pcp_pipe = PCPImageProcessingPipeline(
+    param1="param1",
+    param2=1,
+    param3={},
+)
