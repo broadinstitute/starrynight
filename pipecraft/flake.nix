@@ -47,9 +47,14 @@
                   packages = with pkgs; [
                     poetry
                     micromamba
+                  ];
                   enterShell = ''
                     export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
                     eval "$(micromamba shell hook -s bash)"
+                    micromamba create -r .venv -f env.yml
+                    micromamba activate .venv/envs/pipecraft
+                    poetry install -C pipecraft
+                    python -m ipykernel install --user --name pipecraft
                   '';
                 }
               ];
