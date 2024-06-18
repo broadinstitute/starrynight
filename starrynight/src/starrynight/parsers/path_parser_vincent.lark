@@ -1,0 +1,37 @@
+// Lark grammar for parsing asma paths
+
+start: dataset_id sep _root_dir?
+
+_root_dir: batch_id sep? "images"i? sep? _images_root_dir?
+  | "workspace"i sep? workspace_root_dir?
+
+_images_root_dir: plate_id sep? _plate_root_dir?
+_plate_root_dir: _sbs_folder | _cp_folder
+
+_sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id sep? (_sbs_images_type1 | _sbs_metadata)?
+_sbs_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "," channel "," channel "_Seq" site_id "." extension
+_sbs_metadata: leaf_node
+
+_cp_folder: magnification "_CP_" plate_id sep? (_cp_images_type1 | _cp_metadata)?
+_cp_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "_Seq" site_id "." extension
+_cp_metadata: leaf_node
+
+
+workspace_root_dir: string
+dataset_id: string
+sep: "/"
+batch_id: string
+plate_id: string
+magnification: DIGIT~2 "X"
+cycle_id: DIGIT~1..2
+well_id: (LETTER | DIGIT)~2
+site_id: DIGIT~4
+channel: string
+leaf_node: filename "." extension
+filename: stringwithdash
+extension: string
+string: (LETTER | DIGIT)+
+stringwithdash: ( LETTER | DIGIT | "_" | "-" | " " )+
+
+%import common.DIGIT
+%import common.LETTER
