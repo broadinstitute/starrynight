@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "starrynight"
+version = "0.1.0"
+description = ""
+authors = ["Ankur Kumar <ank@leoank.me>"]
+readme = "README.md"
+packages = [{ include = "starrynight", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pipecraft = "*"
+cytoskel = "^0.2.0"
+cpgdata = "*"
+click = "^8"
+numpy = "^1.24"
+cellprofiler-core-nightly = "*"
+cellprofiler-library-nightly = "*"
+Cellprofiler-nightly = "*"
+joblib = "^1.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.24.0"
+
+[tool.poetry.scripts]
+starrynight = "starrynight.cli.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
