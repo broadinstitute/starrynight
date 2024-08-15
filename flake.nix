@@ -1,6 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    # dream2nix.url = "github:nix-community/dream2nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     systems.url = "github:nix-systems/default";
     flake-utils.url = "github:numtide/flake-utils";
@@ -19,15 +20,25 @@
               system = system;
               config.allowUnfree = true;
             };
-            python_with_pkgs = (pkgs.python310.withPackages(pp: [
-              pp.wxPython_4_2
-              pp.pygobject3
-            ]));
           in
           with pkgs;
-        {
+        rec {
+          packages = import ./nix {inherit pkgs;};
+          apps = {
+            cellprofiler = {
+              type = "app";
+              program = "${packages.cellprofiler-nightly}/bin/cellprofiler";
+            };
+          };
           devShells = {
-              default = mkShell {
+              default = let 
+                python_with_pkgs = (pkgs.python311.withPackages(pp: [
+                  # packages.cellprofiler-nightly
+                  # packages.cellprofiler-core-nightly
+                  # packages.cellprofiler-library-nightly
+                  pp.mysqlclient
+                ]));
+              in mkShell {
                     NIX_LD = runCommand "ld.so" {} ''
                         ln -s "$(cat '${pkgs.stdenv.cc}/nix-support/dynamic-linker')" $out
                       '';
@@ -36,27 +47,26 @@
                       stdenv.cc.cc
                       libGL
                       zlib
+                      libxcrypt-legacy
                       libmysqlclient
                       mariadb
                       glib
                     ];
                     packages = [
                       python_with_pkgs
-                      python310Packages.venvShellHook
+                      python3Packages.venvShellHook
                       git
                       gtk3
                       glib
                       pkg-config
-                      poetry
-                      # (mpkgs.awscli2.overrideAttrs (old: {
-                      #   makeWrapperArgs = (old.makeWrapperArgs or []) ++ ["--unset" "PYTHONPATH"];
-                      # }))
-                      # mpkgs.pulumi-bin
+                      uv
                       jdk
                       maven
                       libmysqlclient
                       mariadb
                       duckdb
+                      # nodejs deps
+                      nodejs_22
                     ];
                     venvDir = "./.venv";
                     postVenvCreation = ''
@@ -67,10 +77,10 @@
                       '';
                     shellHook = ''
                         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
+                        export PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring
                         runHook venvShellHook
                         export PYTHONPATH=${python_with_pkgs}/${python_with_pkgs.sitePackages}:$PYTHONPATH
-                        poetry install -C starrynight
-                        python -m ipykernel install --user --name starry
+                        # rye sync --pyproject starrynight/pyproject.toml
                     '';
                   };
               };
