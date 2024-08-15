@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import cellprofiler_core.utilities.java
+import polars as pl
 from cellprofiler.modules.correctilluminationcalculate import (
     EA_ALL_ACROSS,
     FI_MANUALLY,
@@ -19,17 +20,15 @@ from cellprofiler.modules.saveimages import (
     WS_LAST_CYCLE,
     SaveImages,
 )
-from cellprofiler.modules.createbatchfiles import CreateBatchFiles
 from cellprofiler_core.constants.modules.load_data import (
     ABSOLUTE_FOLDER_NAME,
     DEFAULT_OUTPUT_FOLDER_NAME,
     NO_FOLDER_NAME,
 )
-from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.modules.loaddata import LoadData
+from cellprofiler_core.pipeline import Pipeline
 from centrosome.bg_compensate import MODE_AUTO
 from cpgdata.utils import parallel
-import polars as pl
 from tqdm import tqdm
 
 # from starrynight.experiment import PCPGeneric
@@ -179,7 +178,7 @@ def illum_pipe_gen(load_data_path: Path, write_path: Path):
 def run_illum(pipe_paths: list[Path], job_idx: int = 0) -> None:
     for pipe_path in tqdm(pipe_paths, position=job_idx):
         with CellProfilerContext(
-            Path(__file__).parent.joinpath(f"run/illum/{pipe_path.name}"),
+            pipe_paths[0].parents[2].joinpath(f"run/illum/{pipe_path.name}"),
             require_jvm=False,
         ) as cpipe:
             cpipe.load(str(pipe_path.resolve()))

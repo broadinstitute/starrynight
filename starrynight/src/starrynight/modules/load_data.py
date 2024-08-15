@@ -61,7 +61,9 @@ def gen_load_data(index_path: Path, out_path: Path) -> None:
 
 
 if __name__ == "__main__":
+    from starrynight.utils.misc import get_scratch_path
+
     gen_load_data(
-        Path(__file__).parent.joinpath("asma_index.parquet"),
-        Path().joinpath("load_data"),
+        get_scratch_path().joinpath("asma/asma_index.parquet"),
+        get_scratch_path().joinpath("asma/load_data"),
     )

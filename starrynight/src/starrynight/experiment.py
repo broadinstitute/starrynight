@@ -1,10 +1,9 @@
-"""
-Schema for specifying experiment variables and generated outputs.
-"""
+"""Schema for specifying experiment variables and generated outputs."""
 
 from abc import ABC
+from collections.abc import Callable
 from enum import Enum
-from typing import Callable, Optional
+
 from pydantic import BaseModel, Field
 
 from starrynight.schema import MeasuredInventory
@@ -32,8 +31,8 @@ class AcqusitionOrderType(Enum):
 
 class Experiment(BaseModel, ABC):
     dataset_id: str
-    data_production_contact: Optional[str] = None
-    data_processing_contact: Optional[str] = None
+    data_production_contact: str | None = None
+    data_processing_contact: str | None = None
 
 
 class SBSConfig(BaseModel):
