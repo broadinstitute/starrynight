@@ -19,10 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <link rel="icon" href="/broad.svg" sizes="any" />
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased bg-slate-100",
-          inter.variable
-        )}
+        className={cn("min-h-screen font-sans antialiased", inter.variable)}
       >
         {children}
       </body>
