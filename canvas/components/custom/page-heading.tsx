@@ -11,7 +11,9 @@ export function PageHeading(props: TPageHeadingProps) {
 
   return (
     <div className="flex mt-3 flex-col pb-8 md:flex-row md:justify-between md:items-center md:mt-6 md:border-b md:border-b-slate-200">
-      <div className="font-thin text-5xl mb-8 md:mb-0">{heading}</div>
+      <div>
+        <div className="font-thin text-5xl mb-8 md:mb-0">{heading}</div>
+      </div>
       {primaryAction}
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import useSWR from "swr";
 import {
   Dialog,
   DialogContent,
@@ -15,63 +16,63 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { CreateProjectForm } from "./create-project-form";
 import { TCreateProjectFormData } from "@/schema/create-project";
-import { ExclamationTriangleIcon, ReloadIcon } from "@radix-ui/react-icons";
-import { CheckCircle } from "lucide-react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { CheckCircle, Loader2 } from "lucide-react";
+import { createProject, getParserAndProjectType } from "@/services/projects";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { PROJECT_URL } from "@/constants/routes";
 
 const formID = "create-project-form";
 
 export function CreateProject() {
-  const [hasError, setHasError] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isSuccess, setIsSuccess] = React.useState(false);
+  const { push } = useRouter();
+  const { data, isLoading: isLoadingParserAndProjectType } = useSWR(
+    "getParserAndType",
+    getParserAndProjectType,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
 
-  const ref = React.useRef(0);
-
-  const parser = [
-    {
-      label: "Parser 1",
-      value: "p1",
-    },
-    {
-      label: "Parser 2",
-      value: "p2",
-    },
-    {
-      label: "Parser 3",
-      value: "p3",
-    },
-  ];
+  const {
+    isError: hasErrorDuringCreatingProject,
+    isSuccess: hasCreatedProjectSuccessfully,
+    isPending: isSubmittingCreateProjectForm,
+    data: createNewProjectResponse,
+    mutate: createNewProject,
+  } = useMutation({
+    mutationFn: createProject,
+  });
 
   function handleSubmit(data: TCreateProjectFormData) {
-    setHasError(false);
-    setIsSubmitting(false);
-    setIsSuccess(false);
-    console.log("Data", data);
-
-    if (ref.current % 2 === 0) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setIsSuccess(true);
-      }, 1000);
-      ref.current += 1;
-    } else {
-      setHasError(true);
-      ref.current += 1;
-    }
+    createNewProject(data);
   }
+
+  const isErrorLoadingParserAndProjectType = !data || !!data.error;
+  const hasParserAndProjectType = data && data.response;
+
+  React.useEffect(() => {
+    if (createNewProjectResponse) {
+      setTimeout(() => {
+        push(`${PROJECT_URL}/${createNewProjectResponse.id}`);
+      }, 3000);
+    }
+  }, [createNewProjectResponse, push]);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button>Create Project</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-full overflow-auto">
         <DialogHeader>
           <DialogTitle className="mb-2 text-left">
             Create a new project
           </DialogTitle>
-          {hasError && (
+          {hasErrorDuringCreatingProject && (
             <Alert variant="destructive">
               <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertTitle>Error!</AlertTitle>
@@ -81,42 +82,61 @@ export function CreateProject() {
               </AlertDescription>
             </Alert>
           )}
-          {isSuccess && (
+          {hasCreatedProjectSuccessfully && (
             <Alert variant="default">
               <CheckCircle className="h-4 w-4" />
               <AlertTitle>Success!</AlertTitle>
               <AlertDescription>Project created successfully.</AlertDescription>
             </Alert>
           )}
-          <CreateProjectForm
-            parsers={parser}
-            onSubmit={handleSubmit}
-            formID={formID}
-          />
+
+          {isLoadingParserAndProjectType && (
+            <div className="p-8 flex justify-center items-center">
+              <Loader2 className="animate-spin" />
+            </div>
+          )}
+
+          {isErrorLoadingParserAndProjectType && (
+            <div className="py-8">
+              Something went wrong! Please try again later.
+            </div>
+          )}
+
+          {hasParserAndProjectType && (
+            <CreateProjectForm
+              parsers={data.response![0]}
+              type={data.response![1]}
+              onSubmit={handleSubmit}
+              formID={formID}
+              isSubmitting={isSubmittingCreateProjectForm}
+            />
+          )}
         </DialogHeader>
-        <DialogFooter className="sm:justify-start md:justify-between">
-          <DialogClose asChild>
+        {hasParserAndProjectType && (
+          <DialogFooter className="sm:justify-start md:justify-between">
+            <DialogClose asChild>
+              <Button
+                type="button"
+                className="my-1"
+                variant="secondary"
+                disabled={isSubmittingCreateProjectForm}
+              >
+                Close
+              </Button>
+            </DialogClose>
             <Button
-              type="button"
               className="my-1"
-              variant="secondary"
-              disabled={isSubmitting}
+              type="submit"
+              form={formID}
+              disabled={isSubmittingCreateProjectForm}
             >
-              Close
+              {isSubmittingCreateProjectForm && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Create
             </Button>
-          </DialogClose>
-          <Button
-            className="my-1"
-            type="submit"
-            form={formID}
-            disabled={isSubmitting}
-          >
-            {isSubmitting && (
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Create
-          </Button>
-        </DialogFooter>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

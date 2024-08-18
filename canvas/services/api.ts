@@ -1,10 +1,9 @@
 import wretch from "wretch";
 import { retry } from "wretch/middlewares";
 
-// TODO: Update base api url
-const BASE_URL = "/";
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
-export const api = wretch(BASE_URL).middlewares([retry({ maxAttempts: 3 })]);
+export const api = wretch(BASE_URL);
 
 export type TResponse<T = unknown, E = unknown> = {
   ok?: boolean;

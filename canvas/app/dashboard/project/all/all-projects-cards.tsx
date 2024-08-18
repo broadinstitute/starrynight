@@ -3,14 +3,10 @@ import { Card } from "@/components/custom/card";
 import { AllProjectContainer } from "./all-projects-container";
 import { useRouter } from "next/navigation";
 import { PROJECT_URL } from "@/constants/routes";
+import { TProject } from "@/services/projects";
 
 export type TAllProjectsCardsProps = {
-  projects: {
-    id: string;
-    imgSrc: string;
-    title: string;
-    description: string;
-  }[];
+  projects: TProject[];
 };
 
 export function AllProjectsCards(props: TAllProjectsCardsProps) {
@@ -19,15 +15,15 @@ export function AllProjectsCards(props: TAllProjectsCardsProps) {
 
   return (
     <AllProjectContainer>
-      {projects.map(({ id, title, description, imgSrc }) => (
+      {projects.map(({ id, name, description, img_uri }) => (
         <Card
           key={id}
           img={{
-            alt: title,
-            src: imgSrc,
+            alt: name,
+            src: img_uri || "/project-placeholder.webp",
           }}
           description={description}
-          title={title}
+          title={name}
           action={{
             onClick: () => push(`${PROJECT_URL}/${id}`),
           }}

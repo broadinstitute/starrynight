@@ -1,28 +1,22 @@
+import { getProjects } from "@/services/projects";
 import { AllProjectsCards } from "./all-projects-cards";
 import { NoProjects } from "./no-projects";
+import { AllProjectError } from "./all-project-error";
 
 async function fetchProject() {
-  const projects = [
-    {
-      id: "1",
-      description: "This is the description for project 1",
-      title: "Project",
-      imgSrc: "/test.png",
-    },
-  ];
+  const response = await getProjects();
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     ok: true,
-    data: projects,
+    data: response.response,
   };
 }
 
 export async function AllProjects() {
   const response = await fetchProject();
 
-  if (!response.ok) {
-    return <div>Error</div>;
+  if (!response.ok || !Array.isArray(response.data)) {
+    return <AllProjectError />;
   }
 
   if (response.data.length === 0) {

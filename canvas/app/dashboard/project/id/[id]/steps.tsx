@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
-import { StepsMainArea } from "./steps-main-area";
 import { Sidebar } from "@/components/custom/sidebar";
-
-export type TStep = {
-  title: string;
-};
+import { TProjectStep } from "@/services/step";
+import { ProjectStepJobs } from "./jobs";
 
 export type TStepsProps = {
-  steps: TStep[];
+  steps: TProjectStep[];
 };
 
 export function Steps(props: TStepsProps) {
@@ -18,12 +15,14 @@ export function Steps(props: TStepsProps) {
   return (
     <div className="flex flex-col py-4 gap-4 flex-1 md:flex-row md:overflow-auto">
       <Sidebar
+        active={activeStep.id}
         items={steps.map((step) => ({
-          title: step.title,
+          title: step.name,
+          id: step.id,
           onClick: () => setActiveStep(step),
         }))}
       />
-      <StepsMainArea content={activeStep} />
+      <ProjectStepJobs step={activeStep} />
     </div>
   );
 }
