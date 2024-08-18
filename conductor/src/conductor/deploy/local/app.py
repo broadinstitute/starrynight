@@ -5,7 +5,7 @@ from functools import partial
 from fastapi import Depends, FastAPI
 from pydantic import BaseModel
 
-from conductor.database import create_tables, add_db_session_to_req
+from conductor.database import add_db_session_to_req, create_tables
 from conductor.deploy.local.routes import register_routes
 
 

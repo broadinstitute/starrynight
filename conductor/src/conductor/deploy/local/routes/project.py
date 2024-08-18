@@ -2,7 +2,11 @@
 
 from fastapi import APIRouter, Request
 
-from conductor.handlers.project import create_project, fetch_all_projects
+from conductor.handlers.project import (
+    create_project,
+    fetch_all_project_types,
+    fetch_all_projects,
+)
 from conductor.validators.project import Project
 
 project_router = APIRouter(prefix="/project", tags=["project"])
@@ -19,3 +23,9 @@ def post_project(request: Request, project: Project) -> Project:
 def get_project(request: Request, limit: int = 20, offset: int = 0) -> list[Project]:
     """Get project handler."""
     return fetch_all_projects(request.state.db_session, limit, offset)
+
+
+@project_router.get("/type")
+def get_project_type() -> list[str]:
+    """Get project type handler."""
+    return fetch_all_project_types()

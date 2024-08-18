@@ -2,15 +2,16 @@
 
 from pydantic import BaseModel
 
-from conductor.constants import ProjectType
+from conductor.constants import StepType
 
 
-class Project(BaseModel):
-    """Project create schema."""
+class Step(BaseModel):
+    """Step create schema."""
 
     id: int | None = None
+    project_id: int
     name: str
     description: str
-    type: ProjectType
+    type: StepType
 
     model_config: dict = {"from_attributes": True}
