@@ -13,5 +13,6 @@ class Job(BaseModel):
     name: str
     description: str
     type: JobType
+    outputs: dict
 
     model_config: dict = {"from_attributes": True}

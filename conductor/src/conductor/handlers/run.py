@@ -2,7 +2,7 @@
 
 from collections.abc import Callable
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from conductor.models.run import Run
@@ -67,3 +67,31 @@ def fetch_all_runs(
             runs = session.scalars(select(Run).limit(limit).offset(offset)).all()
         runs = [PyRun.model_validate(run) for run in runs]
     return runs
+
+
+def fetch_run_count(db_session: Callable[[], Session], job_id: int | None) -> int:
+    """Fetch step count.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    job_id: int | None
+        Job id to use as filter.
+
+    Returns
+    -------
+    int
+        Run count
+
+    """
+    with db_session() as session:
+        if job_id is not None:
+            count = session.scalar(
+                select(func.count()).select_from(Run).where(Run.job_id == job_id)
+            )
+        else:
+            count = session.scalar(select(func.count()).select_from(Run))
+
+        assert type(count) is int
+    return count

@@ -11,7 +11,7 @@ dependencies = [
   "alembic~=1.13",
   "pydantic~=2.8",
   "pydantic-settings~=2.4",
-  # "starrynight @ file:///${PROJECT_ROOT}/../starrynight",
+  "starrynight @ file:///${PROJECT_ROOT}/../starrynight",
   "joblib~=1.3",
 ]
 

@@ -3,6 +3,7 @@
 from functools import partial
 
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from conductor.database import add_db_session_to_req, create_tables
@@ -40,6 +41,14 @@ def create_app(app_config: AppConfig) -> FastAPI:
     app = FastAPI(
         title=app_config.name,
         dependencies=[Depends(partial(add_db_session_to_req, app_config.db_uri))],
+    )
+    origins = ["*"]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     register_routes(app)
     create_tables(db_uri=app_config.db_uri)

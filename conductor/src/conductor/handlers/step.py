@@ -2,7 +2,7 @@
 
 from collections.abc import Callable
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from conductor.constants import ProjectType, StepType
@@ -72,6 +72,36 @@ def fetch_all_steps(
             steps = session.scalars(select(Step).limit(limit).offset(offset)).all()
         steps = [PyStep.model_validate(step) for step in steps]
     return steps
+
+
+def fetch_step_count(db_session: Callable[[], Session], project_id: int | None) -> int:
+    """Fetch step count.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    project_id: int | None
+        Project id to use as filter.
+
+    Returns
+    -------
+    int
+        Step count
+
+    """
+    with db_session() as session:
+        if project_id is not None:
+            count = session.scalar(
+                select(func.count())
+                .select_from(Step)
+                .where(Step.project_id == project_id)
+            )
+        else:
+            count = session.scalar(select(func.count()).select_from(Step))
+
+        assert type(count) is int
+    return count
 
 
 def create_steps_for_project(project_type: ProjectType) -> list[Step]:
@@ -163,3 +193,16 @@ def create_steps_for_project(project_type: ProjectType) -> list[Step]:
             )
         )
     return orm_steps
+
+
+def fetch_all_step_types() -> list[str]:
+    """Fetch all step types.
+
+    Returns
+    -------
+    list[str]
+        List of step types.
+
+    """
+    step_types = [pt.value for pt in StepType]
+    return step_types

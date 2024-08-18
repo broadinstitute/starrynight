@@ -1,13 +1,22 @@
 """Job route handlers."""
 
 from collections.abc import Callable
+from datetime import datetime
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from conductor.constants import JobType, StepType
+from conductor.constants import (
+    JobType,
+    RunStatus,
+    StepType,
+    job_desc_dict,
+    job_output_dict,
+)
 from conductor.models.job import Job
+from conductor.models.run import Run
 from conductor.validators.job import Job as PyJob
+from conductor.validators.run import Run as PyRun
 
 
 def create_job(db_session: Callable[[], Session], job: PyJob) -> PyJob:
@@ -70,6 +79,57 @@ def fetch_all_jobs(
     return jobs
 
 
+def fetch_job_count(db_session: Callable[[], Session], step_id: int | None) -> int:
+    """Fetch step count.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    step_id: int | None
+        Step id to use as filter.
+
+    Returns
+    -------
+    int
+        Job count
+
+    """
+    with db_session() as session:
+        if step_id is not None:
+            count = session.scalar(
+                select(func.count()).select_from(Job).where(Job.step_id == step_id)
+            )
+        else:
+            count = session.scalar(select(func.count()).select_from(Job))
+
+        assert type(count) is int
+    return count
+
+
+def gen_orm_job(job_type: JobType) -> Job:
+    """Create loadData job.
+
+    Parameters
+    ----------
+    job_type : JobType
+        Job type instance.
+
+    Returns
+    -------
+    Job
+        Job instance.
+
+    """
+    job = Job(
+        name=job_type.value,
+        type=job_type,
+        description=job_desc_dict[job_type],
+        outputs=job_output_dict[job_type],
+    )
+    return job
+
+
 def create_jobs_for_step(step_type: StepType) -> list[Job]:
     """Create predefined jobs for the step.
 
@@ -86,102 +146,75 @@ def create_jobs_for_step(step_type: StepType) -> list[Job]:
     """
     orm_jobs = []
     if step_type is StepType.CP_ILLUM_CALC:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.CP_ILLUM_APPLY:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.CP_SEG_CHECK:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.CP_ST_CROP:
-        orm_jobs.append(
-            Job(name=JobType.GEN_FIJI.value, type=JobType.GEN_FIJI, description="")
-        )
-    if step_type is StepType.BC_ILLUM_CALC:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.BC_ILLUM_APPLY_ALIGN:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.BC_PRE:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
-    if step_type is StepType.BC_ST_CROP:
-        orm_jobs.append(
-            Job(name=JobType.GEN_FIJI.value, type=JobType.GEN_FIJI, description="")
-        )
-    if step_type is StepType.ANALYSIS:
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_LOADDATA.value,
-                type=JobType.GEN_LOADDATA,
-                description="",
-            )
-        )
-        orm_jobs.append(
-            Job(
-                name=JobType.GEN_CP_PIPE.value, type=JobType.GEN_CP_PIPE, description=""
-            )
-        )
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.CP_ILLUM_APPLY:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.CP_SEG_CHECK:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.CP_ST_CROP:
+        orm_jobs.append(gen_orm_job(JobType.GEN_FIJI))
+    elif step_type is StepType.BC_ILLUM_CALC:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.BC_ILLUM_APPLY_ALIGN:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.BC_PRE:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+    elif step_type is StepType.BC_ST_CROP:
+        orm_jobs.append(gen_orm_job(JobType.GEN_FIJI))
+    elif step_type is StepType.ANALYSIS:
+        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
+        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
     return orm_jobs
+
+
+def fetch_all_job_types() -> list[str]:
+    """Fetch all job types.
+
+    Returns
+    -------
+    list[str]
+        List of job types.
+
+    """
+    job_types = [pt.value for pt in JobType]
+    return job_types
+
+
+def execute_job(db_session: Callable[[], Session], job_id: int) -> PyRun:
+    """Execute job.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    job_id : int
+        ID of the job to execute.
+
+    Returns
+    -------
+    PyRun
+        Instance of PyRun
+
+    """
+    with db_session() as session:
+        job = session.scalar(select(Job).where(Job.id == job_id))
+        assert type(job) is Job
+        step = job.step
+        project = step.project
+
+        orm_object = Run(
+            job_id=job_id,
+            name=f"{project.name}-{step.name}-{job.name}-{datetime.now()}",
+            status=RunStatus.PENDING,
+        )
+
+        session.add(orm_object)
+        session.commit()
+        run = PyRun.model_validate(orm_object)
+    return run
