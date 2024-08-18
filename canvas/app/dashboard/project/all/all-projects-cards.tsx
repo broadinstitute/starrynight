@@ -1,5 +1,5 @@
 "use client";
-import { Card } from "@/app/_components/card";
+import { Card } from "@/components/custom/card";
 import { AllProjectContainer } from "./all-projects-container";
 
 export type TAllProjectsCardsProps = {
