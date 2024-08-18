@@ -2,17 +2,14 @@ import { AllProjectsCards } from "./all-projects-cards";
 import { NoProjects } from "./no-projects";
 
 async function fetchProject() {
-  const projects =
-    Date.now() % 2
-      ? [
-          {
-            id: "1",
-            description: "This is the description for project 1",
-            title: "Project",
-            imgSrc: "/test.png",
-          },
-        ]
-      : [];
+  const projects = [
+    {
+      id: "1",
+      description: "This is the description for project 1",
+      title: "Project",
+      imgSrc: "/test.png",
+    },
+  ];
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return {

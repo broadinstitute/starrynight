@@ -27,21 +27,6 @@ export function CreateProject() {
 
   const ref = React.useRef(0);
 
-  const datasets = [
-    {
-      label: "Dataset 1",
-      value: "d1",
-    },
-    {
-      label: "Dataset 2",
-      value: "d2",
-    },
-    {
-      label: "Dataset 3",
-      value: "d3",
-    },
-  ];
-
   const parser = [
     {
       label: "Parser 1",
@@ -104,7 +89,6 @@ export function CreateProject() {
             </Alert>
           )}
           <CreateProjectForm
-            datasets={datasets}
             parsers={parser}
             onSubmit={handleSubmit}
             formID={formID}

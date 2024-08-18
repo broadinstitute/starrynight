@@ -1,6 +1,8 @@
 "use client";
 import { Card } from "@/components/custom/card";
 import { AllProjectContainer } from "./all-projects-container";
+import { useRouter } from "next/navigation";
+import { PROJECT_URL } from "@/constants/routes";
 
 export type TAllProjectsCardsProps = {
   projects: {
@@ -13,6 +15,7 @@ export type TAllProjectsCardsProps = {
 
 export function AllProjectsCards(props: TAllProjectsCardsProps) {
   const { projects } = props;
+  const { push } = useRouter();
 
   return (
     <AllProjectContainer>
@@ -26,7 +29,7 @@ export function AllProjectsCards(props: TAllProjectsCardsProps) {
           description={description}
           title={title}
           action={{
-            onClick: () => console.log("Opening project" + id),
+            onClick: () => push(`${PROJECT_URL}/${id}`),
           }}
         />
       ))}

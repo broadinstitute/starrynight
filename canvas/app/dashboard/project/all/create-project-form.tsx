@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import {
   TCreateProjectFormData,
   createProjectSchema,
@@ -34,11 +35,10 @@ export type TCreateProjectFormProps = {
   formID: string;
   onSubmit: (data: TCreateProjectFormData) => void;
   parsers: TSelectObject[];
-  datasets: TSelectObject[];
 };
 
 export function CreateProjectForm(props: TCreateProjectFormProps) {
-  const { formID, datasets, parsers, onSubmit } = props;
+  const { formID, parsers, onSubmit } = props;
 
   const createProjectForm = useForm<TCreateProjectFormData>({
     resolver: zodResolver(createProjectSchema),
@@ -58,24 +58,10 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
             <FormItem>
               <FormLabel>Dataset</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Dataset" />
-                  </SelectTrigger>
-                  <SelectContent onBlur={field.onBlur}>
-                    {datasets.map(({ value, label }) => (
-                      <SelectItem key={value} value={value}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Input {...field} placeholder="Dataset" />
               </FormControl>
               <FormDescription>
-                The dataset to use to build the project.
+                S3 bucket URL that contains the dataset.
               </FormDescription>
               <FormMessage />
             </FormItem>
