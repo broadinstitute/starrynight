@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { TProjectStepJob } from "@/services/job";
 import { ProjectStepJobRun } from "./run";
+import React from "react";
 
 export type TProjectStepJobProps = {
   job: TProjectStepJob;

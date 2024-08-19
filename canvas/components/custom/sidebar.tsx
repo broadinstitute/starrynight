@@ -26,7 +26,7 @@ export function Sidebar(props: TSidebarProps) {
           {items.map(({ id, onClick, title }) => (
             <li key={id}>
               <Button
-                variant={active === id ? "default" : "ghost"}
+                variant={active === id ? "secondary" : "ghost"}
                 className={cn(
                   "w-full inline text-left text-ellipsis truncate overflow-hidden",
                   active === id ? "pointer-events-none" : ""

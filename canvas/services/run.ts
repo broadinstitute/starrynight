@@ -4,6 +4,7 @@ export type TProjectStepJobRun = {
   id: string | number;
   job_id: string | number;
   name: string;
+  run_status: "pending" | "running" | "success" | "failed";
 };
 
 export type TGetStepJobsRunOptions = {

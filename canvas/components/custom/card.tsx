@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 export type TCardProps = {
   img: {
@@ -18,13 +19,25 @@ export function Card(props: TCardProps) {
   return (
     <div className="w-[250px]" {...rest}>
       <div className="rounded-md overflow-hidden">
-        <Image
-          className="object-cover object-center h-40"
-          height={80}
-          width={250}
-          src={img.src}
-          alt={img.alt}
-        />
+        <ErrorBoundary
+          errorComponent={() => (
+            <Image
+              className="object-cover object-center h-40"
+              height={80}
+              width={250}
+              src="/project-placeholder.webp"
+              alt="Project"
+            />
+          )}
+        >
+          <Image
+            className="object-cover object-center h-40"
+            height={80}
+            width={250}
+            src={img.src}
+            alt={img.alt}
+          />
+        </ErrorBoundary>
       </div>
       <div className="p-2">
         <span className="font-bold">{title}</span>

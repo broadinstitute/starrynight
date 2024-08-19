@@ -1,12 +1,13 @@
 "use client";
 
-import { PageSpinner } from "@/components/custom/page-spinner";
 import { getJobs } from "@/services/job";
 import { TProjectStep } from "@/services/step";
 import useSWR from "swr";
 import { ProjectError } from "./project-error";
 import { Accordion } from "@/components/ui/accordion";
 import { ProjectStepJob } from "./job";
+import { JobsSkeleton } from "./skeleton/jobs-skeleton";
+import { Button } from "@/components/ui/button";
 
 export type TProjectStepJobProps = {
   step: TProjectStep;
@@ -26,7 +27,7 @@ export function ProjectStepJobs(props: TProjectStepJobProps) {
   );
 
   if (isLoading || !data || !data.response) {
-    return <PageSpinner />;
+    return <JobsSkeleton />;
   }
 
   if (error || !data || !data.response) {
@@ -36,7 +37,15 @@ export function ProjectStepJobs(props: TProjectStepJobProps) {
   return (
     <div className="flex flex-col flex-1 overflow-auto">
       <h4 className="font-bold text-2xl">{step.name}</h4>
-
+      <div className="py-4">
+        <p>
+          This step includes {data.response.length} job(s). You can run each job
+          individually or use the &quot;Execute Step&quot; button to run all
+          jobs at once.
+        </p>
+        <br />
+        <Button size="sm">Execute Step</Button>
+      </div>
       <div className="mt-4">
         <Accordion type="single" collapsible>
           {data.response.map((job) => (

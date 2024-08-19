@@ -3,12 +3,13 @@
 import { PageSpinner } from "@/components/custom/page-spinner";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { TProjectStepJob } from "@/services/job";
-import { createRun, getRun } from "@/services/run";
+import { executeJob, TProjectStepJob } from "@/services/job";
+import { getRun } from "@/services/run";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import React from "react";
 import useSWR, { mutate } from "swr";
+import { JobBadge } from "./badge";
 
 export type TProjectStepJobRunProps = {
   job: TProjectStepJob;
@@ -16,7 +17,7 @@ export type TProjectStepJobRunProps = {
 
 export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
   const { job } = props;
-  const key = `/run?job_id=${job.id}`;
+  const key = `/job/execute?job_id=${job.id}`;
   const { data, error, isLoading } = useSWR(
     key,
     () => getRun({ job_id: job.id, canThrowOnError: true }),
@@ -24,24 +25,22 @@ export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      refreshInterval: 1000 * 60 * 2,
+      refreshInterval: 1000 * 30,
     }
   );
 
   const {
-    mutate: createNewRun,
+    mutate: executeJobMutation,
     isPending: isSubmittingJob,
     isSuccess: isSubmittedSuccessfully,
     error: isFailedToExecute,
   } = useMutation({
-    mutationFn: createRun,
+    mutationFn: executeJob,
   });
 
-  function executeJob() {
-    createNewRun({
-      id: 0,
+  function submitJobRequest() {
+    executeJobMutation({
       jobId: job.id,
-      name: job.name,
       canThrowOnError: true,
     });
   }
@@ -72,12 +71,38 @@ export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
     return (
       <div>
         <p className="mb-4">No job is running.</p>
-        <Button disabled={isSubmittingJob} size="sm" onClick={executeJob}>
+        <Button disabled={isSubmittingJob} size="sm" onClick={submitJobRequest}>
           {isSubmittingJob && <Loader2 className="h-3 w-3 animate-spin mr-1" />}
-          Execute a new job
+          Execute new run
         </Button>
       </div>
     );
   }
-  return <div>Job is running.</div>;
+  return (
+    <div>
+      <div className="font-bold mb-4">Jobs:</div>
+
+      {data.response.map((run, idx) => (
+        <div key={run.id}>
+          <div className="space-y-2">
+            <div>Name: {run.name}</div>
+            <div>
+              Status: <JobBadge status={run.run_status} />
+            </div>
+          </div>
+          {idx !== data.response!.length - 1 && <hr className="my-4" />}
+        </div>
+      ))}
+
+      <Button
+        disabled={isSubmittingJob}
+        size="sm"
+        className="mt-4"
+        onClick={submitJobRequest}
+      >
+        {isSubmittingJob && <Loader2 className="h-3 w-3 animate-spin mr-1" />}
+        Execute new run
+      </Button>
+    </div>
+  );
 }

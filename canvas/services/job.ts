@@ -44,3 +44,36 @@ export async function getJobs(
     };
   }
 }
+
+export type TProjectStepJobExecuteResponse = {};
+
+export type TCreateStepJobsExecuteOptions = {
+  canThrowOnError?: boolean;
+  jobId: string | number;
+};
+
+export async function executeJob(
+  options: TCreateStepJobsExecuteOptions
+): Promise<TResponse<TProjectStepJobExecuteResponse>> {
+  const { jobId, canThrowOnError } = options;
+  try {
+    const response = (await api
+      .post({}, `/job/execute?job_id=${jobId}`)
+      .json()) as TProjectStepJobExecuteResponse;
+
+    return {
+      ok: true,
+      response,
+    };
+  } catch (error) {
+    console.error(error);
+
+    if (canThrowOnError) {
+      throw new Error("Error while executing the job");
+    }
+
+    return {
+      error,
+    };
+  }
+}

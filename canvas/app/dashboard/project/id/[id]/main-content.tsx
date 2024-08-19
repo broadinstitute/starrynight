@@ -7,7 +7,7 @@ import { Steps } from "./steps";
 import { TProject } from "@/services/projects";
 import { ProjectError } from "./project-error";
 import { getSteps } from "@/services/step";
-import { PageSpinner } from "@/components/custom/page-spinner";
+import { StepAndJobsSkeleton } from "./skeleton/step-and-jobs-skeleton";
 
 export type TProjectMainContentProps = {
   project: TProject;
@@ -23,7 +23,7 @@ export function ProjectMainContent(props: TProjectMainContentProps) {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      refreshInterval: 1000 * 60 * 2,
+      refreshInterval: 1000 * 60,
     }
   );
 
@@ -37,10 +37,12 @@ export function ProjectMainContent(props: TProjectMainContentProps) {
         ]}
       />
 
-      {!data?.ok && isLoading && <PageSpinner />}
+      {!data?.ok && isLoading && <StepAndJobsSkeleton />}
       {!data?.ok && error && !isLoading && <ProjectError />}
 
-      {data && data.ok && data.response && <Steps steps={data.response} />}
+      {data && data.ok && data.response && (
+        <Steps steps={data.response} projectDescription={project.description} />
+      )}
     </div>
   );
 }
