@@ -1,7 +1,7 @@
 """Job route handlers."""
 
 from collections.abc import Callable
-from datetime import datetime
+from time import time
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -210,8 +210,8 @@ def execute_job(db_session: Callable[[], Session], job_id: int) -> PyRun:
 
         orm_object = Run(
             job_id=job_id,
-            name=f"{project.name}-{step.name}-{job.name}-{datetime.now()}",
-            status=RunStatus.PENDING,
+            name=f"{project.name} | {step.name} | {job.name} | {int(time())}",
+            run_status=RunStatus.PENDING,
         )
 
         session.add(orm_object)

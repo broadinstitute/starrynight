@@ -14,6 +14,6 @@ class Run(BaseSQLModel):
     __tablename__ = "run"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
-    status = mapped_column(Enum(RunStatus), nullable=False)
+    run_status = mapped_column(Enum(RunStatus), nullable=False)
     job_id: Mapped[int] = mapped_column(ForeignKey("job.id"), nullable=False)
     job = relationship("Job", back_populates="runs")

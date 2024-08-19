@@ -5,6 +5,7 @@ from collections.abc import Callable
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from conductor.constants import RunStatus
 from conductor.models.run import Run
 from conductor.validators.run import Run as PyRun
 
@@ -25,7 +26,9 @@ def create_run(db_session: Callable[[], Session], run: PyRun) -> PyRun:
         Created run.
 
     """
-    orm_object = Run(**run.model_dump(exclude={"id"}))
+    orm_object = Run(
+        **run.model_dump(exclude={"id", "run_status"}), run_status=RunStatus.PENDING
+    )
     with db_session() as session:
         session.add(orm_object)
         session.commit()

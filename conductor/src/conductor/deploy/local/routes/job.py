@@ -4,11 +4,13 @@ from fastapi import APIRouter, Request
 
 from conductor.handlers.job import (
     create_job,
+    execute_job,
     fetch_all_job_types,
     fetch_all_jobs,
     fetch_job_count,
 )
 from conductor.validators.job import Job
+from conductor.validators.run import Run
 
 job_router = APIRouter(prefix="/job", tags=["job"])
 
@@ -38,3 +40,9 @@ def get_job_type() -> list[str]:
 def get_job_count(request: Request, step_id: int | None = None) -> int:
     """Get job count handler."""
     return fetch_job_count(request.state.db_session, step_id)
+
+
+@job_router.post("/execute")
+def job_execute(request: Request, job_id: int) -> Run:
+    """Execute job."""
+    return execute_job(request.state.db_session, job_id)
