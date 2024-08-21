@@ -3,7 +3,6 @@
 import { getJobs } from "@/services/job";
 import { TProjectStep } from "@/services/step";
 import useSWR from "swr";
-import { ProjectError } from "./project-error";
 import { Accordion } from "@/components/ui/accordion";
 import { ProjectStepJob } from "./job";
 import { JobsSkeleton } from "./skeleton/jobs-skeleton";
@@ -26,12 +25,12 @@ export function ProjectStepJobs(props: TProjectStepJobProps) {
     }
   );
 
-  if (isLoading || !data || !data.response) {
+  if (isLoading && !data) {
     return <JobsSkeleton />;
   }
 
   if (error || !data || !data.response) {
-    return <ProjectError />;
+    return <div>Failed to load jobs. Try again after sometime.</div>;
   }
 
   return (

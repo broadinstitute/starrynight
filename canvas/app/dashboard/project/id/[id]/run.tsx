@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import React from "react";
 import useSWR, { mutate } from "swr";
 import { JobBadge } from "./badge";
+import { FileViewer } from "@/components/custom/file-viewer";
 
 export type TProjectStepJobRunProps = {
   job: TProjectStepJob;
@@ -89,6 +90,11 @@ export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
             <div>
               Status: <JobBadge status={run.run_status} />
             </div>
+            {run.run_status === "success" && (
+              <div>
+                <FileViewer fileName="s3_file_url.test" />
+              </div>
+            )}
           </div>
           {idx !== data.response!.length - 1 && <hr className="my-4" />}
         </div>
