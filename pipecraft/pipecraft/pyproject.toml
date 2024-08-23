@@ -11,6 +11,9 @@ dependencies = [
   "matplotlib>=3.8,<4.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8.2", "ruff>=0.5", "build>=1.2", "twine>=5.1"]
+
 [build-system]
 # setuptools>=61 supports PEPs 517, 518, 621, 660
 # https://setuptools.pypa.io/en/latest/history.html#v61-0-0
@@ -21,6 +24,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
+ignore = ["ANN101"]
 exclude = ["vendor"]
 per-file-ignores = { "tests/*" = ["D103"] }
 
