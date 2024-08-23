@@ -19,7 +19,7 @@ export function Steps(props: TStepsProps) {
   if (steps.length === 0) {
     return (
       <div className="flex flex-1 justify-center items-center p-4">
-        <p>This project has no steps.</p>
+        <p>No steps to show! Add some steps to  your pipeline.</p>
       </div>
     );
   }
