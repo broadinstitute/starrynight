@@ -1,13 +1,16 @@
+"""Test snakemake backend."""
+
 from pathlib import Path
+
 from pipecraft.backend import SnakeMakeBackend, SnakeMakeConfig
-from pipecraft.pipeline import Seq, PyFunction
+from pipecraft.pipeline import PyFunction, Seq
 
 
 def get_test_out_path() -> Path:
     return Path(__file__).parent.joinpath("out")
 
 
-def test_snake_seq_node():
+def test_snake_seq_node() -> None:
     pipe = Seq(
         [
             PyFunction("A", ["inpath"], ["outpath1"]),

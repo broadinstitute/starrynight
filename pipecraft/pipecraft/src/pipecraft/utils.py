@@ -1,14 +1,14 @@
-"""
-Pipecraft utilities.
-"""
+"""Pipecraft utilities."""
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import networkx as nx
+from matplotlib.figure import Figure
 
 
-def save_pipeline_plot(pipeline: nx.DiGraph, file_path: Path) -> None:
+def save_pipeline_plot(pipeline: nx.DiGraph, file_path: Path | None) -> Figure:
+    """Create a plot of the pipeline."""
     plt.style.use("dark_background")
     fig, axs = plt.subplots()
     nx.draw_networkx(
@@ -20,4 +20,6 @@ def save_pipeline_plot(pipeline: nx.DiGraph, file_path: Path) -> None:
         edge_color="#ffffff",
     )
     axs.axis("off")
-    fig.savefig(file_path)
+    if file_path:
+        fig.savefig(file_path)
+    return fig
