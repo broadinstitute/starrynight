@@ -11,6 +11,7 @@ from conductor.constants import (
     RunStatus,
     StepType,
     job_desc_dict,
+    job_input_dict,
     job_output_dict,
 )
 from conductor.models.job import Job
@@ -126,6 +127,7 @@ def gen_orm_job(job_type: JobType) -> Job:
         type=job_type,
         description=job_desc_dict[job_type],
         outputs=job_output_dict[job_type],
+        inputs=job_input_dict[job_type],
     )
     return job
 

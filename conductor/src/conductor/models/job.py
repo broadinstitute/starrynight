@@ -13,11 +13,12 @@ class Job(BaseSQLModel):
     """Job table."""
 
     __tablename__ = "job"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     description: Mapped[str] = mapped_column()
-    type = mapped_column(Enum(JobType), nullable=False)
+    type = mapped_column(Enum(JobType, create_constraint=True), nullable=False)
     outputs: Mapped[dict] = mapped_column(JSON)
+    inputs: Mapped[dict] = mapped_column(JSON)
     step_id: Mapped[int] = mapped_column(ForeignKey("step.id"), nullable=False)
     step = relationship("Step", back_populates="jobs")
     runs: Mapped[list[Run]] = relationship(back_populates="job")

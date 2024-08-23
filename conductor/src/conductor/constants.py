@@ -104,6 +104,13 @@ job_output_dict = {
     JobType.CUSTOM: {},
 }
 
+job_input_dict = {
+    JobType.GEN_LOADDATA: {},
+    JobType.GEN_CP_PIPE: {},
+    JobType.GEN_FIJI: {},
+    JobType.CUSTOM: {},
+}
+
 
 class RunStatus(Enum):
     """Run status.
