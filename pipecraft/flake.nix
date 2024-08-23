@@ -1,64 +1,61 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
   };
-
-  nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
-  };
-
-  outputs = { self, nixpkgs, devenv, systems, ... } @ inputs:
-    let
-      forEachSystem = nixpkgs.lib.genAttrs (import systems);
-    in
-    {
-      packages = forEachSystem (system: {
-        devenv-up = self.devShells.${system}.default.config.procfileScript;
-      });
-
-      devShells = forEachSystem
-        (system:
-          let
+  outputs = { self, nixpkgs, flake-utils, systems, ... } @ inputs:
+      flake-utils.lib.eachDefaultSystem (system:
+        let
             pkgs = import nixpkgs {
               system = system;
               config.allowUnfree = true;
             };
 
-            mpkgs = import inputs.nixpkgs_master {
-              system = system;
-              config.allowUnfree = true;
-            };
+            # mpkgs = import inputs.nixpkgs_master {
+            #   system = system;
+            #   config.allowUnfree = true;
+            # };
           in
-          {
-            default = devenv.lib.mkShell {
-              inherit inputs pkgs;
-              modules = [
-                {
-                  env.NIX_LD = nixpkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
-                  env.NIX_LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath [
-                    # Add needed packages here
-                    pkgs.libGL # matplotlib
-                  ];
-                  # https://devenv.sh/reference/options/
-                  packages = with pkgs; [
-                    poetry
-                    micromamba
-                  ];
-                  enterShell = ''
-                    export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
-                    eval "$(micromamba shell hook -s bash)"
-                    micromamba create -r .venv -f env.yml
-                    micromamba activate .venv/envs/pipecraft
-                    poetry install -C pipecraft
-                    python -m ipykernel install --user --name pipecraft
-                  '';
-                }
-              ];
-            };
-          });
-    };
+          with pkgs;
+        {
+          devShells = {
+              default = let 
+                python_with_pkgs = (pkgs.python311.withPackages(pp: [
+                  pp.snakemake
+                ]));
+              in mkShell {
+                    NIX_LD = runCommand "ld.so" {} ''
+                        ln -s "$(cat '${pkgs.stdenv.cc}/nix-support/dynamic-linker')" $out
+                      '';
+                    NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
+                      # Add needed packages here
+                      stdenv.cc.cc
+                      libGL
+                     
+                    ];
+                    packages = [
+                      python_with_pkgs
+                      python3Packages.venvShellHook
+                      uv
+                      duckdb
+                    ];
+                    venvDir = "./.venv";
+                    postVenvCreation = ''
+                        unset SOURCE_DATE_EPOCH
+                      '';
+                    postShellHook = ''
+                        unset SOURCE_DATE_EPOCH
+                      '';
+                    shellHook = ''
+                        export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
+                        export PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring
+                        runHook venvShellHook
+                        export PYTHONPATH=${python_with_pkgs}/${python_with_pkgs.sitePackages}:$PYTHONPATH
+                    '';
+                  };
+              };
+        }
+      );
 }

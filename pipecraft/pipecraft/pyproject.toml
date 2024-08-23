@@ -1,18 +1,28 @@
-[tool.poetry]
+[project]
 name = "pipecraft"
 version = "0.2.0"
 description = ""
-authors = ["Ankur Kumar <ank@leoank.me>"]
+authors = [{ name = "Ankur Kumar", email = "ank@leoank.me" }]
 readme = "README.md"
-packages = [{ include = "pipecraft", from = "src" }]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-pydantic = "^2.6"
-networkx = "^3.2"
-matplotlib = "^3.8"
-
+requires-python = ">=3.10"
+dependencies = [
+  "pydantic>=2.6,<3.0",
+  "networkx>=3.2,<4.0",
+  "matplotlib>=3.8,<4.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+# setuptools>=61 supports PEPs 517, 518, 621, 660
+# https://setuptools.pypa.io/en/latest/history.html#v61-0-0
+# setuptools-scm asks for setuptools>=64
+# https://setuptools-scm.readthedocs.io/en/latest/
+requires = ["setuptools>=64.0.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
+exclude = ["vendor"]
+per-file-ignores = { "tests/*" = ["D103"] }
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
