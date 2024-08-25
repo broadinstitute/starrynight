@@ -23,6 +23,7 @@
           devShells = {
               default = let 
                 python_with_pkgs = (pkgs.python311.withPackages(pp: [
+                  pp.packaging
                   pp.snakemake
                 ]));
               in mkShell {
@@ -40,6 +41,9 @@
                       python3Packages.venvShellHook
                       uv
                       duckdb
+                      # Required by snakemake apptainer/singularity backend
+                      gocryptfs
+                      nextflow
                     ];
                     venvDir = "./.venv";
                     postVenvCreation = ''

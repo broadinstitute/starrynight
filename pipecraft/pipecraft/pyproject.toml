@@ -1,6 +1,6 @@
 [project]
 name = "pipecraft"
-version = "0.2.0"
+version = "0.8.0"
 description = ""
 authors = [{ name = "Ankur Kumar", email = "ank@leoank.me" }]
 readme = "README.md"
@@ -9,6 +9,7 @@ dependencies = [
   "pydantic>=2.6,<3.0",
   "networkx>=3.2,<4.0",
   "matplotlib>=3.8,<4.0",
+  "Mako>=1.3.5,<2.0",
 ]
 
 [project.optional-dependencies]
@@ -21,6 +22,12 @@ dev = ["pytest>=8.2", "ruff>=0.5", "build>=1.2", "twine>=5.1"]
 # https://setuptools-scm.readthedocs.io/en/latest/
 requires = ["setuptools>=64.0.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"pipecraft" = ["*.mako"]
 
 [tool.ruff]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]

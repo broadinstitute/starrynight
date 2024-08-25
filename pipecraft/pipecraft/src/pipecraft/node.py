@@ -8,6 +8,22 @@ from uuid import uuid4
 from pydantic import BaseModel
 
 
+class UnitOfWork(BaseModel):
+    """Unit of work.
+
+    Attributes
+    ----------
+    inputs : Dict[str, list[str]]
+        Dict of list of paths that are used as inputs to this node.
+    outputs : Dict[str, list[str]]
+        Dict of list of paths that are produced by this node.
+
+    """
+
+    inputs: dict[str, list[str]]
+    outputs: dict[str, list[str]]
+
+
 class NodeType(Enum):
     """An enumeration of node types.
 
@@ -29,6 +45,7 @@ class NodeType(Enum):
     PyFunction = "PyFunction"
     InvokeShell = "InvokeShell"
     Container = "Container"
+    ParContainer = "ParContainer"
     Scatter = "Scatter"
     Gather = "Gather"
 
@@ -42,9 +59,9 @@ class Node(ABC):
         The unique name of this node.
     node_type : NodeType
         The type of this node.
-    input_paths : list[str]
+    input_paths : dict[str, list[str]]
         A list of paths that are used as inputs to this node.
-    output_paths : list[str]
+    output_paths : dict[str, list[str]]
         A list of paths that are produced by this node.
     config : object
         The configuration associated with this node.
@@ -63,7 +80,11 @@ class Node(ABC):
     """
 
     def __init__(
-        self, name: str, input_paths: list[str], output_paths: list[str], config: object
+        self,
+        name: str,
+        input_paths: dict[str, list[str]],
+        output_paths: dict[str, list[str]],
+        config: object,
     ) -> None:
         """Abstract base class for nodes in the pipeline.
 
@@ -73,10 +94,10 @@ class Node(ABC):
             The unique name of this node.
         node_type : NodeType
             The type of this node.
-        input_paths : list[str]
-            A list of paths that are used as inputs to this node.
-        output_paths : list[str]
-            A list of paths that are produced by this node.
+        input_paths : dict[str, list[str]]
+            A dict of  list of paths that are used as inputs to this node.
+        output_paths : dict[str, list[str]]
+            A dict of list of paths that are produced by this node.
         config : object
             The configuration associated with this node.
 
@@ -119,8 +140,8 @@ class PyFunction(Node):
     def __init__(
         self,
         name: str,
-        input_paths: list[str],
-        output_paths: list[str],
+        input_paths: dict[str, list[str]],
+        output_paths: dict[str, list[str]],
         config: PyFunctionConfig | None = None,
     ) -> None:
         """Node that represents a Python function.
@@ -129,10 +150,10 @@ class PyFunction(Node):
         ----------
         name : str
             The unique name of this node.
-        input_paths : list[str]
-            A list of paths that are used as inputs to this node.
-        output_paths : list[str]
-            A list of paths that are produced by this node.
+        input_paths : dict[str, list[str]]
+            A dict of list of paths that are used as inputs to this node.
+        output_paths : dict[str, list[str]]
+            A dict of list of paths that are produced by this node.
         config : PyFunctionConfig | None
             The configuration associated with this node.
 
@@ -162,13 +183,110 @@ class InvokeShell(Node):
         return NodeType.InvokeShell
 
 
+class ContainerConfig(BaseModel):
+    """Configuration for a Container node.
+
+    Attributes
+    ----------
+    image : str
+        Image to use for the container.
+    cmd : list[str]
+        Command to run in the container.
+    env: dict
+        Environment variables to set in the container.
+
+    Examples
+    --------
+    >>> config = ContainerConfig(image="python:3.10", cmd=[], env={})
+    >>> config.env
+    {}
+
+    """
+
+    image: str
+    cmd: list[str]
+    env: dict
+
+
 class Container(Node):
     """Node that represents a container."""
 
-    @property
-    def node_type(self) -> NodeType:
-        """Node type."""
-        return NodeType.Container
+    def __init__(
+        self,
+        name: str,
+        input_paths: dict[str, list[str]],
+        output_paths: dict[str, list[str]],
+        config: ContainerConfig | None = None,
+    ) -> None:
+        """Node that represents a Container.
+
+        Attributes
+        ----------
+        name : str
+            The unique name of this node.
+        input_paths : dict[str, list[str]]
+            A dict of list of paths that are used as inputs to this node.
+        output_paths : dict[str, list[str]]
+            A dict of list of paths that are produced by this node.
+        config : ContainerConfig | None
+            The configuration associated with this node.
+
+        Examples
+        --------
+        >>> node = Container(name="my_node", input_paths=[], output_paths=[])
+        >>> node.name
+        'my_node'
+
+        """
+        super().__init__(name, input_paths, output_paths, config)
+        self.node_type = NodeType.Container
+        if config is None:
+            self.config = ContainerConfig(image="python:3.10", cmd=[], env={})
+
+    def __repr__(self) -> str:
+        """Node representation."""
+        return f"{self.name}(CS)"
+
+
+class ParContainer(Node):
+    """Node that represents a parallel container."""
+
+    def __init__(
+        self,
+        name: str,
+        uow_list: list[UnitOfWork],
+        config: ContainerConfig | None = None,
+    ) -> None:
+        """Node that represents a parallel Container.
+
+        Attributes
+        ----------
+        name : str
+            The unique name of this node.
+        uow_list : list[UnitOfWork]
+            A list of UnitOfWork objects used by this node.
+        config : ContainerConfig | None
+            The configuration associated with this node.
+
+        Examples
+        --------
+        >>> node = Container(name="my_node", input_paths=[], output_paths=[])
+        >>> node.name
+        'my_node'
+
+        """
+        super().__init__(name, {}, {}, config)
+        self.node_type = NodeType.ParContainer
+        if config is None:
+            self.config = ContainerConfig(image="python:3.10", cmd=[], env={})
+        self.containers = [
+            Container(f"{name}_{i}", uow.inputs, uow.outputs, config)
+            for i, uow in enumerate(uow_list)
+        ]
+
+    def __repr__(self) -> str:
+        """Node representation."""
+        return f"{self.name}(CO)"
 
 
 # Specialized Nodes
@@ -202,7 +320,7 @@ class Scatter(Node):
 
         """
         self.name = f"Scatter:{uuid4()}"
-        super().__init__(self.name, [], [], config)
+        super().__init__(self.name, {}, {}, config)
         self.node_type = NodeType.Scatter
         self.config = PyFunctionConfig(py_object={}, venv=Path())
 
@@ -239,7 +357,7 @@ class Gather(Node):
 
         """
         self.name = f"Gather:{uuid4()}"
-        super().__init__(self.name, [], [], config)
+        super().__init__(self.name, {}, {}, config)
         if config is None:
             self.config = PyFunctionConfig(py_object={}, venv=Path())
 
