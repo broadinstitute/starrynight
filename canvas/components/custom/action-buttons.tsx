@@ -1,7 +1,5 @@
 import {
-  CheckIcon,
   CircleDotDashed,
-  Icon,
   Loader2,
   PlayIcon,
   RotateCw,
@@ -26,7 +24,6 @@ export type TActionsButtonsProps = {
   pendingButton: TActionsButtonProps;
   runningButton: TActionsButtonProps;
   failedButton: TActionsButtonProps;
-  successButton: TActionsButtonProps;
   cancelButton: TActionsButtonProps;
   currentState: TRunStatus;
 };
@@ -39,12 +36,12 @@ export function ActionsButtons(props: TActionsButtonsProps) {
     runningButton,
     failedButton,
     cancelButton,
-    successButton,
   } = props;
 
   function getPrimaryAction() {
     switch (currentState) {
       case "init":
+      case "success":
         return {
           icon: <PlayIcon className="h-4 w-4" />,
           ...playButton,
@@ -65,11 +62,6 @@ export function ActionsButtons(props: TActionsButtonsProps) {
         return {
           icon: <RotateCw className="h-4 w-4" />,
           ...failedButton,
-        };
-      case "success":
-        return {
-          icon: <CheckIcon className="h-4 w-4" />,
-          ...successButton,
         };
       default:
         return null;

@@ -51,9 +51,12 @@ export function ProjectStepJobs() {
         </div>
       </div>
       <div className="mt-4">
-        <Accordion type="single" collapsible>
+        <Accordion
+          type="multiple"
+          defaultValue={data.response.map((res) => `job-${res.id}-${step!.id}`)}
+        >
           {data.response.map((job) => (
-            <ProjectStepJob key={job.id} job={job} />
+            <ProjectStepJob key={`${job.id} ${step!.id}`} job={job} />
           ))}
         </Accordion>
       </div>

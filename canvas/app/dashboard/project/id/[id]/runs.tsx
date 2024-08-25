@@ -1,10 +1,22 @@
 "use client";
 
-import { TProjectStepJob } from "@/services/job";
+import {
+  executeJob,
+  TProjectStepJob,
+  TProjectStepJobInput,
+  updateJob,
+} from "@/services/job";
 import { TProjectStepJobRun } from "@/services/run";
 import React from "react";
 import { ProjectStepJobRun } from "./run";
 import { RunsActions } from "./runs-actions";
+import { ViewInputModal } from "./view-input-modal";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
+import { useProjectStore } from "@/stores/project";
+import { useMutation } from "@tanstack/react-query";
+import { mutate } from "swr";
+import { FileViewer } from "@/components/custom/file-viewer";
 
 export type TProjectStepJobRunProps = {
   runs: TProjectStepJobRun[];
@@ -14,20 +26,103 @@ export type TProjectStepJobRunProps = {
 
 export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
   const { runs, job, mutateKey } = props;
+  const { project } = useProjectStore((state) => ({
+    project: state.project,
+  }));
+
+  const {
+    mutate: executeJobMutation,
+    isError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: executeJob,
+  });
+
+  function mutateFetchJob() {
+    mutate(mutateKey, true);
+    mutate(`/job/?step_id=${job.step_id}`, true);
+  }
+
+  function submitJob() {
+    executeJobMutation({
+      jobId: job.id,
+      canThrowOnError: true,
+    });
+  }
+
+  async function updateAndSubmitJob(
+    inputs: Record<string, TProjectStepJobInput>
+  ) {
+    const response = await updateJob({
+      job: {
+        ...job,
+        inputs,
+      },
+    });
+
+    if (response.ok) {
+      submitJob();
+    }
+  }
+
+  const inputs = React.useMemo(() => {
+    const _inputs = Object.entries(job.inputs);
+    return _inputs.map((input) => ({
+      id: input[0],
+      label: input[0],
+      type: input[1].type,
+      value: `${project.dataset_uri}${
+        input[1].value.replace(project.dataset_uri, "") || ""
+      }`,
+    }));
+  }, [job.inputs, project.dataset_uri]);
+
+  React.useEffect(() => {
+    if (isError || isSuccess) {
+      mutateFetchJob();
+    }
+  }, [isError, isSuccess]);
 
   return (
     <div>
-      <div className="flex justify-between">
-        <p className="pt-2">{job.description}</p>
-        <div>
-          <RunsActions job={job} mutateKey={mutateKey} />
+      <div className="border border-gray-200 rounded-md">
+        <div className="flex items-center justify-between border-b border-b-gray-200 px-4 py-2">
+          <div className="flex-1 font-bold">Inputs</div>
+          <ViewInputModal
+            inputs={inputs}
+            title={`Inputs - ${job.name}`}
+            isEditable={true}
+            buttonTitle="Edit job inputs"
+            primaryAction={{
+              label: "Run job",
+              onClick: updateAndSubmitJob,
+            }}
+            emptyInputPlaceholder="Add input"
+          />
+          <div className="ml-4">
+            <RunsActions runs={runs} job={job} mutateKey={mutateKey} />
+          </div>
         </div>
+
+        {inputs.map((input, index) => (
+          <div
+            key={input.label + index}
+            className="flex items-center space-x-2 p-4"
+          >
+            <Label htmlFor={input.label + index}>{input.label}</Label>
+            <Input
+              value={input.value}
+              id={input.label + index}
+              disabled={true}
+            />
+            <FileViewer fileName={input.value} />
+          </div>
+        ))}
       </div>
-      {runs.map((run, idx) => (
-        <div key={run.id}>
-          <ProjectStepJobRun run={run} />
-          {idx !== runs.length - 1 && <hr className="my-4" />}
-        </div>
+
+      <h4 className="font-bold my-4">Runs</h4>
+      {runs.map((run) => (
+        <ProjectStepJobRun key={run.id} run={run} />
       ))}
       {runs.length === 0 && <p className="mb-4">No job is running.</p>}
     </div>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import "react-datasheet-grid/dist/style.css";
 import { DataSheetGrid, textColumn, keyColumn } from "react-datasheet-grid";
 import {
   Dialog,
@@ -12,6 +13,7 @@ import { getFile } from "@/services/s3";
 import { Eye, Loader2 } from "lucide-react";
 import React from "react";
 import Image from "next/image";
+import { useProjectStore } from "@/stores/project";
 
 interface DSVRendererProps {
   data: DSVRowArray;
@@ -42,6 +44,7 @@ interface FileViewerProps {
 }
 
 export function FileViewer(props: FileViewerProps) {
+  const { project } = useProjectStore((state) => ({ project: state.project }));
   const { fileName } = props;
   const [viewContent, setViewContent] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
@@ -53,7 +56,10 @@ export function FileViewer(props: FileViewerProps) {
       return;
     }
     const encoding = fileName.endsWith(".png") ? "base64" : "utf-8";
-    const data = await getFile(fileName, { toString: { encoding } });
+    const data = await getFile(fileName, {
+      toString: { encoding },
+      projectId: project.id,
+    });
 
     if (data && typeof data === "string") {
       if (fileName.endsWith(".png")) {
@@ -84,7 +90,7 @@ export function FileViewer(props: FileViewerProps) {
           <Eye className="mr-2 h-4 w-4" /> View
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full w-full">
         <DialogHeader>
           <DialogTitle>{fileName.split("/").pop()}</DialogTitle>
         </DialogHeader>

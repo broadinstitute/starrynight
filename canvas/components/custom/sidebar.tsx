@@ -17,7 +17,7 @@ export function Sidebar(props: TSidebarProps) {
   const { items, active } = props;
 
   return (
-    <div className="overflow-y-auto pr-4">
+    <div className="overflow-y-auto pr-4 border-r border-r-slate-100">
       <aside
         className={cn("w-full md:w-64 transition-transform")}
         aria-label="Sidebar"

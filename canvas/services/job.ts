@@ -5,6 +5,11 @@ export type TProjectStepJobOutput = {
   uri: string;
 };
 
+export type TProjectStepJobInput = {
+  type: string;
+  value: string;
+};
+
 export type TProjectStepJob = {
   id: string | number;
   step_id: string | number;
@@ -12,6 +17,7 @@ export type TProjectStepJob = {
   description: string;
   type: string;
   outputs: Record<string, TProjectStepJobOutput>;
+  inputs: Record<string, TProjectStepJobInput>;
 };
 
 export type TGetStepJobsOptions = {
@@ -72,6 +78,27 @@ export async function executeJob(
       throw new Error("Error while executing the job");
     }
 
+    return {
+      error,
+    };
+  }
+}
+
+export type TUpdateStepJobsOptions = {
+  job: TProjectStepJob;
+};
+
+export async function updateJob(options: TUpdateStepJobsOptions) {
+  const { job } = options;
+
+  try {
+    await api.put({ ...job }, "/job").json();
+
+    return {
+      ok: true,
+    };
+  } catch (error) {
+    console.error(error);
     return {
       error,
     };

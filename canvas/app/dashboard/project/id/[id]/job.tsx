@@ -7,24 +7,24 @@ import {
 import { TProjectStepJob } from "@/services/job";
 import { ProjectStepJobRunsContainer } from "./runs-container";
 import React from "react";
+import { useProjectStore } from "@/stores/project";
 
 export type TProjectStepJobProps = {
   job: TProjectStepJob;
 };
 
 export function ProjectStepJob(props: TProjectStepJobProps) {
-  const { job } = props;
+  const { step } = useProjectStore((state) => ({ step: state.currentStep }));
+  const { job, ...rest } = props;
 
   return (
-    <Accordion type="single" collapsible>
-      <AccordionItem value="item-1">
-        <AccordionTrigger className="hover:no-underline">
-          {job.name}
-        </AccordionTrigger>
-        <AccordionContent>
-          <ProjectStepJobRunsContainer job={job} />
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <AccordionItem value={`job-${job.id}-${step!.id}`} {...rest}>
+      <AccordionTrigger className="hover:no-underline font-bold text-xl">
+        {job.name}
+      </AccordionTrigger>
+      <AccordionContent>
+        <ProjectStepJobRunsContainer job={job} />
+      </AccordionContent>
+    </AccordionItem>
   );
 }

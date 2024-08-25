@@ -1,18 +1,22 @@
 import { ActionsButtons } from "@/components/custom/action-buttons";
 import { toast } from "@/components/ui/use-toast";
 import { executeJob, TProjectStepJob } from "@/services/job";
-import { TRunStatus } from "@/services/run";
+import { TProjectStepJobRun, TRunStatus } from "@/services/run";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { mutate } from "swr";
 
 export type TRunsActionsProps = {
   job: TProjectStepJob;
+  runs: TProjectStepJobRun[];
+
   mutateKey: string;
 };
 
 export function RunsActions(props: TRunsActionsProps) {
-  const { job, mutateKey } = props;
+  const { job, runs, mutateKey } = props;
+
+  const [status, setStatus] = React.useState<TRunStatus>("init");
 
   const {
     mutate: executeJobMutation,
@@ -35,7 +39,7 @@ export function RunsActions(props: TRunsActionsProps) {
       // will tell swr to refetch data
       mutate(mutateKey);
       toast({
-        title: "Job completed successfully",
+        title: "Job started successfully",
         className: "bg-black text-white",
       });
     } else if (error) {
@@ -46,21 +50,18 @@ export function RunsActions(props: TRunsActionsProps) {
       });
     }
   }, [error, isSuccess, mutateKey]);
-  const [currentState, setCurrentState] = React.useState<TRunStatus>("init");
 
   React.useEffect(() => {
-    if (isSuccess) {
-      setCurrentState("running");
-    } else if (error) {
-      setCurrentState("failed");
-    } else if (isPending) {
-      setCurrentState("pending");
+    if (!runs || runs.length === 0) {
+      setStatus("init");
+    } else {
+      setStatus(runs[runs.length - 1].run_status);
     }
-  }, [error, isPending, isSuccess]);
+  }, [runs]);
 
   return (
     <ActionsButtons
-      currentState={currentState}
+      currentState={isPending ? "pending" : status}
       cancelButton={{
         isDisabled: isSuccess,
         onClick: () => {
@@ -81,26 +82,10 @@ export function RunsActions(props: TRunsActionsProps) {
         isDisabled: false,
         tooltipText: "Executing this job.",
       }}
-      successButton={{
-        isDisabled: false,
-        onClick: () => {
-          setCurrentState("pending");
-        },
-        tooltipText: "Click to run this job again.",
-      }}
       failedButton={{
         tooltipText:
           "Last execution was failed. Press this button to retry this job.",
-        onClick: () => {
-          setCurrentState("pending");
-          setTimeout(() => {
-            setCurrentState("running");
-          }, 3000);
-
-          setTimeout(() => {
-            setCurrentState("success");
-          }, 6000);
-        },
+        onClick: submitJobRequest,
       }}
     />
   );

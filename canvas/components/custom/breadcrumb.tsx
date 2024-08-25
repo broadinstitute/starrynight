@@ -5,7 +5,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import Link from "next/link";
 import React from "react";
 
 export type TBreadcrumbLink = {
@@ -36,7 +35,7 @@ export function Breadcrumb(props: TBreadcrumbProps) {
             <React.Fragment key={title}>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href={href}>{title}</Link>
+                  <a href={href}>{title}</a>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
