@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { TProjectStepJob } from "@/services/job";
-import { ProjectStepJobRun } from "./run";
+import { ProjectStepJobRunsContainer } from "./runs-container";
 import React from "react";
 
 export type TProjectStepJobProps = {
@@ -22,7 +22,7 @@ export function ProjectStepJob(props: TProjectStepJobProps) {
           {job.name}
         </AccordionTrigger>
         <AccordionContent>
-          <ProjectStepJobRun job={job} />
+          <ProjectStepJobRunsContainer job={job} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -6,17 +6,19 @@ import useSWR from "swr";
 import { Accordion } from "@/components/ui/accordion";
 import { ProjectStepJob } from "./job";
 import { JobsSkeleton } from "./skeleton/jobs-skeleton";
-import { Button } from "@/components/ui/button";
+import { JobsActions } from "./jobs-actions";
+import React from "react";
+import { useProjectStore } from "@/stores/project";
 
-export type TProjectStepJobProps = {
-  step: TProjectStep;
-};
+export function ProjectStepJobs() {
+  const { step, updateJobs } = useProjectStore((state) => ({
+    step: state.currentStep,
+    updateJobs: state.updateCurrentStepJobs,
+  }));
 
-export function ProjectStepJobs(props: TProjectStepJobProps) {
-  const { step } = props;
   const { data, error, isLoading } = useSWR(
-    `/job/?step_id=${step.id}`,
-    () => getJobs({ stepId: step.id, canThrowOnError: true }),
+    `/job/?step_id=${step!.id}`,
+    () => getJobs({ stepId: step!.id, canThrowOnError: true }),
     {
       revalidateIfStale: false,
       revalidateOnFocus: false,
@@ -24,6 +26,12 @@ export function ProjectStepJobs(props: TProjectStepJobProps) {
       refreshInterval: 1000 * 60 * 2,
     }
   );
+
+  React.useEffect(() => {
+    if (data && data.response) {
+      updateJobs(data.response);
+    }
+  }, [updateJobs, data]);
 
   if (isLoading && !data) {
     return <JobsSkeleton />;
@@ -35,15 +43,12 @@ export function ProjectStepJobs(props: TProjectStepJobProps) {
 
   return (
     <div className="flex flex-col flex-1 overflow-auto">
-      <h4 className="font-bold text-2xl">{step.name}</h4>
-      <div className="py-4">
-        <p>
-          This step includes {data.response.length} job(s). You can run each job
-          individually or use the &quot;Execute Step&quot; button to run all
-          jobs at once.
-        </p>
-        <br />
-        <Button size="sm">Execute Step</Button>
+      <h4 className="font-bold text-2xl">{step!.name}</h4>
+      <div className="py-4 flex justify-between">
+        <p className="pt-2">{step!.description}</p>
+        <div>
+          <JobsActions />
+        </div>
       </div>
       <div className="mt-4">
         <Accordion type="single" collapsible>

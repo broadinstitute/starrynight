@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import * as React from "react";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -47,7 +48,7 @@ export function Providers(props: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        {props.children}
+        <TooltipProvider>{props.children}</TooltipProvider>
       </ReactQueryStreamedHydration>
     </QueryClientProvider>
   );

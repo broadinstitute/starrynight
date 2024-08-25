@@ -1,5 +1,5 @@
 import { PageContainer } from "../../../_layout/page-container";
-import { ProjectMainContent } from "./main-content";
+import { ProjectMainContent } from "./project";
 import { getProject } from "@/services/projects";
 import { ProjectError } from "./project-error";
 

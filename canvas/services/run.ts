@@ -1,10 +1,12 @@
 import { api, TResponse } from "./api";
 
+export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
+
 export type TProjectStepJobRun = {
   id: string | number;
   job_id: string | number;
   name: string;
-  run_status: "pending" | "running" | "success" | "failed";
+  run_status: TRunStatus;
 };
 
 export type TGetStepJobsRunOptions = {
