@@ -8,6 +8,7 @@ export type TProject = {
   description: string;
   type: string;
   parser: string;
+  workspace_uri: string;
 };
 
 export async function getProjects(): Promise<TResponse<TProject>> {
@@ -55,12 +56,13 @@ export type TCreateProjectOptions = {
   type: string;
   name: string;
   description: string;
+  workspaceURI: string;
 };
 
 export async function createProject(
   options: TCreateProjectOptions
 ): Promise<TProject> {
-  const { dataset, parser, type, name, description } = options;
+  const { dataset, parser, type, name, description, workspaceURI } = options;
   const response = (await api
     .post(
       {
@@ -69,6 +71,7 @@ export async function createProject(
         type,
         parser_type: parser,
         dataset_uri: dataset,
+        workspace_uri: workspaceURI,
       },
       "/project"
     )

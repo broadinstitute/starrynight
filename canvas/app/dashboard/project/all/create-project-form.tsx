@@ -120,6 +120,29 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
           )}
         />
 
+        {/* Workspace URI */}
+        <FormField
+          control={createProjectForm.control}
+          name="workspaceURI"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Workspace</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Workspace"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                S3 Bucket URI for the workspace where you want to create this
+                project.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* Parser */}
         <FormField
           control={createProjectForm.control}

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  executeJob,
   TProjectStepJob,
   TProjectStepJobInput,
   updateJob,
@@ -14,9 +13,9 @@ import { ViewInputModal } from "./view-input-modal";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { useProjectStore } from "@/stores/project";
-import { useMutation } from "@tanstack/react-query";
 import { mutate } from "swr";
 import { FileViewer } from "@/components/custom/file-viewer";
+import { toast } from "@/components/ui/use-toast";
 
 export type TProjectStepJobRunProps = {
   runs: TProjectStepJobRun[];
@@ -30,24 +29,9 @@ export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
     project: state.project,
   }));
 
-  const {
-    mutate: executeJobMutation,
-    isError,
-    isSuccess,
-  } = useMutation({
-    mutationFn: executeJob,
-  });
-
   function mutateFetchJob() {
     mutate(mutateKey, true);
     mutate(`/job/?step_id=${job.step_id}`, true);
-  }
-
-  function submitJob() {
-    executeJobMutation({
-      jobId: job.id,
-      canThrowOnError: true,
-    });
   }
 
   async function updateAndSubmitJob(
@@ -61,7 +45,11 @@ export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
     });
 
     if (response.ok) {
-      submitJob();
+      mutateFetchJob();
+    } else {
+      toast({
+        title: "Failed to save inputs.",
+      });
     }
   }
 
@@ -77,12 +65,6 @@ export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
     }));
   }, [job.inputs, project.dataset_uri]);
 
-  React.useEffect(() => {
-    if (isError || isSuccess) {
-      mutateFetchJob();
-    }
-  }, [isError, isSuccess]);
-
   return (
     <div>
       <div className="border border-gray-200 rounded-md">
@@ -94,7 +76,7 @@ export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
             isEditable={true}
             buttonTitle="Edit job inputs"
             primaryAction={{
-              label: "Run job",
+              label: "Save",
               onClick: updateAndSubmitJob,
             }}
             emptyInputPlaceholder="Add input"

@@ -6,6 +6,7 @@ export const createProjectSchema = z.object({
   type: z.string(),
   description: z.string().min(10).max(60),
   name: z.string().min(3).max(30),
+  workspaceURI: z.string(),
 });
 
 export type TCreateProjectFormData = z.infer<typeof createProjectSchema>;

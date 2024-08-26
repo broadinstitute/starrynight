@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 import { TProjectStepJobInput } from "@/services/job";
 import { uploadToS3 } from "@/services/s3";
 import { useProjectStore } from "@/stores/project";
@@ -46,14 +47,28 @@ export function ViewInputModal(props: TViewInputModalProps) {
     if (!fileInput) return;
 
     const file = fileInput.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     setIsUploading(true);
-    await uploadToS3(url, {
+    const res = await uploadToS3(url, {
       ContentType: file.type,
       Body: file,
       projectId: project.id,
     });
+
+    if (!res) {
+      toast({
+        title: "Failed to upload file.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "File uploaded successfully.",
+      });
+    }
+
     setIsUploading(false);
   }
 
