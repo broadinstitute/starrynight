@@ -9,6 +9,8 @@ rule all:
           ],
       % endfor
     % endfor
+  shell:
+    "echo 'done' > completed.txt"
 
 % for container in containers:
 rule ${container.name.replace(" ", "_").lower()}:

@@ -4,6 +4,7 @@ from pathlib import Path
 from subprocess import Popen
 from types import NotImplementedType
 
+from cloudpathlib import CloudPath
 from mako.template import Template
 
 from pipecraft.backend.base import Backend, BackendConfig
@@ -40,7 +41,7 @@ class SnakeMakeBackend(Backend):
     """
 
     def __init__(
-        self, pipeline: Pipeline, config: SnakeMakeConfig, output_dir: Path
+        self, pipeline: Pipeline, config: SnakeMakeConfig, output_dir: Path | CloudPath
     ) -> None:
         """SnakeMakeBackend.
 
@@ -50,7 +51,7 @@ class SnakeMakeBackend(Backend):
             Pipeline to compile.
         config : SnakeMakeConfig
             SnakeMake backend config.
-        output_dir : Path
+        output_dir : Path | CloudPath
             SnakeMake output dir.
 
         """
@@ -102,12 +103,12 @@ class SnakeMakeBackend(Backend):
             snakefile = snakefile.decode("utf-8")
             f.writelines(snakefile)
 
-    def run(self) -> Path:
+    def run(self) -> Path | CloudPath:
         """Run SankeMake.
 
         Returns
         -------
-        Path:
+        Path | CloudPath:
             Path to run log file.
 
         """

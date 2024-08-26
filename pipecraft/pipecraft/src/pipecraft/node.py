@@ -5,6 +5,7 @@ from enum import Enum
 from pathlib import Path
 from uuid import uuid4
 
+from cloudpathlib import CloudPath
 from pydantic import BaseModel
 
 
@@ -128,7 +129,7 @@ class PyFunctionConfig(BaseModel):
     """
 
     py_object: object
-    venv: Path
+    venv: CloudPath | Path
 
 
 # Generic Nodes

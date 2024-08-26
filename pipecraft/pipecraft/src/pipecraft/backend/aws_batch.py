@@ -3,6 +3,7 @@
 from pathlib import Path
 from types import NotImplementedType
 
+from cloudpathlib import CloudPath
 from mako.template import Template
 
 from pipecraft.backend.base import Backend
@@ -18,7 +19,7 @@ from pipecraft.pipeline import Pipeline
 
 
 class AwsBatchConfig:
-    """SnakeMake backend config."""
+    """AwsBatch backend config."""
 
     pass
 
@@ -29,12 +30,13 @@ class AwsBatchBackend(Backend):
     Attributes
     ----------
     pipeline : Pipeline
-    config : SnakeMakeConfig
-    sm_file_blocks : List[str]
+    config : AwsBatchConfig
 
     """
 
-    def __init__(self, pipeline: Pipeline, config: AwsBatchConfig) -> None:
+    def __init__(
+        self, pipeline: Pipeline, config: AwsBatchConfig, output_dir: Path | CloudPath
+    ) -> None:
         """AwsBatchBackend.
 
         Parameters
@@ -43,26 +45,21 @@ class AwsBatchBackend(Backend):
             Pipeline to compile.
         config : AwsBatchConfig
             AwsBatch backend config.
+        output_dir : Path | CloudPath
+            SnakeMake output dir.
 
         """
         self.pipeline = pipeline
         self.pipeline.compile()
         self.config = config
+        self.output_dir = output_dir
         self.template = Template(
             text=Path(__file__).parent.joinpath("templates/aws_batch.mako").read_text(),
             output_encoding="utf-8",
         )
 
-    def compile(self, output_dir: Path) -> None:
-        """Compile SnakeMake pipeline.
-
-        Parameters
-        ----------
-        output_dir : Path
-            Path to save output files.
-
-        """
-        self.sm_file_blocks = []
+    def compile(self) -> None:
+        """Compile AwsBatch pipeline."""
         containers = []
         pyfunctions = []
         invoke_shells = []
@@ -83,12 +80,12 @@ class AwsBatchBackend(Backend):
                 print(node)
             else:
                 raise NotImplementedType
-        with output_dir.joinpath("Snakefile").open("w") as f:
-            snakefile = self.template.render(
+        with self.output_dir.joinpath("aws_batch.py").open("w") as f:
+            aws_batch = self.template.render(
                 containers=containers,
                 pyfunctions=pyfunctions,
                 invoke_shells=invoke_shells,
             )
-            assert type(snakefile) is bytes
-            snakefile = snakefile.decode("utf-8")
-            f.writelines(snakefile)
+            assert type(aws_batch) is bytes
+            aws_batch = aws_batch.decode("utf-8")
+            f.writelines(aws_batch)

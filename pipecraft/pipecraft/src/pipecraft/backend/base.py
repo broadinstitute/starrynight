@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+from cloudpathlib import CloudPath
 from pydantic import BaseModel
 
 from pipecraft.pipeline import Pipeline
@@ -26,7 +27,7 @@ class Backend(ABC):
     """
 
     def __init__(
-        self, pipeline: Pipeline, config: BackendConfig, output_dir: Path
+        self, pipeline: Pipeline, config: BackendConfig, output_dir: Path | CloudPath
     ) -> None:
         """SbnakeMakeBackend.
 
@@ -36,7 +37,7 @@ class Backend(ABC):
             Pipeline to compile.
         config : BackendConfig
             Backend config.
-        output_dir : Path
+        output_dir : Path | CloudPath
             Backend output dir.
 
         """
