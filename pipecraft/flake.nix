@@ -43,6 +43,7 @@
                       duckdb
                       # Required by snakemake apptainer/singularity backend
                       gocryptfs
+                      goofys
                       nextflow
                     ];
                     venvDir = "./.venv";

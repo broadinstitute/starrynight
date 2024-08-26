@@ -1,7 +1,7 @@
 """SankeMake Backend for Pipeline execution."""
 
 from pathlib import Path
-from subprocess import Popen
+from subprocess import Popen, run
 from types import NotImplementedType
 
 from cloudpathlib import CloudPath
@@ -41,7 +41,11 @@ class SnakeMakeBackend(Backend):
     """
 
     def __init__(
-        self, pipeline: Pipeline, config: SnakeMakeConfig, output_dir: Path | CloudPath
+        self,
+        pipeline: Pipeline,
+        config: SnakeMakeConfig,
+        output_dir: Path | CloudPath,
+        scratch_path: Path,
     ) -> None:
         """SnakeMakeBackend.
 
@@ -53,12 +57,15 @@ class SnakeMakeBackend(Backend):
             SnakeMake backend config.
         output_dir : Path | CloudPath
             SnakeMake output dir.
+        scratch_path : Path
+            Scratch path.
 
         """
         self.pipeline = pipeline
         self.pipeline.compile()
         self.config = config
         self.output_dir = output_dir
+        self.scratch_path = scratch_path
         self.template = Template(
             text=Path(__file__).parent.joinpath("templates/snakemake.mako").read_text(),
             output_encoding="utf-8",
@@ -112,6 +119,15 @@ class SnakeMakeBackend(Backend):
             Path to run log file.
 
         """
+        cwd = self.output_dir
+        if isinstance(self.output_dir, CloudPath):
+            bucket = self.output_dir.drive
+            prefix = "/".join(self.output_dir.parts[2:])
+            cwd = self.scratch_path
+            print(f"bucket: {bucket}, prefix: {prefix}")
+            breakpoint()
+            # mount run dir
+            run(["goofys", f"{bucket}:{prefix}", str(cwd.resolve())])
         cmd = []
         if self.config.background:
             cmd += ["nohup"]
@@ -120,9 +136,13 @@ class SnakeMakeBackend(Backend):
             cmd += ["--use-apptainer"]
         if self.config.print_exec:
             cmd += ["-p"]
+        if isinstance(self.output_dir, CloudPath):
+            snakefile = self.output_dir.joinpath("Snakefile")
+            snakefile._refresh_cache()
+            cmd += ["--snakefile", str(snakefile.fspath)]
         # keep this at the end
         if self.config.background:
             cmd += ["&"]
         cmd = " ".join(cmd)
-        Popen(cmd, cwd=self.output_dir, shell=True)
+        Popen(cmd, cwd=cwd, shell=True)
         return self.output_dir.joinpath("nohup.log")

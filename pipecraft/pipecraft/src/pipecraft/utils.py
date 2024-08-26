@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-from cloudpathlib import CloudPath
 import matplotlib.pyplot as plt
 import networkx as nx
+from cloudpathlib import CloudPath
 from matplotlib.figure import Figure
 
 
