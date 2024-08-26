@@ -124,8 +124,6 @@ class SnakeMakeBackend(Backend):
             bucket = self.output_dir.drive
             prefix = "/".join(self.output_dir.parts[2:])
             cwd = self.scratch_path
-            print(f"bucket: {bucket}, prefix: {prefix}")
-            breakpoint()
             # mount run dir
             run(["goofys", f"{bucket}:{prefix}", str(cwd.resolve())])
         cmd = []
