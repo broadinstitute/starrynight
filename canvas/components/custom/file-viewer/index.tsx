@@ -39,6 +39,20 @@ const DSVRenderer = (props: DSVRendererProps) => {
   );
 };
 
+interface ParquetRendererProps {
+}
+const ParquetRenderer = (props: ParquetRendererProps) => {
+  const { } = props;
+  return (
+    <div
+      style={{
+        maxWidth: "calc(100vw - 60px)",
+      }}
+    >
+    </div>
+  );
+};
+
 interface FileViewerProps {
   fileName: string;
 }

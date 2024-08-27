@@ -1,5 +1,6 @@
 "use client";
 
+import { WS_BASE_URL } from "@/services/api";
 import { TProjectStepJobRun } from "@/services/run";
 import React from "react";
 import { JobBadge } from "./badge";
@@ -15,9 +16,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { LogViewer } from "@/components/custom/log-viewer";
 import { downloadFile } from "@/utils/download";
 import { getFile } from "@/services/s3";
 import { useProjectStore } from "@/stores/project";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@radix-ui/react-accordion";
 
 export type TProjectStepJobRunProps = {
   run: TProjectStepJobRun;
@@ -46,18 +54,28 @@ export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
 
   return (
     <div className="space-y-4 pt-4 rounded-md border border-gray-300 p-4 my-4 ">
-      <div className="flex flex-1 items-center space-x-4">
-        <div className="flex-1">{run.name}</div>
-        <JobBadge status={run.run_status} />
-        <ViewInput
-          viewButtonTitle="View input"
-          inputsRecord={run.inputs}
-          isEditable={false}
-          title={`Inputs - ${run.name}`}
-          emptyInputPlaceholder="No input was provided."
-        />
-      </div>
-
+      <Accordion type="single" collapsible>
+        <AccordionItem value={`run-${run.id}`}>
+          <AccordionTrigger>
+            <div className="flex flex-1 items-center space-x-4">
+              <div className="flex-1">{run.name}</div>
+              <JobBadge status={run.run_status} />
+              <ViewInput
+                viewButtonTitle="View input"
+                inputsRecord={run.inputs}
+                isEditable={false}
+                title={`Inputs - ${run.name}`}
+                emptyInputPlaceholder="No input was provided."
+              />
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="h-60 pt-4">
+              <LogViewer endpoint={`${WS_BASE_URL}/ws/run/log/${run.id}`} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       {run.run_status === "success" && (
         <Table>
           <TableCaption>Job Output</TableCaption>
@@ -74,23 +92,12 @@ export function ProjectStepJobRun(props: TProjectStepJobRunProps) {
               <TableRow key={name}>
                 <TableCell className="font-medium">{name}</TableCell>
                 <TableCell>{data.type}</TableCell>
-                <TableCell>
-                  {data.uri || "s3://ip-merck-dev/projects/ASMA/test3.txt"}
-                </TableCell>
+                <TableCell>{data.uri}</TableCell>
                 <TableCell>
                   <div className="space-x-2 flex items-center">
-                    <FileViewer
-                      fileName={
-                        data.uri || "s3://ip-merck-dev/projects/ASMA/test3.txt"
-                      }
-                    />
+                    <FileViewer fileName={data.uri} />
                     <Button
-                      onClick={() =>
-                        handleDownload(
-                          data.uri ||
-                            "s3://ip-merck-dev/projects/ASMA/xlsx.xlsx"
-                        )
-                      }
+                      onClick={() => handleDownload(data.uri)}
                       size="sm"
                       variant="outline"
                     >
