@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from conductor.constants import JobType
+from conductor.constants import JobInputSchema, JobOutputSchema, JobType
 
 
 class Job(BaseModel):
@@ -13,7 +13,7 @@ class Job(BaseModel):
     name: str
     description: str
     type: JobType
-    outputs: dict
-    inputs: dict
+    outputs: dict[str, JobOutputSchema]
+    inputs: dict[str, JobInputSchema]
 
     model_config: dict = {"from_attributes": True}

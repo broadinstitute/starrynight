@@ -3,50 +3,97 @@
 from pathlib import Path
 
 import click
-
-from starrynight.inventory import create_inventory_local
+from cloudpathlib import AnyPath, CloudPath
+from lark import Lark
 from starrynight.index import gen_pcp_index
+from starrynight.inventory import create_inventory
+from starrynight.parsers.common import ParserType, get_parser
+from starrynight.parsers.transformer_vincent import VincentAstToIR
 
 
-@click.command(name="local")
+@click.command(name="gen")
 @click.option("-d", "--dataset", required=True)
 @click.option("-o", "--out", required=True)
-@click.option("-p", "--prefix", type=click.STRING)
-def inv_local(dataset: str, out: str, prefix: str) -> None:
+@click.option("-p", "--prefix", type=click.STRING, default=None)
+def gen_inv(dataset: str, out: str, prefix: str | None) -> None:
+    """Generate inventory files.
+
+    Parameters
+    ----------
+    dataset : str
+        Dataset path. Can be local or a cloud path.
+    out : str
+        Output path. Can be local or a cloud path.
+    prefix : str
+        Prefix to add to inventory files.
+
+    """
     if prefix is None:
-        prefix = str(Path(dataset).resolve())
-    create_inventory_local(Path(dataset), Path(out), prefix)
+        prefix = str(AnyPath(dataset).resolve())
+    create_inventory(AnyPath(dataset), AnyPath(out), prefix)
 
 
 @click.group()
 def inventory() -> None:
+    """Inventory commands."""
     pass
 
 
-inventory.add_command(inv_local)
+inventory.add_command(gen_inv)
 
 
-@click.command(name="local")
-@click.option("-d", "--dataset", required=True)
+@click.command(name="gen")
+@click.option("-d", "--dataset", default=None)
+@click.option("-i", "--inv", default=None)
 @click.option("-o", "--out", required=True)
-@click.option("-p", "--prefix", type=click.STRING)
-def index_local(dataset: str, out: str, prefix: str) -> None:
-    if prefix is None:
-        prefix = str(Path(dataset).resolve())
-    create_inventory_local(Path(dataset), Path(out), prefix)
-    gen_pcp_index(Path(out).joinpath("inventory.parquet"), Path(out))
+@click.option("-p", "--prefix", type=click.STRING, default=None)
+def gen_index(
+    dataset: str | None,
+    inv: str | Path | CloudPath | None,
+    out: str,
+    prefix: str | None,
+) -> None:
+    """Generate index files.
+
+    Parameters
+    ----------
+    dataset : str
+        Dataset path. Can be local or a cloud path.
+    inv : str | None
+        Inventory path. Can be local or a cloud path.
+    out : str
+        Output path. Can be local or a cloud path.
+    prefix : str
+        Prefix to add to inventory files.
+
+    """
+    if inv is None:
+        assert dataset is not None
+        if prefix is None:
+            prefix = str(AnyPath(dataset).resolve())
+        create_inventory(AnyPath(dataset), AnyPath(out), prefix)
+        inv = AnyPath(out).joinpath("inventory.parquet")
+    path_parser = get_parser(ParserType.OPS_VINCENT)
+    gen_pcp_index(
+        AnyPath(inv),
+        AnyPath(out),
+        path_parser,
+        VincentAstToIR,
+    )
 
 
 @click.group()
 def index() -> None:
+    """Index commands."""
     pass
 
 
-index.add_command(index_local)
+index.add_command(gen_index)
 
 
 @click.group
 def main() -> None:
+    """Starrynight CLI."""
     pass
 
 

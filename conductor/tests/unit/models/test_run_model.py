@@ -1,7 +1,7 @@
 """Run model test suite."""
 
 import pytest
-from conductor.constants import RunStatus
+from conductor.constants import ExecutorType, RunStatus
 from conductor.models.job import Job
 from conductor.models.run import Run
 from sqlalchemy.exc import IntegrityError
@@ -13,6 +13,9 @@ def test_create_run(db: Session, sample_job: Job) -> None:
         name="TestRun",
         job_id=sample_job.id,
         run_status=RunStatus.PENDING,
+        executor_type=ExecutorType.LOCAL,
+        inputs={},
+        outputs={},
     )
     db.add(run)
     db.commit()
@@ -24,6 +27,9 @@ def test_unique_name(db: Session, sample_job: Job) -> None:
         name="UniqueName",
         job_id=sample_job.id,
         run_status=RunStatus.PENDING,
+        executor_type=ExecutorType.LOCAL,
+        inputs={},
+        outputs={},
     )
     db.add(run1)
     db.commit()
@@ -33,6 +39,9 @@ def test_unique_name(db: Session, sample_job: Job) -> None:
             name="UniqueName",
             job_id=sample_job.id,
             run_status=RunStatus.PENDING,
+            executor_type=ExecutorType.LOCAL,
+            inputs={},
+            outputs={},
         )
         db.add(run2)
         db.commit()
@@ -43,6 +52,9 @@ def test_relationship_with_job(db: Session, sample_job: Job) -> None:
         name="TestRun",
         job_id=sample_job.id,
         run_status=RunStatus.PENDING,
+        executor_type=ExecutorType.LOCAL,
+        inputs={},
+        outputs={},
     )
     db.add(run)
     db.commit()
@@ -59,6 +71,23 @@ def test_invalid_run_status(db: Session, sample_job: Job) -> None:
             name="TestRun",
             job_id=sample_job.id,
             run_status="InvalidStatus",
+            inputs={},
+            outputs={},
+            executor_type=ExecutorType.LOCAL,
+        )
+        db.add(run)
+        db.commit()
+
+
+def test_invalid_executor_type(db: Session, sample_job: Job) -> None:
+    with pytest.raises(IntegrityError, match="CHECK constraint failed"):
+        run = Run(
+            name="TestRun",
+            job_id=sample_job.id,
+            run_status=RunStatus.PENDING,
+            executor_type="InvalidType",
+            inputs={},
+            outputs={},
         )
         db.add(run)
         db.commit()
@@ -70,6 +99,9 @@ def test_invalid_job(db: Session) -> None:
             name="TestRun",
             job_id=290348,
             run_status=RunStatus.PENDING,
+            executor_type=ExecutorType.LOCAL,
+            inputs={},
+            outputs={},
         )
         db.add(run)
         db.commit()

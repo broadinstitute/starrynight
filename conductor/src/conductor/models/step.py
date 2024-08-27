@@ -21,12 +21,14 @@ class Step(BaseSQLModel):
 
     __tablename__ = "step"
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column()
     type = mapped_column(Enum(StepType, create_constraint=True), nullable=False)
     project_id: Mapped[int] = mapped_column(ForeignKey("project.id"), nullable=False)
     project = relationship("Project", back_populates="steps")
-    jobs: Mapped[list[Job]] = relationship(back_populates="step")
+    jobs: Mapped[list[Job]] = relationship(
+        back_populates="step", cascade="all, delete-orphan"
+    )
     depends_on = relationship(
         "Step",
         secondary=step_step_association_table,

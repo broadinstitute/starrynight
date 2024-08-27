@@ -4,24 +4,45 @@ from pathlib import Path
 from typing import Annotated
 
 import polars as pl
+from cloudpathlib import CloudPath
 from lark import Lark
-from pydantic import BaseModel, Field, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, Field
 from tqdm import tqdm
-
 
 from starrynight.inventory import FileInventory
 from starrynight.parsers.common import BaseTransformer
-from starrynight.validate import write_pq
-from starrynight.parsers.transformer_vincent import VincentAstToIR
-
+from starrynight.utils.misc import write_pq
 
 IMG_FORMATS = ["tiff", "tif", "ndff", "jpeg", "png"]
 
 
 class PCPIndex(BaseModel):
+    """Pooled CellPainting Index.
+
+    Attributes
+    ----------
+    key : File location.
+    local_prefix : Local prefix for the file.
+    cloud_prefix : Cloud prefix for the file.
+    dataset_id : Dataset ID.
+    batch_id : File batch ID.
+    plate_id : File plate ID.
+    cycle_id : File cycle ID.
+    magnification : File magnification. If image file.
+    well_id : File well ID.
+    site_id : File site ID.
+    channel_dict : File channel dictionary. If image file.
+    filename : File name.
+    extension : File extension.
+    is_sbs_image : Is this file an SBS image?
+    is_image : Is this file an image?
+    is_dir : Is this file a directory?
+
+    """
+
     key: str
     local_prefix: str | None = None
-    s3_prefix: str | None = None
+    cloud_prefix: str | None = None
     dataset_id: str | None = None
     batch_id: str | None = None
     plate_id: str | None = None
@@ -35,8 +56,7 @@ class PCPIndex(BaseModel):
     is_sbs_image: Annotated[
         bool,
         BeforeValidator(
-            lambda v, info: v in IMG_FORMATS
-            and bool((info.data["cycle_id"] is not None))
+            lambda v, info: v in IMG_FORMATS and bool(info.data["cycle_id"] is not None)
         ),
     ] = Field(validation_alias="extension", default=False)
     is_image: Annotated[bool, BeforeValidator(lambda v: v in IMG_FORMATS)] = Field(
@@ -52,6 +72,23 @@ class PCPIndex(BaseModel):
 def ast_to_pcp_index(
     parsed_inv: FileInventory, path_parser: Lark, ast_transformer: type[BaseTransformer]
 ) -> PCPIndex:
+    """Create PCPIndex from AST.
+
+    Parameters
+    ----------
+    parsed_inv : FileInventory
+        Parsed inventory.
+    path_parser : Lark
+        Path parser.
+    ast_transformer : type[BaseTransformer]
+        AST transformer.
+
+    Returns
+    -------
+    PCPIndex
+        PCPIndex instance.
+
+    """
     ast = path_parser.parse(parsed_inv.key)
     transformer = ast_transformer()
     ir = transformer.transform(ast)
@@ -75,12 +112,26 @@ def ast_to_pcp_index(
 
 
 def gen_pcp_index(
-    inv_path: Path,
-    out_path: Path,
+    inv_path: Path | CloudPath,
+    out_path: Path | CloudPath,
     path_parser: Lark,
     ast_tansformer: type[BaseTransformer],
 ) -> None:
-    df = pl.read_parquet(inv_path)
+    """Create PCPIndex from inventory.
+
+    Parameters
+    ----------
+    inv_path : Path | CloudPath
+        Path to inventory. Can be local or a cloud path.
+    out_path : Path | CloudPath
+        Path to save generated index. Can be local or a cloud path.
+    path_parser : Lark
+        Path parser.
+    ast_tansformer : type[BaseTransformer]
+        AST transformer.
+
+    """
+    df = pl.read_parquet(inv_path.resolve().__str__())
     parsed_index = {key: [] for key in PCPIndex.model_construct().model_fields.keys()}
     for batch in tqdm(df.iter_slices()):
         row_dicts = batch.to_dicts()
@@ -95,13 +146,3 @@ def gen_pcp_index(
             except Exception as e:
                 raise e
     write_pq(parsed_index, PCPIndex, out_path)
-
-
-if __name__ == "__main__":
-    path_parser = Lark.open("path_parser.lark", rel_to=__file__, parser="lalr")
-    gen_pcp_index(
-        Path(__file__).parents[1].joinpath("inventory.parquet"),
-        Path(__file__).parent.joinpath("asma_index.parquet"),
-        path_parser,
-        VincentAstToIR,
-    )

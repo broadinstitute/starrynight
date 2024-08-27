@@ -11,6 +11,7 @@ class Project(BaseModel):
     id: int | None = None
     name: str
     dataset_uri: str
+    workspace_uri: str
     img_uri: str | None = None
     description: str
     type: ProjectType

@@ -4,6 +4,7 @@ from fastapi import APIRouter, Request
 
 from conductor.handlers.project import (
     create_project,
+    delete_project,
     fetch_all_parser_types,
     fetch_all_project_types,
     fetch_all_projects,
@@ -20,6 +21,12 @@ def post_project(request: Request, project: Project) -> Project:
     """Create project handler."""
     project.id = None
     return create_project(request.state.db_session, project)
+
+
+@project_router.delete("/")
+def remove_project(request: Request, project_id: int) -> Project:
+    """Delete project handler."""
+    return delete_project(request.state.db_session, project_id)
 
 
 @project_router.get("/")
@@ -50,3 +57,9 @@ def get_parser_type() -> list[str]:
 def get_project_count(request: Request) -> int:
     """Get project count handler."""
     return fetch_project_count(request.state.db_session)
+
+
+@project_router.get("/execute")
+def get_project_execute() -> str:
+    """Get project execute handler."""
+    return "test"

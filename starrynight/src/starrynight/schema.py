@@ -1,31 +1,29 @@
-"""
-Schema module.
-"""
+"""Schema module."""
 
-from typing import Annotated, List, Optional
+from typing import Annotated
 
-from pydantic import Field, computed_field, ConfigDict, BeforeValidator
-from cpgdata.parser import ParsedPrefix, WorkspaceFolder
 from cpgdata.measurement import get_is_dir, get_key_parts
+from cpgdata.parser import ParsedPrefix, WorkspaceFolder
+from pydantic import BeforeValidator, ConfigDict, Field, computed_field
 
 
 class MeasuredInventory(ParsedPrefix):
     is_parsing_error: bool = Field(default=False)
-    errors: Optional[str] = Field(default=None)
+    errors: str | None = Field(default=None)
     is_dir: Annotated[bool, BeforeValidator(get_is_dir)] = Field(
         validation_alias="key", default=False
     )
     key_parts: Annotated[
-        List[str],
+        list[str],
         BeforeValidator(get_key_parts),
     ] = Field(validation_alias="key", default=[])
 
     # Model configuration
     model_config = ConfigDict(populate_by_name=True)
 
-    @computed_field(return_type=Optional[str])
+    @computed_field(return_type=str | None)
     @property
-    def workspace_dir(self: "MeasuredInventory") -> Optional[str]:
+    def workspace_dir(self: "MeasuredInventory") -> str | None:
         """Computed workspace directory value.
 
         Returns

@@ -5,8 +5,9 @@ from collections.abc import Callable
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from conductor.constants import ProjectType, StepType
+from conductor.constants import ProjectType, StepType, step_desc_dict
 from conductor.handlers.job import create_jobs_for_step
+from conductor.models.project import Project
 from conductor.models.step import Step
 from conductor.validators.step import Step as PyStep
 
@@ -104,13 +105,15 @@ def fetch_step_count(db_session: Callable[[], Session], project_id: int | None) 
     return count
 
 
-def create_steps_for_project(project_type: ProjectType) -> list[Step]:
+def create_steps_for_project(project_type: ProjectType, project: Project) -> list[Step]:
     """Create predefined steps for the project.
 
     Parameters
     ----------
     project_type : ProjectType
         Project type instance.
+    project: Project
+        Project instance.
 
     Returns
     -------
@@ -120,6 +123,14 @@ def create_steps_for_project(project_type: ProjectType) -> list[Step]:
     """
     orm_steps = []
     if project_type is ProjectType.OPS_GENERIC:
+        orm_steps.append(
+            Step(
+                name=StepType.GEN_INDEX.value,
+                description=step_desc_dict[StepType.GEN_INDEX],
+                type=StepType.GEN_INDEX,
+                jobs=create_jobs_for_step(StepType.GEN_INDEX, project=project),
+            )
+        )
         orm_steps.append(
             Step(
                 name=StepType.CP_ILLUM_CALC.value,

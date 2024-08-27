@@ -1,6 +1,6 @@
 // Lark grammar for parsing asma paths
 
-start: dataset_id sep _root_dir?
+start: sep? dataset_id sep _root_dir?
 
 _root_dir: batch_id sep? "images"i? sep? _images_root_dir?
   | "workspace"i sep? workspace_root_dir?

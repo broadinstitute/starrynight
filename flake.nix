@@ -6,6 +6,8 @@
     systems.url = "github:nix-systems/default";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
+    cp-flake.url = "github:leoank/CellProfiler/refactor/nix";
+    cp-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, flake-utils, systems, ... } @ inputs:
@@ -16,10 +18,10 @@
               config.allowUnfree = true;
             };
 
-            mpkgs = import inputs.nixpkgs_master {
-              system = system;
-              config.allowUnfree = true;
-            };
+            # mpkgs = import inputs.nixpkgs_master {
+            #   system = system;
+            #   config.allowUnfree = true;
+            # };
           in
           with pkgs;
         rec {
@@ -33,10 +35,13 @@
           devShells = {
               default = let 
                 python_with_pkgs = (pkgs.python311.withPackages(pp: [
-                  # packages.cellprofiler-nightly
-                  # packages.cellprofiler-core-nightly
-                  # packages.cellprofiler-library-nightly
+                  inputs.cp-flake.packages.${system}.cellprofiler
+                  inputs.cp-flake.packages.${system}.cellprofiler-core
+                  inputs.cp-flake.packages.${system}.cellprofiler-library
                   pp.mysqlclient
+                  pp.packaging
+                  pp.snakemake
+                  pp.snakemake-storage-plugin-s3
                 ]));
               in mkShell {
                     NIX_LD = runCommand "ld.so" {} ''
@@ -46,11 +51,12 @@
                       # Add needed packages here
                       stdenv.cc.cc
                       libGL
-                      zlib
+                     
                       libxcrypt-legacy
                       libmysqlclient
                       mariadb
                       glib
+                      hdf5
                     ];
                     packages = [
                       python_with_pkgs
@@ -65,8 +71,12 @@
                       libmysqlclient
                       mariadb
                       duckdb
+                      hdf5
                       # nodejs deps
                       nodejs_22
+                      gocryptfs
+                      goofys
+                      nextflow
                     ];
                     venvDir = "./.venv";
                     postVenvCreation = ''
@@ -80,7 +90,6 @@
                         export PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring
                         runHook venvShellHook
                         export PYTHONPATH=${python_with_pkgs}/${python_with_pkgs.sitePackages}:$PYTHONPATH
-                        # rye sync --pyproject starrynight/pyproject.toml
                     '';
                   };
               };

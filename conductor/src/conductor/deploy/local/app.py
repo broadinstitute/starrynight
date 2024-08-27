@@ -1,12 +1,12 @@
 """Local app deployment."""
 
-from functools import partial
-
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from conductor.database import add_db_session_to_req, create_tables
+from conductor.database import (
+    create_tables,
+)
 from conductor.deploy.local.routes import register_routes
 
 
@@ -40,7 +40,7 @@ def create_app(app_config: AppConfig) -> FastAPI:
     """
     app = FastAPI(
         title=app_config.name,
-        dependencies=[Depends(partial(add_db_session_to_req, app_config.db_uri))],
+        separate_input_output_schemas=False,
     )
     origins = ["*"]
     app.add_middleware(
@@ -50,6 +50,6 @@ def create_app(app_config: AppConfig) -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    register_routes(app)
+    register_routes(app, app_config)
     create_tables(db_uri=app_config.db_uri)
     return app

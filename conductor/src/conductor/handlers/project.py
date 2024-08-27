@@ -28,12 +28,36 @@ def create_project(db_session: Callable[[], Session], project: PyProject) -> PyP
 
     """
     orm_object = Project(**project.model_dump(exclude={"id"}))
-    orm_steps = create_steps_for_project(orm_object.type)
+    orm_steps = create_steps_for_project(orm_object.type, orm_object)
     orm_object.steps = orm_steps
     with db_session() as session:
         session.add(orm_object)
         session.commit()
         project = PyProject.model_validate(orm_object)
+    return project
+
+
+def delete_project(db_session: Callable[[], Session], project_id: int) -> PyProject:
+    """Delete project.
+
+    Parameters
+    ----------
+    db_session: Callable[[], Session]
+        Configured callable to create a db session.
+    project_id : int
+        Project Id.
+
+    Returns
+    -------
+    PyProject
+        Deleted project.
+
+    """
+    with db_session() as session:
+        orm_object = session.scalar(select(Project).where(Project.id == project_id))
+        project = PyProject.model_validate(orm_object)
+        session.delete(orm_object)
+        session.commit()
     return project
 
 

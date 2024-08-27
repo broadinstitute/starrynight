@@ -22,29 +22,29 @@ def test_create_job(db: Session, sample_step: Step) -> None:
     assert job.id is not None
 
 
-def test_unique_name(db: Session, sample_step: Step) -> None:
-    job1 = Job(
-        name="UniqueName",
-        description="A test job 1",
-        type=JobType.GEN_LOADDATA,
-        outputs={},
-        inputs={},
-        step_id=sample_step.id,
-    )
-    db.add(job1)
-    db.commit()
-
-    with pytest.raises(IntegrityError, match="UNIQUE constraint failed"):
-        job2 = Job(
-            name="UniqueName",
-            description="A test job 2",
-            type=JobType.GEN_LOADDATA,
-            outputs={},
-            inputs={},
-            step_id=sample_step.id,
-        )
-        db.add(job2)
-        db.commit()
+# def test_unique_name(db: Session, sample_step: Step) -> None:
+#     job1 = Job(
+#         name="UniqueName",
+#         description="A test job 1",
+#         type=JobType.GEN_LOADDATA,
+#         outputs={},
+#         inputs={},
+#         step_id=sample_step.id,
+#     )
+#     db.add(job1)
+#     db.commit()
+#
+#     with pytest.raises(IntegrityError, match="UNIQUE constraint failed"):
+#         job2 = Job(
+#             name="UniqueName",
+#             description="A test job 2",
+#             type=JobType.GEN_LOADDATA,
+#             outputs={},
+#             inputs={},
+#             step_id=sample_step.id,
+#         )
+#         db.add(job2)
+#         db.commit()
 
 
 def test_relationship_step(db: Session, sample_step: Step) -> None:

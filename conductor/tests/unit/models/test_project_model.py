@@ -12,6 +12,7 @@ def test_create_project(db: Session) -> None:
     project = Project(
         name="TestProject",
         dataset_uri="test-uri",
+        workspace_uri="test-uri/workspace",
         description="A test project",
         type=ProjectType.OPS_GENERIC,
         parser_type=ParserType.OPS_VINCENT,
@@ -25,6 +26,7 @@ def test_unique_name(db: Session) -> None:
     project1 = Project(
         name="UniqueName",
         dataset_uri="test-uri-1",
+        workspace_uri="test-uri/workspace",
         description="A test project 1",
         type=ProjectType.OPS_GENERIC,
         parser_type=ParserType.OPS_VINCENT,
@@ -36,6 +38,7 @@ def test_unique_name(db: Session) -> None:
         project2 = Project(
             name="UniqueName",
             dataset_uri="test-uri-2",
+            workspace_uri="test-uri/workspace",
             description="A test project 2",
             type=ProjectType.OPS_GENERIC,
             parser_type=ParserType.OPS_VINCENT,
@@ -48,6 +51,7 @@ def test_relationship_steps(db: Session) -> None:
     project = Project(
         name="TestProject",
         dataset_uri="test-uri",
+        workspace_uri="test-uri/workspace",
         description="A test project",
         type=ProjectType.OPS_GENERIC,
         parser_type=ParserType.OPS_VINCENT,
@@ -78,6 +82,7 @@ def test_invalid_type(db: Session) -> None:
         project = Project(
             name="TestProject",
             dataset_uri="test-uri",
+            workspace_uri="test-uri/workspace",
             description="A test project",
             type="InvalidType",
             parser_type=ParserType.OPS_VINCENT,
@@ -91,6 +96,7 @@ def test_invalid_parser_type(db: Session) -> None:
         project = Project(
             name="TestProject",
             dataset_uri="test-uri",
+            workspace_uri="test-uri/workspace",
             description="A test project",
             type=ProjectType.OPS_GENERIC,
             parser_type="InvalidParserType",

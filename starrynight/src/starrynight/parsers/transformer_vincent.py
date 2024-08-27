@@ -1,10 +1,24 @@
 """Project vincent path parser."""
 
+# ruff: noqa: ANN001, D102, N802
+
 from starrynight.parsers.common import BaseTransformer
 
 
 class VincentAstToIR(BaseTransformer):
+    """Transformer for converting Vincent AST to IR.
+
+    This class takes a parsed AST from Vincent and converts it into an
+    intermediate representation (IR) that can be used by the rest of the
+    pipeline.
+    """
+
     def __init__(self) -> None:
+        """Initialize the transformer.
+
+        Initializes the channel dictionary, which is used to keep track of
+        channels as they are encountered in the input data.
+        """
         super().__init__()
         self.channel_dict: dict[str, list[str]] = {"channel_dict": []}
 
@@ -51,16 +65,16 @@ class VincentAstToIR(BaseTransformer):
         # assert len(set(items)) == 1
         return {"extension": "".join(items)}
 
-    def string(self, s):
+    def string(self, s) -> str:
         return "".join(s)
 
-    def stringwithdash(self, s):
+    def stringwithdash(self, s) -> str:
         return "".join(s)
 
-    def DIGIT(self, n):
+    def DIGIT(self, n) -> str:
         return "".join(n)
 
-    def number(self, n):
+    def number(self, n) -> float:
         (n,) = n
         return float(n)
 

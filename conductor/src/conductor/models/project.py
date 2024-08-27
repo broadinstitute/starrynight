@@ -15,10 +15,13 @@ class Project(BaseSQLModel):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     dataset_uri: Mapped[str] = mapped_column()
+    workspace_uri: Mapped[str] = mapped_column()
     img_uri: Mapped[str | None] = mapped_column()
     description: Mapped[str] = mapped_column()
     type = mapped_column(Enum(ProjectType, create_constraint=True), nullable=False)
     parser_type = mapped_column(
         Enum(ParserType, create_constraint=True), nullable=False
     )
-    steps: Mapped[list[Step]] = relationship(back_populates="project")
+    steps: Mapped[list[Step]] = relationship(
+        back_populates="project", cascade="all, delete-orphan"
+    )

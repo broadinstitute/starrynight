@@ -47,6 +47,7 @@ def sample_project(db: Session) -> Project:
     project = Project(
         name="test-project",
         dataset_uri="s3://test-project",
+        workspace_uri="test-uri/workspace",
         description="This is a test project",
         type=ProjectType.OPS_GENERIC,
         parser_type=ParserType.OPS_VINCENT,

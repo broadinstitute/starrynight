@@ -21,25 +21,25 @@ def test_create_step(db: Session, sample_project: Project) -> None:
     assert step.id is not None
 
 
-def test_unique_name(db: Session, sample_project: Project) -> None:
-    step1 = Step(
-        name="UniqueName",
-        description="Description 1",
-        type=StepType.CP_ILLUM_CALC,
-        project_id=sample_project.id,
-    )
-    db.add(step1)
-    db.commit()
-
-    with pytest.raises(IntegrityError, match="UNIQUE constraint failed"):
-        step2 = Step(
-            name="UniqueName",
-            description="Description 2",
-            type=StepType.CP_ILLUM_CALC,
-            project_id=sample_project.id,
-        )
-        db.add(step2)
-        db.commit()
+# def test_unique_name(db: Session, sample_project: Project) -> None:
+#     step1 = Step(
+#         name="UniqueName",
+#         description="Description 1",
+#         type=StepType.CP_ILLUM_CALC,
+#         project_id=sample_project.id,
+#     )
+#     db.add(step1)
+#     db.commit()
+#
+#     with pytest.raises(IntegrityError, match="UNIQUE constraint failed"):
+#         step2 = Step(
+#             name="UniqueName",
+#             description="Description 2",
+#             type=StepType.CP_ILLUM_CALC,
+#             project_id=sample_project.id,
+#         )
+#         db.add(step2)
+#         db.commit()
 
 
 def test_relationship_project(db: Session, sample_project: Project) -> None:

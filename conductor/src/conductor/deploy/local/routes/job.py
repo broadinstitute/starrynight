@@ -8,6 +8,7 @@ from conductor.handlers.job import (
     fetch_all_job_types,
     fetch_all_jobs,
     fetch_job_count,
+    update_job,
 )
 from conductor.validators.job import Job
 from conductor.validators.run import Run
@@ -20,6 +21,12 @@ def post_job(request: Request, job: Job) -> Job:
     """Create job handler."""
     job.id = None
     return create_job(request.state.db_session, job)
+
+
+@job_router.put("/")
+def put_job(request: Request, job: Job) -> Job:
+    """Update job handler."""
+    return update_job(request.state.db_session, job)
 
 
 @job_router.get("/")

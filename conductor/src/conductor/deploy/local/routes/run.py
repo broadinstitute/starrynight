@@ -2,17 +2,18 @@
 
 from fastapi import APIRouter, Request
 
-from conductor.handlers.run import create_run, fetch_all_runs
+from conductor.handlers.run import fetch_all_runs
 from conductor.validators.run import Run
 
 run_router = APIRouter(prefix="/run", tags=["run"])
 
 
-@run_router.post("/")
-def post_run(request: Request, run: Run) -> Run:
-    """Create run handler."""
-    run.id = None
-    return create_run(request.state.db_session, run)
+# @run_router.post("/")
+# def post_run(request: Request, run: Run) -> Run:
+#     """Create run handler."""
+#     run.id = None
+#     return create_run(request.state.db_session, run)
+#
 
 
 @run_router.get("/")

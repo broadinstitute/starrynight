@@ -5,7 +5,7 @@
 
 from functools import partial
 
-from fastapi import Request
+from fastapi import Request, WebSocket
 from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import Session
 
@@ -26,13 +26,27 @@ def add_db_session_to_req(db_uri: str, request: Request) -> None:
 
     Parameters
     ----------
-    request : Request
-        FastAPI request.
     db_uri : str
         Databse URI
+    request : Request
+        FastAPI request.
 
     """
     request.state.db_session = partial(get_db_session, db_uri)
+
+
+def add_db_session_to_ws(db_uri: str, websocket: WebSocket) -> None:
+    """Add db session to request state.
+
+    Parameters
+    ----------
+    db_uri : str
+        Databse URI
+    websocket : WebSocket
+        FastAPI websocket.
+
+    """
+    websocket.state.db_session = partial(get_db_session, db_uri)
 
 
 def create_tables(db_uri: str) -> None:
