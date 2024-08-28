@@ -20,23 +20,18 @@ class FileInventory(BaseModel):
     key : File location.
     filename : Filename.
     extension : File extension.
-    local_prefix : Local prefix for the file.
-    cloud_prefix : Cloud prefix for the file.
+    prefix : prefix for the file.
 
     """
 
     key: str
     filename: str
     extension: str
-    local_prefix: str | None = None
-    cloud_prefix: str | None = None
+    prefix: str | None = None
 
 
 def create_inventory(
-    dataset_dir: Path | CloudPath,
-    out_dir: Path | CloudPath,
-    local_prefix: str | None = None,
-    cloud_prefix: str | None = None,
+    dataset_dir: Path | CloudPath, out_dir: Path | CloudPath, prefix: Path | CloudPath
 ) -> None:
     """Create inventory files from dataset.
 
@@ -46,21 +41,20 @@ def create_inventory(
         Path to dataset. Can be local or a cloud path.
     out_dir : Path | CloudPath
         Path to save generated inventory. Can be local or a cloud path.
-    local_prefix : str | None
-        Local prefix to add to inventory files.
-    cloud_prefix : str | None
-        Cloud prefix to add to inventory files.
+    prefix : Path | CloudPath
+        prefix to add to inventory files.
 
     """
-    files = [AnyPath(file) for file in AnyPath(dataset_dir).glob("*/**")]
+    files = [AnyPath(file) for file in AnyPath(dataset_dir).rglob("*")]
     col_dict = {key: [] for key in FileInventory.model_construct().model_fields.keys()}
     for file in tqdm(files, desc="Writing inventory: "):
+        if file.is_dir():
+            continue
         parsed_local_file = FileInventory(
-            key=str(file),
-            filename=file.stem,
+            key=file.relative_to(prefix).__str__(),  # pyright: ignore
+            filename=file.name,
             extension=file.suffix,
-            local_prefix=local_prefix,
-            cloud_prefix=cloud_prefix,
+            prefix=prefix.resolve().__str__(),
         )
         for key, value in parsed_local_file.model_dump().items():
             col_dict[key].append(value)

@@ -4,7 +4,6 @@ from pathlib import Path
 
 import click
 from cloudpathlib import AnyPath, CloudPath
-from lark import Lark
 from starrynight.index import gen_pcp_index
 from starrynight.inventory import create_inventory
 from starrynight.parsers.common import ParserType, get_parser
@@ -29,8 +28,8 @@ def gen_inv(dataset: str, out: str, prefix: str | None) -> None:
 
     """
     if prefix is None:
-        prefix = str(AnyPath(dataset).resolve())
-    create_inventory(AnyPath(dataset), AnyPath(out), prefix)
+        prefix = AnyPath(dataset).parent.resolve()  # pyright: ignore
+    create_inventory(AnyPath(dataset), AnyPath(out), prefix)  # pyright: ignore
 
 
 @click.group()
@@ -70,8 +69,8 @@ def gen_index(
     if inv is None:
         assert dataset is not None
         if prefix is None:
-            prefix = str(AnyPath(dataset).resolve())
-        create_inventory(AnyPath(dataset), AnyPath(out), prefix)
+            prefix = AnyPath(dataset).parent.resolve()  # pyright: ignore
+        create_inventory(AnyPath(dataset), AnyPath(out), prefix)  # pyright: ignore
         inv = AnyPath(out).joinpath("inventory.parquet")
     path_parser = get_parser(ParserType.OPS_VINCENT)
     gen_pcp_index(
