@@ -14,6 +14,7 @@ import { Eye, Loader2 } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import { useProjectStore } from "@/stores/project";
+import { tableFromIPC } from "apache-arrow";
 
 interface DSVRendererProps {
   data: DSVRowArray;
@@ -39,17 +40,15 @@ const DSVRenderer = (props: DSVRendererProps) => {
   );
 };
 
-interface ParquetRendererProps {
-}
+interface ParquetRendererProps {}
 const ParquetRenderer = (props: ParquetRendererProps) => {
-  const { } = props;
+  const {} = props;
   return (
     <div
       style={{
         maxWidth: "calc(100vw - 60px)",
       }}
-    >
-    </div>
+    ></div>
   );
 };
 
@@ -60,7 +59,9 @@ interface FileViewerProps {
 export function FileViewer(props: FileViewerProps) {
   const { project } = useProjectStore((state) => ({ project: state.project }));
   const { fileName } = props;
-  const [viewContent, setViewContent] = React.useState("");
+  const [viewContent, setViewContent] = React.useState<
+    string | Blob | undefined
+  >("");
   const [isLoading, setIsLoading] = React.useState(true);
 
   async function fetchData() {
@@ -82,10 +83,15 @@ export function FileViewer(props: FileViewerProps) {
         setViewContent(data);
       }
     } else {
-      console.log("Failed to load file.", data);
+      setViewContent(data);
     }
 
     setIsLoading(false);
+  }
+
+  function parseParquet(buffer: ArrayBufferLike) {
+    const table = tableFromIPC(buffer);
+    return table;
   }
 
   const loading = isLoading;
@@ -96,6 +102,7 @@ export function FileViewer(props: FileViewerProps) {
   const isTSV = fileName.endsWith(".tsv");
   const isTXT = fileName.endsWith(".txt");
   const isExcel = fileName.endsWith(".xlsx");
+  const isParquet = fileName.endsWith(".parquet");
 
   return (
     <Dialog>
@@ -119,6 +126,7 @@ export function FileViewer(props: FileViewerProps) {
         {loaded && isCSV && <DSVRenderer data={csvParse(viewContent)} />}
         {loaded && isTSV && <DSVRenderer data={tsvParse(viewContent)} />}
         {loaded && isTXT && <p> {viewContent} </p>}
+        {loaded && isParquet && <p> {parseParquet(viewContent).toArray()} </p>}
         {loaded && isImage && (
           <div className="flex justify-center">
             <Image

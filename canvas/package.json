@@ -9,7 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apache-arrow/ts": "^17.0.0",
     "@aws-sdk/client-s3": "^3.633.0",
+    "@finos/perspective": "^3.0.1",
+    "@finos/perspective-viewer": "^3.0.1",
+    "@finos/perspective-viewer-d3fc": "^3.0.1",
+    "@finos/perspective-viewer-datagrid": "^3.0.1",
     "@hookform/resolvers": "^3.9.0",
     "@melloware/react-logviewer": "^5.2.0",
     "@radix-ui/react-accordion": "^1.2.0",
@@ -25,6 +30,7 @@
     "@tanstack/react-query": "^5.51.23",
     "@tanstack/react-query-next-experimental": "^5.51.23",
     "@types/d3-dsv": "^3.0.7",
+    "apache-arrow": "^17.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "d3-dsv": "^3.0.1",

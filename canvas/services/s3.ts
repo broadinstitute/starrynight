@@ -4,6 +4,7 @@ import {
   S3Client,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
+import { BASE_URL } from "@/services/api";
 
 export type TFileType = "png" | "csv" | "tsv" | "xlsx" | "txt";
 
@@ -40,25 +41,35 @@ const getFile = async (url: string, options = {} as TGetKeyFileOptions) => {
   /**
    * Extract bucket and key from the url
    */
-  const [Bucket, ...rest] = url.replace("s3://", "").split("/");
-  const command = new GetObjectCommand({
-    Bucket,
-    Key: rest.join("/"),
-  });
-
   const { toString, projectId } = options;
-  const client = getS3Client({ projectId });
+  if (url.startsWith("s3://")) {
+    const [Bucket, ...rest] = url.replace("s3://", "").split("/");
+    const command = new GetObjectCommand({
+      Bucket,
+      Key: rest.join("/"),
+    });
 
-  try {
-    const response = await client.send(command);
+    const client = getS3Client({ projectId });
 
-    const body =
-      typeof toString?.encoding === "string"
-        ? await response.Body?.transformToString(toString.encoding)
-        : await response.Body?.transformToByteArray();
-    return body;
-  } catch (err) {
-    console.log(err);
+    try {
+      const response = await client.send(command);
+
+      const body =
+        typeof toString?.encoding === "string"
+          ? await response.Body?.transformToString(toString.encoding)
+          : await response.Body?.transformToByteArray();
+      return body;
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    try {
+      const response = await fetch(`${BASE_URL}/file/?file_path=${url}`);
+      const body = await response.blob();
+      return body;
+    } catch (err) {
+      console.log(err);
+    }
   }
 };
 
