@@ -10,14 +10,21 @@ Then fill the details of your project.
 
 ![Project creation form](./images/screen_2.png)
 
-Name: The name of your project.
-Description: A short description of your project.
-Dataset: S3 URL of the dataset. It can also be a local path if you are running starrynight locally.
-Workspace: S3 URL where you want to save intermediate files. It can also be a local path if you are running starrynight locally.
-Parser: Select the appropriate parser according to your dataset file naming convention. More information on individual parsers can be found here.
-Project Type: Select a project template. This will help you setup a default workflow for your project. You can also change this later after project creation.
+- Name: The name of your project.
+- Description: A short description of your project.
+- Dataset: S3 URL of the dataset. It can also be a local path if you are running starrynight locally.
+- Workspace: S3 URL where you want to save intermediate files. It can also be a local path if you are running starrynight locally.
+- Parser: Select the appropriate parser according to your dataset file naming convention. More information on individual parsers can be found here.
+- Project Type: Select a project template. This will help you setup a default workflow for your project. You can also change this later after project creation.
 
 Click on create project.
+
+## Add your aws credentials to view project outputs
+
+Click on the gear icon (Add AWS credentials) on the top right corner of the page.
+These credentials are stored locally in your browser and are not shared with the backend server.
+
+![Add AWS credentials](./images/screen_7.png)
 
 ## Run a step in your project
 
