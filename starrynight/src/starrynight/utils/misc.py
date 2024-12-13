@@ -39,5 +39,26 @@ def write_pq(
     """
     pq_schema = get_pyarrow_schema(dict_type)
     out_path.parent.mkdir(exist_ok=True, parents=True)
-    with pq.ParquetWriter(out_path, pq_schema) as pq_witer:
-        pq_witer.write_table(pa.Table.from_pydict(col_dict, schema=pq_schema))
+    with out_path.open("wb") as f:
+        with pq.ParquetWriter(f, pq_schema) as pq_witer:
+            pq_witer.write_table(pa.Table.from_pydict(col_dict, schema=pq_schema))
+
+
+def merge_pq(files_list: list[CloudPath | Path], out_file: CloudPath | Path) -> None:
+    """Merge parquet files.
+
+    Parameters
+    ----------
+    files_list : list[CloudPath | Path]
+        List of file paths to merge
+    out_file : CloudPath | Path
+        Path to merged file
+
+    """
+    schema = pq.ParquetFile(files_list[0]).schema_arrow
+    with out_file.open("wb") as f:
+        with pq.ParquetWriter(f, schema=schema) as writer:
+            for file in files_list:
+                if isinstance(file, CloudPath):
+                    file = file.fspath
+                writer.write_table(pq.read_table(file, schema=schema))

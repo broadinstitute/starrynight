@@ -186,5 +186,5 @@ def write_illum_calculate_pipeline(
     write_path.mkdir(exist_ok=True, parents=True)
     with CellProfilerContext(out_dir=run_path) as cpipe:
         cpipe = generate_illum_calculate_pipeline(cpipe, load_data_path)
-        with write_path.open("w") as f:
+        with write_path.joinpath("illum_calc.cppipe").open("w") as f:
             cpipe.dump(f)

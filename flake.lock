@@ -10,11 +10,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1724242411,
-        "narHash": "sha256-xKl0UwBQ1VvnUU3yXLp/GDwUdoFGlK4eQ2eLppfwmUc=",
+        "lastModified": 1727148882,
+        "narHash": "sha256-aSUvCEsxYTCwJtl+pZZwo0rQ1MD94jFj3tKhlPmMdgQ=",
         "owner": "leoank",
         "repo": "CellProfiler",
-        "rev": "59d1166b7f8efc6415dd706a9c217097d24200a8",
+        "rev": "8ee8e5367cc90cb9c5a4a160f580bfe8874cd015",
         "type": "github"
       },
       "original": {

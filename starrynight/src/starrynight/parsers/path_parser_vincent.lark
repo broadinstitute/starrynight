@@ -1,37 +1,45 @@
 // Lark grammar for parsing asma paths
 
-start: sep? dataset_id sep _root_dir?
+start: sep? dataset_id sep source_id sep _root_dir
 
-_root_dir: batch_id sep? "images"i? sep? _images_root_dir?
-  | "workspace"i sep? workspace_root_dir?
+_root_dir: batch_id sep (_images_root_dir | _illum_root_dir | _images_aligned_root_dir | _workspace_root_dir)
 
-_images_root_dir: plate_id sep? _plate_root_dir?
+_images_root_dir: "images"i sep plate_id sep _plate_root_dir
+_illum_root_dir: "illum"i sep plate_id sep leaf_node
+_images_aligned_root_dir: "images_aligned"i sep "barcoding" sep plate_well_site_id sep leaf_node
+_workspace_root_dir: "workspace" sep workspace_root_dir
 _plate_root_dir: _sbs_folder | _cp_folder
 
-_sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id sep? (_sbs_images_type1 | _sbs_metadata)?
+_sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id sep? (_sbs_images_type1 | _sbs_images_type2 | _sbs_images_type3 | _sbs_metadata)?
 _sbs_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "," channel "," channel "_Seq" site_id "." extension
+_sbs_images_type2: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "," channel "," channel "," channel "_Seq" site_id "." extension
+_sbs_images_type3: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "_Seq" site_id "." extension
 _sbs_metadata: leaf_node
 
-_cp_folder: magnification "_CP_" plate_id sep? (_cp_images_type1 | _cp_metadata)?
+_cp_folder: magnification "_CP_" plate_id sep? (_cp_images_type1 | _cp_images_type2 | _cp_images_type3 |_cp_metadata)?
 _cp_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "_Seq" site_id "." extension
+_cp_images_type2: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "," channel "," channel "," channel "_Seq" site_id "." extension
+_cp_images_type3: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "_Seq" site_id "." extension
 _cp_metadata: leaf_node
 
 
 workspace_root_dir: string
-dataset_id: string
+dataset_id: stringwithdash
+source_id: string
 sep: "/"
 batch_id: string
 plate_id: string
 magnification: DIGIT~2 "X"
 cycle_id: DIGIT~1..2
 well_id: (LETTER | DIGIT)~2
-site_id: DIGIT~4
+site_id: DIGIT~1..4
+plate_well_site_id: plate_id "-Well" well_id "-" site_id
 channel: string
 leaf_node: filename "." extension
 filename: stringwithdash
 extension: string
 string: (LETTER | DIGIT)+
-stringwithdash: ( LETTER | DIGIT | "_" | "-" | " " )+
+stringwithdash: ( string | "-" | "_" | "," | " " )+
+DIGIT: "0".."9"
 
-%import common.DIGIT
 %import common.LETTER

@@ -52,6 +52,12 @@ class VincentAstToIR(BaseTransformer):
         # assert len(set(items)) == 1
         return {"site_id": "".join(items)}
 
+    def plate_well_site_id(self, items) -> dict:
+        out_dict = {}
+        for item in items:
+            out_dict.update(item)
+        return out_dict
+
     def channel(self, items) -> dict:
         channel_len = len(self.channel_dict["channel_dict"])
         self.channel_dict["channel_dict"].append(items[0])
@@ -69,7 +75,7 @@ class VincentAstToIR(BaseTransformer):
         return "".join(s)
 
     def stringwithdash(self, s) -> str:
-        return "".join(s)
+        return "-".join(s)
 
     def DIGIT(self, n) -> str:
         return "".join(n)

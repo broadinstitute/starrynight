@@ -41,8 +41,7 @@ class PCPIndex(BaseModel):
     """
 
     key: str
-    local_prefix: str | None = None
-    cloud_prefix: str | None = None
+    prefix: str | None = None
     dataset_id: str | None = None
     batch_id: str | None = None
     plate_id: str | None = None
@@ -101,7 +100,7 @@ def ast_to_pcp_index(
     if pcp_index_dict.get("filename", False):
         assert parsed_inv.filename == pcp_index_dict["filename"]
     if pcp_index_dict.get("extension", False):
-        assert parsed_inv.extension == pcp_index_dict["extension"]
+        assert parsed_inv.extension.replace(".", "") == pcp_index_dict["extension"]
 
     return PCPIndex(
         **pcp_index_dict,
@@ -133,7 +132,9 @@ def gen_pcp_index(
     """
     df = pl.read_parquet(inv_path.resolve().__str__())
     parsed_index = {key: [] for key in PCPIndex.model_construct().model_fields.keys()}
-    for batch in tqdm(df.iter_slices()):
+    for batch in tqdm(
+        df.iter_slices(), total=len(df) // 10000, desc="Generating Index"
+    ):
         row_dicts = batch.to_dicts()
         for row in row_dicts:
             try:
@@ -144,5 +145,6 @@ def gen_pcp_index(
                     parsed_index[k].append(v)
 
             except Exception as e:
+                print(f"\n\n Failed on: {row}\n\n")
                 raise e
-    write_pq(parsed_index, PCPIndex, out_path)
+    write_pq(parsed_index, PCPIndex, out_path.joinpath("index.parquet"))

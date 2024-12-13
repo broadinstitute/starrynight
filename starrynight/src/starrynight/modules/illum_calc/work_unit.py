@@ -24,10 +24,7 @@ def create_work_unit_illum_calc(
         List of unit of work.
 
     """
-    uow_list = []
-    load_data_list = []
-    illum_cpipe_list = []
-    output_paths_list: list[list[Path]] = []
+    uow_list = [UnitOfWork(inputs={}, outputs={})]
     df = pl.read_csv(load_data_path)
     for i, plate_df in enumerate(df.partition_by("Plate")):
         pass

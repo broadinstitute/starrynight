@@ -1,10 +1,13 @@
 """Common parser modules."""
 
+import logging
 from abc import abstractmethod
 from enum import Enum
 from pathlib import Path
 
 from lark import Lark, Transformer
+
+logging.basicConfig(level=logging.INFO)
 
 
 class ParserType(Enum):
@@ -38,7 +41,12 @@ def get_parser(parser_type: ParserType) -> Lark:
         Parser instance.
 
     """
-    return Lark.open(parser_path_map[parser_type].resolve().__str__(), parser="lalr")
+    return Lark.open(
+        parser_path_map[parser_type].resolve().__str__(),
+        parser="lalr",
+        # strict=True,
+        # debug=True,
+    )
 
 
 class BaseTransformer(Transformer):

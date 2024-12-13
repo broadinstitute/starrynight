@@ -4,8 +4,11 @@ from pathlib import Path
 
 import click
 from cloudpathlib import AnyPath, CloudPath
+
 from starrynight.index import gen_pcp_index
 from starrynight.inventory import create_inventory
+from starrynight.modules.illum_calc.cppipe import write_illum_calculate_pipeline
+from starrynight.modules.illum_calc.load_data import gen_illum_calc_load_data
 from starrynight.parsers.common import ParserType, get_parser
 from starrynight.parsers.transformer_vincent import VincentAstToIR
 
@@ -90,6 +93,60 @@ def index() -> None:
 index.add_command(gen_index)
 
 
+@click.command(name="loaddata")
+@click.option("-i", "--index", default=None)
+@click.option("-o", "--out", required=True)
+def gen_illum_loaddata(
+    index: str | Path | CloudPath | None,
+    out: str,
+) -> None:
+    """Generate loaddata file.
+
+    Parameters
+    ----------
+    index : str | None
+        Index path. Can be local or a cloud path.
+    out : str
+        Output path. Can be local or a cloud path.
+
+    """
+    gen_illum_calc_load_data(AnyPath(index), AnyPath(out), None)
+
+
+@click.command(name="cppipe")
+@click.option("-l", "--loaddata", default=None)
+@click.option("-o", "--out", required=True)
+@click.option("-r", "--run", required=True)
+def gen_illum_cppipe(
+    loaddata: str | Path | CloudPath | None,
+    out: str,
+    run: str,
+) -> None:
+    """Generate cppipe file.
+
+    Parameters
+    ----------
+    loaddata : str | None
+        Loaddata path. Can be local or a cloud path.
+    out : str
+        Output path. Can be local or a cloud path.
+    run : str
+        Run path. Can be local or a cloud path.
+
+    """
+    write_illum_calculate_pipeline(AnyPath(loaddata), AnyPath(out), AnyPath(run))
+
+
+@click.group()
+def illum() -> None:
+    """Illum commands."""
+    pass
+
+
+illum.add_command(gen_illum_loaddata)
+illum.add_command(gen_illum_cppipe)
+
+
 @click.group
 def main() -> None:
     """Starrynight CLI."""
@@ -98,3 +155,4 @@ def main() -> None:
 
 main.add_command(inventory)
 main.add_command(index)
+main.add_command(illum)

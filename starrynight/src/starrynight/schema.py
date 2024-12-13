@@ -8,6 +8,39 @@ from pydantic import BeforeValidator, ConfigDict, Field, computed_field
 
 
 class MeasuredInventory(ParsedPrefix):
+    """Schema for measured inventory.
+
+    Attributes
+    ----------
+    is_parsing_error : bool
+        Whether parsing resulted in an error.
+    errors : str | None
+        Error message if parsing failed.
+    is_dir : Annotated[bool, BeforeValidator(get_is_dir)]
+        Whether the key represents a directory (validated).
+    key_parts : Annotated[list[str], BeforeValidator(get_key_parts)]
+        List of parts of the key from validation.
+
+    Model configuration
+    -------------------
+    model_config : ConfigDict
+        Pydantic model configuration.
+
+    Computed properties
+    -------------------
+    workspace_dir : str | None (computed)
+        Computed value for workspace directory.
+
+    Methods
+    -------
+    get_all_fields() -> dict
+        Returns a dictionary containing all fields including computed fields.
+
+    gen_error_entry(obj_key: str, e: Exception) -> MeasuredInventory (static)
+        Generates an error entry from the parsed object.
+
+    """
+
     is_parsing_error: bool = Field(default=False)
     errors: str | None = Field(default=None)
     is_dir: Annotated[bool, BeforeValidator(get_is_dir)] = Field(
