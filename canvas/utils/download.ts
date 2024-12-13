@@ -1,5 +1,5 @@
 export type TDownloadFileOptions = {
-  content: string | Uint8Array;
+  content: string | Uint8Array | Blob;
   filename: string;
 };
 
@@ -17,6 +17,8 @@ export function downloadFile(options: TDownloadFileOptions) {
     type += "tsv";
   } else if (filename.endsWith(".png")) {
     type = "image/png";
+  } else if (filename.endsWith(".parquet")) {
+    type += "parquet";
   }
 
   console.log("Type", type);

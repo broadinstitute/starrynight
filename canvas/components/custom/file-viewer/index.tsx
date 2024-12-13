@@ -14,7 +14,7 @@ import { Eye, Loader2 } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import { useProjectStore } from "@/stores/project";
-import { tableFromIPC } from "apache-arrow";
+import { ParquetFileViewer } from "./parquet";
 
 interface DSVRendererProps {
   data: DSVRowArray;
@@ -40,18 +40,6 @@ const DSVRenderer = (props: DSVRendererProps) => {
   );
 };
 
-interface ParquetRendererProps {}
-const ParquetRenderer = (props: ParquetRendererProps) => {
-  const {} = props;
-  return (
-    <div
-      style={{
-        maxWidth: "calc(100vw - 60px)",
-      }}
-    ></div>
-  );
-};
-
 interface FileViewerProps {
   fileName: string;
 }
@@ -59,9 +47,7 @@ interface FileViewerProps {
 export function FileViewer(props: FileViewerProps) {
   const { project } = useProjectStore((state) => ({ project: state.project }));
   const { fileName } = props;
-  const [viewContent, setViewContent] = React.useState<
-    string | Blob | undefined
-  >("");
+  const [viewContent, setViewContent] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(true);
 
   async function fetchData() {
@@ -82,16 +68,11 @@ export function FileViewer(props: FileViewerProps) {
       } else {
         setViewContent(data);
       }
-    } else {
-      setViewContent(data);
+    } else if (data && data instanceof Blob) {
+      setViewContent(data as any);
     }
 
     setIsLoading(false);
-  }
-
-  function parseParquet(buffer: ArrayBufferLike) {
-    const table = tableFromIPC(buffer);
-    return table;
   }
 
   const loading = isLoading;
@@ -126,7 +107,7 @@ export function FileViewer(props: FileViewerProps) {
         {loaded && isCSV && <DSVRenderer data={csvParse(viewContent)} />}
         {loaded && isTSV && <DSVRenderer data={tsvParse(viewContent)} />}
         {loaded && isTXT && <p> {viewContent} </p>}
-        {loaded && isParquet && <p> {parseParquet(viewContent).toArray()} </p>}
+        {loaded && isParquet && <ParquetFileViewer data={viewContent as any} />}
         {loaded && isImage && (
           <div className="flex justify-center">
             <Image

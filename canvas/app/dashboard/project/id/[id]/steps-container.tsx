@@ -1,19 +1,15 @@
 "use client";
 import React from "react";
-import { Sidebar } from "@/components/custom/sidebar";
-import { TProjectStep } from "@/services/step";
-import { ProjectStepJobs } from "./jobs";
-import { Button } from "@/components/ui/button";
-import { Loader2, PlayIcon } from "lucide-react";
-import { ActionsButtons } from "@/components/custom/action-buttons";
 import { useProjectStore } from "@/stores/project";
 import useSWR from "swr";
-import { ProjectError } from "./project-error";
 import { getSteps } from "@/services/step";
 import { StepAndJobsSkeleton } from "./skeleton/step-and-jobs-skeleton";
 import { Steps } from "./steps";
+import { getStepSWRKey } from "@/utils/getSWRKey";
+import { useSearchParams } from "next/navigation";
 
 export function StepsContainer() {
+  const searchParams = useSearchParams();
   const { project, updateSteps, updateCurrentStep } = useProjectStore(
     (state) => ({
       project: state.project,
@@ -23,7 +19,7 @@ export function StepsContainer() {
   );
 
   const { data, error, isLoading } = useSWR(
-    `/step/?project_id=${project.id}`,
+    getStepSWRKey(project.id),
     () => getSteps({ projectId: project.id, canThrowOnError: true }),
     {
       revalidateIfStale: false,
@@ -36,9 +32,16 @@ export function StepsContainer() {
   React.useEffect(() => {
     if (data && data.ok && data.response) {
       updateSteps(data.response);
-      updateCurrentStep(data.response[0]);
+      const stepId = searchParams.get("step") || "";
+      const step = data.response.find((step) => step.id === +stepId);
+
+      if (step) {
+        updateCurrentStep(step);
+      } else {
+        updateCurrentStep(data.response[0]);
+      }
     }
-  }, [data, updateSteps, updateCurrentStep]);
+  }, [data, searchParams, updateSteps, updateCurrentStep]);
 
   if (isLoading && !data?.ok) {
     return <StepAndJobsSkeleton />;

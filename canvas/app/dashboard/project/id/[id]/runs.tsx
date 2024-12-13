@@ -59,8 +59,8 @@ export function ProjectStepJobRuns(props: TProjectStepJobRunProps) {
       id: input[0],
       label: input[0],
       type: input[1].type,
-      value: `${project.dataset_uri}${
-        input[1].value.replace(project.dataset_uri, "") || ""
+      value: `${project.dataset_uri.replace(/\/$/, "")}/${
+        input[1].value.replace(project.dataset_uri, "").replace(/^\//, "") || ""
       }`,
     }));
   }, [job.inputs, project.dataset_uri]);

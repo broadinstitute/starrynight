@@ -3,8 +3,11 @@ import React from "react";
 import { Sidebar } from "@/components/custom/sidebar";
 import { ProjectStepJobs } from "./jobs";
 import { useProjectStore } from "@/stores/project";
+import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
+import { TProjectStep } from "@/services/step";
 
 export function Steps() {
+  const { update } = useUpdateSearchParams();
   const { steps, currentStep, updateCurrentStep } = useProjectStore(
     (state) => ({
       steps: state.steps,
@@ -12,6 +15,11 @@ export function Steps() {
       updateCurrentStep: state.updateCurrentStep,
     })
   );
+
+  function onSidebarClick(step: TProjectStep) {
+    update({ step: String(step.id) });
+    updateCurrentStep(step);
+  }
 
   if (steps.length === 0) {
     return (
@@ -28,7 +36,7 @@ export function Steps() {
         items={steps.map((step) => ({
           title: step.name,
           id: step.id,
-          onClick: () => updateCurrentStep(step),
+          onClick: () => onSidebarClick(step),
         }))}
       />
       {currentStep && <ProjectStepJobs />}
