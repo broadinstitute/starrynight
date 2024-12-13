@@ -1,8 +1,8 @@
 """Run route handlers."""
 
 from collections.abc import Callable
-from cloudpathlib import AnyPath
 
+from cloudpathlib import AnyPath
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 

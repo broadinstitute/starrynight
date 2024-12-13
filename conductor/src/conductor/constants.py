@@ -149,9 +149,9 @@ job_output_dict = {
     JobType.RUN_STARRYNIGHT: {},
     JobType.GEN_INVENTORY: {"inventory": {"type": "parquet", "uri": ""}},
     JobType.GEN_INDEX: {"index": {"type": "parquet", "uri": ""}},
-    JobType.GEN_LOADDATA: {"LoadData CSV": {"type": "csv", "uri": ""}},
-    JobType.GEN_CP_PIPE: {"Cellprofiler Pipeline": {"type": "txt", "uri": ""}},
-    JobType.GEN_FIJI: {"Fiji Script": {"type": "txt", "uri": ""}},
+    JobType.GEN_LOADDATA: {"loaddata": {"type": "csv", "uri": ""}},
+    JobType.GEN_CP_PIPE: {"cppipe": {"type": "txt", "uri": ""}},
+    JobType.GEN_FIJI: {"fjscript": {"type": "txt", "uri": ""}},
     JobType.CUSTOM: {},
 }
 
@@ -160,7 +160,7 @@ job_input_dict = {
     JobType.GEN_INVENTORY: {"dataset_path": {"type": "path", "value": ""}},
     JobType.GEN_INDEX: {"inventory_path": {"type": "path", "value": ""}},
     JobType.GEN_LOADDATA: {"index_path": {"type": "path", "value": ""}},
-    JobType.GEN_CP_PIPE: {"index_path": {"type": "path", "value": ""}},
+    JobType.GEN_CP_PIPE: {"load_data_path": {"type": "path", "value": ""}},
     JobType.GEN_FIJI: {},
     JobType.RUN_CP: {
         "load_data_path": {"type": "path", "path": ""},

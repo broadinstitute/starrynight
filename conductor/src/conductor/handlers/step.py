@@ -134,9 +134,9 @@ def create_steps_for_project(project_type: ProjectType, project: Project) -> lis
         orm_steps.append(
             Step(
                 name=StepType.CP_ILLUM_CALC.value,
-                description="",
+                description=step_desc_dict[StepType.CP_ILLUM_CALC],
                 type=StepType.CP_ILLUM_CALC,
-                jobs=create_jobs_for_step(StepType.CP_ILLUM_CALC),
+                jobs=create_jobs_for_step(StepType.CP_ILLUM_CALC, project=project),
             )
         )
         orm_steps.append(

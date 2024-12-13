@@ -112,7 +112,7 @@ async def ws_run_log(ws: WebSocket, run_id: int) -> None:
     await manager.connect(ws)
     try:
         while True:
-            await asyncio.sleep(5)
+            await asyncio.sleep(3)
             try:
                 log = fetch_run_log(ws.state.db_session, run_id)
                 diff = list(set(log) - set(manager.log_read_map[ws]))

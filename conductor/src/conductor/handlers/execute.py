@@ -14,7 +14,11 @@ from starrynight.modules.gen_index.pipe import (
     create_pipe_gen_index,
     create_pipe_gen_inv,
 )
-from starrynight.modules.illum_calc.pipe import create_pipe_illum_calc
+from starrynight.modules.illum_calc.pipe import (
+    create_pipe_illum_cppipe,
+    create_pipe_illum_loaddata,
+    create_pipe_illum_run_cp,
+)
 
 from conductor.constants import (
     ExecutorType,
@@ -57,10 +61,20 @@ def create_pipe_for_job(job: Job) -> Pipeline:
             )
             return pipe
     if job.step.type is StepType.CP_ILLUM_CALC:
+        if job.type is JobType.GEN_LOADDATA:
+            index_path = AnyPath(job.inputs["index"]["value"])
+            out_path = AnyPath(job.outputs["loaddata"]["uri"])
+            pipe = create_pipe_illum_loaddata(index_path, out_path.parent, None)
+            return pipe
+        if job.type is JobType.GEN_CP_PIPE:
+            loaddata_path = AnyPath(job.inputs["load_data_path"]["value"])
+            out_path = AnyPath(job.outputs["cppipe"]["uri"])
+            pipe = create_pipe_illum_cppipe(loaddata_path, out_path.parent)
+            return pipe
         if job.type is JobType.RUN_CP:
-            load_data_path = job.inputs["load_data_path"]["path"]
-            illum_cppipe_path = job.inputs["load_data_path"]["path"]
-            pipe = create_pipe_illum_calc(load_data_path, illum_cppipe_path)
+            load_data_path = AnyPath(job.inputs["load_data_path"]["value"])
+            illum_cppipe_path = AnyPath(job.outputs["cppipe_path"]["path"])
+            pipe = create_pipe_illum_run_cp(load_data_path, illum_cppipe_path)
             return pipe
         else:
             pipe = Seq([])
@@ -141,7 +155,7 @@ def submit_job(
 
         # Add a run record to DB
         run = Run(
-            name=f"{job.step.project.name} | {job.step.name} | {job.name} | {int(time())}",
+            name=f"{job.step.project.name} | {job.step.name} | {job.name} | {executor.scratch_path.stem.split('_')[1]}",
             job_id=job.id,
             log_path=str(log_path.resolve()),
             executor_type=executor_type,

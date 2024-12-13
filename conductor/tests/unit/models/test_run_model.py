@@ -1,11 +1,12 @@
 """Run model test suite."""
 
 import pytest
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
 from conductor.constants import ExecutorType, RunStatus
 from conductor.models.job import Job
 from conductor.models.run import Run
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
 
 
 def test_create_run(db: Session, sample_job: Job) -> None:

@@ -36,6 +36,8 @@ def fetch_run_status(run: Run) -> RunStatus | None:
             return RunStatus.FAILED
         if nohup_file.read_text().find("SyntaxError") != -1:
             return RunStatus.FAILED
+        if nohup_file.read_text().find("MissingInputException") != -1:
+            return RunStatus.FAILED
         # Check nextflow error
         if nohup_file.read_text().find("ERROR") != -1:
             return RunStatus.FAILED

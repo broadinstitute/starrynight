@@ -15,7 +15,7 @@ app_config = AppConfig(
 )
 session = partial(get_db_session, app_config.db_uri)
 
-schedule.every(5).seconds.do(update_run_status, db_session=session)
+schedule.every(2).seconds.do(update_run_status, db_session=session)
 
 while True:
     schedule.run_pending()

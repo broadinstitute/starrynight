@@ -190,7 +190,9 @@ def create_jobs_for_step(
             "value": project.dataset_uri,
         }
         inventory_path = (
-            AnyPath(project.workspace_uri).joinpath("index/inventory.parquet").__str__()
+            AnyPath(project.workspace_uri)
+            .joinpath("gen_index/inventory.parquet")
+            .__str__()
         )
         gen_inv_job.outputs["inventory"]["uri"] = inventory_path
         orm_jobs.append(gen_inv_job)
@@ -202,12 +204,38 @@ def create_jobs_for_step(
             "value": inventory_path,
         }
         gen_index_job.outputs["index"]["uri"] = (
-            AnyPath(project.workspace_uri).joinpath("index/index.parquet").__str__()
+            AnyPath(project.workspace_uri).joinpath("gen_index/index.parquet").__str__()
         )
         orm_jobs.append(gen_index_job)
     if step_type is StepType.CP_ILLUM_CALC:
-        orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-        orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
+        assert project is not None
+        # Generate load data job
+        gen_loaddata_job = gen_orm_job(JobType.GEN_LOADDATA)
+        gen_loaddata_job.inputs["index"] = {
+            "type": "path",
+            "value": AnyPath(project.workspace_uri)
+            .joinpath("index/index.parquet")
+            .__str__(),
+        }
+        loaddata_path = (
+            AnyPath(project.workspace_uri).joinpath("illum/loaddata.csv").__str__()
+        )
+        gen_loaddata_job.outputs["loaddata"]["uri"] = loaddata_path
+        orm_jobs.append(gen_loaddata_job)
+
+        # Generate cppipe job
+        gen_cppipe_job = gen_orm_job(JobType.GEN_CP_PIPE)
+        gen_cppipe_job.inputs["load_data_path"] = {
+            "type": "path",
+            "value": AnyPath(project.workspace_uri)
+            .joinpath("illum/loaddata.csv")
+            .__str__(),
+        }
+        cppipe_path = (
+            AnyPath(project.workspace_uri).joinpath("illum/illum_calc.cppipe").__str__()
+        )
+        gen_cppipe_job.outputs["cppipe"]["uri"] = cppipe_path
+        orm_jobs.append(gen_cppipe_job)
     elif step_type is StepType.CP_ILLUM_APPLY:
         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
