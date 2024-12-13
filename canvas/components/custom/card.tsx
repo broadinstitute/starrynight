@@ -17,7 +17,7 @@ export function Card(props: TCardProps) {
   const { img, title, description, action, ...rest } = props;
 
   return (
-    <div className="w-[250px]" {...rest}>
+    <div {...rest}>
       <div className="rounded-md overflow-hidden">
         <ErrorBoundary
           errorComponent={() => (

@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-[#eee]">
       <link rel="icon" href="/broad.svg" sizes="any" />
       <body
         className={cn("min-h-screen font-sans antialiased", inter.variable)}

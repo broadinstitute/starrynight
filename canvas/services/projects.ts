@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { api, TResponse } from "./api";
 
 export type TProject = {
@@ -24,6 +25,15 @@ export async function getProjects(): Promise<TResponse<TProject>> {
       error,
     };
   }
+}
+
+export const GET_PROJECT_QUERY_KEY = "GET_PROJECT_QUERY_KEY";
+
+export function useGetProjects() {
+  return useQuery({
+    queryKey: [GET_PROJECT_QUERY_KEY],
+    queryFn: getProjects,
+  });
 }
 
 export type TGetProjectOptions = {
@@ -102,4 +112,21 @@ export async function getParserAndProjectType(): Promise<
       error,
     };
   }
+}
+
+export const GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY =
+  "GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY";
+
+export type TUseGetParserAndProjectTypeOptions = {
+  enabled?: boolean;
+};
+
+export function useGetParserAndProjectType(
+  options: TUseGetParserAndProjectTypeOptions
+) {
+  return useQuery({
+    queryKey: [GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY],
+    queryFn: getParserAndProjectType,
+    ...options,
+  });
 }

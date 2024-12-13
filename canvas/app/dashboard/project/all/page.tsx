@@ -1,15 +1,15 @@
 import { Suspense } from "react";
 import { PageContainer } from "../../_layout/page-container";
-import { AllProjects } from "./all-projects";
-import { AllProjectsHeading } from "./all-projects-heading";
-import { AllProjectSkeleton } from "./all-projects-skeleton";
+import { AllProjectsModel } from "./model";
+import { AllProjectsSkeleton } from "./view/skeleton";
+import { AllProjectsHeading } from "./components/heading";
 
 export default function AllProjectPage() {
   return (
     <PageContainer>
       <AllProjectsHeading />
-      <Suspense fallback={<AllProjectSkeleton />}>
-        <AllProjects />
+      <Suspense fallback={<AllProjectsSkeleton />}>
+        <AllProjectsModel />
       </Suspense>
     </PageContainer>
   );

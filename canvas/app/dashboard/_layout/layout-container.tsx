@@ -6,9 +6,14 @@ export function LayoutContainer(props: TLayoutContainer) {
   const { children } = props;
 
   return (
-    <div className="h-screen w-screen bg-[#eee] flex p-3">
-      <div className="flex flex-col flex-1 bg-white rounded-2xl p-4 md:px-8">
-        {children}
+    <div className="bg-[#eee] min-h-screen flex flex-col p-3">
+      <div className="bg-white rounded-2xl p-4 h-full flex-1 w-full flex justify-center">
+        <div
+          id="main-wrapper"
+          className="flex flex-col flex-1 max-w-7xl  md:px-8"
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
