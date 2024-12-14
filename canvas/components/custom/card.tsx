@@ -1,7 +1,9 @@
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import clsx from "clsx";
+import React from "react";
 
 export type TCardProps = {
   img: {
@@ -11,32 +13,46 @@ export type TCardProps = {
   title: string;
   description: string;
   action?: ButtonProps;
+  className?: string;
 };
 
-export function Card(props: TCardProps) {
-  const { img, title, description, action, ...rest } = props;
+type TCardImageProps = {
+  className?: string;
+  src: string;
+  alt: string;
+};
+
+function CardImage(props: TCardImageProps) {
+  const { className, src, alt } = props;
 
   return (
-    <div {...rest}>
-      <div className="rounded-md overflow-hidden">
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className={clsx("object-cover", className)}
+    />
+  );
+}
+
+export function Card(props: TCardProps) {
+  const { img, title, description, action, className, ...rest } = props;
+
+  return (
+    <div
+      className={clsx(
+        "border rounded-md overflow-hidden transition hover:shadow-sm",
+        className
+      )}
+      {...rest}
+    >
+      <div className="rounded-md overflow-hidden flex relative h-40">
         <ErrorBoundary
           errorComponent={() => (
-            <Image
-              className="object-cover object-center h-40"
-              height={80}
-              width={250}
-              src="/project-placeholder.webp"
-              alt="Project"
-            />
+            <CardImage src="/project-placeholder.webp" alt="project" />
           )}
         >
-          <Image
-            className="object-cover object-center h-40"
-            height={80}
-            width={250}
-            src={img.src}
-            alt={img.alt}
-          />
+          <CardImage src={img.src} alt={img.alt} />
         </ErrorBoundary>
       </div>
       <div className="p-2">

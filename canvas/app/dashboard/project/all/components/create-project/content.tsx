@@ -35,7 +35,7 @@ export function CreateProjectContent() {
         push(`${PROJECT_URL}/${data.id}`);
       }, 3000);
     },
-    [push]
+    [push, queryClient]
   );
 
   const {
@@ -48,9 +48,12 @@ export function CreateProjectContent() {
     onSuccess: handleOnCreateProjectSuccess,
   });
 
-  const handleSubmit = React.useCallback((data: TCreateProjectFormData) => {
-    createNewProject(data);
-  }, []);
+  const handleSubmit = React.useCallback(
+    (data: TCreateProjectFormData) => {
+      createNewProject(data);
+    },
+    [createNewProject]
+  );
 
   return (
     <Modal
@@ -58,7 +61,7 @@ export function CreateProjectContent() {
       trigger={<Button>Create Project</Button>}
       hasCloseButtonInFooter
       actions={[
-        <Button className="my-1" type="submit" form={formID}>
+        <Button key="create" className="my-1" type="submit" form={formID}>
           Create
         </Button>,
       ]}

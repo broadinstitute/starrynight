@@ -16,7 +16,7 @@ export async function AllProjectsModel() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AllProjectsView />;
+      <AllProjectsView />
     </HydrationBoundary>
   );
 }
