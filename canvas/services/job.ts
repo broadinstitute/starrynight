@@ -1,38 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import { api, TResponse } from "./api";
 
-export type TProjectStepJobOutput = {
+export type TJobOutput = {
   type: string;
   uri: string;
 };
 
-export type TProjectStepJobInput = {
+export type TJobInput = {
   type: string;
   value: string;
 };
 
-export type TProjectStepJob = {
+export type TJob = {
   id: string | number;
   step_id: string | number;
   name: string;
   description: string;
   type: string;
-  outputs: Record<string, TProjectStepJobOutput>;
-  inputs: Record<string, TProjectStepJobInput>;
+  outputs: Record<string, TJobOutput>;
+  inputs: Record<string, TJobInput>;
 };
 
-export type TGetStepJobsOptions = {
+export type TGetJobsOptions = {
   canThrowOnError?: boolean;
   stepId: string | number;
 };
 
 export async function getJobs(
-  options: TGetStepJobsOptions
-): Promise<TResponse<TProjectStepJob[]>> {
+  options: TGetJobsOptions
+): Promise<TResponse<TJob[]>> {
   const { stepId, canThrowOnError } = options;
   try {
     const response = (await api
       .get(`/job/?step_id=${stepId}`)
-      .json()) as TProjectStepJob[];
+      .json()) as TJob[];
 
     return {
       ok: true,
@@ -51,21 +52,38 @@ export async function getJobs(
   }
 }
 
-export type TProjectStepJobExecuteResponse = {};
+export const GET_JOBS_QUERY_KEY = "GET_JOBS_QUERY_KEY";
 
-export type TCreateStepJobsExecuteOptions = {
+export type TUseGetJobsOptions = {
+  stepId?: string | number;
+};
+
+export function useGetJobs(options: TUseGetJobsOptions) {
+  const { stepId } = options;
+
+  return useQuery({
+    queryKey: [GET_JOBS_QUERY_KEY, stepId],
+    // queryFn will only run if stepId is defined.
+    queryFn: () => getJobs({ stepId: stepId! }),
+    enabled: typeof stepId === "number" || typeof stepId === "string",
+  });
+}
+
+export type TJobExecuteResponse = {};
+
+export type TCreateJobExecuteOptions = {
   canThrowOnError?: boolean;
   jobId: string | number;
 };
 
 export async function executeJob(
-  options: TCreateStepJobsExecuteOptions
-): Promise<TResponse<TProjectStepJobExecuteResponse>> {
+  options: TCreateJobExecuteOptions
+): Promise<TResponse<TJobExecuteResponse>> {
   const { jobId, canThrowOnError } = options;
   try {
     const response = (await api
       .post({}, `/job/execute?job_id=${jobId}`)
-      .json()) as TProjectStepJobExecuteResponse;
+      .json()) as TJobExecuteResponse;
 
     return {
       ok: true,
@@ -84,11 +102,11 @@ export async function executeJob(
   }
 }
 
-export type TUpdateStepJobsOptions = {
-  job: TProjectStepJob;
+export type TUpdateJobOptions = {
+  job: TJob;
 };
 
-export async function updateJob(options: TUpdateStepJobsOptions) {
+export async function updateJob(options: TUpdateJobOptions) {
   const { job } = options;
 
   try {

@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { api, TResponse } from "./api";
 
-export type TProjectStep = {
+export type TStep = {
   id: number | string;
   project_id: number | string;
   name: string;
@@ -15,12 +16,12 @@ export type TGetStepsOptions = {
 
 export async function getSteps(
   options: TGetStepsOptions
-): Promise<TResponse<TProjectStep[]>> {
+): Promise<TResponse<TStep[]>> {
   const { projectId, canThrowOnError } = options;
   try {
     const response = (await api
       .get(`/step/?project_id=${projectId}`)
-      .json()) as TProjectStep[];
+      .json()) as TStep[];
 
     return {
       ok: true,
@@ -37,4 +38,21 @@ export async function getSteps(
       error,
     };
   }
+}
+
+export const GET_STEPS_QUERY_KEY = "GET_STEPS_QUERY_KEY";
+
+export type TUseGetStepsOptions = {
+  /**
+   * Project id
+   */
+  id: string | number;
+};
+
+export function useGetSteps(options: TUseGetStepsOptions) {
+  const { id } = options;
+  return useQuery({
+    queryKey: [GET_STEPS_QUERY_KEY, id],
+    queryFn: () => getSteps({ projectId: id }),
+  });
 }

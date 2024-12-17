@@ -38,7 +38,7 @@ export const useProjectStore = <T,>(
   const projectStoreContext = useContext(ProjectStoreContext);
 
   if (!projectStoreContext) {
-    throw new Error(`useCounterStore must be used within CounterStoreProvider`);
+    throw new Error(`useProjectStore must be used within ProjectStoreProvider`);
   }
 
   return useStore(projectStoreContext, selector);

@@ -27,11 +27,11 @@ export async function getProjects(): Promise<TResponse<TProject>> {
   }
 }
 
-export const GET_PROJECT_QUERY_KEY = "GET_PROJECT_QUERY_KEY";
+export const GET_PROJECTS_QUERY_KEY = "GET_PROJECTS_QUERY_KEY";
 
 export function useGetProjects() {
   return useQuery({
-    queryKey: [GET_PROJECT_QUERY_KEY],
+    queryKey: [GET_PROJECTS_QUERY_KEY],
     queryFn: getProjects,
   });
 }
@@ -58,6 +58,23 @@ export async function getProject(
       error,
     };
   }
+}
+
+export const GET_PROJECT_QUERY_KEY = "GET_PROJECT_QUERY_KEY";
+
+export type TUseGetProject = {
+  /**
+   * Project id
+   */
+  id: string;
+};
+
+export function useGetProject(options: TUseGetProject) {
+  const { id } = options;
+  return useQuery({
+    queryKey: [GET_PROJECT_QUERY_KEY, id],
+    queryFn: () => getProject({ id }),
+  });
 }
 
 export type TCreateProjectOptions = {

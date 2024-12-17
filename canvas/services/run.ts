@@ -1,30 +1,28 @@
 import { api, TResponse } from "./api";
-import { TProjectStepJobInput, TProjectStepJobOutput } from "./job";
+import { TJobInput, TJobOutput } from "./job";
 
 export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
 
-export type TProjectStepJobRun = {
+export type TRun = {
   id: string | number;
   job_id: string | number;
   name: string;
   run_status: TRunStatus;
-  outputs: Record<string, TProjectStepJobOutput>;
-  inputs: Record<string, TProjectStepJobInput>;
+  outputs: Record<string, TJobOutput>;
+  inputs: Record<string, TJobInput>;
 };
 
-export type TGetStepJobsRunOptions = {
+export type TGetRunOptions = {
   canThrowOnError?: boolean;
   job_id: string | number;
 };
 
 export async function getRun(
-  options: TGetStepJobsRunOptions
-): Promise<TResponse<TProjectStepJobRun[]>> {
+  options: TGetRunOptions
+): Promise<TResponse<TRun[]>> {
   const { job_id, canThrowOnError } = options;
   try {
-    const response = (await api
-      .get(`/run/?job_id=${job_id}`)
-      .json()) as TProjectStepJobRun[];
+    const response = (await api.get(`/run/?job_id=${job_id}`).json()) as TRun[];
 
     return {
       ok: true,
@@ -43,7 +41,7 @@ export async function getRun(
   }
 }
 
-export type TCreateStepJobsRunOptions = {
+export type TCreateRunOptions = {
   canThrowOnError?: boolean;
   id: string | number;
   jobId: string | number;
@@ -51,8 +49,8 @@ export type TCreateStepJobsRunOptions = {
 };
 
 export async function createRun(
-  options: TCreateStepJobsRunOptions
-): Promise<TResponse<TProjectStepJobRun>> {
+  options: TCreateRunOptions
+): Promise<TResponse<TRun>> {
   const { jobId, name, id, canThrowOnError } = options;
   try {
     const response = (await api
@@ -64,7 +62,7 @@ export async function createRun(
         },
         "/run"
       )
-      .json()) as TProjectStepJobRun;
+      .json()) as TRun;
 
     return {
       ok: true,

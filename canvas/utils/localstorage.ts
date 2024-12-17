@@ -1,3 +1,8 @@
+import {
+  addAWSCredentials,
+  TAddAWSCredentials,
+} from "@/schema/aws-credentials";
+
 /**
  * To return the value using key from the localStorage.
  */
@@ -34,47 +39,43 @@ export const setLocalStorageValue = (key: string, value: unknown) => {
   }
 };
 
-export type TAWSCredentials = {
-  accessKeyId: string;
-  secretAccessKey: string;
-  region: string;
+const DEFAULT_AWS_CRED: TAddAWSCredentials = {
+  accessKeyID: "",
+  awsRegion: "",
+  awsSecretKey: "",
 };
 
 export const getAWSCredentials = (
   projectId: string | number
-): TAWSCredentials | null => {
+): TAddAWSCredentials => {
   const key = `aws-credentials-${projectId}`;
   const value = getLocalStorageValue(key);
 
   if (typeof value !== "string" || !value) {
-    return null;
+    return DEFAULT_AWS_CRED;
   }
 
   try {
     const parsedValue = JSON.parse(value) as unknown;
 
     if (typeof parsedValue !== "object" || !parsedValue) {
-      return null;
+      return DEFAULT_AWS_CRED;
     }
 
-    if (
-      "accessKeyId" in parsedValue &&
-      "secretAccessKey" in parsedValue &&
-      "region" in parsedValue
-    ) {
-      return parsedValue as TAWSCredentials;
+    if (addAWSCredentials.safeParse(parsedValue)) {
+      return parsedValue as TAddAWSCredentials;
     }
 
-    return null;
+    return DEFAULT_AWS_CRED;
   } catch (e) {
     console.error("Error parsing localStorage value", e);
-    return null;
+    return DEFAULT_AWS_CRED;
   }
 };
 
 export const setAWSCredentials = (
   projectId: string | number,
-  value: TAWSCredentials
+  value: TAddAWSCredentials
 ) => {
   const key = `aws-credentials-${projectId}`;
   try {

@@ -6,39 +6,38 @@ export type TSidebarItem = {
   id: string | number;
   title: string;
   onClick: () => void;
+  actions?: React.ReactNode;
 };
 
-export type TSidebarProps = {
+export type TSidebarProps = React.HTMLProps<HTMLDivElement> & {
   items: TSidebarItem[];
-  active: string | number;
+  activeItemId?: string | number;
 };
 
 export function Sidebar(props: TSidebarProps) {
-  const { items, active } = props;
+  const { items, activeItemId, ...rest } = props;
 
   return (
-    <div className="overflow-y-auto pr-4 border-r border-r-slate-100">
-      <aside
-        className={cn("w-full md:w-64 transition-transform")}
-        aria-label="Sidebar"
-      >
-        <ul className="space-y-2 font-medium">
-          {items.map(({ id, onClick, title }) => (
-            <li key={id}>
-              <Button
-                variant={active === id ? "secondary" : "ghost"}
-                className={cn(
-                  "w-full inline text-left text-ellipsis truncate overflow-hidden",
-                  active === id ? "pointer-events-none" : ""
-                )}
-                onClick={onClick}
-              >
-                {title}
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    </div>
+    <aside aria-label="Sidebar" {...rest}>
+      <ul className="space-y-2 font-medium">
+        {items.map(({ id, onClick, title, actions }) => (
+          <li
+            key={id}
+            className={cn(
+              "flex items-center pl-4 rounded-md",
+              activeItemId === id
+                ? "bg-accent text-accent-foreground"
+                : "hover:bg-accent hover:text-accent-foreground cursor-pointer"
+            )}
+            onClick={onClick}
+          >
+            <div className="w-full text-sm inline items-center text-left text-ellipsis truncate overflow-hidden">
+              {title}
+            </div>
+            {actions}
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 }
