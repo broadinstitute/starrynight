@@ -1,7 +1,12 @@
 import { PageContainer } from "../../../_layout/page-container";
-import { ProjectMainContent } from "./project";
-import { getProject } from "@/services/projects";
+import { GET_PROJECT_QUERY_KEY, getProject } from "@/services/projects";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { ProjectError } from "./project-error";
+import { ProjectModel } from "./model";
 
 type TProjectPageProps = {
   params: {
@@ -10,16 +15,30 @@ type TProjectPageProps = {
 };
 
 export default async function ProjectPage(props: TProjectPageProps) {
-  const { params } = props;
-  const data = await getProject({ id: params.id });
+  const {
+    params: { id },
+  } = props;
+  try {
+    const queryClient = new QueryClient();
 
-  if (!data.ok || !data.response) {
-    return <ProjectError />;
+    await queryClient.prefetchQuery({
+      queryKey: [GET_PROJECT_QUERY_KEY, id],
+      queryFn: () => getProject({ id }),
+    });
+
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PageContainer>
+          <ProjectModel projectId={id} />
+        </PageContainer>
+      </HydrationBoundary>
+    );
+  } catch (error) {
+    console.error(error);
+    return (
+      <PageContainer>
+        <ProjectError />
+      </PageContainer>
+    );
   }
-
-  return (
-    <PageContainer>
-      <ProjectMainContent project={data.response} />
-    </PageContainer>
-  );
 }

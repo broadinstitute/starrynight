@@ -5,7 +5,7 @@ import { TProjectStep } from "@/services/step";
 import useSWR from "swr";
 import { Accordion } from "@/components/ui/accordion";
 import { ProjectStepJob } from "./job";
-import { JobsSkeleton } from "./skeleton/jobs-skeleton";
+import { JobsSkeleton } from "./view/skeleton/jobs-skeleton";
 import { JobsActions } from "./jobs-actions";
 import React from "react";
 import { useProjectStore } from "@/stores/project";

@@ -10,7 +10,7 @@ export function LayoutContainer(props: TLayoutContainer) {
       <div className="bg-white rounded-2xl p-4 h-full flex-1 w-full flex justify-center">
         <div
           id="main-wrapper"
-          className="flex flex-col flex-1 max-w-7xl  md:px-8"
+          className="flex flex-col flex-1 max-w-[1500px]  md:px-8"
         >
           {children}
         </div>

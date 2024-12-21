@@ -22,10 +22,10 @@ const getS3Client = ({
   }
 
   return new S3Client({
-    region: cred.region,
+    region: cred.awsRegion,
     credentials: {
-      accessKeyId: cred.accessKeyId,
-      secretAccessKey: cred.secretAccessKey,
+      accessKeyId: cred.accessKeyID,
+      secretAccessKey: cred.awsSecretKey,
     },
   });
 };

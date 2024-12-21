@@ -1,4 +1,4 @@
-import { GET_PROJECT_QUERY_KEY, getProjects } from "@/services/projects";
+import { GET_PROJECTS_QUERY_KEY, getProjects } from "@/services/projects";
 import { AllProjectsView } from "./view";
 import {
   dehydrate,
@@ -10,7 +10,7 @@ export async function AllProjectsModel() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [GET_PROJECT_QUERY_KEY],
+    queryKey: [GET_PROJECTS_QUERY_KEY],
     queryFn: getProjects,
   });
 

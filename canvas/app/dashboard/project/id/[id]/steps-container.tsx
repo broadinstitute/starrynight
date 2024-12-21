@@ -3,7 +3,7 @@ import React from "react";
 import { useProjectStore } from "@/stores/project";
 import useSWR from "swr";
 import { getSteps } from "@/services/step";
-import { StepAndJobsSkeleton } from "./skeleton/step-and-jobs-skeleton";
+import { StepAndJobsSkeleton } from "./view/skeleton/step-and-jobs-skeleton";
 import { Steps } from "./steps";
 import { getStepSWRKey } from "@/utils/getSWRKey";
 import { useSearchParams } from "next/navigation";

@@ -1,21 +1,18 @@
-import { TProjectStepJob } from "@/services/job";
 import { TProject } from "@/services/projects";
-import { TProjectStep } from "@/services/step";
+import { TStep } from "@/services/step";
 import { createStore } from "zustand/vanilla";
 
-export type TProjectState = {
+export type TState = {
   project: TProject;
-  steps: TProjectStep[];
-  currentStep: TProjectStep | null;
-  currentActiveStepJobs: TProjectStepJob[];
+  projectStatus: "running" | "idle";
+  currentStep?: TStep;
 };
 
-export type TProjectStoreActions = {
-  updateSteps: (steps: TProjectStep[]) => void;
-  updateCurrentStep: (step: TProjectStep) => void;
-  updateCurrentStepJobs: (jobs: TProjectStepJob[]) => void;
+export type TActions = {
+  updateProjectStatus: (status: "running" | "idle") => void;
+  updateCurrentStep: (currentStep: TStep) => void;
 };
-export type TProjectStore = TProjectState & TProjectStoreActions;
+export type TProjectStore = TState & TActions;
 
 export type TCreateProjectStoreOptions = {
   project: TProject;
@@ -23,14 +20,10 @@ export type TCreateProjectStoreOptions = {
 
 export function createProjectStore(options: TCreateProjectStoreOptions) {
   const { project } = options;
-
   return createStore<TProjectStore>()((set) => ({
     project,
-    steps: [],
-    currentStep: null,
-    currentActiveStepJobs: [],
-    updateSteps: (steps) => set({ steps }),
-    updateCurrentStep: (step) => set({ currentStep: step }),
-    updateCurrentStepJobs: (jobs) => set({ currentActiveStepJobs: jobs }),
+    projectStatus: "idle",
+    updateProjectStatus: (projectStatus) => set({ projectStatus }),
+    updateCurrentStep: (currentStep) => set({ currentStep }),
   }));
 }

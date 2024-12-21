@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createProject,
-  GET_PROJECT_QUERY_KEY,
+  GET_PROJECTS_QUERY_KEY,
   TProject,
 } from "@/services/projects";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ export function CreateProjectContent() {
        * project we want to fetch it.
        */
       await queryClient.invalidateQueries({
-        queryKey: [GET_PROJECT_QUERY_KEY],
+        queryKey: [GET_PROJECTS_QUERY_KEY],
       });
 
       setTimeout(() => {

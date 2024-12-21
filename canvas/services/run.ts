@@ -1,30 +1,28 @@
+import { useQuery } from "@tanstack/react-query";
 import { api, TResponse } from "./api";
-import { TProjectStepJobInput, TProjectStepJobOutput } from "./job";
+import { TJobInput, TJobOutput } from "./job";
 
 export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
 
-export type TProjectStepJobRun = {
+export type TRun = {
   id: string | number;
   job_id: string | number;
   name: string;
   run_status: TRunStatus;
-  outputs: Record<string, TProjectStepJobOutput>;
-  inputs: Record<string, TProjectStepJobInput>;
+  outputs: Record<string, TJobOutput>;
+  inputs: Record<string, TJobInput>;
 };
 
-export type TGetStepJobsRunOptions = {
-  canThrowOnError?: boolean;
+export type TGetRunsOptions = {
   job_id: string | number;
 };
 
-export async function getRun(
-  options: TGetStepJobsRunOptions
-): Promise<TResponse<TProjectStepJobRun[]>> {
-  const { job_id, canThrowOnError } = options;
+export async function getRuns(
+  options: TGetRunsOptions
+): Promise<TResponse<TRun[]>> {
+  const { job_id } = options;
   try {
-    const response = (await api
-      .get(`/run/?job_id=${job_id}`)
-      .json()) as TProjectStepJobRun[];
+    const response = (await api.get(`/run/?job_id=${job_id}`).json()) as TRun[];
 
     return {
       ok: true,
@@ -33,27 +31,37 @@ export async function getRun(
   } catch (error) {
     console.error(error);
 
-    if (canThrowOnError) {
-      throw new Error("Error while fetching job run");
-    }
-
     return {
       error,
     };
   }
 }
 
-export type TCreateStepJobsRunOptions = {
-  canThrowOnError?: boolean;
+export const GET_RUNS_QUERY_KEY = "GET_RUNS_QUERY_KEY";
+
+export type TUseGetRunsOptions = {
+  jobId: string | number;
+};
+
+export function useGetRuns(options: TUseGetRunsOptions) {
+  const { jobId } = options;
+
+  return useQuery({
+    queryKey: [GET_RUNS_QUERY_KEY, jobId],
+    queryFn: () => getRuns({ job_id: jobId }),
+  });
+}
+
+export type TCreateRunOptions = {
   id: string | number;
   jobId: string | number;
   name: string;
 };
 
 export async function createRun(
-  options: TCreateStepJobsRunOptions
-): Promise<TResponse<TProjectStepJobRun>> {
-  const { jobId, name, id, canThrowOnError } = options;
+  options: TCreateRunOptions
+): Promise<TResponse<TRun>> {
+  const { jobId, name, id } = options;
   try {
     const response = (await api
       .post(
@@ -64,7 +72,7 @@ export async function createRun(
         },
         "/run"
       )
-      .json()) as TProjectStepJobRun;
+      .json()) as TRun;
 
     return {
       ok: true,
@@ -72,10 +80,6 @@ export async function createRun(
     };
   } catch (error) {
     console.error(error);
-
-    if (canThrowOnError) {
-      throw new Error("Error while creating job run");
-    }
 
     return {
       error,
