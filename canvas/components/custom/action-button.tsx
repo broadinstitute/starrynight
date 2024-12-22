@@ -22,7 +22,7 @@ export function ActionButton(props: TActionsButtonProps) {
     } else {
       setChild(icon);
     }
-  }, [isLoading]);
+  }, [icon, isLoading]);
 
   return (
     <ButtonWithTooltip

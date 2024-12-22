@@ -22,6 +22,7 @@ export function TakeCredentials() {
         <ButtonWithTooltip
           message="Add or update AWS Credentials"
           variant="outline"
+          className="md:w-40"
         >
           <Settings className="mr-2 h-4 w-4" />
           Credentials

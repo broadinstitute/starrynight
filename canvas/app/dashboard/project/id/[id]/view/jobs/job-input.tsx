@@ -1,10 +1,10 @@
-import { TUseParseJobInput } from "./useParseJobInput";
 import React from "react";
 import { ProjectJobInputView } from "./job-input-view";
 import { ProjectJobInputEdit } from "./job-input-edit";
+import { TPathRecord } from "../hooks/useParsePathRecordToArray";
 
 export type TProjectJobInputProps = {
-  input: TUseParseJobInput;
+  input: TPathRecord;
 };
 
 export function ProjectJobInput(props: TProjectJobInputProps) {
@@ -21,10 +21,7 @@ export function ProjectJobInput(props: TProjectJobInputProps) {
   }, []);
 
   return (
-    <li
-      key={input.id}
-      className="flex items-center text-sm border border-gray-200 rounded-md space-x-1"
-    >
+    <>
       {isEditing ? (
         <ProjectJobInputEdit
           inputName={input.name}
@@ -39,6 +36,6 @@ export function ProjectJobInput(props: TProjectJobInputProps) {
           inputPath={inputPath}
         />
       )}
-    </li>
+    </>
   );
 }

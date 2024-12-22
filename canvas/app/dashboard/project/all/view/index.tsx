@@ -10,7 +10,7 @@ export function AllProjectsView() {
   const { data, error } = useGetProjects();
   const { push } = useRouter();
 
-  if (!data || !data.ok || !Array.isArray(data.response) || error) {
+  if (!data || error) {
     return (
       <ContainerWithTextCenter>
         We&apos;re experiencing a temporary issue. Please try again shortly.
@@ -18,7 +18,7 @@ export function AllProjectsView() {
     );
   }
 
-  if (data.response.length === 0) {
+  if (data.length === 0) {
     return (
       <ContainerWithTextCenter>
         You don&apos;t have any project yet! <br />
@@ -30,7 +30,7 @@ export function AllProjectsView() {
 
   return (
     <AllProjectsContainer>
-      {data.response.map(({ id, name, description, img_uri }) => (
+      {data.map(({ id, name, description, img_uri }) => (
         <Card
           key={id}
           img={{

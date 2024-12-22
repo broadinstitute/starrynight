@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, TResponse } from "./api";
+import { api } from "./api";
 import { TJobInput, TJobOutput } from "./job";
 
 export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
@@ -17,24 +17,9 @@ export type TGetRunsOptions = {
   job_id: string | number;
 };
 
-export async function getRuns(
-  options: TGetRunsOptions
-): Promise<TResponse<TRun[]>> {
+export async function getRuns(options: TGetRunsOptions): Promise<TRun[]> {
   const { job_id } = options;
-  try {
-    const response = (await api.get(`/run/?job_id=${job_id}`).json()) as TRun[];
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      error,
-    };
-  }
+  return api.get(`/run/?job_id=${job_id}`).json();
 }
 
 export const GET_RUNS_QUERY_KEY = "GET_RUNS_QUERY_KEY";
@@ -58,31 +43,16 @@ export type TCreateRunOptions = {
   name: string;
 };
 
-export async function createRun(
-  options: TCreateRunOptions
-): Promise<TResponse<TRun>> {
+export function createRun(options: TCreateRunOptions): Promise<TRun> {
   const { jobId, name, id } = options;
-  try {
-    const response = (await api
-      .post(
-        {
-          name,
-          id,
-          job_id: jobId,
-        },
-        "/run"
-      )
-      .json()) as TRun;
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      error,
-    };
-  }
+  return api
+    .post(
+      {
+        name,
+        id,
+        job_id: jobId,
+      },
+      "/run"
+    )
+    .json();
 }

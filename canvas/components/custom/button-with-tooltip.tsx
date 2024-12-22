@@ -14,7 +14,7 @@ export const ButtonWithTooltip = React.forwardRef<
   const { message, ...rest } = props;
   return (
     <WithTooltip message={message}>
-      <Button ref={ref} {...rest} />
+      <Button ref={ref} type="button" {...rest} />
     </WithTooltip>
   );
 });

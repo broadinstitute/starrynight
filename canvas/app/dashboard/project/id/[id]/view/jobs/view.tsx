@@ -14,7 +14,7 @@ export function ProjectJobsView(props: TProjectJobsViewProps) {
     <div>
       <h4 className="font-bold text-xl mb-2">{step.name}</h4>
       {step.description && <p className="mb-2">{step.description}</p>}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 pt-4">
+      <div className="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-2">
         {jobs.map((job) => (
           <ProjectJob job={job} key={job.id} />
         ))}

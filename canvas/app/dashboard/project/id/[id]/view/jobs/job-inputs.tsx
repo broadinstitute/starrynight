@@ -1,5 +1,5 @@
 import { TJob } from "@/services/job";
-import { useParseJobInput } from "./useParseJobInput";
+import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
 import React from "react";
 import { ProjectJobInput } from "./job-input";
 
@@ -9,7 +9,7 @@ export type TProjectJobInputsProps = {
 
 export function ProjectJobInputs(props: TProjectJobInputsProps) {
   const { job } = props;
-  const { inputs } = useParseJobInput({ job });
+  const inputs = useParsePathRecordToArray({ obj: job.inputs });
 
   return (
     <div className="flex-1">
@@ -17,11 +17,11 @@ export function ProjectJobInputs(props: TProjectJobInputsProps) {
       {inputs.length === 0 && (
         <p className="text-sm text-gray-400 my-2">This job has no input</p>
       )}
-      <ul className="space-y-2 my-2">
+      <div className="space-y-2 my-2">
         {inputs.map((input) => (
           <ProjectJobInput input={input} key={input.id} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

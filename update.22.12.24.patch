@@ -1,0 +1,1773 @@
+diff --git a/canvas/app/dashboard/project/all/components/create-project/form.tsx b/canvas/app/dashboard/project/all/components/create-project/form.tsx
+index ba23333..a97ab66 100644
+--- a/canvas/app/dashboard/project/all/components/create-project/form.tsx
++++ b/canvas/app/dashboard/project/all/components/create-project/form.tsx
+@@ -26,10 +26,10 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
+   });
+ 
+   const [parsers, types] = useMemo(() => {
+-    if (!data || !data.response || !data.ok) return [[], []];
++    if (!data) return [[], []];
+ 
+-    const _parsers = data.response[0];
+-    const _types = data.response[1];
++    const _parsers = data[0];
++    const _types = data[1];
+ 
+     const mapFn = (d: string) => ({ label: d, value: d });
+ 
+diff --git a/canvas/app/dashboard/project/all/view/index.tsx b/canvas/app/dashboard/project/all/view/index.tsx
+index 7c11e5f..cf60eb2 100644
+--- a/canvas/app/dashboard/project/all/view/index.tsx
++++ b/canvas/app/dashboard/project/all/view/index.tsx
+@@ -10,7 +10,7 @@ export function AllProjectsView() {
+   const { data, error } = useGetProjects();
+   const { push } = useRouter();
+ 
+-  if (!data || !data.ok || !Array.isArray(data.response) || error) {
++  if (!data || error) {
+     return (
+       <ContainerWithTextCenter>
+         We&apos;re experiencing a temporary issue. Please try again shortly.
+@@ -18,7 +18,7 @@ export function AllProjectsView() {
+     );
+   }
+ 
+-  if (data.response.length === 0) {
++  if (data.length === 0) {
+     return (
+       <ContainerWithTextCenter>
+         You don&apos;t have any project yet! <br />
+@@ -30,7 +30,7 @@ export function AllProjectsView() {
+ 
+   return (
+     <AllProjectsContainer>
+-      {data.response.map(({ id, name, description, img_uri }) => (
++      {data.map(({ id, name, description, img_uri }) => (
+         <Card
+           key={id}
+           img={{
+diff --git a/canvas/app/dashboard/project/id/[id]/model.tsx b/canvas/app/dashboard/project/id/[id]/model.tsx
+index 77a5af2..1422cec 100644
+--- a/canvas/app/dashboard/project/id/[id]/model.tsx
++++ b/canvas/app/dashboard/project/id/[id]/model.tsx
+@@ -11,21 +11,17 @@ export type TProjectModelProps = {
+ 
+ export function ProjectModel(props: TProjectModelProps) {
+   const { projectId } = props;
+-  const {
+-    data: project,
+-    error: projectError,
+-    isLoading: isProjectLoading,
+-  } = useGetProject({
++  const { data, error, isLoading } = useGetProject({
+     id: projectId,
+   });
+ 
+-  if (isProjectLoading) {
++  if (isLoading) {
+     return <ProjectSkeleton />;
+   }
+ 
+-  if (projectError || !project || !project.response) {
++  if (error || !data) {
+     return <ProjectError />;
+   }
+ 
+-  return <ProjectView project={project.response} />;
++  return <ProjectView project={data} />;
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/heading/actions.tsx b/canvas/app/dashboard/project/id/[id]/view/heading/actions.tsx
+index 0b84365..1e791d2 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/heading/actions.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/heading/actions.tsx
+@@ -7,7 +7,7 @@ export function ProjectActions() {
+   return (
+     <ActionContainer>
+       <TakeCredentials />
+-      <Button>
++      <Button className="md:w-40">
+         <PlayIcon /> Run project
+       </Button>
+     </ActionContainer>
+diff --git a/canvas/app/dashboard/project/id/[id]/view/heading/take-credentials.tsx b/canvas/app/dashboard/project/id/[id]/view/heading/take-credentials.tsx
+index cb737b6..2bbce97 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/heading/take-credentials.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/heading/take-credentials.tsx
+@@ -22,6 +22,7 @@ export function TakeCredentials() {
+         <ButtonWithTooltip
+           message="Add or update AWS Credentials"
+           variant="outline"
++          className="md:w-40"
+         >
+           <Settings className="mr-2 h-4 w-4" />
+           Credentials
+diff --git a/canvas/app/dashboard/project/id/[id]/view/hooks/useParsePathRecordToArray.ts b/canvas/app/dashboard/project/id/[id]/view/hooks/useParsePathRecordToArray.ts
+new file mode 100644
+index 0000000..34ddceb
+--- /dev/null
++++ b/canvas/app/dashboard/project/id/[id]/view/hooks/useParsePathRecordToArray.ts
+@@ -0,0 +1,54 @@
++import { TJob } from "@/services/job";
++import { useProjectStore } from "@/stores/project";
++import React from "react";
++
++export type TUseParsePathRecordToArrayOptions<
++  T extends Record<string, string>
++> = {
++  obj: Record<string, T>;
++  /**
++   * @default "type"
++   */
++  typeKey?: string;
++  /**
++   * @default "value"
++   */
++  valueKey?: string;
++};
++
++export type TPathRecord = {
++  id: string;
++  name: string;
++  type: string;
++  value: string;
++};
++export type TUseParsePathRecordToArrayReturn = TPathRecord[];
++
++export function useParsePathRecordToArray<T extends Record<string, string>>(
++  options: TUseParsePathRecordToArrayOptions<T>
++): TUseParsePathRecordToArrayReturn {
++  const { obj, typeKey = "type", valueKey = "value" } = options;
++  const { projectWorkspaceURI } = useProjectStore((state) => ({
++    projectWorkspaceURI: state.project.workspace_uri,
++  }));
++
++  return React.useMemo((): TUseParsePathRecordToArrayReturn => {
++    if (!obj) return [];
++
++    const out = [] as TUseParsePathRecordToArrayReturn;
++
++    for (const [k, v] of Object.entries(obj)) {
++      const type = v[typeKey];
++      const value = v[valueKey] || projectWorkspaceURI;
++
++      out.push({
++        id: k,
++        name: k,
++        type,
++        value,
++      });
++    }
++
++    return out;
++  }, [obj, projectWorkspaceURI, typeKey, valueKey]);
++}
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/index.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/index.tsx
+index f7772be..045580a 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/index.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/index.tsx
+@@ -17,7 +17,7 @@ export function ProjectJobs() {
+     return <JobsSkeleton />;
+   }
+ 
+-  if (error || !data || !data.ok || !data.response) {
++  if (error || !data) {
+     return (
+       <div className="p-4 flex-col flex justify-center items-center text-red-500 md:pr-0 md:col-span-9 md:border-l md:border-l-slate-100">
+         <p>
+@@ -41,7 +41,7 @@ export function ProjectJobs() {
+ 
+   return (
+     <div className="p-4 md:pr-0 md:col-span-9 md:border-l md:border-l-slate-100">
+-      <ProjectJobsView step={currentStep} jobs={data.response} />
++      <ProjectJobsView step={currentStep} jobs={data} />
+     </div>
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-edit.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-edit.tsx
+index dab5443..3d448d6 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-edit.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-edit.tsx
+@@ -1,10 +1,9 @@
+-import { TUseParseJobInput } from "./useParseJobInput";
+ import React from "react";
+-import { Input } from "@/components/ui/input";
+ import { ActionButton } from "@/components/custom/action-button";
+ import { Check, XIcon } from "lucide-react";
+ import { JobInputUploadFile } from "./job-input-upload-file";
+ import { ProjectJobInputEditWarningModal } from "./job-input-edit-warning-modal";
++import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
+ 
+ export type TProjectJobInputProps = {
+   inputPath: string;
+@@ -47,34 +46,52 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
+ 
+   return (
+     <>
+-      <div className="px-1.5 py-2 bg-accent text-accent-foreground rounded-md">
+-        {inputName}
+-      </div>
+-      <Input
+-        className="border-none shadow-transparent flex-1"
+-        autoFocus
+-        value={inputPath}
+-        onChange={(e) => onInputPathChange(e.currentTarget.value)}
++      <PathFieldWithAction
++        pathRecord={{
++          id: inputPath,
++          name: inputName,
++          type: "path",
++          value: inputPath,
++        }}
++        inputProps={{
++          onChange: (e) => onInputPathChange(e.currentTarget.value),
++          autoFocus: true,
++        }}
++        actions={[
++          {
++            id: "upload-file",
++            children: (
++              <JobInputUploadFile
++                inputFile={inputFile}
++                updateInputFile={setInputFile}
++              />
++            ),
++          },
++          {
++            id: "close-editing-mode",
++            children: (
++              <ActionButton
++                icon={<XIcon />}
++                message="Close editing mode"
++                className="text-yellow-600 hover:bg-yellow-50 hover:text-yellow-600"
++                onClick={handleOnCloseEditingModeClick}
++              />
++            ),
++          },
++          {
++            id: "save-changes",
++            children: (
++              <ActionButton
++                onClick={onRequestView}
++                icon={<Check />}
++                message="Save changes"
++                key="save-changes"
++              />
++            ),
++          },
++        ]}
+       />
+ 
+-      <JobInputUploadFile
+-        inputFile={inputFile}
+-        updateInputFile={setInputFile}
+-      />
+-      <div className="w-[1px] h-5 border-r border-r-gray-200" />
+-      <ActionButton
+-        icon={<XIcon />}
+-        message="Close editing mode"
+-        className="text-yellow-600 hover:bg-yellow-50 hover:text-yellow-600"
+-        onClick={handleOnCloseEditingModeClick}
+-      />
+-      <div className="w-[1px] h-5 border-r border-r-gray-200" />
+-      <ActionButton
+-        onClick={onRequestView}
+-        icon={<Check />}
+-        message="Save changes"
+-        key="save-changes"
+-      />
+       <ProjectJobInputEditWarningModal
+         primaryActionCallback={handleOnWarningModalPrimaryActionClick}
+         isOpen={isWarningModalOpen}
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-view.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-view.tsx
+index 3253536..d069fa5 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-view.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input-view.tsx
+@@ -1,7 +1,8 @@
+ import React from "react";
+-import { ViewJobInput } from "./view-input";
+ import { ActionButton } from "@/components/custom/action-button";
+ import { Pencil } from "lucide-react";
++import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
++import { ViewFile } from "@/components/custom/view-file";
+ 
+ export type TProjectJobInputProps = {
+   inputPath: string;
+@@ -13,24 +14,39 @@ export function ProjectJobInputView(props: TProjectJobInputProps) {
+   const { inputPath, inputName, onRequestEditing } = props;
+ 
+   return (
+-    <>
+-      <div className="px-1.5 py-2 bg-accent text-accent-foreground rounded-md">
+-        {inputName}
+-      </div>
+-      <span
+-        onDoubleClick={onRequestEditing}
+-        className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis text-gray-400"
+-      >
+-        {inputPath}
+-      </span>
+-      <ViewJobInput />
+-      <div className="w-[1px] h-5 border-r border-r-gray-200" />
+-      <ActionButton
+-        icon={<Pencil />}
+-        message="Edit input file"
+-        onClick={onRequestEditing}
+-        key="edit-input"
+-      />
+-    </>
++    <PathFieldWithAction
++      pathRecord={{
++        id: inputPath,
++        name: inputName,
++        type: "path",
++        value: inputPath,
++      }}
++      isReadonly
++      spanProp={{
++        onDoubleClick: onRequestEditing,
++      }}
++      actions={[
++        {
++          id: "view-job-input",
++          children: (
++            <ViewFile
++              key="view-job-input"
++              defaultTriggerProps={{ message: "View input file." }}
++            />
++          ),
++        },
++        {
++          id: "edit-job-input",
++          children: (
++            <ActionButton
++              icon={<Pencil />}
++              message="Edit input file"
++              onClick={onRequestEditing}
++              key="edit-input"
++            />
++          ),
++        },
++      ]}
++    />
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input.tsx
+index 32b648f..72ea760 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/job-input.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/job-input.tsx
+@@ -1,10 +1,10 @@
+-import { TUseParseJobInput } from "./useParseJobInput";
+ import React from "react";
+ import { ProjectJobInputView } from "./job-input-view";
+ import { ProjectJobInputEdit } from "./job-input-edit";
++import { TPathRecord } from "../hooks/useParsePathRecordToArray";
+ 
+ export type TProjectJobInputProps = {
+-  input: TUseParseJobInput;
++  input: TPathRecord;
+ };
+ 
+ export function ProjectJobInput(props: TProjectJobInputProps) {
+@@ -21,10 +21,7 @@ export function ProjectJobInput(props: TProjectJobInputProps) {
+   }, []);
+ 
+   return (
+-    <li
+-      key={input.id}
+-      className="flex items-center text-sm border border-gray-200 rounded-md space-x-1"
+-    >
++    <>
+       {isEditing ? (
+         <ProjectJobInputEdit
+           inputName={input.name}
+@@ -39,6 +36,6 @@ export function ProjectJobInput(props: TProjectJobInputProps) {
+           inputPath={inputPath}
+         />
+       )}
+-    </li>
++    </>
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/job-inputs.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/job-inputs.tsx
+index cd86ba0..34e33b2 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/job-inputs.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/job-inputs.tsx
+@@ -1,5 +1,5 @@
+ import { TJob } from "@/services/job";
+-import { useParseJobInput } from "./useParseJobInput";
++import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
+ import React from "react";
+ import { ProjectJobInput } from "./job-input";
+ 
+@@ -9,7 +9,7 @@ export type TProjectJobInputsProps = {
+ 
+ export function ProjectJobInputs(props: TProjectJobInputsProps) {
+   const { job } = props;
+-  const { inputs } = useParseJobInput({ job });
++  const inputs = useParsePathRecordToArray({ obj: job.inputs });
+ 
+   return (
+     <div className="flex-1">
+@@ -17,11 +17,11 @@ export function ProjectJobInputs(props: TProjectJobInputsProps) {
+       {inputs.length === 0 && (
+         <p className="text-sm text-gray-400 my-2">This job has no input</p>
+       )}
+-      <ul className="space-y-2 my-2">
++      <div className="space-y-2 my-2">
+         {inputs.map((input) => (
+           <ProjectJobInput input={input} key={input.id} />
+         ))}
+-      </ul>
++      </div>
+     </div>
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/useParseJobInput.ts b/canvas/app/dashboard/project/id/[id]/view/jobs/useParseJobInput.ts
+deleted file mode 100644
+index 169ecdd..0000000
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/useParseJobInput.ts
++++ /dev/null
+@@ -1,68 +0,0 @@
+-import { TJob } from "@/services/job";
+-import { useProjectStore } from "@/stores/project";
+-import React from "react";
+-
+-export type TUseParseJobInputOptions = {
+-  job: TJob;
+-};
+-
+-export type TUseParseJobInput = {
+-  id: string;
+-  /**
+-   * Name of the input
+-   */
+-  name: string;
+-  /**
+-   * Type of input.
+-   */
+-  type: "path";
+-  /**
+-   * Full path.
+-   */
+-  value: string;
+-  /**
+-   * Workspace path.
+-   */
+-  workspaceURI: string;
+-  /**
+-   * Sub path.
+-   */
+-  subPath: string;
+-};
+-
+-export type TUseParseJobInputReturn = {
+-  inputs: TUseParseJobInput[];
+-};
+-
+-export function useParseJobInput(
+-  options: TUseParseJobInputOptions
+-): TUseParseJobInputReturn {
+-  const { job } = options;
+-  const { projectWorkspaceURI } = useProjectStore((state) => ({
+-    projectWorkspaceURI: state.project.workspace_uri,
+-  }));
+-
+-  const inputs = React.useMemo((): TUseParseJobInput[] => {
+-    const _inputs = [] as TUseParseJobInput[];
+-
+-    for (const [key, value] of Object.entries(job.inputs)) {
+-      const workspaceURI = projectWorkspaceURI.replace(/\/$/, ""); // Remove trailing slash.
+-      const subPath = value.value.replace(/\/$/, "").replace(workspaceURI, "");
+-
+-      _inputs.push({
+-        id: key,
+-        name: key,
+-        type: value.type as "path",
+-        workspaceURI,
+-        subPath,
+-        value: `${workspaceURI}${subPath}`,
+-      });
+-    }
+-
+-    return _inputs;
+-  }, [job, projectWorkspaceURI]);
+-
+-  return {
+-    inputs,
+-  };
+-}
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/view-input.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/view-input.tsx
+deleted file mode 100644
+index e230cd5..0000000
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/view-input.tsx
++++ /dev/null
+@@ -1,16 +0,0 @@
+-import { ButtonWithTooltip } from "@/components/custom/button-with-tooltip";
+-import { Eye } from "lucide-react";
+-
+-export function ViewJobInput() {
+-  // TODO: Implement View job input.
+-  return (
+-    <ButtonWithTooltip
+-      variant="ghost"
+-      size="icon"
+-      message="View input file"
+-      onClick={() => console.log("Not Implemented!")}
+-    >
+-      <Eye className="h-2 w-2" />
+-    </ButtonWithTooltip>
+-  );
+-}
+diff --git a/canvas/app/dashboard/project/id/[id]/view/jobs/view.tsx b/canvas/app/dashboard/project/id/[id]/view/jobs/view.tsx
+index e933900..4bb13b1 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/jobs/view.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/jobs/view.tsx
+@@ -14,7 +14,7 @@ export function ProjectJobsView(props: TProjectJobsViewProps) {
+     <div>
+       <h4 className="font-bold text-xl mb-2">{step.name}</h4>
+       {step.description && <p className="mb-2">{step.description}</p>}
+-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 pt-4">
++      <div className="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-2">
+         {jobs.map((job) => (
+           <ProjectJob job={job} key={job.id} />
+         ))}
+diff --git a/canvas/app/dashboard/project/id/[id]/badge.tsx b/canvas/app/dashboard/project/id/[id]/view/runs/badge.tsx
+similarity index 55%
+rename from canvas/app/dashboard/project/id/[id]/badge.tsx
+rename to canvas/app/dashboard/project/id/[id]/view/runs/badge.tsx
+index e8d38f1..92892af 100644
+--- a/canvas/app/dashboard/project/id/[id]/badge.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/runs/badge.tsx
+@@ -1,20 +1,20 @@
+ import { Badge } from "@/components/ui/badge";
+ 
+-export type TJobBadgeProps = {
++export type TProjectRunBadge = {
+   status: string;
+ };
+ 
+-export function JobBadge(props: TJobBadgeProps) {
++export function ProjectRunBadge(props: TProjectRunBadge) {
+   const { status } = props;
+ 
+   if (status === "pending") {
+-    return <Badge variant="outline">Pending</Badge>;
++    return <Badge variant="default">Pending</Badge>;
+   }
+   if (status === "running") {
+-    return <Badge variant="secondary">Running</Badge>;
++    return <Badge variant="info">Running</Badge>;
+   }
+   if (status === "success") {
+-    return <Badge variant="default">Success</Badge>;
++    return <Badge variant="success">Success</Badge>;
+   }
+   if (status === "failed") {
+     return <Badge variant="destructive">Failed</Badge>;
+diff --git a/canvas/app/dashboard/project/id/[id]/view/runs/index.tsx b/canvas/app/dashboard/project/id/[id]/view/runs/index.tsx
+index 774987e..f02490a 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/runs/index.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/runs/index.tsx
+@@ -15,7 +15,7 @@ export function ProjectRuns(props: TProjectRunProps) {
+     return <p>Loading...</p>;
+   }
+ 
+-  if (error || !data || !data.response) {
++  if (error || !data) {
+     return (
+       <p className="text-red-500 text-sm">Failed to load job&lsquo;s run </p>
+     );
+@@ -24,16 +24,20 @@ export function ProjectRuns(props: TProjectRunProps) {
+   return (
+     <div className="h-96 overflow-auto">
+       <h5 className="font-bold mb-1">Runs</h5>
+-      {data.response.length === 0 && (
++      {data.length === 0 && (
+         <div className="text-sm text-gray-400">
+           Click the play button (<PlayIcon className="h-4 w-4 inline-flex" />)
+           to run this job. Once started, a Run will be displayed here.
+         </div>
+       )}
+ 
+-      {data.response.map((run) => (
+-        <ProjectRun key={run.id} run={run} />
+-      ))}
++      <ul className="space-y-3 mt-2">
++        {data.map((run) => (
++          <li key={run.id}>
++            <ProjectRun run={run} />
++          </li>
++        ))}
++      </ul>
+     </div>
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/runs/run-paths-popover.tsx b/canvas/app/dashboard/project/id/[id]/view/runs/run-paths-popover.tsx
+new file mode 100644
+index 0000000..106177b
+--- /dev/null
++++ b/canvas/app/dashboard/project/id/[id]/view/runs/run-paths-popover.tsx
+@@ -0,0 +1,68 @@
++import {
++  Popover,
++  PopoverTrigger,
++  PopoverContent,
++} from "@/components/ui/popover";
++import { TPathRecord } from "../hooks/useParsePathRecordToArray";
++import React from "react";
++import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
++import { ViewFile } from "@/components/custom/view-file";
++import {
++  ButtonWithTooltip,
++  TButtonWithTooltipProps,
++} from "@/components/custom/button-with-tooltip";
++
++export type TRunPathsPopoverProps = {
++  paths: TPathRecord[];
++  title: string;
++  triggerProps: TButtonWithTooltipProps;
++  noPathsMessage: string;
++  viewActionTooltipMessage: string;
++};
++
++export function RunPathsPopover(props: TRunPathsPopoverProps) {
++  const {
++    paths,
++    title,
++    noPathsMessage,
++    triggerProps,
++    viewActionTooltipMessage,
++  } = props;
++
++  return (
++    <>
++      <Popover>
++        <PopoverTrigger asChild>
++          <ButtonWithTooltip variant="ghost" size="icon" {...triggerProps} />
++        </PopoverTrigger>
++        <PopoverContent className="text-sm w-96">
++          <div className="font-bold mb-2">{title}</div>
++          {paths.length === 0 && (
++            <p className="text-gray-400">{noPathsMessage}</p>
++          )}
++          <div className="space-y-2 my-2">
++            {paths.map((path) => (
++              <PathFieldWithAction
++                pathRecord={path}
++                isReadonly
++                key={path.id}
++                actions={[
++                  {
++                    id: "view-input",
++                    children: (
++                      <ViewFile
++                        defaultTriggerProps={{
++                          message: viewActionTooltipMessage,
++                        }}
++                      />
++                    ),
++                  },
++                ]}
++              />
++            ))}
++          </div>
++        </PopoverContent>
++      </Popover>
++    </>
++  );
++}
+diff --git a/canvas/app/dashboard/project/id/[id]/view/runs/run.tsx b/canvas/app/dashboard/project/id/[id]/view/runs/run.tsx
+index d189048..f831b53 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/runs/run.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/runs/run.tsx
+@@ -1,4 +1,9 @@
+ import { TRun } from "@/services/run";
++import { ProjectRunBadge } from "./badge";
++import { RunPathsPopover } from "./run-paths-popover";
++import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
++import { FileInput, FileOutput, ScrollText } from "lucide-react";
++import { ActionButton } from "@/components/custom/action-button";
+ 
+ export type TProjectRun = {
+   run: TRun;
+@@ -7,9 +12,39 @@ export type TProjectRun = {
+ export function ProjectRun(props: TProjectRun) {
+   const { run } = props;
+ 
++  const inputs = useParsePathRecordToArray({ obj: run.inputs });
++  const outputs = useParsePathRecordToArray({
++    obj: run.outputs,
++    valueKey: "uri",
++  });
++
+   return (
+-    <div>
+-      {run.name} - {run.run_status} - {run.id}
++    <div className="border-b border-b-gray-200 text-sm pb-2">
++      <div className="font-bold">{run.name}</div>
++      <div className="pt-2 flex justify-between items-center">
++        <ProjectRunBadge status={run.run_status} />
++
++        <div>
++          <RunPathsPopover
++            paths={inputs}
++            title="Run Inputs"
++            noPathsMessage="No input file for this run."
++            viewActionTooltipMessage="View input file"
++            triggerProps={{ message: "View inputs", children: <FileInput /> }}
++          />
++          <RunPathsPopover
++            paths={outputs}
++            title="Run Outputs"
++            noPathsMessage="No output file for this run."
++            viewActionTooltipMessage="View output file"
++            triggerProps={{
++              message: "View outputs",
++              children: <FileOutput />,
++            }}
++          />
++          <ActionButton icon={<ScrollText />} message="View logs" />
++        </div>
++      </div>
+     </div>
+   );
+ }
+diff --git a/canvas/app/dashboard/project/id/[id]/view/steps/index.tsx b/canvas/app/dashboard/project/id/[id]/view/steps/index.tsx
+index 8d75e98..6a68326 100644
+--- a/canvas/app/dashboard/project/id/[id]/view/steps/index.tsx
++++ b/canvas/app/dashboard/project/id/[id]/view/steps/index.tsx
+@@ -9,13 +9,13 @@ export function ProjectSteps() {
+     projectId: state.project.id,
+   }));
+ 
+-  const { data, isLoading } = useGetSteps({ id: projectId });
++  const { data, error, isLoading } = useGetSteps({ id: projectId });
+ 
+   if (isLoading) {
+     return <SidebarSkeleton />;
+   }
+ 
+-  if (!data || !data.ok || !data.response) {
++  if (!data || error) {
+     return (
+       <div className="text-red-500 md:pt-4 md:col-span-3">
+         Failed to load steps. Please Refresh the page or try again later.
+@@ -23,5 +23,5 @@ export function ProjectSteps() {
+     );
+   }
+ 
+-  return <StepSidebar steps={data.response} />;
++  return <StepSidebar steps={data} />;
+ }
+diff --git a/canvas/components/custom/action-button.tsx b/canvas/components/custom/action-button.tsx
+index 4fadefb..610e39e 100644
+--- a/canvas/components/custom/action-button.tsx
++++ b/canvas/components/custom/action-button.tsx
+@@ -22,7 +22,7 @@ export function ActionButton(props: TActionsButtonProps) {
+     } else {
+       setChild(icon);
+     }
+-  }, [isLoading]);
++  }, [icon, isLoading]);
+ 
+   return (
+     <ButtonWithTooltip
+diff --git a/canvas/components/custom/button-with-tooltip.tsx b/canvas/components/custom/button-with-tooltip.tsx
+index 28b0ffd..c808c2f 100644
+--- a/canvas/components/custom/button-with-tooltip.tsx
++++ b/canvas/components/custom/button-with-tooltip.tsx
+@@ -14,7 +14,7 @@ export const ButtonWithTooltip = React.forwardRef<
+   const { message, ...rest } = props;
+   return (
+     <WithTooltip message={message}>
+-      <Button ref={ref} {...rest} />
++      <Button ref={ref} type="button" {...rest} />
+     </WithTooltip>
+   );
+ });
+diff --git a/canvas/components/custom/path-filed-with-actions.tsx b/canvas/components/custom/path-filed-with-actions.tsx
+new file mode 100644
+index 0000000..bf7b610
+--- /dev/null
++++ b/canvas/components/custom/path-filed-with-actions.tsx
+@@ -0,0 +1,78 @@
++import { TPathRecord } from "@/app/dashboard/project/id/[id]/view/hooks/useParsePathRecordToArray";
++import { Input } from "../ui/input";
++import React from "react";
++import clsx from "clsx";
++import { WithTooltip } from "./with-tooltip";
++
++export type TPathFiledWithActionsProps = {
++  pathRecord: TPathRecord;
++  /**
++   * If true then use span to show the path value,
++   * else use input component.
++   */
++  isReadonly?: boolean;
++  /**
++   * Props passed to input element
++   */
++  inputProps?: React.HTMLProps<HTMLInputElement>;
++  /**
++   * Props passed to span element.
++   */
++  spanProp?: React.HTMLProps<HTMLSpanElement>;
++
++  actions?: { id: string; children: React.ReactNode }[];
++};
++
++export function PathFieldWithAction(props: TPathFiledWithActionsProps) {
++  const {
++    pathRecord,
++    inputProps = {},
++    spanProp = {},
++    isReadonly,
++    actions = [],
++  } = props;
++  const { name, value } = pathRecord;
++
++  const { className: inputClassName, ...inputRest } = inputProps;
++  const { className: spanClassName, ...spanRest } = spanProp;
++
++  return (
++    <div className="flex items-center text-sm border border-gray-200 rounded-md space-x-1">
++      <div className="px-1.5 py-2 bg-accent text-accent-foreground rounded-md">
++        {name}
++      </div>
++
++      {isReadonly ? (
++        <WithTooltip message={value}>
++          <span
++            className={clsx(
++              "flex-1 overflow-hidden whitespace-nowrap text-ellipsis text-gray-400",
++              spanClassName
++            )}
++            {...spanRest}
++          >
++            {value}
++          </span>
++        </WithTooltip>
++      ) : (
++        <Input
++          className={clsx(
++            "border-none shadow-transparent flex-1",
++            inputClassName
++          )}
++          value={value}
++          {...inputRest}
++        />
++      )}
++
++      {actions.map((action, idx) => (
++        <React.Fragment key={action.id}>
++          {action.children}
++          {idx !== actions.length - 1 && (
++            <div className="w-[1px] h-5 border-r border-r-gray-200" />
++          )}
++        </React.Fragment>
++      ))}
++    </div>
++  );
++}
+diff --git a/canvas/components/custom/view-file/index.tsx b/canvas/components/custom/view-file/index.tsx
+new file mode 100644
+index 0000000..974539a
+--- /dev/null
++++ b/canvas/components/custom/view-file/index.tsx
+@@ -0,0 +1,16 @@
++import React from "react";
++import { ActionButton, TActionsButtonProps } from "../action-button";
++import { Eye } from "lucide-react";
++
++export type TViewFileProps = {
++  trigger?: React.ReactNode;
++  defaultTriggerProps?: TActionsButtonProps;
++};
++
++export function ViewFile(props: TViewFileProps) {
++  const { trigger, defaultTriggerProps = { message: "View file" } } = props;
++
++  return (
++    <>{trigger || <ActionButton icon={<Eye />} {...defaultTriggerProps} />}</>
++  );
++}
+diff --git a/canvas/components/ui/badge.tsx b/canvas/components/ui/badge.tsx
+index 677eedb..4533326 100644
+--- a/canvas/components/ui/badge.tsx
++++ b/canvas/components/ui/badge.tsx
+@@ -1,27 +1,25 @@
+-import * as React from "react"
+-import { cva, type VariantProps } from "class-variance-authority"
++import * as React from "react";
++import { cva, type VariantProps } from "class-variance-authority";
+ 
+-import { cn } from "@/shadcn/utils"
++import { cn } from "@/shadcn/utils";
+ 
+ const badgeVariants = cva(
+   "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+   {
+     variants: {
+       variant: {
+-        default:
+-          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+-        secondary:
+-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
++        default: "border-transparent bg-accent text-accent-foreground",
++        success: "border-transparent bg-green-600 text-white",
++        info: "border-transparent bg-blue-600 text-white",
+         destructive:
+-          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+-        outline: "text-foreground",
++          "border-transparent bg-destructive text-destructive-foreground",
+       },
+     },
+     defaultVariants: {
+       variant: "default",
+     },
+   }
+-)
++);
+ 
+ export interface BadgeProps
+   extends React.HTMLAttributes<HTMLDivElement>,
+@@ -30,7 +28,7 @@ export interface BadgeProps
+ function Badge({ className, variant, ...props }: BadgeProps) {
+   return (
+     <div className={cn(badgeVariants({ variant }), className)} {...props} />
+-  )
++  );
+ }
+ 
+-export { Badge, badgeVariants }
++export { Badge, badgeVariants };
+diff --git a/canvas/components/ui/popover.tsx b/canvas/components/ui/popover.tsx
+new file mode 100644
+index 0000000..1ef0dfc
+--- /dev/null
++++ b/canvas/components/ui/popover.tsx
+@@ -0,0 +1,33 @@
++"use client"
++
++import * as React from "react"
++import * as PopoverPrimitive from "@radix-ui/react-popover"
++
++import { cn } from "@/shadcn/utils"
++
++const Popover = PopoverPrimitive.Root
++
++const PopoverTrigger = PopoverPrimitive.Trigger
++
++const PopoverAnchor = PopoverPrimitive.Anchor
++
++const PopoverContent = React.forwardRef<
++  React.ElementRef<typeof PopoverPrimitive.Content>,
++  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
++>(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
++  <PopoverPrimitive.Portal>
++    <PopoverPrimitive.Content
++      ref={ref}
++      align={align}
++      sideOffset={sideOffset}
++      className={cn(
++        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
++        className
++      )}
++      {...props}
++    />
++  </PopoverPrimitive.Portal>
++))
++PopoverContent.displayName = PopoverPrimitive.Content.displayName
++
++export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor }
+diff --git a/canvas/package-lock.json b/canvas/package-lock.json
+index c179db2..3def30c 100644
+--- a/canvas/package-lock.json
++++ b/canvas/package-lock.json
+@@ -17,6 +17,7 @@
+         "@radix-ui/react-hover-card": "^1.1.4",
+         "@radix-ui/react-icons": "^1.3.0",
+         "@radix-ui/react-label": "^2.1.0",
++        "@radix-ui/react-popover": "^1.1.4",
+         "@radix-ui/react-progress": "^1.1.0",
+         "@radix-ui/react-select": "^2.1.1",
+         "@radix-ui/react-slot": "^1.1.0",
+@@ -1917,6 +1918,301 @@
+         }
+       }
+     },
++    "node_modules/@radix-ui/react-popover": {
++      "version": "1.1.4",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-popover/-/react-popover-1.1.4.tgz",
++      "integrity": "sha512-aUACAkXx8LaFymDma+HQVji7WhvEhpFJ7+qPz17Nf4lLZqtreGOFRiNQWQmhzp7kEWg9cOyyQJpdIMUMPc/CPw==",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.1",
++        "@radix-ui/react-compose-refs": "1.1.1",
++        "@radix-ui/react-context": "1.1.1",
++        "@radix-ui/react-dismissable-layer": "1.1.3",
++        "@radix-ui/react-focus-guards": "1.1.1",
++        "@radix-ui/react-focus-scope": "1.1.1",
++        "@radix-ui/react-id": "1.1.0",
++        "@radix-ui/react-popper": "1.2.1",
++        "@radix-ui/react-portal": "1.1.3",
++        "@radix-ui/react-presence": "1.1.2",
++        "@radix-ui/react-primitive": "2.0.1",
++        "@radix-ui/react-slot": "1.1.1",
++        "@radix-ui/react-use-controllable-state": "1.1.0",
++        "aria-hidden": "^1.1.1",
++        "react-remove-scroll": "^2.6.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/primitive": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/primitive/-/primitive-1.1.1.tgz",
++      "integrity": "sha512-SJ31y+Q/zAyShtXJc8x83i9TYdbAfHZ++tUZnvjJJqFjzsdUnKsxPL6IEtBlxKkU7yzer//GQtZSV4GbldL3YA=="
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-arrow": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-arrow/-/react-arrow-1.1.1.tgz",
++      "integrity": "sha512-NaVpZfmv8SKeZbn4ijN2V3jlHA9ngBG16VnIIm22nUR0Yk8KUALyBxT3KYEUnNuch9sTE8UTsS3whzBgKOL30w==",
++      "dependencies": {
++        "@radix-ui/react-primitive": "2.0.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-compose-refs": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.1.tgz",
++      "integrity": "sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==",
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-context": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.1.1.tgz",
++      "integrity": "sha512-UASk9zi+crv9WteK/NU4PLvOoL3OuE6BWVKNF6hPRBtYBDXQ2u5iu3O59zUlJiTVvkyuycnqrztsHVJwcK9K+Q==",
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-dismissable-layer": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-dismissable-layer/-/react-dismissable-layer-1.1.3.tgz",
++      "integrity": "sha512-onrWn/72lQoEucDmJnr8uczSNTujT0vJnA/X5+3AkChVPowr8n1yvIKIabhWyMQeMvvmdpsvcyDqx3X1LEXCPg==",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.1",
++        "@radix-ui/react-compose-refs": "1.1.1",
++        "@radix-ui/react-primitive": "2.0.1",
++        "@radix-ui/react-use-callback-ref": "1.1.0",
++        "@radix-ui/react-use-escape-keydown": "1.1.0"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-focus-guards": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-focus-guards/-/react-focus-guards-1.1.1.tgz",
++      "integrity": "sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==",
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-focus-scope": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-focus-scope/-/react-focus-scope-1.1.1.tgz",
++      "integrity": "sha512-01omzJAYRxXdG2/he/+xy+c8a8gCydoQ1yOxnWNcRhrrBW5W+RQJ22EK1SaO8tb3WoUsuEw7mJjBozPzihDFjA==",
++      "dependencies": {
++        "@radix-ui/react-compose-refs": "1.1.1",
++        "@radix-ui/react-primitive": "2.0.1",
++        "@radix-ui/react-use-callback-ref": "1.1.0"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-popper": {
++      "version": "1.2.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-popper/-/react-popper-1.2.1.tgz",
++      "integrity": "sha512-3kn5Me69L+jv82EKRuQCXdYyf1DqHwD2U/sxoNgBGCB7K9TRc3bQamQ+5EPM9EvyPdli0W41sROd+ZU1dTCztw==",
++      "dependencies": {
++        "@floating-ui/react-dom": "^2.0.0",
++        "@radix-ui/react-arrow": "1.1.1",
++        "@radix-ui/react-compose-refs": "1.1.1",
++        "@radix-ui/react-context": "1.1.1",
++        "@radix-ui/react-primitive": "2.0.1",
++        "@radix-ui/react-use-callback-ref": "1.1.0",
++        "@radix-ui/react-use-layout-effect": "1.1.0",
++        "@radix-ui/react-use-rect": "1.1.0",
++        "@radix-ui/react-use-size": "1.1.0",
++        "@radix-ui/rect": "1.1.0"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-portal": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-portal/-/react-portal-1.1.3.tgz",
++      "integrity": "sha512-NciRqhXnGojhT93RPyDaMPfLH3ZSl4jjIFbZQ1b/vxvZEdHsBZ49wP9w8L3HzUQwep01LcWtkUvm0OVB5JAHTw==",
++      "dependencies": {
++        "@radix-ui/react-primitive": "2.0.1",
++        "@radix-ui/react-use-layout-effect": "1.1.0"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-presence": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-1.1.2.tgz",
++      "integrity": "sha512-18TFr80t5EVgL9x1SwF/YGtfG+l0BS0PRAlCWBDoBEiDQjeKgnNZRVJp/oVBl24sr3Gbfwc/Qpj4OcWTQMsAEg==",
++      "dependencies": {
++        "@radix-ui/react-compose-refs": "1.1.1",
++        "@radix-ui/react-use-layout-effect": "1.1.0"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-primitive": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.0.1.tgz",
++      "integrity": "sha512-sHCWTtxwNn3L3fH8qAfnF3WbUZycW93SM1j3NFDzXBiz8D6F5UTTy8G1+WFEaiCdvCVRJWj6N2R4Xq6HdiHmDg==",
++      "dependencies": {
++        "@radix-ui/react-slot": "1.1.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/@radix-ui/react-slot": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.1.1.tgz",
++      "integrity": "sha512-RApLLOcINYJA+dMVbOju7MYv1Mb2EBp2nH4HdDzXTSyaR5optlm6Otrz1euW3HbdOR8UmmFK06TD+A9frYWv+g==",
++      "dependencies": {
++        "@radix-ui/react-compose-refs": "1.1.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-popover/node_modules/react-remove-scroll": {
++      "version": "2.6.2",
++      "resolved": "https://registry.npmjs.org/react-remove-scroll/-/react-remove-scroll-2.6.2.tgz",
++      "integrity": "sha512-KmONPx5fnlXYJQqC62Q+lwIeAk64ws/cUw6omIumRzMRPqgnYqhSSti99nbj0Ry13bv7dF+BKn7NB+OqkdZGTw==",
++      "dependencies": {
++        "react-remove-scroll-bar": "^2.3.7",
++        "react-style-singleton": "^2.2.1",
++        "tslib": "^2.1.0",
++        "use-callback-ref": "^1.3.3",
++        "use-sidecar": "^1.1.2"
++      },
++      "engines": {
++        "node": ">=10"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/@radix-ui/react-popper": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/@radix-ui/react-popper/-/react-popper-1.2.0.tgz",
+@@ -5193,14 +5489,6 @@
+         "node": ">= 0.4"
+       }
+     },
+-    "node_modules/invariant": {
+-      "version": "2.2.4",
+-      "resolved": "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz",
+-      "integrity": "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==",
+-      "dependencies": {
+-        "loose-envify": "^1.0.0"
+-      }
+-    },
+     "node_modules/is-arguments": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/is-arguments/-/is-arguments-1.1.1.tgz",
+@@ -6566,19 +6854,19 @@
+       }
+     },
+     "node_modules/react-remove-scroll-bar": {
+-      "version": "2.3.6",
+-      "resolved": "https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.6.tgz",
+-      "integrity": "sha512-DtSYaao4mBmX+HDo5YWYdBWQwYIQQshUV/dVxFxK+KM26Wjwp1gZ6rv6OC3oujI6Bfu6Xyg3TwK533AQutsn/g==",
++      "version": "2.3.8",
++      "resolved": "https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.8.tgz",
++      "integrity": "sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==",
+       "dependencies": {
+-        "react-style-singleton": "^2.2.1",
++        "react-style-singleton": "^2.2.2",
+         "tslib": "^2.0.0"
+       },
+       "engines": {
+         "node": ">=10"
+       },
+       "peerDependencies": {
+-        "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+-        "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
++        "@types/react": "*",
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+       },
+       "peerDependenciesMeta": {
+         "@types/react": {
+@@ -6607,20 +6895,19 @@
+       }
+     },
+     "node_modules/react-style-singleton": {
+-      "version": "2.2.1",
+-      "resolved": "https://registry.npmjs.org/react-style-singleton/-/react-style-singleton-2.2.1.tgz",
+-      "integrity": "sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==",
++      "version": "2.2.3",
++      "resolved": "https://registry.npmjs.org/react-style-singleton/-/react-style-singleton-2.2.3.tgz",
++      "integrity": "sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==",
+       "dependencies": {
+         "get-nonce": "^1.0.0",
+-        "invariant": "^2.2.4",
+         "tslib": "^2.0.0"
+       },
+       "engines": {
+         "node": ">=10"
+       },
+       "peerDependencies": {
+-        "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+-        "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
++        "@types/react": "*",
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc"
+       },
+       "peerDependenciesMeta": {
+         "@types/react": {
+@@ -7596,9 +7883,9 @@
+       }
+     },
+     "node_modules/use-callback-ref": {
+-      "version": "1.3.2",
+-      "resolved": "https://registry.npmjs.org/use-callback-ref/-/use-callback-ref-1.3.2.tgz",
+-      "integrity": "sha512-elOQwe6Q8gqZgDA8mrh44qRTQqpIHDcZ3hXTLjBe1i4ph8XpNJnO+aQf3NaG+lriLopI4HMx9VjQLfPQ6vhnoA==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/use-callback-ref/-/use-callback-ref-1.3.3.tgz",
++      "integrity": "sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==",
+       "dependencies": {
+         "tslib": "^2.0.0"
+       },
+@@ -7606,8 +7893,8 @@
+         "node": ">=10"
+       },
+       "peerDependencies": {
+-        "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+-        "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
++        "@types/react": "*",
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc"
+       },
+       "peerDependenciesMeta": {
+         "@types/react": {
+diff --git a/canvas/package.json b/canvas/package.json
+index 5e11148..785f3d8 100644
+--- a/canvas/package.json
++++ b/canvas/package.json
+@@ -18,6 +18,7 @@
+     "@radix-ui/react-hover-card": "^1.1.4",
+     "@radix-ui/react-icons": "^1.3.0",
+     "@radix-ui/react-label": "^2.1.0",
++    "@radix-ui/react-popover": "^1.1.4",
+     "@radix-ui/react-progress": "^1.1.0",
+     "@radix-ui/react-select": "^2.1.1",
+     "@radix-ui/react-slot": "^1.1.0",
+diff --git a/canvas/services/api.ts b/canvas/services/api.ts
+index 45f3da5..bebfbdf 100644
+--- a/canvas/services/api.ts
++++ b/canvas/services/api.ts
+@@ -1,15 +1,7 @@
+ import wretch from "wretch";
+-import { retry } from "wretch/middlewares";
+-
+ export const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+ export const WS_BASE_URL = process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL;
+ 
+ export const api = wretch(BASE_URL).options({
+   cache: "no-store", // Disables caching
+ });
+-
+-export type TResponse<T = unknown, E = unknown> = {
+-  ok?: boolean;
+-  error?: E;
+-  response?: T;
+-};
+diff --git a/canvas/services/job.ts b/canvas/services/job.ts
+index 62a426a..601d4ef 100644
+--- a/canvas/services/job.ts
++++ b/canvas/services/job.ts
+@@ -1,5 +1,5 @@
+ import { useQuery } from "@tanstack/react-query";
+-import { api, TResponse } from "./api";
++import { api } from "./api";
+ 
+ export type TJobOutput = {
+   type: string;
+@@ -22,34 +22,12 @@ export type TJob = {
+ };
+ 
+ export type TGetJobsOptions = {
+-  canThrowOnError?: boolean;
+   stepId: string | number;
+ };
+ 
+-export async function getJobs(
+-  options: TGetJobsOptions
+-): Promise<TResponse<TJob[]>> {
+-  const { stepId, canThrowOnError } = options;
+-  try {
+-    const response = (await api
+-      .get(`/job/?step_id=${stepId}`)
+-      .json()) as TJob[];
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-
+-    if (canThrowOnError) {
+-      throw new Error("Error while fetching jobs");
+-    }
+-
+-    return {
+-      error,
+-    };
+-  }
++export function getJobs(options: TGetJobsOptions): Promise<TJob[]> {
++  const { stepId } = options;
++  return api.get(`/job/?step_id=${stepId}`).json();
+ }
+ 
+ export const GET_JOBS_QUERY_KEY = "GET_JOBS_QUERY_KEY";
+@@ -72,53 +50,22 @@ export function useGetJobs(options: TUseGetJobsOptions) {
+ export type TJobExecuteResponse = {};
+ 
+ export type TCreateJobExecuteOptions = {
+-  canThrowOnError?: boolean;
+   jobId: string | number;
+ };
+ 
+-export async function executeJob(
++export function executeJob(
+   options: TCreateJobExecuteOptions
+-): Promise<TResponse<TJobExecuteResponse>> {
+-  const { jobId, canThrowOnError } = options;
+-  try {
+-    const response = (await api
+-      .post({}, `/job/execute?job_id=${jobId}`)
+-      .json()) as TJobExecuteResponse;
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-
+-    if (canThrowOnError) {
+-      throw new Error("Error while executing the job");
+-    }
+-
+-    return {
+-      error,
+-    };
+-  }
++): Promise<TJobExecuteResponse> {
++  const { jobId } = options;
++  return api.post({}, `/job/execute?job_id=${jobId}`).json();
+ }
+ 
+ export type TUpdateJobOptions = {
+   job: TJob;
+ };
+ 
+-export async function updateJob(options: TUpdateJobOptions) {
++export function updateJob(options: TUpdateJobOptions) {
+   const { job } = options;
+ 
+-  try {
+-    await api.put({ ...job }, "/job").json();
+-
+-    return {
+-      ok: true,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-    return {
+-      error,
+-    };
+-  }
++  return api.put({ ...job }, "/job").json();
+ }
+diff --git a/canvas/services/projects.ts b/canvas/services/projects.ts
+index e55abd8..9843faf 100644
+--- a/canvas/services/projects.ts
++++ b/canvas/services/projects.ts
+@@ -1,5 +1,5 @@
+ import { useQuery } from "@tanstack/react-query";
+-import { api, TResponse } from "./api";
++import { api } from "./api";
+ 
+ export type TProject = {
+   id: number | string;
+@@ -12,19 +12,8 @@ export type TProject = {
+   workspace_uri: string;
+ };
+ 
+-export async function getProjects(): Promise<TResponse<TProject>> {
+-  try {
+-    const response = (await api.get("/project").json()) as TProject;
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-    return {
+-      error,
+-    };
+-  }
++export function getProjects(): Promise<TProject[]> {
++  return api.get("/project").json();
+ }
+ 
+ export const GET_PROJECTS_QUERY_KEY = "GET_PROJECTS_QUERY_KEY";
+@@ -40,24 +29,10 @@ export type TGetProjectOptions = {
+   id: string;
+ };
+ 
+-export async function getProject(
+-  options: TGetProjectOptions
+-): Promise<TResponse<TProject>> {
++export function getProject(options: TGetProjectOptions): Promise<TProject> {
+   const { id } = options;
+ 
+-  try {
+-    const response = (await api.get(`/project/id/${id}`).json()) as TProject;
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-    return {
+-      error,
+-    };
+-  }
++  return api.get(`/project/id/${id}`).json();
+ }
+ 
+ export const GET_PROJECT_QUERY_KEY = "GET_PROJECT_QUERY_KEY";
+@@ -86,11 +61,11 @@ export type TCreateProjectOptions = {
+   workspaceURI: string;
+ };
+ 
+-export async function createProject(
++export function createProject(
+   options: TCreateProjectOptions
+ ): Promise<TProject> {
+   const { dataset, parser, type, name, description, workspaceURI } = options;
+-  const response = (await api
++  return api
+     .post(
+       {
+         name,
+@@ -102,33 +77,14 @@ export async function createProject(
+       },
+       "/project"
+     )
+-    .json()) as TProject;
+-
+-  return response;
++    .json();
+ }
+ 
+-export async function getParserAndProjectType(): Promise<
+-  TResponse<[string[], string[]]>
+-> {
+-  try {
+-    const parsers = api.get("/project/parser-type").json();
+-    const type = api.get("/project/type").json();
+-
+-    const response = (await Promise.all([parsers, type])) as [
+-      string[],
+-      string[]
+-    ];
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.log("Error", error);
+-    return {
+-      error,
+-    };
+-  }
++export function getParserAndProjectType(): Promise<[string[], string[]]> {
++  const parsers = api.get("/project/parser-type").json() as Promise<string[]>;
++  const type = api.get("/project/type").json() as Promise<string[]>;
++
++  return Promise.all([parsers, type]);
+ }
+ 
+ export const GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY =
+diff --git a/canvas/services/run.ts b/canvas/services/run.ts
+index a8da4c2..c6ecb64 100644
+--- a/canvas/services/run.ts
++++ b/canvas/services/run.ts
+@@ -1,5 +1,5 @@
+ import { useQuery } from "@tanstack/react-query";
+-import { api, TResponse } from "./api";
++import { api } from "./api";
+ import { TJobInput, TJobOutput } from "./job";
+ 
+ export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
+@@ -17,24 +17,9 @@ export type TGetRunsOptions = {
+   job_id: string | number;
+ };
+ 
+-export async function getRuns(
+-  options: TGetRunsOptions
+-): Promise<TResponse<TRun[]>> {
++export async function getRuns(options: TGetRunsOptions): Promise<TRun[]> {
+   const { job_id } = options;
+-  try {
+-    const response = (await api.get(`/run/?job_id=${job_id}`).json()) as TRun[];
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-
+-    return {
+-      error,
+-    };
+-  }
++  return api.get(`/run/?job_id=${job_id}`).json();
+ }
+ 
+ export const GET_RUNS_QUERY_KEY = "GET_RUNS_QUERY_KEY";
+@@ -58,31 +43,16 @@ export type TCreateRunOptions = {
+   name: string;
+ };
+ 
+-export async function createRun(
+-  options: TCreateRunOptions
+-): Promise<TResponse<TRun>> {
++export function createRun(options: TCreateRunOptions): Promise<TRun> {
+   const { jobId, name, id } = options;
+-  try {
+-    const response = (await api
+-      .post(
+-        {
+-          name,
+-          id,
+-          job_id: jobId,
+-        },
+-        "/run"
+-      )
+-      .json()) as TRun;
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-
+-    return {
+-      error,
+-    };
+-  }
++  return api
++    .post(
++      {
++        name,
++        id,
++        job_id: jobId,
++      },
++      "/run"
++    )
++    .json();
+ }
+diff --git a/canvas/services/step.ts b/canvas/services/step.ts
+index 35c6c9a..613a56d 100644
+--- a/canvas/services/step.ts
++++ b/canvas/services/step.ts
+@@ -1,5 +1,5 @@
+ import { useQuery } from "@tanstack/react-query";
+-import { api, TResponse } from "./api";
++import { api } from "./api";
+ 
+ export type TStep = {
+   id: number | string;
+@@ -10,34 +10,12 @@ export type TStep = {
+ };
+ 
+ export type TGetStepsOptions = {
+-  canThrowOnError?: boolean;
+   projectId: string | number;
+ };
+ 
+-export async function getSteps(
+-  options: TGetStepsOptions
+-): Promise<TResponse<TStep[]>> {
+-  const { projectId, canThrowOnError } = options;
+-  try {
+-    const response = (await api
+-      .get(`/step/?project_id=${projectId}`)
+-      .json()) as TStep[];
+-
+-    return {
+-      ok: true,
+-      response,
+-    };
+-  } catch (error) {
+-    console.error(error);
+-
+-    if (canThrowOnError) {
+-      throw new Error("Error while fetching steps");
+-    }
+-
+-    return {
+-      error,
+-    };
+-  }
++export function getSteps(options: TGetStepsOptions): Promise<TStep[]> {
++  const { projectId } = options;
++  return api.get(`/step/?project_id=${projectId}`).json();
+ }
+ 
+ export const GET_STEPS_QUERY_KEY = "GET_STEPS_QUERY_KEY";

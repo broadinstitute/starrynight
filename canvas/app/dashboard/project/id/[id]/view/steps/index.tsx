@@ -9,13 +9,13 @@ export function ProjectSteps() {
     projectId: state.project.id,
   }));
 
-  const { data, isLoading } = useGetSteps({ id: projectId });
+  const { data, error, isLoading } = useGetSteps({ id: projectId });
 
   if (isLoading) {
     return <SidebarSkeleton />;
   }
 
-  if (!data || !data.ok || !data.response) {
+  if (!data || error) {
     return (
       <div className="text-red-500 md:pt-4 md:col-span-3">
         Failed to load steps. Please Refresh the page or try again later.
@@ -23,5 +23,5 @@ export function ProjectSteps() {
     );
   }
 
-  return <StepSidebar steps={data.response} />;
+  return <StepSidebar steps={data} />;
 }

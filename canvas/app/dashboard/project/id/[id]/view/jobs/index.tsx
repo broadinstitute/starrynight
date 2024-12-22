@@ -17,7 +17,7 @@ export function ProjectJobs() {
     return <JobsSkeleton />;
   }
 
-  if (error || !data || !data.ok || !data.response) {
+  if (error || !data) {
     return (
       <div className="p-4 flex-col flex justify-center items-center text-red-500 md:pr-0 md:col-span-9 md:border-l md:border-l-slate-100">
         <p>
@@ -41,7 +41,7 @@ export function ProjectJobs() {
 
   return (
     <div className="p-4 md:pr-0 md:col-span-9 md:border-l md:border-l-slate-100">
-      <ProjectJobsView step={currentStep} jobs={data.response} />
+      <ProjectJobsView step={currentStep} jobs={data} />
     </div>
   );
 }

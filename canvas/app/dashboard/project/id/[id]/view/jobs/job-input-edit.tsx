@@ -1,10 +1,9 @@
-import { TUseParseJobInput } from "./useParseJobInput";
 import React from "react";
-import { Input } from "@/components/ui/input";
 import { ActionButton } from "@/components/custom/action-button";
 import { Check, XIcon } from "lucide-react";
 import { JobInputUploadFile } from "./job-input-upload-file";
 import { ProjectJobInputEditWarningModal } from "./job-input-edit-warning-modal";
+import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
 
 export type TProjectJobInputProps = {
   inputPath: string;
@@ -47,34 +46,52 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
 
   return (
     <>
-      <div className="px-1.5 py-2 bg-accent text-accent-foreground rounded-md">
-        {inputName}
-      </div>
-      <Input
-        className="border-none shadow-transparent flex-1"
-        autoFocus
-        value={inputPath}
-        onChange={(e) => onInputPathChange(e.currentTarget.value)}
+      <PathFieldWithAction
+        pathRecord={{
+          id: inputPath,
+          name: inputName,
+          type: "path",
+          value: inputPath,
+        }}
+        inputProps={{
+          onChange: (e) => onInputPathChange(e.currentTarget.value),
+          autoFocus: true,
+        }}
+        actions={[
+          {
+            id: "upload-file",
+            children: (
+              <JobInputUploadFile
+                inputFile={inputFile}
+                updateInputFile={setInputFile}
+              />
+            ),
+          },
+          {
+            id: "close-editing-mode",
+            children: (
+              <ActionButton
+                icon={<XIcon />}
+                message="Close editing mode"
+                className="text-yellow-600 hover:bg-yellow-50 hover:text-yellow-600"
+                onClick={handleOnCloseEditingModeClick}
+              />
+            ),
+          },
+          {
+            id: "save-changes",
+            children: (
+              <ActionButton
+                onClick={onRequestView}
+                icon={<Check />}
+                message="Save changes"
+                key="save-changes"
+              />
+            ),
+          },
+        ]}
       />
 
-      <JobInputUploadFile
-        inputFile={inputFile}
-        updateInputFile={setInputFile}
-      />
-      <div className="w-[1px] h-5 border-r border-r-gray-200" />
-      <ActionButton
-        icon={<XIcon />}
-        message="Close editing mode"
-        className="text-yellow-600 hover:bg-yellow-50 hover:text-yellow-600"
-        onClick={handleOnCloseEditingModeClick}
-      />
-      <div className="w-[1px] h-5 border-r border-r-gray-200" />
-      <ActionButton
-        onClick={onRequestView}
-        icon={<Check />}
-        message="Save changes"
-        key="save-changes"
-      />
       <ProjectJobInputEditWarningModal
         primaryActionCallback={handleOnWarningModalPrimaryActionClick}
         isOpen={isWarningModalOpen}

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, TResponse } from "./api";
+import { api } from "./api";
 
 export type TJobOutput = {
   type: string;
@@ -22,34 +22,12 @@ export type TJob = {
 };
 
 export type TGetJobsOptions = {
-  canThrowOnError?: boolean;
   stepId: string | number;
 };
 
-export async function getJobs(
-  options: TGetJobsOptions
-): Promise<TResponse<TJob[]>> {
-  const { stepId, canThrowOnError } = options;
-  try {
-    const response = (await api
-      .get(`/job/?step_id=${stepId}`)
-      .json()) as TJob[];
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-
-    if (canThrowOnError) {
-      throw new Error("Error while fetching jobs");
-    }
-
-    return {
-      error,
-    };
-  }
+export function getJobs(options: TGetJobsOptions): Promise<TJob[]> {
+  const { stepId } = options;
+  return api.get(`/job/?step_id=${stepId}`).json();
 }
 
 export const GET_JOBS_QUERY_KEY = "GET_JOBS_QUERY_KEY";
@@ -72,53 +50,22 @@ export function useGetJobs(options: TUseGetJobsOptions) {
 export type TJobExecuteResponse = {};
 
 export type TCreateJobExecuteOptions = {
-  canThrowOnError?: boolean;
   jobId: string | number;
 };
 
-export async function executeJob(
+export function executeJob(
   options: TCreateJobExecuteOptions
-): Promise<TResponse<TJobExecuteResponse>> {
-  const { jobId, canThrowOnError } = options;
-  try {
-    const response = (await api
-      .post({}, `/job/execute?job_id=${jobId}`)
-      .json()) as TJobExecuteResponse;
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-
-    if (canThrowOnError) {
-      throw new Error("Error while executing the job");
-    }
-
-    return {
-      error,
-    };
-  }
+): Promise<TJobExecuteResponse> {
+  const { jobId } = options;
+  return api.post({}, `/job/execute?job_id=${jobId}`).json();
 }
 
 export type TUpdateJobOptions = {
   job: TJob;
 };
 
-export async function updateJob(options: TUpdateJobOptions) {
+export function updateJob(options: TUpdateJobOptions) {
   const { job } = options;
 
-  try {
-    await api.put({ ...job }, "/job").json();
-
-    return {
-      ok: true,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      error,
-    };
-  }
+  return api.put({ ...job }, "/job").json();
 }

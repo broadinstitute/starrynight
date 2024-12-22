@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, TResponse } from "./api";
+import { api } from "./api";
 
 export type TStep = {
   id: number | string;
@@ -10,34 +10,12 @@ export type TStep = {
 };
 
 export type TGetStepsOptions = {
-  canThrowOnError?: boolean;
   projectId: string | number;
 };
 
-export async function getSteps(
-  options: TGetStepsOptions
-): Promise<TResponse<TStep[]>> {
-  const { projectId, canThrowOnError } = options;
-  try {
-    const response = (await api
-      .get(`/step/?project_id=${projectId}`)
-      .json()) as TStep[];
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-
-    if (canThrowOnError) {
-      throw new Error("Error while fetching steps");
-    }
-
-    return {
-      error,
-    };
-  }
+export function getSteps(options: TGetStepsOptions): Promise<TStep[]> {
+  const { projectId } = options;
+  return api.get(`/step/?project_id=${projectId}`).json();
 }
 
 export const GET_STEPS_QUERY_KEY = "GET_STEPS_QUERY_KEY";

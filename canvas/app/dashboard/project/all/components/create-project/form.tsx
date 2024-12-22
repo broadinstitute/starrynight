@@ -26,10 +26,10 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
   });
 
   const [parsers, types] = useMemo(() => {
-    if (!data || !data.response || !data.ok) return [[], []];
+    if (!data) return [[], []];
 
-    const _parsers = data.response[0];
-    const _types = data.response[1];
+    const _parsers = data[0];
+    const _types = data[1];
 
     const mapFn = (d: string) => ({ label: d, value: d });
 

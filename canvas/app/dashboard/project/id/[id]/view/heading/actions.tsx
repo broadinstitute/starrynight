@@ -7,7 +7,7 @@ export function ProjectActions() {
   return (
     <ActionContainer>
       <TakeCredentials />
-      <Button>
+      <Button className="md:w-40">
         <PlayIcon /> Run project
       </Button>
     </ActionContainer>

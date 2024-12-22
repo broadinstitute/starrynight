@@ -15,7 +15,7 @@ export function ProjectRuns(props: TProjectRunProps) {
     return <p>Loading...</p>;
   }
 
-  if (error || !data || !data.response) {
+  if (error || !data) {
     return (
       <p className="text-red-500 text-sm">Failed to load job&lsquo;s run </p>
     );
@@ -24,16 +24,20 @@ export function ProjectRuns(props: TProjectRunProps) {
   return (
     <div className="h-96 overflow-auto">
       <h5 className="font-bold mb-1">Runs</h5>
-      {data.response.length === 0 && (
+      {data.length === 0 && (
         <div className="text-sm text-gray-400">
           Click the play button (<PlayIcon className="h-4 w-4 inline-flex" />)
           to run this job. Once started, a Run will be displayed here.
         </div>
       )}
 
-      {data.response.map((run) => (
-        <ProjectRun key={run.id} run={run} />
-      ))}
+      <ul className="space-y-3 mt-2">
+        {data.map((run) => (
+          <li key={run.id}>
+            <ProjectRun run={run} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, TResponse } from "./api";
+import { api } from "./api";
 
 export type TProject = {
   id: number | string;
@@ -12,19 +12,8 @@ export type TProject = {
   workspace_uri: string;
 };
 
-export async function getProjects(): Promise<TResponse<TProject>> {
-  try {
-    const response = (await api.get("/project").json()) as TProject;
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      error,
-    };
-  }
+export function getProjects(): Promise<TProject[]> {
+  return api.get("/project").json();
 }
 
 export const GET_PROJECTS_QUERY_KEY = "GET_PROJECTS_QUERY_KEY";
@@ -40,24 +29,10 @@ export type TGetProjectOptions = {
   id: string;
 };
 
-export async function getProject(
-  options: TGetProjectOptions
-): Promise<TResponse<TProject>> {
+export function getProject(options: TGetProjectOptions): Promise<TProject> {
   const { id } = options;
 
-  try {
-    const response = (await api.get(`/project/id/${id}`).json()) as TProject;
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      error,
-    };
-  }
+  return api.get(`/project/id/${id}`).json();
 }
 
 export const GET_PROJECT_QUERY_KEY = "GET_PROJECT_QUERY_KEY";
@@ -86,11 +61,11 @@ export type TCreateProjectOptions = {
   workspaceURI: string;
 };
 
-export async function createProject(
+export function createProject(
   options: TCreateProjectOptions
 ): Promise<TProject> {
   const { dataset, parser, type, name, description, workspaceURI } = options;
-  const response = (await api
+  return api
     .post(
       {
         name,
@@ -102,33 +77,14 @@ export async function createProject(
       },
       "/project"
     )
-    .json()) as TProject;
-
-  return response;
+    .json();
 }
 
-export async function getParserAndProjectType(): Promise<
-  TResponse<[string[], string[]]>
-> {
-  try {
-    const parsers = api.get("/project/parser-type").json();
-    const type = api.get("/project/type").json();
+export function getParserAndProjectType(): Promise<[string[], string[]]> {
+  const parsers = api.get("/project/parser-type").json() as Promise<string[]>;
+  const type = api.get("/project/type").json() as Promise<string[]>;
 
-    const response = (await Promise.all([parsers, type])) as [
-      string[],
-      string[]
-    ];
-
-    return {
-      ok: true,
-      response,
-    };
-  } catch (error) {
-    console.log("Error", error);
-    return {
-      error,
-    };
-  }
+  return Promise.all([parsers, type]);
 }
 
 export const GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY =

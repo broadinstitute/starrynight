@@ -11,21 +11,17 @@ export type TProjectModelProps = {
 
 export function ProjectModel(props: TProjectModelProps) {
   const { projectId } = props;
-  const {
-    data: project,
-    error: projectError,
-    isLoading: isProjectLoading,
-  } = useGetProject({
+  const { data, error, isLoading } = useGetProject({
     id: projectId,
   });
 
-  if (isProjectLoading) {
+  if (isLoading) {
     return <ProjectSkeleton />;
   }
 
-  if (projectError || !project || !project.response) {
+  if (error || !data) {
     return <ProjectError />;
   }
 
-  return <ProjectView project={project.response} />;
+  return <ProjectView project={data} />;
 }
