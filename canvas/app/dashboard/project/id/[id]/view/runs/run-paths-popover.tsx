@@ -51,6 +51,7 @@ export function RunPathsPopover(props: TRunPathsPopoverProps) {
                     id: "view-input",
                     children: (
                       <ViewFile
+                        url={path.value}
                         defaultTriggerProps={{
                           message: viewActionTooltipMessage,
                         }}

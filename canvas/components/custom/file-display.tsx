@@ -9,6 +9,7 @@ import {
   FileArchive,
   FileSpreadsheet,
 } from "lucide-react";
+import { ViewFile } from "./view-file";
 
 export type TFileDisplayProps = {
   file: File;
@@ -22,11 +23,12 @@ export function FileDisplay(props: TFileDisplayProps) {
       <div>{getFileIcon(file.type)}</div>
 
       <div className="flex-1">
-        <p className="max-w-64 text-sm font-medium text-gray-800 truncate">
+        <p className="max-w-56 text-sm font-medium text-gray-800 truncate">
           {file.name}
         </p>
         <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
       </div>
+      <ViewFile file={file} />
     </div>
   );
 }

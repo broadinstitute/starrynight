@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, ButtonProps } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { WithTooltip } from "./with-tooltip";
 
 export type TButtonWithTooltipProps = ButtonProps & {

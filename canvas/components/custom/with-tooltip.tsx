@@ -10,7 +10,7 @@ export function WithTooltip(props: TWithTooltipProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent>{message}</TooltipContent>
+      <TooltipContent className="max-w-48">{message}</TooltipContent>
     </Tooltip>
   );
 }

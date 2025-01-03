@@ -30,6 +30,7 @@ export function ProjectJobInputView(props: TProjectJobInputProps) {
           id: "view-job-input",
           children: (
             <ViewFile
+              url={inputPath}
               key="view-job-input"
               defaultTriggerProps={{ message: "View input file." }}
             />
