@@ -1,23 +1,23 @@
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import React from "react";
 
 export function ProjectSidebarAddStep() {
   const handleOnClick = React.useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    console.log("Adding a new step");
+    // TODO: Add a logic to add a new step
   }, []);
 
   return (
-    <Button
-      onClick={handleOnClick}
-      variant="ghost"
-      size="icon"
-      className="hover:bg-slate-200"
-    >
-      <PlusIcon />
-    </Button>
+    <FeatureNotImplementedModal featureName="Add A New Step">
+      <Button
+        onClick={handleOnClick}
+        variant="ghost"
+        size="icon"
+        className="hover:bg-slate-200"
+      >
+        <PlusIcon />
+      </Button>
+    </FeatureNotImplementedModal>
   );
 }

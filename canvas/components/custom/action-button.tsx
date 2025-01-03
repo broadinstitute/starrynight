@@ -11,7 +11,10 @@ export type TActionsButtonProps = Omit<TButtonWithTooltipProps, "children"> & {
   icon?: React.ReactNode;
 };
 
-export function ActionButton(props: TActionsButtonProps) {
+export const ActionButton = React.forwardRef<
+  HTMLButtonElement,
+  TActionsButtonProps
+>(function _ActionButton(props, ref) {
   const { isLoading, icon, className, ...rest } = props;
 
   const [child, setChild] = React.useState(icon);
@@ -30,9 +33,10 @@ export function ActionButton(props: TActionsButtonProps) {
       size="icon"
       variant="ghost"
       className={clsx(isLoading && "animate-spin", className)}
+      ref={ref}
       {...rest}
     >
       {child}
     </ButtonWithTooltip>
   );
-}
+});

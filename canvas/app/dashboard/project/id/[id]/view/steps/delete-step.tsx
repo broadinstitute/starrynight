@@ -1,4 +1,5 @@
 import { ActionButton } from "@/components/custom/action-button";
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 import { Trash2 } from "lucide-react";
 import React from "react";
 
@@ -12,22 +13,18 @@ export function ProjectSidebarDeleteStep(
 ) {
   const { stepId } = props;
 
-  const handleOnClick = React.useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      console.log("Deleting step id:", stepId);
-    },
-    [stepId]
-  );
+  const handleOnClick = React.useCallback((event: React.MouseEvent) => {
+    // TODO: add the feature to delete the step.
+  }, []);
 
   return (
-    <ActionButton
-      onClick={handleOnClick}
-      className="text-red-500 hover:bg-red-50 hover:text-red-500"
-      message="Delete"
-      icon={<Trash2 />}
-    />
+    <FeatureNotImplementedModal featureName="Delete Step">
+      <ActionButton
+        onClick={handleOnClick}
+        className="text-red-500 hover:bg-red-50 hover:text-red-500"
+        message="Delete"
+        icon={<Trash2 />}
+      />
+    </FeatureNotImplementedModal>
   );
 }

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./api";
 
 export type TJobOutput = {
@@ -47,7 +47,13 @@ export function useGetJobs(options: TUseGetJobsOptions) {
   });
 }
 
-export type TJobExecuteResponse = {};
+export type TJobExecuteResponse = {
+  id: number;
+  job_id: number;
+  name: string;
+  run_status: "pending" | "running" | "completed" | "failed";
+  executor_type: "local" | "remote";
+};
 
 export type TCreateJobExecuteOptions = {
   jobId: string | number;
@@ -58,6 +64,22 @@ export function executeJob(
 ): Promise<TJobExecuteResponse> {
   const { jobId } = options;
   return api.post({}, `/job/execute?job_id=${jobId}`).json();
+}
+
+export type TUseExecuteJobOptions = {
+  jobId: string | number;
+  onError: (error: unknown) => void;
+  onSuccess: (data: TJobExecuteResponse) => void;
+};
+
+export function useExecuteJob(options: TUseExecuteJobOptions) {
+  const { jobId, onError, onSuccess } = options;
+
+  return useMutation({
+    mutationFn: () => executeJob({ jobId }),
+    onError,
+    onSuccess,
+  });
 }
 
 export type TUpdateJobOptions = {

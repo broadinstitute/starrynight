@@ -7,6 +7,7 @@ import { ProjectSidebarAddStep } from "./add-step";
 import { Sidebar } from "@/components/custom/sidebar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CURRENT_STEP_QUERY_PARAMETER } from "@/constants/searchparams";
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 
 export type TStepSidebarProps = {
   steps: TStep[];
@@ -55,15 +56,13 @@ export function StepSidebar(props: TStepSidebarProps) {
     });
 
     return _items;
-  }, [steps]);
+  }, [handleOnStepUpdateRequest, steps]);
 
   React.useEffect(() => {
-    if (!currentStep) {
-      const id = searchParams.get(CURRENT_STEP_QUERY_PARAMETER);
-      const step = steps.find((s) => `${s.id}` === id) || steps[0];
-      handleOnStepUpdateRequest(step);
-    }
-  }, []);
+    const id = searchParams.get(CURRENT_STEP_QUERY_PARAMETER);
+    const step = steps.find((s) => `${s.id}` === id) || steps[0];
+    handleOnStepUpdateRequest(step);
+  }, [handleOnStepUpdateRequest, searchParams, steps]);
 
   return (
     <Sidebar

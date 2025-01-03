@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "../ui/button";
 import { cn } from "@/shadcn/utils";
 
 export type TSidebarItem = {

@@ -1,4 +1,5 @@
 import { ActionButton } from "@/components/custom/action-button";
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 import { PlayIcon } from "lucide-react";
 import { useCallback } from "react";
 
@@ -9,22 +10,18 @@ export type TProjectSidebarRunStepProps = {
 export function ProjectSidebarRunStep(props: TProjectSidebarRunStepProps) {
   const { stepId } = props;
 
-  const handleOnClick = useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      console.log("Running step id:", stepId);
-    },
-    [stepId]
-  );
+  const handleOnClick = useCallback((event: React.MouseEvent) => {
+    // TODO: add the feature to run the step.
+  }, []);
 
   return (
-    <ActionButton
-      onClick={handleOnClick}
-      className="hover:bg-slate-200"
-      message="Run"
-      icon={<PlayIcon />}
-    />
+    <FeatureNotImplementedModal featureName="Run Step">
+      <ActionButton
+        onClick={handleOnClick}
+        className="hover:bg-slate-200"
+        message="Run"
+        icon={<PlayIcon />}
+      />
+    </FeatureNotImplementedModal>
   );
 }
