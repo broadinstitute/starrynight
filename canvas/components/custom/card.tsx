@@ -1,6 +1,4 @@
-import Image, { ImageProps } from "next/image";
-import { Button, ButtonProps } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import clsx from "clsx";
 import React from "react";
@@ -12,8 +10,8 @@ export type TCardProps = {
   };
   title: string;
   description: string;
-  action?: ButtonProps;
   className?: string;
+  onClick?: () => void;
 };
 
 type TCardImageProps = {
@@ -36,14 +34,16 @@ function CardImage(props: TCardImageProps) {
 }
 
 export function Card(props: TCardProps) {
-  const { img, title, description, action, className, ...rest } = props;
+  const { img, title, description, className, onClick, ...rest } = props;
 
   return (
     <div
+      onClick={onClick}
       className={clsx(
-        "border rounded-md overflow-hidden transition hover:shadow-sm",
+        "border rounded-md overflow-hidden transition hover:border-[#b8cadd] hover:shadow-sm hover:scale-[1.01] hover:cursor-pointer",
         className
       )}
+      tabIndex={0}
       {...rest}
     >
       <div className="rounded-md overflow-hidden flex relative h-40">
@@ -57,15 +57,8 @@ export function Card(props: TCardProps) {
       </div>
       <div className="p-2">
         <span className="font-bold">{title}</span>
-        <p className="mt-4 font-light">{description}</p>
+        <p className="mt-4 font-light pb-16">{description}</p>
       </div>
-      {action && (
-        <div className="flex justify-end">
-          <Button size="icon" variant="ghost" {...action}>
-            <ChevronRight />
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

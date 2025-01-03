@@ -32,6 +32,7 @@ export function AllProjectsView() {
     <AllProjectsContainer>
       {data.map(({ id, name, description, img_uri }) => (
         <Card
+          onClick={() => push(`${PROJECT_URL}/${id}`)}
           key={id}
           img={{
             alt: name,
@@ -39,9 +40,6 @@ export function AllProjectsView() {
           }}
           description={description}
           title={name}
-          action={{
-            onClick: () => push(`${PROJECT_URL}/${id}`),
-          }}
         />
       ))}
     </AllProjectsContainer>
