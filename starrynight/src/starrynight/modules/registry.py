@@ -22,5 +22,10 @@ class StarrynightModule(BaseModel):
     pipe: Pipeline
     uow: list[UnitOfWork]
 
+    class Config:
+        """Model config."""
+
+        arbitrary_types_allowed = True
+
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {}

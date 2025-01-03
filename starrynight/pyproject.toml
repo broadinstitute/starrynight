@@ -34,7 +34,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
-exclude = ["vendor"]
+exclude = ["vendor", "src/starrynight/modules/schema.py"]
 ignore = ["ANN101"]
 
 [tool.basedpyright]
