@@ -25,6 +25,7 @@
                 python_with_pkgs = (pkgs.python311.withPackages(pp: [
                   pp.packaging
                   pp.snakemake
+                  pp.snakemake-storage-plugin-s3
                 ]));
               in mkShell {
                     NIX_LD = runCommand "ld.so" {} ''

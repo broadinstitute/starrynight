@@ -123,6 +123,7 @@ class SnakeMakeBackend(Backend):
         if isinstance(self.output_dir, CloudPath):
             bucket = self.output_dir.drive
             prefix = "/".join(self.output_dir.parts[2:])
+            self.scratch_path.mkdir(exist_ok=True, parents=True)
             cwd = self.scratch_path
             # mount run dir
             run(["goofys", f"{bucket}:{prefix}", str(cwd.resolve())])
@@ -134,13 +135,9 @@ class SnakeMakeBackend(Backend):
             cmd += ["--use-apptainer"]
         if self.config.print_exec:
             cmd += ["-p"]
-        if isinstance(self.output_dir, CloudPath):
-            snakefile = self.output_dir.joinpath("Snakefile")
-            snakefile._refresh_cache()
-            cmd += ["--snakefile", str(snakefile.fspath)]
         # keep this at the end
         if self.config.background:
             cmd += ["&"]
         cmd = " ".join(cmd)
         Popen(cmd, cwd=cwd, shell=True)
-        return self.output_dir.joinpath("nohup.log")
+        return self.output_dir.joinpath("nohup.out")

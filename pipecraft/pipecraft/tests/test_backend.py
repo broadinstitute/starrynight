@@ -32,7 +32,7 @@ def test_snake_seq_node() -> None:
     )
     out_dir = get_test_out_path().joinpath("sm_backend")
     out_dir.mkdir(exist_ok=True, parents=True)
-    backend = SnakeMakeBackend(pipe, SnakeMakeConfig(), out_dir)
+    backend = SnakeMakeBackend(pipe, SnakeMakeConfig(), out_dir, out_dir)
     backend.compile()
     # backend.run()
 
@@ -62,7 +62,7 @@ def test_snake_seq_parcontainer_node() -> None:
     out_dir = get_test_out_path().joinpath("sm_container")
     out_dir.mkdir(exist_ok=True, parents=True)
     backend = SnakeMakeBackend(
-        pipe, SnakeMakeConfig(apptainer=True, print_exec=True), out_dir
+        pipe, SnakeMakeConfig(apptainer=True, print_exec=True), out_dir, out_dir
     )
     backend.compile()
     backend.run()

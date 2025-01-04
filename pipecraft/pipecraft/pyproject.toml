@@ -1,6 +1,6 @@
 [project]
 name = "pipecraft"
-version = "0.16.0"
+version = "0.19.0"
 description = "Library and tools to build and execute pipelines"
 authors = [{ name = "Ankur Kumar", email = "ank@leoank.me" }]
 readme = "README.md"
