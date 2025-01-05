@@ -1,16 +1,16 @@
 {
-  inputs,
+  pkgs,
+  nix2container,
   outputs,
   ...
 }:
-{
-  illum_calculate = inputs.nix2container.buildImage {
-    name = "starrynight-illum-calculate";
-    config = {
-      entrypoint = [
-        "${outputs.packages.starrynight}/bin/starrynight"
-        "illum"
-      ];
-    };
+pkgs.dockerTools.buildImage {
+  name = "ghcr.io/broadinstitute/starrynight-illum-calculate";
+  tag = "dev";
+  config = {
+    Cmd = [
+      "${outputs.packages.${pkgs.system}.starrynight}/bin/starrynight"
+      "illum"
+    ];
   };
 }

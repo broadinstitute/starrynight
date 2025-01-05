@@ -2,39 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytest,
-  cython,
-  setuptools,
-  setuptools-scm,
-  maturin,
+  rustPlatform,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cpgparser";
   version = "0.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "";
+    sha256 = "sha256-5k3u873kKKFyP2qps1Buq+SmIuU0BPUfa23+FaAoomE=";
 
   };
-  pyproject = true;
 
-  # Relax deps constraints
-  # postPatch = ''
-  #   substituteInPlace setup.py \
-  #     --replace "scipy>=1.4.1,<1.11" "scipy>=1.4.1" \
-  #     --replace "matplotlib>=3.1.3,<3.8" "matplotlib>=3.1.3"
-  # '';
-
-  buildInputs = [
-    pytest
-    cython
-    setuptools
-    setuptools-scm
-    maturin
+  nativeBuildInputs = with rustPlatform; [
+    maturinBuildHook
+    cargoSetupHook
   ];
 
-  propagatedBuildInputs = [
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-uz/q3cnWNf9k8bNeUIh1gzJGCWWOnPSwSoAgvlwAdlo=";
+  };
+
+  dependencies = [
   ];
   pythonImportsCheck = [ "cpgparser" ];
 

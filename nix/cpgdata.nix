@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  poetry-core,
   pytest,
   cython,
   setuptools,
@@ -15,28 +16,29 @@
   tqdm,
   lark,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cpgdata";
   version = "0.4.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "";
+    sha256 = "sha256-nCDzjnEXD0Hs4lfS9NP9DbG0ly84Y8NDICbvpuMD1cU=";
 
   };
   pyproject = true;
 
   # Relax deps constraints
-  # postPatch = ''
-  #   substituteInPlace setup.py \
-  #     --replace "scipy>=1.4.1,<1.11" "scipy>=1.4.1" \
-  #     --replace "matplotlib>=3.1.3,<3.8" "matplotlib>=3.1.3"
-  # '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn 'polars = "^0.19"' 'polars = ">=0.19"' \
+      --replace-warn 'pyarrow = "^13.0"' 'pyarrow = ">=13.0"'
+  '';
 
   buildInputs = [
     pytest
     cython
     setuptools
     setuptools-scm
+    poetry-core
   ];
 
   propagatedBuildInputs = [

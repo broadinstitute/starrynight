@@ -6,6 +6,7 @@
   setuptools,
   setuptools-scm,
   pipecraft,
+  cpgdata,
   lark,
   numpy,
   contourpy,
@@ -18,6 +19,7 @@
 buildPythonPackage {
   pname = "starrynight";
   version = "0.1.0";
+  pyproject = true;
 
   src = ./../starrynight;
 
@@ -37,6 +39,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     pipecraft
+    cpgdata
     lark
     numpy
     contourpy
@@ -49,8 +52,8 @@ buildPythonPackage {
   pythonImportsCheck = [ "starrynight" ];
 
   meta = {
-    description = "Centrosome";
-    homepage = "https://cellprofiler.org";
+    description = "Starrynight";
+    homepage = "https://github.com/broadinstitute/bin/starrynight";
     license = lib.licenses.mit;
   };
 

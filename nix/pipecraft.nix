@@ -18,13 +18,6 @@ buildPythonPackage {
   src = ./../pipecraft;
   pyproject = true;
 
-  # Relax deps constraints
-  # postPatch = ''
-  #   substituteInPlace setup.py \
-  #     --replace "scipy>=1.4.1,<1.11" "scipy>=1.4.1" \
-  #     --replace "matplotlib>=3.1.3,<3.8" "matplotlib>=3.1.3"
-  # '';
-
   buildInputs = [
     pytest
     cython
@@ -42,8 +35,8 @@ buildPythonPackage {
   pythonImportsCheck = [ "pipecraft" ];
 
   meta = {
-    description = "Centrosome";
-    homepage = "https://cellprofiler.org";
+    description = "Pipecraft library for crafting data pipelines in python";
+    homepage = "https://github.com/broadinstitute/starrynight";
     license = lib.licenses.mit;
   };
 
