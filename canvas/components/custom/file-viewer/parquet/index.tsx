@@ -1,10 +1,10 @@
 import React from "react";
-import { useParseFileToCSV } from "./useParseFileToCSV";
+import { useParseParquetFile } from "./useParseParquetFile";
 import { FileViewerMessage } from "../message";
 import { PageSpinner } from "../../page-spinner";
 import { FileViewerTableView } from "../table-view";
 
-export type TFileViewerCSVLikeProps = {
+export type TFileViewerParquetProps = {
   /**
    * Width and height of parent element.
    */
@@ -14,9 +14,9 @@ export type TFileViewerCSVLikeProps = {
 /**
  * A component to view CSV like files in a table format.
  */
-export function FileViewerCSVLike(props: TFileViewerCSVLikeProps) {
+export function FileViewerParquet(props: TFileViewerParquetProps) {
   const { parentDimension } = props;
-  const { rows, header, hasError, isDone } = useParseFileToCSV();
+  const { rows, header, hasError, isDone } = useParseParquetFile();
 
   if (hasError) {
     return (

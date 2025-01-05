@@ -29,7 +29,7 @@ export function FileViewerTableView(props: TFileViewerTableView) {
 
       return Math.min(maxSoFar, 300);
     },
-    [rows, header]
+    [rows.length, data]
   );
 
   const getRowHeight = React.useCallback(
@@ -45,7 +45,7 @@ export function FileViewerTableView(props: TFileViewerTableView) {
 
       return Math.min(maxSoFar, 100);
     },
-    [rows, header]
+    [header.length, data]
   );
 
   return (
@@ -61,7 +61,7 @@ export function FileViewerTableView(props: TFileViewerTableView) {
     >
       {({ columnIndex, rowIndex, style, data: d }) => (
         <FileViewerTableViewCell
-          text={data[rowIndex][columnIndex]}
+          data={data[rowIndex][columnIndex]}
           isHeader={rowIndex === 0}
           style={style}
         />

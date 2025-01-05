@@ -44,3 +44,11 @@ export function getFileType(file: TGetFileTypeFile): TFileType {
       return "not-supported";
   }
 }
+
+export function getFileName(file: TGetFileTypeFile): string {
+  if (file instanceof File) {
+    return file.name;
+  }
+
+  return file.split("/").pop() || "No Filename";
+}

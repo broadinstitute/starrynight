@@ -4,6 +4,7 @@ import { RunPathsPopover } from "./run-paths-popover";
 import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
 import { FileInput, FileOutput, ScrollText } from "lucide-react";
 import { ActionButton } from "@/components/custom/action-button";
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 
 export type TProjectRun = {
   run: TRun;
@@ -42,7 +43,9 @@ export function ProjectRun(props: TProjectRun) {
               children: <FileOutput />,
             }}
           />
-          <ActionButton icon={<ScrollText />} message="View logs" />
+          <FeatureNotImplementedModal featureName="View Logs">
+            <ActionButton icon={<ScrollText />} message="View logs" />
+          </FeatureNotImplementedModal>
         </div>
       </div>
     </div>

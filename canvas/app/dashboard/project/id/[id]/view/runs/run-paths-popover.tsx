@@ -11,6 +11,9 @@ import {
   ButtonWithTooltip,
   TButtonWithTooltipProps,
 } from "@/components/custom/button-with-tooltip";
+import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
+import { ActionButton } from "@/components/custom/action-button";
+import { EyeIcon } from "lucide-react";
 
 export type TRunPathsPopoverProps = {
   paths: TPathRecord[];
@@ -50,12 +53,18 @@ export function RunPathsPopover(props: TRunPathsPopoverProps) {
                   {
                     id: "view-input",
                     children: (
-                      <ViewFile
-                        url={path.value}
-                        defaultTriggerProps={{
-                          message: viewActionTooltipMessage,
-                        }}
-                      />
+                      <FeatureNotImplementedModal featureName="View File">
+                        <ActionButton
+                          icon={<EyeIcon />}
+                          message={viewActionTooltipMessage}
+                        />
+                        {/* <ViewFile
+                          url={path.value}
+                          defaultTriggerProps={{
+                            message: viewActionTooltipMessage,
+                          }}
+                        /> */}
+                      </FeatureNotImplementedModal>
                     ),
                   },
                 ]}

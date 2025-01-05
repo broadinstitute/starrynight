@@ -6,14 +6,31 @@ import { Clipboard } from "lucide-react";
 
 export type TFileViewerTableViewCellProps = {
   style: React.CSSProperties;
-  text: string;
+  data: unknown;
   isHeader: boolean;
 };
 
 export function FileViewerTableViewCell(props: TFileViewerTableViewCellProps) {
-  const { style, text, isHeader } = props;
+  const { style, data, isHeader } = props;
   const { toast } = useToast();
 
+  const text = (() => {
+    if (
+      typeof data === "string" ||
+      typeof data === "number" ||
+      typeof data === "bigint"
+    ) {
+      return data.toString();
+    }
+    if (typeof data === "boolean") {
+      return data ? "True" : "False";
+    }
+    if (data instanceof Date) {
+      return data.toISOString();
+    }
+
+    return "[object Object]";
+  })();
   const THRESHOLD = (+style.width! / 8) * (+style.height! / 32) - 3;
   const hasOverflow = text.length > THRESHOLD;
 
