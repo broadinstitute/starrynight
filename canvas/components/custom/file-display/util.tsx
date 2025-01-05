@@ -5,9 +5,10 @@ import {
   FileVideo,
   FileAudio,
   FileArchive,
-  FileSpreadsheet,
   FileBox,
   FileChartColumn,
+  FileJson,
+  FileCode,
 } from "lucide-react";
 
 export function formatFileSize(size: number) {
@@ -17,16 +18,18 @@ export function formatFileSize(size: number) {
 }
 
 const fileTypeRegEx = {
-  csvLike: /vnd.ms-excel|csv|tsv|parquet/,
-  image: /image|\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|tiff?)$/i,
-  video: /video|\.(mp4|mov|wmv|avi|mkv|flv|webm|3gp|ogg|m4v)$/i,
-  audio: /audio|\.(mp3|wav|aac|flac|ogg|m4a|wma)$/i,
-  text: /text|\.(txt|csv|tsv|md|json|xml|html|css|js)$/i,
+  tabular: /vnd.ms-excel|csv|tsv|parquet/,
+  image: /image|jpg|jpeg|png|gif|bmp|webp|svg|ico|tiff?/i,
+  video: /video|mp4|mov|wmv|avi|mkv|flv|webm|3gp|ogg|m4v/i,
+  audio: /audio|mp3|wav|aac|flac|ogg|m4a|wma/i,
+  text: /text|txt|md|json|xml|yml/i,
   archive: /application\/(zip|x-rar-compressed)/,
 };
 
 export function getFileIcon(fileType: string) {
-  const { csvLike, image, video, audio, text, archive } = fileTypeRegEx;
+  const { tabular, image, video, audio, text, archive } = fileTypeRegEx;
+
+  console.log("File type", fileType, text.test(fileType));
 
   if (image.test(fileType))
     return <FileImage className="w-6 h-6 text-blue-500" />;
@@ -36,9 +39,16 @@ export function getFileIcon(fileType: string) {
     return <FileAudio className="w-6 h-6 text-purple-500" />;
   if (archive.test(fileType))
     return <FileArchive className="w-6 h-6 text-yellow-500" />;
-  if (text.test(fileType))
+  if (text.test(fileType)) {
+    if (fileType.includes("json"))
+      return <FileJson className="w-6 h-6 text-yellow-500" />;
+    if (fileType.includes("yml"))
+      return <FileCode className="w-6 h-6 text-purple-500" />;
+    if (fileType.includes("xml"))
+      return <FileCode className="w-6 h-6 text-green-500" />;
     return <FileText className="w-6 h-6 text-blue-500" />;
-  if (csvLike.test(fileType)) {
+  }
+  if (tabular.test(fileType)) {
     return <FileChartColumn className="w-6 h-6 text-green-500" />;
   }
 

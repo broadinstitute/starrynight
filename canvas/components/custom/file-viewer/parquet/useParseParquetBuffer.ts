@@ -3,7 +3,7 @@ import { parquetRead, parquetMetadata, parquetSchema } from "hyparquet";
 import { compressors } from "hyparquet-compressors";
 import { useFileViewerStore } from "../provider";
 
-export function useParseParquetFile() {
+export function useParseParquetBuffer() {
   const { buffer, addDetails } = useFileViewerStore((store) => ({
     buffer: store.buffer,
     addDetails: store.addDetails,

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParseParquetFile } from "./useParseParquetFile";
+import { useParseParquetBuffer } from "./useParseParquetBuffer";
 import { FileViewerMessage } from "../message";
 import { PageSpinner } from "../../page-spinner";
 import { FileViewerTableView } from "../table-view";
@@ -12,11 +12,11 @@ export type TFileViewerParquetProps = {
 };
 
 /**
- * A component to view CSV like files in a table format.
+ * A component to view parquet files in a table format.
  */
 export function FileViewerParquet(props: TFileViewerParquetProps) {
   const { parentDimension } = props;
-  const { rows, header, hasError, isDone } = useParseParquetFile();
+  const { rows, header, hasError, isDone } = useParseParquetBuffer();
 
   if (hasError) {
     return (

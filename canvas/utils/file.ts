@@ -2,6 +2,9 @@ export type TFileType =
   | "csv"
   | "tsv"
   | "txt"
+  | "yml"
+  | "json"
+  | "xml"
   | "parquet"
   | "jpg"
   | "png"
@@ -28,18 +31,33 @@ export function getFileType(file: TGetFileTypeFile): TFileType {
   }
 
   switch (extension) {
+    // ---------> Tabular
+    case "parquet":
+      return "parquet";
     case "csv":
       return "csv";
     case "tsv":
       return "tsv";
+    case "xml":
+      return "xml";
+
+    // ---------> Text
     case "txt":
       return "txt";
-    case "parquet":
-      return "parquet";
+    case "json":
+      return "json";
+    case "yml":
+      return "yml";
+
+    // ---------> Images
     case "jpg":
+      return "jpg";
+    case "jpeg":
       return "jpg";
     case "png":
       return "png";
+
+    // ---------> Others
     default:
       return "not-supported";
   }

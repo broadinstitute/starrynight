@@ -4,7 +4,7 @@ import { useFileViewerStore } from "../provider";
 
 const textDecoder = new TextDecoder();
 
-export function useParseFileToCSV() {
+export function useParseCSVBuffer() {
   const { buffer, addDetails } = useFileViewerStore((store) => ({
     buffer: store.buffer,
     addDetails: store.addDetails,

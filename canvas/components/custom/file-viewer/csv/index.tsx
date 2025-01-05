@@ -1,5 +1,5 @@
 import React from "react";
-import { useParseFileToCSV } from "./useParseFileToCSV";
+import { useParseCSVBuffer } from "./useParseCSVBuffer";
 import { FileViewerMessage } from "../message";
 import { PageSpinner } from "../../page-spinner";
 import { FileViewerTableView } from "../table-view";
@@ -16,7 +16,7 @@ export type TFileViewerCSVLikeProps = {
  */
 export function FileViewerCSVLike(props: TFileViewerCSVLikeProps) {
   const { parentDimension } = props;
-  const { rows, header, hasError, isDone } = useParseFileToCSV();
+  const { rows, header, hasError, isDone } = useParseCSVBuffer();
 
   if (hasError) {
     return (
