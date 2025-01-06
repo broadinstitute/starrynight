@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.2", "ruff>=0.5", "build>=1.2", "twine>=5.1"]
+dev = ["pytest", "ruff", "build", "twine"]
 
 [build-system]
 # setuptools>=61 supports PEPs 517, 518, 621, 660

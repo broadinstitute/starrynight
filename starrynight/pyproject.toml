@@ -6,20 +6,26 @@ authors = [{ name = "Ankur Kumar", email = "ank@leoank.me" }]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  # "attrdict3~=2.0",
-  "pipecraft @ file:///home/ank/workspace/hub/broad/pipecraft/pipecraft",
-  # "pipecraft>=0.16",
+  "pipecraft>=0.16",
   # "cytoskel~=0.2",
   "lark[interegular]>=1.2",
   "cpgdata~=0.4",
   "click~=8.1",
   "numpy<=1.26.4",
   "cloudpathlib[all]>=0.18,<1.0",
-  # "cellprofiler-core",
-  # "cellprofiler-library",
-  # "Cellprofiler",
   "joblib<=1.4",
 ]
+
+[project.optional-dependencies]
+cellprofiler = [
+  "cellprofiler-core",
+  "cellprofiler-library",
+  "Cellprofiler",
+]
+dev = ["pytest", "ruff", "build", "twine"]
+
+[tools.uv.sources]
+pipecraft = { workspace = true }
 
 [project.scripts]
 starrynight = "starrynight.cli.main:main"

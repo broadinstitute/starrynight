@@ -1,11 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    nixpkgs_master.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     systems.url = "github:nix-systems/default";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
-    cp-flake.url = "github:leoank/CellProfiler/refactor/nix";
+    cp-flake.url = "github:CellProfiler/CellProfiler";
     cp-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -20,33 +19,27 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
+        inherit (self) outputs;
         pkgs = import nixpkgs {
           system = system;
           config.allowUnfree = true;
         };
 
       in
-      # mpkgs = import inputs.nixpkgs_m
-      #   system = system;
-      #   config.allowUnfree = true;
-      # };
       with pkgs;
-      rec {
-        packages = import ./nix { inherit pkgs; };
-        apps = {
-          cellprofiler = {
-            type = "app";
-            program = "${packages.cellprofiler-nightly}/bin/cellprofiler";
-          };
+      {
+        packages = pkgs.callPackage ./nix {
+          inherit inputs outputs;
+          python3Packages = pkgs.python311Packages;
         };
         devShells = {
           default =
             let
               python_with_pkgs = (
                 pkgs.python311.withPackages (pp: [
-                  inputs.cp-flake.packages.${system}.cellprofiler
-                  inputs.cp-flake.packages.${system}.cellprofiler-core
-                  inputs.cp-flake.packages.${system}.cellprofiler-library
+                  (inputs.cp-flake.packages.${system}.override {
+                    python3Packages = pkgs.python311Packages;
+                  }).cellprofiler
                   pp.mysqlclient
                   pp.packaging
                   pp.snakemake
@@ -71,7 +64,7 @@
               ];
               packages = [
                 python_with_pkgs
-                python3Packages.venvShellHook
+                python311Packages.venvShellHook
                 git
                 gtk3
                 glib

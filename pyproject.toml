@@ -1,0 +1,24 @@
+[project]
+name = "workspace"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["starrynight", "pipecraft", "conductor"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "build", "twine"]
+
+[tool.uv.sources]
+starrynight = { workspace = true }
+pipecraft = { workspace = true }
+conductor = { workspace = true }
+
+[tool.uv.workspace]
+members = ["starrynight", "pipecraft", "conductor"]
+exclude = ["canvas", "docs", "nix", "scratch"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["workspace"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
