@@ -14,14 +14,15 @@ dependencies = [
   "numpy<=1.26.4",
   "cloudpathlib[all]>=0.18,<1.0",
   "joblib<=1.4",
+  "linkml>=1.8"
 ]
 
 [project.optional-dependencies]
-cellprofiler = [
-  "cellprofiler-core",
-  "cellprofiler-library",
-  "Cellprofiler",
-]
+# cellprofiler = [
+#   "cellprofiler-core",
+#   "cellprofiler-library",
+#   "Cellprofiler",
+# ]
 dev = ["pytest", "ruff", "build", "twine"]
 
 [tools.uv.sources]
