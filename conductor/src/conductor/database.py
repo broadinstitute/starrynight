@@ -13,7 +13,6 @@ from conductor.models.base import BaseSQLModel
 from conductor.models.job import Job  # noqa: F401
 from conductor.models.project import Project  # noqa: F401
 from conductor.models.run import Run  # noqa: F401
-from conductor.models.step import Step  # noqa: F401
 
 
 def get_db_session(db_uri: str) -> Session:
@@ -27,7 +26,7 @@ def add_db_session_to_req(db_uri: str, request: Request) -> None:
     Parameters
     ----------
     db_uri : str
-        Databse URI
+        Database URI
     request : Request
         FastAPI request.
 
@@ -41,7 +40,7 @@ def add_db_session_to_ws(db_uri: str, websocket: WebSocket) -> None:
     Parameters
     ----------
     db_uri : str
-        Databse URI
+        Database URI
     websocket : WebSocket
         FastAPI websocket.
 

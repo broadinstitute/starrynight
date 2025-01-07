@@ -15,14 +15,14 @@ class Job(BaseSQLModel):
 
     __tablename__ = "job"
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    module_id: Mapped[str] = mapped_column(nullable=False, index=True)
+    uid: Mapped[str] = mapped_column(nullable=False, index=True)
     name: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column()
-    spec: Mapped[dict] = mapped_column(Container, nullable=False)
+    spec: Mapped[Container] = mapped_column(JSON, nullable=False)
     outputs: Mapped[dict] = mapped_column(JSON)
     inputs: Mapped[dict] = mapped_column(JSON)
-    step_id: Mapped[int] = mapped_column(ForeignKey("step.id"), nullable=False)
-    step = relationship("Step", back_populates="jobs")
+    project_id: Mapped[int] = mapped_column(ForeignKey("project.id"), nullable=False)
+    project = relationship("Project", back_populates="jobs")
     runs: Mapped[list[Run]] = relationship(
         back_populates="job", cascade="all, delete-orphan"
     )

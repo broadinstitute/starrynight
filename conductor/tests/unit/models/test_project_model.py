@@ -1,11 +1,12 @@
 """Project model test suite."""
 
 import pytest
-from conductor.constants import ParserType, ProjectType, StepType
-from conductor.models.project import Project
-from conductor.models.step import Step
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+
+from conductor.constants import ParserType, ProjectType, StepType
+from conductor.models.job import Job
+from conductor.models.project import Project
 
 
 def test_create_project(db: Session) -> None:
@@ -13,8 +14,9 @@ def test_create_project(db: Session) -> None:
         name="TestProject",
         dataset_uri="test-uri",
         workspace_uri="test-uri/workspace",
+        storage_uri="test-uri/storage",
         description="A test project",
-        type=ProjectType.OPS_GENERIC,
+        type="randomproject",
         parser_type=ParserType.OPS_VINCENT,
     )
     db.add(project)
@@ -28,7 +30,8 @@ def test_unique_name(db: Session) -> None:
         dataset_uri="test-uri-1",
         workspace_uri="test-uri/workspace",
         description="A test project 1",
-        type=ProjectType.OPS_GENERIC,
+        storage_uri="test-uri/storage",
+        type="randomproject",
         parser_type=ParserType.OPS_VINCENT,
     )
     db.add(project1)
@@ -39,56 +42,50 @@ def test_unique_name(db: Session) -> None:
             name="UniqueName",
             dataset_uri="test-uri-2",
             workspace_uri="test-uri/workspace",
+            storage_uri="test-uri/storage",
             description="A test project 2",
-            type=ProjectType.OPS_GENERIC,
+            type="randomproject",
             parser_type=ParserType.OPS_VINCENT,
         )
         db.add(project2)
         db.commit()
 
 
-def test_relationship_steps(db: Session) -> None:
+def test_relationship_jobs(db: Session) -> None:
     project = Project(
         name="TestProject",
         dataset_uri="test-uri",
         workspace_uri="test-uri/workspace",
+        storage_uri="test-uri/storage",
         description="A test project",
-        type=ProjectType.OPS_GENERIC,
+        type="OPS GENERIC",
         parser_type=ParserType.OPS_VINCENT,
     )
-    step1 = Step(
-        name="Step 1",
-        description="A step 1",
-        type=StepType.CP_ILLUM_CALC,
+    job1 = Job(
+        name="test-job1",
+        uid="Unique module name",
+        description="This is a test job",
+        spec={},
+        inputs={},
+        outputs={},
     )
-    step2 = Step(
-        name="Step 2",
+    job2 = Job(
+        name="Job 2",
         description="A step 2",
-        type=StepType.CP_ILLUM_CALC,
+        uid="Unique module name",
+        spec={},
+        inputs={},
+        outputs={},
     )
 
-    project.steps.append(step1)
-    project.steps.append(step2)
+    project.jobs.append(job1)
+    project.jobs.append(job2)
 
     db.add(project)
     db.commit()
     db.refresh(project)
 
-    assert len(project.steps) == 2
-
-
-def test_invalid_type(db: Session) -> None:
-    with pytest.raises(IntegrityError, match="CHECK constraint failed"):
-        project = Project(
-            name="TestProject",
-            dataset_uri="test-uri",
-            workspace_uri="test-uri/workspace",
-            description="A test project",
-            type="InvalidType",
-            parser_type=ParserType.OPS_VINCENT,
-        )
-        db.add(project)
-        db.commit()
+    assert len(project.jobs) == 2
 
 
 def test_invalid_parser_type(db: Session) -> None:
@@ -97,8 +94,9 @@ def test_invalid_parser_type(db: Session) -> None:
             name="TestProject",
             dataset_uri="test-uri",
             workspace_uri="test-uri/workspace",
+            storage_uri="test-uri/storage",
             description="A test project",
-            type=ProjectType.OPS_GENERIC,
+            type="randomproject",
             parser_type="InvalidParserType",
         )
         db.add(project)

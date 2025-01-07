@@ -17,6 +17,7 @@ def test_create_run(db: Session, sample_job: Job) -> None:
         executor_type=ExecutorType.LOCAL,
         inputs={},
         outputs={},
+        spec={},
     )
     db.add(run)
     db.commit()
@@ -31,6 +32,7 @@ def test_unique_name(db: Session, sample_job: Job) -> None:
         executor_type=ExecutorType.LOCAL,
         inputs={},
         outputs={},
+        spec={},
     )
     db.add(run1)
     db.commit()
@@ -43,6 +45,7 @@ def test_unique_name(db: Session, sample_job: Job) -> None:
             executor_type=ExecutorType.LOCAL,
             inputs={},
             outputs={},
+            spec={},
         )
         db.add(run2)
         db.commit()
@@ -56,6 +59,7 @@ def test_relationship_with_job(db: Session, sample_job: Job) -> None:
         executor_type=ExecutorType.LOCAL,
         inputs={},
         outputs={},
+        spec={},
     )
     db.add(run)
     db.commit()
@@ -75,6 +79,7 @@ def test_invalid_run_status(db: Session, sample_job: Job) -> None:
             inputs={},
             outputs={},
             executor_type=ExecutorType.LOCAL,
+            spec={},
         )
         db.add(run)
         db.commit()
@@ -89,6 +94,7 @@ def test_invalid_executor_type(db: Session, sample_job: Job) -> None:
             executor_type="InvalidType",
             inputs={},
             outputs={},
+            spec={},
         )
         db.add(run)
         db.commit()
@@ -103,6 +109,7 @@ def test_invalid_job(db: Session) -> None:
             executor_type=ExecutorType.LOCAL,
             inputs={},
             outputs={},
+            spec={},
         )
         db.add(run)
         db.commit()

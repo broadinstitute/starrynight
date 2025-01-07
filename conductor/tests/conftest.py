@@ -3,19 +3,16 @@
 from collections.abc import Generator
 
 import pytest
+from sqlalchemy import Engine, create_engine, event
+from sqlalchemy.orm import Session, sessionmaker
+
 from conductor.constants import (
-    JobType,
     ParserType,
     ProjectType,
-    StepType,
-    job_output_dict,
 )
 from conductor.models.base import BaseSQLModel
 from conductor.models.job import Job
 from conductor.models.project import Project
-from conductor.models.step import Step
-from sqlalchemy import Engine, create_engine, event
-from sqlalchemy.orm import Session, sessionmaker
 
 DATABASE_URL = (
     "sqlite+pysqlite:///:memory:"  # Use an in-memory SQLite database for testing
@@ -48,8 +45,9 @@ def sample_project(db: Session) -> Project:
         name="test-project",
         dataset_uri="s3://test-project",
         workspace_uri="test-uri/workspace",
+        storage_uri="test-uri/workspace",
         description="This is a test project",
-        type=ProjectType.OPS_GENERIC,
+        type="randomproject",
         parser_type=ParserType.OPS_VINCENT,
     )
     db.add(project)
@@ -58,27 +56,15 @@ def sample_project(db: Session) -> Project:
 
 
 @pytest.fixture(scope="function")
-def sample_step(db: Session, sample_project: Project) -> Step:
-    step = Step(
-        name="test-step",
-        description="This is a test step",
-        project_id=sample_project.id,
-        type=StepType.CP_ILLUM_CALC,
-    )
-    db.add(step)
-    db.commit()
-    return step
-
-
-@pytest.fixture(scope="function")
-def sample_job(db: Session, sample_step: Step) -> Job:
+def sample_job(db: Session, sample_project: Project) -> Job:
     job = Job(
         name="test-job",
+        uid="Unique module name",
         description="This is a test job",
-        step_id=sample_step.id,
-        type=JobType.GEN_LOADDATA,
+        project_id=sample_project.id,
+        spec={},
         inputs={},
-        outputs=job_output_dict[JobType.GEN_LOADDATA],
+        outputs={},
     )
     db.add(job)
     db.commit()
