@@ -37,7 +37,12 @@ class StarrynightModule(BaseModel, ABC):
 
     @staticmethod
     @abstractmethod
-    def from_config(experiment: Experiment, data: DataConfig, **kwargs: Unpack) -> Self:
+    def from_config(
+        experiment: Experiment,
+        data: DataConfig,
+        updated_spec_dict: dict[str, Container] = {},
+        **kwargs: Unpack,
+    ) -> Self:
         """Create module from experiment and data config."""
         raise NotImplementedError
 

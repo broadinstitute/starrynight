@@ -9,9 +9,12 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.schema import Container as SpecContainer
+from starrynight.modules.schema import (
+    Container as SpecContainer,
+)
 from starrynight.modules.schema import (
     ExecFunction,
+    TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
     TypeInput,
@@ -47,12 +50,17 @@ def create_work_unit_gen_inv(out_dir: Path | CloudPath) -> list[UnitOfWork]:
 
 
 def create_pipe_gen_inv(
-    spec: SpecContainer, dataset_path: Path | CloudPath, out_dir: Path | CloudPath
+    uid: str,
+    spec: SpecContainer,
+    dataset_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
 ) -> Pipeline:
     """Create pipeline for gen inv.
 
     Parameters
     ----------
+    uid: str
+        Module unique id.
     spec: SpecContainer
         GenInvModule specification.
     dataset_path : Path | CloudPath
@@ -83,7 +91,7 @@ def create_pipe_gen_inv(
     gen_inv_pipe = Seq(
         [
             Container(
-                "GenerateInventory",
+                name=uid,
                 input_paths={},
                 output_paths={"inventory": [spec.outputs[0].path]},
                 config=ContainerConfig(
@@ -145,7 +153,14 @@ class GenInvModule(StarrynightModule):
             ),
             docker_image=None,
             algorithm_folder_name=None,
-            citations=TypeCitations(algorithm=[]),
+            citations=TypeCitations(
+                algorithm=[
+                    TypeAlgorithmFromCitation(
+                        name="Starrynight inventory module",
+                        description="This module generates an inventory for the dataset.",
+                    )
+                ]
+            ),
         )
 
     @staticmethod
@@ -161,7 +176,7 @@ class GenInvModule(StarrynightModule):
                 .resolve()
                 .__str__()
             )
-        pipe = create_pipe_gen_inv(spec=spec)
+        pipe = create_pipe_gen_inv(uid=GenInvModule.uid(), spec=spec)
         uow = create_work_unit_gen_inv(out_dir=data.storage_path.joinpath("inventory"))
 
         return GenInvModule(spec=spec, pipe=pipe, uow=uow)

@@ -9,8 +9,14 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.schema import Container as SpecContainer
-from starrynight.modules.schema import ExecFunction, TypeCitations
+from starrynight.modules.schema import (
+    Container as SpecContainer,
+)
+from starrynight.modules.schema import (
+    ExecFunction,
+    TypeAlgorithmFromCitation,
+    TypeCitations,
+)
 from starrynight.schema import DataConfig
 
 
@@ -41,12 +47,14 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
 
 
 def create_pipe_gen_index(
-    inventory_path: Path | CloudPath, out_dir: Path | CloudPath
+    uid: str, inventory_path: Path | CloudPath, out_dir: Path | CloudPath
 ) -> Pipeline:
     """Create pipeline for gen index.
 
     Parameters
     ----------
+    uid: str
+        Module unique id.
     inventory_path : Path | CloudPath
         Inventory path. Can be local or cloud.
     out_dir : Path | CloudPath
@@ -61,7 +69,7 @@ def create_pipe_gen_index(
     gen_index_pipe = Seq(
         [
             Container(
-                "GenerateIndex",
+                name=uid,
                 input_paths={"inventory": [inventory_path.resolve().__str__()]},
                 output_paths={
                     "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
@@ -113,9 +121,17 @@ class GenIndexModule(StarrynightModule):
                 ),
                 docker_image=None,
                 algorithm_folder_name=None,
-                citations=TypeCitations(algorithm=[]),
+                citations=TypeCitations(
+                    algorithm=[
+                        TypeAlgorithmFromCitation(
+                            name="Starrynight indexing module",
+                            description="This module generates an index for the dataset.",
+                        )
+                    ]
+                ),
             )
         pipe = create_pipe_gen_index(
+            uid=GenIndexModule.uid(),
             inventory_path=data.dataset_path,
             out_dir=data.storage_path.joinpath("inventory"),
         )
