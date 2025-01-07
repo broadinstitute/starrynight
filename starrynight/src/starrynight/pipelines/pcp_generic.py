@@ -2,7 +2,7 @@
 
 from pipecraft.pipeline import Parallel, Pipeline, Seq
 
-from starrynight.experiment import Experiment
+from starrynight.experiments.common import Experiment
 from starrynight.modules.schema import Container
 from starrynight.schema import DataConfig
 

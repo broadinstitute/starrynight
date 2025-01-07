@@ -4,7 +4,7 @@ from functools import partial
 
 from pipecraft.pipeline import Pipeline, Seq
 
-from starrynight.experiment import Experiment
+from starrynight.experiments.common import Experiment
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
 from starrynight.modules.schema import Container as SpecContainer
