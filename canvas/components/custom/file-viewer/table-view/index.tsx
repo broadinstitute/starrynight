@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import React from "react";
 import { VariableSizeGrid as Grid } from "react-window";
 import { FileViewerTableViewCell } from "./cell";
@@ -59,7 +58,7 @@ export function FileViewerTableView(props: TFileViewerTableView) {
       className="bg-accent border-l-accent border-l overflow-auto"
       overscanRowCount={50}
     >
-      {({ columnIndex, rowIndex, style, data: d }) => (
+      {({ columnIndex, rowIndex, style }) => (
         <FileViewerTableViewCell
           data={data[rowIndex][columnIndex]}
           isHeader={rowIndex === 0}

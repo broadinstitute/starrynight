@@ -3,8 +3,7 @@ import { ProjectRunBadge } from "./badge";
 import { RunPathsPopover } from "./run-paths-popover";
 import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
 import { FileInput, FileOutput, ScrollText } from "lucide-react";
-import { ActionButton } from "@/components/custom/action-button";
-import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
+import { RunViewLog } from "./view-logs";
 
 export type TProjectRun = {
   run: TRun;
@@ -43,9 +42,7 @@ export function ProjectRun(props: TProjectRun) {
               children: <FileOutput />,
             }}
           />
-          <FeatureNotImplementedModal featureName="View Logs">
-            <ActionButton icon={<ScrollText />} message="View logs" />
-          </FeatureNotImplementedModal>
+          <RunViewLog run={run} />
         </div>
       </div>
     </div>
