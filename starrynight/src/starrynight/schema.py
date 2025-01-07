@@ -1,10 +1,20 @@
 """Schema module."""
 
+from pathlib import Path
 from typing import Annotated
 
+from cloudpathlib import CloudPath
 from cpgdata.measurement import get_is_dir, get_key_parts
 from cpgdata.parser import ParsedPrefix, WorkspaceFolder
-from pydantic import BeforeValidator, ConfigDict, Field, computed_field
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, computed_field
+
+
+class DataConfig(BaseModel):
+    """Data configuration schema."""
+
+    dataset_path: Path | CloudPath
+    storage_path: Path | CloudPath
+    workspace_path: Path | CloudPath
 
 
 class MeasuredInventory(ParsedPrefix):

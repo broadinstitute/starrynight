@@ -47,6 +47,7 @@ class Pipeline(ABC):
         """
         self.pipeline = nx.DiGraph()
         self.node_list = node_list
+        self.is_compiled = False
         self.resolve()
 
     def resolve(self) -> None:
@@ -102,6 +103,8 @@ class Seq(Pipeline):
             Compiled pipeline.
 
         """
+        if self.is_compiled:
+            return self
         # for i in range(max(0, len(self.node_list) - 1)):
         prev_root = None
         for i, item in enumerate(self.node_list):
@@ -123,6 +126,7 @@ class Seq(Pipeline):
                 elif isinstance(prev_root, list):
                     self.pipeline.add_edge(prev_root[-1], subgraph_flattened[0])
                 prev_root = subgraph_flattened[-1]
+        self.is_compiled = True
         return self
 
 
@@ -157,6 +161,8 @@ class Parallel(Pipeline):
             Compiled pipeline.
 
         """
+        if self.is_compiled:
+            return self
         flattened_list: list[Node] = list(flatten([self.resolved_list]))
         scatter_node = flattened_list[0]
         gather_node = flattened_list[-1]
@@ -171,4 +177,5 @@ class Parallel(Pipeline):
                 subgraph_flattened = list(flatten([self.resolved_list[i]]))
                 self.pipeline.add_edge(scatter_node, subgraph_flattened[0])
                 self.pipeline.add_edge(subgraph_flattened[-1], gather_node)
+        self.is_compiled = True
         return self

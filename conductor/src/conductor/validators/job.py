@@ -1,19 +1,17 @@
 """Job domain related validators."""
 
 from pydantic import BaseModel
-
-from conductor.constants import JobInputSchema, JobOutputSchema, JobType
+from starrynight.modules.schema import Container
 
 
 class Job(BaseModel):
     """Job create schema."""
 
     id: int | None = None
+    module_id: str
     step_id: int
     name: str
     description: str
-    type: JobType
-    outputs: dict[str, JobOutputSchema]
-    inputs: dict[str, JobInputSchema]
+    spec: Container
 
     model_config: dict = {"from_attributes": True}

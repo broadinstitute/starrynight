@@ -70,6 +70,7 @@ class SnakeMakeBackend(Backend):
             text=Path(__file__).parent.joinpath("templates/snakemake.mako").read_text(),
             output_encoding="utf-8",
         )
+        self.snakefile = None
 
     def compile(self) -> None:
         """Compile SnakeMake pipeline.
@@ -107,8 +108,8 @@ class SnakeMakeBackend(Backend):
                 invoke_shells=invoke_shells,
             )
             assert type(snakefile) is bytes
-            snakefile = snakefile.decode("utf-8")
-            f.writelines(snakefile)
+            self.snakefile = snakefile.decode("utf-8")
+            f.writelines(self.snakefile)
 
     def run(self) -> Path | CloudPath:
         """Run SankeMake.
@@ -119,6 +120,7 @@ class SnakeMakeBackend(Backend):
             Path to run log file.
 
         """
+        self.compile()
         cwd = self.output_dir
         if isinstance(self.output_dir, CloudPath):
             bucket = self.output_dir.drive
