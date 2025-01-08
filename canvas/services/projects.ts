@@ -53,36 +53,26 @@ export function useGetProject(options: TUseGetProject) {
 }
 
 export type TCreateProjectOptions = {
-  dataset: string;
-  parser: string;
+  dataset_uri: string;
+  parser_type: string;
   type: string;
   name: string;
   description: string;
-  workspaceURI: string;
+  workspace_uri: string;
+  storage_uri: string;
+  is_configured: boolean;
+  init_config: Record<string, unknown>;
 };
 
 export function createProject(
   options: TCreateProjectOptions
 ): Promise<TProject> {
-  const { dataset, parser, type, name, description, workspaceURI } = options;
-  return api
-    .post(
-      {
-        name,
-        description,
-        type,
-        parser_type: parser,
-        dataset_uri: dataset,
-        workspace_uri: workspaceURI,
-      },
-      "/project"
-    )
-    .json();
+  return api.post(options, "/project").json();
 }
 
 export function getParserAndProjectType(): Promise<[string[], string[]]> {
   const parsers = api.get("/project/parser-type").json() as Promise<string[]>;
-  const type = api.get("/project/type").json() as Promise<string[]>;
+  const type = api.get("/project/type/all").json() as Promise<string[]>;
 
   return Promise.all([parsers, type]);
 }

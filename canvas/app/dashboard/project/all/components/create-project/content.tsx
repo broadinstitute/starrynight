@@ -14,6 +14,7 @@ import React from "react";
 import { TCreateProjectFormData } from "@/schema/create-project";
 import { Alert } from "@/components/custom/alert";
 import { PROJECT_URL } from "@/constants/routes";
+import { Loader2 } from "lucide-react";
 
 const formID = "create-project-form";
 
@@ -50,7 +51,29 @@ export function CreateProjectContent() {
 
   const handleSubmit = React.useCallback(
     (data: TCreateProjectFormData) => {
-      createNewProject(data);
+      const {
+        dataset,
+        storageURI,
+        workspaceURI,
+        description,
+        isConfigured,
+        name,
+        parser,
+        type,
+        init_config,
+      } = data;
+
+      createNewProject({
+        dataset_uri: dataset,
+        storage_uri: storageURI || dataset,
+        workspace_uri: workspaceURI || dataset,
+        description: description || "",
+        is_configured: isConfigured,
+        name,
+        parser_type: parser,
+        type,
+        init_config,
+      });
     },
     [createNewProject]
   );
@@ -61,7 +84,16 @@ export function CreateProjectContent() {
       trigger={<Button>Create Project</Button>}
       hasCloseButtonInFooter
       actions={[
-        <Button key="create" className="my-1" type="submit" form={formID}>
+        <Button
+          disabled={isSubmittingCreateProjectForm}
+          key="create"
+          className="my-1"
+          type="submit"
+          form={formID}
+        >
+          {isSubmittingCreateProjectForm && (
+            <Loader2 className="animate-spin" />
+          )}
           Create
         </Button>,
       ]}

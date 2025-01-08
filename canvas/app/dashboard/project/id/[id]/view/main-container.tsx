@@ -9,7 +9,7 @@ export function ProjectMainContainer(props: TProjectMainContainerProps) {
   return (
     <div
       className={clsx(
-        "grid flex-1 grid-cols-1 md:grid-cols-12 gap-6",
+        "grid flex-1 grid-cols-1 md:grid-cols-9 gap-6",
         className
       )}
       {...rest}

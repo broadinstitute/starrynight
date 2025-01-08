@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
+import { Form, FormItem, FormLabel } from "@/components/ui/form";
 import {
   TCreateProjectFormData,
   createProjectSchema,
@@ -13,6 +13,9 @@ import { useGetParserAndProjectType } from "@/services/projects";
 import { TextAreaFormField } from "@/components/custom/form-field/textarea";
 import { InputFormField } from "@/components/custom/form-field/input";
 import { SelectFormField } from "@/components/custom/form-field/select";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/services/api";
+import { Input } from "@/components/ui/input";
 
 export type TCreateProjectFormProps = {
   formID: string;
@@ -38,26 +41,62 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
 
   const { formID, isSubmitting, onSubmit } = props;
 
-  const createProjectForm = useForm<TCreateProjectFormData>({
+  const { getValues, control, ...rest } = useForm<TCreateProjectFormData>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       name: "",
       description: "",
       dataset: "",
       workspaceURI: "",
+      storageURI: "",
+      isConfigured: false,
     },
   });
 
+  const projectType = getValues("type");
+
+  const handleUpdateInitConfig = React.useCallback(
+    (key: string, value: string) => {
+      rest.setValue("init_config", {
+        ...getValues("init_config"),
+        [key]: value,
+      });
+    },
+    [rest, getValues]
+  );
+
+  // TODO: Fix why handleSubmit doesn't pass init_config value to onSubmit.
+  // TODO: Could be related to how useForm handles nested objects in the form.
+  const _onSubmit = React.useCallback(
+    (data: TCreateProjectFormData) => {
+      const init_config = getValues("init_config");
+
+      onSubmit({
+        ...data,
+        init_config,
+      });
+    },
+    [getValues, onSubmit]
+  );
+
+  // TODO: Move this to services.
+  const { data: projectTypeConfig } = useQuery({
+    queryKey: ["GET_INIT_CONFIG_KEY", projectType],
+    queryFn: (): Promise<Record<string, Record<"title", string>>> =>
+      api.get(`/project/type/${projectType}`).json(),
+    enabled: !!projectType,
+  });
+
   return (
-    <Form {...createProjectForm}>
+    <Form getValues={getValues} control={control} {...rest}>
       <form
-        onSubmit={createProjectForm.handleSubmit(onSubmit)}
+        onSubmit={rest.handleSubmit(_onSubmit)}
         className="space-y-4 text-left"
         id={formID}
       >
         {/* Project Name */}
         <InputFormField
-          control={createProjectForm.control}
+          control={control}
           name="name"
           label="Name"
           inputProps={{
@@ -69,7 +108,7 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
 
         {/* Description */}
         <TextAreaFormField
-          control={createProjectForm.control}
+          control={control}
           name="description"
           label="Description"
           textAreaProps={{
@@ -81,7 +120,7 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
 
         {/* Dataset */}
         <InputFormField
-          control={createProjectForm.control}
+          control={control}
           name="dataset"
           label="Dataset"
           inputProps={{
@@ -93,20 +132,31 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
 
         {/* Workspace URI */}
         <InputFormField
-          control={createProjectForm.control}
+          control={control}
           name="workspaceURI"
           label="Workspace"
           inputProps={{
             placeholder: "Workspace",
             disabled: isSubmitting,
           }}
-          description="S3 Bucket URI for the workspace where you want to create this
-                project."
+          description="Optional"
+        />
+
+        {/* Storage URI */}
+        <InputFormField
+          control={control}
+          name="storageURI"
+          label="Storage URI"
+          inputProps={{
+            placeholder: "Storage URI",
+            disabled: isSubmitting,
+          }}
+          description="Optional."
         />
 
         {/* Parser */}
         <SelectFormField
-          control={createProjectForm.control}
+          control={control}
           name="parser"
           description="The parser to use to build the project."
           label="Parser"
@@ -123,7 +173,7 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
 
         {/* Type */}
         <SelectFormField
-          control={createProjectForm.control}
+          control={control}
           name="type"
           description="The type of the project."
           label="Project Type"
@@ -137,6 +187,18 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
             error,
           }}
         />
+
+        {projectTypeConfig &&
+          Object.entries(projectTypeConfig).map(([key, value]) => (
+            <FormItem key={key}>
+              <FormLabel>{value.title}</FormLabel>
+              <Input
+                onChange={(e) =>
+                  handleUpdateInitConfig(key, e.currentTarget.value)
+                }
+              />
+            </FormItem>
+          ))}
       </form>
     </Form>
   );

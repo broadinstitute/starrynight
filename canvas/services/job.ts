@@ -22,28 +22,32 @@ export type TJob = {
 };
 
 export type TGetJobsOptions = {
-  stepId: string | number;
+  project_id: string | number;
 };
 
 export function getJobs(options: TGetJobsOptions): Promise<TJob[]> {
-  const { stepId } = options;
-  return api.get(`/job/?step_id=${stepId}`).json();
+  const { project_id } = options;
+  const searchParams = new URLSearchParams();
+
+  searchParams.set("project_id", String(project_id));
+
+  return api.get(`/job/?${searchParams.toString()}`).json();
 }
 
 export const GET_JOBS_QUERY_KEY = "GET_JOBS_QUERY_KEY";
 
 export type TUseGetJobsOptions = {
-  stepId?: string | number;
+  projectID?: string | number;
 };
 
 export function useGetJobs(options: TUseGetJobsOptions) {
-  const { stepId } = options;
+  const { projectID } = options;
 
   return useQuery({
-    queryKey: [GET_JOBS_QUERY_KEY, stepId],
+    queryKey: [GET_JOBS_QUERY_KEY, projectID],
     // queryFn will only run if stepId is defined.
-    queryFn: () => getJobs({ stepId: stepId! }),
-    enabled: typeof stepId === "number" || typeof stepId === "string",
+    queryFn: () => getJobs({ project_id: projectID! }),
+    enabled: typeof projectID === "number",
   });
 }
 
