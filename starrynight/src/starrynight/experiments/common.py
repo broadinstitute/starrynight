@@ -21,6 +21,9 @@ class Experiment(BaseModel, ABC):
     data_production_contact: str | None = None
     data_processing_contact: str | None = None
 
+    # users should not access it directly
+    init_config_: BaseModel | None = None
+
     @abstractstaticmethod
     def from_index(index_path: Path, **kwargs: Unpack) -> Self:
         """Create experiment schema from index."""

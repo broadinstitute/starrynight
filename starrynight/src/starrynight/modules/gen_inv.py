@@ -52,8 +52,6 @@ def create_work_unit_gen_inv(out_dir: Path | CloudPath) -> list[UnitOfWork]:
 def create_pipe_gen_inv(
     uid: str,
     spec: SpecContainer,
-    dataset_path: Path | CloudPath,
-    out_dir: Path | CloudPath,
 ) -> Pipeline:
     """Create pipeline for gen inv.
 
@@ -115,7 +113,7 @@ class GenInvModule(StarrynightModule):
 
     @staticmethod
     def _spec() -> SpecContainer:
-        """Return module unique id."""
+        """Return module default spec."""
         return SpecContainer(
             inputs=[
                 TypeInput(

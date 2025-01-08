@@ -49,10 +49,10 @@ class PCPGeneric(Experiment):
 
     sbs_config: SBSConfig
     cp_config: CPConfig
-    path_parser: Callable[[str], MeasuredInventory] | None
+    # path_parser: Callable[[str], MeasuredInventory] | None
 
     # users should not access it directly
-    _init_config: PCPGenericInitConfig | None
+    init_config_: PCPGenericInitConfig | None = None
 
     @staticmethod
     def from_index(index_path: Path, init_config: PCPGenericInitConfig) -> Self:
