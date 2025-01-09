@@ -36,6 +36,7 @@ export function LogViewer(props: TLogViewerProps) {
                 websocketOptions={{
                   reconnect: true,
                   reconnectWait: 5,
+                  formatMessage: (e) => JSON.parse(e).message
                 }}
                 onScroll={onScroll}
                 follow={follow}
