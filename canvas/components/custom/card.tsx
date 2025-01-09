@@ -40,7 +40,7 @@ export function Card(props: TCardProps) {
     <div
       onClick={onClick}
       className={clsx(
-        "border rounded-md overflow-hidden transition hover:border-[#b8cadd] hover:shadow-sm hover:scale-[1.01] hover:cursor-pointer",
+        "border rounded-md md:max-h-80 overflow-hidden transition hover:border-[#b8cadd] hover:shadow-sm hover:scale-[1.01] hover:cursor-pointer",
         className
       )}
       tabIndex={0}
