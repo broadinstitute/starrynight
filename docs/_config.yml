@@ -21,7 +21,7 @@ repository:
   path_to_book: starrynight-docs
 
 html:
-  baseurl: TODO #distributedscience.github.io
+  baseurl: broadinstitute.github.io
   use_repository_button: true
   use_issues_button: true
   use_edit_page_button: true
