@@ -1,0 +1,17 @@
+# Table of contents
+
+format: jb-book
+root: overview
+parts:
+- caption: FAQ
+  chapters:
+  - file: costs
+- caption: Running starrynight
+  chapters:
+  - file: step_0_creating_project
+  - file: step_1_creating_inventory_index
+  - file: step_2_creating_pipeline
+- caption: Technical Guides
+  chapters:
+  - file: troubleshooting_runs
+  - file: versions
