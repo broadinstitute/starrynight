@@ -5,7 +5,7 @@ import { useFileViewerStore } from "../provider";
 
 export function useParseParquetBuffer() {
   const { buffer, addDetails } = useFileViewerStore((store) => ({
-    buffer: store.buffer,
+    buffer: store.bufferViewerOption,
     addDetails: store.addDetails,
   }));
   const [rows, setRows] = React.useState([] as string[][]);
@@ -14,11 +14,15 @@ export function useParseParquetBuffer() {
   const [hasError, setHasError] = React.useState(false);
 
   const processBuffer = React.useCallback(async () => {
-    const { children, count } = parquetSchema(parquetMetadata(buffer));
+    if (!buffer || !buffer.data) {
+      return;
+    }
+
+    const { children } = parquetSchema(parquetMetadata(buffer.data));
 
     try {
       await parquetRead({
-        file: buffer,
+        file: buffer.data,
         compressors,
         onComplete: (data) => {
           setRows(data);

@@ -29,8 +29,6 @@ const fileTypeRegEx = {
 export function getFileIcon(fileType: string) {
   const { tabular, image, video, audio, text, archive } = fileTypeRegEx;
 
-  console.log("File type", fileType, text.test(fileType));
-
   if (image.test(fileType))
     return <FileImage className="w-6 h-6 text-blue-500" />;
   if (video.test(fileType))
@@ -57,5 +55,6 @@ export function getFileIcon(fileType: string) {
   }
   if (fileType.startsWith("application/"))
     return <FileBox className="w-6 h-6 text-gray-500" />;
+
   return <File className="w-6 h-6 text-gray-400" />;
 }

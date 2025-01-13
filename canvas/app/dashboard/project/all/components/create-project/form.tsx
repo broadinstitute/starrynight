@@ -191,7 +191,7 @@ export function CreateProjectForm(props: TCreateProjectFormProps) {
         {projectTypeConfig &&
           Object.entries(projectTypeConfig).map(([key, value]) => (
             <FormItem key={key}>
-              <FormLabel>{value.title}</FormLabel>
+              <FormLabel>{value.title || key}</FormLabel>
               <Input
                 onChange={(e) =>
                   handleUpdateInitConfig(key, e.currentTarget.value)

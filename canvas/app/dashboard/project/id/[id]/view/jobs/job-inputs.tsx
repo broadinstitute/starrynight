@@ -9,7 +9,7 @@ export type TProjectJobInputsProps = {
 
 export function ProjectJobInputs(props: TProjectJobInputsProps) {
   const { job } = props;
-  const inputs = useParsePathRecordToArray({ obj: job.inputs });
+  const inputs = useParsePathRecordToArray({ records: job.spec.inputs });
 
   return (
     <div className="flex-1">

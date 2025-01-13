@@ -6,6 +6,8 @@ import { useFileViewerStore } from "./provider";
 import { PageSpinner } from "../page-spinner";
 import { FileViewerParquet } from "./parquet";
 import { FileViewerText } from "./text";
+import { FileViewerListFiles } from "./list-files";
+import { FileViewerNotebook } from "./notebook-viewer";
 
 export function FileViewerViewerSection() {
   const { fileType } = useFileViewerStore((store) => ({
@@ -29,6 +31,10 @@ export function FileViewerViewerSection() {
       case "yml":
       case "xml":
         return <FileViewerText parentDimension={[width, height]} />;
+      case "s3-directory":
+        return <FileViewerListFiles parentDimension={[width, height]} />;
+      case "notebook":
+        return <FileViewerNotebook parentDimension={[width, height]} />;
       default:
         return (
           <FileViewerMessage message="A viewer for this file is not available. Please download the file to view it locally." />

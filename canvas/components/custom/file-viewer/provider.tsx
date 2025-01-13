@@ -11,7 +11,6 @@ import {
   type TFileViewerStore,
   createFileViewerStore,
 } from "./store";
-import { TFileType } from "@/utils/file";
 
 export type TFileViewerStoreApi = ReturnType<typeof createFileViewerStore>;
 

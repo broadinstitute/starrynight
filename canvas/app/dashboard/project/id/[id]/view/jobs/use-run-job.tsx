@@ -1,7 +1,6 @@
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { PROJECT_URL } from "@/constants/routes";
-import { CURRENT_STEP_QUERY_PARAMETER } from "@/constants/searchparams";
 import { TJob, TJobExecuteResponse, useExecuteJob } from "@/services/job";
 import { GET_RUNS_QUERY_KEY } from "@/services/run";
 import { useProjectStore } from "@/stores/project";
@@ -17,20 +16,19 @@ export function useRunJob(options: TUseRunJobOptions) {
   const { job } = options;
   const { toast, dismiss } = useToast();
 
-  const { project, step } = useProjectStore((state) => ({
+  const { project } = useProjectStore((state) => ({
     project: state.project,
-    step: state.currentStep,
   }));
 
   const queryClient = useQueryClient();
 
   const jobDescription = React.useMemo(() => {
-    return `Job "${job.name}" in step "${step?.name}" of project "${project.name}"`;
-  }, [job.name, step?.name, project.name]);
+    return `Job "${job.name}" of project "${project.name}"`;
+  }, [job.name, project.name]);
 
   const jobURL = React.useMemo(() => {
-    return `${PROJECT_URL}/${project.id}?${CURRENT_STEP_QUERY_PARAMETER}=${step?.id}`;
-  }, [project.id, step?.id]);
+    return `${PROJECT_URL}/${project.id}`;
+  }, [project.id]);
 
   const _handleOnError = React.useCallback(() => {
     const { id } = toast({

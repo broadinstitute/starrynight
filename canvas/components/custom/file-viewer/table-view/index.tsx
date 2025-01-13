@@ -20,7 +20,12 @@ export function FileViewerTableView(props: TFileViewerTableView) {
       let maxSoFar = 100;
 
       for (let row = 0; row < 100 && row < rows.length; row++) {
-        const width = data[row][index].length * 8;
+        const val = data[row][index];
+        let width = 100;
+        if (typeof val === "string") {
+          width = val.length * 8;
+        }
+
         if (width > maxSoFar) {
           maxSoFar = width;
         }
@@ -36,7 +41,12 @@ export function FileViewerTableView(props: TFileViewerTableView) {
       let maxSoFar = 32;
 
       for (let col = 0; col < header.length; col++) {
-        const height = Math.round(data[index][col].length / 32) * 32;
+        const val = data[index][col];
+        let height = 32;
+
+        if (typeof val === "string") {
+          height = Math.round(val.length / 32) * 32;
+        }
         if (height > maxSoFar) {
           maxSoFar = height;
         }

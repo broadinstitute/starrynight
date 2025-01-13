@@ -6,7 +6,7 @@ const textDecoder = new TextDecoder();
 
 export function useParseCSVBuffer() {
   const { buffer, addDetails } = useFileViewerStore((store) => ({
-    buffer: store.buffer,
+    buffer: store.bufferViewerOption,
     addDetails: store.addDetails,
   }));
 
@@ -16,7 +16,9 @@ export function useParseCSVBuffer() {
   const [hasError, setHasError] = React.useState(false);
 
   const processBuffer = React.useCallback(async () => {
-    const csvString = textDecoder.decode(buffer);
+    if (!buffer || !buffer.data) return;
+
+    const csvString = textDecoder.decode(buffer.data);
     const parsed = Papaparse.parse(csvString);
 
     setRows(parsed.data.slice(1) as string[][]);

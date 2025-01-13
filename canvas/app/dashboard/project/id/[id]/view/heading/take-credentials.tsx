@@ -2,7 +2,7 @@ import { ButtonWithTooltip } from "@/components/custom/button-with-tooltip";
 import { Modal } from "@/components/custom/modal";
 import { Button } from "@/components/ui/button";
 import { useProjectStore } from "@/stores/project";
-import { Settings } from "lucide-react";
+import { KeyRound, Settings } from "lucide-react";
 import React from "react";
 import { TakeCredentialsForm } from "./take-credentials-form";
 
@@ -24,7 +24,7 @@ export function TakeCredentials() {
           variant="outline"
           className="md:w-40"
         >
-          <Settings className="mr-2 h-4 w-4" />
+          <KeyRound className="mr-2 h-4 w-4" />
           Credentials
         </ButtonWithTooltip>
       }

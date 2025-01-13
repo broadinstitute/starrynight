@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "./api";
-import { TJobInput, TJobOutput } from "./job";
+import { TSpecPathRecord } from "./misc";
 
 export type TRunStatus = "pending" | "running" | "success" | "failed" | "init";
 
@@ -9,8 +9,10 @@ export type TRun = {
   job_id: string | number;
   name: string;
   run_status: TRunStatus;
-  outputs: Record<string, TJobOutput>;
-  inputs: Record<string, TJobInput>;
+  spec: {
+    outputs: TSpecPathRecord[];
+    inputs: TSpecPathRecord[];
+  };
 };
 
 export type TGetRunsOptions = {
@@ -34,6 +36,7 @@ export function useGetRuns(options: TUseGetRunsOptions) {
   return useQuery({
     queryKey: [GET_RUNS_QUERY_KEY, jobId],
     queryFn: () => getRuns({ job_id: jobId }),
+    refetchInterval: 10 * 1000, // 10 seconds
   });
 }
 

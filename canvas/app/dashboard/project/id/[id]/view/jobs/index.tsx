@@ -5,13 +5,21 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { PROJECTS_LISTING_URL } from "@/constants/routes";
 import { ProjectJobsView } from "./view";
+import React from "react";
 
 export function ProjectJobs() {
-  const { project } = useProjectStore((state) => ({
+  const { project, addJobs } = useProjectStore((state) => ({
     project: state.project,
+    addJobs: state.addJobs,
   }));
 
   const { data, isLoading, error } = useGetJobs({ projectID: project.id });
+
+  React.useEffect(() => {
+    if (data) {
+      addJobs(data);
+    }
+  }, [data]);
 
   if (isLoading) {
     return <JobsSkeleton />;

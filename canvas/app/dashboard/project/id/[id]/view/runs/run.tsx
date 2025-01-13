@@ -2,7 +2,7 @@ import { TRun } from "@/services/run";
 import { ProjectRunBadge } from "./badge";
 import { RunPathsPopover } from "./run-paths-popover";
 import { useParsePathRecordToArray } from "../hooks/useParsePathRecordToArray";
-import { FileInput, FileOutput, ScrollText } from "lucide-react";
+import { FileInput, FileOutput } from "lucide-react";
 import { RunViewLog } from "./view-logs";
 
 export type TProjectRun = {
@@ -12,10 +12,9 @@ export type TProjectRun = {
 export function ProjectRun(props: TProjectRun) {
   const { run } = props;
 
-  const inputs = useParsePathRecordToArray({ obj: run.inputs });
+  const inputs = useParsePathRecordToArray({ records: run.spec.inputs });
   const outputs = useParsePathRecordToArray({
-    obj: run.outputs,
-    valueKey: "uri",
+    records: run.spec.outputs,
   });
 
   return (

@@ -6,7 +6,7 @@ import {
 } from "./button-with-tooltip";
 import clsx from "clsx";
 
-export type TActionsButtonProps = Omit<TButtonWithTooltipProps, "children"> & {
+export type TActionsButtonProps = TButtonWithTooltipProps & {
   isLoading?: boolean;
   icon?: React.ReactNode;
 };
@@ -15,15 +15,15 @@ export const ActionButton = React.forwardRef<
   HTMLButtonElement,
   TActionsButtonProps
 >(function _ActionButton(props, ref) {
-  const { isLoading, icon, className, ...rest } = props;
+  const { isLoading, icon, className, children, ...rest } = props;
 
-  const [child, setChild] = React.useState(icon);
+  const [_icon, setIcon] = React.useState(icon);
 
   React.useEffect(() => {
     if (isLoading) {
-      setChild(<Loader2 />);
+      setIcon(<Loader2 />);
     } else {
-      setChild(icon);
+      setIcon(icon);
     }
   }, [icon, isLoading]);
 
@@ -32,11 +32,12 @@ export const ActionButton = React.forwardRef<
       disabled={isLoading}
       size="icon"
       variant="ghost"
-      className={clsx(isLoading && "animate-spin", className)}
+      className={className}
       ref={ref}
       {...rest}
     >
-      {child}
+      <span className={clsx(isLoading && "animate-spin")}>{_icon}</span>
+      {children}
     </ButtonWithTooltip>
   );
 });

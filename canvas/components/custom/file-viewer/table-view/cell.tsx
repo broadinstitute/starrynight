@@ -25,9 +25,13 @@ export function FileViewerTableViewCell(props: TFileViewerTableViewCellProps) {
     if (typeof data === "boolean") {
       return data ? "True" : "False";
     }
+
     if (data instanceof Date) {
       return data.toISOString();
     }
+
+    if (data === null) return "NULL";
+    if (!data) return "";
 
     return "[object Object]";
   })();
@@ -48,7 +52,7 @@ export function FileViewerTableViewCell(props: TFileViewerTableViewCellProps) {
         });
       }
     },
-    [text]
+    [text, toast]
   );
 
   return (

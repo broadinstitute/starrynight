@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./api";
+import { TSpecPathRecord } from "./misc";
 
 export type TJobOutput = {
   type: string;
@@ -17,8 +18,10 @@ export type TJob = {
   name: string;
   description: string;
   type: string;
-  outputs: Record<string, TJobOutput>;
-  inputs: Record<string, TJobInput>;
+  spec: {
+    outputs: TSpecPathRecord[];
+    inputs: TSpecPathRecord[];
+  };
 };
 
 export type TGetJobsOptions = {

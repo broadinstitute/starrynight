@@ -6,7 +6,12 @@ import { FileViewerMain } from "./main";
 import { FileViewerStoreProvider } from "./provider";
 import { PageSpinner } from "../page-spinner";
 import { TCreateFileViewerStoreOptions } from "./store";
-import { getFileName, getFileType, TFileType } from "@/utils/file";
+import { TFileType } from "@/utils/file";
+import {
+  TUseProcessFileOrURLData,
+  useProcessFileOrURL,
+} from "./useProcessFileOrURL";
+import { FeatureNotImplementedModal } from "../feature-not-implemented-modal";
 
 export type TFileViewerProps = {
   /**
@@ -32,48 +37,57 @@ export function FileViewer(props: TFileViewerProps) {
   const [storeOptions, setStoreOptions] =
     React.useState<TCreateFileViewerStoreOptions>();
 
-  if (!url && !file) {
-    throw new Error("Either 'url' or 'file' must be provided.");
-  }
+  const handleOnProcessFileSuccess = React.useCallback(
+    (data: TUseProcessFileOrURLData, fileType: TFileType, name: string) => {
+      if (fileType === "notebook") {
+        return setStoreOptions({
+          iframeViewerOption: {
+            src: data as string,
+          },
+          fileType,
+          name,
+        });
+      }
 
-  if (url && file) {
-    console.warn(
-      "Both `url` and `file` are provided. Using `url` to download and view the file."
-    );
-  }
+      if (fileType === "s3-directory") {
+        return setStoreOptions({
+          s3DirectoryViewerOption: {
+            url: data as string,
+          },
+          fileType,
+          name,
+        });
+      }
 
-  const createAndSetBuffer = React.useCallback(async () => {
-    let _buffer = undefined as undefined | ArrayBuffer;
-    let _fileType = "not-supported" as TFileType;
-    let _fileName = "";
+      return setStoreOptions({
+        fileType,
+        name,
+        bufferViewerOption: {
+          data: data as ArrayBuffer,
+        },
+      });
+    },
+    []
+  );
 
-    if (file) {
-      _buffer = await file.arrayBuffer();
-      _fileType = getFileType(file);
-      _fileName = getFileName(file);
-    } else if (url) {
-      // TODO: add logic to fetch file.
-      _buffer = new ArrayBuffer(0);
-      _fileType = getFileType(url);
-      _fileName = getFileName(url);
-    } else {
-      throw new Error("Either 'url' or 'file' must be provided.");
-    }
+  const handleOnProcessFileError = React.useCallback(() => {
+    console.error("Failed to process file or url.");
+  }, []);
 
-    setStoreOptions({
-      buffer: _buffer,
-      fileType: _fileType,
-      name: _fileName,
-    });
-  }, [file, url]);
-
-  React.useEffect(() => {
-    createAndSetBuffer();
-  }, [createAndSetBuffer]);
+  const { processFileOrURL } = useProcessFileOrURL({
+    onError: handleOnProcessFileError,
+    onSuccess: handleOnProcessFileSuccess,
+    file,
+    url,
+  });
 
   const handleDownload = React.useCallback(() => {
     // TODO: Implement download logic here.
   }, []);
+
+  React.useEffect(() => {
+    processFileOrURL();
+  }, [processFileOrURL]);
 
   return (
     <Modal
@@ -90,9 +104,18 @@ export function FileViewer(props: TFileViewerProps) {
       actions={
         hasDownloadButton
           ? [
-              <Button variant="default" key="download" onClick={handleDownload}>
-                <Download /> Download
-              </Button>,
+              <FeatureNotImplementedModal
+                key="download"
+                featureName="Download File"
+              >
+                <Button
+                  variant="default"
+                  key="download"
+                  onClick={handleDownload}
+                >
+                  <Download /> Download
+                </Button>
+              </FeatureNotImplementedModal>,
             ]
           : []
       }

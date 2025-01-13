@@ -6,22 +6,30 @@ export function FileViewerDetailsSection() {
     (store) => ({
       filename: store.name,
       details: store.details,
-      buffer: store.buffer,
+      buffer: store.bufferViewerOption,
       filetype: store.fileType,
     })
   );
 
+  if (filetype === "notebook" || filetype === "not-supported") {
+    return null;
+  }
+
   return (
     <div className="border-l border-l-gray-200 pt-4 max-w-80 flex-1 pl-6">
-      <FileDisplay
-        hasViewFileAction={false}
-        file={new File([buffer], filename, { type: filetype })}
-      />
+      {buffer?.data && (
+        <FileDisplay
+          hasViewFileAction={false}
+          file={new File([buffer.data], filename, { type: filetype })}
+        />
+      )}
 
       <table className="mt-4 text-sm">
         <thead>
-          <th></th>
-          <th></th>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
           {details.map(([label, value]) => (

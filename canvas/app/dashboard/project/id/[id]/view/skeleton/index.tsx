@@ -10,7 +10,6 @@ export function ProjectSkeleton() {
         <Skeleton className="h-12 w-[400px]" />
       </div>
       <ProjectMainContainer>
-        <SidebarSkeleton />
         <JobsSkeleton />
       </ProjectMainContainer>
     </div>

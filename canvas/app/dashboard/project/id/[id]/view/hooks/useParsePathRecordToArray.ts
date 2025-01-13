@@ -1,19 +1,9 @@
-import { TJob } from "@/services/job";
+import { TSpecPathRecord } from "@/services/misc";
 import { useProjectStore } from "@/stores/project";
 import React from "react";
 
-export type TUseParsePathRecordToArrayOptions<
-  T extends Record<string, string>
-> = {
-  obj: Record<string, T>;
-  /**
-   * @default "type"
-   */
-  typeKey?: string;
-  /**
-   * @default "value"
-   */
-  valueKey?: string;
+export type TUseParsePathRecordToArrayOptions = {
+  records: TSpecPathRecord[];
 };
 
 export type TPathRecord = {
@@ -22,33 +12,33 @@ export type TPathRecord = {
   type: string;
   value: string;
 };
+
 export type TUseParsePathRecordToArrayReturn = TPathRecord[];
 
-export function useParsePathRecordToArray<T extends Record<string, string>>(
-  options: TUseParsePathRecordToArrayOptions<T>
+export function useParsePathRecordToArray(
+  options: TUseParsePathRecordToArrayOptions
 ): TUseParsePathRecordToArrayReturn {
-  const { obj, typeKey = "type", valueKey = "value" } = options;
+  const { records } = options;
   const { projectWorkspaceURI } = useProjectStore((state) => ({
     projectWorkspaceURI: state.project.workspace_uri,
   }));
 
   return React.useMemo((): TUseParsePathRecordToArrayReturn => {
-    if (!obj) return [];
+    if (!records) return [];
 
     const out = [] as TUseParsePathRecordToArrayReturn;
 
-    for (const [k, v] of Object.entries(obj)) {
-      const type = v[typeKey];
-      const value = v[valueKey] || projectWorkspaceURI;
+    for (const record of records) {
+      const { type, name, path } = record;
 
       out.push({
-        id: k,
-        name: k,
+        id: name,
+        name,
         type,
-        value,
+        value: path || projectWorkspaceURI,
       });
     }
 
     return out;
-  }, [obj, projectWorkspaceURI, typeKey, valueKey]);
+  }, [projectWorkspaceURI, records]);
 }

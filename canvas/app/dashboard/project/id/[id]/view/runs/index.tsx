@@ -2,6 +2,8 @@ import { TJob } from "@/services/job";
 import { useGetRuns } from "@/services/run";
 import { PlayIcon } from "lucide-react";
 import { ProjectRun } from "./run";
+import { useProjectStore } from "@/stores/project";
+import React from "react";
 
 export type TProjectRunProps = {
   job: TJob;
@@ -9,7 +11,17 @@ export type TProjectRunProps = {
 
 export function ProjectRuns(props: TProjectRunProps) {
   const { job } = props;
+  const { updateJobStatus } = useProjectStore((store) => ({
+    updateJobStatus: store.updateJobStatus,
+  }));
+
   const { data, isLoading, error } = useGetRuns({ jobId: job.id });
+
+  React.useEffect(() => {
+    if (data && data.length > 0) {
+      updateJobStatus(job.id, data[data.length - 1].run_status);
+    }
+  }, [data]);
 
   if (isLoading) {
     return <p>Loading...</p>;
