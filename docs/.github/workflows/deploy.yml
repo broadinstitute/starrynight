@@ -1,0 +1,40 @@
+name: deploy-documentation
+
+# Only run this when the master branch changes
+on:
+  push:
+    branches:
+    - main
+    # Only run if edits in documentation
+    paths:
+    - docs/starrynight-docs/**
+    - docs/.github/workflows/deploy.yml
+
+# This job installs dependencies, builds the book, and pushes it to `gh-pages`
+jobs:
+  deploy-book:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    # Install dependencies
+    - name: Set up Python
+      uses: actions/setup-python@v5.3.0
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        pip install jupyter-book
+
+    # Build the book
+    - name: Build the book
+      run: |
+        jupyter-book build starrynight-docs/
+
+    # Push the book's HTML to github-pages
+    - name: GitHub Pages action
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./starrynight-docs/_build/html
