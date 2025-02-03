@@ -1,6 +1,7 @@
 import { Input, InputProps } from "@/components/ui/input";
 import { BaseFormField, TBaseFormFieldProps } from "./_base";
 import { FieldPath, FieldValues } from "react-hook-form";
+import React from "react";
 
 export type TInputFormField<
   TFieldValues extends FieldValues = FieldValues,
@@ -14,11 +15,21 @@ export function InputFormField<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >(props: TInputFormField<TFieldValues, TName>) {
   const { inputProps, ...rest } = props;
+
   return (
     <BaseFormField
       {...rest}
       render={({ field }) => {
-        return <Input {...inputProps} {...field} />;
+        return (
+          <Input
+            {...inputProps}
+            {...field}
+            onChange={(e) => {
+              inputProps?.onChange?.(e);
+              field.onChange(e);
+            }}
+          />
+        );
       }}
     />
   );

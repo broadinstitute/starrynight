@@ -8,8 +8,13 @@ export const createProjectSchema = z.object({
   name: z.string().min(3).max(30),
   workspaceURI: z.string().optional(),
   storageURI: z.string().optional(),
-  isConfigured: z.boolean(),
-  init_config: z.object({}),
+  init_config: z.array(
+    z.tuple([
+      z.string(),
+      z.string(),
+      z.object({ title: z.string().optional() }),
+    ])
+  ),
 });
 
 export type TCreateProjectFormData = z.infer<typeof createProjectSchema>;

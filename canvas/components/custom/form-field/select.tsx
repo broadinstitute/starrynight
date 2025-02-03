@@ -64,8 +64,12 @@ function Content(props: TContentProps) {
 export function SelectFormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(props: TSelectField<TFieldValues, TName>) {
-  const { selectProps, ...rest } = props;
+>(
+  props: TSelectField<TFieldValues, TName> & {
+    onChange?: (value: string) => void;
+  }
+) {
+  const { selectProps, onChange, ...rest } = props;
   const { disabled, placeholder, ...selectPropsRest } = selectProps;
 
   return (
@@ -74,7 +78,10 @@ export function SelectFormField<
       render={({ field }) => {
         return (
           <Select
-            onValueChange={field.onChange}
+            onValueChange={(e) => {
+              field.onChange(e);
+              onChange?.(e);
+            }}
             defaultValue={field.value}
             disabled={disabled}
           >

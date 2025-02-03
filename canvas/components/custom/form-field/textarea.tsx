@@ -25,6 +25,10 @@ export function TextAreaFormField<
             {...textAreaRest}
             className={clsx("resize-none", className)}
             {...field}
+            onChange={(e) => {
+              field.onChange(e);
+              textAreaProps?.onChange?.(e);
+            }}
           />
         );
       }}

@@ -29,6 +29,7 @@ export function FileViewerNotebook(props: TFileViewerNotebookProps) {
       src={iframeViewerOption.src}
       height={parentDimension[1]}
       width={parentDimension[0]}
+      allowFullScreen
     />
   );
 }

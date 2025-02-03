@@ -28,7 +28,7 @@ export function TakeCredentialsForm(props: TTakeCredentialsFormProps) {
       setAWSCredentials(projectId, data);
       onRequestClose();
     },
-    [projectId]
+    [onRequestClose, projectId]
   );
 
   return (

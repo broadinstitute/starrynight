@@ -158,3 +158,35 @@ export function useExecuteProject(options: TUseExecuteProjectOptions) {
     onSuccess,
   });
 }
+
+export type TGetProjectInitConfigUsingProjectTypeOptions = {
+  project_type: string;
+};
+
+export type TProjectInitConfig = Record<string, Record<string, string>>;
+
+export function getProjectInitConfigUsingProjectType(
+  options: TGetProjectInitConfigUsingProjectTypeOptions
+): Promise<TProjectInitConfig> {
+  const { project_type } = options;
+
+  return api.get(`/project/type/${project_type}`).json();
+}
+
+export const GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE_KEY =
+  "GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE";
+
+export type TUseGetProjectInitConfigUsingProjectTypeOptions = {
+  project_type: string;
+};
+
+export function useGetProjectInitConfigUsingProjectType(
+  options: TUseGetProjectInitConfigUsingProjectTypeOptions
+) {
+  const { project_type } = options;
+
+  return useQuery({
+    queryKey: [GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE_KEY],
+    queryFn: () => getProjectInitConfigUsingProjectType({ project_type }),
+  });
+}

@@ -1,5 +1,4 @@
 import React from "react";
-import { CreateProjectContent } from "./content";
 import {
   dehydrate,
   HydrationBoundary,
@@ -9,8 +8,11 @@ import {
   GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY,
   getParserAndProjectType,
 } from "@/services/projects";
+import { PageContainer } from "../../_layout/page-container";
+import { CreateNewProjectHeading } from "./heading";
+import { CreateNewProjectForm } from "./form";
 
-export async function CreateProject() {
+export default async function CreateNewProjectPage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -20,7 +22,10 @@ export async function CreateProject() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CreateProjectContent />
+      <PageContainer>
+        <CreateNewProjectHeading />
+        <CreateNewProjectForm />
+      </PageContainer>
     </HydrationBoundary>
   );
 }
