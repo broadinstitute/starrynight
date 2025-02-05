@@ -38,7 +38,7 @@ export function CreateNewProjectStep2() {
         append([[key, "", val]]);
       });
     }
-  }, [data, currentStep]);
+  }, [data, currentStep, remove, append]);
 
   const handleOnBackClick = React.useCallback(() => {
     updateCurrentStep(currentStep - 1);
@@ -73,9 +73,10 @@ export function CreateNewProjectStep2() {
     return (
       <div>
         <p className="max-w-md text-sm text-gray-600">
-          Project type "{projectType}" requires no config to initialize the
-          project. Click the "Create project" button to create the project. If
-          you want to change the project type press "Back"
+          Project type &quot;{projectType}&quot; requires no config to
+          initialize the project. Click the &quot;Create project&quot; button to
+          create the project. If you want to change the project type press
+          &quot;Back&quot;
         </p>
         <div className="flex justify-between mt-12">
           <Button variant="secondary" onClick={handleOnBackClick}>

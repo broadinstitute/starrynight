@@ -6,7 +6,7 @@ const decoder = new TextDecoder();
 
 export function useParseTextBuffer() {
   const { buffer, fileType, addDetails } = useFileViewerStore((store) => ({
-    buffer: store.buffer,
+    buffer: store.bufferViewerOption,
     addDetails: store.addDetails,
     fileType: store.fileType,
   }));
@@ -15,12 +15,12 @@ export function useParseTextBuffer() {
   const [hasError, setHasError] = React.useState(false);
 
   const parseData = React.useCallback(() => {
-    if (!buffer) {
+    if (!buffer || !buffer.data) {
       return;
     }
 
     try {
-      const string = decoder.decode(buffer);
+      const string = decoder.decode(buffer.data);
 
       setData(string);
 

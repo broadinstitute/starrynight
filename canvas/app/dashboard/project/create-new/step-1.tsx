@@ -145,7 +145,7 @@ export function CreateNewProjectStep1() {
       <SelectFormField
         control={control}
         name="parser"
-        description="The parser to use to build the project."
+        description="The parser to use to build the project index."
         label="Parser"
         onChange={() => handleTriggerValidation("parser")}
         selectProps={{
@@ -163,12 +163,12 @@ export function CreateNewProjectStep1() {
       <SelectFormField
         control={control}
         name="type"
-        description="The type of the project."
-        label="Project Type"
+        description="The type of the experiment."
+        label="Experiment Type"
         onChange={() => handleTriggerValidation("type")}
         selectProps={{
           disabled: isSubmitting,
-          placeholder: "Select Project Type",
+          placeholder: "Select Experiment Type",
           noDataMsg: "No project type available.",
           errorMsg: "Unable to load project type.",
           isLoading,
@@ -183,7 +183,7 @@ export function CreateNewProjectStep1() {
           disabled={isFormSubmitting}
           type="button"
         >
-          Init Project
+          Configure experiment
           <ChevronRight />
         </Button>
       </div>

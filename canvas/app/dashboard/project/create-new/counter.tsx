@@ -5,11 +5,11 @@ import { CheckIcon } from "lucide-react";
 const steps = [
   {
     id: 0,
-    text: "Step 1",
+    text: "Project",
   },
   {
     id: 1,
-    text: "Init Project",
+    text: "Experiment",
   },
 ];
 

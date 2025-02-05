@@ -45,7 +45,7 @@ export function ProjectRunProject() {
       title: "Project configured successfully!",
       variant: "default",
     });
-  }, [toast]);
+  }, [projectID, queryClient, toast, updateProjectStatus]);
 
   const handleOnExecuteProjectError = React.useCallback(() => {
     toast({
@@ -54,7 +54,7 @@ export function ProjectRunProject() {
     });
 
     updateProjectStatus("configured");
-  }, [toast]);
+  }, [toast, updateProjectStatus]);
 
   const { data, isPending } = useExecuteProject({
     onError: handleOnExecuteProjectError,

@@ -49,7 +49,7 @@ export function ProjectConfigureProject() {
       title: "Project configured successfully!",
       variant: "default",
     });
-  }, [toast, updateProjectStatus, queryClient]);
+  }, [queryClient, projectID, updateProjectStatus, toast]);
 
   const handleOnConfigureProjectError = React.useCallback(() => {
     toast({
@@ -58,7 +58,7 @@ export function ProjectConfigureProject() {
     });
 
     updateProjectStatus("not-configured");
-  }, [toast]);
+  }, [toast, updateProjectStatus]);
 
   const { mutate: configureProject, isPending: isConfiguringProject } =
     useConfigureProject({
@@ -70,13 +70,13 @@ export function ProjectConfigureProject() {
 
   const handleOnConfigureProject = React.useCallback(() => {
     configureProject({ project_id: projectID as string });
-  }, []);
+  }, [configureProject, projectID]);
 
   React.useEffect(() => {
     if (isConfiguringProject) {
       updateProjectStatus("configuring");
     }
-  }, []);
+  }, [isConfiguringProject, updateProjectStatus]);
 
   React.useEffect(() => {
     const values = Object.values(jobStatus);

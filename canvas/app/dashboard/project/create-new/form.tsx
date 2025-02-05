@@ -104,7 +104,7 @@ function _CreateNewProjectForm() {
         is_configured: false,
       });
     },
-    [updateIsFormSubmitting]
+    [createNewProject, updateIsFormSubmitting]
   );
 
   const Steps = React.useMemo(

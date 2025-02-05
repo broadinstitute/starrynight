@@ -21,7 +21,7 @@ export function ProjectRuns(props: TProjectRunProps) {
     if (data && data.length > 0) {
       updateJobStatus(job.id, data[data.length - 1].run_status);
     }
-  }, [data]);
+  }, [data, job.id, updateJobStatus]);
 
   if (isLoading) {
     return <p>Loading...</p>;

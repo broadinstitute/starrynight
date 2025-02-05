@@ -19,7 +19,7 @@ export function ProjectJobs() {
     if (data) {
       addJobs(data);
     }
-  }, [data]);
+  }, [addJobs, data]);
 
   if (isLoading) {
     return <JobsSkeleton />;
