@@ -10,36 +10,35 @@ _images_aligned_root_dir: "images_aligned"i sep "barcoding" sep plate_well_site_
 _workspace_root_dir: "workspace" sep workspace_root_dir
 _plate_root_dir: _sbs_folder | _cp_folder
 
-_sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id sep? (_sbs_images_type1 | _sbs_images_type2 | _sbs_images_type3 | _sbs_metadata)?
-_sbs_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "," channel "," channel "_Seq" site_id "." extension
-_sbs_images_type2: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "," channel "," channel "," channel "_Seq" site_id "." extension
-_sbs_images_type3: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "_Seq" site_id "." extension
+_sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id _timestamp? sep? (_sbs_images | _sbs_metadata)?
+_sbs_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel)  "_Seq" site_id "." extension
 _sbs_metadata: leaf_node
 
-_cp_folder: magnification "_CP_" plate_id sep? (_cp_images_type1 | _cp_images_type2 | _cp_images_type3 |_cp_metadata)?
-_cp_images_type1: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel " nm," channel " nm," channel "," channel "_Seq" site_id "." extension
-_cp_images_type2: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "," channel "," channel "," channel "_Seq" site_id "." extension
-_cp_images_type3: "Well" well_id "_Point" well_id "_" site_id "_Channel" channel "," channel "," channel "_Seq" site_id "." extension
+_cp_folder: magnification "_CP_" _folder_plate_id _timestamp? sep? (_cp_images |_cp_metadata)?
+_cp_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel) "_Seq" site_id "." extension
 _cp_metadata: leaf_node
 
-
 workspace_root_dir: string
-dataset_id: stringwithdash
+dataset_id: stringwithdashcommaspace
 source_id: string
 sep: "/"
-batch_id: string
+batch_id: stringwithdashcommaspace
 plate_id: string
+_folder_plate_id: string
+_timestamp: ("_" (DIGIT | "_")+)
 magnification: DIGIT~2 "X"
 cycle_id: DIGIT~1..2
 well_id: (LETTER | DIGIT)~2
 site_id: DIGIT~1..4
 plate_well_site_id: plate_id "-Well" well_id "-" site_id
-channel: string
+channel: stringwithdash
 leaf_node: filename "." extension
-filename: stringwithdash
-extension: string
+filename: stringwithdashcommaspace
+extension: stringwithdots
 string: (LETTER | DIGIT)+
-stringwithdash: ( string | "-" | "_" | "," | " " )+
+stringwithdash: (string | "-")+
+stringwithdashcommaspace: ( string | "-" | "_" | "," | " " )+
+stringwithdots: ( string | "." )+
 DIGIT: "0".."9"
 
 %import common.LETTER

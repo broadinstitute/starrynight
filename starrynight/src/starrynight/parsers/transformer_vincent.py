@@ -77,6 +77,12 @@ class VincentAstToIR(BaseTransformer):
     def stringwithdash(self, s) -> str:
         return "-".join(s)
 
+    def stringwithdots(self, s) -> str:
+        return s[-1]
+
+    def stringwithdashcommaspace(self, s) -> str:
+        return "-".join(s)
+
     def DIGIT(self, n) -> str:
         return "".join(n)
 

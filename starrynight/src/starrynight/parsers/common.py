@@ -5,6 +5,7 @@ from abc import abstractmethod
 from enum import Enum
 from pathlib import Path
 
+from cloudpathlib.cloudpath import CloudPathT
 from lark import Lark, Transformer
 
 logging.basicConfig(level=logging.INFO)
@@ -27,13 +28,17 @@ parser_path_map = {
 }
 
 
-def get_parser(parser_type: ParserType) -> Lark:
+def get_parser(
+    parser_type: ParserType, parser_path: Path | CloudPathT | None = None
+) -> Lark:
     """Get parser.
 
     Parameters
     ----------
     parser_type : ParserType
         Parser type.
+    parser_path : ParserType
+        Path to a custom parser.
 
     Returns
     -------
@@ -41,8 +46,11 @@ def get_parser(parser_type: ParserType) -> Lark:
         Parser instance.
 
     """
+    if parser_path is None:
+        parser_path = parser_path_map[parser_type]
+
     return Lark.open(
-        parser_path_map[parser_type].resolve().__str__(),
+        parser_path.resolve().__str__(),
         parser="lalr",
         # strict=True,
         # debug=True,
@@ -52,7 +60,7 @@ def get_parser(parser_type: ParserType) -> Lark:
 class BaseTransformer(Transformer):
     """Base Lark transformer.
 
-    Attribures
+    Attributes
     ----------
     visit_tokens : bool
         Is token already visited.
