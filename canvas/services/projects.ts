@@ -81,6 +81,32 @@ export function createProject(
   return api.post(options, "/project").json();
 }
 
+export type TDeleteProjectOptions = {
+  project_id: string | number;
+};
+
+export function deleteProject(
+  options: TDeleteProjectOptions
+): Promise<TProject> {
+  const { project_id } = options;
+  return api.delete(`/project?project_id=${project_id}`).json();
+}
+
+export type TUseDeleteProjectOptions = {
+  onSuccess: () => void;
+  onError: (error?: unknown) => void;
+};
+
+export function useDeleteProject(options: TUseDeleteProjectOptions) {
+  const { onError, onSuccess } = options;
+
+  return useMutation({
+    mutationFn: deleteProject,
+    onSuccess,
+    onError,
+  });
+}
+
 export function getParserAndProjectType(): Promise<[string[], string[]]> {
   const parsers = api.get("/project/parser-type").json() as Promise<string[]>;
   const type = api.get("/project/type/all").json() as Promise<string[]>;

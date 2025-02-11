@@ -1,10 +1,10 @@
-import { ButtonWithTooltip } from "@/components/custom/button-with-tooltip";
 import { Modal } from "@/components/custom/modal";
 import { Button } from "@/components/ui/button";
 import { useProjectStore } from "@/stores/project";
 import { KeyRound, Settings } from "lucide-react";
 import React from "react";
 import { TakeCredentialsForm } from "./take-credentials-form";
+import { ActionButton } from "@/components/custom/action-button";
 
 const formId = "add-aws-credentials-form";
 
@@ -19,14 +19,14 @@ export function TakeCredentials() {
       title="Add AWS Credentials"
       headerIcon={<Settings />}
       trigger={
-        <ButtonWithTooltip
+        <ActionButton
           message="Add or update AWS Credentials"
           variant="outline"
-          className="md:w-40"
+          size="default"
+          icon={<KeyRound />}
         >
-          <KeyRound className="mr-2 h-4 w-4" />
           Credentials
-        </ButtonWithTooltip>
+        </ActionButton>
       }
       actions={[
         <Button key="add-creds" form={formId}>

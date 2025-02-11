@@ -9,13 +9,14 @@ import clsx from "clsx";
 export type TActionsButtonProps = TButtonWithTooltipProps & {
   isLoading?: boolean;
   icon?: React.ReactNode;
+  childSpan?: React.HTMLProps<HTMLSpanElement>;
 };
 
 export const ActionButton = React.forwardRef<
   HTMLButtonElement,
   TActionsButtonProps
 >(function _ActionButton(props, ref) {
-  const { isLoading, icon, className, children, ...rest } = props;
+  const { isLoading, icon, className, children, childSpan, ...rest } = props;
 
   const [_icon, setIcon] = React.useState(icon);
 
@@ -37,7 +38,12 @@ export const ActionButton = React.forwardRef<
       {...rest}
     >
       <span className={clsx(isLoading && "animate-spin")}>{_icon}</span>
-      {children}
+      <span
+        {...childSpan}
+        className={clsx("md:hidden lg:inline", childSpan?.className)}
+      >
+        {children}
+      </span>
     </ButtonWithTooltip>
   );
 });
