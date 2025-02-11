@@ -59,6 +59,8 @@ class CellProfilerContext:
         """
         cellprofiler_core.preferences.set_headless()
         cellprofiler_core.preferences.set_default_output_directory(self.out_dir)
+        cellprofiler_core.reader.fill_readers(check_config=False)
+        cellprofiler_core.reader.filter_active_readers(["bioformats_reader"])
         if self.loaddata_path:
             cellprofiler_core.preferences.set_data_file(
                 self.loaddata_path.resolve().__str__()
