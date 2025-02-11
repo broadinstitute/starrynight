@@ -1,4 +1,4 @@
-"""Execute Illumination Calculate."""
+"""Invoke cellprofiler."""
 
 from pathlib import Path
 
@@ -9,10 +9,8 @@ from tqdm import tqdm
 from starrynight.utils.cellprofiler import CellProfilerContext
 
 
-def run_illum(
-    uow_list: list[tuple[Path, Path]], out_dir: Path, job_idx: int = 0
-) -> None:
-    """Run Illumination Calculate for a list of unit-of-work (UOW) items.
+def run_cp(uow_list: list[tuple[Path, Path]], out_dir: Path, job_idx: int = 0) -> None:
+    """Run cellprofiler for a list of unit-of-work (UOW) items.
 
     Parameters
     ----------
@@ -43,10 +41,10 @@ def run_illum(
             cpipe.run()
 
 
-def run_illum_parallel(
+def run_cp_parallel(
     uow_list: list[tuple[Path, Path]], out_dir: Path, jobs: int = 20
 ) -> None:
-    """Run Illumination Calculate on multiple unit-of-work (UOW) items in parallel.
+    """Run cellprofiler on multiple unit-of-work (UOW) items in parallel.
 
     Parameters
     ----------
@@ -69,5 +67,5 @@ def run_illum_parallel(
 
     """
     cellprofiler_core.utilities.java.start_java()
-    parallel(uow_list, run_illum, [out_dir], jobs)
+    parallel(uow_list, run_cp, [out_dir], jobs)
     cellprofiler_core.utilities.java.stop_java()

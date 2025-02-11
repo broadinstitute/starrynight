@@ -9,7 +9,7 @@ from lark import Lark
 from pydantic import BaseModel, BeforeValidator, Field
 from tqdm import tqdm
 
-from starrynight.inventory import FileInventory
+from starrynight.algorithms.inventory import FileInventory
 from starrynight.parsers.common import BaseTransformer
 from starrynight.utils.misc import write_pq
 
@@ -22,8 +22,7 @@ class PCPIndex(BaseModel):
     Attributes
     ----------
     key : File location.
-    local_prefix : Local prefix for the file.
-    cloud_prefix : Cloud prefix for the file.
+    prefix : Default prefix for the file. Can be a Local or CloudPath
     dataset_id : Dataset ID.
     batch_id : File batch ID.
     plate_id : File plate ID.
@@ -106,6 +105,7 @@ def ast_to_pcp_index(
         **pcp_index_dict,
         filename=parsed_inv.filename,
         key=parsed_inv.key,
+        prefix=parsed_inv.prefix,
         channel_dict=transformer.channel_dict["channel_dict"],
     )
 
@@ -145,6 +145,5 @@ def gen_pcp_index(
                     parsed_index[k].append(v)
 
             except Exception as e:
-                print(f"\n\n Failed on: {row}\n\n")
-                raise e
+                print(f"Unable to parse: {row} because of {e}")
     write_pq(parsed_index, PCPIndex, out_path.joinpath("index.parquet"))

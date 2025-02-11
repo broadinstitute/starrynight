@@ -54,7 +54,7 @@ def randomword(length: int) -> str:
 def parse_prefix(
     prefix_list: list[CloudPath | Path],
     out_dir: CloudPath | Path,
-    prefix: CloudPath | Path,
+    prefix: str,
     job_idx: int = 0,
 ) -> None:
     """Parse prefix.
@@ -65,7 +65,7 @@ def parse_prefix(
         List of prefix to parse.
     out_dir : CloudPath | Path
         Path to output dir.
-    prefix : CloudPath | Path
+    prefix : str
         Prefix to use.
     job_idx : int
         Index of job.
@@ -76,10 +76,10 @@ def parse_prefix(
         if file.is_dir():
             continue
         parsed_local_file = FileInventory(
-            key=file.relative_to(prefix).__str__(),  # pyright: ignore
+            key=file.relative_to(prefix).__str__(),
             filename=file.name,
             extension=file.suffix,
-            prefix=prefix.resolve().__str__(),
+            prefix=prefix,
         )
         for key, value in parsed_local_file.model_dump().items():
             col_dict[key].append(value)
@@ -90,9 +90,7 @@ def parse_prefix(
     )
 
 
-def create_inventory(
-    dataset_dir: Path | CloudPath, out_dir: Path | CloudPath, prefix: Path | CloudPath
-) -> None:
+def create_inventory(dataset_dir: Path | CloudPath, out_dir: Path | CloudPath) -> None:
     """Create inventory files from dataset.
 
     Parameters
@@ -101,15 +99,13 @@ def create_inventory(
         Path to dataset. Can be local or a cloud path.
     out_dir : Path | CloudPath
         Path to save generated inventory. Can be local or a cloud path.
-    prefix : Path | CloudPath
-        prefix to add to inventory files.
 
     """
     files = [AnyPath(file) for file in AnyPath(dataset_dir).rglob("*")]
     inv = out_dir.joinpath("inv")
     inv.mkdir(parents=True, exist_ok=True)
-    # prefix = Path("/datastore/")
-    parallel(files, parse_prefix, [inv, prefix])
+    prefix_mask = "/".join(dataset_dir.__str__().split("/")[0:-1])
+    parallel(files, parse_prefix, [inv, prefix_mask])
 
     out_files = [AnyPath(file) for file in AnyPath(inv).rglob("*.parquet")]
     merge_pq(out_files, out_dir.joinpath("inventory.parquet"))
