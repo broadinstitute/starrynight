@@ -1,8 +1,10 @@
 """Project local route handlers."""
 
 from fastapi import APIRouter, Request
+from starrynight.experiments.common import Experiment
 
 from conductor.handlers.project import (
+    configure_project,
     create_project,
     delete_project,
     fetch_all_parser_types,
@@ -10,8 +12,10 @@ from conductor.handlers.project import (
     fetch_all_projects,
     fetch_project_by_id,
     fetch_project_count,
+    fetch_project_details_by_type,
 )
 from conductor.validators.project import Project
+from conductor.validators.run import Run
 
 project_router = APIRouter(prefix="/project", tags=["project"])
 
@@ -20,6 +24,7 @@ project_router = APIRouter(prefix="/project", tags=["project"])
 def post_project(request: Request, project: Project) -> Project:
     """Create project handler."""
     project.id = None
+    project.is_configured = False
     return create_project(request.state.db_session, project)
 
 
@@ -41,10 +46,16 @@ def get_project_by_id(request: Request, project_id: int) -> Project:
     return fetch_project_by_id(request.state.db_session, project_id)
 
 
-@project_router.get("/type")
+@project_router.get("/type/all")
 def get_project_type() -> list[str]:
-    """Get project type handler."""
+    """Get all project type handler."""
     return fetch_all_project_types()
+
+
+@project_router.get("/type/{project_type}")
+def get_project_type_details(project_type: str) -> dict | None:
+    """Get project init details handler."""
+    return fetch_project_details_by_type(project_type)
 
 
 @project_router.get("/parser-type")
@@ -59,7 +70,13 @@ def get_project_count(request: Request) -> int:
     return fetch_project_count(request.state.db_session)
 
 
-@project_router.get("/execute")
-def get_project_execute() -> str:
+@project_router.post("/execute")
+def post_project_execute(request: Request, project_id: int) -> Run:
     """Get project execute handler."""
     return "test"
+
+
+@project_router.post("/configure")
+def post_configure_project(request: Request, project_id: int) -> Project:
+    """Configure project by id handler."""
+    return configure_project(request.state.db_session, project_id)

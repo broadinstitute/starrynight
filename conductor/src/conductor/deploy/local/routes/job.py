@@ -31,10 +31,10 @@ def put_job(request: Request, job: Job) -> Job:
 
 @job_router.get("/")
 def get_job(
-    request: Request, step_id: int | None = None, limit: int = 20, offset: int = 0
+    request: Request, project_id: int | None = None, limit: int = 20, offset: int = 0
 ) -> list[Job]:
     """Get job handler."""
-    return fetch_all_jobs(request.state.db_session, step_id, limit, offset)
+    return fetch_all_jobs(request.state.db_session, project_id, limit, offset)
 
 
 @job_router.get("/type")
@@ -44,9 +44,9 @@ def get_job_type() -> list[str]:
 
 
 @job_router.get("/count")
-def get_job_count(request: Request, step_id: int | None = None) -> int:
+def get_job_count(request: Request, project_id: int | None = None) -> int:
     """Get job count handler."""
-    return fetch_job_count(request.state.db_session, step_id)
+    return fetch_job_count(request.state.db_session, project_id)
 
 
 @job_router.post("/execute")
