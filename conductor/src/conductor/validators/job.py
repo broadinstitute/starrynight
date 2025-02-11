@@ -8,10 +8,12 @@ class Job(BaseModel):
     """Job create schema."""
 
     id: int | None = None
-    module_id: str
-    step_id: int
+    uid: str
     name: str
     description: str
     spec: Container
+    inputs: dict
+    outputs: dict
+    project_id: int
 
     model_config: dict = {"from_attributes": True}

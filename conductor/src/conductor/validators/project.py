@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from conductor.constants import ParserType, ProjectType
+from conductor.constants import ParserType
 
 
 class Project(BaseModel):
@@ -12,9 +12,12 @@ class Project(BaseModel):
     name: str
     dataset_uri: str
     workspace_uri: str
+    storage_uri: str
+    init_config: dict = {}
     img_uri: str | None = None
     description: str
-    type: ProjectType
+    type: str
     parser_type: ParserType
+    is_configured: bool
 
     model_config: dict = {"from_attributes": True}

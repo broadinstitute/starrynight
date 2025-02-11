@@ -3,7 +3,6 @@
 from sqlalchemy import JSON, Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.sqltypes import String
-from starrynight.modules.schema import Container
 
 from conductor.constants import ExecutorType, RunStatus
 from conductor.models.base import BaseSQLModel
@@ -19,7 +18,7 @@ class Run(BaseSQLModel):
     run_status = mapped_column(Enum(RunStatus, create_constraint=True), nullable=False)
     outputs: Mapped[dict] = mapped_column(JSON)
     inputs: Mapped[dict] = mapped_column(JSON)
-    spec: Mapped[Container] = mapped_column(JSON, nullable=False)
+    spec: Mapped[dict] = mapped_column(JSON, nullable=False)
     executor_type = mapped_column(
         Enum(ExecutorType, create_constraint=True), nullable=False
     )

@@ -1,7 +1,7 @@
 """Project ORM class."""
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql.sqltypes import Enum, String
+from sqlalchemy.sql.sqltypes import JSON, Enum, String
 
 from conductor.constants import ParserType
 from conductor.models.base import BaseSQLModel
@@ -17,6 +17,7 @@ class Project(BaseSQLModel):
     dataset_uri: Mapped[str] = mapped_column()
     workspace_uri: Mapped[str] = mapped_column()
     storage_uri: Mapped[str] = mapped_column()
+    init_config: Mapped[dict] = mapped_column(JSON, nullable=False)
     img_uri: Mapped[str | None] = mapped_column()
     is_configured: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column()
