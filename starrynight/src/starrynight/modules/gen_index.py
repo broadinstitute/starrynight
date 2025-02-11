@@ -69,6 +69,18 @@ def create_pipe_gen_index(uid: str, spec: SpecContainer) -> Pipeline:
         Pipeline instance.
 
     """
+    cmd = [
+        "starrynight",
+        "index",
+        "gen",
+        "-i",
+        spec.inputs[0].path,
+        "-o",
+        Path(spec.outputs[0].path).parent.resolve().__str__(),
+    ]
+    # Use user provided parser if available
+    if spec.inputs[1].path is not None:
+        cmd += ["--parser", spec.inputs[1].path]
     gen_index_pipe = Seq(
         [
             Container(
@@ -77,15 +89,7 @@ def create_pipe_gen_index(uid: str, spec: SpecContainer) -> Pipeline:
                 output_paths={"index": [spec.outputs[0].path]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
-                    cmd=[
-                        "starrynight",
-                        "index",
-                        "gen",
-                        "-i",
-                        spec.inputs[0].path,
-                        "-o",
-                        Path(spec.outputs[0].path).parent.resolve().__str__(),
-                    ],
+                    cmd=cmd,
                     env={},
                 ),
             ),
@@ -114,6 +118,13 @@ class GenIndexModule(StarrynightModule):
                     optional=False,
                     path="path/to/the/inventory",
                 ),
+                TypeInput(
+                    name="parser_path",
+                    type=TypeEnum.file,
+                    description="Path to a custom parser grammar file.",
+                    optional=True,
+                    path=None,
+                ),
             ],
             outputs=[
                 TypeOutput(
@@ -122,7 +133,14 @@ class GenIndexModule(StarrynightModule):
                     description="Generated Index",
                     optional=False,
                     path="random/path/to/index.parquet",
-                )
+                ),
+                TypeOutput(
+                    name="index_notebook",
+                    type=TypeEnum.notebook,
+                    description="Notebook for inspecting index",
+                    optional=False,
+                    path="http://karkinos:2720/?file=.%2FindexOutput.py",
+                ),
             ],
             parameters=[],
             display_only=[],
@@ -147,18 +165,20 @@ class GenIndexModule(StarrynightModule):
 
     @staticmethod
     def from_config(
-        experiment: Experiment, data: DataConfig, spec: SpecContainer | None
+        data: DataConfig,
+        experiment: Experiment | None = None,
+        spec: SpecContainer | None = None,
     ) -> Self:
         """Create module from experiment and data config."""
         if spec is None:
             spec = GenIndexModule._spec()
             spec.inputs[0].path = (
-                data.storage_path.joinpath("inventory/inventory.parquet")
+                data.workspace_path.joinpath("inventory/inventory.parquet")
                 .resolve()
                 .__str__()
             )
             spec.outputs[0].path = (
-                data.storage_path.joinpath("index/index.parquet").resolve().__str__()
+                data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
             )
         pipe = create_pipe_gen_index(
             uid=GenIndexModule.uid(),

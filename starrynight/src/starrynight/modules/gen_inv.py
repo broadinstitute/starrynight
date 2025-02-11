@@ -82,16 +82,14 @@ def create_pipe_gen_inv(
         Path(spec.outputs[0].path).parent.__str__(),
     ]
 
-    # Use user provided parser if available
-    if spec.inputs[1].path is not None:
-        cmd += ["-p", spec.inputs[1].path]
-
     gen_inv_pipe = Seq(
         [
             Container(
                 name=uid,
                 input_paths={},
-                output_paths={"inventory": [spec.outputs[0].path]},
+                output_paths={
+                    "inventory": [Path(spec.outputs[0].path).parent.__str__()]
+                },
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -122,13 +120,6 @@ class GenInvModule(StarrynightModule):
                     description="Path to the dataset.",
                     optional=False,
                     path="path/to/the/dataset",
-                ),
-                TypeInput(
-                    name="parser_path",
-                    type=TypeEnum.file,
-                    description="Path to a custom parser grammar file.",
-                    optional=True,
-                    path=None,
                 ),
             ],
             outputs=[
@@ -163,18 +154,22 @@ class GenInvModule(StarrynightModule):
 
     @staticmethod
     def from_config(
-        experiment: Experiment, data: DataConfig, spec: SpecContainer | None
+        data: DataConfig,
+        experiment: Experiment | None = None,
+        spec: SpecContainer | None = None,
     ) -> Self:
         """Create module from experiment and data config."""
         if spec is None:
             spec = GenInvModule._spec()
             spec.inputs[0].path = data.dataset_path.resolve().__str__()
             spec.outputs[0].path = (
-                data.storage_path.joinpath("inventory/inventory.parquet")
+                data.workspace_path.joinpath("inventory/inventory.parquet")
                 .resolve()
                 .__str__()
             )
         pipe = create_pipe_gen_inv(uid=GenInvModule.uid(), spec=spec)
-        uow = create_work_unit_gen_inv(out_dir=data.storage_path.joinpath("inventory"))
+        uow = create_work_unit_gen_inv(
+            out_dir=data.workspace_path.joinpath("inventory")
+        )
 
         return GenInvModule(spec=spec, pipe=pipe, uow=uow)

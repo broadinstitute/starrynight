@@ -1,4 +1,4 @@
-from __future__ import annotations 
+from __future__ import annotations
 
 import re
 import sys
@@ -7,8 +7,8 @@ from datetime import (
     datetime,
     time
 )
-from decimal import Decimal 
-from enum import Enum 
+from decimal import Decimal
+from enum import Enum
 from typing import (
     Any,
     ClassVar,
@@ -90,6 +90,7 @@ class TypeEnum(str, Enum):
     array = "array"
     file = "file"
     executable = "executable"
+    notebook = "notebook"
 
 
 class ModeEnum(str, Enum):

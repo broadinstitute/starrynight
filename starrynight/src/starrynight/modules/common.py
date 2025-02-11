@@ -38,9 +38,9 @@ class StarrynightModule(BaseModel, ABC):
     @staticmethod
     @abstractmethod
     def from_config(
-        experiment: Experiment,
         data: DataConfig,
-        updated_spec_dict: dict[str, Container] = {},
+        experiment: Experiment | None = None,
+        spec: Container | None = None,
         **kwargs: Unpack,
     ) -> Self:
         """Create module from experiment and data config."""
