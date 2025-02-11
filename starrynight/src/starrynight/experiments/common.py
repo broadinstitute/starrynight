@@ -11,6 +11,7 @@ try:
 except ImportError:
     from typing_extensions import Self
 
+from cloudpathlib.cloudpath import CloudPath
 from pydantic import BaseModel
 
 
@@ -18,6 +19,8 @@ class Experiment(BaseModel, ABC):
     """Experiment configuration."""
 
     dataset_id: str
+    index_path: Path | CloudPath
+    inventory_path: Path | CloudPath | None = None
     data_production_contact: str | None = None
     data_processing_contact: str | None = None
 
@@ -25,7 +28,7 @@ class Experiment(BaseModel, ABC):
     init_config_: BaseModel | None = None
 
     @abstractstaticmethod
-    def from_index(index_path: Path, **kwargs: Unpack) -> Self:
+    def from_index(index_path: Path | CloudPath, **kwargs: Unpack) -> Self:
         """Create experiment schema from index."""
         pass
 

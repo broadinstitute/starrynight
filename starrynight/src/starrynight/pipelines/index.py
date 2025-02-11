@@ -5,6 +5,7 @@ from functools import partial
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
+from starrynight.modules.common import StarrynightModule
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
 from starrynight.modules.schema import Container as SpecContainer
@@ -13,10 +14,14 @@ from starrynight.schema import DataConfig
 
 
 def create_index_pipeline(
-    experiment: Experiment,
     data: DataConfig,
+    experiment: Experiment | None = None,
     updated_spec_dict: dict[str, SpecContainer] = {},
-) -> Pipeline:
+) -> tuple[list[StarrynightModule], Pipeline]:
     """Generate indexing pipeline."""
-    init_module = partial(apply_module_params, experiment, data, updated_spec_dict)
-    return Seq([init_module(GenInvModule).pipe, init_module(GenIndexModule).pipe])
+    init_module = partial(apply_module_params, data, experiment, updated_spec_dict)
+    module_list = [
+        gen_inv := init_module(GenInvModule),
+        gen_index := init_module(GenIndexModule),
+    ]
+    return module_list, Seq([gen_inv.pipe, gen_index.pipe])

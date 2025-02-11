@@ -7,10 +7,10 @@ from starrynight.schema import DataConfig
 
 
 def apply_module_params(
-    experiment: Experiment,
     data: DataConfig,
-    updated_spec_dict: dict[str, SpecContainer],
-    module: StarrynightModule,
+    experiment: Experiment | None = None,
+    updated_spec_dict: dict[str, SpecContainer] = {},
+    module: StarrynightModule = None,
 ) -> StarrynightModule:
     """Apply modules params helper."""
     return module.from_config(
