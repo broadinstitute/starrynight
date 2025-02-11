@@ -1,10 +1,30 @@
+<%!
+    from pathlib import Path
+
+    def get_completed_if_dir(path):
+        if Path(path).suffix != "":
+          return path
+        else:
+          return Path(path).joinpath('completed.txt').resolve().__str__()
+
+    def wrap_dir_if_dir(path):
+        if Path(path).suffix != "":
+          return path
+        else:
+          return f"directory({path})"
+    def touch_path_if_dir(path):
+        if Path(path).suffix != "":
+          return f'"{path}"'
+        else:
+          return f'touch("{Path(path).joinpath("completed.txt").resolve().__str__()}")'
+%>
 rule all:
-  input:
     % for container in containers:
+  input:
       % for k, v in container.output_paths.items():
     ${k}_${container.name.replace(" ", "_").lower()}=[
             % for path in v:
-            "${path}",
+            "${get_completed_if_dir(path)}",
             % endfor
           ],
       % endfor
@@ -14,19 +34,19 @@ rule all:
 
 % for container in containers:
 rule ${container.name.replace(" ", "_").lower()}:
-  input:
     % for k, v in container.input_paths.items():
+  input:
       ${k}=[
               % for path in v:
-              "${path}",
+              "${get_completed_if_dir(path)}",
               % endfor
             ],
     % endfor
-  output:
     % for k, v in container.output_paths.items():
+  output:
       ${k}=[
               % for path in v:
-              "${path}",
+              ${touch_path_if_dir(path)},
               % endfor
             ],
     % endfor
@@ -49,7 +69,6 @@ rule ${function.name}:
   outputs:
   shell:
 % endfor
-
 
 % for invoke_shell in invoke_shells:
 rule ${invoke_shell.name}:

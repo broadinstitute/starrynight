@@ -65,6 +65,7 @@ class SnakeMakeBackend(Backend):
         self.pipeline.compile()
         self.config = config
         self.output_dir = output_dir
+        self.output_dir.mkdir(exist_ok=True, parents=True)
         self.scratch_path = scratch_path
         self.template = Template(
             text=Path(__file__).parent.joinpath("templates/snakemake.mako").read_text(),
