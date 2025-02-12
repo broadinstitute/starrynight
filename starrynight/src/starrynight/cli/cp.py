@@ -26,10 +26,20 @@ def invoke_cp(cppipe: str, loaddata: str, out: str, jobs: int) -> None:
         Number of jobs to launch.
 
     """
-    uow = [
-        (file.resolve(), AnyPath(loaddata).joinpath(f"{file.stem}.csv").resolve())
-        for file in AnyPath(cppipe).glob("*.cppipe")
-    ]
+    batches = [batch.stem for batch in AnyPath(loaddata).glob("*") if batch.is_dir()]
+    cppipe_by_batch = {
+        batch: [file for file in AnyPath(cppipe).joinpath(batch).glob("*.cppipe")]
+        for batch in batches
+    }
+    uow = []
+    for batch in batches:
+        for cfile in cppipe_by_batch[batch]:
+            uow.append(
+                (
+                    cfile.resolve(),
+                    AnyPath(loaddata).joinpath(f"{batch}/{cfile.stem}.csv"),
+                )
+            )
     if len(uow) == 0:
         print("Found 0 cppipe files. No work to be done. Exiting...")
         return

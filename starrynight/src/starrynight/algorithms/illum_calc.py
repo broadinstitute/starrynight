@@ -31,17 +31,19 @@ from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
-
-# from starrynight.experiment import PCPGeneric
 from starrynight.utils.cellprofiler import CellProfilerContext
+from starrynight.utils.dfutils import gen_image_hierarchy, get_channels_by_batch_plate
 
 ###############################
 ## Load data generation
 ###############################
 
 
-def gen_illum_calc_load_data_by_plate(
-    index_path: Path | CloudPath, out_path: Path | CloudPath, path_mask: str | None
+def gen_illum_calc_load_data_by_batch_plate(
+    index_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    path_mask: str | None,
+    for_sbs: bool = False,
 ) -> None:
     """Generate load data for illum calc pipeline.
 
@@ -53,79 +55,81 @@ def gen_illum_calc_load_data_by_plate(
         Path to save output csv file.
     path_mask : str | None
         Path prefix mask to use.
+    for_sbs : str | None
+        Generate illums for SBS images.
 
     """
     df = pl.read_parquet(index_path.resolve().__str__())
 
-    # Filter for CP images
-    cp_images_df = df.filter(
-        pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-    )
+    # Filter for relevant images
+    if not for_sbs:
+        images_df = df.filter(
+            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
+        )
+    else:
+        images_df = df.filter(
+            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+        )
+
+    images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = (
-        cp_images_df.select("prefix").unique().to_series().to_list()[0]
-    )
-
-    # Query for available plates
-    plate_list = cp_images_df.select("plate_id").unique().to_series().to_list()
-
-    # Get channel dict for all plates
-    plates_channel_dict = (
-        cp_images_df.group_by(pl.col("plate_id"))
-        .agg(pl.col("channel_dict").explode().unique())
-        .to_dicts()
-    )
+    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
 
-    # Setup chunking and write loaddata for each plate
-    for plate in plate_list:
-        # Setup channel list for that plate
-        plate_channel_list = None
-        for chdict in plates_channel_dict:
-            if chdict["plate_id"] == plate:
-                plate_channel_list = chdict["channel_dict"]
+    # Setup chunking and write loaddata for each batch/plate
+    for batch in images_hierarchy_dict.keys():
+        for plate in images_hierarchy_dict[batch].keys():
+            # Setup channel list for that plate
+            plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
 
-        # setup df by filtering for plate id
-        df_plate = cp_images_df.filter(pl.col("plate_id").eq(plate))
+            # setup df by filtering for plate id
+            df_plate = images_df.filter(pl.col("plate_id").eq(plate))
 
-        # Write load data csv for the plate
-        out_path.mkdir(parents=True, exist_ok=True)
-        with out_path.joinpath(f"illum_calc_{plate}.csv").open("w") as f:
-            # setup csv headers and write the header first
-            loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-            metadata_heads = [f"Metadata_{col}" for col in ["Plate", "Series", "Site"]]
-            filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
-            frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
-            pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
-            loaddata_writer.writerow(
-                [*metadata_heads, *filename_heads, *frame_heads, *pathname_heads]
-            )
-            for index in df_plate.to_dicts():
-                index = PCPIndex(**index)
-                assert index.key is not None
-                loaddata_writer.writerow(
-                    [
-                        # Metadata heads
-                        index.plate_id,
-                        index.site_id,
-                        index.site_id,
-                        # Filename heads
-                        *[f"{index.filename}" for _ in range(len(filename_heads))],
-                        # Frame heads
-                        *[str(i) for i in range(len(frame_heads))],
-                        # Pathname heads
-                        *[
-                            # We need to remove the file name from the "key"
-                            # (expected by cellprofiler)
-                            f"{path_mask.rstrip('/')}/{'/'.join(index.key.split('/')[0:-1])}/"
-                            for _ in range(len(pathname_heads))
-                        ],
-                    ]
+            # Write load data csv for the plate
+            batch_out_path = out_path.joinpath(batch)
+            batch_out_path.mkdir(parents=True, exist_ok=True)
+            with batch_out_path.joinpath(f"illum_calc_{batch}_{plate}.csv").open(
+                "w"
+            ) as f:
+                # setup csv headers and write the header first
+                loaddata_writer = csv.writer(
+                    f, delimiter=",", quoting=csv.QUOTE_MINIMAL
                 )
+                metadata_heads = [
+                    f"Metadata_{col}" for col in ["Plate", "Series", "Site"]
+                ]
+                filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
+                frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
+                pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
+                loaddata_writer.writerow(
+                    [*metadata_heads, *filename_heads, *frame_heads, *pathname_heads]
+                )
+                for index in df_plate.to_dicts():
+                    index = PCPIndex(**index)
+                    assert index.key is not None
+                    loaddata_writer.writerow(
+                        [
+                            # Metadata heads
+                            index.plate_id,
+                            index.site_id,
+                            index.site_id,
+                            # Filename heads
+                            *[f"{index.filename}" for _ in range(len(filename_heads))],
+                            # Frame heads
+                            *[str(i) for i in range(len(frame_heads))],
+                            # Pathname heads
+                            *[
+                                # We need to remove the file name from the "key"
+                                # (expected by cellprofiler)
+                                f"{path_mask.rstrip('/')}/{'/'.join(index.key.split('/')[0:-1])}/"
+                                for _ in range(len(pathname_heads))
+                            ],
+                        ]
+                    )
 
 
 ###################################
@@ -268,7 +272,7 @@ def generate_illum_calculate_pipeline(
     return pipeline
 
 
-def gen_illum_calculate_cppipe(
+def gen_illum_calculate_cppipe_by_batch_plate(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
@@ -287,13 +291,21 @@ def gen_illum_calculate_cppipe(
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
-    # Get all the generated load data files
-    load_data_files = [file for file in load_data_path.glob("**/*.csv")]
+    # Get all the generated load data files by batch
+    batches = [batch.stem for batch in load_data_path.glob("*") if batch.is_dir()]
+    files_by_batch = {
+        batch: [file for file in load_data_path.joinpath(batch).glob("*.csv")]
+        for batch in batches
+    }
 
     # Generate cppipe file for each load data file
-    for file in load_data_files:
-        with CellProfilerContext(out_dir=workspace_path) as cpipe:
-            cpipe = generate_illum_calculate_pipeline(cpipe, file)
-            filename = f"{file.stem}.cppipe"
-            with out_dir.joinpath(filename).open("w") as f:
-                cpipe.dump(f)
+
+    for batch in batches:
+        batch_out_dir = out_dir.joinpath(batch)
+        batch_out_dir.mkdir(exist_ok=True, parents=True)
+        for file in files_by_batch[batch]:
+            with CellProfilerContext(out_dir=workspace_path) as cpipe:
+                cpipe = generate_illum_calculate_pipeline(cpipe, file)
+                filename = f"{file.stem}.cppipe"
+                with batch_out_dir.joinpath(filename).open("w") as f:
+                    cpipe.dump(f)

@@ -6,6 +6,11 @@ from starrynight.modules.gen_inv import GenInvModule
 from starrynight.modules.illum_calc.calc_cp import CalcIllumInvokeCPModule
 from starrynight.modules.illum_calc.calc_cppipe import CalcIllumGenCPPipeModule
 from starrynight.modules.illum_calc.calc_load_data import CalcIllumGenLoadDataModule
+from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
+from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
+from starrynight.modules.sbs_illum_calc.calc_load_data import (
+    SBSCalcIllumGenLoadDataModule,
+)
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {
     GenInvModule.uid(): GenInvModule,
@@ -13,4 +18,7 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     CalcIllumGenLoadDataModule.uid(): CalcIllumGenLoadDataModule,
     CalcIllumGenCPPipeModule.uid(): CalcIllumGenCPPipeModule,
     CalcIllumInvokeCPModule.uid(): CalcIllumInvokeCPModule,
+    SBSCalcIllumGenLoadDataModule.uid(): SBSCalcIllumGenLoadDataModule,
+    SBSCalcIllumGenCPPipeModule.uid(): SBSCalcIllumGenCPPipeModule,
+    SBSCalcIllumInvokeCPModule.uid(): SBSCalcIllumInvokeCPModule,
 }
