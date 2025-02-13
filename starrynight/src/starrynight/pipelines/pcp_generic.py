@@ -6,6 +6,11 @@ from pipecraft.pipeline import Parallel, Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
+from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
+from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
+from starrynight.modules.cp_illum_apply.apply_load_data import (
+    CPApplyIllumGenLoadDataModule,
+)
 from starrynight.modules.illum_calc.calc_cp import CalcIllumInvokeCPModule
 from starrynight.modules.illum_calc.calc_cppipe import CalcIllumGenCPPipeModule
 from starrynight.modules.illum_calc.calc_load_data import CalcIllumGenLoadDataModule
@@ -30,6 +35,9 @@ def create_pcp_generic_pipeline(
         illum_calc_loaddata := init_module(CalcIllumGenLoadDataModule),
         illum_calc_cpipe := init_module(CalcIllumGenCPPipeModule),
         illum_calc_cp := init_module(CalcIllumInvokeCPModule),
+        apply_calc_loaddata := init_module(CPApplyIllumGenLoadDataModule),
+        apply_calc_cpipe := init_module(CPApplyIllumGenCPPipeModule),
+        apply_calc_cp := init_module(CPApplyIllumInvokeCPModule),
         # sbs related modules
         sbs_illum_calc_loaddata := init_module(SBSCalcIllumGenLoadDataModule),
         sbs_illum_calc_cpipe := init_module(SBSCalcIllumGenCPPipeModule),
@@ -37,7 +45,16 @@ def create_pcp_generic_pipeline(
     ]
     return module_list, Parallel(
         [
-            Seq([illum_calc_loaddata.pipe, illum_calc_cpipe.pipe, illum_calc_cp.pipe]),
+            Seq(
+                [
+                    illum_calc_loaddata.pipe,
+                    illum_calc_cpipe.pipe,
+                    illum_calc_cp.pipe,
+                    apply_calc_loaddata.pipe,
+                    apply_calc_cpipe.pipe,
+                    apply_calc_cp.pipe,
+                ]
+            ),
             Seq(
                 [
                     sbs_illum_calc_loaddata.pipe,

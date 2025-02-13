@@ -1,4 +1,4 @@
-"""Calculate illumination correction calculate invoke cellprofiler module."""
+"""CPApplyulate illumination correction calculate gen loaddata module."""
 
 from pathlib import Path
 from typing import Self
@@ -9,6 +9,9 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
+from starrynight.modules.cp_illum_apply.constants import (
+    CP_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.schema import (
     Container as SpecContainer,
 )
@@ -49,15 +52,15 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     return uow_list
 
 
-def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
-    """Create pipeline for invoking cellprofiler.
+def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
+    """Create pipeline for generating load data.
 
     Parameters
     ----------
     uid: str
         Module unique id.
     spec: SpecContainer
-        CalcIllumInvokeCPModule specification.
+        CPApplyIllumModule specification.
 
     Returns
     -------
@@ -67,24 +70,23 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
     """
     cmd = [
         "starrynight",
-        "cp",
-        "-p",
+        "illum",
+        "apply",
+        "loaddata",
+        "-i",
         spec.inputs[0].path,
-        "-l",
-        spec.inputs[1].path,
         "-o",
-        spec.outputs[0].path,
+        Path(spec.outputs[0].path).resolve().__str__(),
     ]
-
+    # Use user provided parser if available
+    if spec.inputs[1].path is not None:
+        cmd += ["--path_mask", spec.inputs[1].path]
     gen_load_data_pipe = Seq(
         [
             Container(
                 name=uid,
-                input_paths={
-                    "cppipe_path": [spec.inputs[0].path],
-                    "load_data_path": [spec.inputs[1].path],
-                },
-                output_paths={"illum_dir": [spec.outputs[0].path]},
+                input_paths={"index": [spec.inputs[0].path]},
+                output_paths={"load_data_path": [spec.outputs[0].path]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -96,13 +98,13 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
     return gen_load_data_pipe
 
 
-class CalcIllumInvokeCPModule(StarrynightModule):
-    """Calculate illumination invoke cellprofiler module."""
+class CPApplyIllumGenLoadDataModule(StarrynightModule):
+    """CPApplyulate illumination generate loaddata module."""
 
     @staticmethod
     def uid() -> str:
         """Return module unique id."""
-        return "calc_illum_invoke_cp"
+        return "cp_apply_illum_gen_loaddata"
 
     @staticmethod
     def _spec() -> str:
@@ -110,34 +112,34 @@ class CalcIllumInvokeCPModule(StarrynightModule):
         return SpecContainer(
             inputs=[
                 TypeInput(
-                    name="cppipe_path",
+                    name="index_path",
                     type=TypeEnum.files,
-                    description="Path to the cppipe file.",
+                    description="Path to the index.",
                     optional=False,
-                    path="path/to/the/cppipe",
+                    path="path/to/the/index",
                 ),
                 TypeInput(
-                    name="load_data_path",
-                    type=TypeEnum.files,
-                    description="Path to the LoadData csv.",
-                    optional=False,
-                    path="path/to/the/loaddata",
+                    name="path_mask",
+                    type=TypeEnum.file,
+                    description="Path prefix mask to use.",
+                    optional=True,
+                    path=None,
                 ),
             ],
             outputs=[
                 TypeOutput(
-                    name="plate_illum",
+                    name="cp_apply_illum_loaddata",
                     type=TypeEnum.files,
-                    description="Generated Illum correction files for the plate",
+                    description="Generated Illum calc loaddata files",
                     optional=False,
-                    path="random/path/to/illum plate dir",
+                    path="random/path/to/loaddata_dir",
                 ),
                 TypeOutput(
-                    name="cppipe_notebook",
+                    name="loaddata_notebook",
                     type=TypeEnum.notebook,
-                    description="Notebook for inspecting generated illum corrections",
+                    description="Notebook for inspecting load data files",
                     optional=False,
-                    path="http://karkinos:2720/?file=.%2FillumCalcOutput.py",
+                    path="http://karkinos:2720/?file=.%2FillumCPApplyOutput.py",
                 ),
             ],
             parameters=[],
@@ -154,8 +156,8 @@ class CalcIllumInvokeCPModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight illum calculation invoke cellprofiler module",
-                        description="This module invoke cellprofiler for generating illumination corrections.",
+                        name="Starrynight CP illum apply generate loaddata module",
+                        description="This module generates load data files for cp illumination apply module.",
                     )
                 ]
             ),
@@ -169,22 +171,19 @@ class CalcIllumInvokeCPModule(StarrynightModule):
     ) -> Self:
         """Create module from experiment and data config."""
         if spec is None:
-            spec = CalcIllumInvokeCPModule._spec()
+            spec = CPApplyIllumGenLoadDataModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath("cppipe/illum_calc").resolve().__str__()
+                data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
             )
-
-            spec.inputs[1].path = (
-                data.workspace_path.joinpath("loaddata/illum_calc").resolve().__str__()
-            )
-
             spec.outputs[0].path = (
-                data.workspace_path.joinpath("illum/illum_calc").resolve().__str__()
+                data.workspace_path.joinpath(CP_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
-        pipe = create_pipe_gen_cpinvoke(
-            uid=CalcIllumInvokeCPModule.uid(),
+        pipe = create_pipe_gen_load_data(
+            uid=CPApplyIllumGenLoadDataModule.uid(),
             spec=spec,
         )
         uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
 
-        return CalcIllumInvokeCPModule(spec=spec, pipe=pipe, uow=uow)
+        return CPApplyIllumGenLoadDataModule(spec=spec, pipe=pipe, uow=uow)

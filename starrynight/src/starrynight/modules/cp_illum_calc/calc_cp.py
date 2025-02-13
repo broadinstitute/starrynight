@@ -1,4 +1,4 @@
-"""Calculate illumination correction calculate invoke cellprofiler module."""
+"""CPCalculate illumination correction calculate invoke cellprofiler module."""
 
 from pathlib import Path
 from typing import Self
@@ -9,6 +9,11 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
+from starrynight.modules.sbs_illum_calc.constants import (
+    CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
+    CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX,
+    CP_ILLUM_CALC_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.schema import (
     Container as SpecContainer,
 )
@@ -57,7 +62,7 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
     uid: str
         Module unique id.
     spec: SpecContainer
-        CalcIllumInvokeCPModule specification.
+        CPCalcIllumInvokeCPModule specification.
 
     Returns
     -------
@@ -96,13 +101,13 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
     return gen_load_data_pipe
 
 
-class CalcIllumInvokeCPModule(StarrynightModule):
-    """Calculate illumination invoke cellprofiler module."""
+class CPCalcIllumInvokeCPModule(StarrynightModule):
+    """CPCalculate illumination invoke cellprofiler module."""
 
     @staticmethod
     def uid() -> str:
         """Return module unique id."""
-        return "calc_illum_invoke_cp"
+        return "cp_calc_illum_invoke_cp"
 
     @staticmethod
     def _spec() -> str:
@@ -137,7 +142,7 @@ class CalcIllumInvokeCPModule(StarrynightModule):
                     type=TypeEnum.notebook,
                     description="Notebook for inspecting generated illum corrections",
                     optional=False,
-                    path="http://karkinos:2720/?file=.%2FillumCalcOutput.py",
+                    path="http://karkinos:2720/?file=.%2FillumCPCalcOutput.py",
                 ),
             ],
             parameters=[],
@@ -169,22 +174,28 @@ class CalcIllumInvokeCPModule(StarrynightModule):
     ) -> Self:
         """Create module from experiment and data config."""
         if spec is None:
-            spec = CalcIllumInvokeCPModule._spec()
+            spec = CPCalcIllumInvokeCPModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath("cppipe/illum_calc").resolve().__str__()
+                data.workspace_path.joinpath(CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
 
             spec.inputs[1].path = (
-                data.workspace_path.joinpath("loaddata/illum_calc").resolve().__str__()
+                data.workspace_path.joinpath(CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
 
             spec.outputs[0].path = (
-                data.workspace_path.joinpath("illum/illum_calc").resolve().__str__()
+                data.workspace_path.joinpath(CP_ILLUM_CALC_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
         pipe = create_pipe_gen_cpinvoke(
-            uid=CalcIllumInvokeCPModule.uid(),
+            uid=CPCalcIllumInvokeCPModule.uid(),
             spec=spec,
         )
         uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
 
-        return CalcIllumInvokeCPModule(spec=spec, pipe=pipe, uow=uow)
+        return CPCalcIllumInvokeCPModule(spec=spec, pipe=pipe, uow=uow)
