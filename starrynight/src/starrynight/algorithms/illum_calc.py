@@ -1,6 +1,7 @@
 """Illum Calculate commands."""
 
 import csv
+from io import TextIOWrapper
 from pathlib import Path
 
 import polars as pl
@@ -32,11 +33,109 @@ from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
-from starrynight.utils.dfutils import gen_image_hierarchy, get_channels_by_batch_plate
+from starrynight.utils.dfutils import (
+    gen_image_hierarchy,
+    get_channels_by_batch_plate,
+    get_cycles_by_batch_plate,
+)
 
 ###############################
 ## Load data generation
 ###############################
+
+
+def write_loaddata(
+    images_df: pl.DataFrame,
+    plate_channel_list: list[str],
+    path_mask: str,
+    f: TextIOWrapper,
+) -> None:
+    # setup csv headers and write the header first
+    loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+    metadata_heads = [f"Metadata_{col}" for col in ["Plate", "Site", "Well"]]
+    filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
+    frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
+    pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
+    loaddata_writer.writerow(
+        [*metadata_heads, *filename_heads, *frame_heads, *pathname_heads]
+    )
+    for index in images_df.to_dicts():
+        index = PCPIndex(**index)
+        # make sure frame heads are matched with their order in the filenames
+        frame_index = [index.channel_dict.index(channel) for channel in frame_heads]
+        assert index.key is not None
+        loaddata_writer.writerow(
+            [
+                # Metadata heads
+                index.plate_id,
+                index.site_id,
+                index.well_id,
+                # Filename heads
+                *[f"{index.filename}" for _ in range(len(filename_heads))],
+                # Frame heads
+                *[str(i) for i in frame_index],
+                # Pathname heads
+                *[
+                    # We need to remove the file name from the "key"
+                    # (expected by cellprofiler)
+                    f"{path_mask.rstrip('/')}/{'/'.join(index.key.split('/')[0:-1])}/"
+                    for _ in range(len(pathname_heads))
+                ],
+            ]
+        )
+
+
+def write_loaddata_csv_by_batch_plate(
+    images_df: pl.DataFrame,
+    out_path: Path | CloudPath,
+    path_mask: str,
+    batch: str,
+    plate: str,
+) -> None:
+    pass
+
+    # Setup channel list for that plate
+    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
+
+    # setup df by filtering for plate id
+    df_plate = images_df.filter(
+        pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
+    )
+
+    # Write load data csv for the plate
+    batch_out_path = out_path.joinpath(batch)
+    batch_out_path.mkdir(parents=True, exist_ok=True)
+    with batch_out_path.joinpath(f"illum_calc_{batch}_{plate}.csv").open("w") as f:
+        write_loaddata(df_plate, plate_channel_list, path_mask, f)
+
+
+def write_loaddata_csv_by_batch_plate_cycle(
+    images_df: pl.DataFrame,
+    out_path: Path | CloudPath,
+    path_mask: str,
+    batch: str,
+    plate: str,
+    cycle: str,
+) -> None:
+    pass
+
+    # Setup channel list for that plate
+    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
+
+    # setup df by filtering for plate id
+    df_batch_plate_cycle = images_df.filter(
+        pl.col("batch_id").eq(batch)
+        & pl.col("plate_id").eq(plate)
+        & pl.col("cycle_id").eq(cycle)
+    )
+
+    # Write load data csv for the plate
+    batch_plate_out_path = out_path.joinpath(batch, plate)
+    batch_plate_out_path.mkdir(parents=True, exist_ok=True)
+    with batch_plate_out_path.joinpath(f"illum_calc_{batch}_{plate}_{cycle}.csv").open(
+        "w"
+    ) as f:
+        write_loaddata(df_batch_plate_cycle, plate_channel_list, path_mask, f)
 
 
 def gen_illum_calc_load_data_by_batch_plate(
@@ -83,52 +182,17 @@ def gen_illum_calc_load_data_by_batch_plate(
     # Setup chunking and write loaddata for each batch/plate
     for batch in images_hierarchy_dict.keys():
         for plate in images_hierarchy_dict[batch].keys():
-            # Setup channel list for that plate
-            plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
-            # setup df by filtering for plate id
-            df_plate = images_df.filter(pl.col("plate_id").eq(plate))
-
-            # Write load data csv for the plate
-            batch_out_path = out_path.joinpath(batch)
-            batch_out_path.mkdir(parents=True, exist_ok=True)
-            with batch_out_path.joinpath(f"illum_calc_{batch}_{plate}.csv").open(
-                "w"
-            ) as f:
-                # setup csv headers and write the header first
-                loaddata_writer = csv.writer(
-                    f, delimiter=",", quoting=csv.QUOTE_MINIMAL
+            if not for_sbs:
+                # Write loaddata assuming no image nesting with cycles
+                write_loaddata_csv_by_batch_plate(
+                    images_df, out_path, path_mask, batch, plate
                 )
-                metadata_heads = [
-                    f"Metadata_{col}" for col in ["Plate", "Series", "Site"]
-                ]
-                filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
-                frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
-                pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
-                loaddata_writer.writerow(
-                    [*metadata_heads, *filename_heads, *frame_heads, *pathname_heads]
-                )
-                for index in df_plate.to_dicts():
-                    index = PCPIndex(**index)
-                    assert index.key is not None
-                    loaddata_writer.writerow(
-                        [
-                            # Metadata heads
-                            index.plate_id,
-                            index.site_id,
-                            index.site_id,
-                            # Filename heads
-                            *[f"{index.filename}" for _ in range(len(filename_heads))],
-                            # Frame heads
-                            *[str(i) for i in range(len(frame_heads))],
-                            # Pathname heads
-                            *[
-                                # We need to remove the file name from the "key"
-                                # (expected by cellprofiler)
-                                f"{path_mask.rstrip('/')}/{'/'.join(index.key.split('/')[0:-1])}/"
-                                for _ in range(len(pathname_heads))
-                            ],
-                        ]
+            else:
+                # Write loaddata assuming image nesting with cycles
+                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+                for cycle in plate_cycles_list:
+                    write_loaddata_csv_by_batch_plate_cycle(
+                        images_df, out_path, path_mask, batch, plate, cycle
                     )
 
 
