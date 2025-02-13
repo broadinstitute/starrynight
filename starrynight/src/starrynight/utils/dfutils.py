@@ -89,3 +89,20 @@ def get_channels_by_batch_plate(
         .to_list()
     )
     return channels
+
+
+def get_cycles_by_batch_plate(
+    df: pl.LazyFrame, batch_id: str, plate_id: str
+) -> list[str]:
+    cycles = (
+        df.filter(
+            pl.col("batch_id").eq(batch_id)
+            & pl.col("plate_id").eq(plate_id)
+            & pl.col("cycle_id").is_not_null()
+        )
+        .select(pl.col("cycle_id"))
+        .unique()
+        .to_series()
+        .to_list()
+    )
+    return cycles
