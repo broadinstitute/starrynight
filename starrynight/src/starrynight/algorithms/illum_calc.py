@@ -38,6 +38,7 @@ from starrynight.utils.dfutils import (
     get_channels_by_batch_plate,
     get_cycles_by_batch_plate,
 )
+from starrynight.utils.globbing import flatten_dict, get_files_by
 
 ###############################
 ## Load data generation
@@ -52,7 +53,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{col}" for col in ["Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
+    ]
     filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
     frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
     pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
@@ -62,14 +65,19 @@ def write_loaddata(
     for index in images_df.to_dicts():
         index = PCPIndex(**index)
         # make sure frame heads are matched with their order in the filenames
-        frame_index = [index.channel_dict.index(channel) for channel in frame_heads]
+        frame_index = [
+            index.channel_dict.index(channel.replace("Frame_Orig", ""))
+            for channel in frame_heads
+        ]
         assert index.key is not None
         loaddata_writer.writerow(
             [
                 # Metadata heads
+                index.batch_id,
                 index.plate_id,
                 index.site_id,
                 index.well_id,
+                index.cycle_id,
                 # Filename heads
                 *[f"{index.filename}" for _ in range(len(filename_heads))],
                 # Frame heads
@@ -132,9 +140,9 @@ def write_loaddata_csv_by_batch_plate_cycle(
     # Write load data csv for the plate
     batch_plate_out_path = out_path.joinpath(batch, plate)
     batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_plate_out_path.joinpath(f"illum_calc_{batch}_{plate}_{cycle}.csv").open(
-        "w"
-    ) as f:
+    with batch_plate_out_path.joinpath(
+        f"illum_calc_{batch}_{plate}_{int(cycle):02}.csv"
+    ).open("w") as f:
         write_loaddata(df_batch_plate_cycle, plate_channel_list, path_mask, f)
 
 
@@ -202,8 +210,7 @@ def gen_illum_calc_load_data_by_batch_plate(
 
 
 def generate_illum_calculate_pipeline(
-    pipeline: Pipeline,
-    load_data_path: Path | CloudPath,
+    pipeline: Pipeline, load_data_path: Path | CloudPath, for_sbs: bool = False
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = [
@@ -224,7 +231,10 @@ def generate_illum_calculate_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    load_data.metadata_fields.value = "Plate"
+    if not for_sbs:
+        load_data.metadata_fields.value = "Batch,Plate"
+    else:
+        load_data.metadata_fields.value = "Batch,Plate,Cycle"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
@@ -266,9 +276,9 @@ def generate_illum_calculate_pipeline(
         correct_illum_calculate.object_width.value = 10
         correct_illum_calculate.size_of_smoothing_filter.value = 20
         correct_illum_calculate.save_average_image.value = False
-        correct_illum_calculate.average_image_name.value = "IllumBlueAvg"
+        correct_illum_calculate.average_image_name.value = f"Illum{col}Avg"
         correct_illum_calculate.save_dilated_image.value = False
-        correct_illum_calculate.dilated_image_name.value = "IllumBlueDilated"
+        correct_illum_calculate.dilated_image_name.value = f"Illum{col}Dilated"
         correct_illum_calculate.automatic_splines.value = True
         correct_illum_calculate.spline_bg_mode.value = MODE_AUTO
         correct_illum_calculate.spline_points.value = 5
@@ -303,7 +313,6 @@ def generate_illum_calculate_pipeline(
         save_image.image_name.value = f"UpsampledIllum{col}"
         save_image.file_name_method.value = FN_SINGLE_NAME
         # save_image.file_image_name.value = ""
-        save_image.single_file_name.value = f"\\g<Plate>_Illum{col}"
         save_image.number_of_digits.value = 4
         save_image.wants_file_name_suffix.value = False
         save_image.file_name_suffix.value = ""
@@ -318,6 +327,13 @@ def generate_illum_calculate_pipeline(
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
         pipeline.add_module(save_image)
+
+        if not for_sbs:
+            save_image.single_file_name.value = f"\\g<Batch>/\\g<Plate>/Illum{col}"
+        else:
+            save_image.single_file_name.value = (
+                f"\\g<Batch>/\\g<Plate>/\\g<Cycle>/Illum{col}"
+            )
 
     # TODO: Figure out why having this makes the pipeline a noop
     # create_batch_files = CreateBatchFiles()
@@ -340,6 +356,7 @@ def gen_illum_calculate_cppipe_by_batch_plate(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
+    for_sbs: bool = False,
 ) -> None:
     """Write out illumination calculate pipeline to file.
 
@@ -351,25 +368,27 @@ def gen_illum_calculate_cppipe_by_batch_plate(
         Path | CloudPath to output directory.
     workspace_path : Path | CloudPath
         Path | CloudPath to workspace directory.
+    for_sbs : str | None
+        Generate illums for SBS images.
 
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
+
     # Get all the generated load data files by batch
-    batches = [batch.stem for batch in load_data_path.glob("*") if batch.is_dir()]
-    files_by_batch = {
-        batch: [file for file in load_data_path.joinpath(batch).glob("*.csv")]
-        for batch in batches
-    }
+    if not for_sbs:
+        files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
+    else:
+        files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
 
-    # Generate cppipe file for each load data file
-
-    for batch in batches:
-        batch_out_dir = out_dir.joinpath(batch)
-        batch_out_dir.mkdir(exist_ok=True, parents=True)
-        for file in files_by_batch[batch]:
+    # flatten all the levels to reduce nested loops
+    files_by_hierarchy_flatten = flatten_dict(files_by_hierarchy)
+    for hierarchy, files in files_by_hierarchy_flatten:
+        files_out_dir = out_dir.joinpath(*hierarchy)
+        files_out_dir.mkdir(exist_ok=True, parents=True)
+        for file in files:
             with CellProfilerContext(out_dir=workspace_path) as cpipe:
-                cpipe = generate_illum_calculate_pipeline(cpipe, file)
+                cpipe = generate_illum_calculate_pipeline(cpipe, file, for_sbs)
                 filename = f"{file.stem}.cppipe"
-                with batch_out_dir.joinpath(filename).open("w") as f:
+                with files_out_dir.joinpath(filename).open("w") as f:
                     cpipe.dump(f)
