@@ -9,7 +9,7 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.sbs_illum_calc.constants import (
+from starrynight.modules.cp_illum_calc.constants import (
     CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_OUT_PATH_SUFFIX,
@@ -159,7 +159,7 @@ class CPCalcIllumInvokeCPModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight illum calculation invoke cellprofiler module",
+                        name="Starrynight CP illum calculation invoke cellprofiler module",
                         description="This module invoke cellprofiler for generating illumination corrections.",
                     )
                 ]

@@ -156,7 +156,7 @@ class CPCalcIllumGenLoadDataModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight illum calculation generate loaddata module",
+                        name="Starrynight CP illum calculation generate loaddata module",
                         description="This module generates load data files for illumination corrections module.",
                     )
                 ]

@@ -157,7 +157,7 @@ class SBSCalcIllumGenLoadDataModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight sbs illum calculation generate loaddata module",
+                        name="Starrynight SBS illum calculation generate loaddata module",
                         description="This module generates load data files for sbs illumination corrections module.",
                     )
                 ]

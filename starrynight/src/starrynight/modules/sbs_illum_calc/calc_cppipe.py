@@ -81,6 +81,7 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         spec.outputs[0].path,
         "-w",
         spec.inputs[1].path,
+        "--sbs",
     ]
 
     gen_load_data_pipe = Seq(
@@ -158,7 +159,7 @@ class SBSCalcIllumGenCPPipeModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight illum calculation generate cppipe module",
+                        name="Starrynight SBS illum calculation generate cppipe module",
                         description="This module generates cppipe files for illumination corrections module.",
                     )
                 ]

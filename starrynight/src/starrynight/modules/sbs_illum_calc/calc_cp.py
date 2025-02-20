@@ -79,6 +79,7 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
         spec.inputs[1].path,
         "-o",
         spec.outputs[0].path,
+        "--sbs",
     ]
 
     gen_load_data_pipe = Seq(
@@ -159,7 +160,7 @@ class SBSCalcIllumInvokeCPModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight sbs illum calculation invoke cellprofiler module",
+                        name="Starrynight SBS illum calculation invoke cellprofiler module",
                         description="This module invoke cellprofiler for generating sbs illumination corrections.",
                     )
                 ]
