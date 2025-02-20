@@ -40,11 +40,8 @@ def gen_illum_calc_load_data(
 @click.option("-l", "--loaddata", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
-def gen_illum_calc_cppipe(
-    loaddata: str,
-    out: str,
-    workspace: str,
-) -> None:
+@click.option("--sbs", is_flag=True, default=False)
+def gen_illum_calc_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) -> None:
     """Generate illum calc cppipe file.
 
     Parameters
@@ -55,10 +52,12 @@ def gen_illum_calc_cppipe(
         Path to output directory. Can be local or a cloud path.
     workspace : str
         Path to workspace directory. Can be local or a cloud path.
+    sbs : str | Mask
+        Flag for treating as sbs images.
 
     """
     gen_illum_calculate_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace)
+        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), sbs
     )
 
 
