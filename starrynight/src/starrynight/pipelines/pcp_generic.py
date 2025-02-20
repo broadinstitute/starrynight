@@ -11,9 +11,11 @@ from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPip
 from starrynight.modules.cp_illum_apply.apply_load_data import (
     CPApplyIllumGenLoadDataModule,
 )
-from starrynight.modules.illum_calc.calc_cp import CalcIllumInvokeCPModule
-from starrynight.modules.illum_calc.calc_cppipe import CalcIllumGenCPPipeModule
-from starrynight.modules.illum_calc.calc_load_data import CalcIllumGenLoadDataModule
+from starrynight.modules.cp_illum_calc.calc_cp import CPCalcIllumInvokeCPModule
+from starrynight.modules.cp_illum_calc.calc_cppipe import CPCalcIllumGenCPPipeModule
+from starrynight.modules.cp_illum_calc.calc_load_data import (
+    CPCalcIllumGenLoadDataModule,
+)
 from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
 from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
@@ -32,12 +34,12 @@ def create_pcp_generic_pipeline(
     init_module = partial(apply_module_params, data, experiment, updated_spec_dict)
     module_list = [
         # cp modules
-        illum_calc_loaddata := init_module(CalcIllumGenLoadDataModule),
-        illum_calc_cpipe := init_module(CalcIllumGenCPPipeModule),
-        illum_calc_cp := init_module(CalcIllumInvokeCPModule),
-        apply_calc_loaddata := init_module(CPApplyIllumGenLoadDataModule),
-        apply_calc_cpipe := init_module(CPApplyIllumGenCPPipeModule),
-        apply_calc_cp := init_module(CPApplyIllumInvokeCPModule),
+        cp_illum_calc_loaddata := init_module(CPCalcIllumGenLoadDataModule),
+        cp_illum_calc_cpipe := init_module(CPCalcIllumGenCPPipeModule),
+        cp_illum_calc_cp := init_module(CPCalcIllumInvokeCPModule),
+        cp_apply_calc_loaddata := init_module(CPApplyIllumGenLoadDataModule),
+        cp_apply_calc_cpipe := init_module(CPApplyIllumGenCPPipeModule),
+        cp_apply_calc_cp := init_module(CPApplyIllumInvokeCPModule),
         # sbs related modules
         sbs_illum_calc_loaddata := init_module(SBSCalcIllumGenLoadDataModule),
         sbs_illum_calc_cpipe := init_module(SBSCalcIllumGenCPPipeModule),
@@ -47,12 +49,12 @@ def create_pcp_generic_pipeline(
         [
             Seq(
                 [
-                    illum_calc_loaddata.pipe,
-                    illum_calc_cpipe.pipe,
-                    illum_calc_cp.pipe,
-                    apply_calc_loaddata.pipe,
-                    apply_calc_cpipe.pipe,
-                    apply_calc_cp.pipe,
+                    cp_illum_calc_loaddata.pipe,
+                    cp_illum_calc_cpipe.pipe,
+                    cp_illum_calc_cp.pipe,
+                    cp_apply_calc_loaddata.pipe,
+                    cp_apply_calc_cpipe.pipe,
+                    cp_apply_calc_cp.pipe,
                 ]
             ),
             Seq(
