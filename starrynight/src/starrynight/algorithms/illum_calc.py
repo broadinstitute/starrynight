@@ -77,7 +77,7 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id,
+                f"{int(index.cycle_id):02}",
                 # Filename heads
                 *[f"{index.filename}" for _ in range(len(filename_heads))],
                 # Frame heads
@@ -328,11 +328,12 @@ def generate_illum_calculate_pipeline(
         # save_image.tiff_compress.value = ""
         pipeline.add_module(save_image)
 
+        # Do not add subfolders as cellprofiler won't create them automatically and fail
         if not for_sbs:
-            save_image.single_file_name.value = f"\\g<Batch>/\\g<Plate>/Illum{col}"
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Illum{col}"
         else:
             save_image.single_file_name.value = (
-                f"\\g<Batch>/\\g<Plate>/\\g<Cycle>/Illum{col}"
+                f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Illum{col}"
             )
 
     # TODO: Figure out why having this makes the pipeline a noop
