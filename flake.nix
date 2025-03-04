@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs_master.url = "github:NixOS/nixpkgs/master";
     systems.url = "github:nix-systems/default";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
@@ -21,10 +22,13 @@
       let
         inherit (self) outputs;
         pkgs = import nixpkgs {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
         };
-
+        mpkgs = import inputs.nixpkgs_master {
+          inherit system;
+          config.allowUnfree = true;
+        };
       in
       with pkgs;
       {
@@ -81,6 +85,8 @@
                 gocryptfs
                 goofys
                 nextflow
+                arion
+                mpkgs.fluent-bit
               ];
               venvDir = "./.venv";
               postVenvCreation = ''

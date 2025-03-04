@@ -27,6 +27,7 @@ class SnakeMakeConfig(BackendConfig):
     singularity: bool = False
     apptainer: bool = False
     print_exec: bool = False
+    use_fluent_bit: bool = True
 
 
 class SnakeMakeBackend(Backend):
@@ -71,6 +72,12 @@ class SnakeMakeBackend(Backend):
             text=Path(__file__).parent.joinpath("templates/snakemake.mako").read_text(),
             output_encoding="utf-8",
         )
+        self.fluent_bit_template = Template(
+            text=Path(__file__)
+            .parent.joinpath("templates/fluent.yaml.mako")
+            .read_text(),
+            output_encoding="utf-8",
+        )
         self.snakefile = None
 
     def compile(self) -> None:
@@ -111,6 +118,12 @@ class SnakeMakeBackend(Backend):
             assert type(snakefile) is bytes
             self.snakefile = snakefile.decode("utf-8")
             f.writelines(self.snakefile)
+        if self.config.use_fluent_bit:
+            with self.output_dir.joinpath("fluent.yaml").open("w") as f:
+                fluent_bit = self.fluent_bit_template.render()
+                assert type(fluent_bit) is bytes
+                self.fluent_bit = fluent_bit.decode("utf-8")
+                f.writelines(self.fluent_bit)
 
     def run(self) -> Path | CloudPath:
         """Run SankeMake.
@@ -138,6 +151,8 @@ class SnakeMakeBackend(Backend):
             cmd += ["--use-apptainer"]
         if self.config.print_exec:
             cmd += ["-p"]
+        if self.config.use_fluent_bit:
+            cmd += [" 2>&1 | fluent-bit -c fluent.yaml"]
         # keep this at the end
         if self.config.background:
             cmd += ["&"]
