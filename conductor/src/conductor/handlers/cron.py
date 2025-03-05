@@ -28,6 +28,8 @@ def fetch_run_status(run: Run) -> RunStatus | None:
     run_path = AnyPath(log_path).parent
     completed_file = run_path.joinpath("completed.txt")
     nohup_file = run_path.joinpath("nohup.out")
+    if not nohup_file.exists():
+        return None
     if completed_file.exists() and completed_file.is_file():
         return RunStatus.SUCCESS
     else:

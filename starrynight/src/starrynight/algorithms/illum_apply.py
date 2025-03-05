@@ -93,7 +93,7 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id,
+                index.cycle_id or 0,
                 # Filename heads
                 *[f"{index.filename}" for _ in range(len(filename_heads))],
                 # Frame heads
