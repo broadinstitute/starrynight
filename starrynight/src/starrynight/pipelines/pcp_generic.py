@@ -16,6 +16,13 @@ from starrynight.modules.cp_illum_calc.calc_cppipe import CPCalcIllumGenCPPipeMo
 from starrynight.modules.cp_illum_calc.calc_load_data import (
     CPCalcIllumGenLoadDataModule,
 )
+from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
+from starrynight.modules.sbs_illum_apply.apply_cppipe import (
+    SBSApplyIllumGenCPPipeModule,
+)
+from starrynight.modules.sbs_illum_apply.apply_load_data import (
+    SBSApplyIllumGenLoadDataModule,
+)
 from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
 from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
@@ -44,6 +51,9 @@ def create_pcp_generic_pipeline(
         sbs_illum_calc_loaddata := init_module(SBSCalcIllumGenLoadDataModule),
         sbs_illum_calc_cpipe := init_module(SBSCalcIllumGenCPPipeModule),
         sbs_illum_calc_cp := init_module(SBSCalcIllumInvokeCPModule),
+        sbs_illum_apply_loaddata := init_module(SBSApplyIllumGenLoadDataModule),
+        sbs_illum_apply_cpipe := init_module(SBSApplyIllumGenCPPipeModule),
+        sbs_illum_apply_cp := init_module(SBSApplyIllumInvokeCPModule),
     ]
     return module_list, Parallel(
         [
@@ -62,6 +72,9 @@ def create_pcp_generic_pipeline(
                     sbs_illum_calc_loaddata.pipe,
                     sbs_illum_calc_cpipe.pipe,
                     sbs_illum_calc_cp.pipe,
+                    sbs_illum_apply_loaddata.pipe,
+                    sbs_illum_apply_cpipe.pipe,
+                    sbs_illum_apply_cp.pipe,
                 ]
             ),
         ]

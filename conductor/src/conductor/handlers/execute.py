@@ -7,7 +7,7 @@ from time import time
 from cloudpathlib import AnyPath, CloudPath
 from pipecraft.backend.base import Backend
 from pipecraft.backend.snakemake import SnakeMakeBackend, SnakeMakeConfig
-from pipecraft.pipeline import Pipeline, Seq
+from pipecraft.pipeline import Pipeline
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starrynight.modules import MODULE_REGISTRY
@@ -16,9 +16,7 @@ from starrynight.modules.schema import Container
 
 from conductor.constants import (
     ExecutorType,
-    JobType,
     RunStatus,
-    StepType,
 )
 from conductor.models.job import Job
 from conductor.models.run import Run

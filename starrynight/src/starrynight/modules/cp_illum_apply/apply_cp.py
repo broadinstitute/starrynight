@@ -89,7 +89,7 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
                     "cppipe_path": [spec.inputs[0].path],
                     "load_data_path": [spec.inputs[1].path],
                 },
-                output_paths={"illum_dir": [spec.outputs[0].path]},
+                output_paths={"corr_images_dir": [spec.outputs[0].path]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -131,16 +131,16 @@ class CPApplyIllumInvokeCPModule(StarrynightModule):
             ],
             outputs=[
                 TypeOutput(
-                    name="plate_illum",
+                    name="path to corrected images",
                     type=TypeEnum.files,
-                    description="Generated Illum correction files for the plate",
+                    description="Corrected images after illum application",
                     optional=False,
-                    path="random/path/to/illum plate dir",
+                    path="random/path/to/corrected images",
                 ),
                 TypeOutput(
                     name="cppipe_notebook",
                     type=TypeEnum.notebook,
-                    description="Notebook for inspecting generated illum corrections",
+                    description="Notebook for inspecting illum corrections",
                     optional=False,
                     path="http://karkinos:2720/?file=.%2FillumCPApplyOutput.py",
                 ),

@@ -13,6 +13,13 @@ from starrynight.modules.cp_illum_calc.calc_load_data import (
 )
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
+from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
+from starrynight.modules.sbs_illum_apply.apply_cppipe import (
+    SBSApplyIllumGenCPPipeModule,
+)
+from starrynight.modules.sbs_illum_apply.apply_load_data import (
+    SBSApplyIllumGenLoadDataModule,
+)
 from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
 from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
@@ -20,15 +27,23 @@ from starrynight.modules.sbs_illum_calc.calc_load_data import (
 )
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {
+    # Generate inventory and index for the project
     GenInvModule.uid(): GenInvModule,
     GenIndexModule.uid(): GenIndexModule,
+    # CP illum calc
     CPCalcIllumGenLoadDataModule.uid(): CPCalcIllumGenLoadDataModule,
     CPCalcIllumGenCPPipeModule.uid(): CPCalcIllumGenCPPipeModule,
     CPCalcIllumInvokeCPModule.uid(): CPCalcIllumInvokeCPModule,
+    # CP illum apply
     CPApplyIllumGenLoadDataModule.uid(): CPApplyIllumGenLoadDataModule,
     CPApplyIllumGenCPPipeModule.uid(): CPApplyIllumGenCPPipeModule,
     CPApplyIllumInvokeCPModule.uid(): CPApplyIllumInvokeCPModule,
+    # SBS illum calc
     SBSCalcIllumGenLoadDataModule.uid(): SBSCalcIllumGenLoadDataModule,
     SBSCalcIllumGenCPPipeModule.uid(): SBSCalcIllumGenCPPipeModule,
     SBSCalcIllumInvokeCPModule.uid(): SBSCalcIllumInvokeCPModule,
+    # SBS illum apply
+    SBSApplyIllumGenLoadDataModule.uid(): SBSApplyIllumGenLoadDataModule,
+    SBSApplyIllumGenCPPipeModule.uid(): SBSApplyIllumGenCPPipeModule,
+    SBSApplyIllumInvokeCPModule.uid(): SBSApplyIllumInvokeCPModule,
 }
