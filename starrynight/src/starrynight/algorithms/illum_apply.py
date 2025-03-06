@@ -328,12 +328,12 @@ def generate_illum_apply_pipeline(
         # save_image.root_dir.value = ""
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
-        pipeline.add_module(save_image)
 
         if not for_sbs:
             save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
         else:
             save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
+        pipeline.add_module(save_image)
     return pipeline
 
 

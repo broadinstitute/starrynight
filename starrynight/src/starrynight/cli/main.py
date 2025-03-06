@@ -7,6 +7,7 @@ from starrynight.cli.illum import illum
 from starrynight.cli.index import index
 from starrynight.cli.inv import inventory
 from starrynight.cli.presegcheck import presegcheck
+from starrynight.cli.segcheck import segcheck
 
 
 @click.group
@@ -20,3 +21,4 @@ main.add_command(index)
 main.add_command(illum)
 main.add_command(invoke_cp)
 main.add_command(presegcheck)
+main.add_command(segcheck)

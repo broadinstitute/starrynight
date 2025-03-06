@@ -1,4 +1,4 @@
-"""Pre seg check commands."""
+"""Segmenation check commands."""
 
 import csv
 from io import TextIOWrapper
@@ -11,6 +11,7 @@ from cellprofiler.modules.exporttospreadsheet import (
     NANS_AS_NANS,
     ExportToSpreadsheet,
 )
+from cellprofiler.modules.graytocolor import SCHEME_RGB, GrayToColor
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
     FH_DECLUMP,
@@ -26,6 +27,21 @@ from cellprofiler.modules.identifysecondaryobjects import (
     IdentifySecondaryObjects,
 )
 from cellprofiler.modules.maskimage import MaskImage
+from cellprofiler.modules.overlayoutlines import MAX_IMAGE, WANTS_COLOR, OverlayOutlines
+from cellprofiler.modules.rescaleintensity import (
+    CUSTOM_VALUE,
+    M_STRETCH,
+    RescaleIntensity,
+)
+from cellprofiler.modules.saveimages import (
+    AXIS_T,
+    BIT_DEPTH_16,
+    FF_TIFF,
+    FN_SINGLE_NAME,
+    IF_IMAGE,
+    WS_EVERY_CYCLE,
+    SaveImages,
+)
 from cellprofiler.modules.threshold import (
     O_BACKGROUND,
     O_FOREGROUND,
@@ -72,6 +88,8 @@ def write_loaddata(
     images_df: pl.DataFrame,
     plate_channel_list: list[str],
     corr_images_path: Path | CloudPath,
+    nuclei_channel: str,
+    cell_channel: str,
     path_mask: str,
     f: TextIOWrapper,
 ) -> None:
@@ -80,8 +98,8 @@ def write_loaddata(
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
     ]
-    filename_heads = [f"FileName_Corr{col}" for col in plate_channel_list]
-    pathname_heads = [f"PathName_Corr{col}" for col in plate_channel_list]
+    filename_heads = [f"FileName_Corr{col}" for col in [nuclei_channel, cell_channel]]
+    pathname_heads = [f"PathName_Corr{col}" for col in [nuclei_channel, cell_channel]]
     loaddata_writer.writerow(
         [
             *metadata_heads,
@@ -93,7 +111,7 @@ def write_loaddata(
         index = PCPIndex(**index)
         filenames = [
             f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-            for col in plate_channel_list
+            for col in [nuclei_channel, cell_channel]
         ]
         pathnames = [
             resolve_path(AnyPath(path_mask), corr_images_path)
@@ -122,6 +140,8 @@ def write_loaddata_csv_by_batch_plate(
     images_df: pl.DataFrame,
     out_path: Path | CloudPath,
     corr_images_path: Path | CloudPath,
+    nuclei_channel: str,
+    cell_channel: str,
     path_mask: str,
     batch: str,
     plate: str,
@@ -139,14 +159,24 @@ def write_loaddata_csv_by_batch_plate(
     # Write load data csv for the plate
     batch_out_path = out_path.joinpath(batch)
     batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"pre_segcheck_{batch}_{plate}.csv").open("w") as f:
-        write_loaddata(df_plate, plate_channel_list, corr_images_path, path_mask, f)
+    with batch_out_path.joinpath(f"segcheck_{batch}_{plate}.csv").open("w") as f:
+        write_loaddata(
+            df_plate,
+            plate_channel_list,
+            corr_images_path,
+            nuclei_channel,
+            cell_channel,
+            path_mask,
+            f,
+        )
 
 
 def write_loaddata_csv_by_batch_plate_cycle(
     images_df: pl.DataFrame,
     out_path: Path | CloudPath,
     corr_images_path: Path | CloudPath,
+    nuclei_channel: str,
+    cell_channel: str,
     path_mask: str,
     batch: str,
     plate: str,
@@ -168,25 +198,29 @@ def write_loaddata_csv_by_batch_plate_cycle(
     batch_plate_out_path = out_path.joinpath(batch, plate)
     batch_plate_out_path.mkdir(parents=True, exist_ok=True)
     with batch_plate_out_path.joinpath(
-        f"pre_segcheck_{batch}_{plate}_{int(cycle):02}.csv"
+        f"segcheck_{batch}_{plate}_{int(cycle):02}.csv"
     ).open("w") as f:
         write_loaddata(
             df_batch_plate_cycle,
             plate_channel_list,
             corr_images_path,
+            nuclei_channel,
+            cell_channel,
             path_mask,
             f,
         )
 
 
-def gen_pre_segcheck_load_data_by_batch_plate(
+def gen_segcheck_load_data_by_batch_plate(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
+    nuclei_channel: str,
+    cell_channel: str,
     corr_images_path: Path | CloudPath | None = None,
     for_sbs: bool = False,
 ) -> None:
-    """Generate load data for pre-segcheck pipeline.
+    """Generate load data for segcheck pipeline.
 
     Parameters
     ----------
@@ -196,6 +230,10 @@ def gen_pre_segcheck_load_data_by_batch_plate(
         Path to save output csv file.
     path_mask : str | None
         Path prefix mask to use.
+    nuclei_channel: str
+        Channel to use for doing nuclei segmentation
+    cell_channel: str
+        Channel to use for doing cell segmentation
     corr_images_path : Path | CloudPath
         Path | CloudPath to corr images directory.
     for_sbs : str | None
@@ -204,9 +242,9 @@ def gen_pre_segcheck_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None and not for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/cp/presegcheck")
+        corr_images_path = index_path.parents[1].joinpath("illum/cp/segcheck")
     elif corr_images_path is None and for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/presegcheck")
+        corr_images_path = index_path.parents[1].joinpath("illum/sbs/segcheck")
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
@@ -234,7 +272,14 @@ def gen_pre_segcheck_load_data_by_batch_plate(
             if not for_sbs:
                 # Write loaddata assuming no image nesting with cycles
                 write_loaddata_csv_by_batch_plate(
-                    images_df, out_path, corr_images_path, path_mask, batch, plate
+                    images_df,
+                    out_path,
+                    corr_images_path,
+                    nuclei_channel,
+                    cell_channel,
+                    path_mask,
+                    batch,
+                    plate,
                 )
             else:
                 # Write loaddata assuming image nesting with cycles
@@ -244,6 +289,8 @@ def gen_pre_segcheck_load_data_by_batch_plate(
                         images_df,
                         out_path,
                         corr_images_path,
+                        nuclei_channel,
+                        cell_channel,
                         path_mask,
                         batch,
                         plate,
@@ -256,7 +303,7 @@ def gen_pre_segcheck_load_data_by_batch_plate(
 ###################################
 
 
-def generate_pre_segcheck_pipeline(
+def generate_segcheck_pipeline(
     pipeline: Pipeline,
     load_data_path: Path | CloudPath,
     nuclei_channel: str,
@@ -293,7 +340,8 @@ def generate_pre_segcheck_pipeline(
 
     # INFO: Create and configure required modules
     # identifyPrimaryObject(confluent regions) -> mask -> identifyPrimaryObject(nuclei)
-    # -> identifySecondaryObject(cells) -> ExportToSpreadSheet
+    # -> identifySecondaryObject(cells) -> rescaleIntensity -> graytoColor -> OverlayOutlines
+    # -> save(outlines) -> ExportToSpreadSheet
 
     # Confluent regions identification
     identify_primary_object_cfregions = IdentifyPrimaryObjects()
@@ -414,7 +462,7 @@ def generate_pre_segcheck_pipeline(
     identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 2.0
     identify_secondary_object_cells.threshold.threshold_correction_factor.value = 0.7
-    identify_secondary_object_cells.threshold.threshold_range.value = (0.0005, 1.0)
+    identify_secondary_object_cells.threshold.threshold_range.value = (0.000001, 1.0)
     identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
     identify_secondary_object_cells.threshold.thresholding_measurement.value = None
     identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
@@ -430,6 +478,95 @@ def generate_pre_segcheck_pipeline(
     identify_secondary_object_cells.threshold.log_transform.value = False
     pipeline.add_module(identify_secondary_object_cells)
 
+    # rescale intensity
+    for ch in channel_list:
+        rescale_intensity = RescaleIntensity()
+        module_counter += 1
+        rescale_intensity.module_num = module_counter
+        rescale_intensity.x_name.value = f"Masked{ch}"
+        rescale_intensity.y_name.value = f"Rescaled{ch}"
+        rescale_intensity.rescale_method.value = M_STRETCH
+        rescale_intensity.wants_automatic_high.value = CUSTOM_VALUE
+        rescale_intensity.wants_automatic_low.value = CUSTOM_VALUE
+        rescale_intensity.source_high.value = 1.0
+        rescale_intensity.source_low.value = 0.0
+        rescale_intensity.source_scale.value = (0.0, 1.0)
+        rescale_intensity.dest_scale.value = (0.0, 1.0)
+        rescale_intensity.matching_image_name.value = None
+        rescale_intensity.divisor_value.value = 1.0
+        rescale_intensity.divisor_measurement.value = None
+        pipeline.add_module(rescale_intensity)
+
+    # GrayToColor
+    gray_to_color = GrayToColor()
+    module_counter += 1
+    gray_to_color.module_num = module_counter
+    gray_to_color.scheme_choice.value = SCHEME_RGB
+    gray_to_color.wants_rescale.value = False
+    gray_to_color.red_image_name.value = f"Rescaled{nuclei_channel}"
+    gray_to_color.green_image_name.value = f"Rescaled{cell_channel}"
+    gray_to_color.blue_image_name.value = f"Rescaled{nuclei_channel}"
+    gray_to_color.rgb_image_name.value = "ColorImage"
+    gray_to_color.red_adjustment_factor.value = 1.0
+    gray_to_color.green_adjustment_factor.value = 1.0
+    gray_to_color.blue_adjustment_factor.value = 1.0
+    pipeline.add_module(gray_to_color)
+
+    # OverlayOutlines
+
+    overlay_outlines = OverlayOutlines()
+    module_counter += 1
+    overlay_outlines.module_num = module_counter
+    overlay_outlines.blank_image.value = False
+    overlay_outlines.image_name.value = "ColorImage"
+    overlay_outlines.output_image_name.value = "OrigOverlay"
+    overlay_outlines.line_mode.value = "Inner"
+    overlay_outlines.wants_color.value = WANTS_COLOR
+    overlay_outlines.max_type.value = MAX_IMAGE
+
+    # Add outlines for nuclei, cells and confluent regions
+    for _ in range(
+        len(["Nuclei", "Cells", "ConfluentRegions"]) - 1
+    ):  # 1 outline is already added during init
+        overlay_outlines.add_outline()
+
+    colors = ["blue", "white", "#FF8000"]
+    for i, obj in enumerate(["Nuclei", "Cells", "ConfluentRegions"]):
+        overlay_outlines.outlines[i].objects_name.value = obj
+        overlay_outlines.outlines[i].color.value = colors[i]
+    pipeline.add_module(overlay_outlines)
+
+    # Save image (combined overlay)
+    save_image = SaveImages()
+    module_counter += 1
+    save_image.module_num = module_counter
+    save_image.save_image_or_figure.value = IF_IMAGE
+    save_image.image_name.value = "OrigOverlay"
+    save_image.file_name_method.value = FN_SINGLE_NAME
+    save_image.number_of_digits.value = 4
+    save_image.wants_file_name_suffix.value = False
+    save_image.file_name_suffix.value = ""
+    save_image.file_format.value = FF_TIFF
+    save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+    save_image.bit_depth.value = BIT_DEPTH_16
+    save_image.overwrite.value = False
+    save_image.when_to_save.value = WS_EVERY_CYCLE
+    save_image.update_file_names.value = False
+    save_image.create_subdirectories.value = False
+    # save_image.root_dir.value = ""
+    save_image.stack_axis.value = AXIS_T
+    # save_image.tiff_compress.value = ""
+
+    if not for_sbs:
+        save_image.single_file_name.value = (
+            "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
+        )
+    else:
+        save_image.single_file_name.value = (
+            "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
+        )
+    pipeline.add_module(save_image)
+
     # export measurements to spreadsheet
     export_measurements = ExportToSpreadsheet()
     module_counter += 1
@@ -438,11 +575,9 @@ def generate_pre_segcheck_pipeline(
     export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
     if not for_sbs:
-        export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_PreSegcheck"
+        export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_Segcheck"
     else:
-        export_measurements.prefix.value = (
-            "\\g<Batch>_\\g<Plate>_\\g<Cycle>_PreSegcheck"
-        )
+        export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Segcheck"
     export_measurements.wants_overwrite_without_warning.value = False
     export_measurements.add_metadata.value = False
     export_measurements.add_filepath.value = False
@@ -462,7 +597,7 @@ def generate_pre_segcheck_pipeline(
     return pipeline
 
 
-def gen_pre_segcheck_cppipe_by_batch_plate(
+def gen_segcheck_cppipe_by_batch_plate(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
@@ -470,7 +605,7 @@ def gen_pre_segcheck_cppipe_by_batch_plate(
     cell_channel: str,
     for_sbs: bool = False,
 ) -> None:
-    """Write out pre_segcheck pipeline to file.
+    """Write out segcheck pipeline to file.
 
     Parameters
     ----------
@@ -504,7 +639,7 @@ def gen_pre_segcheck_cppipe_by_batch_plate(
         files_out_dir.mkdir(exist_ok=True, parents=True)
         for file in files:
             with CellProfilerContext(out_dir=workspace_path) as cpipe:
-                cpipe = generate_pre_segcheck_pipeline(
+                cpipe = generate_segcheck_pipeline(
                     cpipe, file, nuclei_channel, cell_channel, for_sbs
                 )
                 filename = f"{file.stem}.cppipe"
