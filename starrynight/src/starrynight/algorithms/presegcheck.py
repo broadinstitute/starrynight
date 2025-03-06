@@ -33,7 +33,7 @@ from cellprofiler.modules.threshold import (
     O_TWO_CLASS,
     RB_MEAN,
     RB_SD,
-    TM_LI,
+    TM_OTSU,
     TS_GLOBAL,
 )
 from cellprofiler_core.constants.modules.load_data import (
@@ -43,7 +43,7 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
-from cloudpathlib import CloudPath
+from cloudpathlib import AnyPath, CloudPath
 from numpy import exp
 
 from starrynight.algorithms.index import PCPIndex
@@ -58,6 +58,14 @@ from starrynight.utils.globbing import flatten_dict, get_files_by
 ###############################
 ## Load data generation
 ###############################
+
+
+def resolve_path(path_mask: Path | CloudPath, filepath: Path | CloudPath) -> str:
+    try:
+        rel_path = filepath.relative_to(path_mask)
+        return path_mask.joinpath(rel_path).resolve().__str__()
+    except ValueError:
+        return f"{path_mask.resolve().rstrip('/')}/{filepath.resolve().lstrip('/')}/"
 
 
 def write_loaddata(
@@ -84,11 +92,11 @@ def write_loaddata(
     for index in images_df.to_dicts():
         index = PCPIndex(**index)
         filenames = [
-            f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{index.site_id}_Corr{col}.tiff"
+            f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
             for col in plate_channel_list
         ]
         pathnames = [
-            f"{path_mask.rstrip('/')}/{'/'.join(corr_images_path.resolve().__str__())}/"
+            resolve_path(AnyPath(path_mask), corr_images_path)
             for _ in range(len(pathname_heads))
         ]
 
@@ -131,7 +139,7 @@ def write_loaddata_csv_by_batch_plate(
     # Write load data csv for the plate
     batch_out_path = out_path.joinpath(batch)
     batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"illum_apply_{batch}_{plate}.csv").open("w") as f:
+    with batch_out_path.joinpath(f"pre_segcheck_{batch}_{plate}.csv").open("w") as f:
         write_loaddata(df_plate, plate_channel_list, corr_images_path, path_mask, f)
 
 
@@ -160,7 +168,7 @@ def write_loaddata_csv_by_batch_plate_cycle(
     batch_plate_out_path = out_path.joinpath(batch, plate)
     batch_plate_out_path.mkdir(parents=True, exist_ok=True)
     with batch_plate_out_path.joinpath(
-        f"illum_calc_{batch}_{plate}_{int(cycle):02}.csv"
+        f"pre_segcheck_{batch}_{plate}_{int(cycle):02}.csv"
     ).open("w") as f:
         write_loaddata(
             df_batch_plate_cycle,
@@ -196,9 +204,9 @@ def gen_pre_segcheck_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None and not for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/cp/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath("illum/cp/presegcheck")
     elif corr_images_path is None and for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath("illum/sbs/presegcheck")
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
@@ -257,7 +265,9 @@ def generate_pre_segcheck_pipeline(
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = [
-        col.split("_")[1] for col in load_data_df.columns if col.startswith("Frame")
+        col.split("_")[1].replace("Corr", "")
+        for col in load_data_df.columns
+        if col.startswith("FileName")
     ]
     module_counter = 0
 
@@ -309,8 +319,8 @@ def generate_pre_segcheck_pipeline(
     identify_primary_object_cfregions.use_advanced.value = True
     identify_primary_object_cfregions.threshold_setting_version.value = 12
     identify_primary_object_cfregions.threshold.threshold_scope.value = TS_GLOBAL
-    identify_primary_object_cfregions.threshold.global_operation.value = TM_LI
-    identify_primary_object_cfregions.threshold.local_operation.value = TM_LI
+    identify_primary_object_cfregions.threshold.global_operation.value = TM_OTSU
+    identify_primary_object_cfregions.threshold.local_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.threshold_smoothing_scale.value = 2.0
     identify_primary_object_cfregions.threshold.threshold_correction_factor.value = 0.5
     identify_primary_object_cfregions.threshold.threshold_range.value = (0.0, 1.0)
@@ -364,8 +374,8 @@ def generate_pre_segcheck_pipeline(
     identify_primary_object_nuclei.use_advanced.value = True
     identify_primary_object_nuclei.threshold_setting_version.value = 12
     identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
-    identify_primary_object_nuclei.threshold.global_operation.value = TM_LI
-    identify_primary_object_nuclei.threshold.local_operation.value = TM_LI
+    identify_primary_object_nuclei.threshold.global_operation.value = TM_OTSU
+    identify_primary_object_nuclei.threshold.local_operation.value = TM_OTSU
     identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = 1.3488
     identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.0
     identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
@@ -397,11 +407,11 @@ def generate_pre_segcheck_pipeline(
     identify_secondary_object_cells.wants_discard_edge.value = False
     identify_secondary_object_cells.wants_discard_primary.value = False
     identify_secondary_object_cells.fill_holes.value = False
-    identify_secondary_object_cells.new_primary_objects_name = "FilteredNuclei"
+    identify_secondary_object_cells.new_primary_objects_name.value = "FilteredNuclei"
     identify_secondary_object_cells.threshold_setting_version.value = 12
     identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
-    identify_secondary_object_cells.threshold.global_operation.value = TM_LI
-    identify_secondary_object_cells.threshold.local_operation.value = TM_LI
+    identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
+    identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 2.0
     identify_secondary_object_cells.threshold.threshold_correction_factor.value = 0.7
     identify_secondary_object_cells.threshold.threshold_range.value = (0.0005, 1.0)
@@ -425,7 +435,7 @@ def generate_pre_segcheck_pipeline(
     module_counter += 1
     export_measurements.module_num = module_counter
     export_measurements.delimiter.value = DELIMITER_COMMA
-    export_measurements.directory.value = DEFAULT_OUTPUT_FOLDER_NAME
+    export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
     export_measurements.prefix.value = "PreSegcheck"
     export_measurements.wants_overwrite_without_warning.value = False

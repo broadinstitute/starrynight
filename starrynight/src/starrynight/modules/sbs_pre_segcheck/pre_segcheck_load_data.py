@@ -9,7 +9,7 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.sbs_pre_segchek.constants import (
+from starrynight.modules.sbs_pre_segcheck.constants import (
     SBS_PRE_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX,
 )
 from starrynight.modules.schema import (

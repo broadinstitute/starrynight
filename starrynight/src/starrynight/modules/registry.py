@@ -58,7 +58,7 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     CPApplyIllumInvokeCPModule.uid(): CPApplyIllumInvokeCPModule,
     # CP pre segcheck
     CPPreSegcheckGenLoadDataModule.uid(): CPPreSegcheckGenLoadDataModule,
-    CPPreSegcheckGenCPPipeModule.uid(): CPPreSegcheckGenLoadDataModule,
+    CPPreSegcheckGenCPPipeModule.uid(): CPPreSegcheckGenCPPipeModule,
     CPPreSegcheckInvokeCPModule.uid(): CPPreSegcheckInvokeCPModule,
     # SBS illum calc
     SBSCalcIllumGenLoadDataModule.uid(): SBSCalcIllumGenLoadDataModule,
