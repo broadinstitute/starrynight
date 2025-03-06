@@ -9,11 +9,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1736013773,
-        "narHash": "sha256-p+JsdjngH+OMjAaSsFfQMcTm5Ozi98oG332JtmBgJmM=",
+        "lastModified": 1741214857,
+        "narHash": "sha256-lHQ6PrlW7ZjqqNC0nz387NdZw69AB8pKmleC5O5Y+aA=",
         "owner": "CellProfiler",
         "repo": "CellProfiler",
-        "rev": "d0b57ebf7de738a5c3b9fc5c793572bd4fc8f37b",
+        "rev": "2b822869d92f95d2dea26251c31ba62776e73f73",
         "type": "github"
       },
       "original": {

@@ -9,7 +9,8 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.cp_pre_segchek.constants import (
+from starrynight.modules.cp_illum_apply.constants import CP_ILLUM_APPLY_OUT_PATH_SUFFIX
+from starrynight.modules.cp_pre_segcheck.constants import (
     CP_PRE_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX,
 )
 from starrynight.modules.schema import (
@@ -76,6 +77,8 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         spec.inputs[0].path,
         "-o",
         Path(spec.outputs[0].path).resolve().__str__(),
+        "-c",
+        Path(spec.inputs[2].path).resolve().__str__(),
     ]
     # Use user provided parser if available
     if spec.inputs[1].path is not None:
@@ -123,6 +126,13 @@ class CPPreSegcheckGenLoadDataModule(StarrynightModule):
                     description="Path prefix mask to use.",
                     optional=True,
                     path=None,
+                ),
+                TypeInput(
+                    name="corr_images_path",
+                    type=TypeEnum.file,
+                    description="Path to corrected images.",
+                    optional=False,
+                    path="path/to/corr_images",
                 ),
             ],
             outputs=[
@@ -173,6 +183,11 @@ class CPPreSegcheckGenLoadDataModule(StarrynightModule):
             spec = CPPreSegcheckGenLoadDataModule._spec()
             spec.inputs[0].path = (
                 data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
+            )
+            spec.inputs[2].path = (
+                data.workspace_path.joinpath(CP_ILLUM_APPLY_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(

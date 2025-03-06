@@ -9,7 +9,7 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.cp_pre_segchek.constants import (
+from starrynight.modules.cp_pre_segcheck.constants import (
     CP_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX,
     CP_PRE_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX,
     CP_PRE_SEGCHECK_OUT_PATH_SUFFIX,
@@ -80,6 +80,10 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         spec.outputs[0].path,
         "-w",
         spec.inputs[1].path,
+        "-n",
+        spec.inputs[2].path,
+        "-c",
+        spec.inputs[3].path,
     ]
 
     gen_load_data_pipe = Seq(
@@ -125,6 +129,18 @@ class CPPreSegcheckGenCPPipeModule(StarrynightModule):
                     description="Workspace path.",
                     optional=True,
                     path=None,
+                ),
+                TypeInput(
+                    name="nuclei_channel",
+                    type=TypeEnum.textbox,
+                    description="Channel to use for nuclei segmentation.",
+                    optional=False,
+                ),
+                TypeInput(
+                    name="cell_channel",
+                    type=TypeEnum.textbox,
+                    description="Channel to use for cell segmentation.",
+                    optional=False,
                 ),
             ],
             outputs=[
@@ -186,6 +202,9 @@ class CPPreSegcheckGenCPPipeModule(StarrynightModule):
                 .resolve()
                 .__str__()
             )
+
+            spec.inputs[2].path = "changeme"
+            spec.inputs[3].path = "changeme"
 
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(CP_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)

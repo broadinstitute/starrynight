@@ -5,6 +5,7 @@ from functools import partial
 from pipecraft.pipeline import Parallel, Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
+from starrynight.modules import cp_pre_segcheck
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
 from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
@@ -15,6 +16,15 @@ from starrynight.modules.cp_illum_calc.calc_cp import CPCalcIllumInvokeCPModule
 from starrynight.modules.cp_illum_calc.calc_cppipe import CPCalcIllumGenCPPipeModule
 from starrynight.modules.cp_illum_calc.calc_load_data import (
     CPCalcIllumGenLoadDataModule,
+)
+from starrynight.modules.cp_pre_segcheck.pre_segcheck_cp import (
+    CPPreSegcheckInvokeCPModule,
+)
+from starrynight.modules.cp_pre_segcheck.pre_segcheck_cppipe import (
+    CPPreSegcheckGenCPPipeModule,
+)
+from starrynight.modules.cp_pre_segcheck.pre_segcheck_load_data import (
+    CPPreSegcheckGenLoadDataModule,
 )
 from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
 from starrynight.modules.sbs_illum_apply.apply_cppipe import (
@@ -47,6 +57,9 @@ def create_pcp_generic_pipeline(
         cp_apply_calc_loaddata := init_module(CPApplyIllumGenLoadDataModule),
         cp_apply_calc_cpipe := init_module(CPApplyIllumGenCPPipeModule),
         cp_apply_calc_cp := init_module(CPApplyIllumInvokeCPModule),
+        cp_pre_segcheck_loaddata := init_module(CPPreSegcheckGenLoadDataModule),
+        cp_pre_segcheck_cpipe := init_module(CPPreSegcheckGenCPPipeModule),
+        cp_pre_segcheck_cp := init_module(CPPreSegcheckInvokeCPModule),
         # sbs related modules
         sbs_illum_calc_loaddata := init_module(SBSCalcIllumGenLoadDataModule),
         sbs_illum_calc_cpipe := init_module(SBSCalcIllumGenCPPipeModule),
@@ -65,6 +78,9 @@ def create_pcp_generic_pipeline(
                     cp_apply_calc_loaddata.pipe,
                     cp_apply_calc_cpipe.pipe,
                     cp_apply_calc_cp.pipe,
+                    cp_pre_segcheck_loaddata.pipe,
+                    cp_pre_segcheck_cpipe.pipe,
+                    cp_pre_segcheck_cp.pipe,
                 ]
             ),
             Seq(
