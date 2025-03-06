@@ -19,7 +19,7 @@ export function ProjectJobInputs(props: TProjectJobInputsProps) {
       )}
       <div className="space-y-2 my-2">
         {inputs.map((input) => (
-          <ProjectJobInput input={input} key={input.id} />
+          <ProjectJobInput job={job} input={input} key={input.id} />
         ))}
       </div>
     </div>

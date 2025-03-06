@@ -2,13 +2,15 @@ import React from "react";
 import { ProjectJobInputView } from "./job-input-view";
 import { ProjectJobInputEdit } from "./job-input-edit";
 import { TPathRecord } from "../hooks/useParsePathRecordToArray";
+import { TJob } from "@/services/job";
 
 export type TProjectJobInputProps = {
   input: TPathRecord;
+  job: TJob;
 };
 
 export function ProjectJobInput(props: TProjectJobInputProps) {
-  const { input } = props;
+  const { input, job } = props;
   const [isEditing, setIsEditing] = React.useState(false);
   const [inputPath, setInputPath] = React.useState(input.value);
 
@@ -24,6 +26,7 @@ export function ProjectJobInput(props: TProjectJobInputProps) {
     <>
       {isEditing ? (
         <ProjectJobInputEdit
+          job={job}
           inputName={input.name}
           inputPath={inputPath}
           onInputPathChange={setInputPath}

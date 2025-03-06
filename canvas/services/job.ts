@@ -93,8 +93,23 @@ export type TUpdateJobOptions = {
   job: TJob;
 };
 
-export function updateJob(options: TUpdateJobOptions) {
+export function updateJob(options: TUpdateJobOptions): Promise<TJob> {
   const { job } = options;
 
   return api.put({ ...job }, "/job").json();
+}
+
+export type TUseUpdateJobOptions = {
+  onError: (error?: unknown) => void;
+  onSuccess: (data: TJob) => void;
+};
+
+export function useUpdateJob(options: TUseUpdateJobOptions) {
+  const { onError, onSuccess } = options;
+
+  return useMutation({
+    mutationFn: updateJob,
+    onError,
+    onSuccess,
+  });
 }

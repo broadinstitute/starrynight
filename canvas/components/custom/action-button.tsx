@@ -38,12 +38,14 @@ export const ActionButton = React.forwardRef<
       {...rest}
     >
       <span className={clsx(isLoading && "animate-spin")}>{_icon}</span>
-      <span
-        {...childSpan}
-        className={clsx("md:hidden lg:inline", childSpan?.className)}
-      >
-        {children}
-      </span>
+      {children && (
+        <span
+          {...childSpan}
+          className={clsx("md:hidden lg:inline", childSpan?.className)}
+        >
+          {children}
+        </span>
+      )}
     </ButtonWithTooltip>
   );
 });

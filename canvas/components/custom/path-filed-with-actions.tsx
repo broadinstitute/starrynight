@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { WithTooltip } from "./with-tooltip";
 
 export type TPathFiledWithActionsProps = {
-  pathRecord: TPathRecord;
+  pathRecord: Omit<TPathRecord, "raw">;
   /**
    * If true then use span to show the path value,
    * else use input component.

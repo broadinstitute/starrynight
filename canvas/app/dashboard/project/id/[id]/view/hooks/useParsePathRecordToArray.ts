@@ -11,6 +11,7 @@ export type TPathRecord = {
   name: string;
   type: string;
   value: string;
+  raw: TSpecPathRecord;
 };
 
 export type TUseParsePathRecordToArrayReturn = TPathRecord[];
@@ -36,6 +37,7 @@ export function useParsePathRecordToArray(
         name,
         type,
         value: path || projectWorkspaceURI,
+        raw: record,
       });
     }
 
