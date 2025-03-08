@@ -26,6 +26,15 @@ from starrynight.modules.cp_pre_segcheck.pre_segcheck_cppipe import (
 from starrynight.modules.cp_pre_segcheck.pre_segcheck_load_data import (
     CPPreSegcheckGenLoadDataModule,
 )
+from starrynight.modules.cp_segcheck.segcheck_cp import (
+    CPSegcheckInvokeCPModule,
+)
+from starrynight.modules.cp_segcheck.segcheck_cppipe import (
+    CPSegcheckGenCPPipeModule,
+)
+from starrynight.modules.cp_segcheck.segcheck_load_data import (
+    CPSegcheckGenLoadDataModule,
+)
 from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
 from starrynight.modules.sbs_illum_apply.apply_cppipe import (
     SBSApplyIllumGenCPPipeModule,
@@ -60,6 +69,9 @@ def create_pcp_generic_pipeline(
         cp_pre_segcheck_loaddata := init_module(CPPreSegcheckGenLoadDataModule),
         cp_pre_segcheck_cpipe := init_module(CPPreSegcheckGenCPPipeModule),
         cp_pre_segcheck_cp := init_module(CPPreSegcheckInvokeCPModule),
+        cp_segcheck_loaddata := init_module(CPSegcheckGenLoadDataModule),
+        cp_segcheck_cpipe := init_module(CPSegcheckGenCPPipeModule),
+        cp_segcheck_cp := init_module(CPSegcheckInvokeCPModule),
         # sbs related modules
         sbs_illum_calc_loaddata := init_module(SBSCalcIllumGenLoadDataModule),
         sbs_illum_calc_cpipe := init_module(SBSCalcIllumGenCPPipeModule),
@@ -81,6 +93,9 @@ def create_pcp_generic_pipeline(
                     cp_pre_segcheck_loaddata.pipe,
                     cp_pre_segcheck_cpipe.pipe,
                     cp_pre_segcheck_cp.pipe,
+                    cp_segcheck_loaddata.pipe,
+                    cp_segcheck_cpipe.pipe,
+                    cp_segcheck_cp.pipe,
                 ]
             ),
             Seq(

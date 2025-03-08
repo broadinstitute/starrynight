@@ -20,6 +20,15 @@ from starrynight.modules.cp_pre_segcheck.pre_segcheck_cppipe import (
 from starrynight.modules.cp_pre_segcheck.pre_segcheck_load_data import (
     CPPreSegcheckGenLoadDataModule,
 )
+from starrynight.modules.cp_segcheck.segcheck_cp import (
+    CPSegcheckInvokeCPModule,
+)
+from starrynight.modules.cp_segcheck.segcheck_cppipe import (
+    CPSegcheckGenCPPipeModule,
+)
+from starrynight.modules.cp_segcheck.segcheck_load_data import (
+    CPSegcheckGenLoadDataModule,
+)
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
 from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
@@ -60,6 +69,10 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     CPPreSegcheckGenLoadDataModule.uid(): CPPreSegcheckGenLoadDataModule,
     CPPreSegcheckGenCPPipeModule.uid(): CPPreSegcheckGenCPPipeModule,
     CPPreSegcheckInvokeCPModule.uid(): CPPreSegcheckInvokeCPModule,
+    # CP pre segcheck
+    CPSegcheckGenLoadDataModule.uid(): CPSegcheckGenLoadDataModule,
+    CPSegcheckGenCPPipeModule.uid(): CPSegcheckGenCPPipeModule,
+    CPSegcheckInvokeCPModule.uid(): CPSegcheckInvokeCPModule,
     # SBS illum calc
     SBSCalcIllumGenLoadDataModule.uid(): SBSCalcIllumGenLoadDataModule,
     SBSCalcIllumGenCPPipeModule.uid(): SBSCalcIllumGenCPPipeModule,
