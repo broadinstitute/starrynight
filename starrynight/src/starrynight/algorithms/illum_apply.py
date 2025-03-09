@@ -169,7 +169,7 @@ def write_loaddata_csv_by_batch_plate_cycle(
 
     # find illum files for this plate and cycle
     illum_by_channel_dict = {
-        ch: illum_path.joinpath(f"{batch}_{plate}_{int(cycle):02}_IllumOrig{ch}.npy")
+        ch: illum_path.joinpath(f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy")
         for ch in plate_channel_list
     }
 
@@ -341,7 +341,6 @@ def gen_illum_apply_cppipe_by_batch_plate(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
-    illum_path: Path | CloudPath | None = None,
     for_sbs: bool = False,
 ) -> None:
     """Write out illumination apply pipeline to file.

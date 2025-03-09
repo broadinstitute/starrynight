@@ -79,6 +79,7 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
         spec.inputs[1].path,
         "-o",
         spec.outputs[0].path,
+        "--sbs",
     ]
 
     gen_load_data_pipe = Seq(
