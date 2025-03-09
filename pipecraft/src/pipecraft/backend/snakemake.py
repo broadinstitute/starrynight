@@ -1,5 +1,7 @@
 """SankeMake Backend for Pipeline execution."""
 
+import os
+import signal
 from pathlib import Path
 from subprocess import Popen, run
 from types import NotImplementedType
@@ -7,7 +9,7 @@ from types import NotImplementedType
 from cloudpathlib import CloudPath
 from mako.template import Template
 
-from pipecraft.backend.base import Backend, BackendConfig
+from pipecraft.backend.base import Backend, BackendConfig, BaseBackendRun
 from pipecraft.node import (
     Container,
     Gather,
@@ -28,6 +30,18 @@ class SnakeMakeConfig(BackendConfig):
     apptainer: bool = False
     print_exec: bool = False
     use_fluent_bit: bool = True
+
+
+class SnakeMakeBackendRun(BaseBackendRun):
+    """Snakemake run object."""
+
+    def terminate(self) -> None:
+        """Terminate snakemake run."""
+        os.kill(self.pid, signal.SIGTERM)
+
+    def kill(self) -> None:
+        """Kill snakemake run."""
+        os.kill(self.pid, signal.SIGKILL)
 
 
 class SnakeMakeBackend(Backend):
@@ -157,5 +171,8 @@ class SnakeMakeBackend(Backend):
         if self.config.background:
             cmd += ["&"]
         cmd = " ".join(cmd)
-        Popen(cmd, cwd=cwd, shell=True)
-        return self.output_dir.joinpath("nohup.out")
+        process = Popen(cmd, cwd=cwd, shell=True)
+        run_obj = SnakeMakeBackendRun(
+            pid=process.pid, log_path=self.output_dir.joinpath("nohup.out")
+        )
+        return run_obj

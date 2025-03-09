@@ -100,18 +100,19 @@ def submit_job(
         executor.compile()
 
         # Execute the pipeline
-        log_path = executor.run()
+        exec_run = executor.run()
 
         # Add a run record to DB
         run = Run(
             name=f"{job.name} | {executor.scratch_path.stem.split('_')[1]}",
             job_id=job.id,
-            log_path=str(log_path.resolve()),
+            log_path=str(exec_run.log_path.resolve()),
             executor_type=executor_type,
             run_status=RunStatus.RUNNING,
             inputs=job.inputs,
             outputs=job.outputs,
             spec=job.spec,
+            backend_run=exec_run.dict(),
         )
         session.add(run)
         session.commit()

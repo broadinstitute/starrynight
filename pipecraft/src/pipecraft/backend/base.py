@@ -15,6 +15,30 @@ class BackendConfig(ABC, BaseModel):
     background: bool = True
 
 
+class BaseBackendRun(ABC, BaseModel):
+    """Abstract class for backend runs.
+
+    Attributes
+    ----------
+    pid : int
+    log_path: Path | CloudPath
+
+    """
+
+    pid: int
+    log_path: Path | CloudPath
+
+    @abstractmethod
+    def terminate(self) -> None:
+        """Terminate the run."""
+        pass
+
+    @abstractmethod
+    def kill(self) -> None:
+        """Kill the run."""
+        pass
+
+
 class Backend(ABC):
     """Abstract class for backends.
 
@@ -50,7 +74,7 @@ class Backend(ABC):
         pass
 
     @abstractmethod
-    def run(self) -> Path:
+    def run(self) -> BaseBackendRun:
         """Run pipeline.
 
         Returns immediately after starting the backend.
@@ -58,8 +82,8 @@ class Backend(ABC):
 
         Returns
         -------
-        Path:
-            Path to run log file.
+        BaseBackendRun:
+            Backend run object.
 
         """
         pass

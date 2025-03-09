@@ -1,5 +1,6 @@
 """Run domain related validators."""
 
+from pipecraft.backend.base import BaseBackendRun
 from pydantic import BaseModel
 from starrynight.modules.schema import Container
 
@@ -18,5 +19,6 @@ class Run(BaseModel):
     spec: Container
     outputs: dict[str, JobOutputSchema]
     inputs: dict[str, JobInputSchema]
+    backend_run: dict[str, BaseBackendRun] | None = None
 
     model_config: dict = {"from_attributes": True}

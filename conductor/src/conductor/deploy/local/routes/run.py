@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Request
 
-from conductor.handlers.run import fetch_all_runs
+from conductor.handlers.run import fetch_all_runs, kill_run
 from conductor.validators.run import Run
 
 run_router = APIRouter(prefix="/run", tags=["run"])
@@ -22,3 +22,9 @@ def get_run(
 ) -> list[Run]:
     """Get run handler."""
     return fetch_all_runs(request.state.db_session, job_id, limit, offset)
+
+
+@run_router.post("/kill")
+def post_kill_run(request: Request, run_id: int) -> Run:
+    """Post run kill handler."""
+    return kill_run(request.state.db_session, run_id)

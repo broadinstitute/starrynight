@@ -180,6 +180,7 @@ class RunStatus(Enum):
     RUNNING : running
     SUCCESS : success
     FAILED :  failed
+    CANCELLED : cancelled
 
     """
 
@@ -187,6 +188,7 @@ class RunStatus(Enum):
     RUNNING = "running"
     SUCCESS = "success"
     FAILED = "failed"
+    CANCELLED = "cancelled"
 
 
 class ExecutorType(Enum):
@@ -201,3 +203,4 @@ class ExecutorType(Enum):
 
     LOCAL = "local"
     AWS_BATCH = "aws_batch"
+    SNAKEMAKE = "snakemake"

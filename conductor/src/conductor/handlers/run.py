@@ -3,10 +3,11 @@
 from collections.abc import Callable
 
 from cloudpathlib import AnyPath
+from pipecraft.backend.snakemake import SnakeMakeBackendRun
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from conductor.constants import RunStatus
+from conductor.constants import ExecutorType, RunStatus
 from conductor.models.run import Run
 from conductor.validators.run import Run as PyRun
 
@@ -188,3 +189,36 @@ def fetch_run_log(
             for line in f.readlines()[-offset:]:
                 log_lines.append(line)
     return log_lines
+
+
+def kill_run(
+    db_session: Callable[[], Session],
+    run_id: int,
+) -> PyRun:
+    """Fetch all runs.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    run_id: int
+        run id to kill.
+
+    Returns
+    -------
+    PyRun
+        Run object.
+
+    """
+    with db_session() as session:
+        orm_run = session.scalar(select(Run).where(Run.id == run_id))
+        run = PyRun.model_validate(orm_run)
+        if run.executor_type is ExecutorType.SNAKEMAKE:
+            exec_run = SnakeMakeBackendRun(**run.backend_run)
+            exec_run.kill()
+            orm_run.run_status = RunStatus.FAILED
+            session.add(orm_run)
+            session.commit()
+        # updated run
+        run = PyRun.model_validate(orm_run)
+    return run
