@@ -35,6 +35,9 @@ from starrynight.modules.cp_segcheck.segcheck_cppipe import (
 from starrynight.modules.cp_segcheck.segcheck_load_data import (
     CPSegcheckGenLoadDataModule,
 )
+from starrynight.modules.sbs_align.algin_cp import SBSAlignInvokeCPModule
+from starrynight.modules.sbs_align.algin_cppipe import SBSAlignGenCPPipeModule
+from starrynight.modules.sbs_align.algin_load_data import SBSAlignGenLoadDataModule
 from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
 from starrynight.modules.sbs_illum_apply.apply_cppipe import (
     SBSApplyIllumGenCPPipeModule,
@@ -79,6 +82,9 @@ def create_pcp_generic_pipeline(
         sbs_illum_apply_loaddata := init_module(SBSApplyIllumGenLoadDataModule),
         sbs_illum_apply_cpipe := init_module(SBSApplyIllumGenCPPipeModule),
         sbs_illum_apply_cp := init_module(SBSApplyIllumInvokeCPModule),
+        sbs_align_loaddata := init_module(SBSAlignGenLoadDataModule),
+        sbs_align_cpipe := init_module(SBSAlignGenCPPipeModule),
+        sbs_align_cp := init_module(SBSAlignInvokeCPModule),
     ]
     return module_list, Parallel(
         [
@@ -106,6 +112,9 @@ def create_pcp_generic_pipeline(
                     sbs_illum_apply_loaddata.pipe,
                     sbs_illum_apply_cpipe.pipe,
                     sbs_illum_apply_cp.pipe,
+                    sbs_align_loaddata.pipe,
+                    sbs_align_cpipe.pipe,
+                    sbs_align_cp.pipe,
                 ]
             ),
         ]

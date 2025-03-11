@@ -2,6 +2,7 @@
 
 import click
 
+from starrynight.cli.align import align
 from starrynight.cli.cp import invoke_cp
 from starrynight.cli.illum import illum
 from starrynight.cli.index import index
@@ -22,3 +23,4 @@ main.add_command(illum)
 main.add_command(invoke_cp)
 main.add_command(presegcheck)
 main.add_command(segcheck)
+main.add_command(align)

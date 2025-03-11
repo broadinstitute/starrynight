@@ -86,7 +86,7 @@ def gen_segcheck_cppipe(
 
 @click.group()
 def segcheck() -> None:
-    """Pre segcheck commands."""
+    """Segcheck commands."""
     pass
 
 

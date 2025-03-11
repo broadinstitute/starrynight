@@ -1,4 +1,4 @@
-"""SBSApplyulate illumination correction calculate invoke cellprofiler module."""
+"""SBS Apply illumination correction invoke cellprofiler module."""
 
 from pathlib import Path
 from typing import Self

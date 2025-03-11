@@ -1,1 +1,1 @@
-"""Illumination Calculate."""
+"""SBS Illumination Calculate."""

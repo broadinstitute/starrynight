@@ -242,9 +242,9 @@ def gen_segcheck_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None and not for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/cp/segcheck")
+        corr_images_path = index_path.parents[1].joinpath("illum/cp/illum_apply")
     elif corr_images_path is None and for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/segcheck")
+        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
