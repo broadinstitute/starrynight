@@ -102,6 +102,10 @@ def submit_job(
         # Execute the pipeline
         exec_run = executor.run()
 
+        # prepare the dict, PosixPath are not JSON serializable
+        exec_run_dict = exec_run.dict()
+        exec_run_dict["log_path"] = str(exec_run.log_path)
+
         # Add a run record to DB
         run = Run(
             name=f"{job.name} | {executor.scratch_path.stem.split('_')[1]}",
@@ -112,7 +116,7 @@ def submit_job(
             inputs=job.inputs,
             outputs=job.outputs,
             spec=job.spec,
-            backend_run=exec_run.dict(),
+            backend_run=exec_run_dict,
         )
         session.add(run)
         session.commit()

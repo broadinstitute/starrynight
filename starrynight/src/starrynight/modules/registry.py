@@ -72,7 +72,7 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     CPPreSegcheckGenLoadDataModule.uid(): CPPreSegcheckGenLoadDataModule,
     CPPreSegcheckGenCPPipeModule.uid(): CPPreSegcheckGenCPPipeModule,
     CPPreSegcheckInvokeCPModule.uid(): CPPreSegcheckInvokeCPModule,
-    # CP pre segcheck
+    # CP segcheck
     CPSegcheckGenLoadDataModule.uid(): CPSegcheckGenLoadDataModule,
     CPSegcheckGenCPPipeModule.uid(): CPSegcheckGenCPPipeModule,
     CPSegcheckInvokeCPModule.uid(): CPSegcheckInvokeCPModule,

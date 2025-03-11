@@ -19,6 +19,6 @@ class Run(BaseModel):
     spec: Container
     outputs: dict[str, JobOutputSchema]
     inputs: dict[str, JobInputSchema]
-    backend_run: dict[str, BaseBackendRun] | None = None
+    backend_run: dict | None = None
 
     model_config: dict = {"from_attributes": True}

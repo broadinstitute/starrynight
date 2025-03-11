@@ -78,11 +78,11 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
         "-c",
-        Path(spec.inputs[2].path).resolve().__str__(),
+        spec.inputs[2].path,
         "-n",
-        Path(spec.inputs[3].path).resolve().__str__(),
+        spec.inputs[3].path,
     ]
     # Use user provided parser if available
     if spec.inputs[1].path is not None:
