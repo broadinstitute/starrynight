@@ -31,7 +31,7 @@ def put_job(request: Request, job: Job) -> Job:
 
 @job_router.get("/")
 def get_job(
-    request: Request, project_id: int | None = None, limit: int = 20, offset: int = 0
+    request: Request, project_id: int | None = None, limit: int = 40, offset: int = 0
 ) -> list[Job]:
     """Get job handler."""
     return fetch_all_jobs(request.state.db_session, project_id, limit, offset)
