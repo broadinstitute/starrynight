@@ -34,16 +34,16 @@ rule all:
 
 % for container in containers:
 rule ${container.name.replace(" ", "_").lower()}:
-    % for k, v in container.input_paths.items():
   input:
+    % for k, v in container.input_paths.items():
       ${k}=[
               % for path in v:
               "${get_completed_if_dir(path)}",
               % endfor
             ],
     % endfor
-    % for k, v in container.output_paths.items():
   output:
+    % for k, v in container.output_paths.items():
       ${k}=[
               % for path in v:
               ${touch_path_if_dir(path)},
