@@ -55,6 +55,13 @@ from starrynight.modules.sbs_pre_segcheck.pre_segcheck_cppipe import (
 from starrynight.modules.sbs_pre_segcheck.pre_segcheck_load_data import (
     SBSPreSegcheckGenLoadDataModule,
 )
+from starrynight.modules.sbs_preprocess.preprocess_cp import SBSPreprocessInvokeCPModule
+from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
+    SBSPreprocessGenCPPipeModule,
+)
+from starrynight.modules.sbs_preprocess.preprocess_load_data import (
+    SBSPreprocessGenLoadDataModule,
+)
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {
     # Generate inventory and index for the project
@@ -92,4 +99,8 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     SBSAlignGenLoadDataModule.uid(): SBSAlignGenLoadDataModule,
     SBSAlignGenCPPipeModule.uid(): SBSAlignGenCPPipeModule,
     SBSAlignInvokeCPModule.uid(): SBSAlignInvokeCPModule,
+    # SBS preprocess
+    SBSPreprocessGenLoadDataModule.uid(): SBSPreprocessGenLoadDataModule,
+    SBSPreprocessGenCPPipeModule.uid(): SBSPreprocessGenCPPipeModule,
+    SBSPreprocessInvokeCPModule.uid(): SBSPreprocessInvokeCPModule,
 }

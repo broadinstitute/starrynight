@@ -50,6 +50,13 @@ from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipe
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
     SBSCalcIllumGenLoadDataModule,
 )
+from starrynight.modules.sbs_preprocess.preprocess_cp import SBSPreprocessInvokeCPModule
+from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
+    SBSPreprocessGenCPPipeModule,
+)
+from starrynight.modules.sbs_preprocess.preprocess_load_data import (
+    SBSPreprocessGenLoadDataModule,
+)
 from starrynight.modules.schema import Container
 from starrynight.pipelines.common import apply_module_params
 from starrynight.schema import DataConfig
@@ -85,6 +92,9 @@ def create_pcp_generic_pipeline(
         sbs_align_loaddata := init_module(SBSAlignGenLoadDataModule),
         sbs_align_cpipe := init_module(SBSAlignGenCPPipeModule),
         sbs_align_cp := init_module(SBSAlignInvokeCPModule),
+        sbs_preprocess_loaddata := init_module(SBSPreprocessGenLoadDataModule),
+        sbs_preprocess_cpipe := init_module(SBSPreprocessGenCPPipeModule),
+        sbs_preprocess_cp := init_module(SBSPreprocessInvokeCPModule),
     ]
     return module_list, Parallel(
         [
@@ -115,6 +125,9 @@ def create_pcp_generic_pipeline(
                     sbs_align_loaddata.pipe,
                     sbs_align_cpipe.pipe,
                     sbs_align_cp.pipe,
+                    sbs_preprocess_loaddata.pipe,
+                    sbs_preprocess_cpipe.pipe,
+                    sbs_preprocess_cp.pipe,
                 ]
             ),
         ]
