@@ -77,7 +77,7 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                f"{int(index.cycle_id):02}",
+                f"{int(index.cycle_id):02}" if index.cycle_id is not None else 0,
                 # Filename heads
                 *[f"{index.filename}" for _ in range(len(filename_heads))],
                 # Frame heads
