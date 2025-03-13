@@ -66,28 +66,31 @@
                 glib
                 hdf5
               ];
-              packages = [
-                python_with_pkgs
-                python311Packages.venvShellHook
-                git
-                gtk3
-                glib
-                pkg-config
-                uv
-                jdk
-                maven
-                libmysqlclient
-                mariadb
-                duckdb
-                hdf5
-                # nodejs deps
-                nodejs_22
-                gocryptfs
-                goofys
-                nextflow
-                arion
-                mpkgs.fluent-bit
-              ];
+              packages =
+                [
+                  python_with_pkgs
+                  python311Packages.venvShellHook
+                  git
+                  gtk3
+                  glib
+                  pkg-config
+                  uv
+                  jdk
+                  maven
+                  libmysqlclient
+                  mariadb
+                  duckdb
+                  hdf5
+                  # nodejs deps
+                  nodejs_22
+                  gocryptfs
+                  nextflow
+                  arion
+                ]
+                ++ lib.optionals stdenv.isLinux [
+                  goofys
+                  mpkgs.fluent-bit
+                ];
               venvDir = "./.venv";
               postVenvCreation = ''
                 unset SOURCE_DATE_EPOCH
