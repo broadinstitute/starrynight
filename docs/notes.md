@@ -20,6 +20,16 @@ First, create a test fixture with a single plate of Cell Painting images:
    aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_workspace scratch/starrynight_example_workspace_reference
    ```
 
+:::spoiler
+
+To keep data sizes manageable for this tutorial, the original files were compressed with this command, resulting in a 50x lossy compression:
+
+```bash!
+for file in *.ome.tiff; do                                                                
+    convert "$file" -compress jpeg -quality 80 "${file%.ome.tiff}.compressed.tiff"
+done
+```
+:::
 
 2. Organize them in the following structure:
    ```
