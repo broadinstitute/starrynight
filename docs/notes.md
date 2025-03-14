@@ -1,7 +1,7 @@
-# starrynight: Cell Painting Workflow Guide
+# starrynight: Optical Pooled Screening Workflow Guide
 
-This guide provides documentation for the starrynight image processing system for Pooled Cell Painting data. 
-The system consists of 10 different modules, and this document shows how to use the illumination correction module.
+This guide provides documentation for the starrynight image processing system for optical pooled screening. 
+The system consists of 10 different modules, and this document currently shows how to use the illumination correction module alone.
 
 ## One-Time Setup Steps
 
