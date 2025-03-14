@@ -20,17 +20,18 @@ First, create a test fixture with a single plate of Cell Painting images:
    aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_workspace scratch/starrynight_example_workspace_reference
    ```
 
+
 2. Organize them in the following structure:
    ```
    scratch/starrynight_example/Source1/Batch1/images/
    └── Plate1
        └── 20X_CP_Plate1_20240319_122800_179
-           ├── WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
-           ├── WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff
-           ├── WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
-           ├── WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome.tiff
-           ├── WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome.tiff
-           └── WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome.tiff
+           ├── WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.compressed.tiff
+           ├── WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.compressed.tiff
+           ├── WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.compressed.tiff
+           ├── WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.compressed.tiff
+           ├── WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.compressed.tiff
+           └── WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.compressed.tiff
    ```
 
 ### Clone the Repository
