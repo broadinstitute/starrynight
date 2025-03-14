@@ -15,6 +15,9 @@ First, create a test fixture with a single plate of Cell Painting images:
    ```bash
    mkdir -p scratch
    aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example scratch/starrynight_example
+
+   # Optional: Copy reference output files to compare your results
+   aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_workspace scratch/starrynight_example_workspace_reference
    ```
 
 2. Organize them in the following structure:
@@ -185,3 +188,4 @@ plt.colorbar()
 plt.title('DAPI Illumination Correction')
 plt.show()
 ```
+
