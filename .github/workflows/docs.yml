@@ -4,8 +4,11 @@ on:
   push:
     branches:
       - main
+      - ss-docs
     paths:
       - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
   workflow_dispatch:
 
 permissions:
