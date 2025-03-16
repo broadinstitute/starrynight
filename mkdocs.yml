@@ -1,0 +1,64 @@
+site_name: StarryNight Documentation
+site_description: Documentation for the StarryNight image processing system for optical pooled screening
+site_author: Broad Institute
+repo_url: https://github.com/broadinstitute/starrynight
+edit_uri: edit/main/docs/
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: blue
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.expand
+    - navigation.indexes
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: "!!python/name:pymdownx.superfences.fence_code_format"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - tables
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: numpy
+          rendering:
+            show_source: false
+
+nav:
+  - Home: index.md
+  - Overview:
+    - Architecture: architecture.md
+    - Core Concepts:
+      - Overview: concepts/overview.md
+      - Inventory and Index: concepts/inventory-index.md
+  - User Documentation:
+    - CLI Workflows:
+      - Setup Guide: user/cli-workflows/setup.md
+      - Illumination Correction: user/cli-workflows/illumination-correction.md
+    - Web UI:
+      - Getting Started: user/web-ui/getting-started.md
+  - Developer Documentation:
+    - Getting Started: developer/getting-started.md
+  - Project Documentation:
+    - Documentation Plan: documentation-plan.md

@@ -85,6 +85,8 @@ Key components:
 
 ## Data Flow
 
+This section describes how data flows through the StarryNight system in both usage modes.
+
 ### Through Orchestrated Platform (Conductor)
 
 1. **Project Creation & Configuration**
@@ -124,6 +126,32 @@ Key components:
    - User can run CellProfiler integration via `starrynight cp`
    - Results are written to specified output directories
    - Each step can be executed independently
+
+### User Roles and Interactions
+
+The system supports different types of users with distinct workflows:
+
+1. **Scientific Users**
+   - Create and configure projects
+   - Generate inventory and index
+   - Configure experiments
+   - Execute pipelines
+   - Inspect and analyze results
+
+2. **Module Authors**
+   - Write scientific algorithms
+   - Wrap algorithms in Node objects
+   - Write specifications for algorithms
+   - Configure modules using experiments and data parameters
+   - Define parallel execution strategies
+
+3. **Infrastructure Maintainers**
+   - Develop Pipecraft backends
+   - Implement security models
+   - Handle deployment strategies
+   - Manage CI/CD for components
+   - Configure compute worker scaling
+   - Manage data storage and movement
 
 ## Dependency Graph
 
