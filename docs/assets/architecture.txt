@@ -1,0 +1,28 @@
+                     +-------------------+
+                     |                   |
+                     |  Raw Image Files  |
+                     |                   |
+                     +-------------------+
+                              |
+                              v
+                     +-------------------+
+                     |    StarryNight    |
+                     |       Core        |
+                     | (Image Processing)|
+                     +-------------------+
+                         /          \
+                        /            \
+                       /              \
+         +-------------------+  +-------------------+
+         |    PipeCraft      |  |     Conductor     |
+         | (Pipeline Engine) |  |  (Job Management) |
+         +-------------------+  +-------------------+
+                                         |
+                                         v
+                                +-------------------+
+                                |     Canvas UI     |
+                                |  (Web Interface)  |
+                                +-------------------+
+
+Note: Please convert this text-based diagram to a proper image using a
+diagramming tool or render it using mermaid in MkDocs.

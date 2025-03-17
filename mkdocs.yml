@@ -1,0 +1,17 @@
+site_name: StarryNight Documentation
+site_description: Documentation for the StarryNight optical pooled screening platform
+repo_url: https://github.com/broadinstitute/starrynight
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start Guide: getting-started/quickstart.md
+  - User Guide:
+    - Core Concepts: user/core-concepts.md
+    - Processing Modules: user/modules.md
+    - Illumination Correction: user/illumination-correction.md
+    - Canvas UI: user/ui-guide.md
+  - Development:
+    - Developer Guide: developer/developer-guide.md
+  - FAQ: misc/faq.md
