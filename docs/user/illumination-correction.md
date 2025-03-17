@@ -14,21 +14,28 @@ The illumination correction process in StarryNight:
 
 Before using the illumination correction module, you need:
 
-- A generated inventory and index (see [Quick Start Guide](quickstart.md))
+- A generated inventory and index (see [Quick Start Guide](../getting-started/quickstart.md))
 - Sufficient disk space for intermediate and output files
 
-## Workflow Steps
+## Illumination Correction Workflow
 
-The illumination correction workflow consists of three main steps:
+The illumination correction process consists of two main modules:
 
-### 1. Generate CellProfiler LoadData Files
+1. **Illumination Function Calculation** (`illum calc`) - Generates correction functions
+2. **Illumination Function Application** (`illum apply`) - Applies corrections to images
+
+Each module follows a similar three-step workflow.
+
+## Module 1: Calculating Illumination Functions
+
+### 1.1. Generate CellProfiler LoadData Files
 
 This step creates CSV files that tell CellProfiler which images to use for calculating illumination functions:
 
 ```bash
 starrynight illum calc loaddata \
-    -i /path/to/index/index.parquet \
-    -o /path/to/output/cellprofiler/loaddata/cp/illum/illum_calc
+    -i ./scratch/workspace/index/index.parquet \
+    -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc
 ```
 
 Parameters:
@@ -38,15 +45,15 @@ Parameters:
 - `--channels`: Optional comma-separated list of channels to process
 - `--sample-size`: Number of images to sample per channel
 
-### 2. Generate CellProfiler Pipelines
+### 1.2. Generate CellProfiler Pipelines
 
 This step creates CellProfiler pipeline files (.cppipe) customized for your dataset:
 
 ```bash
 starrynight illum calc cppipe \
-    -l /path/to/output/cellprofiler/loaddata/cp/illum/illum_calc/ \
-    -o /path/to/output/cellprofiler/cppipe/cp/illum/illum_calc \
-    -w /path/to/workspace
+    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
+    -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
+    -w ./scratch/workspace
 ```
 
 Parameters:
@@ -55,15 +62,15 @@ Parameters:
 - `-o, --output`: Output directory for the CellProfiler pipelines
 - `-w, --workspace`: Path to the workspace directory
 
-### 3. Execute CellProfiler Pipelines
+### 1.3. Execute CellProfiler Pipelines
 
 This step runs the generated CellProfiler pipelines to calculate illumination correction functions:
 
 ```bash
 starrynight cp \
-    -p /path/to/output/cellprofiler/cppipe/cp/illum/illum_calc/ \
-    -l /path/to/output/cellprofiler/loaddata/cp/illum/illum_calc \
-    -o /path/to/output/illum/cp/illum_calc
+    -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
+    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
+    -o ./scratch/workspace/illum/cp/illum_calc
 ```
 
 Parameters:
@@ -72,27 +79,77 @@ Parameters:
 - `-l, --loaddata`: Path to the LoadData CSV files directory
 - `-o, --output`: Output directory for the illumination correction files
 
-## Output Files
+### Output Files
 
-The illumination correction process produces:
+The calculation process produces:
 
 - `.npy` files containing illumination correction functions for each channel
 - Example: `Batch1_Plate1_IllumOrigDAPI.npy`
 
-## Applying Illumination Correction
+## Module 2: Applying Illumination Correction
 
-After generating illumination correction functions, you can apply them to your images using a similar workflow:
+After generating illumination correction functions, you apply them to your images using a similar workflow:
+
+### 2.1. Generate CellProfiler LoadData Files
+
+This step creates CSV files that tell CellProfiler which images to apply corrections to:
 
 ```bash
-# Generate LoadData files for applying correction
-starrynight illum apply loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY -c CORRECTION_DIRECTORY
-
-# Generate CellProfiler pipelines
-starrynight illum apply cppipe -l LOADDATA_DIRECTORY -o PIPELINE_DIRECTORY -w WORKSPACE
-
-# Execute pipelines
-starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
+starrynight illum apply loaddata \
+    -i ./scratch/workspace/index/index.parquet \
+    -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply
 ```
+
+Parameters:
+
+- `-i, --index`: Path to the index.parquet file
+- `-o, --out`: Output directory for the LoadData CSV files
+- `--illum`: Path to the illumination correction files directory (default: auto-detected as "index/../illum/cp/illum_calc")
+- `-m, --path_mask`: Path prefix mask to use when resolving image paths
+- `--sbs`: Flag for treating as sequence-based screening images (default: False)
+
+### 2.2. Generate CellProfiler Pipelines
+
+This step creates CellProfiler pipeline files (.cppipe) for applying corrections:
+
+```bash
+starrynight illum apply cppipe \
+    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
+    -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
+    -w ./scratch/workspace
+```
+
+Parameters:
+
+- `-l, --loaddata`: Path to the LoadData CSV files directory
+- `-o, --out`: Output directory for the CellProfiler pipelines
+- `-w, --workspace`: Path to the workspace directory
+- `--sbs`: Flag for treating as sequence-based screening images (default: False)
+
+### 2.3. Execute CellProfiler Pipelines
+
+This step runs the pipelines to apply corrections to all images:
+
+```bash
+starrynight cp \
+    -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
+    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
+    -o ./scratch/workspace/illum/cp/illum_apply
+```
+
+Parameters:
+
+- `-p, --cppipe_path`: Path to the CellProfiler pipeline directory
+- `-l, --load_data_path`: Path to the LoadData CSV files directory
+- `-o, --path`: Output directory for the corrected images
+
+### Output Files
+
+The application process produces:
+
+- 16-bit TIFF files with illumination-corrected images
+- Regular image naming: `{batch}_{plate}_Well_{well}_Site_{site}_{CorrChannel}`
+- SBS image naming: `{batch}_{plate}_{cycle}_Well_{well}_Site_{site}_{CorrChannel}`
 
 ## Troubleshooting
 
