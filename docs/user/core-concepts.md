@@ -15,11 +15,28 @@ The platform consists of three main components:
 2. **PipeCraft**: Workflow definition and execution framework
 3. **Conductor**: Job scheduling, management, and Canvas UI
 
-## Data Organization
+## Data Organization and Parsing
+
+StarryNight provides flexibility in data organization through its inventory and index system, which extracts metadata from file paths using configurable path parsers.
+
+### Inventory and Index Concepts
+
+The foundation of data organization in StarryNight consists of two key concepts:
+
+1. **Inventory**: A catalog of all files in a dataset
+   - Contains basic file information: path, name, extension
+   - Created by scanning a data directory recursively
+   - Stored as a Parquet file for efficient querying
+
+2. **Index**: Structured metadata extracted from file paths
+   - Contains rich metadata: dataset, batch, plate, well, site, channel info
+   - Created by parsing file paths using a grammar-based parser
+   - Enables sophisticated filtering and selection of images
+   - Stored as a structured Parquet file
 
 ### Directory Structure
 
-StarryNight uses a structured approach to organize data:
+StarryNight uses a standardized workspace structure for processing:
 
 ```
 workspace/
@@ -35,9 +52,17 @@ workspace/
 └── results/                    # Analysis results
 ```
 
-### File Naming Conventions
+This workspace structure is used for processing results, but the *source data* can follow various organization patterns, as long as the path parser can interpret them.
 
-StarryNight extracts metadata from image file paths. The default parser ("vincent") expects paths like:
+### Path Parsing System
+
+StarryNight uses a grammar-based path parsing system that:
+
+1. Takes file paths from the inventory
+2. Applies grammar rules to extract structured metadata
+3. Creates index records with rich, queryable information
+
+The default parser ("vincent") expects paths like:
 
 ```
 [dataset]/Source[source_id]/Batch[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
@@ -47,6 +72,23 @@ Example:
 ```
 starrynight_example/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
 ```
+
+### Flexible Data Organization
+
+The path parsing approach provides significant flexibility:
+
+- **Dataset Structure**: Your raw data can follow different organization patterns
+- **File Naming**: Different file naming conventions can be supported
+- **Customization**: Custom parsers can be created for specific needs
+
+The parsing system extracts key metadata including:
+- Dataset, batch, and plate identifiers
+- Well and site information
+- Channel details
+- Sequence/cycle information for sequence-based screens
+- Other experiment-specific metadata
+
+See [Parser Configuration](parser-configuration.md) for details on customizing the parser for your own data organization.
 
 ## Workflow Concepts
 
