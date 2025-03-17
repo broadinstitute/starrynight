@@ -96,27 +96,30 @@ See [Parser Configuration](parser-configuration.md) for details on customizing t
 
 A typical StarryNight workflow involves:
 
-1. **Inventory Generation**: Creating a catalog of image files
-2. **Index Generation**: Extracting metadata from file paths
-3. **Module Processing**: Running specific image processing algorithms
-4. **Pipeline Execution**: Executing complete workflows
+1. **Inventory Generation**: Creating a catalog of all image files (one-time step)
+2. **Index Generation**: Extracting metadata from file paths (one-time step)
+3. **Module Processing**: For each processing module (e.g., illumination correction):
+      - **Generate LoadData**: Creating CellProfiler LoadData CSV files
+      - **Generate Pipeline**: Creating CellProfiler pipeline (.cppipe) files
+      - **Execute Pipeline**: Running CellProfiler with the generated files
 
 ### Module System
 
-StarryNight is built around a modular architecture, where each module:
+StarryNight is built around a modular architecture where each module represents a specific processing task (illumination correction, alignment, etc.). Modules follow a consistent three-step pattern:
 
-- Represents a specific image processing task
-- Has clearly defined inputs and outputs
-- Can be used independently or in a workflow
-- Often integrates with CellProfiler for processing
+1. **Load Data Generation**: Creating input specifications for processing
+2. **Pipeline Generation**: Creating processing pipeline definitions
+3. **Pipeline Execution**: Running the defined pipeline on the data
+
+Modules can be used independently via CLI or composed into complete workflows through PipeCraft.
 
 ### Processing Approaches
 
 StarryNight supports different processing approaches:
 
-1. **CLI-based**: Direct command-line execution
-2. **Pipeline-based**: Using PipeCraft to define workflows
-3. **UI-based**: Using the Canvas interface
+1. **CLI-based**: Direct command-line execution of individual modules
+2. **Pipeline-based**: Using PipeCraft to define and automate complete workflows
+3. **UI-based**: Using the Canvas interface for intuitive configuration and execution
 
 ## Key Abstractions
 

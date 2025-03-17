@@ -4,10 +4,49 @@ This guide will walk you through running a basic illumination correction workflo
 
 ## Prerequisites
 
-Before starting, ensure you have:
+Before starting, ensure you have installed StarryNight (see the [Installation Guide](installation.md))
 
-- Installed StarryNight (see the [Installation Guide](installation.md))
-- Sample data (see the [Installation Guide](installation.md))
+
+## Step 0: Download sample data
+
+Download this example dataset:
+
+```bash
+# Create a directory for the sample data
+mkdir -p scratch
+
+# Download sample data from S3 (if you have AWS CLI and access)
+aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example scratch/starrynight_example
+```
+
+<details markdown="1">
+
+A sampling of a dataset was first downloaded like this:
+
+```bash
+export S3_PATH="s3://BUCKET/projects/PROJECT/BATCH"
+
+# Copy SBS images
+parallel mkdir -p scratch/starrynight_example/Source1/Batch1/images/Plate1/20X_c{1}_SBS-{1}/ ::: 1 2 3 4 5 6 7 8 9 10
+
+parallel --match '.*' --match '(.*) (.*) (.*)' aws s3 cp "${S3_PATH}/images/Plate1/20X_c{1}_SBS-{1}/Well{2.1}_Point{2.1}_{2.2}_ChannelC,A,T,G,DAPI_Seq{2.3}.ome.tiff" "scratch/starrynight_example/Source1/Batch1/images/Plate1/20X_c{1}_SBS-{1}/" ::: 1 2 3 4 5 6 7 8 9 10 ::: "A1 0000 0000" "A1 0001 0001" "A2 0000 1025" "A2 0001 1026" "B1 0000 3075" "B1 0001 3076"
+
+# Copy Cell Painting images
+mkdir -p scratch/starrynight_example/Source1/Batch1/images/20X_CP_Plate1_20240319_122800_179
+
+parallel --match '(.*) (.*) (.*)' aws s3 cp "${S3_PATH}/images/Plate1/20X_CP_Plate1_20240319_122800_179/Well{1.1}_Point{1.1}_{1.2}_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq{1.3}.ome.tiff" "scratch/starrynight_example/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/" ::: "A1 0000 0000" "A1 0001 0001" "A2 0000 1025" "A2 0001 1026" "B1 0000 3075" "B1 0001 3076"
+
+```
+
+To keep data sizes manageable for this tutorial, the original files were compressed with this command, resulting in a 50x lossy compression:
+
+```bash
+find . -type f -name "*.ome.tiff" | parallel 'magick {} -compress jpeg -quality 80 {= s/\.ome\.tiff$/.compressed.tiff/ =}'
+find . -type f -name "*.ome.tiff" -exec rm {} +
+```
+
+</details>
+
 
 ## Step 1: Generate Inventory
 
