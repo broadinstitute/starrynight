@@ -2,23 +2,6 @@
 
 Welcome to the StarryNight platform documentation. StarryNight is a comprehensive toolkit for processing, analyzing, and managing optical pooled screening (OPS) image data.
 
-## Documentation
-
-- **Getting Started**
-    - [Installation](installation.md)
-    - [Quick Start Guide](quickstart.md)
-- **User Guide**
-    - [Core Concepts](core-concepts.md)
-    - [Processing Modules](modules.md)
-    - [Illumination Correction](illumination-correction.md)
-    - [Canvas UI](ui-guide.md)
-- **Reference**
-    - [CLI Reference](cli-reference.md)
-- **Development**
-    - [Developer Guide](developer-guide.md)
-- **Help**
-    - [FAQ & Troubleshooting](faq.md)
-
 ## Platform Overview
 
 StarryNight is composed of three main components:
