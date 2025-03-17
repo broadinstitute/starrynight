@@ -4,7 +4,7 @@ Welcome to the StarryNight platform documentation. StarryNight is a comprehensiv
 
 ## Platform Overview
 
-StarryNight is composed of three main components:
+StarryNight is composed of four main components:
 
 ### StarryNight Core
 
@@ -33,4 +33,13 @@ Job management and monitoring system:
 - Project organization
 - Job configuration and execution
 - Run monitoring and results management
-- Canvas web UI for intuitive interaction
+- API and database services
+
+### Canvas
+
+Web-based user interface:
+
+- Intuitive project management
+- Job configuration interface
+- Run monitoring and visualization
+- Results exploration

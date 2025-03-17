@@ -8,12 +8,12 @@ StarryNight is a comprehensive platform for processing, analyzing, and managing 
 
 ### Core Components
 
-The platform consists of three main components:
-
+The platform consists of four main components:
 
 1. **StarryNight Core**: Image processing algorithms and command-line tools
 2. **PipeCraft**: Workflow definition and execution framework
-3. **Conductor**: Job scheduling, management, and Canvas UI
+3. **Conductor**: Job scheduling, management, and API services
+4. **Canvas**: Web-based user interface for intuitive interaction
 
 ## Data Organization and Parsing
 
