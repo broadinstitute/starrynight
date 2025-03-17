@@ -104,5 +104,5 @@ plt.show()
 
 ## Next Steps
 
-- Learn about other [Processing Modules](user/modules.md)
-- Understand [Core Concepts](user/core-concepts.md) of StarryNight
+- Learn about other [Processing Modules](../user/modules.md)
+- Understand [Core Concepts](../user/core-concepts.md) of StarryNight

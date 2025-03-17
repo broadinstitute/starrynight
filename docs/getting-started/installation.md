@@ -95,4 +95,4 @@ aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_ex
 ## Next Steps
 
 - Continue to the [Quick Start Guide](quickstart.md) to run your first analysis
-- Learn about [Core Concepts](core-concepts.md) of the StarryNight platform
+- Learn about [Core Concepts](../user/core-concepts.md) of the StarryNight platform

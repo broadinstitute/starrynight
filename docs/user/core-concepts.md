@@ -10,11 +10,10 @@ StarryNight is a comprehensive platform for processing, analyzing, and managing 
 
 The platform consists of three main components:
 
+
 1. **StarryNight Core**: Image processing algorithms and command-line tools
 2. **PipeCraft**: Workflow definition and execution framework
 3. **Conductor**: Job scheduling, management, and Canvas UI
-
-![System Architecture](assets/architecture.png)
 
 ## Data Organization
 
@@ -96,26 +95,7 @@ Each module handles a specific image processing task:
 - **Cell Painting Analysis**: Cell segmentation and features
 - **Sequencing Analysis**: Processes sequencing-based images
 
-### Projects and Jobs
-
-In the Conductor system:
-
-- **Project**: An organizational unit for related analyses
-- **Job**: A specific analysis run within a project
-- **Run**: An execution instance of a job
-- **Step**: An individual processing step in a job
-
-## Canvas UI Concepts
-
-The Canvas UI provides a graphical interface for:
-
-- **Project Management**: Creating and organizing projects
-- **Job Configuration**: Setting up analysis parameters
-- **Execution Monitoring**: Tracking progress and viewing logs
-- **Result Visualization**: Displaying and downloading results
-
 ## Next Steps
 
-- Learn about all [Processing Modules](modules.md)
-- Try the [Illumination Correction](illumination-correction.md) workflow
-- Explore the [Canvas UI](ui-guide.md)
+- Learn about all [Processing Modules](../user/modules.md)
+- Try the [Illumination Correction](../user/illumination-correction.md) workflow

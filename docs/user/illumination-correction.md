@@ -2,6 +2,13 @@
 
 This guide explains how to use the illumination correction module in StarryNight.
 
+## Prerequisites
+
+Before using the illumination correction module, you need:
+
+- A generated inventory and index (see [Quick Start Guide](../getting-started/quickstart.md))
+- Sufficient disk space for intermediate and output files
+
 ## Overview
 
 The illumination correction process in StarryNight:
@@ -10,16 +17,7 @@ The illumination correction process in StarryNight:
 2. Calculates illumination correction functions for each channel
 3. Applies these corrections to normalize illumination across all images
 
-## Prerequisites
-
-Before using the illumination correction module, you need:
-
-- A generated inventory and index (see [Quick Start Guide](../getting-started/quickstart.md))
-- Sufficient disk space for intermediate and output files
-
-## Illumination Correction Workflow
-
-The illumination correction process consists of two main modules:
+It comprises two modules:
 
 1. **Illumination Function Calculation** (`illum calc`) - Generates correction functions
 2. **Illumination Function Application** (`illum apply`) - Applies corrections to images

@@ -54,7 +54,7 @@ pip install -e conductor/
 1. Organize your data with a consistent file structure
 2. Generate an inventory and index
 3. Run the appropriate processing modules
-4. See the [Quick Start Guide](quickstart.md) for details
+4. See the [Quick Start Guide](../getting-started/quickstart.md) for details
 
 ### What file formats does StarryNight support?
 
@@ -135,7 +135,7 @@ If the Canvas UI can't connect to Conductor:
 
 ### How do I contribute to StarryNight?
 
-See the [Developer Guide](developer-guide.md) for details on:
+See the [Developer Guide](../developer/developer-guide.md) for details on:
 
 - Setting up a development environment
 - Understanding the codebase
@@ -147,7 +147,7 @@ Report bugs on the [GitHub issue tracker](https://github.com/broadinstitute/star
 
 ### How do I add a new processing module?
 
-See the "Adding a New Module" section in the [Developer Guide](developer-guide.md).
+See the "Adding a New Module" section in the [Developer Guide](../developer/developer-guide.md).
 
 ## Getting Help
 
@@ -155,4 +155,3 @@ See the "Adding a New Module" section in the [Developer Guide](developer-guide.m
 
 - Check the documentation
 - Post on the GitHub issues
-- Contact the team at imaging@broadinstitute.org
