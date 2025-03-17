@@ -11,7 +11,6 @@ nav:
     - Core Concepts: user/core-concepts.md
     - Processing Modules: user/modules.md
     - Illumination Correction: user/illumination-correction.md
-    - Canvas UI: user/ui-guide.md
   - Development:
     - Developer Guide: developer/developer-guide.md
   - FAQ: misc/faq.md

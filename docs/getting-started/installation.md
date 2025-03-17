@@ -74,16 +74,10 @@ For a more traditional Python installation:
 
 Test your installation:
 
-1. **Check CLI Tools**:
-   ```bash
-   starrynight --version
-   pipecraft --version
-   conductor --version
-   ```
-
-2. **Run a Simple Command**:
    ```bash
    starrynight --help
+   pipecraft --help
+   conductor --help
    ```
 
 ## Sample Data

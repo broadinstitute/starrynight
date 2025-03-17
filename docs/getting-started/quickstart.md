@@ -7,16 +7,13 @@ This guide will walk you through running a basic illumination correction workflo
 Before starting, ensure you have:
 
 - Installed StarryNight (see the [Installation Guide](installation.md))
-- Sample data (either from AWS or the [project website](https://starrynight.broadinstitute.org/downloads))
+- Sample data (see the [Installation Guide](installation.md))
 
 ## Step 1: Generate Inventory
 
 First, create a catalog of all image files in your dataset:
 
 ```bash
-# Create output directories
-mkdir -p scratch/workspace/inventory
-
 # Generate the inventory
 starrynight inventory gen \
     -d ./scratch/starrynight_example \
@@ -36,8 +33,6 @@ This command will scan all files in the input directory and create an inventory 
 Next, parse the inventory to create a structured index with metadata:
 
 ```bash
-mkdir -p scratch/workspace/index
-
 starrynight index gen \
     -i ./scratch/workspace/inventory/inventory.parquet \
     -o ./scratch/workspace/index/
@@ -52,8 +47,6 @@ The result will be an `index.parquet` file containing structured metadata for ea
 Create CSV files for CellProfiler to load images:
 
 ```bash
-mkdir -p scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc
-
 starrynight illum calc loaddata \
     -i ./scratch/workspace/index/index.parquet \
     -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc
@@ -64,8 +57,6 @@ starrynight illum calc loaddata \
 Create CellProfiler pipeline files:
 
 ```bash
-mkdir -p scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc
-
 starrynight illum calc cppipe \
     -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
     -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
@@ -77,8 +68,6 @@ starrynight illum calc cppipe \
 Run the pipelines to generate illumination correction files:
 
 ```bash
-mkdir -p scratch/workspace/illum/cp/illum_calc
-
 starrynight cp \
     -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
     -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
@@ -113,23 +102,7 @@ plt.title('DAPI Illumination Correction')
 plt.show()
 ```
 
-## Step 5: Using the Canvas UI (Optional)
-
-For a graphical interface to manage projects and jobs:
-
-```bash
-# Start the Conductor service
-conductor start
-
-# In a separate terminal, start the Canvas UI
-cd canvas
-npm run dev
-```
-
-Open your browser to http://localhost:3000 to access the Canvas UI.
-
 ## Next Steps
 
-- Learn about other [Processing Modules](modules.md)
-- Understand [Core Concepts](core-concepts.md) of StarryNight
-- Explore the [CLI Reference](cli-reference.md)
+- Learn about other [Processing Modules](user/modules.md)
+- Understand [Core Concepts](user/core-concepts.md) of StarryNight

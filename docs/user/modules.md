@@ -6,15 +6,15 @@ This guide provides an overview of the processing modules available in StarryNig
 
 StarryNight organizes functionality into distinct processing modules:
 
-| Module | Purpose | Key Features |
-|--------|---------|--------------|
-| **Inventory** | Catalog image files | Fast file scanning, parallel processing |
-| **Index** | Extract metadata | Path parsing, structure generation |
-| **Illumination Correction** | Normalize illumination | Per-channel correction, CellProfiler integration |
-| **Alignment** | Register images | Multi-channel alignment, cycle-to-cycle registration |
-| **Preprocessing** | Prepare images for analysis | Background subtraction, artifact removal |
-| **Cell Painting Analysis** | Cell segmentation & features | CellProfiler integration, feature extraction |
-| **Sequencing Analysis** | Process sequencing data | Barcode calling, cycle alignment |
+| Module                      | Purpose                      | Key Features                                         |
+| --------------------------- | ---------------------------- | ---------------------------------------------------- |
+| **Inventory**               | Catalog image files          | Fast file scanning, parallel processing              |
+| **Index**                   | Extract metadata             | Path parsing, structure generation                   |
+| **Illumination Correction** | Normalize illumination       | Per-channel correction, CellProfiler integration     |
+| **Alignment**               | Register images              | Multi-channel alignment, cycle-to-cycle registration |
+| **Preprocessing**           | Prepare images for analysis  | Background subtraction, artifact removal             |
+| **Cell Painting Analysis**  | Cell segmentation & features | CellProfiler integration, feature extraction         |
+| **Sequencing Analysis**     | Process sequencing data      | Barcode calling, cycle alignment                     |
 
 ## Module Workflow
 
@@ -33,6 +33,7 @@ starrynight inventory gen -d INPUT_DIRECTORY -o OUTPUT_DIRECTORY
 ```
 
 Key features:
+
 - Fast parallel file scanning
 - Parquet file format for efficient access
 - Supports large datasets (millions of files)
@@ -46,6 +47,7 @@ starrynight index gen -i INVENTORY_FILE -o OUTPUT_DIRECTORY
 ```
 
 Key features:
+
 - Extracts well, plate, channel information
 - Uses a parser for consistent metadata extraction
 - Creates a structured index for downstream processing
@@ -83,6 +85,7 @@ starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
 ```
 
 Key features:
+
 - Multi-channel alignment
 - Cycle-to-cycle registration
 - Configurable reference channel
@@ -103,6 +106,7 @@ starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
 ```
 
 Key features:
+
 - Background subtraction
 - Image normalization
 - Artifact removal
@@ -118,6 +122,7 @@ The cell painting module handles cell segmentation and feature extraction:
 ```
 
 Key features:
+
 - Cell segmentation
 - Feature extraction
 - Integration with CellProfiler
@@ -132,6 +137,7 @@ The sequencing module processes sequencing-based image data:
 ```
 
 Key features:
+
 - Cycle alignment
 - Barcode calling
 - Sequence decoding
@@ -157,6 +163,4 @@ Each module produces specific outputs:
 
 ## Next Steps
 
-- Read the detailed [Illumination Correction](illumination-correction.md) guide
-- Explore the [CLI Reference](cli-reference.md) for all commands
-- Learn about the [Canvas UI](ui-guide.md) for graphical interaction
+- Read the detailed user guides for each of the modules

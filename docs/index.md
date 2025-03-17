@@ -34,7 +34,3 @@ Job management and monitoring system:
 - Job configuration and execution
 - Run monitoring and results management
 - Canvas web UI for intuitive interaction
-
-## License
-
-StarryNight is released under the [MIT License](https://github.com/broadinstitute/starrynight/blob/main/LICENSE).
