@@ -12,6 +12,7 @@ nav:
     - Quick Start Guide: getting-started/quickstart.md
   - User Guide:
     - Core Concepts: user/core-concepts.md
+    - Parser Configuration: user/parser-configuration.md
     - Processing Modules: user/modules.md
     - Illumination Correction: user/illumination-correction.md
   - Development:

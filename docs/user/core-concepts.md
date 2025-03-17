@@ -23,12 +23,12 @@ StarryNight provides flexibility in data organization through its inventory and 
 
 The foundation of data organization in StarryNight consists of two key concepts:
 
-1. **Inventory**: A catalog of all files in a dataset
+**Inventory**: A catalog of all files in a dataset
    - Contains basic file information: path, name, extension
    - Created by scanning a data directory recursively
    - Stored as a Parquet file for efficient querying
 
-2. **Index**: Structured metadata extracted from file paths
+**Index**: Structured metadata extracted from file paths
    - Contains rich metadata: dataset, batch, plate, well, site, channel info
    - Created by parsing file paths using a grammar-based parser
    - Enables sophisticated filtering and selection of images
