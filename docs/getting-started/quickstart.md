@@ -56,7 +56,7 @@ First, create a catalog of all image files in your dataset:
 # Generate the inventory
 starrynight inventory gen \
     -d ./scratch/starrynight_example \
-    -o ./scratch/workspace/inventory
+    -o ./scratch/starrynight_example/workspace/inventory
 ```
 
 This command will scan all files in the input directory and create an inventory file:
@@ -73,8 +73,8 @@ Next, parse the inventory to create a structured index with metadata:
 
 ```bash
 starrynight index gen \
-    -i ./scratch/workspace/inventory/inventory.parquet \
-    -o ./scratch/workspace/index/
+    -i ./scratch/starrynight_example/workspace/inventory/inventory.parquet \
+    -o ./scratch/starrynight_example/workspace/index/
 ```
 
 The result will be an `index.parquet` file containing structured metadata for each image.
@@ -87,8 +87,8 @@ Create CSV files for CellProfiler to load images:
 
 ```bash
 starrynight illum calc loaddata \
-    -i ./scratch/workspace/index/index.parquet \
-    -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc
+    -i ./scratch/starrynight_example/workspace/index/index.parquet \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc
 ```
 
 ### 3.2: Generate CellProfiler Pipelines
@@ -97,9 +97,9 @@ Create CellProfiler pipeline files:
 
 ```bash
 starrynight illum calc cppipe \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
-    -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
-    -w ./scratch/workspace
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
+    -w ./scratch/starrynight_example/workspace
 ```
 
 ### 3.3: Execute CellProfiler Pipelines
@@ -108,9 +108,9 @@ Run the pipelines to generate illumination correction files:
 
 ```bash
 starrynight cp \
-    -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
-    -o ./scratch/workspace/illum/cp/illum_calc
+    -p ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
+    -o ./scratch/starrynight_example/workspace/illum/cp/illum_calc
 ```
 
 ## Step 4: Verify Results
@@ -118,7 +118,7 @@ starrynight cp \
 The illumination correction files will be created in the output directory:
 
 ```
-./scratch/workspace/illum/cp/illum_calc/
+./scratch/starrynight_example/workspace/illum/cp/illum_calc/
 ├── Batch1_Plate1_IllumOrigDAPI.npy
 ├── Batch1_Plate1_IllumOrigPhalloAF750.npy
 └── Batch1_Plate1_IllumOrigZO1-AF488.npy
@@ -131,7 +131,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load one of the illumination correction files
-data = np.load('./scratch/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigDAPI.npy')
+data = np.load('./scratch/starrynight_example/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigDAPI.npy')
 
 # Create a visualization
 plt.figure(figsize=(10,8))
