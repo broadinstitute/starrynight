@@ -1,0 +1,21 @@
+site_name: StarryNight Documentation
+site_description: Documentation for the StarryNight optical pooled screening platform
+repo_url: https://github.com/broadinstitute/starrynight
+
+plugins:
+    - mermaid2
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start Guide: getting-started/quickstart.md
+  - User Guide:
+    - Core Concepts: user/core-concepts.md
+    - Parser Configuration: user/parser-configuration.md
+    - Processing Modules: user/modules.md
+    - Illumination Correction: user/illumination-correction.md
+    - Segmentation Check: user/segmentation-check.md
+  - Development:
+    - Developer Guide: developer/developer-guide.md
+  - FAQ: misc/faq.md

@@ -1,0 +1,616 @@
+/Users/shsingh/Documents/GitHub/starrynight/scratch/starrynight_example/Source1
+├── Batch1
+│   ├── illum
+│   │   └── Plate1
+│   │       ├── Plate1_Cycle10_IllumA.npy
+│   │       ├── Plate1_Cycle10_IllumC.npy
+│   │       ├── Plate1_Cycle10_IllumDNA.npy
+│   │       ├── Plate1_Cycle10_IllumG.npy
+│   │       ├── Plate1_Cycle10_IllumT.npy
+│   │       ├── Plate1_Cycle1_IllumA.npy
+│   │       ├── Plate1_Cycle1_IllumC.npy
+│   │       ├── Plate1_Cycle1_IllumDNA.npy
+│   │       ├── Plate1_Cycle1_IllumG.npy
+│   │       ├── Plate1_Cycle1_IllumT.npy
+│   │       ├── Plate1_Cycle2_IllumA.npy
+│   │       ├── Plate1_Cycle2_IllumC.npy
+│   │       ├── Plate1_Cycle2_IllumDNA.npy
+│   │       ├── Plate1_Cycle2_IllumG.npy
+│   │       ├── Plate1_Cycle2_IllumT.npy
+│   │       ├── Plate1_Cycle3_IllumA.npy
+│   │       ├── Plate1_Cycle3_IllumC.npy
+│   │       ├── Plate1_Cycle3_IllumDNA.npy
+│   │       ├── Plate1_Cycle3_IllumG.npy
+│   │       ├── Plate1_Cycle3_IllumT.npy
+│   │       ├── Plate1_Cycle4_IllumA.npy
+│   │       ├── Plate1_Cycle4_IllumC.npy
+│   │       ├── Plate1_Cycle4_IllumDNA.npy
+│   │       ├── Plate1_Cycle4_IllumG.npy
+│   │       ├── Plate1_Cycle4_IllumT.npy
+│   │       ├── Plate1_Cycle5_IllumA.npy
+│   │       ├── Plate1_Cycle5_IllumC.npy
+│   │       ├── Plate1_Cycle5_IllumDNA.npy
+│   │       ├── Plate1_Cycle5_IllumG.npy
+│   │       ├── Plate1_Cycle5_IllumT.npy
+│   │       ├── Plate1_Cycle6_IllumA.npy
+│   │       ├── Plate1_Cycle6_IllumC.npy
+│   │       ├── Plate1_Cycle6_IllumDNA.npy
+│   │       ├── Plate1_Cycle6_IllumG.npy
+│   │       ├── Plate1_Cycle6_IllumT.npy
+│   │       ├── Plate1_Cycle7_IllumA.npy
+│   │       ├── Plate1_Cycle7_IllumC.npy
+│   │       ├── Plate1_Cycle7_IllumDNA.npy
+│   │       ├── Plate1_Cycle7_IllumG.npy
+│   │       ├── Plate1_Cycle7_IllumT.npy
+│   │       ├── Plate1_Cycle8_IllumA.npy
+│   │       ├── Plate1_Cycle8_IllumC.npy
+│   │       ├── Plate1_Cycle8_IllumDNA.npy
+│   │       ├── Plate1_Cycle8_IllumG.npy
+│   │       ├── Plate1_Cycle8_IllumT.npy
+│   │       ├── Plate1_Cycle9_IllumA.npy
+│   │       ├── Plate1_Cycle9_IllumC.npy
+│   │       ├── Plate1_Cycle9_IllumDNA.npy
+│   │       ├── Plate1_Cycle9_IllumG.npy
+│   │       ├── Plate1_Cycle9_IllumT.npy
+│   │       ├── Plate1_IllumDNA.npy
+│   │       ├── Plate1_IllumPhalloidin.npy
+│   │       └── Plate1_IllumZO1.npy
+│   ├── images
+│   │   ├── 20X_CP_Plate1_20240319_122800_179
+│   │   └── Plate1
+│   │       ├── 20X_CP_Plate1_20240319_122800_179
+│   │       │   ├── WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c10_SBS-10
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c1_SBS-1
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c2_SBS-2
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c3_SBS-3
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c4_SBS-4
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c5_SBS-5
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c6_SBS-6
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c7_SBS-7
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       ├── 20X_c8_SBS-8
+│   │       │   ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │       │   ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │       │   ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │       │   ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │       │   └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   │       └── 20X_c9_SBS-9
+│   │           ├── WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.compressed.tiff
+│   │           ├── WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.compressed.tiff
+│   │           ├── WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.compressed.tiff
+│   │           ├── WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.compressed.tiff
+│   │           ├── WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.compressed.tiff
+│   │           └── WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.compressed.tiff
+│   ├── images_aligned
+│   │   └── barcoding
+│   │       ├── Plate1-WellA1-0
+│   │       │   ├── BarcodingApplication_Experiment.csv
+│   │       │   ├── BarcodingApplication_Image.csv
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle04_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle04_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle04_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle04_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle04_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle05_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle05_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle05_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle05_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle05_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle06_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle06_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle06_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle06_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle06_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle07_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle07_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle07_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle07_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle07_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle08_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle08_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle08_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle08_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle08_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle09_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle09_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle09_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle09_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle09_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle10_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle10_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle10_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_0_Cycle10_G.tiff
+│   │       │   └── Plate_Plate1_Well_A1_Site_0_Cycle10_T.tiff
+│   │       ├── Plate1-WellA1-1
+│   │       │   ├── BarcodingApplication_Experiment.csv
+│   │       │   ├── BarcodingApplication_Image.csv
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle04_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle04_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle04_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle04_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle04_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle05_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle05_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle05_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle05_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle05_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle06_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle06_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle06_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle06_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle06_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle07_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle07_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle07_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle07_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle07_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle08_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle08_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle08_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle08_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle08_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle09_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle09_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle09_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle09_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle09_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle10_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle10_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle10_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A1_Site_1_Cycle10_G.tiff
+│   │       │   └── Plate_Plate1_Well_A1_Site_1_Cycle10_T.tiff
+│   │       ├── Plate1-WellA2-0
+│   │       │   ├── BarcodingApplication_Experiment.csv
+│   │       │   ├── BarcodingApplication_Image.csv
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_G.tiff
+│   │       │   └── Plate_Plate1_Well_A2_Site_0_Cycle03_T.tiff
+│   │       ├── Plate1-WellA2-1
+│   │       │   ├── BarcodingApplication_Experiment.csv
+│   │       │   ├── BarcodingApplication_Image.csv
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_G.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_T.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_A.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_C.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_G.tiff
+│   │       │   └── Plate_Plate1_Well_A2_Site_1_Cycle03_T.tiff
+│   │       ├── Plate1-WellB1-0
+│   │       │   ├── BarcodingApplication_Experiment.csv
+│   │       │   ├── BarcodingApplication_Image.csv
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_A.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_C.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_G.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_T.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_A.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_C.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_DAPI.tiff
+│   │       │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_G.tiff
+│   │       │   └── Plate_Plate1_Well_B1_Site_0_Cycle03_T.tiff
+│   │       └── Plate1-WellB1-1
+│   │           ├── BarcodingApplication_Experiment.csv
+│   │           ├── BarcodingApplication_Image.csv
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle01_A.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle01_C.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle01_DAPI.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle01_G.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle01_T.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle02_A.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle02_C.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle02_DAPI.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle02_G.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle02_T.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle03_A.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle03_C.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle03_DAPI.tiff
+│   │           ├── Plate_Plate1_Well_B1_Site_1_Cycle03_G.tiff
+│   │           └── Plate_Plate1_Well_B1_Site_1_Cycle03_T.tiff
+│   ├── images_corrected
+│   │   ├── barcoding
+│   │   │   ├── Plate1-WellA1-0
+│   │   │   │   ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │   │   ├── BarcodePreprocessing_Experiment.csv
+│   │   │   │   ├── BarcodePreprocessing_Image.csv
+│   │   │   │   ├── BarcodePreprocessing_Nuclei.csv
+│   │   │   │   ├── BarcodePreprocessing_PreFoci.csv
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
+│   │   │   │   └── Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
+│   │   │   ├── Plate1-WellA1-1
+│   │   │   │   ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │   │   ├── BarcodePreprocessing_Experiment.csv
+│   │   │   │   ├── BarcodePreprocessing_Image.csv
+│   │   │   │   ├── BarcodePreprocessing_Nuclei.csv
+│   │   │   │   ├── BarcodePreprocessing_PreFoci.csv
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_DAPI.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle01_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle02_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A1_Site_1_Cycle03_G.tiff
+│   │   │   │   └── Plate_Plate1_Well_A1_Site_1_Cycle03_T.tiff
+│   │   │   ├── Plate1-WellA2-0
+│   │   │   │   ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │   │   ├── BarcodePreprocessing_Experiment.csv
+│   │   │   │   ├── BarcodePreprocessing_Image.csv
+│   │   │   │   ├── BarcodePreprocessing_Nuclei.csv
+│   │   │   │   ├── BarcodePreprocessing_PreFoci.csv
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_DAPI.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle01_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle02_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_0_Cycle03_G.tiff
+│   │   │   │   └── Plate_Plate1_Well_A2_Site_0_Cycle03_T.tiff
+│   │   │   ├── Plate1-WellA2-1
+│   │   │   │   ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │   │   ├── BarcodePreprocessing_Experiment.csv
+│   │   │   │   ├── BarcodePreprocessing_Image.csv
+│   │   │   │   ├── BarcodePreprocessing_Nuclei.csv
+│   │   │   │   ├── BarcodePreprocessing_PreFoci.csv
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_DAPI.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle01_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle02_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_A2_Site_1_Cycle03_G.tiff
+│   │   │   │   └── Plate_Plate1_Well_A2_Site_1_Cycle03_T.tiff
+│   │   │   ├── Plate1-WellB1-0
+│   │   │   │   ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │   │   ├── BarcodePreprocessing_Experiment.csv
+│   │   │   │   ├── BarcodePreprocessing_Image.csv
+│   │   │   │   ├── BarcodePreprocessing_Nuclei.csv
+│   │   │   │   ├── BarcodePreprocessing_PreFoci.csv
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_G.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle02_T.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_A.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_C.tiff
+│   │   │   │   ├── Plate_Plate1_Well_B1_Site_0_Cycle03_G.tiff
+│   │   │   │   └── Plate_Plate1_Well_B1_Site_0_Cycle03_T.tiff
+│   │   │   └── Plate1-WellB1-1
+│   │   │       ├── BarcodePreprocessing_BarcodeFoci.csv
+│   │   │       ├── BarcodePreprocessing_Experiment.csv
+│   │   │       ├── BarcodePreprocessing_Image.csv
+│   │   │       ├── BarcodePreprocessing_Nuclei.csv
+│   │   │       ├── BarcodePreprocessing_PreFoci.csv
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle01_A.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle01_C.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle01_DAPI.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle01_G.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle01_T.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle02_A.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle02_C.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle02_G.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle02_T.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle03_A.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle03_C.tiff
+│   │   │       ├── Plate_Plate1_Well_B1_Site_1_Cycle03_G.tiff
+│   │   │       └── Plate_Plate1_Well_B1_Site_1_Cycle03_T.tiff
+│   │   └── painting
+│   │       ├── Plate1-WellA1
+│   │       │   ├── PaintingIllumApplication_Cells.csv
+│   │       │   ├── PaintingIllumApplication_ConfluentRegions.csv
+│   │       │   ├── PaintingIllumApplication_Experiment.csv
+│   │       │   ├── PaintingIllumApplication_Image.csv
+│   │       │   ├── PaintingIllumApplication_Nuclei.csv
+│   │       │   ├── Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
+│   │       │   └── Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
+│   │       ├── Plate1-WellA2
+│   │       │   ├── PaintingIllumApplication_Cells.csv
+│   │       │   ├── PaintingIllumApplication_ConfluentRegions.csv
+│   │       │   ├── PaintingIllumApplication_Experiment.csv
+│   │       │   ├── PaintingIllumApplication_Image.csv
+│   │       │   ├── PaintingIllumApplication_Nuclei.csv
+│   │       │   ├── Plate_Plate1_Well_WellA2_Site_0_CorrDNA.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA2_Site_0_CorrPhalloidin.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA2_Site_0_CorrZO1.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA2_Site_1_CorrDNA.tiff
+│   │       │   ├── Plate_Plate1_Well_WellA2_Site_1_CorrPhalloidin.tiff
+│   │       │   └── Plate_Plate1_Well_WellA2_Site_1_CorrZO1.tiff
+│   │       └── Plate1-WellB1
+│   │           ├── PaintingIllumApplication_Cells.csv
+│   │           ├── PaintingIllumApplication_ConfluentRegions.csv
+│   │           ├── PaintingIllumApplication_Experiment.csv
+│   │           ├── PaintingIllumApplication_Image.csv
+│   │           ├── PaintingIllumApplication_Nuclei.csv
+│   │           ├── Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff
+│   │           ├── Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff
+│   │           ├── Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff
+│   │           ├── Plate_Plate1_Well_WellB1_Site_1_CorrDNA.tiff
+│   │           ├── Plate_Plate1_Well_WellB1_Site_1_CorrPhalloidin.tiff
+│   │           └── Plate_Plate1_Well_WellB1_Site_1_CorrZO1.tiff
+│   └── images_segmentation
+│       └── Plate1
+│           ├── Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+│           ├── Plate_Plate1_Well_WellA2_Site_0_CorrDNA_SegmentCheck.png
+│           ├── Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
+│           ├── SegmentationCheck_Cells.csv
+│           ├── SegmentationCheck_ConfluentRegions.csv
+│           ├── SegmentationCheck_Experiment.csv
+│           ├── SegmentationCheck_Image.csv
+│           ├── SegmentationCheck_Nuclei.csv
+│           └── SegmentationCheck_PreCells.csv
+└── workspace_example
+    ├── analysis
+    │   └── 20231011_batch_1
+    │       ├── Plate1-WellA1-0
+    │       │   ├── BarcodeFoci.csv
+    │       │   ├── Cells.csv
+    │       │   ├── ConfluentRegions.csv
+    │       │   ├── Cytoplasm.csv
+    │       │   ├── Experiment.csv
+    │       │   ├── Foci.csv
+    │       │   ├── Foci_NonCellEdge.csv
+    │       │   ├── Foci_PreMask.csv
+    │       │   ├── Image.csv
+    │       │   ├── Nuclei.csv
+    │       │   ├── Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
+    │       │   ├── Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
+    │       │   ├── PreCells.csv
+    │       │   ├── RelateObjects.csv
+    │       │   ├── Resize_Foci.csv
+    │       │   └── segmentation_masks
+    │       │       ├── Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
+    │       │       ├── Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
+    │       │       └── Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
+    │       ├── Plate1-WellA1-1
+    │       │   ├── BarcodeFoci.csv
+    │       │   ├── Cells.csv
+    │       │   ├── ConfluentRegions.csv
+    │       │   ├── Cytoplasm.csv
+    │       │   ├── Experiment.csv
+    │       │   ├── Foci.csv
+    │       │   ├── Foci_NonCellEdge.csv
+    │       │   ├── Foci_PreMask.csv
+    │       │   ├── Image.csv
+    │       │   ├── Nuclei.csv
+    │       │   ├── Plate_Plate1_Well_WellA1_Site_1_CorrDNA_Overlay.png
+    │       │   ├── Plate_Plate1_Well_WellA1_Site_1_CorrDNA_SpotOverlay.png
+    │       │   ├── PreCells.csv
+    │       │   ├── RelateObjects.csv
+    │       │   ├── Resize_Foci.csv
+    │       │   └── segmentation_masks
+    │       │       ├── Plate_Plate1_Well_WellA1_Site_1_Cells_Objects.tiff
+    │       │       ├── Plate_Plate1_Well_WellA1_Site_1_Cytoplasm_Objects.tiff
+    │       │       └── Plate_Plate1_Well_WellA1_Site_1_Nuclei_Objects.tiff
+    │       ├── Plate1-WellA2-0
+    │       │   ├── BarcodeFoci.csv
+    │       │   ├── Cells.csv
+    │       │   ├── ConfluentRegions.csv
+    │       │   ├── Cytoplasm.csv
+    │       │   ├── Experiment.csv
+    │       │   ├── Foci.csv
+    │       │   ├── Foci_NonCellEdge.csv
+    │       │   ├── Foci_PreMask.csv
+    │       │   ├── Image.csv
+    │       │   ├── Nuclei.csv
+    │       │   ├── Plate_Plate1_Well_WellA2_Site_0_CorrDNA_Overlay.png
+    │       │   ├── Plate_Plate1_Well_WellA2_Site_0_CorrDNA_SpotOverlay.png
+    │       │   ├── PreCells.csv
+    │       │   ├── RelateObjects.csv
+    │       │   ├── Resize_Foci.csv
+    │       │   └── segmentation_masks
+    │       │       ├── Plate_Plate1_Well_WellA2_Site_0_Cells_Objects.tiff
+    │       │       ├── Plate_Plate1_Well_WellA2_Site_0_Cytoplasm_Objects.tiff
+    │       │       └── Plate_Plate1_Well_WellA2_Site_0_Nuclei_Objects.tiff
+    │       ├── Plate1-WellA2-1
+    │       │   ├── BarcodeFoci.csv
+    │       │   ├── Cells.csv
+    │       │   ├── ConfluentRegions.csv
+    │       │   ├── Cytoplasm.csv
+    │       │   ├── Experiment.csv
+    │       │   ├── Foci.csv
+    │       │   ├── Foci_NonCellEdge.csv
+    │       │   ├── Foci_PreMask.csv
+    │       │   ├── Image.csv
+    │       │   ├── Nuclei.csv
+    │       │   ├── Plate_Plate1_Well_WellA2_Site_1_CorrDNA_Overlay.png
+    │       │   ├── Plate_Plate1_Well_WellA2_Site_1_CorrDNA_SpotOverlay.png
+    │       │   ├── PreCells.csv
+    │       │   ├── RelateObjects.csv
+    │       │   ├── Resize_Foci.csv
+    │       │   └── segmentation_masks
+    │       │       ├── Plate_Plate1_Well_WellA2_Site_1_Cells_Objects.tiff
+    │       │       ├── Plate_Plate1_Well_WellA2_Site_1_Cytoplasm_Objects.tiff
+    │       │       └── Plate_Plate1_Well_WellA2_Site_1_Nuclei_Objects.tiff
+    │       ├── Plate1-WellB1-0
+    │       │   ├── BarcodeFoci.csv
+    │       │   ├── Cells.csv
+    │       │   ├── ConfluentRegions.csv
+    │       │   ├── Cytoplasm.csv
+    │       │   ├── Experiment.csv
+    │       │   ├── Foci.csv
+    │       │   ├── Foci_NonCellEdge.csv
+    │       │   ├── Foci_PreMask.csv
+    │       │   ├── Image.csv
+    │       │   ├── Nuclei.csv
+    │       │   ├── Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png
+    │       │   ├── Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png
+    │       │   ├── PreCells.csv
+    │       │   ├── RelateObjects.csv
+    │       │   ├── Resize_Foci.csv
+    │       │   └── segmentation_masks
+    │       │       ├── Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff
+    │       │       ├── Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff
+    │       │       └── Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff
+    │       └── Plate1-WellB1-1
+    │           ├── BarcodeFoci.csv
+    │           ├── Cells.csv
+    │           ├── ConfluentRegions.csv
+    │           ├── Cytoplasm.csv
+    │           ├── Experiment.csv
+    │           ├── Foci.csv
+    │           ├── Foci_NonCellEdge.csv
+    │           ├── Foci_PreMask.csv
+    │           ├── Image.csv
+    │           ├── Nuclei.csv
+    │           ├── Plate_Plate1_Well_WellB1_Site_1_CorrDNA_Overlay.png
+    │           ├── Plate_Plate1_Well_WellB1_Site_1_CorrDNA_SpotOverlay.png
+    │           ├── PreCells.csv
+    │           ├── RelateObjects.csv
+    │           ├── Resize_Foci.csv
+    │           └── segmentation_masks
+    │               ├── Plate_Plate1_Well_WellB1_Site_1_Cells_Objects.tiff
+    │               ├── Plate_Plate1_Well_WellB1_Site_1_Cytoplasm_Objects.tiff
+    │               └── Plate_Plate1_Well_WellB1_Site_1_Nuclei_Objects.tiff
+    └── load_data_csv
+        └── Batch1
+            └── Plate1
+                ├── load_data_pipeline1.csv
+                ├── load_data_pipeline2.csv
+                ├── load_data_pipeline3.csv
+                ├── load_data_pipeline5.csv
+                ├── load_data_pipeline6.csv
+                ├── load_data_pipeline7.csv
+                └── load_data_pipeline9.csv
+
+58 directories, 556 files
