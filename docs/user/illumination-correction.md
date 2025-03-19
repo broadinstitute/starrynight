@@ -32,8 +32,8 @@ This step creates CSV files that tell CellProfiler which images to use for calcu
 
 ```bash
 starrynight illum calc loaddata \
-    -i ./scratch/workspace/index/index.parquet \
-    -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc
+    -i ./scratch/starrynight_example/workspace/index/index.parquet \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc
 ```
 
 Parameters:
@@ -49,9 +49,9 @@ This step creates CellProfiler pipeline files (.cppipe) customized for your data
 
 ```bash
 starrynight illum calc cppipe \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
-    -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
-    -w ./scratch/workspace
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
+    -w ./scratch/starrynight_example/workspace
 ```
 
 Parameters:
@@ -66,9 +66,9 @@ This step runs the generated CellProfiler pipelines to calculate illumination co
 
 ```bash
 starrynight cp \
-    -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
-    -o ./scratch/workspace/illum/cp/illum_calc
+    -p ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
+    -o ./scratch/starrynight_example/workspace/illum/cp/illum_calc
 ```
 
 Parameters:
@@ -94,8 +94,8 @@ This step creates CSV files that tell CellProfiler which images to apply correct
 
 ```bash
 starrynight illum apply loaddata \
-    -i ./scratch/workspace/index/index.parquet \
-    -o ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply
+    -i ./scratch/starrynight_example/workspace/index/index.parquet \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_apply
 ```
 
 Parameters:
@@ -112,9 +112,9 @@ This step creates CellProfiler pipeline files (.cppipe) for applying corrections
 
 ```bash
 starrynight illum apply cppipe \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
-    -o ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
-    -w ./scratch/workspace
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
+    -o ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
+    -w ./scratch/starrynight_example/workspace
 ```
 
 Parameters:
@@ -130,9 +130,9 @@ This step runs the pipelines to apply corrections to all images:
 
 ```bash
 starrynight cp \
-    -p ./scratch/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
-    -l ./scratch/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
-    -o ./scratch/workspace/illum/cp/illum_apply
+    -p ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_apply \
+    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_apply \
+    -o ./scratch/starrynight_example/workspace/illum/cp/illum_apply
 ```
 
 Parameters:
