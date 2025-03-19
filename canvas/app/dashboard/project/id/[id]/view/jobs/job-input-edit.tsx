@@ -126,7 +126,7 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
               <ActionButton
                 icon={<XIcon />}
                 message="Close editing mode"
-                className="text-yellow-600 hover:bg-yellow-50 hover:text-yellow-600"
+                variant="ghost-warning"
                 onClick={handleOnCloseEditingModeClick}
               />
             ),

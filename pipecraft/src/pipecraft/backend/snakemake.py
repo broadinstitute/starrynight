@@ -41,6 +41,8 @@ class SnakeMakeBackendRun(BaseBackendRun):
 
     def kill(self) -> None:
         """Kill snakemake run."""
+        print(f"sending kill signal to PID: {self.pid}")
+        os.kill(self.pid, signal.SIGKILL)
         os.kill(self.pid, signal.SIGKILL)
 
 
@@ -160,7 +162,7 @@ class SnakeMakeBackend(Backend):
         cmd = []
         if self.config.background:
             cmd += ["nohup"]
-        cmd += ["snakemake", "-c", str(self.config.cores)]
+        cmd += ["snakemake", "-F", "-c", str(self.config.cores)]
         if self.config.apptainer:
             cmd += ["--use-apptainer"]
         if self.config.print_exec:

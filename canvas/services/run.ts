@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./api";
 import { TSpecPathRecord } from "./misc";
 
@@ -58,4 +58,32 @@ export function createRun(options: TCreateRunOptions): Promise<TRun> {
       "/run"
     )
     .json();
+}
+
+export type TKillRunOptions = {
+  run_id: string | number;
+};
+
+export function killRun(options: TKillRunOptions) {
+  const { run_id } = options;
+
+  const searchParams = new URLSearchParams();
+  searchParams.set("run_id", run_id.toString());
+
+  return api.post({}, `/run/kill?${searchParams.toString()}`).json();
+}
+
+export type TUseKillRunOptions = {
+  onError: () => void;
+  onSuccess: () => void;
+};
+
+export function useKillRun(options: TUseKillRunOptions) {
+  const { onError, onSuccess } = options;
+
+  return useMutation({
+    mutationFn: killRun,
+    onError,
+    onSuccess,
+  });
 }

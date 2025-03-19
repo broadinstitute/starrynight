@@ -213,7 +213,7 @@ def kill_run(
     with db_session() as session:
         orm_run = session.scalar(select(Run).where(Run.id == run_id))
         run = PyRun.model_validate(orm_run)
-        if run.executor_type is ExecutorType.SNAKEMAKE:
+        if run.executor_type is ExecutorType.LOCAL:
             exec_run = SnakeMakeBackendRun(**run.backend_run)
             exec_run.kill()
             orm_run.run_status = RunStatus.FAILED
