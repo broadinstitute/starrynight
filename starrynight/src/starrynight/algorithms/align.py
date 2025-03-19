@@ -341,9 +341,7 @@ def generate_align_pipeline(
         flag_unaligned.flags[i].measurement_settings[0].object_name.value = None
         flag_unaligned.flags[i].measurement_settings[
             0
-        ].measurement.value = (
-            f"Correlation_Correlation_Corr_Cycle_1_{nuclei_channel}_{flag_image}"
-        )
+        ].measurement.value = f"Correlation_Correlation_Aligned_Corr_Cycle_1_{nuclei_channel}_{flag_image}"
         flag_unaligned.flags[i].measurement_settings[0].wants_minimum.value = True
         flag_unaligned.flags[i].measurement_settings[0].minimum_value.value = 0.9
         flag_unaligned.flags[i].measurement_settings[0].wants_maximum.value = False
