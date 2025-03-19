@@ -97,6 +97,8 @@ starrynight segcheck loaddata \
     -i ./scratch/starrynight_example/workspace/index/index.parquet \
     -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/segcheck \
     -c ./scratch/starrynight_example/workspace/illum/cp/illum_apply \
+    -n DAPI \
+    -c PhalloAF750
 ```
 
 Parameters:
@@ -105,6 +107,10 @@ Parameters:
 - `-o, --out`: Output directory for the LoadData CSV files
 - `-c, --corr_images`: Path to illumination-corrected images
 - `-m, --path_mask`: Path prefix mask to use when resolving image paths
+- `-n, --nuclei`: Channel to use for nuclei segmentation
+- `-c, --cell`: Channel to use for cell segmentation
+
+BUG: The `-n` and `-c` are specified in `segcheck` but not in `presegcheck`. This is an implementation quirk that needs to be fixed.
 
 ### 2.2. Generate CellProfiler Pipelines
 
@@ -150,7 +156,6 @@ The segmentation check produces:
 
 - CSV files with segmentation quality metrics
 - TIFF images with overlaid segmentation outlines for visual validation
-- Metrics for cell and nuclei identification (count, size, distribution)
 
 ## FIXME: How Segmentation Checking Works
 
@@ -161,16 +166,15 @@ The pre-segmentation check:
 1. Identifies confluent regions in images
 2. Creates masks to exclude regions unsuitable for segmentation
 3. Performs initial nuclei and cell identification
-4. Computes quality metrics to predict segmentation success
+3. Exports measurements for quality assessment
 
 ### Segmentation Check Algorithm
 
 The segmentation check:
 
 1. Performs nuclei and cell identification using optimized parameters
-2. Analyzes object counts, sizes, and distributions
-3. Generates overlay images highlighting segmentation results
-4. Exports measurements for quality assessment
+2. Generates overlay images highlighting segmentation results
+3. Exports measurements for quality assessment
 
 ## Troubleshooting
 
