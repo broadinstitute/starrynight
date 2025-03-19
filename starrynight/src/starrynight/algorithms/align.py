@@ -293,7 +293,7 @@ def generate_align_pipeline(
     measure_colocal_sbs = MeasureColocalization()
     module_counter += 1
     measure_colocal_sbs.module_num = module_counter
-    measure_colocal_sbs.images_list.value = ",".join(
+    measure_colocal_sbs.images_list.value = ", ".join(
         [
             f"Aligned_Corr_Cycle_{cycle}_{ch}"
             for ch in channel_list
@@ -318,6 +318,8 @@ def generate_align_pipeline(
     flag_unaligned.module_num = module_counter
 
     images_to_flag = [f"Corr_Cycle_{cycle}_{nuclei_channel}" for cycle in cycle_list]
+    # skip checking cycle 1 nuclei
+    images_to_flag.remove(f"Corr_Cycle_1_{nuclei_channel}")
     # One flag is already created
     for _ in range(len(images_to_flag) - 1):
         flag_unaligned.add_flag()
