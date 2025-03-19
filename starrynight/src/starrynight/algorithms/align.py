@@ -199,7 +199,7 @@ def gen_align_load_data_by_batch_plate(
             write_loaddata_csv_by_batch_plate_cycle(
                 images_df,
                 out_path,
-                corr_images_path.joinpath(batch, plate),
+                corr_images_path,
                 nuclei_channel,
                 path_mask,
                 batch,
