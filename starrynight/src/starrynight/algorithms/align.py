@@ -47,18 +47,11 @@ from starrynight.utils.dfutils import (
     get_cycles_by_batch_plate,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.misc import resolve_path_loaddata
 
 ###############################
 ## Load data generation
 ###############################
-
-
-def resolve_path(path_mask: Path | CloudPath, filepath: Path | CloudPath) -> str:
-    try:
-        rel_path = filepath.relative_to(path_mask)
-        return path_mask.joinpath(rel_path).resolve().__str__()
-    except ValueError:
-        return f"{path_mask.resolve().rstrip('/')}/{filepath.resolve().lstrip('/')}/"
 
 
 def write_loaddata(
@@ -96,7 +89,7 @@ def write_loaddata(
         ]
         cycle1_nuclei_filename = f"{index.batch_id}_{index.plate_id}_1_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{nuclei_channel}.tiff"
         pathnames = [
-            resolve_path(AnyPath(path_mask), corr_images_path)
+            resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
             for _ in range(len(pathname_heads))
         ]
 
@@ -190,9 +183,7 @@ def gen_align_load_data_by_batch_plate(
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(
-        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-    ).sample(fraction=0.1)
+    images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 

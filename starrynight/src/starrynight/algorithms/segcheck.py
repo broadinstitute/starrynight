@@ -70,18 +70,11 @@ from starrynight.utils.dfutils import (
     get_cycles_by_batch_plate,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.misc import resolve_path_loaddata
 
 ###############################
 ## Load data generation
 ###############################
-
-
-def resolve_path(path_mask: Path | CloudPath, filepath: Path | CloudPath) -> str:
-    try:
-        rel_path = filepath.relative_to(path_mask)
-        return path_mask.joinpath(rel_path).resolve().__str__()
-    except ValueError:
-        return f"{path_mask.resolve().rstrip('/')}/{filepath.resolve().lstrip('/')}/"
 
 
 def write_loaddata(
@@ -114,7 +107,7 @@ def write_loaddata(
             for col in [nuclei_channel, cell_channel]
         ]
         pathnames = [
-            resolve_path(AnyPath(path_mask), corr_images_path)
+            resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
             for _ in range(len(pathname_heads))
         ]
 
@@ -251,11 +244,15 @@ def gen_segcheck_load_data_by_batch_plate(
     if not for_sbs:
         images_df = df.filter(
             pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        ).sample(fraction=0.1)
+        )
     else:
         images_df = df.filter(
             pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        ).sample(fraction=0.1)
+        )
+
+    # Only subsample if df is large
+    if len(images_df) > 10:
+        images_df = images_df.sample(fraction=0.1)
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
@@ -575,9 +572,9 @@ def generate_segcheck_pipeline(
     export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
     if not for_sbs:
-        export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_Segcheck"
+        export_measurements.prefix.value = "Segcheck_"
     else:
-        export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Segcheck"
+        export_measurements.prefix.value = "Segcheck_"
     export_measurements.wants_overwrite_without_warning.value = False
     export_measurements.add_metadata.value = False
     export_measurements.add_filepath.value = False

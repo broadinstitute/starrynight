@@ -206,11 +206,15 @@ def gen_pre_segcheck_load_data_by_batch_plate(
     if not for_sbs:
         images_df = df.filter(
             pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        ).sample(fraction=0.1)
+        )
     else:
         images_df = df.filter(
             pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        ).sample(fraction=0.1)
+        )
+
+    # Only subsample if df is large
+    if len(images_df) > 10:
+        images_df = images_df.sample(fraction=0.1)
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
