@@ -5,15 +5,18 @@ from io import TextIOWrapper
 from pathlib import Path
 
 import polars as pl
-
-# from cellprofiler.modules.exporttospreadsheet import (
-#     DELIMITER_COMMA,
-#     GP_NAME_METADATA,
-#     NANS_AS_NANS,
-#     ExportToSpreadsheet,
-# )
-# from cellprofiler.modules.flagimage import FlagImage
-# from cellprofiler.modules.measurecolocalization import MeasureColocalization
+from cellprofiler.modules.exporttospreadsheet import (
+    DELIMITER_COMMA,
+    GP_NAME_METADATA,
+    NANS_AS_NANS,
+    ExportToSpreadsheet,
+)
+from cellprofiler.modules.flagimage import C_ANY, S_IMAGE, FlagImage
+from cellprofiler.modules.measurecolocalization import (
+    M_ACCURATE,
+    M_IMAGES,
+    MeasureColocalization,
+)
 from cellprofiler.modules.saveimages import (
     AXIS_T,
     BIT_DEPTH_16,
@@ -56,6 +59,7 @@ from starrynight.utils.misc import resolve_path_loaddata
 
 def write_loaddata(
     images_df: pl.DataFrame,
+    plate_cycles_list: list[str],
     plate_channel_list: list[str],
     corr_images_path: Path | CloudPath,
     nuclei_channel: str,
@@ -68,17 +72,21 @@ def write_loaddata(
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
     ]
 
-    filename_heads = [f"FileName_Corr{col}" for col in plate_channel_list]
-    pathname_heads = [f"PathName_Corr{col}" for col in plate_channel_list]
-    cycle1_nuclei_filename_head = "FileName_CorrCycle1Nuclei"
-    cycle1_nuclei_pathname_head = "PathName_CorrCycle1Nuclei"
+    filename_heads = [
+        f"FileName_Corr_Cycle_{int(cycle)}_{col}"
+        for col in plate_channel_list
+        for cycle in plate_cycles_list
+    ]
+    pathname_heads = [
+        f"PathName_Corr_Cycle_{int(cycle)}_{col}"
+        for col in plate_channel_list
+        for cycle in plate_cycles_list
+    ]
     loaddata_writer.writerow(
         [
             *metadata_heads,
             *filename_heads,
             *pathname_heads,
-            cycle1_nuclei_filename_head,
-            cycle1_nuclei_pathname_head,
         ]
     )
     for index in images_df.to_dicts():
@@ -87,7 +95,6 @@ def write_loaddata(
             f"{index.batch_id}_{index.plate_id}_{int(index.cycle_id)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
             for col in plate_channel_list
         ]
-        cycle1_nuclei_filename = f"{index.batch_id}_{index.plate_id}_1_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{nuclei_channel}.tiff"
         pathnames = [
             resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
             for _ in range(len(pathname_heads))
@@ -102,15 +109,11 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id or 0,
+                index.cycle_id,
                 # Filename heads
                 *filenames,
                 # Pathname heads
                 *pathnames,
-                # cycle 1 filename
-                cycle1_nuclei_filename,
-                # cycle 1 pathname
-                pathnames[0],
             ]
         )
 
@@ -123,28 +126,26 @@ def write_loaddata_csv_by_batch_plate_cycle(
     path_mask: str,
     batch: str,
     plate: str,
-    cycle: str,
 ) -> None:
     pass
 
+    # Setup cycles list
+    plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
     # Setup channel list for that plate
     plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
 
-    # setup df by filtering for plate id
+    # setup df by filtering for batch id and plate id
     df_batch_plate_cycle = images_df.filter(
-        pl.col("batch_id").eq(batch)
-        & pl.col("plate_id").eq(plate)
-        & pl.col("cycle_id").eq(cycle)
+        pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
     )
 
     # Write load data csv for the plate
     batch_plate_out_path = out_path.joinpath(batch, plate)
     batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_plate_out_path.joinpath(
-        f"align_{batch}_{plate}_{int(cycle):02}.csv"
-    ).open("w") as f:
+    with batch_plate_out_path.joinpath(f"align_{batch}_{plate}.csv").open("w") as f:
         write_loaddata(
             df_batch_plate_cycle,
+            plate_cycles_list,
             plate_channel_list,
             corr_images_path,
             nuclei_channel,
@@ -197,21 +198,15 @@ def gen_align_load_data_by_batch_plate(
     # Setup chunking and write loaddata for each batch/plate
     for batch in images_hierarchy_dict.keys():
         for plate in images_hierarchy_dict[batch].keys():
-            # Write loaddata assuming image nesting with cycles
-            plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
-            # remove the first cycle (not required for alignment)
-            plate_cycles_list.remove("1")
-            for cycle in plate_cycles_list:
-                write_loaddata_csv_by_batch_plate_cycle(
-                    images_df,
-                    out_path,
-                    corr_images_path,
-                    nuclei_channel,
-                    path_mask,
-                    batch,
-                    plate,
-                    cycle,
-                )
+            write_loaddata_csv_by_batch_plate_cycle(
+                images_df,
+                out_path,
+                corr_images_path,
+                nuclei_channel,
+                path_mask,
+                batch,
+                plate,
+            )
 
 
 ###################################
@@ -226,12 +221,12 @@ def generate_align_pipeline(
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = [
-        col.split("_")[1].replace("Corr", "")
-        for col in load_data_df.columns
-        if col.startswith("FileName")
+        col.split("_")[-1] for col in load_data_df.columns if col.startswith("FileName")
     ]
-    # remove the extra channel only needed for alignment
-    channel_list.remove("Cycle1Nuclei")
+
+    cycle_list = [
+        col.split("_")[-2] for col in load_data_df.columns if col.startswith("FileName")
+    ]
 
     module_counter = 0
     # INFO: Configure load data module
@@ -252,56 +247,136 @@ def generate_align_pipeline(
     pipeline.add_module(load_data)
 
     # INFO: Create and configure required modules
-    # Align(to cycle 0 nuclei channel) -> MeasureColocalization -> FlagImage
+    # Align(to cycle 1 nuclei channel) -> MeasureColocalization -> FlagImage
     # -> save(aligned images) -> ExportToSpreadsheet
 
-    align = Align()
+    for cycle in cycle_list:
+        align = Align()
+        module_counter += 1
+        align.module_num = module_counter
+        align.alignment_method.value = M_CROSS_CORRELATION
+        align.crop_mode.value = C_SAME_SIZE
+
+        # make a copy of channel list and remove nuclei_channel
+        align_channel_list = channel_list.copy()
+        align_channel_list.remove(nuclei_channel)
+        align.first_input_image.value = f"Corr_Cycle_1_{nuclei_channel}"
+        align.first_output_image.value = f"Aligned_Corr_Cycle_1_{nuclei_channel}"
+        align.second_input_image.value = f"Corr_Cycle_{cycle}_{nuclei_channel}"
+        align.second_output_image.value = f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}"
+
+        for i, ch in enumerate(align_channel_list):
+            align.add_image()
+            # input_image_name
+            align.additional_images[i].settings[1].value = f"Corr_Cycle_{cycle}_{ch}"
+            # output_image_name
+            align.additional_images[i].settings[
+                2
+            ].value = f"Aligned_Corr_Cycle_{cycle}_{ch}"
+            # align_choice
+            align.additional_images[i].settings[3].value = A_SIMILARLY
+        pipeline.add_module(align)
+
+    # MeasureColocalization sbs
+    measure_colocal_sbs = MeasureColocalization()
     module_counter += 1
-    align.module_num = module_counter
-    align.alignment_method.value = M_CROSS_CORRELATION
-    align.crop_mode.value = C_SAME_SIZE
+    measure_colocal_sbs.module_num = module_counter
+    measure_colocal_sbs.images_list.value = ",".join(
+        [f"Corr_Cycle_{cycle}_{ch}" for ch in channel_list for cycle in cycle_list]
+    )
+    measure_colocal_sbs.thr.value = 15.0
+    measure_colocal_sbs.images_or_objects.value = M_IMAGES
+    measure_colocal_sbs.objects_list.value = ""
+    measure_colocal_sbs.do_all.value = False
+    measure_colocal_sbs.do_corr_and_slope.value = True
+    measure_colocal_sbs.do_manders.value = False
+    measure_colocal_sbs.do_rwc.value = False
+    measure_colocal_sbs.do_overlap.value = True
+    measure_colocal_sbs.do_costes.value = False
+    measure_colocal_sbs.fast_costes.value = M_ACCURATE
+    pipeline.add_module(measure_colocal_sbs)
 
-    # make a copy of channel list and remove nuclei_channel
-    align_channel_list = channel_list.copy()
-    align_channel_list.remove(nuclei_channel)
-    align.first_input_image.value = "CorrCycle1Nuclei"
-    align.first_output_image.value = "AlignedCorrCycle1Nuclei"
-    align.second_input_image.value = f"Corr{nuclei_channel}"
-    align.second_output_image.value = f"Aligned{nuclei_channel}"
+    # -> FlagImage (Unaligned)
+    flag_unaligned = FlagImage()
+    module_counter += 1
+    flag_unaligned.module_num = module_counter
 
-    for i, ch in enumerate(align_channel_list):
-        align.add_image()
-        # input_image_name
-        align.additional_images[i].settings[1].value = f"Corr{ch}"
-        # output_image_name
-        align.additional_images[i].settings[2].value = f"Aligned{ch}"
-        # align_choice
-        align.additional_images[i].settings[3].value = A_SIMILARLY
-    pipeline.add_module(align)
+    images_to_flag = [f"Corr_Cycle_{cycle}_{nuclei_channel}" for cycle in cycle_list]
+    # One flag is already created
+    for _ in range(len(images_to_flag) - 1):
+        flag_unaligned.add_flag()
+
+    for i, flag_image in enumerate(images_to_flag):
+        # Flag's category [3]
+        flag_unaligned.flags[i].category.value = "Metadata"
+        # Name of the flag [4]
+        flag_unaligned.flags[i].feature_name.value = "Unaligned"
+        # How should the measurements be linked [5]
+        flag_unaligned.flags[i].combination_choice.value = C_ANY
+        # Skip image set if flagged [6]
+        flag_unaligned.flags[i].wants_skip.value = False
+
+        # Measurement settings, One measurement is added by default for each flag
+        flag_unaligned.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
+        flag_unaligned.flags[i].measurement_settings[0].object_name.value = None
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].measurement.value = (
+            f"Correlation_Correlation_Corr_Cycle_1_{nuclei_channel}_{flag_image}"
+        )
+        flag_unaligned.flags[i].measurement_settings[0].wants_minimum.value = True
+        flag_unaligned.flags[i].measurement_settings[0].minimum_value.value = 0.9
+        flag_unaligned.flags[i].measurement_settings[0].wants_maximum.value = False
+    pipeline.add_module(flag_unaligned)
 
     # Save image (combined overlay)
-    for ch in channel_list:
-        save_image = SaveImages()
-        module_counter += 1
-        save_image.module_num = module_counter
-        save_image.save_image_or_figure.value = IF_IMAGE
-        save_image.image_name.value = f"Aligned{ch}"
-        save_image.file_name_method.value = FN_SINGLE_NAME
-        save_image.number_of_digits.value = 4
-        save_image.wants_file_name_suffix.value = False
-        save_image.file_name_suffix.value = ""
-        save_image.file_format.value = FF_TIFF
-        save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
-        save_image.bit_depth.value = BIT_DEPTH_16
-        save_image.overwrite.value = False
-        save_image.when_to_save.value = WS_EVERY_CYCLE
-        save_image.update_file_names.value = False
-        save_image.create_subdirectories.value = False
-        # save_image.root_dir.value = ""
-        save_image.stack_axis.value = AXIS_T
-        # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
-        pipeline.add_module(save_image)
+    for cycle in cycle:
+        for ch in channel_list:
+            save_image = SaveImages()
+            module_counter += 1
+            save_image.module_num = module_counter
+            save_image.save_image_or_figure.value = IF_IMAGE
+            save_image.image_name.value = f"Aligned_Corr_Cycle_{cycle}_{ch}"
+            save_image.file_name_method.value = FN_SINGLE_NAME
+            save_image.number_of_digits.value = 4
+            save_image.wants_file_name_suffix.value = False
+            save_image.file_name_suffix.value = ""
+            save_image.file_format.value = FF_TIFF
+            save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+            save_image.bit_depth.value = BIT_DEPTH_16
+            save_image.overwrite.value = False
+            save_image.when_to_save.value = WS_EVERY_CYCLE
+            save_image.update_file_names.value = False
+            save_image.create_subdirectories.value = False
+            # save_image.root_dir.value = ""
+            save_image.stack_axis.value = AXIS_T
+            # save_image.tiff_compress.value = ""
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
+            pipeline.add_module(save_image)
+
+    # export measurements to spreadsheet
+    export_measurements = ExportToSpreadsheet()
+    module_counter += 1
+    export_measurements.module_num = module_counter
+    export_measurements.delimiter.value = DELIMITER_COMMA
+    export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+    export_measurements.wants_prefix.value = True
+    export_measurements.prefix.value = "Align_"
+    export_measurements.wants_overwrite_without_warning.value = False
+    export_measurements.add_metadata.value = False
+    export_measurements.add_filepath.value = False
+    export_measurements.nan_representation.value = NANS_AS_NANS
+    export_measurements.pick_columns.value = False
+    export_measurements.wants_aggregate_means.value = False
+    export_measurements.wants_aggregate_medians.value = False
+    export_measurements.wants_aggregate_std.value = False
+    export_measurements.wants_genepattern_file.value = False
+    export_measurements.how_to_specify_gene_name.value = GP_NAME_METADATA
+    export_measurements.gene_name_column.value = None
+    export_measurements.use_which_image_for_gene_name.value = None
+    export_measurements.wants_everything.value = True
+
+    pipeline.add_module(export_measurements)
 
     return pipeline
 
