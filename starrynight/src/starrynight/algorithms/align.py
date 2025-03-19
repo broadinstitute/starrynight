@@ -218,13 +218,27 @@ def generate_align_pipeline(
     nuclei_channel: str,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
-    channel_list = [
-        col.split("_")[-1] for col in load_data_df.columns if col.startswith("FileName")
-    ]
+    channel_list = list(
+        set(
+            [
+                col.split("_")[-1]
+                for col in load_data_df.columns
+                if col.startswith("FileName")
+            ]
+        )
+    )
+    channel_list.sort()
 
-    cycle_list = [
-        col.split("_")[-2] for col in load_data_df.columns if col.startswith("FileName")
-    ]
+    cycle_list = list(
+        set(
+            [
+                col.split("_")[-2]
+                for col in load_data_df.columns
+                if col.startswith("FileName")
+            ]
+        )
+    )
+    cycle_list.sort()
 
     module_counter = 0
     # INFO: Configure load data module

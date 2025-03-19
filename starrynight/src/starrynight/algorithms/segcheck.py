@@ -308,11 +308,16 @@ def generate_segcheck_pipeline(
     for_sbs: bool = False,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
-    channel_list = [
-        col.split("_")[1].replace("Corr", "")
-        for col in load_data_df.columns
-        if col.startswith("FileName")
-    ]
+    channel_list = list(
+        set(
+            [
+                col.split("_")[1].replace("Corr", "")
+                for col in load_data_df.columns
+                if col.startswith("FileName")
+            ]
+        )
+    )
+    channel_list.sort()
     module_counter = 0
 
     # INFO: Configure load data module
