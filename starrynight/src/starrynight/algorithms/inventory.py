@@ -4,6 +4,7 @@ Provides functions to create inventory files.
 """
 
 import random
+import shutil
 import string
 from pathlib import Path
 
@@ -76,7 +77,7 @@ def parse_prefix(
         if file.is_dir():
             continue
         parsed_local_file = FileInventory(
-            key=file.relative_to(prefix).__str__(),
+            key=file.resolve().relative_to(prefix).__str__(),
             filename=file.name,
             extension=file.suffix,
             prefix=prefix,
@@ -101,10 +102,16 @@ def create_inventory(dataset_dir: Path | CloudPath, out_dir: Path | CloudPath) -
         Path to save generated inventory. Can be local or a cloud path.
 
     """
-    files = [AnyPath(file) for file in AnyPath(dataset_dir).rglob("*")]
+    files = [AnyPath(file).resolve() for file in AnyPath(dataset_dir).rglob("*")]
     inv = out_dir.joinpath("inv")
+    # Delete files from previous run
+    if inv.exists():
+        if isinstance(inv, CloudPath):
+            inv.rmtree()
+        else:
+            shutil.rmtree(inv)
     inv.mkdir(parents=True, exist_ok=True)
-    prefix_mask = "/".join(dataset_dir.__str__().split("/")[0:-1])
+    prefix_mask = "/".join(dataset_dir.resolve().__str__().split("/")[0:-1])
     parallel(files, parse_prefix, [inv, prefix_mask])
 
     out_files = [AnyPath(file) for file in AnyPath(inv).rglob("*.parquet")]
