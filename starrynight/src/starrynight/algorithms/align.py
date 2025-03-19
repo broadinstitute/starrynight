@@ -294,7 +294,11 @@ def generate_align_pipeline(
     module_counter += 1
     measure_colocal_sbs.module_num = module_counter
     measure_colocal_sbs.images_list.value = ",".join(
-        [f"Corr_Cycle_{cycle}_{ch}" for ch in channel_list for cycle in cycle_list]
+        [
+            f"Aligned_Corr_Cycle_{cycle}_{ch}"
+            for ch in channel_list
+            for cycle in cycle_list
+        ]
     )
     measure_colocal_sbs.thr.value = 15.0
     measure_colocal_sbs.images_or_objects.value = M_IMAGES
