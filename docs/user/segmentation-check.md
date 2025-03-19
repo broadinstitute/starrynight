@@ -35,11 +35,11 @@ starrynight presegcheck loaddata \
 ```
 
 Parameters:
+
 - `-i, --index`: Path to the index.parquet file
 - `-o, --out`: Output directory for the LoadData CSV files
 - `-c, --corr_images`: Path to illumination-corrected images
 - `-m, --path_mask`: Path prefix mask to use when resolving image paths
-- `--sbs`: Flag for treating as sequence-based screening images (default: False)
 
 ### 1.2. Generate CellProfiler Pipelines
 
@@ -55,12 +55,12 @@ starrynight presegcheck cppipe \
 ```
 
 Parameters:
+
 - `-l, --loaddata`: Path to the LoadData CSV files directory
 - `-o, --out`: Output directory for the CellProfiler pipelines
 - `-w, --workspace`: Path to the workspace directory
 - `-n, --nuclei`: Channel to use for nuclei segmentation (e.g., "DAPI")
 - `-c, --cell`: Channel to use for cell segmentation (e.g., "PhalloAF750")
-- `--sbs`: Flag for treating as sequence-based screening images (default: False)
 
 ### 1.3. Execute CellProfiler Pipelines
 
@@ -74,6 +74,7 @@ starrynight cp \
 ```
 
 Parameters:
+
 - `-p, --pipeline`: Path to the CellProfiler pipeline directory
 - `-l, --loaddata`: Path to the LoadData CSV files directory
 - `-o, --output`: Output directory for the pre-segmentation check results
@@ -82,8 +83,6 @@ Parameters:
 
 The pre-segmentation check produces:
 - CSV files with image quality metrics
-- Focus scores and other quality indicators
-- Information about confluent regions and potential segmentation issues
 
 ## Module 2: Segmentation Checking
 
@@ -98,18 +97,14 @@ starrynight segcheck loaddata \
     -i ./scratch/starrynight_example/workspace/index/index.parquet \
     -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/segcheck \
     -c ./scratch/starrynight_example/workspace/illum/cp/illum_apply \
-    -n DAPI \
-    --cell PhalloAF750
 ```
 
 Parameters:
+
 - `-i, --index`: Path to the index.parquet file
 - `-o, --out`: Output directory for the LoadData CSV files
 - `-c, --corr_images`: Path to illumination-corrected images
-- `-n, --nuclei`: Channel to use for nuclei segmentation
-- `--cell`: Channel to use for cell segmentation
 - `-m, --path_mask`: Path prefix mask to use when resolving image paths
-- `--sbs`: Flag for treating as sequence-based screening images (default: False)
 
 ### 2.2. Generate CellProfiler Pipelines
 
@@ -125,12 +120,12 @@ starrynight segcheck cppipe \
 ```
 
 Parameters:
+
 - `-l, --loaddata`: Path to the LoadData CSV files directory
 - `-o, --out`: Output directory for the CellProfiler pipelines
 - `-w, --workspace`: Path to the workspace directory
 - `-n, --nuclei`: Channel to use for nuclei segmentation
 - `-c, --cell`: Channel to use for cell segmentation
-- `--sbs`: Flag for treating as sequence-based screening images (default: False)
 
 ### 2.3. Execute CellProfiler Pipelines
 
@@ -144,6 +139,7 @@ starrynight cp \
 ```
 
 Parameters:
+
 - `-p, --pipeline`: Path to the CellProfiler pipeline directory
 - `-l, --loaddata`: Path to the LoadData CSV files directory
 - `-o, --output`: Output directory for the segmentation check results
@@ -151,15 +147,17 @@ Parameters:
 ### Output Files
 
 The segmentation check produces:
+
 - CSV files with segmentation quality metrics
 - TIFF images with overlaid segmentation outlines for visual validation
 - Metrics for cell and nuclei identification (count, size, distribution)
 
-## How Segmentation Checking Works
+## FIXME: How Segmentation Checking Works
 
 ### Pre-segmentation Algorithm
 
 The pre-segmentation check:
+
 1. Identifies confluent regions in images
 2. Creates masks to exclude regions unsuitable for segmentation
 3. Performs initial nuclei and cell identification
@@ -168,6 +166,7 @@ The pre-segmentation check:
 ### Segmentation Check Algorithm
 
 The segmentation check:
+
 1. Performs nuclei and cell identification using optimized parameters
 2. Analyzes object counts, sizes, and distributions
 3. Generates overlay images highlighting segmentation results
@@ -178,11 +177,13 @@ The segmentation check:
 Common issues:
 
 **Poor quality metrics in pre-segmentation**
+
 - Check for focus issues in original images
 - Verify illumination correction was properly applied
 - Adjust nuclei and cell channels if necessary
 
 **Segmentation errors in visualization**
+
 - Adjust threshold parameters in the CellProfiler pipeline
 - Verify the correct nuclei and cell channels are specified
 - Check for over-confluent regions that may need exclusion

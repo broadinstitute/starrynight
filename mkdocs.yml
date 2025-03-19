@@ -15,6 +15,7 @@ nav:
     - Parser Configuration: user/parser-configuration.md
     - Processing Modules: user/modules.md
     - Illumination Correction: user/illumination-correction.md
+    - Segmentation Check: user/segmentation-check.md
   - Development:
     - Developer Guide: developer/developer-guide.md
   - FAQ: misc/faq.md
