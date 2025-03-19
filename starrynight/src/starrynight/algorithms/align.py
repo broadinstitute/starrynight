@@ -68,9 +68,7 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
-    ]
+    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
 
     filename_heads = [
         f"FileName_Corr_Cycle_{int(cycle)}_{col}"
@@ -92,8 +90,9 @@ def write_loaddata(
     for index in images_df.to_dicts():
         index = PCPIndex(**index)
         filenames = [
-            f"{index.batch_id}_{index.plate_id}_{int(index.cycle_id)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
+            f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
             for col in plate_channel_list
+            for cycle in plate_cycles_list
         ]
         pathnames = [
             resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
@@ -109,7 +108,6 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id,
                 # Filename heads
                 *filenames,
                 # Pathname heads
@@ -201,7 +199,7 @@ def gen_align_load_data_by_batch_plate(
             write_loaddata_csv_by_batch_plate_cycle(
                 images_df,
                 out_path,
-                corr_images_path,
+                corr_images_path.joinpath(batch, plate),
                 nuclei_channel,
                 path_mask,
                 batch,
@@ -242,7 +240,7 @@ def generate_align_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    load_data.metadata_fields.value = "Batch,Plate,Cycle"
+    load_data.metadata_fields.value = "Batch,Plate"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
@@ -351,7 +349,7 @@ def generate_align_pipeline(
             # save_image.root_dir.value = ""
             save_image.stack_axis.value = AXIS_T
             # save_image.tiff_compress.value = ""
-            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\{cycle}_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
             pipeline.add_module(save_image)
 
     # export measurements to spreadsheet
