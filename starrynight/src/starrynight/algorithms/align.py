@@ -317,9 +317,11 @@ def generate_align_pipeline(
     module_counter += 1
     flag_unaligned.module_num = module_counter
 
-    images_to_flag = [f"Corr_Cycle_{cycle}_{nuclei_channel}" for cycle in cycle_list]
+    images_to_flag = [
+        f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}" for cycle in cycle_list
+    ]
     # skip checking cycle 1 nuclei
-    images_to_flag.remove(f"Corr_Cycle_1_{nuclei_channel}")
+    images_to_flag.remove(f"Aligned_Corr_Cycle_1_{nuclei_channel}")
     # One flag is already created
     for _ in range(len(images_to_flag) - 1):
         flag_unaligned.add_flag()
@@ -369,7 +371,7 @@ def generate_align_pipeline(
             # save_image.root_dir.value = ""
             save_image.stack_axis.value = AXIS_T
             # save_image.tiff_compress.value = ""
-            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\{cycle}_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_{cycle}_Well_\\g<Well>_Site_\\g<Site>_Aligned{ch}"
             pipeline.add_module(save_image)
 
     # export measurements to spreadsheet
