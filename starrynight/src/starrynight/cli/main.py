@@ -3,6 +3,7 @@
 import click
 
 from starrynight.cli.align import align
+from starrynight.cli.analysis import analysis
 from starrynight.cli.cp import invoke_cp
 from starrynight.cli.illum import illum
 from starrynight.cli.index import index
@@ -26,3 +27,4 @@ main.add_command(presegcheck)
 main.add_command(segcheck)
 main.add_command(align)
 main.add_command(preprocess)
+main.add_command(analysis)

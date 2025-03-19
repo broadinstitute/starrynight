@@ -366,13 +366,13 @@ def generate_preprocess_pipeline(
         # Add cycle images
         for i, cycle in enumerate(cycle_list):
             # Image or measurement?
-            mean_cycles.images[i].settings[0].value = IM_IMAGE
+            mean_cycles.images[i].image_or_measurement.value = IM_IMAGE
             # Image name
-            mean_cycles.images[i].settings[1].value = f"Align_Cycle_{cycle}_{ch}"
+            mean_cycles.images[i].image_name.value = f"Align_Cycle_{cycle}_{ch}"
             # Measurement
-            mean_cycles.images[i].settings[2].value = ""
+            mean_cycles.images[i].measurement.value = ""
             # Factor
-            mean_cycles.images[i].settings[3].value = 1
+            mean_cycles.images[i].factor.value = 1
 
         pipeline.add_module(mean_cycles)
 
@@ -413,10 +413,10 @@ def generate_preprocess_pipeline(
         correct_illum_apply.module_num = module_counter
 
         # add image slots
-        for col in range(len(cycle_list) - 1):  # One image is already added by default
+        for _ in range(len(cycle_list) - 1):  # One image is already added by default
             correct_illum_apply.add_image()
 
-        for i, col in enumerate(cycle_list):
+        for i, cycle in enumerate(cycle_list):
             # image_name
             correct_illum_apply.images[i].settings[
                 0
