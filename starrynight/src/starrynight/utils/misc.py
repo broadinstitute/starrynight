@@ -22,6 +22,26 @@ def get_scratch_path() -> Path:
     return Path(__file__).parents[4].joinpath("scratch")
 
 
+def resolve_path_loaddata(
+    path_mask: Path | CloudPath, filepath: Path | CloudPath
+) -> str:
+    """Resolve filepaths for loaddata.
+
+    Parameters
+    ----------
+    path_mask : Path | CloudPath
+        Path used for masking filepath from index
+    filepath : Path | CloudPath
+        Path of the file in index
+
+    """
+    try:
+        filepath.resolve().relative_to(path_mask.resolve())
+        return filepath.resolve().__str__()
+    except ValueError:
+        return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
+
+
 def write_pq(
     col_dict: dict, dict_type: type[BaseModel], out_path: Path | CloudPath
 ) -> None:
