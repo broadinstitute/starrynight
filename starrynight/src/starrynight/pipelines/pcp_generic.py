@@ -6,6 +6,9 @@ from pipecraft.pipeline import Parallel, Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules import cp_pre_segcheck
+from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
+from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
+from starrynight.modules.analysis.analysis_load_data import AnalysisGenLoadDataModule
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
 from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
@@ -95,40 +98,51 @@ def create_pcp_generic_pipeline(
         sbs_preprocess_loaddata := init_module(SBSPreprocessGenLoadDataModule),
         sbs_preprocess_cpipe := init_module(SBSPreprocessGenCPPipeModule),
         sbs_preprocess_cp := init_module(SBSPreprocessInvokeCPModule),
+        # analysis
+        analysis_loaddata := init_module(AnalysisGenLoadDataModule),
+        analysis_cpipe := init_module(AnalysisGenCPPipeModule),
+        analysis_cp := init_module(AnalysisInvokeCPModule),
     ]
-    return module_list, Parallel(
+    return module_list, Seq(
         [
-            Seq(
+            Parallel(
                 [
-                    cp_illum_calc_loaddata.pipe,
-                    cp_illum_calc_cpipe.pipe,
-                    cp_illum_calc_cp.pipe,
-                    cp_apply_calc_loaddata.pipe,
-                    cp_apply_calc_cpipe.pipe,
-                    cp_apply_calc_cp.pipe,
-                    cp_pre_segcheck_loaddata.pipe,
-                    cp_pre_segcheck_cpipe.pipe,
-                    cp_pre_segcheck_cp.pipe,
-                    cp_segcheck_loaddata.pipe,
-                    cp_segcheck_cpipe.pipe,
-                    cp_segcheck_cp.pipe,
+                    Seq(
+                        [
+                            cp_illum_calc_loaddata.pipe,
+                            cp_illum_calc_cpipe.pipe,
+                            cp_illum_calc_cp.pipe,
+                            cp_apply_calc_loaddata.pipe,
+                            cp_apply_calc_cpipe.pipe,
+                            cp_apply_calc_cp.pipe,
+                            cp_pre_segcheck_loaddata.pipe,
+                            cp_pre_segcheck_cpipe.pipe,
+                            cp_pre_segcheck_cp.pipe,
+                            cp_segcheck_loaddata.pipe,
+                            cp_segcheck_cpipe.pipe,
+                            cp_segcheck_cp.pipe,
+                        ]
+                    ),
+                    Seq(
+                        [
+                            sbs_illum_calc_loaddata.pipe,
+                            sbs_illum_calc_cpipe.pipe,
+                            sbs_illum_calc_cp.pipe,
+                            sbs_illum_apply_loaddata.pipe,
+                            sbs_illum_apply_cpipe.pipe,
+                            sbs_illum_apply_cp.pipe,
+                            sbs_align_loaddata.pipe,
+                            sbs_align_cpipe.pipe,
+                            sbs_align_cp.pipe,
+                            sbs_preprocess_loaddata.pipe,
+                            sbs_preprocess_cpipe.pipe,
+                            sbs_preprocess_cp.pipe,
+                        ]
+                    ),
                 ]
-            ),
-            Seq(
-                [
-                    sbs_illum_calc_loaddata.pipe,
-                    sbs_illum_calc_cpipe.pipe,
-                    sbs_illum_calc_cp.pipe,
-                    sbs_illum_apply_loaddata.pipe,
-                    sbs_illum_apply_cpipe.pipe,
-                    sbs_illum_apply_cp.pipe,
-                    sbs_align_loaddata.pipe,
-                    sbs_align_cpipe.pipe,
-                    sbs_align_cp.pipe,
-                    sbs_preprocess_loaddata.pipe,
-                    sbs_preprocess_cpipe.pipe,
-                    sbs_preprocess_cp.pipe,
-                ]
-            ),
-        ]
+            )
+        ],
+        analysis_loaddata.pipe,
+        analysis_cpipe.pipe,
+        analysis_cp.pipe,
     )

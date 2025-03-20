@@ -1,5 +1,8 @@
 """Starrynight module registry."""
 
+from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
+from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
+from starrynight.modules.analysis.analysis_load_data import AnalysisGenLoadDataModule
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
 from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
@@ -103,4 +106,8 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     SBSPreprocessGenLoadDataModule.uid(): SBSPreprocessGenLoadDataModule,
     SBSPreprocessGenCPPipeModule.uid(): SBSPreprocessGenCPPipeModule,
     SBSPreprocessInvokeCPModule.uid(): SBSPreprocessInvokeCPModule,
+    # Analysis
+    AnalysisGenLoadDataModule.uid(): AnalysisGenLoadDataModule,
+    AnalysisGenCPPipeModule.uid(): AnalysisGenCPPipeModule,
+    AnalysisInvokeCPModule.uid(): AnalysisInvokeCPModule,
 }
