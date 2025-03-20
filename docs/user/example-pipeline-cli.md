@@ -197,21 +197,29 @@ starrynight cp \
     -o ${WKDIR}/segcheck/cp/
 ```
 
-## Step 3
+## Step 3. Image Alignment
+
+Image alignment is a critical step SBS images, ensuring that images from different cycles are spatially aligned.
+
+This step registers all images from different cycles using the nuclei channel as a reference. The alignment process generates transformed images with consistent spatial coordinates across all cycles, which is crucial for accurately matching cells across multiple imaging rounds.
+
 
 ```bash
+# Generate LoadData files for alignment
 starrynight align loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/align \
     -c ${WKDIR}/illum/sbs/illum_apply/ \
     --nuclei DAPI
 
+# Generate CellProfiler pipelines for alignment
 starrynight align cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/align \
     -w ${WKDIR}/align/sbs \
     --nuclei DAPI
 
+# Execute alignment pipelines
 starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/sbs/align \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
@@ -220,13 +228,23 @@ starrynight cp \
     --jobs 1
 ```
 
-## Step 4
+## Step 4. Preprocessing and Barcode Calling
+
+Preprocessing prepares your images for final analysis by performing barcode calling on SBS images.
+
+This step performs the following operations:
+
+1. Cell segmentation based on nuclear and cytoplasmic markers
+2. Feature enhancement to identify barcode spots
+3. Color compensation across channels
+4. Barcode calling to match detected signals to known barcode sequences
+5. Association of barcodes with segmented cells
 
 ```bash
+# Set input directory with barcode information
 export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
-```
 
-```bash
+# Generate LoadData files for preprocessing
 starrynight preprocess loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
@@ -234,6 +252,7 @@ starrynight preprocess loaddata \
     -a ${WKDIR}/align/sbs/ \
     -n DAPI
 
+# Generate CellProfiler pipelines for preprocessing
 starrynight preprocess cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/ \
@@ -241,6 +260,7 @@ starrynight preprocess cppipe \
     -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
     -n DAPI
 
+# Execute preprocessing pipelines
 starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess \
@@ -248,12 +268,57 @@ starrynight cp \
     --sbs
 ```
 
+Module-specific parameters:
 
-## FIXME How Quality Control Works
+- `-a, --align_images`: Path to aligned images from the previous step
+- `-b, --barcode`: Path to the barcode CSV file that defines barcode sequences
+
+## Step 5. Final Analysis
+
+The final analysis step processes the preprocessed images to extract cellular measurements and generate the dataset for downstream analysis.
+
+This step generates the final dataset with:
+
+1. Comprehensive cell morphology measurements
+2. Intensity measurements for all channels across all cells
+3. Barcode identity associations with cells
+4. Quality control metrics for all analyzed objects
+
+```bash
+# Generate LoadData files for analysis
+starrynight analysis loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
+    -c ${WKDIR}/illum/cp/illum_apply/ \
+    -a ${WKDIR}/align/sbs/ \
+    -n DAPI
+
+# Generate CellProfiler pipelines for analysis
+starrynight analysis cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/analysis/ \
+    -w ${WKDIR}/analysis/sbs/ \
+    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
+    -n DAPI
+
+# Execute analysis pipelines
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis \
+    -o ${WKDIR}/analysis/sbs/ \
+    --sbs
+```
+
+Module-specific parameters:
+
+- `-a, --align_images`: Path to aligned images from the previous step
+- `-b, --barcode`: Path to the barcode CSV file that defines barcode sequences
+
+## How Quality Control Works
 
 The pre-segmentation check identifies confluent regions in images and creates masks to exclude regions unsuitable for segmentation. The post-segmentation check performs nuclei and cell identification using optimized parameters and generates overlay images highlighting segmentation results for visual validation.
 
-## Output Files
+## FIXME Output Files
 
 Each step produces specific outputs:
 
@@ -295,8 +360,34 @@ Throughout the pipeline, you'll use these common parameters:
 - For over-confluent regions, consider adjusting threshold parameters
 - Review CellProfiler logs for pipeline errors
 
+### Alignment Issues
+
+- Verify that the nuclei channel (DAPI) has sufficient signal and contrast
+- Check that images from different cycles have similar quality
+- For poor alignment, consider increasing the number of registration points
+- For memory errors, reduce the batch size by editing the loaddata files
+
+### Barcode Calling Issues
+
+- Verify that the barcode CSV file has the correct format with sgRNA and gene_symbol columns
+- Ensure that barcode sequences match the expected pattern from your experiment
+- For low confidence barcode calls, adjust intensity thresholds in preprocessing
+- Check for spectral bleedthrough that might affect barcode signal quality
+
 ## Next Steps
 
-- Proceed with full cell segmentation
-- Extract and analyze features
-- View results in the Canvas UI
+- Perform statistical analysis on the extracted features
+- Visualize results using your preferred analysis tools
+- Export processed data for integration with other analysis platforms
+
+## Conclusion
+
+You have now completed a full StarryNight pipeline, from ingesting raw image data to producing structured analysis results. This example demonstrates the core workflow for processing and analyzing high-content screening data:
+
+1. Create an inventory of your raw image files
+2. Generate an index with extracted metadata
+3. Perform illumination correction to normalize image intensity
+4. Run quality control to ensure reliable segmentation
+5. Align images across cycles (for sequence-based screening)
+6. Preprocess images and perform barcode calling
+7. Run final analysis to extract comprehensive measurements
