@@ -8,9 +8,9 @@ StarryNight uses **CellProfiler** as its core image processing engine:
 
 1. **StarryNight generates CellProfiler pipelines** rather than implementing image processing directly
 2. **Common three-tier architecture**:
-   - **Load Data Generation**: Creates CSVs for CellProfiler's LoadData module
-   - **Pipeline Generation**: Programmatically constructs CellProfiler pipelines
-   - **Pipeline Execution**: Handled elsewhere
+      - **Load Data Generation**: Creates CSVs for CellProfiler's LoadData module
+      - **Pipeline Generation**: Programmatically constructs CellProfiler pipelines
+      - **Pipeline Execution**: Handled elsewhere
 
 ## Algorithm Index
 
