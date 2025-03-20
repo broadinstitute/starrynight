@@ -16,7 +16,16 @@ nav:
     - Processing Modules: user/modules.md
     - Example CLI Pipeline: user/example-pipeline-cli.md
     - Algorithms:
+      - Overview: user/algorithms/README.md
+      - Documentation Guide: user/algorithms/DOCUMENTATION_GUIDE.md
       - Illumination Calculation: user/algorithms/illum_calc.md
+      - Illumination Apply: user/algorithms/illum_apply.md
+      - Alignment: user/algorithms/align.md
+      - Preprocessing: user/algorithms/preprocess.md
+      - Pre-segmentation Check: user/algorithms/presegcheck.md
+      - Segmentation Check: user/algorithms/segcheck.md
+      - Stitch and Crop: user/algorithms/stitchcrop.md
+      - Analysis: user/algorithms/analysis.md
   - Development:
     - Developer Guide: developer/developer-guide.md
   - FAQ: misc/faq.md
