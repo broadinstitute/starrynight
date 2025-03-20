@@ -90,7 +90,9 @@ def write_loaddata(
 
     index = images_df[0].to_dicts()[0]
     index = PCPIndex(**index)
-    wells_sites = images_df.group_by("well_id").agg("site_id").to_dicts()
+    wells_sites = (
+        images_df.group_by("well_id").agg(pl.col("site_id").unique()).to_dicts()
+    )
     for well_sites in wells_sites:
         index.well_id = well_sites["well_id"]
         for site_id in well_sites["site_id"]:
