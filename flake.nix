@@ -75,7 +75,7 @@
                   glib
                   pkg-config
                   uv
-                  jdk
+                  jdk11
                   maven
                   libmysqlclient
                   mariadb
@@ -90,6 +90,7 @@
                 ++ lib.optionals stdenv.isLinux [
                   goofys
                   mpkgs.fluent-bit
+                  fiji
                 ];
               venvDir = "./.venv";
               postVenvCreation = ''

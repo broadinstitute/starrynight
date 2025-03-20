@@ -15,7 +15,8 @@ dependencies = [
   "cloudpathlib[all]>=0.18,<1.0",
   "joblib<=1.4",
   "linkml>=1.8",
-  "marimo[sql]"
+  "marimo[sql]",
+  "pyimagej>=1.6"
 ]
 
 [project.optional-dependencies]
