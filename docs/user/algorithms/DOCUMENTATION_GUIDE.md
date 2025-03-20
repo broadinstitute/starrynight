@@ -1,178 +1,93 @@
 # Algorithm Documentation Guide
 
-This guide provides detailed instructions for documenting algorithms in the StarryNight project. Following these guidelines ensures consistency and thoroughness across all algorithm documentation.
+This guide provides instructions for documenting algorithms in the StarryNight project. Following these guidelines ensures consistency while being concise and developer-friendly.
+
+## Core Documentation Principles
+
+1. **Be concise**: Developers can read code. Focus on explaining "why" not "how".
+2. **Emphasize unique aspects**: Document what makes each algorithm special, not what's common.
+3. **Focus on architecture decisions**: Explain key design choices and their rationale.
+4. **Include non-obvious information**: Document things that aren't immediately clear from the code.
 
 ## Understanding the CellProfiler-Based Architecture
 
-Before documenting a StarryNight algorithm, it's essential to understand the core architectural pattern:
+Most StarryNight algorithms follow a common pattern:
 
-StarryNight uses a **three-tier architecture** built around CellProfiler:
-
-1. **Load Data Generation**: Python code that prepares CSV files describing which images to process
+1. **Load Data Generation**: Python code that prepares CSVs for CellProfiler's LoadData module
 2. **Pipeline Generation**: Python code that programmatically constructs CellProfiler pipelines
-3. **Pipeline Execution**: Running the generated pipelines with CellProfiler (handled by separate mechanisms)
+3. **Pipeline Execution**: Handled elsewhere
 
-This means that StarryNight's "algorithms" are primarily pipeline generators, not direct image processing implementations. The actual image processing happens inside CellProfiler.
+This pattern doesn't need to be extensively documented in each algorithm file. Focus on what's unique.
 
-## Documentation Structure
-
-Each algorithm should be documented using the following structure:
+## Documentation Sections
 
 ### 1. Title and Overview
 
 ```markdown
-# Algorithm Name (file.py) - Technical Documentation
+# Algorithm Name (file.py)
 
-This document provides a detailed explanation of the [algorithm name] implementation in the StarryNight project.
-
-## Overview
-
-The `[file.py]` module implements [brief description of what the algorithm does and its purpose].
-
-The module follows StarryNight's standard three-tier architecture:
-1. Load data generation
-2. CellProfiler pipeline generation
-3. Pipeline execution (handled elsewhere)
+Brief explanation of what this algorithm does and its purpose within StarryNight.
 ```
 
-The overview should clearly state:
+Keep the overview to 2-3 sentences. Focus on:
 - What problem the algorithm solves
 - Where it fits in the overall workflow
-- That it generates CellProfiler pipelines rather than implementing processing directly
 
-### 2. Dependencies
-
-```markdown
-## Dependencies
-
-The module relies on several key libraries:
-- **CellProfiler**: Core image processing functionality through modules like [list key CP modules]
-- **[Other Library]**: [Description of functionality provided]
-```
-
-Always list CellProfiler first, with specific modules it uses. This emphasizes the CellProfiler foundation.
-
-### 3. Key Components
+### 2. Key Components and Special Features
 
 ```markdown
 ## Key Components
 
-### 1. Load Data Generation
+- **Unique Feature A**: Brief explanation of what makes this feature special
+- **Unique Feature B**: Brief explanation of what makes this feature special
 
-#### Main Functions
-- `function1`: [Description]
-- `main_entry_function`: Main entry point for load data generation
+### CellProfiler Configuration
 
-#### Data Organization
-- [Describe how data is organized]
-
-### 2. CellProfiler Pipeline Generation
-
-#### Main Functions
-- `function1`: [Description]
-- `main_entry_function`: Main entry point for pipeline generation
-
-#### Pipeline Structure
-[Describe the CellProfiler pipeline structure created by this algorithm]
-1. **[CP Module Name]**: [What it does]
-2. **[CP Module Name]**: [What it does]
+Key CellProfiler modules and configurations:
+- **ModuleA**: Configured with X parameters for Y purpose
+- **ModuleB**: Configured with X parameters for Y purpose
 ```
 
-For each CellProfiler module:
-- Name the specific module (e.g., CorrectIlluminationCalculate)
-- Explain how it's configured in this particular algorithm
-- List key parameters that affect its behavior
+Focus on what's unique to this algorithm, not what's common across all algorithms.
 
-### 4. Technical Details
+### 3. Technical Implementation Notes
 
 ```markdown
-### Technical Details
+## Implementation Notes
 
-#### Key Parameters
-- Parameter 1: [Value and meaning]
-- Parameter 2: [Value and meaning]
-
-#### File Naming and Organization
-- [Explain file naming conventions]
-
-#### Special Considerations
-- [Describe any special cases]
+- **Special case handling**: How this algorithm handles X edge case
+- **Performance considerations**: Any optimizations or considerations
+- **Key parameters**: Only the non-obvious or critical parameters
 ```
 
-### 5. Workflow
+Include information that would help a developer understand non-obvious aspects of the implementation.
+
+### 4. Integration Points
 
 ```markdown
-## Workflow
+## Integration Points
 
-1. **Step 1**:
-   - [Detail what happens]
-
-2. **Step 2**:
-   - [Detail what happens]
+- **Inputs**: Expected input format, structure, or requirements
+- **Outputs**: What this algorithm produces and how it's used downstream
+- **Dependencies**: Non-standard dependencies or requirements
 ```
 
-Include a complete workflow from data input to output, emphasizing the transitions between:
-- Data preparation
-- Load data generation
-- Pipeline generation
-- What happens during execution
-
-### 6. Resources and Implementation Notes
-
-```markdown
-## Key Classes and Resources
-- **Class/Resource 1**: [Description]
-
-## Technical Implementation Notes
-1. **Note 1**:
-   - [Detailed explanation]
-```
-
-### 7. Conclusion
-
-```markdown
-## Conclusion
-
-The [algorithm name] module provides [summary of what it accomplishes]. By leveraging CellProfiler's [specific capabilities], it enables [key capabilities] in the StarryNight platform.
-```
-
-Always emphasize the CellProfiler foundation in the conclusion.
+Focus on how the algorithm connects to other parts of the system.
 
 ## Documentation Best Practices
 
-1. **Be Specific About CellProfiler Usage**
-   - Name the exact CellProfiler modules used
-   - Describe module parameters and their effects
-   - Explain how StarryNight configures these modules programmatically
-
-2. **Include Concrete Examples**
-   - Show example CSV structure for LoadData
-   - Provide example pipeline snippets for key CellProfiler configurations
-   - Demonstrate file naming patterns
-
-3. **Emphasize the Generation Pattern**
-   - Clarify that StarryNight generates the pipelines rather than implementing processing
-   - Explain how the generation code adapts to different data organizations
-
-4. **Document Both Tiers**
-   - Load data generation: How StarryNight organizes image data for CellProfiler
-   - Pipeline generation: How StarryNight configures CellProfiler to process that data
-
-5. **Clarify Special Cases**
-   - SBS vs. non-SBS images
-   - Batch/plate/cycle organization
-   - Error handling and fallbacks
-
-## Review Checklist
-
-Before submitting new algorithm documentation, verify that it:
-
-- [ ] Clearly states the algorithm uses CellProfiler for actual processing
-- [ ] Lists all CellProfiler modules used by the algorithm
-- [ ] Explains how each module is configured and connected
-- [ ] Documents the three-tier architecture implementation
-- [ ] Provides concrete examples of inputs and outputs
-- [ ] Describes the end-to-end workflow
+1. **Be specific about differences**
+      - Highlight what makes this algorithm unique
+      - Don't repeat architectural patterns common to all algorithms
+2. **Include only non-obvious examples**
+      - Show examples only for complex or unusual configurations
+      - Skip examples for standard patterns
+3. **Focus on design decisions and trade-offs**
+      - Explain why certain approaches were chosen
+      - Document alternative approaches that were considered
+4. **Document edge cases and limitations**
+      - Note known limitations or constraints
+      - Document special case handling
 
 ## Template
 

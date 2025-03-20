@@ -1,129 +1,29 @@
-# Illumination Apply (illum_apply.py) - Technical Documentation
+# Illumination Apply (illum_apply.py)
 
-This document provides a detailed explanation of the illumination apply algorithm implementation in the StarryNight project.
-
-## Overview
-
-The `illum_apply.py` module implements an algorithm for applying previously calculated illumination correction functions to microscopy images. This process normalizes uneven illumination across images, ensuring consistent intensity profiles that improve downstream analysis accuracy.
-
-The module follows StarryNight's standard three-tier architecture:
-1. Load data generation
-2. CellProfiler pipeline generation
-3. Pipeline execution (handled elsewhere)
-
-## Dependencies
-
-The module relies on several key libraries:
-- **CellProfiler**: Core image processing functionality through modules like `CorrectIlluminationApply` and `SaveImages`
-- **Polars**: Data manipulation through DataFrames
-- **CloudPath**: Path abstraction for local and cloud storage compatibility
-- **centrosome**: Background compensation functionality with `MODE_AUTO`
+Applies previously calculated illumination correction functions to microscopy images, normalizing uneven illumination patterns to improve downstream analysis accuracy.
 
 ## Key Components
 
-### 1. Load Data Generation
+- **Division-Based Correction**: Uses division method (DOS_DIVIDE) to normalize illumination, appropriate for fluorescence microscopy where illumination has multiplicative effects
+- **Hierarchical Processing**: Handles both standard (batch/plate) and sequential (batch/plate/cycle) image organizations
+- **Automatic Function Matching**: Automatically maps illumination functions to corresponding images based on metadata
 
-#### Main Functions
+### CellProfiler Configuration
 
-- `write_loaddata`: Writes CSV headers and data rows for CellProfiler's LoadData module
-- `write_loaddata_csv_by_batch_plate`: Writes load data CSV files organized by batch and plate
-- `write_loaddata_csv_by_batch_plate_cycle`: Writes load data CSV files organized by batch, plate, and cycle
-- `gen_illum_apply_load_data_by_batch_plate`: Main entry point for load data generation
+Key CellProfiler modules:
 
-#### Data Organization
+- **CorrectIlluminationApply**: Implements division-based correction to normalize images
+- **SaveImages**: Preserves corrected images as 16-bit TIFFs to maintain precision
 
-- Data is organized hierarchically by `batch`, `plate`, and optionally `cycle`
-- Each CSV contains metadata columns (Batch, Plate, Site, Well, Cycle) plus:
-  - Original image paths and channel information
-  - Illumination function paths for each channel
-- The CSV links each input image with its corresponding illumination function
+## Implementation Notes
 
-### 2. CellProfiler Pipeline Generation
+- **SBS vs. Non-SBS Images**: Handles both standard and cycle-based sequential imaging protocols
+- **Modular Design**: Separates illumination function calculation from application, enabling reuse of correction functions
+- **File Organization**: Maintains hierarchical structure (batch/plate/cycle) for output files, matching input organization
 
-#### Main Functions
+## Integration Points
 
-- `generate_illum_apply_pipeline`: Creates a CellProfiler pipeline for illumination application
-- `gen_illum_apply_cppipe_by_batch_plate`: Writes pipeline files for each batch/plate combination
-
-#### Pipeline Structure
-
-The pipeline consists of a sequence of modules that:
-1. **LoadData**: Loads both original images and illumination functions using the CSV specification
-2. **CorrectIlluminationApply**: Applies illumination correction to each channel using division method
-3. **SaveImages**: Saves corrected images with appropriate names
-
-### Technical Details
-
-#### Illumination Application Method
-
-- The module uses division-based correction (DOS_DIVIDE) to normalize illumination
-- This divides the original image intensity by the illumination function values
-- Division is preferred for fluorescence microscopy where illumination has a multiplicative effect
-
-#### File Naming and Organization
-
-- Corrected images are named following the pattern: `[Batch]_[Plate]_Well_[Well]_Site_[Site]_[Channel]Corr`
-- For SBS images: `[Batch]_[Plate]_[Cycle]_Well_[Well]_Site_[Site]_[Channel]Corr`
-- Images are saved as 16-bit TIFF files to preserve precision
-
-#### SBS vs. Non-SBS Images
-
-The module handles two types of image sets:
-- **Non-SBS images**: Standard images organized by batch and plate
-- **SBS images**: Sequential (cycle-based) images organized by batch, plate, and cycle
-
-## Workflow
-
-1. **Data Preparation**:
-   - Read the index file containing image metadata
-   - Filter for relevant images (SBS or non-SBS)
-   - Group images by hierarchy (batch/plate/cycle)
-
-2. **Load Data Generation**:
-   - For each batch/plate combination (or batch/plate/cycle for SBS):
-     - Filter the relevant images
-     - Identify corresponding illumination function files
-     - Generate a CSV file linking images with their illumination functions
-     - Write to the output directory
-
-3. **Pipeline Generation**:
-   - For each generated CSV file:
-     - Create a CellProfiler pipeline
-     - Configure the LoadData module to read both images and illumination functions
-     - Add CorrectIlluminationApply module for each channel
-     - Configure SaveImages module for each corrected channel
-     - Save the pipeline to a .cppipe file
-
-4. **Execution**:
-   - Pipelines are executed separately (not covered in this module)
-   - Corrected images are saved as TIFF files
-
-## Key Classes and Resources
-
-- **PCPIndex**: Manages image metadata and hierarchy
-- **CellProfilerContext**: Context manager for CellProfiler resources
-- **Data Utilities**:
-  - `gen_image_hierarchy`: Generates hierarchical organization of images
-  - `get_channels_by_batch_plate`: Extracts channel information for a batch/plate
-  - `get_cycles_by_batch_plate`: Extracts cycle information for a batch/plate
-
-## Technical Implementation Notes
-
-1. **File Organization**:
-   - Output files are organized in a hierarchical directory structure (batch/plate/cycle)
-   - The structure matches the input organization for easy traceability
-
-2. **Efficient Processing**:
-   - Images are processed in batch/plate groups for efficient parallel execution
-   - This allows distribution across compute resources for large datasets
-
-3. **Path Handling**:
-   - `CloudPath` abstraction enables working with both local and cloud storage
-   - Path resolution is handled carefully to ensure CellProfiler can access all files
-
-4. **Context Management**:
-   - CellProfilerContext is used to manage resources and ensure proper cleanup
-
-## Conclusion
-
-The illumination apply module provides an efficient system for applying illumination correction to microscopy images. By separating the illumination function calculation from its application, StarryNight enables a modular workflow where correction functions can be calculated once and applied to multiple image sets. The module handles both standard and sequential (SBS) imaging protocols, applying the appropriate illumination functions based on metadata.
+- **Inputs**: Requires both original images and previously calculated illumination functions (.npy files)
+- **Outputs**: Produces corrected images named with pattern `[Batch]_[Plate]_Well_[Well]_Site_[Site]_[Channel]Corr`
+- **Dependencies**: CellProfiler, Polars, CloudPath
+- **Used By**: The `align.py` algorithm which registers these corrected images across cycles

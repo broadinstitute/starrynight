@@ -1,46 +1,38 @@
 # Algorithm Documentation
 
-This directory contains technical documentation for each algorithm in the StarryNight project. Each file provides detailed information about a specific algorithm's implementation, including its architecture, components, workflow, and technical details.
+This directory contains concise technical documentation for algorithms in the StarryNight project, focusing on unique aspects and implementation details not obvious from the code.
 
 ## CellProfiler as the Foundation
 
-The StarryNight platform uses **CellProfiler** as its core image processing engine. This fundamental design choice defines how algorithms are implemented:
+StarryNight uses **CellProfiler** as its core image processing engine:
 
-1. **StarryNight does not implement image processing algorithms directly**. Instead, it generates CellProfiler pipelines that perform the actual image processing.
-
-2. **Each algorithm follows a three-tier architecture**:
-   - **Load Data Generation**: Creates CSV files that tell CellProfiler which images to process
-   - **Pipeline Generation**: Programmatically constructs CellProfiler pipelines (.cppipe files) with specific modules
-   - **Pipeline Execution**: Runs CellProfiler with the generated pipeline and input data (handled separately)
-
-3. **Key Benefits of the CellProfiler-based approach**:
-   - Leverages CellProfiler's extensive, validated image processing capabilities
-   - Provides reproducible workflows through explicit pipeline files
-   - Allows flexible scaling from local execution to distributed computing
+1. **StarryNight generates CellProfiler pipelines** rather than implementing image processing directly
+2. **Common three-tier architecture**:
+   - **Load Data Generation**: Creates CSVs for CellProfiler's LoadData module
+   - **Pipeline Generation**: Programmatically constructs CellProfiler pipelines
+   - **Pipeline Execution**: Handled elsewhere
 
 ## Algorithm Index
 
-The following algorithms are documented:
-
-- [Illumination Calculation](illum_calc.md): Calculates illumination correction functions for microscopy images
-- [Illumination Apply](illum_apply.md): Applies illumination correction to microscopy images
+- [Illumination Calculation](illum_calc.md): Calculates illumination correction functions
+- [Illumination Apply](illum_apply.md): Applies illumination correction to images
 - [Alignment](align.md): Registers images across cycles and channels
-- [Preprocessing](preprocess.md): Prepares images for analysis with standardization and quality checks
-- [Analysis](analysis.md): Performs feature extraction and analysis on processed images
+- [Preprocessing](preprocess.md): Prepares images for analysis
+- [Analysis](analysis.md): Performs feature extraction and analysis
 - [Pre-segmentation Check](presegcheck.md): Validates images prior to segmentation
 - [Segmentation Check](segcheck.md): Validates segmentation results
-- [CellProfiler Plugins](cp_plugins.md): Additional CellProfiler functionality
+- [Stitch and Crop](stitchcrop.md): Combines and crops image tiles
+- [CP Plugins](cp_plugins.md): Additional CellProfiler functionality
 - [Index Generation](index.md): Creates structured metadata from file paths
-- [Inventory](inventory.md): Catalogs files in a dataset
+- [Inventory](inventory.md): Catalogues files in a dataset
 
-## Using This Documentation
+## Documentation Focus
 
-Each algorithm document is structured to help developers understand both the conceptual approach and implementation details:
+Each document emphasizes:
 
-- **Overview**: Explains the algorithm's purpose and its place in the workflow
-- **Dependencies**: Lists key libraries, with emphasis on CellProfiler modules used
-- **Key Components**: Details the load data generation and pipeline generation functions
-- **Workflow**: Describes the end-to-end process from input to output
-- **Technical Implementation**: Highlights important considerations and design decisions
+- Unique components and features specific to the algorithm
+- Key CellProfiler modules and configurations
+- Non-obvious implementation details and special cases
+- Integration points with other parts of the system
 
 For understanding the overall system architecture, refer to the [Core Concepts](../core-concepts.md) documentation.
