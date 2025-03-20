@@ -26,7 +26,7 @@ Most StarryNight modules follow a consistent three-step pattern:
 Before running any commands, set up your workspace directory as an environment variable for convenience:
 
 ```bash
-export WKDIR='./scratch/starrynight_example/workspace'
+export WKDIR='./scratch/starrynight_example_output/workspace'
 ```
 
 ## Step 1: Illumination Correction
@@ -56,6 +56,28 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_calc
 ```
 
+```bash
+# Generate LoadData files
+starrynight illum calc loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
+    --sbs
+
+# Generate CellProfiler pipelines
+starrynight illum calc cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc/ \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc \
+    -w ${WKDIR} \
+    --sbs
+
+# Execute pipelines
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc/ \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
+    -o ${WKDIR}/illum/sbs/illum_calc \
+    --sbs
+```
+
 Module-specific parameters:
 
 - `--channels`: comma-separated list of channels to process (e.g., `--channels DAPI,PhalloAF750`)
@@ -82,6 +104,29 @@ starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_apply \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply \
     -o ${WKDIR}/illum/cp/illum_apply
+```
+
+
+```bash
+# Generate LoadData files
+starrynight illum apply loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    --sbs
+
+# Generate CellProfiler pipelines
+starrynight illum apply cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply \
+    -w ${WKDIR} \
+    --sbs
+
+# Execute pipelines
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    -o ${WKDIR}/illum/sbs/illum_apply \
+    --sbs
 ```
 
 Module-specific parameters:
@@ -151,6 +196,58 @@ starrynight cp \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck \
     -o ${WKDIR}/segcheck/cp/
 ```
+
+## Step 3
+
+```bash
+starrynight align loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/align \
+    -c ${WKDIR}/illum/sbs/illum_apply/ \
+    --nuclei DAPI
+
+starrynight align cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/align \
+    -w ${WKDIR}/align/sbs \
+    --nuclei DAPI
+
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/align \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
+    -o ${WKDIR}/align/sbs \
+    --sbs \
+    --jobs 1
+```
+
+## Step 4
+
+```bash
+export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
+```
+
+```bash
+starrynight preprocess loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
+    -c ${WKDIR}/illum/cp/illum_apply/ \
+    -a ${WKDIR}/align/sbs/ \
+    -n DAPI
+
+starrynight preprocess cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/ \
+    -w ${WKDIR}/preprocess/sbs/ \
+    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
+    -n DAPI
+
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess \
+    -o ${WKDIR}/preprocess/sbs/ \
+    --sbs
+```
+
 
 ## FIXME How Quality Control Works
 
