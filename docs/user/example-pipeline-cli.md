@@ -320,14 +320,23 @@ The pre-segmentation check identifies confluent regions in images and creates ma
 
 ## FIXME Output Files
 
-Each step produces specific outputs:
-
 - Illumination Correction
     - `.npy` files containing correction functions (e.g., `Batch1_Plate1_IllumOrigDAPI.npy`)
     - 16-bit TIFF files with corrected images
 - Quality Control
     - CSV files with quality metrics
     - TIFF images with segmentation overlays (post-segmentation check)
+- Image Alignment                                                                                                                                                                         │ │
+    - Aligned TIFF images with consistent spatial coordinates across cycles                                                                                                               │ │
+    - Transformation matrices for each image registration                                                                                                                                 │ │
+- Preprocessing                                                                                                                                                                           │ │
+    - Compensated image files for each channel and cycle                                                                                                                                  │ │
+    - CSV files with barcode call information                                                                                                                                             │ │
+    - Overlay images showing cell segmentation and barcode spots                                                                                                                          │ │
+- Analysis                                                                                                                                                                                │ │
+    - CSV files with comprehensive cell measurements (shape, intensity, texture)                                                                                                          │ │
+    - Visualization images with cell outlines and identified features                                                                                                                     │ │
+    - Barcode-cell association data for downstream analysis
 
 ## Common Parameters
 
