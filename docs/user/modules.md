@@ -67,8 +67,6 @@ starrynight illum calc cppipe -l LOADDATA_DIRECTORY -o PIPELINE_DIRECTORY -w WOR
 starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
 ```
 
-See the [Illumination Correction](illumination-correction.md) guide for detailed instructions.
-
 ## Alignment Module
 
 The alignment module handles registration of images across different channels and cycles:

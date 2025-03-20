@@ -22,9 +22,6 @@ StarryNight uses **CellProfiler** as its core image processing engine:
 - [Pre-segmentation Check](presegcheck.md): Validates images prior to segmentation
 - [Segmentation Check](segcheck.md): Validates segmentation results
 - [Stitch and Crop](stitchcrop.md): Combines and crops image tiles
-- [CP Plugins](cp_plugins.md): Additional CellProfiler functionality
-- [Index Generation](index.md): Creates structured metadata from file paths
-- [Inventory](inventory.md): Catalogues files in a dataset
 
 ## Documentation Focus
 

@@ -146,4 +146,3 @@ Each module handles a specific image processing task:
 ## Next Steps
 
 - Learn about all [Processing Modules](../user/modules.md)
-- Try the [Illumination Correction](../user/illumination-correction.md) workflow
