@@ -87,33 +87,39 @@ def write_loaddata(
             *pathname_heads,
         ]
     )
-    for index in images_df.to_dicts():
-        index = PCPIndex(**index)
-        filenames = [
-            f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-            for col in plate_channel_list
-            for cycle in plate_cycles_list
-        ]
-        pathnames = [
-            resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
-            for _ in range(len(pathname_heads))
-        ]
 
-        # make sure frame heads are matched with their order in the filenames
-        assert index.key is not None
-        loaddata_writer.writerow(
-            [
-                # Metadata heads
-                index.batch_id,
-                index.plate_id,
-                index.site_id,
-                index.well_id,
-                # Filename heads
-                *filenames,
-                # Pathname heads
-                *pathnames,
+    index = images_df[0].to_dicts()[0]
+    index = PCPIndex(**index)
+    wells_sites = images_df.group_by("well_id").agg("site_id").to_dicts()
+    for well_sites in wells_sites:
+        index.well_id = well_sites["well_id"]
+        for site_id in well_sites["site_id"]:
+            index.site_id = site_id
+            filenames = [
+                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
+                for col in plate_channel_list
+                for cycle in plate_cycles_list
             ]
-        )
+            pathnames = [
+                resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
+                for _ in range(len(pathname_heads))
+            ]
+
+            # make sure frame heads are matched with their order in the filenames
+            assert index.key is not None
+            loaddata_writer.writerow(
+                [
+                    # Metadata heads
+                    index.batch_id,
+                    index.plate_id,
+                    index.site_id,
+                    index.well_id,
+                    # Filename heads
+                    *filenames,
+                    # Pathname heads
+                    *pathnames,
+                ]
+            )
 
 
 def write_loaddata_csv_by_batch_plate_cycle(
