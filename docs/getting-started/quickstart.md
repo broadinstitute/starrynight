@@ -47,6 +47,12 @@ find . -type f -name "*.ome.tiff" -exec rm {} +
 
 </details>
 
+Before running any commands, set up your data and workspace directories as environment variables for convenience:
+
+```bash
+export DATADIR='./scratch/starrynight_example_input'
+export WKDIR='./scratch/starrynight_example_output/workspace'
+```
 
 ## Step 1: Generate Inventory
 
@@ -55,14 +61,14 @@ First, create a catalog of all image files in your dataset:
 ```bash
 # Generate the inventory
 starrynight inventory gen \
-    -d ./scratch/starrynight_example \
-    -o ./scratch/starrynight_example/workspace/inventory
+    -d ${DATADIR} \
+    -o ${WKDIR}/inventory
 ```
 
 This command will scan all files in the input directory and create an inventory file:
 
 ```
-./scratch/workspace/inventory/
+${WKDIR}/inventory/
 ├── inv/                # Shard directory with temporary files
 └── inventory.parquet   # Main inventory file
 ```
@@ -73,11 +79,14 @@ Next, parse the inventory to create a structured index with metadata:
 
 ```bash
 starrynight index gen \
-    -i ./scratch/starrynight_example/workspace/inventory/inventory.parquet \
-    -o ./scratch/starrynight_example/workspace/index/
+    -i ${WKDIR}/inventory/inventory.parquet \
+    -o ${WKDIR}/index/
 ```
 
 The result will be an `index.parquet` file containing structured metadata for each image.
+
+> **Note**:
+
 
 ## Step 3: Run Illumination Correction
 
@@ -87,8 +96,8 @@ Create CSV files for CellProfiler to load images:
 
 ```bash
 starrynight illum calc loaddata \
-    -i ./scratch/starrynight_example/workspace/index/index.parquet \
-    -o ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc
 ```
 
 ### 3.2: Generate CellProfiler Pipelines
@@ -97,9 +106,9 @@ Create CellProfiler pipeline files:
 
 ```bash
 starrynight illum calc cppipe \
-    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc/ \
-    -o ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc \
-    -w ./scratch/starrynight_example/workspace
+    -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc/ \
+    -o ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc \
+    -w ${WKDIR}
 ```
 
 ### 3.3: Execute CellProfiler Pipelines
@@ -108,9 +117,9 @@ Run the pipelines to generate illumination correction files:
 
 ```bash
 starrynight cp \
-    -p ./scratch/starrynight_example/workspace/cellprofiler/cppipe/cp/illum/illum_calc/ \
-    -l ./scratch/starrynight_example/workspace/cellprofiler/loaddata/cp/illum/illum_calc \
-    -o ./scratch/starrynight_example/workspace/illum/cp/illum_calc
+    -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc/ \
+    -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc \
+    -o ${WKDIR}/illum/cp/illum_calc
 ```
 
 ## Step 4: Verify Results
@@ -118,7 +127,7 @@ starrynight cp \
 The illumination correction files will be created in the output directory:
 
 ```
-./scratch/starrynight_example/workspace/illum/cp/illum_calc/
+${WKDIR}/illum/cp/illum_calc/
 ├── Batch1_Plate1_IllumOrigDAPI.npy
 ├── Batch1_Plate1_IllumOrigPhalloAF750.npy
 └── Batch1_Plate1_IllumOrigZO1-AF488.npy
@@ -131,7 +140,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load one of the illumination correction files
-data = np.load('./scratch/starrynight_example/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigDAPI.npy')
+import os
+wkdir = os.environ.get('WKDIR', './scratch/starrynight_example/workspace')
+data = np.load(f'{wkdir}/illum/cp/illum_calc/Batch1_Plate1_IllumOrigDAPI.npy')
 
 # Create a visualization
 plt.figure(figsize=(10,8))
