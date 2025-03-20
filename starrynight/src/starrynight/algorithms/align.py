@@ -348,7 +348,7 @@ def generate_align_pipeline(
     pipeline.add_module(flag_unaligned)
 
     # Save image (combined overlay)
-    for cycle in cycle:
+    for cycle in cycle_list:
         for ch in channel_list:
             save_image = SaveImages()
             module_counter += 1
