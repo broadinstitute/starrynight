@@ -15,6 +15,8 @@ nav:
     - Parser Configuration: user/parser-configuration.md
     - Processing Modules: user/modules.md
     - Example CLI Pipeline: user/example-pipeline-cli.md
+    - Algorithms:
+      - Illumination Calculation: user/algorithms/illum_calc.md
   - Development:
     - Developer Guide: developer/developer-guide.md
   - FAQ: misc/faq.md
