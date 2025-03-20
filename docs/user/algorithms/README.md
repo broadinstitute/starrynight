@@ -16,12 +16,12 @@ StarryNight uses **CellProfiler** as its core image processing engine:
 
 - [Illumination Calculation](illum_calc.md): Calculates illumination correction functions
 - [Illumination Apply](illum_apply.md): Applies illumination correction to images
-- [Alignment](align.md): Registers images across cycles and channels
-- [Preprocessing](preprocess.md): Prepares images for analysis
-- [Analysis](analysis.md): Performs feature extraction and analysis
 - [Pre-segmentation Check](presegcheck.md): Validates images prior to segmentation
 - [Segmentation Check](segcheck.md): Validates segmentation results
+- [Alignment](align.md): Registers images across cycles and channels
 - [Stitch and Crop](stitchcrop.md): Combines and crops image tiles
+- [Preprocessing](preprocess.md): Prepares images for analysis
+- [Analysis](analysis.md): Performs feature extraction and analysis
 
 ## Documentation Focus
 
