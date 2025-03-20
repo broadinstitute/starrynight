@@ -124,3 +124,29 @@ parallel \
    aws s3 sync "${S3_PATH_WORKSPACE}/analysisfix/${BATCH}/Plate1-Well{1}-{2}/" \
    "scratch/starrynight_example/Source1/workspace_example/analysis/${BATCH}/Plate1-Well{1}-{2}/" ::: \
    A1 A2 B1 ::: 0 1
+
+# Compress files to reduce disk usage after downloading
+echo "Compressing files to reduce disk usage..."
+
+# 1. Compress all TIFF files that haven't already been compressed
+find scratch/starrynight_example -type f -name "*.tiff" ! -name "*.compressed.tiff" | parallel 'magick {} -compress jpeg -quality 80 {= s/\.tiff$/.compressed.tiff/ =}'
+
+# 2. Remove original TIFF files after compression
+find scratch/starrynight_example -type f -name "*.tiff" ! -name "*.compressed.tiff" -exec rm {} \;
+
+# 3. Rename compressed files back to original naming
+find scratch/starrynight_example -type f -name "*.compressed.tiff" | parallel 'mv {} {= s/\.compressed\.tiff$/.tiff/ =}'
+
+# 4. Compress NPY files (illumination correction functions)
+
+# Make sure the script exists and is executable
+chmod +x docs/assets/compress_npy.py
+
+# Use parallel to process NPY files with the script
+find scratch/starrynight_example -type f -name "*.npy" | parallel 'python3 docs/assets/compress_npy.py {}'
+
+# Remove original NPY files after compression (only removes if NPZ exists)
+find scratch/starrynight_example -type f -name "*.npy" -exec rm {} \;
+
+# 5. Compress CSV files
+find scratch/starrynight_example -type f -name "*.csv" | parallel 'gzip -9 {}'
