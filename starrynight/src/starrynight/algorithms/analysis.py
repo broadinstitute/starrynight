@@ -11,6 +11,7 @@ from cellprofiler.modules.calculatemath import (
     ROUNDING,
     CalculateMath,
 )
+from cellprofiler.modules.convertobjectstoimage import ConvertObjectsToImage
 from cellprofiler.modules.enhanceorsuppressfeatures import (
     E_NEURITES,
     E_SPECKLES,
@@ -32,6 +33,7 @@ from cellprofiler.modules.filterobjects import (
     FilterObjects,
 )
 from cellprofiler.modules.flagimage import C_ANY, S_AVERAGE_OBJECT, S_IMAGE, FlagImage
+from cellprofiler.modules.graytocolor import SCHEME_RGB, GrayToColor
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
     FH_ALL,
@@ -108,6 +110,7 @@ from cellprofiler.modules.rescaleintensity import (
     M_STRETCH,
     RescaleIntensity,
 )
+from cellprofiler.modules.resize import I_NEAREST_NEIGHBOR, R_BY_FACTOR, Resize
 from cellprofiler.modules.resizeobjects import ResizeObjects
 from cellprofiler.modules.saveimages import (
     AXIS_T,
@@ -1073,7 +1076,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     resize_obj.module_num = module_counter
     resize_obj.x_name.value = "Foci"
-    resize_obj.y_name.value = f"Resize{obj}"
+    resize_obj.y_name.value = "ResizeFoci"
     resize_obj.method.value = "Factor"
     resize_obj.factor_x.value = 0.50
     resize_obj.factor_y.value = 0.50
@@ -1506,43 +1509,183 @@ def generate_analysis_pipeline(
     pipeline.add_module(relate_objects)
 
     # Resize Objects (Painting nuclei and cyto channel)
-    objects_to_resize = [f"", "Cells", "Nuclei"]
+    objects_to_resize = [f"Corr{nuclei_channel}", f"Corr{cyto_channel}"]
     for obj in objects_to_resize:
         resize_obj = ResizeObjects()
         module_counter += 1
         resize_obj.module_num = module_counter
         resize_obj.x_name.value = obj
-        resize_obj.y_name.value = f"Resize{obj}"
+        resize_obj.y_name.value = f"Resize{obj}Vis"
         resize_obj.method.value = "Factor"
         resize_obj.factor_x.value = 0.50
         resize_obj.factor_y.value = 0.50
         resize_obj.factor_z.value = 0.50
         pipeline.add_module(resize_obj)
 
-    # Save image (compensated images)
-    for cycle in cycle_list:
-        for ch in channel_list:
-            save_image = SaveImages()
-            module_counter += 1
-            save_image.module_num = module_counter
-            save_image.save_image_or_figure.value = IF_IMAGE
-            save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}_Compensated"
-            save_image.file_name_method.value = FN_SINGLE_NAME
-            save_image.number_of_digits.value = 4
-            save_image.wants_file_name_suffix.value = False
-            save_image.file_name_suffix.value = ""
-            save_image.file_format.value = FF_TIFF
-            save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
-            save_image.bit_depth.value = BIT_DEPTH_16
-            save_image.overwrite.value = False
-            save_image.when_to_save.value = WS_EVERY_CYCLE
-            save_image.update_file_names.value = False
-            save_image.create_subdirectories.value = False
-            # save_image.root_dir.value = ""
-            save_image.stack_axis.value = AXIS_T
-            # save_image.tiff_compress.value = ""
-            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_Compensated{ch}"
-            pipeline.add_module(save_image)
+    # GrayToColor
+    gray_to_color = GrayToColor()
+    module_counter += 1
+    gray_to_color.module_num = module_counter
+    gray_to_color.scheme_choice.value = SCHEME_RGB
+    gray_to_color.wants_rescale.value = True
+    gray_to_color.red_image_name.value = None
+    gray_to_color.green_image_name.value = f"Resize{cyto_channel}Vis"
+    gray_to_color.blue_image_name.value = f"Resize{nuclei_channel}Vis"
+    gray_to_color.rgb_image_name.value = "ColorImage"
+    gray_to_color.red_adjustment_factor.value = 1.0
+    gray_to_color.green_adjustment_factor.value = 1.0
+    gray_to_color.blue_adjustment_factor.value = 1.0
+    pipeline.add_module(gray_to_color)
+
+    # OverlayOutlines
+    overlay_outlines = OverlayOutlines()
+    module_counter += 1
+    overlay_outlines.module_num = module_counter
+    overlay_outlines.blank_image.value = False
+    overlay_outlines.image_name.value = "ColorImage"
+    overlay_outlines.output_image_name.value = "OrigOverlay"
+    overlay_outlines.line_mode.value = "Inner"
+    overlay_outlines.wants_color.value = WANTS_COLOR
+    overlay_outlines.max_type.value = MAX_IMAGE
+
+    # Add outlines for nuclei, cells and confluent regions
+    for _ in range(
+        len(["ResizeNuclei", "ResizeCells", "ResizeConfluentRegions"]) - 1
+    ):  # 1 outline is already added during init
+        overlay_outlines.add_outline()
+
+    colors = ["yellow", "white", "#FF8000"]
+    for i, obj in enumerate(["ResizeNuclei", "ResizeCells", "ResizeConfluentRegions"]):
+        overlay_outlines.outlines[i].objects_name.value = obj
+        overlay_outlines.outlines[i].color.value = colors[i]
+    pipeline.add_module(overlay_outlines)
+
+    # Save image
+    for img in ["ColorImage", "OrigOverlay"]:
+        save_image = SaveImages()
+        module_counter += 1
+        save_image.module_num = module_counter
+        save_image.save_image_or_figure.value = IF_IMAGE
+        save_image.image_name.value = img
+        save_image.file_name_method.value = FN_SINGLE_NAME
+        save_image.number_of_digits.value = 4
+        save_image.wants_file_name_suffix.value = False
+        save_image.file_name_suffix.value = ""
+        save_image.file_format.value = FF_PNG
+        save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+        save_image.bit_depth.value = BIT_DEPTH_8
+        save_image.overwrite.value = False
+        save_image.when_to_save.value = WS_EVERY_CYCLE
+        save_image.update_file_names.value = False
+        save_image.create_subdirectories.value = False
+        # save_image.root_dir.value = ""
+        save_image.stack_axis.value = AXIS_T
+        # save_image.tiff_compress.value = ""
+        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment{img}"
+        pipeline.add_module(save_image)
+
+    # Resize image
+    resize = Resize()
+    module_counter += 1
+    resize.module_num = module_counter
+    resize.x_name.value = "MaxOfCycle01"
+    resize.y_name.value = "ResizedMaxOfCycle01"
+    resize.size_method.value = R_BY_FACTOR
+    resize.resizing_factor_x.value = 0.5
+    resize.resizing_factor_y.value = 0.5
+    resize.resizing_factor_z.value = 0.5
+    resize.interpolation.value = I_NEAREST_NEIGHBOR
+    pipeline.add_module(resize)
+
+    # Rescale maxofcy01
+    rescale = RescaleIntensity()
+    module_counter += 1
+    rescale.module_num = module_counter
+    rescale.x_name.value = "ResizedMaxOfCycle01"
+    rescale.y_name.value = "ResclaedMaxOfCycle01"
+    rescale.rescale_method.value = M_STRETCH
+    rescale.wants_automatic_low.value = CUSTOM_VALUE
+    rescale.wants_automatic_high.value = CUSTOM_VALUE
+    rescale.source_low.value = 0.0
+    rescale.source_high.value = 1.0
+    rescale.source_scale.value = (0.0, 1.0)
+    rescale.dest_scale.value = (0.0, 1.0)
+    rescale.matching_image_name.value = None
+    rescale.divisor_value.value = 1.0
+    rescale.divisor_measurement.value = None
+    pipeline.add_module(rescale)
+
+    # OverlayOutlines
+    overlay_outlines = OverlayOutlines()
+    module_counter += 1
+    overlay_outlines.module_num = module_counter
+    overlay_outlines.blank_image.value = False
+    overlay_outlines.image_name.value = "ResclaedMaxOfCycle01"
+    overlay_outlines.output_image_name.value = "SpotOverlay"
+    overlay_outlines.line_mode.value = "Inner"
+    overlay_outlines.wants_color.value = WANTS_COLOR
+    overlay_outlines.max_type.value = MAX_IMAGE
+    overlay_outlines.outlines[0].objects_name.value = "ResizeFoci"
+    overlay_outlines.outlines[0].color.value = "Red"
+
+    # Save resized spot overlay
+    save_image = SaveImages()
+    module_counter += 1
+    save_image.module_num = module_counter
+    save_image.save_image_or_figure.value = IF_IMAGE
+    save_image.image_name.value = "SpotOverlay"
+    save_image.file_name_method.value = FN_SINGLE_NAME
+    save_image.number_of_digits.value = 4
+    save_image.wants_file_name_suffix.value = False
+    save_image.file_name_suffix.value = ""
+    save_image.file_format.value = FF_PNG
+    save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+    save_image.bit_depth.value = BIT_DEPTH_8
+    save_image.overwrite.value = False
+    save_image.when_to_save.value = WS_EVERY_CYCLE
+    save_image.update_file_names.value = False
+    save_image.create_subdirectories.value = False
+    # save_image.root_dir.value = ""
+    save_image.stack_axis.value = AXIS_T
+    # save_image.tiff_compress.value = ""
+    save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment_SpotOverlay"
+    pipeline.add_module(save_image)
+
+    # ConvertObjectsToImage
+    obj_to_img = ["Cells", "Cytoplasm", "Nuclei"]
+    for obj in obj_to_img:
+        convert_obj_to_img = ConvertObjectsToImage()
+        module_counter += 1
+        convert_obj_to_img.module_num = module_counter
+        convert_obj_to_img.object_name.value = obj
+        convert_obj_to_img.image_name.value = f"{obj}_Objects"
+        convert_obj_to_img.image_mode.value = "unit16"
+        pipeline.add_module(convert_obj_to_img)
+
+    for img in ["Cells_Objects", "Cytoplasm_Objects", "Nuclei_Objects"]:
+        save_image = SaveImages()
+        module_counter += 1
+        save_image.module_num = module_counter
+        save_image.save_image_or_figure.value = IF_IMAGE
+        save_image.image_name.value = img
+        save_image.file_name_method.value = FN_SINGLE_NAME
+        save_image.number_of_digits.value = 4
+        save_image.wants_file_name_suffix.value = False
+        save_image.file_name_suffix.value = ""
+        save_image.file_format.value = FF_PNG
+        save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+        save_image.bit_depth.value = BIT_DEPTH_8
+        save_image.overwrite.value = False
+        save_image.when_to_save.value = WS_EVERY_CYCLE
+        save_image.update_file_names.value = False
+        save_image.create_subdirectories.value = False
+        # save_image.root_dir.value = ""
+        save_image.stack_axis.value = AXIS_T
+        # save_image.tiff_compress.value = ""
+        save_image.single_file_name.value = (
+            f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_{img}"
+        )
+        pipeline.add_module(save_image)
 
     # ExportToSpreadsheet
     export_measurements = ExportToSpreadsheet()
@@ -1551,7 +1694,7 @@ def generate_analysis_pipeline(
     export_measurements.delimiter.value = DELIMITER_COMMA
     export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
-    export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_PreProcess"
+    export_measurements.prefix.value = "Analysis_"
     export_measurements.wants_overwrite_without_warning.value = False
     export_measurements.add_metadata.value = True
     export_measurements.add_filepath.value = False
@@ -1566,119 +1709,6 @@ def generate_analysis_pipeline(
     export_measurements.use_which_image_for_gene_name.value = None
     export_measurements.wants_everything.value = True
     pipeline.add_module(export_measurements)
-
-    # Calculate Math
-    # TODO: Figure out why this is here
-    # for out_name, round_val in [("Divide20", ""), ("Divide20floor",)]:
-    #     calc_math_div20 = CalculateMath()
-    #     calc_math_div20.output_feature_name.value = out_name
-    #     calc_math_div20.operation.value = O_NONE
-    #
-    #
-    #     calc_math_div20.operand_choice.value = None
-    #     calc_math_div20.operand_objects.value = None
-    #     calc_math_div20.operand_measurement.value = None
-    #     calc_math_div20.multiplicand.value = None
-    #     calc_math_div20.exponent.value = None
-    #
-    #     calc_math_div20.wants_log.value = ""
-    #     calc_math_div20.final_multiplicand.value = ""
-    #     calc_math_div20.final_exponent.value = ""
-    #     calc_math_div20.final_addend.value = ""
-    #
-    #     calc_math_div20.constrain_lower_bound = ""
-    #     calc_math_div20.lower_bound = ""
-    #     calc_math_div20.constrain_upper_bound = ""
-    #     calc_math_div20.upper_bound = ""
-
-    # ImageMath
-    # TODO: Is something really happening here?
-    math_stdsqrt = ImageMath()
-    module_counter += 1
-    math_stdsqrt.module_num = module_counter
-    math_stdsqrt.operation.value = O_NONE
-    math_stdsqrt.exponent.value = 1
-    math_stdsqrt.after_factor.value = 1
-    math_stdsqrt.addend.value = 0
-    math_stdsqrt.truncate_low.value = True
-    math_stdsqrt.truncate_high.value = True
-    math_stdsqrt.replace_nan.value = True
-    math_stdsqrt.ignore_mask.value = False
-    math_stdsqrt.output_image_name.value = "StdSqrt"
-    # Image or measurement
-    math_stdsqrt.images[0].settings[0].value = IM_IMAGE
-    # Image name
-    math_stdsqrt.images[0].settings[1].value = "MeanStdDevOfAllCycles"
-    # Measurement
-    math_stdsqrt.images[0].settings[2].value = ""
-    # Factor
-    math_stdsqrt.images[0].settings[3].value = 1.0
-    pipeline.add_module(math_stdsqrt)
-
-    # Rescale Intensity
-    rescale_intensity = RescaleIntensity()
-    module_counter += 1
-    rescale_intensity.module_num = module_counter
-    rescale_intensity.x_name.value = "StdSqrt"
-    rescale_intensity.y_name.value = "RescaledStdSqrt"
-    rescale_intensity.rescale_method.value = M_STRETCH
-    rescale_intensity.wants_automatic_low.value = CUSTOM_VALUE
-    rescale_intensity.wants_automatic_high.value = CUSTOM_VALUE
-    rescale_intensity.source_low.value = 0.0
-    rescale_intensity.source_high.value = 1.0
-    rescale_intensity.source_scale.value = (0.0, 1.0)
-    rescale_intensity.dest_scale.value = (0.0, 1.0)
-    rescale_intensity.matching_image_name.value = None
-    rescale_intensity.divisor_value.value = 1.0
-    rescale_intensity.divisor_measurement.value = None
-    pipeline.add_module(rescale_intensity)
-
-    # OverlayOutlines
-    overlay_outlines = OverlayOutlines()
-    module_counter += 1
-    overlay_outlines.module_num = module_counter
-    overlay_outlines.blank_image.value = False
-    overlay_outlines.image_name.value = "RescaledStdSqrt"
-    overlay_outlines.output_image_name.value = "StdSqrt_Overlay"
-    overlay_outlines.line_mode.value = "Inner"
-    overlay_outlines.wants_color.value = WANTS_COLOR
-    overlay_outlines.max_type.value = MAX_IMAGE
-
-    # Add outlines for nuclei, cells and confluent regions
-    for _ in range(
-        len(["Foci", "Cells"]) - 1
-    ):  # 1 outline is already added during init
-        overlay_outlines.add_outline()
-
-    colors = ["red", "#0080FF"]
-    for i, obj in enumerate(["Foci", "Cells"]):
-        overlay_outlines.outlines[i].objects_name.value = obj
-        overlay_outlines.outlines[i].color.value = colors[i]
-    pipeline.add_module(overlay_outlines)
-
-    # Save outlines
-    for fmt in [FF_PNG, FF_TIFF]:
-        save_image = SaveImages()
-        module_counter += 1
-        save_image.module_num = module_counter
-        save_image.save_image_or_figure.value = IF_IMAGE
-        save_image.image_name.value = "StdSqrt_Overlay"
-        save_image.file_name_method.value = FN_SINGLE_NAME
-        save_image.number_of_digits.value = 4
-        save_image.wants_file_name_suffix.value = False
-        save_image.file_name_suffix.value = ""
-        save_image.file_format.value = fmt
-        save_image.pathname.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
-        save_image.bit_depth.value = BIT_DEPTH_16
-        save_image.overwrite.value = False
-        save_image.when_to_save.value = WS_EVERY_CYCLE
-        save_image.update_file_names.value = False
-        save_image.create_subdirectories.value = False
-        # save_image.root_dir.value = ""
-        save_image.stack_axis.value = AXIS_T
-        # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_StdSqrt_Overlay"
-        pipeline.add_module(save_image)
 
     return pipeline
 
