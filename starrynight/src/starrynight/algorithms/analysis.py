@@ -179,11 +179,7 @@ def write_loaddata(
     metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
 
     cp_filename_heads = [f"FileName_Corr{col}" for col in cp_plate_channel_list]
-    cp_pathname_heads = [
-        f"PathName_Corr{col}"
-        for cycle in plate_cycles_list
-        for col in cp_plate_channel_list
-    ]
+    cp_pathname_heads = [f"PathName_Corr{col}" for col in cp_plate_channel_list]
     sbs_filename_heads = [
         f"FileName_Cycle_{int(cycle)}_{col}"
         for cycle in plate_cycles_list
@@ -214,10 +210,10 @@ def write_loaddata(
             index.site_id = site_id
             cp_filenames = [
                 f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-                for col in sbs_plate_channel_list
+                for col in cp_plate_channel_list
             ]
             sbs_filenames = [
-                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
+                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{col}.tiff"
                 for col in sbs_plate_channel_list
                 for cycle in plate_cycles_list
             ]
