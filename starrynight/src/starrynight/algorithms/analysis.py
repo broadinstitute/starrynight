@@ -617,7 +617,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal.module_num = module_counter
     measure_colocal.images_list.value = (
-        f"EdgeMasked_Corr{nuclei_channel},EdgeMasked_Cycle1_{nuclei_channel}"
+        f"EdgeMasked_Corr{nuclei_channel}, EdgeMasked_Cycle1_{nuclei_channel}"
     )
     measure_colocal.thr.value = 15.0
     measure_colocal.images_or_objects.value = M_IMAGES
@@ -685,6 +685,7 @@ def generate_analysis_pipeline(
     morph_edge.functions[0].repeats_choice.value = R_ONCE
     morph_edge.functions[0].custom_repeats.value = 2
     morph_edge.functions[0].rescale_values.value = False
+    pipeline.add_module(morph_edge)
 
     # -> MeasureImageIntensity (In binary padded areas)
     measure_image_intensity_padded = MeasureImageIntensity()
@@ -987,7 +988,7 @@ def generate_analysis_pipeline(
     mask_image_maxofcy01.masked_image_name.value = "EdgeMasked_MaxOfCycle01"
     mask_image_maxofcy01.source_choice.value = IO_IMAGE
     mask_image_maxofcy01.object_name.value = "WellEdgeObjects"
-    mask_image_maxofcy01.image_name.value = f"NonPaddedAreas_{O_MINIMUM}"
+    mask_image_maxofcy01.masking_image_name.value = f"NonPaddedAreas_{O_MINIMUM}"
     mask_image_maxofcy01.invert_mask.value = False
     pipeline.add_module(mask_image_maxofcy01)
 
@@ -1160,7 +1161,7 @@ def generate_analysis_pipeline(
     mask_image_bintvals.masked_image_name.value = "Masked_Barcodes_IntValues"
     mask_image_bintvals.source_choice.value = IO_OBJECTS
     mask_image_bintvals.object_name.value = "BarcodeFoci"
-    mask_image_bintvals.image_name.value = "Barcode_Thresh"
+    mask_image_bintvals.masking_image_name.value = "Barcode_Thresh"
     mask_image_bintvals.invert_mask.value = False
     pipeline.add_module(mask_image_bintvals)
 
@@ -1172,7 +1173,7 @@ def generate_analysis_pipeline(
     mask_image_bscore.masked_image_name.value = "Masked_Barcodes_Scores_IntValues"
     mask_image_bscore.source_choice.value = IO_OBJECTS
     mask_image_bscore.object_name.value = "BarcodeFoci"
-    mask_image_bscore.image_name.value = "Barcode_Thresh"
+    mask_image_bscore.masking_image_name.value = "Barcode_Thresh"
     mask_image_bscore.invert_mask.value = False
     pipeline.add_module(mask_image_bscore)
 
