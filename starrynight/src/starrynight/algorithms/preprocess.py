@@ -707,7 +707,7 @@ def generate_preprocess_pipeline(
     measure_object_intensity.module_num = module_counter
     measure_object_intensity.images_list.value = ", ".join(
         [
-            f"Align_Cycle_{cycle}_{ch}_Compensated"
+            f"Cycle{cycle}_{ch}_Compensated"
             for ch in sbs_channel_list
             for cycle in cycle_list
         ]
