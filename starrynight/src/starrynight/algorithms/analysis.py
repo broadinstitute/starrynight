@@ -349,7 +349,7 @@ def generate_analysis_pipeline(
         # Remove duplicate channels
         set(
             [
-                col.split("_")[-1]
+                col.split("_")[-1].replace("Corr", "")
                 for col in load_data_df.columns
                 if col.startswith("FileName_Corr")
             ]
