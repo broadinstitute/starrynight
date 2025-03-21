@@ -322,7 +322,7 @@ def generate_preprocess_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    load_data.metadata_fields.value = "Batch,Plate,Cycle"
+    load_data.metadata_fields.value = "Batch,Plate"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
