@@ -1149,7 +1149,7 @@ def generate_analysis_pipeline(
     measure_object_intensity_barcodes = MeasureObjectIntensity()
     module_counter += 1
     measure_object_intensity_barcodes.module_num = module_counter
-    measure_object_intensity_barcodes.images_list.value = ",".join(
+    measure_object_intensity_barcodes.images_list.value = " ,".join(
         ["Barcodes_Scores", "Barcodes_Barcodes", "CellOutlineImage"]
     )
     measure_object_intensity_barcodes.objects_list.value = ", ".join(["BarcodeFoci"])
