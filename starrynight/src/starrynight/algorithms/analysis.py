@@ -1527,7 +1527,7 @@ def generate_analysis_pipeline(
         module_counter += 1
         resize_img.module_num = module_counter
         resize_img.x_name.value = img
-        resize_img.y_name.value = f"Resize{img}Vis"
+        resize_img.y_name.value = f"Resize{img.replace('Aligned', '')}Vis"
         resize_img.size_method.value = R_BY_FACTOR
         resize_img.resizing_factor_x.value = 0.50
         resize_img.resizing_factor_y.value = 0.50
@@ -1541,7 +1541,8 @@ def generate_analysis_pipeline(
     gray_to_color.module_num = module_counter
     gray_to_color.scheme_choice.value = SCHEME_RGB
     gray_to_color.wants_rescale.value = True
-    gray_to_color.red_image_name.value = None
+    # None or a blank string, both don't work
+    # gray_to_color.red_image_name.value = ""
     gray_to_color.green_image_name.value = f"Resize{cell_channel}Vis"
     gray_to_color.blue_image_name.value = f"Resize{nuclei_channel}Vis"
     gray_to_color.rgb_image_name.value = "ColorImage"
@@ -1640,6 +1641,7 @@ def generate_analysis_pipeline(
     overlay_outlines.max_type.value = MAX_IMAGE
     overlay_outlines.outlines[0].objects_name.value = "ResizeFoci"
     overlay_outlines.outlines[0].color.value = "Red"
+    pipeline.add_module(overlay_outlines)
 
     # Save resized spot overlay
     save_image = SaveImages()
