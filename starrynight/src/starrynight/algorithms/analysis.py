@@ -14,7 +14,6 @@ from cellprofiler.modules.calculatemath import (
 from cellprofiler.modules.convertobjectstoimage import ConvertObjectsToImage
 from cellprofiler.modules.enhanceorsuppressfeatures import (
     E_NEURITES,
-    E_SPECKLES,
     ENHANCE,
     N_TUBENESS,
     S_FAST,

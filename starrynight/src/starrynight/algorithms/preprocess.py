@@ -5,6 +5,13 @@ from io import TextIOWrapper
 from pathlib import Path
 
 import polars as pl
+from cellprofiler.modules.calculatemath import (
+    MC_IMAGE,
+    O_NONE,
+    O_SUBTRACT,
+    ROUNDING,
+    CalculateMath,
+)
 from cellprofiler.modules.correctilluminationapply import (
     DOS_SUBTRACT,
     CorrectIlluminationApply,
@@ -35,6 +42,7 @@ from cellprofiler.modules.filterobjects import (
     PO_BOTH,
     FilterObjects,
 )
+from cellprofiler.modules.flagimage import C_ANY, S_AVERAGE_OBJECT, S_IMAGE, FlagImage
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
     FH_ALL,
@@ -702,14 +710,14 @@ def generate_preprocess_pipeline(
     measure_object_intensity = MeasureObjectIntensity()
     module_counter += 1
     measure_object_intensity.module_num = module_counter
-    measure_object_intensity.images_list.value = ",".join(
+    measure_object_intensity.images_list.value = ", ".join(
         [
             f"Align_Cycle_{cycle}_{ch}_Compensated"
             for ch in sbs_channel_list
             for cycle in cycle_list
         ]
     )
-    measure_object_intensity.objects_list.value = ",".join(["Foci"])
+    measure_object_intensity.objects_list.value = ", ".join(["Foci"])
     pipeline.add_module(measure_object_intensity)
 
     # CallBarcodes
@@ -764,13 +772,13 @@ def generate_preprocess_pipeline(
     measure_object_intensity_barcodes = MeasureObjectIntensity()
     module_counter += 1
     measure_object_intensity_barcodes.module_num = module_counter
-    measure_object_intensity_barcodes.images_list.value = ",".join(
+    measure_object_intensity_barcodes.images_list.value = ", ".join(
         [
             "Barcodes_Scores",
             "Barcodes_Barcodes",
         ]
     )
-    measure_object_intensity_barcodes.objects_list.value = ",".join(["BarcodeFoci"])
+    measure_object_intensity_barcodes.objects_list.value = ", ".join(["BarcodeFoci"])
     pipeline.add_module(measure_object_intensity_barcodes)
 
     # RelateObjects
@@ -836,27 +844,75 @@ def generate_preprocess_pipeline(
 
     # Calculate Math
     # TODO: Figure out why this is here
-    # for out_name, round_val in [("Divide20", ""), ("Divide20floor",)]:
-    #     calc_math_div20 = CalculateMath()
-    #     calc_math_div20.output_feature_name.value = out_name
-    #     calc_math_div20.operation.value = O_NONE
-    #
-    #
-    #     calc_math_div20.operand_choice.value = None
-    #     calc_math_div20.operand_objects.value = None
-    #     calc_math_div20.operand_measurement.value = None
-    #     calc_math_div20.multiplicand.value = None
-    #     calc_math_div20.exponent.value = None
-    #
-    #     calc_math_div20.wants_log.value = ""
-    #     calc_math_div20.final_multiplicand.value = ""
-    #     calc_math_div20.final_exponent.value = ""
-    #     calc_math_div20.final_addend.value = ""
-    #
-    #     calc_math_div20.constrain_lower_bound = ""
-    #     calc_math_div20.lower_bound = ""
-    #     calc_math_div20.constrain_upper_bound = ""
-    #     calc_math_div20.upper_bound = ""
+    for out_name, op, round_val in [
+        ("Divide20", O_NONE, ROUNDING[0]),
+        ("Divide20floor", O_NONE, ROUNDING[2]),
+        ("Divide20diff", O_SUBTRACT, ROUNDING[0]),
+    ]:
+        calc_math_div20 = CalculateMath()
+        module_counter += 1
+        calc_math_div20.module_num = module_counter
+        calc_math_div20.output_feature_name.value = out_name
+        calc_math_div20.operation.value = op
+
+        # Numerator
+        calc_math_div20.operands[0].operand_choice.value = MC_IMAGE
+        calc_math_div20.operands[0].operand_objects.value = None
+
+        if op is not O_SUBTRACT:
+            calc_math_div20.operands[0].operand_measurement.value = None
+        else:
+            calc_math_div20.operands[0].operand_measurement.value = "Math_Divide20"
+
+        calc_math_div20.operands[0].multiplicand.value = 0.05
+        calc_math_div20.operands[0].exponent.value = 1.0
+
+        # Denominator
+        calc_math_div20.operands[1].operand_choice.value = MC_IMAGE
+        calc_math_div20.operands[1].operand_objects.value = None
+
+        if op is not O_SUBTRACT:
+            calc_math_div20.operands[1].operand_measurement.value = None
+        else:
+            calc_math_div20.operands[1].operand_measurement.value = "Math_Divide20floor"
+
+        calc_math_div20.operands[1].multiplicand.value = 1.0
+        calc_math_div20.operands[1].exponent.value = 1.0
+
+        calc_math_div20.wants_log.value = False
+        calc_math_div20.final_multiplicand.value = 1.0
+        calc_math_div20.final_exponent.value = 1.0
+        calc_math_div20.final_addend.value = 0
+
+        calc_math_div20.constrain_lower_bound.value = False
+        calc_math_div20.lower_bound.value = 0
+        calc_math_div20.constrain_upper_bound.value = False
+        calc_math_div20.upper_bound = 1.0
+        calc_math_div20.rounding.value = round_val
+        pipeline.add_module(calc_math_div20)
+
+    # -> Flag Image (Divide20)
+    flag_images = FlagImage()
+    module_counter += 1
+    flag_images.module_num = module_counter
+    # Flag's category [3]
+    flag_images.flags[i].category.value = "Divide20"
+    # Name of the flag [4]
+    flag_images.flags[i].feature_name.value = "Divide20Flag"
+    # How should the measurements be linked [5]
+    flag_images.flags[i].combination_choice.value = C_ANY
+    # Skip image set if flagged [6]
+    flag_images.flags[i].wants_skip.value = True
+
+    # Measurement settings, One measurement is added by default for each flag
+    flag_images.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
+    flag_images.flags[i].measurement_settings[0].object_name.value = None
+    flag_images.flags[i].measurement_settings[0].measurement.value = "Math_Divide20diff"
+    flag_images.flags[i].measurement_settings[0].wants_minimum.value = False
+    flag_images.flags[i].measurement_settings[0].minimum_value.value = 0.0
+    flag_images.flags[i].measurement_settings[0].wants_maximum.value = True
+    flag_images.flags[i].measurement_settings[0].maximum_value.value = 0.0000000001
+    pipeline.add_module(flag_images)
 
     # ImageMath
     # TODO: Is something really happening here?
