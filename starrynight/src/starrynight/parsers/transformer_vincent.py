@@ -60,8 +60,10 @@ class VincentAstToIR(BaseTransformer):
 
     def channel(self, items) -> dict:
         channel_len = len(self.channel_dict["channel_dict"])
-        self.channel_dict["channel_dict"].append(items[0])
-        return {f"channel_{channel_len}": items[0]}
+        # important for cellprofiler ("-" in channel name is not allowed)
+        normalized_channel = items[0].replace("-", "")
+        self.channel_dict["channel_dict"].append(normalized_channel)
+        return {f"channel_{channel_len}": normalized_channel}
 
     def filename(self, items) -> dict:
         # assert len(set(items)) == 1

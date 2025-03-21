@@ -1304,7 +1304,7 @@ def generate_analysis_pipeline(
     flag_align_all_images.flags[0].measurement_settings[
         0
     ].measurement.value = (
-        f"Correlation_Correlation_Corr{nuclei_channel}_Cycle1_{nuclei_channel}"
+        f"Correlation_Correlation_Aligned{nuclei_channel}_Cycle1_{nuclei_channel}"
     )
     flag_align_all_images.flags[0].measurement_settings[0].wants_minimum.value = True
     flag_align_all_images.flags[0].measurement_settings[0].minimum_value.value = 0.9
