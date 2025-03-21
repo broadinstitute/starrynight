@@ -181,12 +181,12 @@ def write_loaddata(
     cp_filename_heads = [f"FileName_Corr{col}" for col in cp_plate_channel_list]
     cp_pathname_heads = [f"PathName_Corr{col}" for col in cp_plate_channel_list]
     sbs_filename_heads = [
-        f"FileName_Cycle_{int(cycle)}_{col}"
+        f"FileName_Cycle{int(cycle)}_{col}"
         for cycle in plate_cycles_list
         for col in sbs_plate_channel_list
     ]
     sbs_pathname_heads = [
-        f"PathName_Cycle_{int(cycle)}_{col}"
+        f"PathName_Cycle{int(cycle)}_{col}"
         for cycle in plate_cycles_list
         for col in sbs_plate_channel_list
     ]
@@ -463,7 +463,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_image_intensity.module_num = module_counter
     measure_image_intensity.images_list.value = (
-        f"Corr{nuclei_channel},Cycle_1_{nuclei_channel}"
+        f"Corr{nuclei_channel},Cycle1_{nuclei_channel}"
     )
     measure_image_intensity.wants_objects.value = False
     measure_image_intensity.objects_list.value = ""
@@ -476,7 +476,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     flag_empty_images.module_num = module_counter
 
-    images_to_flag = [f"Corr{nuclei_channel}", f"Cycle_1_{nuclei_channel}"]
+    images_to_flag = [f"Corr{nuclei_channel}", f"Cycle1_{nuclei_channel}"]
 
     # One flag is already created
     for _ in range(len(images_to_flag) - 1):
@@ -528,7 +528,7 @@ def generate_analysis_pipeline(
     pipeline.add_module(align)
 
     # -> Threshold
-    images_to_threshold = [f"Corr{nuclei_channel}", f"Cycle_1_{nuclei_channel}"]
+    images_to_threshold = [f"Corr{nuclei_channel}", f"Cycle1_{nuclei_channel}"]
     for image in images_to_threshold:
         threshold_image = Threshold()
         module_counter += 1
@@ -555,7 +555,7 @@ def generate_analysis_pipeline(
     # Calculate Min and Max of f"NonPaddedAreas_{image}"
     images_to_minmax = [
         f"NonPaddedAreas_Corr{nuclei_channel}",
-        f"NonPaddedAreas_Cycle_1_{nuclei_channel}",
+        f"NonPaddedAreas_Cycle1_{nuclei_channel}",
     ]
     for op in [O_MINIMUM, O_MAXIMUM]:
         minmax = ImageMath()
@@ -588,7 +588,7 @@ def generate_analysis_pipeline(
     # -> MaskImage (Nuclei, Cyto, Cycle01 -> EdgeMasked)
     images_to_mask = [
         f"Corr{nuclei_channel}",
-        f"Cycle_1_{nuclei_channel}",
+        f"Cycle1_{nuclei_channel}",
         f"Corr{cell_channel}",
     ]
     for image in images_to_mask:
@@ -606,7 +606,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal.module_num = module_counter
     measure_colocal.images_list.value = (
-        f"EdgeMasked_Corr{nuclei_channel},EdgeMasked_Cycle_1_{nuclei_channel}"
+        f"EdgeMasked_Corr{nuclei_channel},EdgeMasked_Cycle1_{nuclei_channel}"
     )
     measure_colocal.thr.value = 15.0
     measure_colocal.images_or_objects.value = M_IMAGES
@@ -634,7 +634,7 @@ def generate_analysis_pipeline(
     flag_align_images.flags[0].measurement_settings[0].object_name.value = None
     flag_align_images.flags[0].measurement_settings[
         0
-    ].measurement.value = f"Correlation_Correlation_EdgeMasked_Corr{nuclei_channel}_EdgeMasked_Cycle_1_{nuclei_channel}"
+    ].measurement.value = f"Correlation_Correlation_EdgeMasked_Corr{nuclei_channel}_EdgeMasked_Cycle1_{nuclei_channel}"
     flag_align_images.flags[0].measurement_settings[0].wants_minimum.value = True
     flag_align_images.flags[0].measurement_settings[0].minimum_value.value = 0.7
     flag_align_images.flags[0].measurement_settings[0].wants_maximum.value = False
@@ -668,7 +668,7 @@ def generate_analysis_pipeline(
     morph_edge = Morph()
     module_counter += 1
     morph_edge.module_num = module_counter
-    morph_edge.image_name.value = f"NonPaddedAreas_Cycle_1_{nuclei_channel}"
+    morph_edge.image_name.value = f"NonPaddedAreas_Cycle1_{nuclei_channel}"
     morph_edge.output_image_name.value = "WellEdgeDistancePreMultiply"
     morph_edge.functions[0].function.value = F_DISTANCE
     morph_edge.functions[0].repeat_choice.value = R_ONCE
@@ -961,7 +961,7 @@ def generate_analysis_pipeline(
         # Image or measurement?
         maxofcy01.images[i].image_or_measurement.value = IM_IMAGE
         # Image name
-        maxofcy01.images[i].image_name.value = f"Cycle_1_{ch}"
+        maxofcy01.images[i].image_name.value = f"Cycle1_{ch}"
         # Measurement
         maxofcy01.images[i].measurement.value = ""
         # Factor
@@ -1078,7 +1078,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_object_intensity.module_num = module_counter
     measure_object_intensity.images_list.value = ",".join(
-        [f"Cycle_{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
+        [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
     )
     measure_object_intensity.objects_list.value = ",".join(["Foci"])
     pipeline.add_module(measure_object_intensity)
@@ -1090,7 +1090,7 @@ def generate_analysis_pipeline(
     call_barcodes.ncycles.value = len(cycle_list)
     call_barcodes.input_object_name.value = "Foci"
     call_barcodes.cycle1measure.value = (
-        f"Intensity_MaxIntensity_Cycle_1_{channel_list[0]}"
+        f"Intensity_MaxIntensity_Cycle1_{channel_list[0]}"
     )
     call_barcodes.csv_directory.value = barcode_csv_path.parent.resolve().__str__()
     call_barcodes.csv_file_name.value = barcode_csv_path.name
@@ -1254,7 +1254,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_cp_sbs.module_num = module_counter
     measure_colocal_cp_sbs.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in channel_list] + [f"Cycle_1_{nuclei_channel}"]
+        [f"Corr{ch}" for ch in channel_list] + [f"Cycle1_{nuclei_channel}"]
     )
     measure_colocal_cp_sbs.thr.value = 15.0
     measure_colocal_cp_sbs.images_or_objects.value = M_BOTH
@@ -1286,7 +1286,7 @@ def generate_analysis_pipeline(
     flag_align_all_images.flags[0].measurement_settings[
         0
     ].measurement.value = (
-        f"Correlation_Correlation_Corr{nuclei_channel}_Cycle_1_{nuclei_channel}"
+        f"Correlation_Correlation_Corr{nuclei_channel}_Cycle1_{nuclei_channel}"
     )
     flag_align_all_images.flags[0].measurement_settings[0].wants_minimum.value = True
     flag_align_all_images.flags[0].measurement_settings[0].minimum_value.value = 0.9
@@ -1447,7 +1447,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_sbs.module_num = module_counter
     measure_colocal_sbs.images_list.value = ",".join(
-        [f"Cycle_{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
+        [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
     )
     measure_colocal_sbs.thr.value = 15.0
     measure_colocal_sbs.images_or_objects.value = M_IMAGES
