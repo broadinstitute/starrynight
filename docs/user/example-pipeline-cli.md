@@ -106,7 +106,6 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_apply
 ```
 
-
 ```bash
 # Generate LoadData files
 starrynight illum apply loaddata \
@@ -181,7 +180,6 @@ starrynight segcheck loaddata \
     --nuclei DAPI \
     --cell PhalloAF750
 
-
 # Generate CellProfiler pipelines
 starrynight segcheck cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck/ \
@@ -202,7 +200,6 @@ starrynight cp \
 Image alignment is a critical step SBS images, ensuring that images from different cycles are spatially aligned.
 
 This step registers all images from different cycles using the nuclei channel as a reference. The alignment process generates transformed images with consistent spatial coordinates across all cycles, which is crucial for accurately matching cells across multiple imaging rounds.
-
 
 ```bash
 # Generate LoadData files for alignment
@@ -248,7 +245,7 @@ export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
 starrynight preprocess loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
-    -c ${WKDIR}/illum/cp/illum_apply/ \
+    -c ${WKDIR}/illum/sbs/illum_apply/ \
     -a ${WKDIR}/align/sbs/ \
     -n DAPI
 
