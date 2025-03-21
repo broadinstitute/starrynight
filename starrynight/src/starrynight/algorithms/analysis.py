@@ -472,7 +472,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_image_intensity.module_num = module_counter
     measure_image_intensity.images_list.value = (
-        f"Corr{nuclei_channel},Cycle1_{nuclei_channel}"
+        f"Corr{nuclei_channel}, Cycle1_{nuclei_channel}"
     )
     measure_image_intensity.wants_objects.value = False
     measure_image_intensity.objects_list.value = ""
@@ -606,7 +606,9 @@ def generate_analysis_pipeline(
         mask_image_edge.module_num = module_counter
         mask_image_edge.image_name.value = image
         mask_image_edge.masked_image_name.value = f"EdgeMasked_{image}"
-        mask_image_edge.object_name.value = f"NonPaddedAreas_{O_MINIMUM}"
+        mask_image_edge.source_choice.value = IO_IMAGE
+        mask_image_edge.object_name.value = f"PaddedObjects_{O_MINIMUM}"
+        mask_image_edge.masking_image_name.value = f"NonPaddedAreas_{O_MINIMUM}"
         mask_image_edge.invert_mask.value = True
         pipeline.add_module(mask_image_edge)
 
@@ -680,7 +682,7 @@ def generate_analysis_pipeline(
     morph_edge.image_name.value = f"NonPaddedAreas_Cycle1_{nuclei_channel}"
     morph_edge.output_image_name.value = "WellEdgeDistancePreMultiply"
     morph_edge.functions[0].function.value = F_DISTANCE
-    morph_edge.functions[0].repeat_choice.value = R_ONCE
+    morph_edge.functions[0].repeats_choice.value = R_ONCE
     morph_edge.functions[0].custom_repeats.value = 2
     morph_edge.functions[0].rescale_values.value = False
 
@@ -812,7 +814,7 @@ def generate_analysis_pipeline(
     calc_cfregion_pct.constrain_lower_bound.value = False
     calc_cfregion_pct.lower_bound.value = 0
     calc_cfregion_pct.constrain_upper_bound.value = False
-    calc_cfregion_pct.upper_bound = 1.0
+    calc_cfregion_pct.upper_bound.value = 1.0
     calc_cfregion_pct.rounding.value = ROUNDING[0]
     pipeline.add_module(calc_cfregion_pct)
 
@@ -945,8 +947,8 @@ def generate_analysis_pipeline(
     cell_outline_image.wants_color.value = WANTS_GRAYSCALE
     cell_outline_image.max_type.value = MAX_IMAGE
     # 1 outline is already added during init
-    cell_outline_image.outlines[i].objects_name.value = "Cells"
-    cell_outline_image.outlines[i].color.value = "white"
+    cell_outline_image.outlines[0].objects_name.value = "Cells"
+    cell_outline_image.outlines[0].color.value = "white"
     pipeline.add_module(cell_outline_image)
 
     # ImageMath MaxOfCycle01
