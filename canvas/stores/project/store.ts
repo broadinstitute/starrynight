@@ -15,7 +15,6 @@ export type TState = {
 export type TActions = {
   updateProjectStatus: (status: TProjectStatus) => void;
   updateCurrentStep: (currentStep: TStep) => void;
-  addJobs: (jobs: TJob[]) => void;
   updateJobStatus: (id: string | number, status: TRun["run_status"]) => void;
 };
 export type TProjectStore = TState & TActions;
@@ -45,14 +44,6 @@ export function createProjectStore(options: TCreateProjectStoreOptions) {
     jobStatus: {},
     updateProjectStatus: (projectStatus) => set({ projectStatus }),
     updateCurrentStep: (currentStep) => set({ currentStep }),
-    addJobs: (jobs) => {
-      const _jobStatus = {} as Record<string, TJob>;
-
-      for (const job of jobs) {
-        _jobStatus[job.id] = job;
-      }
-    },
-
     updateJobStatus: (id, status) => {
       const _jobStatus = get().jobStatus;
       _jobStatus[id] = status;

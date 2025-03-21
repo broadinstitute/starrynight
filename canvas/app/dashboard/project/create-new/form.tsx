@@ -23,7 +23,7 @@ import { Alert } from "@/components/custom/alert";
 import { useRouter } from "next/navigation";
 import { PROJECT_URL } from "@/constants/routes";
 
-function _CreateNewProjectForm() {
+function CreateNewProjectForm_() {
   const { currentStep, updateCurrentStep, updateIsFormSubmitting } =
     useCreateNewProjectStore((store) => ({
       currentStep: store.currentStep,
@@ -151,7 +151,7 @@ function _CreateNewProjectForm() {
 }
 
 const CreateNewProjectForm = withCreateNewProjectProvider(
-  _CreateNewProjectForm
+  CreateNewProjectForm_
 );
 
 export { CreateNewProjectForm };

@@ -1,5 +1,4 @@
 import { TSpecPathRecord } from "@/services/misc";
-import { useProjectStore } from "@/stores/project";
 import React from "react";
 
 export type TUseParsePathRecordToArrayOptions = {
@@ -20,9 +19,6 @@ export function useParsePathRecordToArray(
   options: TUseParsePathRecordToArrayOptions
 ): TUseParsePathRecordToArrayReturn {
   const { records } = options;
-  const { projectWorkspaceURI } = useProjectStore((state) => ({
-    projectWorkspaceURI: state.project.workspace_uri,
-  }));
 
   return React.useMemo((): TUseParsePathRecordToArrayReturn => {
     if (!records) return [];
@@ -36,11 +32,11 @@ export function useParsePathRecordToArray(
         id: name,
         name,
         type,
-        value: path || projectWorkspaceURI,
+        value: path,
         raw: record,
       });
     }
 
     return out;
-  }, [projectWorkspaceURI, records]);
+  }, [records]);
 }

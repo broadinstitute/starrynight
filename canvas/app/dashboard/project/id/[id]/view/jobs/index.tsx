@@ -8,18 +8,11 @@ import { ProjectJobsView } from "./view";
 import React from "react";
 
 export function ProjectJobs() {
-  const { project, addJobs } = useProjectStore((state) => ({
+  const { project } = useProjectStore((state) => ({
     project: state.project,
-    addJobs: state.addJobs,
   }));
 
   const { data, isLoading, error } = useGetJobs({ projectID: project.id });
-
-  React.useEffect(() => {
-    if (data) {
-      addJobs(data);
-    }
-  }, [addJobs, data]);
 
   if (isLoading) {
     return <JobsSkeleton />;

@@ -5,8 +5,15 @@ import { Check, Upload, XIcon } from "lucide-react";
 import { ProjectJobInputEditWarningModal } from "./job-input-edit-warning-modal";
 import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
 import { useToast } from "@/components/ui/use-toast";
-import { TJob, useUpdateJob } from "@/services/job";
+import {
+  GET_JOBS_QUERY_KEY,
+  getJobs,
+  TJob,
+  useUpdateJob,
+} from "@/services/job";
 import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
+import { useQueryClient } from "@tanstack/react-query";
+import { useProjectStore } from "@/stores/project";
 
 export type TProjectJobInputProps = {
   job: TJob;
@@ -21,9 +28,30 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
   const [isWarningModalOpen, setIsWarningModalOpen] = React.useState(false);
   const oldValue = React.useRef(inputPath);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { projectID } = useProjectStore((store) => ({
+    projectID: store.project.id,
+  }));
 
   // To upload new file.
   const [inputFile, setInputFile] = React.useState<File | null>(null);
+
+  const handleOnSuccessfulSavingChanges = React.useCallback(async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [GET_JOBS_QUERY_KEY, projectID],
+    });
+
+    /**
+     * After invalidating fetching new data to
+     * make sure the UI has the latest data.
+     */
+    await queryClient.prefetchQuery({
+      queryKey: [GET_JOBS_QUERY_KEY, projectID],
+      queryFn: () => getJobs({ project_id: projectID }),
+    });
+
+    onRequestView();
+  }, [queryClient, projectID, onRequestView]);
 
   const handleOnErrorSavingChanges = React.useCallback(() => {
     toast({
@@ -34,7 +62,7 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
 
   const { isPending, mutate: updateJob } = useUpdateJob({
     onError: handleOnErrorSavingChanges,
-    onSuccess: onRequestView,
+    onSuccess: handleOnSuccessfulSavingChanges,
   });
 
   const hasAnyFieldUpdated = useMemo(() => {

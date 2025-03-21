@@ -33,7 +33,7 @@ export function KillRun(props: TKillRunProps) {
 
   const handleKillRun = useCallback(() => {
     killRun({ run_id: run.id });
-  }, [run, killRun]);
+  }, [killRun, run.id]);
 
   if (run.run_status !== "running") {
     /**

@@ -19,7 +19,7 @@ export type TActionsButtonProps = Omit<TButtonWithTooltipProps, "variant"> & {
 export const ActionButton = React.forwardRef<
   HTMLButtonElement,
   TActionsButtonProps
->(function _ActionButton(props, ref) {
+>(function ActionButton_(props, ref) {
   const {
     isLoading,
     icon,
