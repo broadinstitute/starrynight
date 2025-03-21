@@ -62,18 +62,6 @@ Focus on what's unique to this algorithm, not what's common across all algorithm
 
 Include information that would help a developer understand non-obvious aspects of the implementation.
 
-### 4. Integration Points
-
-```markdown
-## Integration Points
-
-- **Inputs**: Expected input format, structure, or requirements
-- **Outputs**: What this algorithm produces and how it's used downstream
-- **Dependencies**: Non-standard dependencies or requirements
-```
-
-Focus on how the algorithm connects to other parts of the system.
-
 ## Documentation Best Practices
 
 1. **Be specific about differences**

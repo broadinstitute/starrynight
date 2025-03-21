@@ -19,7 +19,6 @@ Key CellProfiler modules:
 
 - **SBS vs. Non-SBS Images**: Handles both standard and cycle-based sequential imaging protocols
 - **Modular Design**: Separates illumination function calculation from application, enabling reuse of correction functions
-- **File Organization**: Maintains hierarchical structure (batch/plate/cycle) for output files, matching input organization
 
 ## Integration Points
 

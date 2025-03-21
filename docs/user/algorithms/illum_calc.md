@@ -5,8 +5,6 @@ Calculates illumination correction functions for microscopy images to normalize 
 ## Key Components
 
 - **Image Downsampling/Upsampling**: Uses 4x downsampling during processing and 4x upsampling for final outputs to improve performance while maintaining quality
-- **Hierarchical Organization**: Processes data by batch/plate (standard) or batch/plate/cycle (SBS images)
-- **Automatic File Organization**: Generates appropriately named output files and directories based on data hierarchy
 
 ### CellProfiler Configuration
 
@@ -14,12 +12,12 @@ Key CellProfiler modules:
 
 - **CorrectIlluminationCalculate**: Uses median filtering (block size 60, filter size 20) to model background illumination patterns
 - **Resize**: Implements bilinear interpolation for both downsampling (0.25x) and upsampling (4x)
-- **SaveImages**: Stores illumination functions as NumPy (.npy) files for efficient storage and loading
+- **SaveImages**: Stores illumination functions as NumPy (.npy) files
 
 ## Implementation Notes
 
 - **SBS vs. Non-SBS Images**: Handles both standard images (batch/plate) and sequential images (batch/plate/cycle)
-- **Performance Optimization**: Downsampling significantly reduces processing time while maintaining correction quality
+- **Performance Optimization**: Downsampling reduces processing time while maintaining correction quality
 - **Smooth Gradients**: Bilinear interpolation preserves smooth illumination gradients during resizing operations
 
 ## Integration Points

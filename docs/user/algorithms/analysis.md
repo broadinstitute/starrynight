@@ -16,21 +16,10 @@ Key CellProfiler modules:
 - **IdentifySecondaryObjects**: Uses propagation with Otsu three-class thresholding for cell detection
 - **MeasureObjectIntensity/Texture/Granularity**: Captures diverse cellular phenotypic features
 - **MeasureObjectNeighbors**: Quantifies spatial relationships between cells
-- **Custom Modules**: Integrates `CallBarcodes` and `CompensateColors` for genetic readouts
+- **Custom Modules**: Uses `CallBarcodes` and `CompensateColors` for calling barcodes
 
 ## Implementation Notes
 
 - **Quality Control Integration**: Embeds multiple quality checkpoints throughout the pipeline including alignment verification
-- **Hierarchical Object Relationships**: Establishes parent-child relationships between detected objects (nuclei → cells → cytoplasm)
 - **Data Organization**: Processes data by batch/plate with channels and cycles from both CP and SBS modalities
-- **Computational Optimization**: Employs strategic downsampling and memory management for large datasets
-
-## Integration Points
-
-- **Inputs**: Requires multiple image types including CP corrected images, SBS corrected images, and SBS compensated images
-- **Outputs**:
-    - Feature data exported as spreadsheets organized by object type
-    - Visualization overlays showing segmentation results
-    - Barcode calls with gene annotations
-- **Dependencies**: CellProfiler with custom plugins for barcode calling and color compensation
-- **Terminal Pipeline**: Represents the final processing step that generates data for downstream biological analysis
+- **Computational Optimization**: Employs downsampling and memory management for large datasets
