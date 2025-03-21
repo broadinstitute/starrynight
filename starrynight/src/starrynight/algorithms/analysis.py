@@ -1529,9 +1529,9 @@ def generate_analysis_pipeline(
         resize_img.x_name.value = img
         resize_img.y_name.value = f"Resize{img}Vis"
         resize_img.size_method.value = R_BY_FACTOR
-        resize_img.factor_x.value = 0.50
-        resize_img.factor_y.value = 0.50
-        resize_img.factor_z.value = 0.50
+        resize_img.resizing_factor_x.value = 0.50
+        resize_img.resizing_factor_y.value = 0.50
+        resize_img.resizing_factor_z.value = 0.50
         resize_img.interpolation.value = I_NEAREST_NEIGHBOR
         pipeline.add_module(resize_img)
 
