@@ -1089,10 +1089,10 @@ def generate_analysis_pipeline(
     measure_object_intensity = MeasureObjectIntensity()
     module_counter += 1
     measure_object_intensity.module_num = module_counter
-    measure_object_intensity.images_list.value = ",".join(
+    measure_object_intensity.images_list.value = ", ".join(
         [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
     )
-    measure_object_intensity.objects_list.value = ",".join(["Foci"])
+    measure_object_intensity.objects_list.value = ", ".join(["Foci"])
     pipeline.add_module(measure_object_intensity)
 
     # CallBarcodes
@@ -1346,7 +1346,7 @@ def generate_analysis_pipeline(
     measure_obj_int_dist_paint = MeasureObjectIntensityDistribution()
     module_counter += 1
     measure_obj_int_dist_paint.module_num = module_counter
-    measure_obj_int_dist_paint.images_list.value = ",".join(
+    measure_obj_int_dist_paint.images_list.value = ", ".join(
         [f"Corr{ch}" for ch in cp_channel_list]
     )
     measure_obj_int_dist_paint.wants_zernikes.value = False
@@ -1366,7 +1366,7 @@ def generate_analysis_pipeline(
     measure_obj_int_dist_mito = MeasureObjectIntensityDistribution()
     module_counter += 1
     measure_obj_int_dist_mito.module_num = module_counter
-    measure_obj_int_dist_mito.images_list.value = ",".join(["mito_tubeness"])
+    measure_obj_int_dist_mito.images_list.value = ", ".join(["mito_tubeness"])
     measure_obj_int_dist_mito.wants_zernikes.value = False
     obj_int_dist_mito = [("Cells", True, 16, 100), ("Cytoplasm", False, 20, 200)]
     for _ in range(len(obj_int_dist_mito) - 1):  # one object is already added
@@ -1396,7 +1396,7 @@ def generate_analysis_pipeline(
         [f"Corr{ch}" for ch in cp_channel_list]
     )
     measure_granularity.wants_objects.value = True
-    measure_granularity.objects_list.value = ",".join(["Cells", "Cytoplasm", "Nuclei"])
+    measure_granularity.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
     measure_granularity.subsample_size.value = 0.25
     measure_granularity.image_sample_size.value = 0.25
     measure_granularity.element_size.value = 10
@@ -1462,7 +1462,7 @@ def generate_analysis_pipeline(
     measure_colocal_sbs = MeasureColocalization()
     module_counter += 1
     measure_colocal_sbs.module_num = module_counter
-    measure_colocal_sbs.images_list.value = ",".join(
+    measure_colocal_sbs.images_list.value = ", ".join(
         [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
     )
     measure_colocal_sbs.thr.value = 15.0
