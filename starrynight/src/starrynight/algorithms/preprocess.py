@@ -802,7 +802,7 @@ def generate_preprocess_pipeline(
             module_counter += 1
             save_image.module_num = module_counter
             save_image.save_image_or_figure.value = IF_IMAGE
-            if ch is nuclei_channel:
+            if ch == nuclei_channel:
                 save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}"
             else:
                 save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}_Compensated"
@@ -863,7 +863,7 @@ def generate_preprocess_pipeline(
         calc_math_div20.operands[0].operand_choice.value = MC_IMAGE
         calc_math_div20.operands[0].operand_objects.value = None
 
-        if op is not O_SUBTRACT:
+        if op != O_SUBTRACT:
             calc_math_div20.operands[0].operand_measurement.value = None
         else:
             calc_math_div20.operands[0].operand_measurement.value = "Math_Divide20"
@@ -875,7 +875,7 @@ def generate_preprocess_pipeline(
         calc_math_div20.operands[1].operand_choice.value = MC_IMAGE
         calc_math_div20.operands[1].operand_objects.value = None
 
-        if op is not O_SUBTRACT:
+        if op != O_SUBTRACT:
             calc_math_div20.operands[1].operand_measurement.value = None
         else:
             calc_math_div20.operands[1].operand_measurement.value = "Math_Divide20floor"
