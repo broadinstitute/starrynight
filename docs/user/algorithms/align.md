@@ -10,7 +10,7 @@ Registers images across different cycles in sequencing-based imaging (SBS) exper
 
 ### CellProfiler Configuration
 
-Key CellProfiler modules:
+Key CellProfiler modules and configurations:
 
 - **Align**: Implements cross-correlation alignment (M_CROSS_CORRELATION) while maintaining original image size
 - **MeasureColocalization**: Measures alignment quality between reference and aligned images

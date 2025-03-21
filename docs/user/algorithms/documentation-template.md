@@ -10,7 +10,7 @@ Brief explanation of what this algorithm does and its purpose within StarryNight
 
 ### CellProfiler Configuration
 
-Key CellProfiler modules and configurations:
+Key CellProfiler modules:
 
 - **ModuleA**: Configured with X parameters for Y purpose
 - **ModuleB**: Configured with X parameters for Y purpose

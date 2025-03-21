@@ -10,7 +10,7 @@ Implements a comprehensive analysis pipeline for microscopy images that integrat
 
 ### CellProfiler Configuration
 
-Key CellProfiler modules:
+Key CellProfiler modules and configurations:
 
 - **IdentifyPrimaryObjects**: Detects nuclei (10-80 pixels) and barcode spots (2-10 pixels)
 - **IdentifySecondaryObjects**: Uses propagation with Otsu three-class thresholding for cell detection

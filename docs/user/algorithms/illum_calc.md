@@ -8,7 +8,7 @@ Calculates illumination correction functions for microscopy images to normalize 
 
 ### CellProfiler Configuration
 
-Key CellProfiler modules:
+Key CellProfiler modules and configurations:
 
 - **CorrectIlluminationCalculate**: Uses median filtering (block size 60, filter size 20) to model background illumination patterns
 - **Resize**: Implements bilinear interpolation for both downsampling (0.25x) and upsampling (4x)
