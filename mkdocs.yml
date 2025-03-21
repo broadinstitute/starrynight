@@ -1,6 +1,7 @@
 site_name: StarryNight Documentation
 site_description: Documentation for the StarryNight optical pooled screening platform
 repo_url: https://github.com/broadinstitute/starrynight
+edit_uri: blob/main/docs/
 
 plugins:
     - mermaid2
