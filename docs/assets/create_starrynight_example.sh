@@ -17,7 +17,8 @@ parallel --match '.*' --match '(.*) (.*) (.*)' \
     aws s3 cp "${S3_PATH}/images/Plate1/20X_c{1}_SBS-{1}/Well{2.1}_Point{2.1}_{2.2}_ChannelC,A,T,G,DAPI_Seq{2.3}.ome.tiff" \
     "${INPUT_DIR}/Source1/Batch1/images/Plate1/20X_c{1}_SBS-{1}/" ::: \
     1 2 3 ::: \
-    "A1 0000 0000" "A1 0001 0001" "A2 0000 1025" "A2 0001 1026" "B1 0000 3075" "B1 0001 3076"
+    "A1 0000 0000" "A1 0001 0001" "A1 0002 0002" "A1 0003 0003" "A2 0000 1025" "A2 0001 1026" "A2 0002 1027" "A2 0003 1028" "B1 0000 3075" "B1 0001 3076" "B1 0002 3077" "B1 0003 3078"
+
 
 ## Cell Painting images
 
@@ -26,7 +27,7 @@ mkdir -p ${INPUT_DIR}/Source1/Batch1/images/20X_CP_Plate1_20240319_122800_179
 parallel --match '(.*) (.*) (.*)' \
    aws s3 cp "${S3_PATH}/images/Plate1/20X_CP_Plate1_20240319_122800_179/Well{1.1}_Point{1.1}_{1.2}_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq{1.3}.ome.tiff" \
    "${INPUT_DIR}/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/" ::: \
-   "A1 0000 0000" "A1 0001 0001" "A2 0000 1025" "A2 0001 1026" "B1 0000 3075" "B1 0001 3076"
+   "A1 0000 0000" "A1 0001 0001" "A1 0002 0002" "A1 0003 0003" "A2 0000 1025" "A2 0001 1026" "A2 0002 1027" "A2 0003 1028" "B1 0000 3075" "B1 0001 3076" "B1 0002 3077" "B1 0003 3078"
 
 # Outputs
 
@@ -59,32 +60,32 @@ parallel \
 parallel \
    aws s3 cp "${S3_PATH}/images_aligned/barcoding/Plate1-Well{1}-{2}/Plate_Plate1_Well_{1}_Site_{2}_Cycle0{3}_{4}.tiff" \
    "${OUTPUT_BASELINE_DIR}/Source1/Batch1/images_aligned/barcoding/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1 ::: 1 2 3 ::: A T G C DAPI
+   A1 A2 B1 ::: 0 1 2 3 ::: 1 2 3 ::: A T G C DAPI
 
 
 parallel \
    aws s3 cp "${S3_PATH}/images_aligned/barcoding/Plate1-Well{1}-{2}/BarcodingApplication_{3}.csv" \
    "${OUTPUT_BASELINE_DIR}/Source1/Batch1/images_aligned/barcoding/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1 ::: Experiment Image
+   A1 A2 B1 ::: 0 1 2 3 ::: Experiment Image
 
 ## SBS images: Illumination corrected
 
 parallel \
    aws s3 cp "${S3_PATH}/images_corrected/barcoding/Plate1-Well{1}-{2}/Plate_Plate1_Well_{1}_Site_{2}_Cycle0{3}_{4}.tiff" \
    "${OUTPUT_BASELINE_DIR}/Source1/Batch1/images_corrected/barcoding/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1 ::: 1 2 3 ::: A T G C
+   A1 A2 B1 ::: 0 1 2 3 ::: 1 2 3 ::: A T G C
 
 parallel \
    aws s3 cp "${S3_PATH}/images_corrected/barcoding/Plate1-Well{1}-{2}/Plate_Plate1_Well_{1}_Site_{2}_Cycle0{3}_{4}.tiff" \
    "${OUTPUT_BASELINE_DIR}/Source1/Batch1/images_corrected/barcoding/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1 ::: 1 ::: DAPI
+   A1 A2 B1 ::: 0 1 2 3 ::: 1 ::: DAPI
 # DAPI is present only in the first cycle
 
 
 parallel \
    aws s3 cp "${S3_PATH}/images_corrected/barcoding/Plate1-Well{1}-{2}/BarcodePreprocessing_{3}.csv" \
    "${OUTPUT_BASELINE_DIR}/Source1/Batch1/images_corrected/barcoding/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1 ::: BarcodeFoci PreFoci Experiment Image Nuclei
+   A1 A2 B1 ::: 0 1 2 3 ::: BarcodeFoci PreFoci Experiment Image Nuclei
 
 ## Segmentation images
 
@@ -118,14 +119,14 @@ parallel \
    "${S3_PATH_WORKSPACE}/analysis/${BATCH}/Plate1-Well{1}-{2}/" \
    "${OUTPUT_BASELINE_DIR}/Source1/workspace_example/analysis/${BATCH}/Plate1-Well{1}-{2}/" \
    --exclude \""*.csv\"" ::: \
-   A1 A2 B1 ::: 0 1
+   A1 A2 B1 ::: 0 1 2 3
 
 
 parallel \
    aws s3 sync \
    "${S3_PATH_WORKSPACE}/analysisfix/${BATCH}/Plate1-Well{1}-{2}/" \
    "${OUTPUT_BASELINE_DIR}/Source1/workspace_example/analysis/${BATCH}/Plate1-Well{1}-{2}/" ::: \
-   A1 A2 B1 ::: 0 1
+   A1 A2 B1 ::: 0 1 2 3
 # Note that the analysis files are synced from two different locations: analysis and analysisfix.
 # analysisfix was a rerun of analysis
 
