@@ -802,7 +802,10 @@ def generate_preprocess_pipeline(
             module_counter += 1
             save_image.module_num = module_counter
             save_image.save_image_or_figure.value = IF_IMAGE
-            save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}_Compensated"
+            if ch is nuclei_channel:
+                save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}"
+            else:
+                save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}_Compensated"
             save_image.file_name_method.value = FN_SINGLE_NAME
             save_image.number_of_digits.value = 4
             save_image.wants_file_name_suffix.value = False
