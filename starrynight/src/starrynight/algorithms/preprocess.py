@@ -42,7 +42,7 @@ from cellprofiler.modules.filterobjects import (
     PO_BOTH,
     FilterObjects,
 )
-from cellprofiler.modules.flagimage import C_ANY, S_AVERAGE_OBJECT, S_IMAGE, FlagImage
+from cellprofiler.modules.flagimage import C_ANY, S_IMAGE, FlagImage
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
     FH_ALL,
@@ -130,9 +130,7 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
-    ]
+    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
 
     filename_heads = [
         f"FileName_Align_Cycle_{int(cycle)}_{col}"
