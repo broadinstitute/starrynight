@@ -896,22 +896,22 @@ def generate_preprocess_pipeline(
     module_counter += 1
     flag_images.module_num = module_counter
     # Flag's category [3]
-    flag_images.flags[i].category.value = "Divide20"
+    flag_images.flags[0].category.value = "Divide20"
     # Name of the flag [4]
-    flag_images.flags[i].feature_name.value = "Divide20Flag"
+    flag_images.flags[0].feature_name.value = "Divide20Flag"
     # How should the measurements be linked [5]
-    flag_images.flags[i].combination_choice.value = C_ANY
+    flag_images.flags[0].combination_choice.value = C_ANY
     # Skip image set if flagged [6]
-    flag_images.flags[i].wants_skip.value = True
+    flag_images.flags[0].wants_skip.value = True
 
     # Measurement settings, One measurement is added by default for each flag
-    flag_images.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
-    flag_images.flags[i].measurement_settings[0].object_name.value = None
-    flag_images.flags[i].measurement_settings[0].measurement.value = "Math_Divide20diff"
-    flag_images.flags[i].measurement_settings[0].wants_minimum.value = False
-    flag_images.flags[i].measurement_settings[0].minimum_value.value = 0.0
-    flag_images.flags[i].measurement_settings[0].wants_maximum.value = True
-    flag_images.flags[i].measurement_settings[0].maximum_value.value = 0.0000000001
+    flag_images.flags[0].measurement_settings[0].source_choice.value = S_IMAGE
+    flag_images.flags[0].measurement_settings[0].object_name.value = None
+    flag_images.flags[0].measurement_settings[0].measurement.value = "Math_Divide20diff"
+    flag_images.flags[0].measurement_settings[0].wants_minimum.value = False
+    flag_images.flags[0].measurement_settings[0].minimum_value.value = 0.0
+    flag_images.flags[0].measurement_settings[0].wants_maximum.value = True
+    flag_images.flags[0].measurement_settings[0].maximum_value.value = 0.0000000001
     pipeline.add_module(flag_images)
 
     # ImageMath
