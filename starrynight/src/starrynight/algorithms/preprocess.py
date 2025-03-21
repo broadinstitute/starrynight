@@ -688,7 +688,7 @@ def generate_preprocess_pipeline(
             ].value = f"Align_Cycle_{cycle}_{ch}_Compensated"
 
     compensate.images_or_objects.value = CC_OBJECTS
-    compensate.object_groups[0].settings.object_name.value = "Foci"
+    compensate.object_groups[0].object_name.value = "Foci"
     compensate.do_rescale_input.value = "No"
     compensate.do_rescale_after_mask.value = "No"
     compensate.do_match_histograms.value = "Yes, post-masking to objects"
