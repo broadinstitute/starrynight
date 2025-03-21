@@ -19,10 +19,3 @@ Key CellProfiler modules:
 
 - **SBS vs. Non-SBS Images**: Handles both standard and cycle-based sequential imaging protocols
 - **Modular Design**: Separates illumination function calculation from application, enabling reuse of correction functions
-
-## Integration Points
-
-- **Inputs**: Requires both original images and previously calculated illumination functions (.npy files)
-- **Outputs**: Produces corrected images named with pattern `[Batch]_[Plate]_Well_[Well]_Site_[Site]_[Channel]Corr`
-- **Dependencies**: CellProfiler, Polars, CloudPath
-- **Used By**: The `align.py` algorithm which registers these corrected images across cycles
