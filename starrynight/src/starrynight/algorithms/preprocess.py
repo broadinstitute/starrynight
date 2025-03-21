@@ -136,12 +136,12 @@ def write_loaddata(
     metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
 
     filename_heads = [
-        f"FileName_Align_Cycle_{int(cycle)}_{col}"
+        f"FileName_Cycle{int(cycle)}_{col}"
         for cycle in plate_cycles_list
         for col in plate_channel_list
     ]
     pathname_heads = [
-        f"PathName_Align_Cycle_{int(cycle)}_{col}"
+        f"PathName_Cycle{int(cycle)}_{col}"
         for cycle in plate_cycles_list
         for col in plate_channel_list
     ]
@@ -375,7 +375,7 @@ def generate_preprocess_pipeline(
             # Image or measurement?
             mean_cycles.images[i].image_or_measurement.value = IM_IMAGE
             # Image name
-            mean_cycles.images[i].image_name.value = f"Align_Cycle_{cycle}_{ch}"
+            mean_cycles.images[i].image_name.value = f"Cycle{cycle}_{ch}"
             # Measurement
             mean_cycles.images[i].measurement.value = ""
             # Factor
@@ -425,11 +425,11 @@ def generate_preprocess_pipeline(
 
         for i, cycle in enumerate(cycle_list):
             # image_name
-            correct_illum_apply.images[i].image_name.value = f"Align_Cycle_{cycle}_{ch}"
+            correct_illum_apply.images[i].image_name.value = f"Cycle{cycle}_{ch}"
             # corrected_image_name
             correct_illum_apply.images[
                 i
-            ].corrected_image_name.value = f"Align_Cycle_{cycle}_{ch}_BackSub"
+            ].corrected_image_name.value = f"Cycle{cycle}_{ch}_BackSub"
 
             # illum correct function image name
             correct_illum_apply.images[
@@ -462,9 +462,7 @@ def generate_preprocess_pipeline(
             # Image or measurement?
             std_dev_cycles.images[i].settings[0].value = IM_IMAGE
             # Image name
-            std_dev_cycles.images[i].settings[
-                1
-            ].value = f"Align_Cycle_{int(cycle)}_{ch}"
+            std_dev_cycles.images[i].settings[1].value = f"Cycle{int(cycle)}_{ch}"
             # Measurement
             std_dev_cycles.images[i].settings[2].value = ""
             # Factor
@@ -506,7 +504,7 @@ def generate_preprocess_pipeline(
     identify_primary_object_nuclei = IdentifyPrimaryObjects()
     module_counter += 1
     identify_primary_object_nuclei.module_num = module_counter
-    identify_primary_object_nuclei.x_name.value = f"Align_Cycle_1_{nuclei_channel}"
+    identify_primary_object_nuclei.x_name.value = f"Cycle1_{nuclei_channel}"
     identify_primary_object_nuclei.y_name.value = "Nuclei"
     identify_primary_object_nuclei.size_range.value = (6, 25)
     identify_primary_object_nuclei.exclude_size.value = True
@@ -553,9 +551,7 @@ def generate_preprocess_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_PROPAGATION
-    identify_secondary_object_cells.image_name.value = (
-        f"Align_Cycle_{1}_{sbs_channel_list[0]}"
-    )
+    identify_secondary_object_cells.image_name.value = f"Cycle{1}_{sbs_channel_list[0]}"
     identify_secondary_object_cells.distance_to_dilate.value = 20
     identify_secondary_object_cells.regularization_factor.value = 0.05
     identify_secondary_object_cells.wants_discard_edge.value = False
@@ -679,13 +675,13 @@ def generate_preprocess_pipeline(
             # Select an image to measure
             compensate.image_groups[offset + j].settings[
                 1
-            ].value = f"Align_Cycle_{cycle}_{ch}_BackSub"
+            ].value = f"Cycle{cycle}_{ch}_BackSub"
             # What compensation class it belongs to?
             compensate.image_groups[offset + j].settings[2].value = i + 1
             # Select an output image
             compensate.image_groups[offset + j].settings[
                 3
-            ].value = f"Align_Cycle_{cycle}_{ch}_Compensated"
+            ].value = f"Cycle{cycle}_{ch}_Compensated"
 
     compensate.images_or_objects.value = CC_OBJECTS
     compensate.object_groups[0].object_name.value = "Foci"
@@ -726,7 +722,7 @@ def generate_preprocess_pipeline(
     call_barcodes.ncycles.value = len(cycle_list)
     call_barcodes.input_object_name.value = "Foci"
     call_barcodes.cycle1measure.value = (
-        f"Intensity_MaxIntensity_Align_Cycle_1_{channel_list[0]}_Compensated"
+        f"Intensity_MaxIntensity_Cycle1_{channel_list[0]}_Compensated"
     )
     call_barcodes.csv_directory.value = (
         f"{ABSOLUTE_FOLDER_NAME}|{barcode_csv_path.parent.resolve().__str__()}"
@@ -803,9 +799,9 @@ def generate_preprocess_pipeline(
             save_image.module_num = module_counter
             save_image.save_image_or_figure.value = IF_IMAGE
             if ch == nuclei_channel:
-                save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}"
+                save_image.image_name.value = f"Cycle{cycle}_{ch}"
             else:
-                save_image.image_name.value = f"Align_Cycle_{cycle}_{ch}_Compensated"
+                save_image.image_name.value = f"Cycle{cycle}_{ch}_Compensated"
             save_image.file_name_method.value = FN_SINGLE_NAME
             save_image.number_of_digits.value = 4
             save_image.wants_file_name_suffix.value = False
