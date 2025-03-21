@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Processing Modules - StarryNight Documentation</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">StarryNight Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Getting Started</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../getting-started/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../getting-started/quickstart/" class="dropdown-item">Quick Start Guide</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../core-concepts/" class="dropdown-item">Core Concepts</a>
+</li>
+                                    
+<li>
+    <a href="../parser-configuration/" class="dropdown-item">Parser Configuration</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">Processing Modules</a>
+</li>
+                                    
+<li>
+    <a href="../example-pipeline-cli/" class="dropdown-item">Example CLI Pipeline</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Algorithms</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../algorithms/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/DOCUMENTATION_GUIDE/" class="dropdown-item">Documentation Guide</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/illum_calc/" class="dropdown-item">Illumination Calculation</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/illum_apply/" class="dropdown-item">Illumination Apply</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/presegcheck/" class="dropdown-item">Pre-segmentation Check</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/segcheck/" class="dropdown-item">Segmentation Check</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/align/" class="dropdown-item">Alignment</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/preprocess/" class="dropdown-item">Preprocessing</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/stitchcrop/" class="dropdown-item">Stitch and Crop</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/analysis/" class="dropdown-item">Analysis</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Development</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../developer/developer-guide/" class="dropdown-item">Developer Guide</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../misc/faq/" class="nav-link">FAQ</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../parser-configuration/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../example-pipeline-cli/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/broadinstitute/starrynight/blob/main/docs/user/modules.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#processing-modules" class="nav-link">Processing Modules</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#module-overview" class="nav-link">Module Overview</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#module-workflow" class="nav-link">Module Workflow</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#inventory-module" class="nav-link">Inventory Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#index-module" class="nav-link">Index Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#illumination-correction-module" class="nav-link">Illumination Correction Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#alignment-module" class="nav-link">Alignment Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#preprocessing-module" class="nav-link">Preprocessing Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cell-painting-analysis-module" class="nav-link">Cell Painting Analysis Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#sequencing-analysis-module" class="nav-link">Sequencing Analysis Module</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#module-dependencies" class="nav-link">Module Dependencies</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#module-outputs" class="nav-link">Module Outputs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#next-steps" class="nav-link">Next Steps</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="processing-modules">Processing Modules</h1>
+<p>This guide provides an overview of the processing modules available in StarryNight.</p>
+<h2 id="module-overview">Module Overview</h2>
+<p>StarryNight organizes functionality into distinct processing modules:</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+<th>Key Features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inventory</strong></td>
+<td>Catalog image files</td>
+<td>Fast file scanning, parallel processing</td>
+</tr>
+<tr>
+<td><strong>Index</strong></td>
+<td>Extract metadata</td>
+<td>Path parsing, structure generation</td>
+</tr>
+<tr>
+<td><strong>Illumination Correction</strong></td>
+<td>Normalize illumination</td>
+<td>Per-channel correction, CellProfiler integration</td>
+</tr>
+<tr>
+<td><strong>Alignment</strong></td>
+<td>Register images</td>
+<td>Multi-channel alignment, cycle-to-cycle registration</td>
+</tr>
+<tr>
+<td><strong>Preprocessing</strong></td>
+<td>Prepare images for analysis</td>
+<td>Background subtraction, artifact removal</td>
+</tr>
+<tr>
+<td><strong>Cell Painting Analysis</strong></td>
+<td>Cell segmentation &amp; features</td>
+<td>CellProfiler integration, feature extraction</td>
+</tr>
+<tr>
+<td><strong>Sequencing Analysis</strong></td>
+<td>Process sequencing data</td>
+<td>Barcode calling, cycle alignment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="module-workflow">Module Workflow</h2>
+<p>Most StarryNight modules follow a similar three-step workflow:</p>
+<ol>
+<li><strong>Generate LoadData files</strong>: Create CSV files telling CellProfiler which images to process</li>
+<li><strong>Generate pipeline files</strong>: Create customized CellProfiler pipelines</li>
+<li><strong>Execute pipelines</strong>: Run CellProfiler with the generated files</li>
+</ol>
+<h2 id="inventory-module">Inventory Module</h2>
+<p>The inventory module catalogs all image files in a dataset:</p>
+<pre><code class="language-bash">starrynight inventory gen -d INPUT_DIRECTORY -o OUTPUT_DIRECTORY
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Fast parallel file scanning</li>
+<li>Parquet file format for efficient access</li>
+<li>Supports large datasets (millions of files)</li>
+</ul>
+<h2 id="index-module">Index Module</h2>
+<p>The index module extracts structured metadata from file paths:</p>
+<pre><code class="language-bash">starrynight index gen -i INVENTORY_FILE -o OUTPUT_DIRECTORY
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Extracts well, plate, channel information</li>
+<li>Uses a parser for consistent metadata extraction</li>
+<li>Creates a structured index for downstream processing</li>
+</ul>
+<h2 id="illumination-correction-module">Illumination Correction Module</h2>
+<p>The illumination correction module compensates for uneven illumination across the field of view:</p>
+<pre><code class="language-bash"># Generate LoadData files
+starrynight illum calc loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
+
+# Generate pipelines
+starrynight illum calc cppipe -l LOADDATA_DIRECTORY -o PIPELINE_DIRECTORY -w WORKSPACE
+
+# Execute pipelines
+starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
+</code></pre>
+<h2 id="alignment-module">Alignment Module</h2>
+<p>The alignment module handles registration of images across different channels and cycles:</p>
+<pre><code class="language-bash"># Generate LoadData files
+starrynight align loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
+
+# Generate pipelines
+starrynight align cppipe -l LOADDATA_DIRECTORY -o PIPELINE_DIRECTORY -w WORKSPACE
+
+# Execute pipelines
+starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Multi-channel alignment</li>
+<li>Cycle-to-cycle registration</li>
+<li>Configurable reference channel</li>
+</ul>
+<h2 id="preprocessing-module">Preprocessing Module</h2>
+<p>The preprocessing module prepares images for downstream analysis:</p>
+<pre><code class="language-bash"># Generate LoadData files
+starrynight preprocess loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
+
+# Generate pipelines
+starrynight preprocess cppipe -l LOADDATA_DIRECTORY -o PIPELINE_DIRECTORY -w WORKSPACE
+
+# Execute pipelines
+starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Background subtraction</li>
+<li>Image normalization</li>
+<li>Artifact removal</li>
+<li>Quality control</li>
+</ul>
+<h2 id="cell-painting-analysis-module">Cell Painting Analysis Module</h2>
+<p>The cell painting module handles cell segmentation and feature extraction:</p>
+<pre><code class="language-bash"># Multiple steps for cell segmentation and feature extraction
+# See CLI reference for detailed options
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Cell segmentation</li>
+<li>Feature extraction</li>
+<li>Integration with CellProfiler</li>
+</ul>
+<h2 id="sequencing-analysis-module">Sequencing Analysis Module</h2>
+<p>The sequencing module processes sequencing-based image data:</p>
+<pre><code class="language-bash"># Multiple steps for cycle alignment and barcode calling
+# See CLI reference for detailed options
+</code></pre>
+<p>Key features:</p>
+<ul>
+<li>Cycle alignment</li>
+<li>Barcode calling</li>
+<li>Sequence decoding</li>
+</ul>
+<h2 id="module-dependencies">Module Dependencies</h2>
+<p>Modules typically have dependencies on earlier modules:</p>
+<pre><code>Inventory → Index → Illumination Correction → Alignment → Preprocessing → Analysis
+</code></pre>
+<h2 id="module-outputs">Module Outputs</h2>
+<p>Each module produces specific outputs:</p>
+<ul>
+<li><strong>Inventory</strong>: <code>inventory.parquet</code> file</li>
+<li><strong>Index</strong>: <code>index.parquet</code> file</li>
+<li><strong>Illumination Correction</strong>: <code>.npy</code> illumination function files</li>
+<li><strong>Alignment</strong>: Aligned image files</li>
+<li><strong>Preprocessing</strong>: Processed image files</li>
+<li><strong>Analysis</strong>: Measurement and feature files</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Read the detailed user guides for each of the modules</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

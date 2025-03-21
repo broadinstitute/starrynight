@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Parser Configuration - StarryNight Documentation</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">StarryNight Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Getting Started</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../getting-started/installation/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../getting-started/quickstart/" class="dropdown-item">Quick Start Guide</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../core-concepts/" class="dropdown-item">Core Concepts</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">Parser Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../modules/" class="dropdown-item">Processing Modules</a>
+</li>
+                                    
+<li>
+    <a href="../example-pipeline-cli/" class="dropdown-item">Example CLI Pipeline</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Algorithms</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../algorithms/" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/DOCUMENTATION_GUIDE/" class="dropdown-item">Documentation Guide</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/illum_calc/" class="dropdown-item">Illumination Calculation</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/illum_apply/" class="dropdown-item">Illumination Apply</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/presegcheck/" class="dropdown-item">Pre-segmentation Check</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/segcheck/" class="dropdown-item">Segmentation Check</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/align/" class="dropdown-item">Alignment</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/preprocess/" class="dropdown-item">Preprocessing</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/stitchcrop/" class="dropdown-item">Stitch and Crop</a>
+</li>
+                                    
+<li>
+    <a href="../algorithms/analysis/" class="dropdown-item">Analysis</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Development</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../developer/developer-guide/" class="dropdown-item">Developer Guide</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../misc/faq/" class="nav-link">FAQ</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../core-concepts/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../modules/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/broadinstitute/starrynight/blob/main/docs/user/parser-configuration.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#parser-configuration" class="nav-link">Parser Configuration</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#understanding-path-parsers" class="nav-link">Understanding Path Parsers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#the-default-parser" class="nav-link">The Default Parser</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#customizing-the-parser" class="nav-link">Customizing the Parser</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#advanced-creating-custom-transformers" class="nav-link">Advanced: Creating Custom Transformers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#best-practices" class="nav-link">Best Practices</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#next-steps" class="nav-link">Next Steps</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="parser-configuration">Parser Configuration</h1>
+<p>This guide explains how to configure and customize path parsers in StarryNight to work with your own data organization.</p>
+<h2 id="understanding-path-parsers">Understanding Path Parsers</h2>
+<p>StarryNight uses a grammar-based path parsing system to extract structured metadata from file paths. This allows it to work with a variety of file organization schemes.</p>
+<h3 id="how-path-parsing-works">How Path Parsing Works</h3>
+<ol>
+<li><strong>Grammar Definition</strong>: A grammar file (<code>.lark</code>) defines the rules for interpreting file paths</li>
+<li><strong>Transformer</strong>: A transformer class converts the parsed structure into usable metadata</li>
+<li><strong>Index Generation</strong>: The parsed metadata is stored in a structured index</li>
+</ol>
+<h2 id="the-default-parser">The Default Parser</h2>
+<p>StarryNight includes a default parser ("vincent") that expects paths matching this pattern:</p>
+<pre><code>[dataset]/Source[source_id]/Batch[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
+</code></pre>
+<h3 id="understanding-the-grammar-file">Understanding the Grammar File</h3>
+<p>The default grammar file (<code>path_parser_vincent.lark</code>) defines rules for parsing file paths:</p>
+<pre><code>start: sep? dataset_id sep source_id sep _root_dir
+
+_root_dir: batch_id sep (_images_root_dir | _illum_root_dir | _images_aligned_root_dir | _workspace_root_dir)
+
+_images_root_dir: &quot;images&quot;i sep plate_id sep _plate_root_dir
+...
+</code></pre>
+<p>Each rule identifies specific components of the path, such as dataset ID, batch ID, plate ID, etc.</p>
+<h2 id="customizing-the-parser">Customizing the Parser</h2>
+<h3 id="option-1-using-cli-parameters">Option 1: Using CLI Parameters</h3>
+<p>When generating an index, you can specify a custom parser path:</p>
+<pre><code class="language-bash">starrynight index gen -i ./workspace/inventory/inventory.parquet \
+                      -o ./workspace/index/ \
+                      --parser /path/to/custom/parser.lark
+</code></pre>
+<h3 id="option-2-creating-a-custom-grammar-file">Option 2: Creating a Custom Grammar File</h3>
+<p>To create a custom parser for your own file organization:</p>
+<ol>
+<li><strong>Create a grammar file</strong> based on your file organization pattern</li>
+<li><strong>Test your grammar</strong> with sample file paths</li>
+<li><strong>Use it when generating the index</strong></li>
+</ol>
+<h3 id="example-custom-grammar-file">Example: Custom Grammar File</h3>
+<p>Here's an example grammar file for a different file organization pattern:</p>
+<pre><code>// Custom grammar for example_lab file organization
+start: sep? project_name sep experiment_name sep plate_id sep _image_file
+
+_image_file: well_id &quot;_&quot; site_id &quot;_&quot; channel &quot;_&quot; cycle_id &quot;.&quot; extension
+
+project_name: stringwithdashcommaspace
+experiment_name: stringwithdashcommaspace
+plate_id: string
+well_id: (LETTER | DIGIT)~2
+site_id: DIGIT~1..4
+channel: stringwithdash
+cycle_id: DIGIT~1..2
+extension: stringwithdots
+
+string: (LETTER | DIGIT)+
+stringwithdash: (string | &quot;-&quot;)+
+stringwithdashcommaspace: ( string | &quot;-&quot; | &quot;_&quot; | &quot;,&quot; | &quot; &quot; )+
+stringwithdots: ( string | &quot;.&quot; )+
+DIGIT: &quot;0&quot;..&quot;9&quot;
+
+%import common.LETTER
+</code></pre>
+<p>This would parse paths like:</p>
+<pre><code>MyProject/Experiment-2023-05/Plate1/A1_01_DAPI_01.tiff
+</code></pre>
+<h2 id="advanced-creating-custom-transformers">Advanced: Creating Custom Transformers</h2>
+<p>For even more customization, you can create your own transformer class:</p>
+<ol>
+<li>Extend the <code>BaseTransformer</code> class</li>
+<li>Override methods for each grammar rule</li>
+<li>Register your transformer with the system</li>
+</ol>
+<p>Example:</p>
+<pre><code class="language-python">from starrynight.parsers.common import BaseTransformer
+
+class MyCustomTransformer(BaseTransformer):
+    &quot;&quot;&quot;Custom transformer for my file organization.&quot;&quot;&quot;
+
+    def __init__(self) -&gt; None:
+        super().__init__()
+        self.channel_dict: dict[str, list[str]] = {&quot;channel_dict&quot;: []}
+
+    def project_name(self, items) -&gt; dict:
+        return {&quot;project_name&quot;: items[0]}
+
+    def experiment_name(self, items) -&gt; dict:
+        return {&quot;experiment_name&quot;: items[0]}
+
+    # Other methods for each rule in your grammar
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<p>When configuring parsers:</p>
+<ol>
+<li><strong>Start Simple</strong>: Begin with basic grammar rules and refine them</li>
+<li><strong>Test Thoroughly</strong>: Validate your parser with representative file paths</li>
+<li><strong>Handle Edge Cases</strong>: Consider special file naming conventions</li>
+<li><strong>Document Your Schema</strong>: Document your file organization for reference</li>
+</ol>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Common issues with parsers:</p>
+<ul>
+<li><strong>Parsing Errors</strong>: Check if your file paths match your grammar rules</li>
+<li><strong>Missing Metadata</strong>: Ensure your grammar extracts all needed metadata fields</li>
+<li><strong>Performance Issues</strong>: Very complex grammars might be slower to parse</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<p>After configuring your parser:</p>
+<ul>
+<li>Generate an inventory and index with your custom parser</li>
+<li>Validate the index contains the expected metadata</li>
+<li>Proceed with your StarryNight workflow</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,198 @@
+images:
+  level: plate
+  path: ../../scratch/starrynight_example_input/Source1/Batch1/images/
+  files:
+    set1:
+      - folder: Plate1
+        files:
+          - tiff:
+            - 20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
+            - 20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff
+            - 20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
+            - 20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome.tiff
+            - 20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome.tiff
+            - 20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome.tiff
+            - 20X_c1_SBS-1/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
+            - 20X_c1_SBS-1/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
+            - 20X_c1_SBS-1/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
+            - 20X_c1_SBS-1/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
+            - 20X_c1_SBS-1/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
+            - 20X_c1_SBS-1/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
+            - 20X_c2_SBS-2/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
+            - 20X_c2_SBS-2/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
+            - 20X_c2_SBS-2/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
+            - 20X_c2_SBS-2/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
+            - 20X_c2_SBS-2/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
+            - 20X_c2_SBS-2/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
+            - 20X_c3_SBS-3/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
+            - 20X_c3_SBS-3/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
+            - 20X_c3_SBS-3/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
+            - 20X_c3_SBS-3/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
+            - 20X_c3_SBS-3/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
+            - 20X_c3_SBS-3/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
+
+load_data:
+  level: plate
+  path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
+  files:
+    set1:
+      - folder: Plate1
+        files:
+          - csv:
+            - load_data_pipeline1.csv
+            - load_data_pipeline2.csv
+            - load_data_pipeline3.csv
+            - load_data_pipeline5.csv
+            - load_data_pipeline6.csv
+            - load_data_pipeline7.csv
+            - load_data_pipeline9.csv
+
+illum:
+  level: plate
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/
+  files:
+    set1:
+      - folder: Plate1
+        files:
+          - tiff:
+            - Plate1_Cycle1_IllumA.npy
+            - Plate1_Cycle1_IllumC.npy
+            - Plate1_Cycle1_IllumDNA.npy
+            - Plate1_Cycle1_IllumG.npy
+            - Plate1_Cycle1_IllumT.npy
+            - Plate1_Cycle2_IllumA.npy
+            - Plate1_Cycle2_IllumC.npy
+            - Plate1_Cycle2_IllumDNA.npy
+            - Plate1_Cycle2_IllumG.npy
+            - Plate1_Cycle2_IllumT.npy
+            - Plate1_Cycle3_IllumA.npy
+            - Plate1_Cycle3_IllumC.npy
+            - Plate1_Cycle3_IllumDNA.npy
+            - Plate1_Cycle3_IllumG.npy
+            - Plate1_Cycle3_IllumT.npy
+            - Plate1_IllumDNA.npy
+            - Plate1_IllumPhalloidin.npy
+            - Plate1_IllumZO1.npy
+
+images_aligned_barcoding:
+  level: site
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/
+  files:
+    set1:
+      - folder: Plate1-WellA1-0
+        files:
+          - csv:
+            - BarcodingApplication_Experiment.csv
+            - BarcodingApplication_Image.csv
+          - tiff:
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_DAPI.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_DAPI.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
+
+images_corrected_barcoding:
+  level: site
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/
+  files:
+    set1:
+      - folder: Plate1-WellA1-0
+        files:
+          - csv:
+            - BarcodePreprocessing_BarcodeFoci.csv
+            - BarcodePreprocessing_Experiment.csv
+            - BarcodePreprocessing_Image.csv
+            - BarcodePreprocessing_Nuclei.csv
+            - BarcodePreprocessing_PreFoci.csv
+          - tiff:
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
+            - Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
+
+images_corrected_painting:
+  level: well
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
+  files:
+    set1:
+      - folder: Plate1-WellA1
+        files:
+          - csv:
+            - PaintingIllumApplication_Cells.csv
+            - PaintingIllumApplication_ConfluentRegions.csv
+            - PaintingIllumApplication_Experiment.csv
+            - PaintingIllumApplication_Image.csv
+            - PaintingIllumApplication_Nuclei.csv
+          - tiff:
+            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+            - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+            - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
+
+images_segmentation:
+  level: plate
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/
+  files:
+    set1:
+      - folder: Plate1
+        files:
+          - csv:
+            - SegmentationCheck_Cells.csv
+            - SegmentationCheck_ConfluentRegions.csv
+            - SegmentationCheck_Experiment.csv
+            - SegmentationCheck_Image.csv
+            - SegmentationCheck_Nuclei.csv
+            - SegmentationCheck_PreCells.csv
+          - png:
+            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+            - Plate_Plate1_Well_WellA2_Site_0_CorrDNA_SegmentCheck.png
+            - Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
+
+analysis:
+  level: site
+  path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/
+  files:
+    set1:
+      - folder: Plate1-WellA1-0
+        files:
+          - csv:
+            - BarcodeFoci.csv
+            - Cells.csv
+            - ConfluentRegions.csv
+            - Cytoplasm.csv
+            - Experiment.csv
+            - Foci.csv
+            - Foci_NonCellEdge.csv
+            - Foci_PreMask.csv
+            - Image.csv
+            - Nuclei.csv
+            - PreCells.csv
+            - RelateObjects.csv
+            - Resize_Foci.csv
+          - tiff:
+            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
+            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
+            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
+            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
+            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
