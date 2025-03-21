@@ -1104,7 +1104,9 @@ def generate_analysis_pipeline(
     call_barcodes.cycle1measure.value = (
         f"Intensity_MaxIntensity_Cycle1_{sbs_channel_list[0]}"
     )
-    call_barcodes.csv_directory.value = barcode_csv_path.parent.resolve().__str__()
+    call_barcodes.csv_directory.value = (
+        f"{ABSOLUTE_FOLDER_NAME}|{barcode_csv_path.parent.resolve().__str__()}"
+    )
     call_barcodes.csv_file_name.value = barcode_csv_path.name
     call_barcodes.metadata_field_barcode.value = "sgRNA"
     call_barcodes.metadata_field_tag.value = "gene_symbol"
