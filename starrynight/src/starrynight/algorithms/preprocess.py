@@ -887,7 +887,7 @@ def generate_preprocess_pipeline(
         calc_math_div20.constrain_lower_bound.value = False
         calc_math_div20.lower_bound.value = 0
         calc_math_div20.constrain_upper_bound.value = False
-        calc_math_div20.upper_bound = 1.0
+        calc_math_div20.upper_bound.value = 1.0
         calc_math_div20.rounding.value = round_val
         pipeline.add_module(calc_math_div20)
 

@@ -53,13 +53,11 @@ from cellprofiler.modules.identifytertiaryobjects import IdentifyTertiaryObjects
 from cellprofiler.modules.imagemath import (
     IM_IMAGE,
     IM_MEASUREMENT,
-    O_AVERAGE,
     O_INVERT,
     O_MAXIMUM,
     O_MINIMUM,
     O_MULTIPLY,
     O_NONE,
-    O_STDEV,
     ImageMath,
 )
 from cellprofiler.modules.maskimage import IO_IMAGE, IO_OBJECTS, MaskImage
@@ -114,9 +112,7 @@ from cellprofiler.modules.resizeobjects import ResizeObjects
 from cellprofiler.modules.saveimages import (
     AXIS_T,
     BIT_DEPTH_8,
-    BIT_DEPTH_16,
     FF_PNG,
-    FF_TIFF,
     FN_SINGLE_NAME,
     IF_IMAGE,
     WS_EVERY_CYCLE,
@@ -151,11 +147,9 @@ from cellprofiler_core.modules.align import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
-from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
-from starrynight.algorithms.cp_plugin_compensate_colors import CompensateColors
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
