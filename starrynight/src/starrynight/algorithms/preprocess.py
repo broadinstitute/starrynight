@@ -361,7 +361,7 @@ def generate_preprocess_pipeline(
         mean_cycles.operation.value = O_AVERAGE
         mean_cycles.exponent.value = 1
         mean_cycles.after_factor.value = 1
-        mean_cycles.addend.value = 1
+        mean_cycles.addend.value = 0
         mean_cycles.truncate_low.value = True
         mean_cycles.truncate_high.value = True
         mean_cycles.replace_nan.value = True
@@ -425,19 +425,19 @@ def generate_preprocess_pipeline(
 
         for i, cycle in enumerate(cycle_list):
             # image_name
-            correct_illum_apply.images[i].settings[
-                0
-            ].value = f"Align_Cycle_{cycle}_{ch}"
+            correct_illum_apply.images[i].image_name.value = f"Align_Cycle_{cycle}_{ch}"
             # corrected_image_name
-            correct_illum_apply.images[i].settings[
-                1
-            ].value = f"Align_Cycle_{cycle}_{ch}_BackSub"
+            correct_illum_apply.images[
+                i
+            ].corrected_image_name.value = f"Align_Cycle_{cycle}_{ch}_BackSub"
 
             # illum correct function image name
-            correct_illum_apply.images[i].settings[2].value = f"IllumMean{ch}"
+            correct_illum_apply.images[
+                i
+            ].illum_correct_function_image_name.value = f"IllumMean{ch}"
 
             # how illum function is applied
-            correct_illum_apply.images[i].settings[3] = DOS_SUBTRACT
+            correct_illum_apply.images[i].divide_or_subtract.value = DOS_SUBTRACT
         pipeline.add_module(correct_illum_apply)
 
     # Calculate StdDev
@@ -864,7 +864,7 @@ def generate_preprocess_pipeline(
         calc_math_div20.operands[0].operand_objects.value = None
 
         if op != O_SUBTRACT:
-            calc_math_div20.operands[0].operand_measurement.value = None
+            calc_math_div20.operands[0].operand_measurement.value = "Metadata_Site"
         else:
             calc_math_div20.operands[0].operand_measurement.value = "Math_Divide20"
 
