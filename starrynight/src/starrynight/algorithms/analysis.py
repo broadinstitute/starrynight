@@ -345,17 +345,26 @@ def generate_analysis_pipeline(
     mito_channel: str,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
-    channel_list = list(
+    cp_channel_list = list(
         # Remove duplicate channels
         set(
             [
                 col.split("_")[-1]
                 for col in load_data_df.columns
-                if col.startswith("FileName")
+                if col.startswith("FileName_Corr")
             ]
         )
     )
-    sbs_channel_list = channel_list.copy()
+    sbs_channel_list = list(
+        # Remove duplicate channels
+        set(
+            [
+                col.split("_")[-1]
+                for col in load_data_df.columns
+                if col.startswith("FileName_Cycle")
+            ]
+        )
+    )
     sbs_channel_list.remove(nuclei_channel)
     cycle_list = list(
         # Remove duplilcate cycels
@@ -363,7 +372,7 @@ def generate_analysis_pipeline(
             [
                 int(col.split("_")[-2].replace("Cycle", ""))
                 for col in load_data_df.columns
-                if col.startswith("FileName")
+                if col.startswith("FileName_Cycle")
             ]
         )
     )
@@ -513,10 +522,10 @@ def generate_analysis_pipeline(
     align.crop_mode.value = C_SAME_SIZE
 
     # make a copy of channel list and remove nuclei_channel
-    align_channel_list = channel_list.copy()
+    align_channel_list = cp_channel_list.copy()
     align_channel_list.remove(nuclei_channel)
-    align.first_input_image.value = "CorrCycle1Nuclei"
-    align.first_output_image.value = "AlignedCorrCycle1Nuclei"
+    align.first_input_image.value = f"Cycle1_{nuclei_channel}"
+    align.first_output_image.value = "AlignedCycle1Nuclei"
     align.second_input_image.value = f"Corr{nuclei_channel}"
     align.second_output_image.value = f"Aligned{nuclei_channel}"
 
@@ -1090,7 +1099,7 @@ def generate_analysis_pipeline(
     call_barcodes.ncycles.value = len(cycle_list)
     call_barcodes.input_object_name.value = "Foci"
     call_barcodes.cycle1measure.value = (
-        f"Intensity_MaxIntensity_Cycle1_{channel_list[0]}"
+        f"Intensity_MaxIntensity_Cycle1_{sbs_channel_list[0]}"
     )
     call_barcodes.csv_directory.value = barcode_csv_path.parent.resolve().__str__()
     call_barcodes.csv_file_name.value = barcode_csv_path.name
@@ -1254,7 +1263,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_cp_sbs.module_num = module_counter
     measure_colocal_cp_sbs.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in channel_list] + [f"Cycle1_{nuclei_channel}"]
+        [f"Corr{ch}" for ch in cp_channel_list] + [f"Cycle1_{nuclei_channel}"]
     )
     measure_colocal_cp_sbs.thr.value = 15.0
     measure_colocal_cp_sbs.images_or_objects.value = M_BOTH
@@ -1312,7 +1321,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_painting_object_intensity.module_num = module_counter
     measure_painting_object_intensity.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in channel_list]
+        [f"Corr{ch}" for ch in cp_channel_list]
     )
     measure_painting_object_intensity.objects_list.value = ", ".join(
         ["Cells", "Cytoplasm", "Nuclei"]
@@ -1335,7 +1344,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_obj_int_dist_paint.module_num = module_counter
     measure_obj_int_dist_paint.images_list.value = ",".join(
-        [f"Corr{ch}" for ch in channel_list]
+        [f"Corr{ch}" for ch in cp_channel_list]
     )
     measure_obj_int_dist_paint.wants_zernikes.value = False
     obj_int_dist_paint_painting = ["Cells", "Cytoplasm", "Nuclei"]
@@ -1381,7 +1390,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_granularity.module_num = module_counter
     measure_granularity.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in channel_list]
+        [f"Corr{ch}" for ch in cp_channel_list]
     )
     measure_granularity.wants_objects.value = True
     measure_granularity.objects_list.value = ",".join(["Cells", "Cytoplasm", "Nuclei"])
@@ -1395,7 +1404,9 @@ def generate_analysis_pipeline(
     measure_texture = MeasureTexture()
     module_counter += 1
     measure_texture.module_num = module_counter
-    measure_texture.images_list.value = ", ".join([f"Corr{ch}" for ch in channel_list])
+    measure_texture.images_list.value = ", ".join(
+        [f"Corr{ch}" for ch in cp_channel_list]
+    )
     measure_texture.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
     measure_texture.gray_levels.value = 256
     for _ in range(2):  # we need 3, one is added by default
@@ -1425,7 +1436,9 @@ def generate_analysis_pipeline(
     # save_mito_radial.root_dir.value = ""
     save_mito_radial.stack_axis.value = AXIS_T
     # save_mito_radial.tiff_compress.value = ""
-    save_mito_radial.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
+    save_mito_radial.single_file_name.value = (
+        f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
+    )
     pipeline.add_module(save_mito_radial)
 
     # MeasureImageQuality
@@ -1571,7 +1584,7 @@ def generate_analysis_pipeline(
         # save_image.root_dir.value = ""
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment{img}"
+        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment{img}"
         pipeline.add_module(save_image)
 
     # Resize image
@@ -1638,7 +1651,7 @@ def generate_analysis_pipeline(
     # save_image.root_dir.value = ""
     save_image.stack_axis.value = AXIS_T
     # save_image.tiff_compress.value = ""
-    save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment_SpotOverlay"
+    save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_VisualizeAlignment_SpotOverlay"
     pipeline.add_module(save_image)
 
     # ConvertObjectsToImage
@@ -1673,7 +1686,7 @@ def generate_analysis_pipeline(
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
         save_image.single_file_name.value = (
-            f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_{img}"
+            f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_{img}"
         )
         pipeline.add_module(save_image)
 
