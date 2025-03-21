@@ -1520,19 +1520,20 @@ def generate_analysis_pipeline(
     relate_objects.output_child_objects_name.value = "RelateObjects"
     pipeline.add_module(relate_objects)
 
-    # Resize Objects (Painting nuclei and cyto channel)
-    objects_to_resize = [f"Aligned{nuclei_channel}", f"Corr{cell_channel}"]
-    for obj in objects_to_resize:
-        resize_obj = ResizeObjects()
+    # Resize (Painting nuclei and cyto channel)
+    imgs_to_resize = [f"Aligned{nuclei_channel}", f"Aligned{cell_channel}"]
+    for img in imgs_to_resize:
+        resize_img = Resize()
         module_counter += 1
-        resize_obj.module_num = module_counter
-        resize_obj.x_name.value = obj
-        resize_obj.y_name.value = f"Resize{obj}Vis"
-        resize_obj.method.value = "Factor"
-        resize_obj.factor_x.value = 0.50
-        resize_obj.factor_y.value = 0.50
-        resize_obj.factor_z.value = 0.50
-        pipeline.add_module(resize_obj)
+        resize_img.module_num = module_counter
+        resize_img.x_name.value = img
+        resize_img.y_name.value = f"Resize{img}Vis"
+        resize_img.size_method.value = R_BY_FACTOR
+        resize_img.factor_x.value = 0.50
+        resize_img.factor_y.value = 0.50
+        resize_img.factor_z.value = 0.50
+        resize_img.interpolation.value = I_NEAREST_NEIGHBOR
+        pipeline.add_module(resize_img)
 
     # GrayToColor
     gray_to_color = GrayToColor()
