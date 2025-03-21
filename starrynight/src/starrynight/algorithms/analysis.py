@@ -537,7 +537,7 @@ def generate_analysis_pipeline(
     pipeline.add_module(align)
 
     # -> Threshold
-    images_to_threshold = [f"Corr{nuclei_channel}", f"Cycle1_{nuclei_channel}"]
+    images_to_threshold = [f"Aligned{nuclei_channel}", f"Cycle1_{nuclei_channel}"]
     for image in images_to_threshold:
         threshold_image = Threshold()
         module_counter += 1
@@ -563,7 +563,7 @@ def generate_analysis_pipeline(
 
     # Calculate Min and Max of f"NonPaddedAreas_{image}"
     images_to_minmax = [
-        f"NonPaddedAreas_Corr{nuclei_channel}",
+        f"NonPaddedAreas_Aligned{nuclei_channel}",
         f"NonPaddedAreas_Cycle1_{nuclei_channel}",
     ]
     for op in [O_MINIMUM, O_MAXIMUM]:
@@ -596,9 +596,9 @@ def generate_analysis_pipeline(
 
     # -> MaskImage (Nuclei, Cyto, Cycle01 -> EdgeMasked)
     images_to_mask = [
-        f"Corr{nuclei_channel}",
+        f"Aligned{nuclei_channel}",
         f"Cycle1_{nuclei_channel}",
-        f"Corr{cell_channel}",
+        f"Aligned{cell_channel}",
     ]
     for image in images_to_mask:
         mask_image_edge = MaskImage()
@@ -617,7 +617,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal.module_num = module_counter
     measure_colocal.images_list.value = (
-        f"EdgeMasked_Corr{nuclei_channel}, EdgeMasked_Cycle1_{nuclei_channel}"
+        f"EdgeMasked_Aligned{nuclei_channel}, EdgeMasked_Cycle1_{nuclei_channel}"
     )
     measure_colocal.thr.value = 15.0
     measure_colocal.images_or_objects.value = M_IMAGES
@@ -645,7 +645,7 @@ def generate_analysis_pipeline(
     flag_align_images.flags[0].measurement_settings[0].object_name.value = None
     flag_align_images.flags[0].measurement_settings[
         0
-    ].measurement.value = f"Correlation_Correlation_EdgeMasked_Corr{nuclei_channel}_EdgeMasked_Cycle1_{nuclei_channel}"
+    ].measurement.value = f"Correlation_Correlation_EdgeMasked_Aligned{nuclei_channel}_EdgeMasked_Cycle1_{nuclei_channel}"
     flag_align_images.flags[0].measurement_settings[0].wants_minimum.value = True
     flag_align_images.flags[0].measurement_settings[0].minimum_value.value = 0.7
     flag_align_images.flags[0].measurement_settings[0].wants_maximum.value = False
@@ -734,7 +734,9 @@ def generate_analysis_pipeline(
     identify_primary_object_cfregions = IdentifyPrimaryObjects()
     module_counter += 1
     identify_primary_object_cfregions.module_num = module_counter
-    identify_primary_object_cfregions.x_name.value = f"EdgeMasked_Corr{nuclei_channel}"
+    identify_primary_object_cfregions.x_name.value = (
+        f"EdgeMasked_Aligned{nuclei_channel}"
+    )
     identify_primary_object_cfregions.y_name.value = "ConfluentRegions"
     identify_primary_object_cfregions.size_range.value = (500, 5000)
     identify_primary_object_cfregions.exclude_size.value = True
@@ -824,7 +826,7 @@ def generate_analysis_pipeline(
         mask_image_cfregion = MaskImage()
         module_counter += 1
         mask_image_cfregion.module_num = module_counter
-        mask_image_cfregion.image_name.value = f"EdgeMasked_Corr{ch}"
+        mask_image_cfregion.image_name.value = f"EdgeMasked_Aligned{ch}"
         mask_image_cfregion.masked_image_name.value = f"Masked{ch}"
         mask_image_cfregion.object_name.value = "ConfluentRegions"
         mask_image_cfregion.invert_mask.value = True
@@ -834,7 +836,7 @@ def generate_analysis_pipeline(
     identify_primary_object_nuclei = IdentifyPrimaryObjects()
     module_counter += 1
     identify_primary_object_nuclei.module_num = module_counter
-    identify_primary_object_nuclei.x_name.value = f"EdgeMasked_Corr{nuclei_channel}"
+    identify_primary_object_nuclei.x_name.value = f"EdgeMasked_Aligned{nuclei_channel}"
     identify_primary_object_nuclei.y_name.value = "Nuclei"
     identify_primary_object_nuclei.size_range.value = (10, 80)
     identify_primary_object_nuclei.exclude_size.value = True
@@ -881,7 +883,9 @@ def generate_analysis_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_PROPAGATION
-    identify_secondary_object_cells.image_name.value = f"EdgeMasked_Corr{cell_channel}"
+    identify_secondary_object_cells.image_name.value = (
+        f"EdgeMasked_Aligned{cell_channel}"
+    )
     identify_secondary_object_cells.distance_to_dilate.value = 10
     identify_secondary_object_cells.regularization_factor.value = 0.0005
     identify_secondary_object_cells.wants_discard_edge.value = False
@@ -1183,7 +1187,7 @@ def generate_analysis_pipeline(
     eos_features = EnhanceOrSuppressFeatures()
     module_counter += 1
     eos_features.module_num = module_counter
-    eos_features.x_name.value = "Mito"
+    eos_features.x_name.value = f"Aligned{mito_channel}"
     eos_features.y_name.value = "mito_tubeness"
     eos_features.method.value = ENHANCE
     eos_features.object_size.value = 10
@@ -1268,7 +1272,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_cp_sbs.module_num = module_counter
     measure_colocal_cp_sbs.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in cp_channel_list] + [f"Cycle1_{nuclei_channel}"]
+        [f"Aligned{ch}" for ch in cp_channel_list] + [f"Cycle1_{nuclei_channel}"]
     )
     measure_colocal_cp_sbs.thr.value = 15.0
     measure_colocal_cp_sbs.images_or_objects.value = M_BOTH
@@ -1326,7 +1330,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_painting_object_intensity.module_num = module_counter
     measure_painting_object_intensity.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in cp_channel_list]
+        [f"Aligned{ch}" for ch in cp_channel_list]
     )
     measure_painting_object_intensity.objects_list.value = ", ".join(
         ["Cells", "Cytoplasm", "Nuclei"]
@@ -1349,7 +1353,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_obj_int_dist_paint.module_num = module_counter
     measure_obj_int_dist_paint.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in cp_channel_list]
+        [f"Aligned{ch}" for ch in cp_channel_list]
     )
     measure_obj_int_dist_paint.wants_zernikes.value = False
     obj_int_dist_paint_painting = ["Cells", "Cytoplasm", "Nuclei"]
@@ -1395,7 +1399,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_granularity.module_num = module_counter
     measure_granularity.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in cp_channel_list]
+        [f"Aligned{ch}" for ch in cp_channel_list]
     )
     measure_granularity.wants_objects.value = True
     measure_granularity.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
@@ -1410,7 +1414,7 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_texture.module_num = module_counter
     measure_texture.images_list.value = ", ".join(
-        [f"Corr{ch}" for ch in cp_channel_list]
+        [f"Aligned{ch}" for ch in cp_channel_list]
     )
     measure_texture.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
     measure_texture.gray_levels.value = 256
@@ -1517,7 +1521,7 @@ def generate_analysis_pipeline(
     pipeline.add_module(relate_objects)
 
     # Resize Objects (Painting nuclei and cyto channel)
-    objects_to_resize = [f"Corr{nuclei_channel}", f"Corr{cell_channel}"]
+    objects_to_resize = [f"Aligned{nuclei_channel}", f"Corr{cell_channel}"]
     for obj in objects_to_resize:
         resize_obj = ResizeObjects()
         module_counter += 1
