@@ -817,7 +817,7 @@ def generate_preprocess_pipeline(
             # save_image.root_dir.value = ""
             save_image.stack_axis.value = AXIS_T
             # save_image.tiff_compress.value = ""
-            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_Compensated{ch}"
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_{cycle}_Well_\\g<Well>_Site_\\g<Site>_Compensated{ch}"
             pipeline.add_module(save_image)
 
     # ExportToSpreadsheet
@@ -827,7 +827,7 @@ def generate_preprocess_pipeline(
     export_measurements.delimiter.value = DELIMITER_COMMA
     export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
-    export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_PreProcess"
+    export_measurements.prefix.value = "\\g<Batch>_\\g<Plate>_PreProcess"
     export_measurements.wants_overwrite_without_warning.value = False
     export_measurements.add_metadata.value = True
     export_measurements.add_filepath.value = False
@@ -1001,7 +1001,9 @@ def generate_preprocess_pipeline(
         # save_image.root_dir.value = ""
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_StdSqrt_Overlay"
+        save_image.single_file_name.value = (
+            "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_StdSqrt_Overlay"
+        )
         pipeline.add_module(save_image)
 
     return pipeline
