@@ -1674,7 +1674,7 @@ def generate_analysis_pipeline(
         convert_obj_to_img.module_num = module_counter
         convert_obj_to_img.object_name.value = obj
         convert_obj_to_img.image_name.value = f"{obj}_Objects"
-        convert_obj_to_img.image_mode.value = "unit16"
+        convert_obj_to_img.image_mode.value = "uint16"
         pipeline.add_module(convert_obj_to_img)
 
     for img in ["Cells_Objects", "Cytoplasm_Objects", "Nuclei_Objects"]:
