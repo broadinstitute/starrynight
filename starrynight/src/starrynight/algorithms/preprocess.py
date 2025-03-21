@@ -102,7 +102,10 @@ from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
-from starrynight.algorithms.cp_plugin_compensate_colors import CompensateColors
+from starrynight.algorithms.cp_plugin_compensate_colors import (
+    CC_OBJECTS,
+    CompensateColors,
+)
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
@@ -684,12 +687,14 @@ def generate_preprocess_pipeline(
                 3
             ].value = f"Align_Cycle_{cycle}_{ch}_Compensated"
 
-    compensate.do_rescale_input.value = False
-    compensate.do_rescale_after_mask.value = False
+    compensate.images_or_objects.value = CC_OBJECTS
+    compensate.object_groups[0].settings.object_name.value = "Foci"
+    compensate.do_rescale_input.value = "No"
+    compensate.do_rescale_after_mask.value = "No"
     compensate.do_match_histograms.value = "Yes, post-masking to objects"
     compensate.histogram_match_class.value = len(sbs_channel_list)
-    compensate.do_rescale_output.value = False
-    compensate.do_scalar_multiply.value = False
+    compensate.do_rescale_output.value = "No"
+    compensate.do_scalar_multiply.value = "No"
     compensate.scalar_percentile.value = 4
     compensate.do_tophat_filter.value = False
     # compensate.tophat_radius = False
