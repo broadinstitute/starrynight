@@ -299,7 +299,7 @@ def generate_preprocess_pipeline(
         # Remove duplilcate cycels
         set(
             [
-                int(col.split("_")[-2])
+                int(col.split("_")[-2].replace("Cycle", ""))
                 for col in load_data_df.columns
                 if col.startswith("FileName")
             ]
