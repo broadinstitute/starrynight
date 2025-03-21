@@ -228,10 +228,6 @@ def gen_preprocess_load_data_by_batch_plate(
     # Filter for relevant images
     images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
 
-    # Only subsample if df is large
-    if len(images_df) > 10:
-        images_df = images_df.sample(fraction=0.1)
-
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
