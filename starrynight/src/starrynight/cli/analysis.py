@@ -13,15 +13,13 @@ from starrynight.algorithms.analysis import (
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-c", "--corr_images", required=True)
-@click.option("-a", "--align_images", required=True)
-@click.option("-n", "--nuclei", required=True)
+@click.option("-p", "--comp_images", required=True)
 @click.option("-m", "--path_mask", default=None)
 def gen_analysis_load_data(
     index: str,
     out: str,
     corr_images: str,
-    align_images: str,
-    nuclei: str,
+    comp_images: str,
     path_mask: str | None,
 ) -> None:
     """Generate analysis loaddata file.
@@ -33,11 +31,9 @@ def gen_analysis_load_data(
     out : str
         Output dir. Can be local or a cloud path.
     corr_images : str
-        Corrected images dir. Can be local or a cloud path.
-    align_images : str
-        Aligned images dir. Can be local or a cloud path.
-    nuclei : str
-        Channel to use for nuceli segmentation
+        Corrected painting images dir. Can be local or a cloud path.
+    comp_images : str
+        Color compensated sbs images dir. Can be local or a cloud path.
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
 
@@ -46,9 +42,8 @@ def gen_analysis_load_data(
         AnyPath(index),
         AnyPath(out),
         path_mask,
-        nuclei,
         AnyPath(corr_images),
-        AnyPath(align_images),
+        AnyPath(comp_images),
     )
 
 
@@ -58,8 +53,16 @@ def gen_analysis_load_data(
 @click.option("-w", "--workspace", required=True)
 @click.option("-b", "--barcode", required=True)
 @click.option("-n", "--nuclei", required=True)
+@click.option("-e", "--cell", required=True)
+@click.option("-m", "--mito", required=True)
 def gen_analysis_cppipe(
-    loaddata: str, out: str, workspace: str, barcode: str, nuclei: str
+    loaddata: str,
+    out: str,
+    workspace: str,
+    barcode: str,
+    nuclei: str,
+    cell: str,
+    mito: str,
 ) -> None:
     """Generate analysis cppipe file.
 
@@ -75,10 +78,20 @@ def gen_analysis_cppipe(
         Path to barcode csv. Can be local or a cloud path.
     nuclei : str
         Channel to use for nuceli segmentation
+    cell : str
+        Channel to use for cell segmentation
+    mito : str
+        Channel to use for mito segmentation
 
     """
     gen_analysis_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), AnyPath(barcode), nuclei
+        AnyPath(loaddata),
+        AnyPath(out),
+        AnyPath(workspace),
+        AnyPath(barcode),
+        nuclei,
+        cell,
+        mito,
     )
 
 

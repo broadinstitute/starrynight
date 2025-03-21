@@ -35,7 +35,6 @@ from cellprofiler.modules.flagimage import C_ANY, S_AVERAGE_OBJECT, S_IMAGE, Fla
 from cellprofiler.modules.graytocolor import SCHEME_RGB, GrayToColor
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
-    FH_ALL,
     FH_DECLUMP,
     LIMIT_NONE,
     UN_INTENSITY,
@@ -101,7 +100,7 @@ from cellprofiler.modules.overlayoutlines import (
     WANTS_GRAYSCALE,
     OverlayOutlines,
 )
-from cellprofiler.modules.relateobjects import D_BOTH, D_NONE, RelateObjects
+from cellprofiler.modules.relateobjects import D_BOTH, RelateObjects
 from cellprofiler.modules.rescaleintensity import (
     CUSTOM_VALUE,
     M_STRETCH,
@@ -166,82 +165,95 @@ from starrynight.utils.misc import resolve_path_loaddata
 
 
 def write_loaddata(
-    images_df: pl.DataFrame,
+    cp_images_df: pl.DataFrame,
     cp_plate_channel_list: list[str],
     sbs_plate_channel_list: list[str],
     plate_cycles_list: list[str],
     cp_corr_images_path: Path | CloudPath,
-    sbs_corr_images_path: Path | CloudPath,
     sbs_comp_images_path: Path | CloudPath,
-    nuclei_channel: str,
     path_mask: str,
     f: TextIOWrapper,
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
-    ]
+    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
 
-    filename_heads = [
-        f"FileName_Align_Cycle_{int(cycle)}_{col}"
+    cp_filename_heads = [f"FileName_Corr{col}" for col in cp_plate_channel_list]
+    cp_pathname_heads = [
+        f"PathName_Corr{col}"
         for cycle in plate_cycles_list
         for col in cp_plate_channel_list
     ]
-    pathname_heads = [
-        f"PathName_Align_Cycle_{int(cycle)}_{col}"
+    sbs_filename_heads = [
+        f"FileName_Cycle_{int(cycle)}_{col}"
         for cycle in plate_cycles_list
-        for col in cp_plate_channel_list
+        for col in sbs_plate_channel_list
+    ]
+    sbs_pathname_heads = [
+        f"PathName_Cycle_{int(cycle)}_{col}"
+        for cycle in plate_cycles_list
+        for col in sbs_plate_channel_list
     ]
     loaddata_writer.writerow(
         [
             *metadata_heads,
-            *filename_heads,
-            *pathname_heads,
+            *cp_filename_heads,
+            *cp_pathname_heads,
+            *sbs_filename_heads,
+            *sbs_pathname_heads,
         ]
     )
-    for index in images_df.to_dicts():
-        index = PCPIndex(**index)
-        filenames = [
-            f"{index.batch_id}_{index.plate_id}_{int(index.cycle_id)}_Well_{index.well_id}_Site_{int(index.site_id)}_Aligned{col}.tiff"
-            for col in cp_plate_channel_list
-        ]
-        if int(index.cycle_id) != 1:
-            pathnames = [
-                resolve_path_loaddata(AnyPath(path_mask), sbs_comp_images_path)
-                for _ in range(len(pathname_heads))
+    index = cp_images_df[0].to_dicts()[0]
+    index = PCPIndex(**index)
+    wells_sites = (
+        cp_images_df.group_by("well_id").agg(pl.col("site_id").unique()).to_dicts()
+    )
+    for well_sites in wells_sites:
+        index.well_id = well_sites["well_id"]
+        for site_id in well_sites["site_id"]:
+            index.site_id = site_id
+            cp_filenames = [
+                f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
+                for col in sbs_plate_channel_list
             ]
-        else:
-            pathnames = [
+            sbs_filenames = [
+                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
+                for col in sbs_plate_channel_list
+                for cycle in plate_cycles_list
+            ]
+            cp_pathnames = [
                 resolve_path_loaddata(AnyPath(path_mask), cp_corr_images_path)
-                for _ in range(len(pathname_heads))
+                for _ in range(len(cp_pathname_heads))
+            ]
+            sbs_pathnames = [
+                resolve_path_loaddata(AnyPath(path_mask), sbs_comp_images_path)
+                for _ in range(len(sbs_pathname_heads))
             ]
 
-        # make sure frame heads are matched with their order in the filenames
-        assert index.key is not None
-        loaddata_writer.writerow(
-            [
-                # Metadata heads
-                index.batch_id,
-                index.plate_id,
-                index.site_id,
-                index.well_id,
-                index.cycle_id or 0,
-                # Filename heads
-                *filenames,
-                # Pathname heads
-                *pathnames,
-            ]
-        )
+            # make sure frame heads are matched with their order in the filenames
+            assert index.key is not None
+            loaddata_writer.writerow(
+                [
+                    # Metadata heads
+                    index.batch_id,
+                    index.plate_id,
+                    index.site_id,
+                    index.well_id,
+                    # CP Filename and Pathname heads
+                    *cp_filenames,
+                    *cp_pathnames,
+                    # SBS Filename and Pathname heads
+                    *sbs_filenames,
+                    *sbs_pathnames,
+                ]
+            )
 
 
 def gen_analysis_load_data_by_batch_plate(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
-    nuclei_channel: str,
     cp_corr_images_path: Path | CloudPath | None = None,
-    sbs_corr_images_path: Path | CloudPath | None = None,
     sbs_comp_images_path: Path | CloudPath | None = None,
 ) -> None:
     """Generate load data for analysis pipeline.
@@ -254,12 +266,8 @@ def gen_analysis_load_data_by_batch_plate(
         Path to save output csv file.
     path_mask : str | None
         Path prefix mask to use.
-    nuclei_channel: str
-        Channel to use for doing nuclei segmentation
     cp_corr_images_path : Path | CloudPath
         Path | CloudPath to cp corr images directory.
-    sbs_corr_images_path : Path | CloudPath
-        Path | CloudPath to sbs corr images directory.
     sbs_comp_images_path : Path | CloudPath
         Path | CloudPath to sbs compensated images directory.
 
@@ -267,8 +275,6 @@ def gen_analysis_load_data_by_batch_plate(
     # Construct illum path if not given
     if cp_corr_images_path is None:
         cp_corr_images_path = index_path.parents[1].joinpath("illum/cp/illum_apply")
-    if sbs_corr_images_path is None:
-        sbs_corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
     if sbs_comp_images_path is None:
         sbs_comp_images_path = index_path.parents[1].joinpath("preprocess/sbs")
 
@@ -311,9 +317,6 @@ def gen_analysis_load_data_by_batch_plate(
             cp_df_plate = cp_images_df.filter(
                 pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
             )
-            sbs_df_plate = sbs_images_df.filter(
-                pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
-            )
 
             batch_plate_out_path = out_path.joinpath(batch, plate)
             batch_plate_out_path.mkdir(parents=True, exist_ok=True)
@@ -322,14 +325,11 @@ def gen_analysis_load_data_by_batch_plate(
             ) as f:
                 write_loaddata(
                     cp_df_plate,
-                    sbs_df_plate,
                     cp_plate_channel_list,
                     sbs_plate_channel_list,
                     plate_cycles_list,
                     cp_corr_images_path,
-                    sbs_corr_images_path,
                     sbs_comp_images_path,
-                    nuclei_channel,
                     path_mask,
                     f,
                 )
@@ -345,7 +345,8 @@ def generate_analysis_pipeline(
     load_data_path: Path | CloudPath,
     barcode_csv_path: Path | CloudPath,
     nuclei_channel: str,
-    cyto_channel: str,
+    cell_channel: str,
+    mito_channel: str,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = list(
@@ -364,7 +365,7 @@ def generate_analysis_pipeline(
         # Remove duplilcate cycels
         set(
             [
-                int(col.split("_")[-2])
+                int(col.split("_")[-2].replace("Cycle", ""))
                 for col in load_data_df.columns
                 if col.startswith("FileName")
             ]
@@ -386,7 +387,7 @@ def generate_analysis_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    load_data.metadata_fields.value = "Batch,Plate,Cycle"
+    load_data.metadata_fields.value = "Batch,Plate"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
@@ -592,7 +593,7 @@ def generate_analysis_pipeline(
     images_to_mask = [
         f"Corr{nuclei_channel}",
         f"Cycle_1_{nuclei_channel}",
-        f"Corr{cyto_channel}",
+        f"Corr{cell_channel}",
     ]
     for image in images_to_mask:
         mask_image_edge = MaskImage()
@@ -811,7 +812,7 @@ def generate_analysis_pipeline(
     pipeline.add_module(calc_cfregion_pct)
 
     # Masking confluentRegions in all channels
-    for ch in [nuclei_channel, cyto_channel]:
+    for ch in [nuclei_channel, cell_channel]:
         mask_image_cfregion = MaskImage()
         module_counter += 1
         mask_image_cfregion.module_num = module_counter
@@ -872,7 +873,7 @@ def generate_analysis_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_PROPAGATION
-    identify_secondary_object_cells.image_name.value = f"EdgeMasked_Corr{cyto_channel}"
+    identify_secondary_object_cells.image_name.value = f"EdgeMasked_Corr{cell_channel}"
     identify_secondary_object_cells.distance_to_dilate.value = 10
     identify_secondary_object_cells.regularization_factor.value = 0.0005
     identify_secondary_object_cells.wants_discard_edge.value = False
@@ -1141,7 +1142,7 @@ def generate_analysis_pipeline(
     measure_object_intensity_barcodes.images_list.value = ",".join(
         ["Barcodes_Scores", "Barcodes_Barcodes", "CellOutlineImage"]
     )
-    measure_object_intensity_barcodes.objects_list.value = ",".join(["BarcodeFoci"])
+    measure_object_intensity_barcodes.objects_list.value = ", ".join(["BarcodeFoci"])
     pipeline.add_module(measure_object_intensity_barcodes)
 
     # -> MaskImage barcode intvals
@@ -1256,7 +1257,7 @@ def generate_analysis_pipeline(
     measure_colocal_cp_sbs = MeasureColocalization()
     module_counter += 1
     measure_colocal_cp_sbs.module_num = module_counter
-    measure_colocal_cp_sbs.images_list.value = ",".join(
+    measure_colocal_cp_sbs.images_list.value = ", ".join(
         [f"Corr{ch}" for ch in channel_list] + [f"Cycle_1_{nuclei_channel}"]
     )
     measure_colocal_cp_sbs.thr.value = 15.0
@@ -1300,24 +1301,24 @@ def generate_analysis_pipeline(
     measure_barcode_object_intensity = MeasureObjectIntensity()
     module_counter += 1
     measure_barcode_object_intensity.module_num = module_counter
-    measure_barcode_object_intensity.images_list.value = ",".join(
+    measure_barcode_object_intensity.images_list.value = ", ".join(
         [
             "Masked_Barcodes_IntValues",
             "Masked_Barcodes_Scores_IntValues",
             "WellEdgeDistance",
         ]
     )
-    measure_barcode_object_intensity.objects_list.value = ",".join(["Cells"])
+    measure_barcode_object_intensity.objects_list.value = ", ".join(["Cells"])
     pipeline.add_module(measure_barcode_object_intensity)
 
     # -> MeasureObjectIntensity(Barcode related)
     measure_painting_object_intensity = MeasureObjectIntensity()
     module_counter += 1
     measure_painting_object_intensity.module_num = module_counter
-    measure_painting_object_intensity.images_list.value = ",".join(
+    measure_painting_object_intensity.images_list.value = ", ".join(
         [f"Corr{ch}" for ch in channel_list]
     )
-    measure_painting_object_intensity.objects_list.value = ",".join(
+    measure_painting_object_intensity.objects_list.value = ", ".join(
         ["Cells", "Cytoplasm", "Nuclei"]
     )
     pipeline.add_module(measure_painting_object_intensity)
@@ -1326,7 +1327,7 @@ def generate_analysis_pipeline(
     measure_obj_size_shape = MeasureObjectSizeShape()
     module_counter += 1
     measure_obj_size_shape.module_num = module_counter
-    measure_obj_size_shape.objects_list.value = ",".join(
+    measure_obj_size_shape.objects_list.value = ", ".join(
         ["Cells", "Cytoplasm", "Nuclei"]
     )
     measure_obj_size_shape.calculate_zernikes.value = True
@@ -1383,7 +1384,7 @@ def generate_analysis_pipeline(
     measure_granularity = MeasureGranularity()
     module_counter += 1
     measure_granularity.module_num = module_counter
-    measure_granularity.images_list.value = ",".join(
+    measure_granularity.images_list.value = ", ".join(
         [f"Corr{ch}" for ch in channel_list]
     )
     measure_granularity.wants_objects.value = True
@@ -1398,8 +1399,8 @@ def generate_analysis_pipeline(
     measure_texture = MeasureTexture()
     module_counter += 1
     measure_texture.module_num = module_counter
-    measure_texture.images_list.value = ",".join([f"Corr{ch}" for ch in channel_list])
-    measure_texture.objects_list.value = ",".join(["Cells", "Cytoplasm", "Nuclei"])
+    measure_texture.images_list.value = ", ".join([f"Corr{ch}" for ch in channel_list])
+    measure_texture.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
     measure_texture.gray_levels.value = 256
     for _ in range(2):  # we need 3, one is added by default
         measure_texture.add_scale()
@@ -1502,7 +1503,7 @@ def generate_analysis_pipeline(
     pipeline.add_module(relate_objects)
 
     # Resize Objects (Painting nuclei and cyto channel)
-    objects_to_resize = [f"Corr{nuclei_channel}", f"Corr{cyto_channel}"]
+    objects_to_resize = [f"Corr{nuclei_channel}", f"Corr{cell_channel}"]
     for obj in objects_to_resize:
         resize_obj = ResizeObjects()
         module_counter += 1
@@ -1522,7 +1523,7 @@ def generate_analysis_pipeline(
     gray_to_color.scheme_choice.value = SCHEME_RGB
     gray_to_color.wants_rescale.value = True
     gray_to_color.red_image_name.value = None
-    gray_to_color.green_image_name.value = f"Resize{cyto_channel}Vis"
+    gray_to_color.green_image_name.value = f"Resize{cell_channel}Vis"
     gray_to_color.blue_image_name.value = f"Resize{nuclei_channel}Vis"
     gray_to_color.rgb_image_name.value = "ColorImage"
     gray_to_color.red_adjustment_factor.value = 1.0
@@ -1712,6 +1713,8 @@ def gen_analysis_cppipe_by_batch_plate(
     workspace_path: Path | CloudPath,
     barcode_csv_path: Path | CloudPath,
     nuclei_channel: str,
+    cell_channel: str,
+    mito_channel: str,
 ) -> None:
     """Write out analysis pipeline to file.
 
@@ -1727,6 +1730,10 @@ def gen_analysis_cppipe_by_batch_plate(
         Path | CloudPath to barcode csv.
     nuclei_channel : str
         Channel to use for nuclei segmentation
+    cell_channel : str
+        Channel to use for cell segmentation
+    mito_channel : str
+        Channel to use for mito segmentation
 
     """
     # Default run dir should already be present, otherwise CP raises an error
@@ -1743,7 +1750,12 @@ def gen_analysis_cppipe_by_batch_plate(
         for file in files:
             with CellProfilerContext(out_dir=workspace_path) as cpipe:
                 cpipe = generate_analysis_pipeline(
-                    cpipe, file, barcode_csv_path, nuclei_channel
+                    cpipe,
+                    file,
+                    barcode_csv_path,
+                    nuclei_channel,
+                    cell_channel,
+                    mito_channel,
                 )
                 filename = f"{file.stem}.cppipe"
                 with files_out_dir.joinpath(filename).open("w") as f:
