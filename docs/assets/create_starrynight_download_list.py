@@ -83,6 +83,36 @@ def create_directories():
     # Other directories will be created as needed when generating the file list
 
 
+def get_paths(relative_path, is_input=True, is_image=True):
+    """
+    Generate local and S3 destination paths from a relative path.
+
+    Args:
+        relative_path (str): The relative path to append to base paths
+        is_input (bool): Whether to use input or output base paths
+        is_image (bool): Whether to use image or workspace base paths
+
+    Returns:
+        tuple: (local_dir, s3_dest_dir)
+    """
+    if is_image:
+        local_base = LOCAL_PATH_IMAGES_INPUT if is_input else LOCAL_PATH_IMAGES_OUTPUT
+        s3_base = S3_DEST_IMAGES_INPUT if is_input else S3_DEST_IMAGES_OUTPUT
+    else:
+        local_base = (
+            LOCAL_PATH_WORKSPACE_INPUT if is_input else LOCAL_PATH_WORKSPACE_OUTPUT
+        )
+        s3_base = S3_DEST_WORKSPACE_INPUT if is_input else S3_DEST_WORKSPACE_OUTPUT
+
+    local_dir = f"{local_base}/{relative_path}"
+    s3_dest_dir = f"{s3_base}/{relative_path}"
+
+    # Ensure local directory exists
+    Path(local_dir).mkdir(parents=True, exist_ok=True)
+
+    return local_dir, s3_dest_dir
+
+
 def generate_download_list():
     # Initialize both files
     with (
@@ -97,9 +127,11 @@ def generate_download_list():
                     seq_str = f"{well_offsets[well] + site:04d}"
                     # Format point as 4-digit string
                     site_str = f"{site:04d}"
-                    s3_file = f"{S3_PATH_IMAGES}/images/Plate1/20X_c{cycle}_SBS-{cycle}/Well{well}_Point{well}_{site_str}_ChannelC,A,T,G,DAPI_Seq{seq_str}.ome.tiff"
-                    local_dir = f"{LOCAL_PATH_IMAGES_INPUT}/images/Plate1/20X_c{cycle}_SBS-{cycle}/"
-                    s3_dest_dir = f"{S3_DEST_IMAGES_INPUT}/images/Plate1/20X_c{cycle}_SBS-{cycle}/"
+                    relative_path = f"images/Plate1/20X_c{cycle}_SBS-{cycle}/"
+                    local_dir, s3_dest_dir = get_paths(
+                        relative_path, is_input=True, is_image=True
+                    )
+                    s3_file = f"{S3_PATH_IMAGES}/{relative_path}Well{well}_Point{well}_{site_str}_ChannelC,A,T,G,DAPI_Seq{seq_str}.ome.tiff"
                     download_file.write(f"cp '{s3_file}' {local_dir}\n")
                     s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -110,9 +142,11 @@ def generate_download_list():
                 seq_str = f"{well_offsets[well] + site:04d}"
                 # Format point as 4-digit string
                 site_str = f"{site:04d}"
-                s3_file = f"{S3_PATH_IMAGES}/images/Plate1/20X_CP_Plate1_20240319_122800_179/Well{well}_Point{well}_{site_str}_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq{seq_str}.ome.tiff"
-                local_dir = f"{LOCAL_PATH_IMAGES_INPUT}/images/Plate1/20X_CP_Plate1_20240319_122800_179/"
-                s3_dest_dir = f"{S3_DEST_IMAGES_INPUT}/images/Plate1/20X_CP_Plate1_20240319_122800_179/"
+                relative_path = "images/Plate1/20X_CP_Plate1_20240319_122800_179/"
+                local_dir, s3_dest_dir = get_paths(
+                    relative_path, is_input=True, is_image=True
+                )
+                s3_file = f"{S3_PATH_IMAGES}/{relative_path}Well{well}_Point{well}_{site_str}_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq{seq_str}.ome.tiff"
                 download_file.write(f"cp '{s3_file}' {local_dir}\n")
                 s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -120,18 +154,20 @@ def generate_download_list():
         for cycle, channel in itertools.product(
             range(1, 4), ["DNA", "A", "T", "G", "C"]
         ):
-            s3_file = (
-                f"{S3_PATH_IMAGES}/illum/Plate1/Plate1_Cycle{cycle}_Illum{channel}.npy"
+            relative_path = "illum/Plate1/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
             )
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/illum/Plate1/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/illum/Plate1/"
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate1_Cycle{cycle}_Illum{channel}.npy"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for channel in ["DNA", "Phalloidin", "ZO1"]:
-            s3_file = f"{S3_PATH_IMAGES}/illum/Plate1/Plate1_Illum{channel}.npy"
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/illum/Plate1/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/illum/Plate1/"
+            relative_path = "illum/Plate1/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate1_Illum{channel}.npy"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -139,23 +175,22 @@ def generate_download_list():
         for well, site, channel in itertools.product(
             wells, [0, 1], ["DNA", "Phalloidin", "ZO1"]
         ):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_corrected/painting/Plate1-Well{well}/"
-            s3_dest_dir = (
-                f"{S3_DEST_IMAGES_OUTPUT}/images_corrected/painting/Plate1-Well{well}/"
+            relative_path = f"images_corrected/painting/Plate1-Well{well}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
             )
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
-            s3_file = f"{S3_PATH_IMAGES}/images_corrected/painting/Plate1-Well{well}/Plate_Plate1_Well_Well{well}_Site_{site}_Corr{channel}.tiff"
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_Well{well}_Site_{site}_Corr{channel}.tiff"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for well, csvfile in itertools.product(
             wells, ["Cells", "ConfluentRegions", "Experiment", "Image", "Nuclei"]
         ):
-            s3_file = f"{S3_PATH_IMAGES}/images_corrected/painting/Plate1-Well{well}/PaintingIllumApplication_{csvfile}.csv"
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_corrected/painting/Plate1-Well{well}/"
-            s3_dest_dir = (
-                f"{S3_DEST_IMAGES_OUTPUT}/images_corrected/painting/Plate1-Well{well}/"
+            relative_path = f"images_corrected/painting/Plate1-Well{well}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
             )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}PaintingIllumApplication_{csvfile}.csv"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -163,19 +198,24 @@ def generate_download_list():
         for well, site, cycle, channel in itertools.product(
             wells, sites, range(1, 4), ["A", "T", "G", "C", "DAPI"]
         ):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_aligned/barcoding/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_aligned/barcoding/Plate1-Well{well}-{site}/"
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
-            s3_file = f"{S3_PATH_IMAGES}/images_aligned/barcoding/Plate1-Well{well}-{site}/Plate_Plate1_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
+            relative_path = f"images_aligned/barcoding/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for well, site, csvfile in itertools.product(
             wells, sites, ["Experiment", "Image"]
         ):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_aligned/barcoding/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_aligned/barcoding/Plate1-Well{well}-{site}/"
-            s3_file = f"{S3_PATH_IMAGES}/images_aligned/barcoding/Plate1-Well{well}-{site}/BarcodingApplication_{csvfile}.csv"
+            relative_path = f"images_aligned/barcoding/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = (
+                f"{S3_PATH_IMAGES}/{relative_path}BarcodingApplication_{csvfile}.csv"
+            )
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -183,37 +223,44 @@ def generate_download_list():
         for well, site, cycle, channel in itertools.product(
             wells, sites, range(1, 4), ["A", "T", "G", "C"]
         ):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
-            s3_file = f"{S3_PATH_IMAGES}/images_corrected/barcoding/Plate1-Well{well}-{site}/Plate_Plate1_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
+            relative_path = f"images_corrected/barcoding/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         # DAPI is present only in the first cycle
         for well, site in itertools.product(wells, sites):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
-            s3_file = f"{S3_PATH_IMAGES}/images_corrected/barcoding/Plate1-Well{well}-{site}/Plate_Plate1_Well_{well}_Site_{site}_Cycle01_DAPI.tiff"
+            relative_path = f"images_corrected/barcoding/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_{well}_Site_{site}_Cycle01_DAPI.tiff"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for well, site, csvfile in itertools.product(
             wells, sites, ["BarcodeFoci", "PreFoci", "Experiment", "Image", "Nuclei"]
         ):
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_corrected/barcoding/Plate1-Well{well}-{site}/"
-            s3_file = f"{S3_PATH_IMAGES}/images_corrected/barcoding/Plate1-Well{well}-{site}/BarcodePreprocessing_{csvfile}.csv"
+            relative_path = f"images_corrected/barcoding/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = (
+                f"{S3_PATH_IMAGES}/{relative_path}BarcodePreprocessing_{csvfile}.csv"
+            )
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
         # Segmentation images
         for well in wells:
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_segmentation/Plate1/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_segmentation/Plate1/"
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
-            s3_file = f"{S3_PATH_IMAGES}/images_segmentation/Plate1/Plate_Plate1_Well_Well{well}_Site_0_CorrDNA_SegmentCheck.png"
+            relative_path = "images_segmentation/Plate1/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_Well{well}_Site_0_CorrDNA_SegmentCheck.png"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -225,9 +272,11 @@ def generate_download_list():
             "PreCells",
             "ConfluentRegions",
         ]:
-            local_dir = f"{LOCAL_PATH_IMAGES_OUTPUT}/images_segmentation/Plate1/"
-            s3_dest_dir = f"{S3_DEST_IMAGES_OUTPUT}/images_segmentation/Plate1/"
-            s3_file = f"{S3_PATH_IMAGES}/images_segmentation/Plate1/SegmentationCheck_{csvfile}.csv"
+            relative_path = "images_segmentation/Plate1/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=True
+            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}SegmentationCheck_{csvfile}.csv"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -252,9 +301,10 @@ def generate_download_list():
         # Add analysis files per well and site
         for well, site in itertools.product(wells, sites):
             # Create the directory
-            local_dir = f"{LOCAL_PATH_WORKSPACE_OUTPUT}/analysis/{BATCH_S3}/Plate1-Well{well}-{site}/"
-            s3_dest_dir = f"{S3_DEST_WORKSPACE_OUTPUT}/analysis/{BATCH_S3}/Plate1-Well{well}-{site}/"
-            Path(local_dir).mkdir(parents=True, exist_ok=True)
+            relative_path = f"analysis/{BATCH_S3}/Plate1-Well{well}-{site}/"
+            local_dir, s3_dest_dir = get_paths(
+                relative_path, is_input=False, is_image=False
+            )
 
             # Add CSV files - get these from the analysisfix folder
             for csv_file in analysis_csv_files:
@@ -264,9 +314,10 @@ def generate_download_list():
 
             # Add segmentation mask TIFF files - get these from the analysis folder
             for object_type in ["Cells", "Cytoplasm", "Nuclei"]:
-                mask_dir = f"{local_dir}segmentation_masks/"
-                s3_dest_mask_dir = f"{s3_dest_dir}segmentation_masks/"
-                Path(mask_dir).mkdir(parents=True, exist_ok=True)
+                relative_mask_path = f"{relative_path}segmentation_masks/"
+                mask_dir, s3_dest_mask_dir = get_paths(
+                    relative_mask_path, is_input=False, is_image=False
+                )
                 s3_file = f"{S3_PATH_WORKSPACE}/analysis/{BATCH_S3}/Plate1-Well{well}-{site}/segmentation_masks/Plate_Plate1_Well_Well{well}_Site_{site}_{object_type}_Objects.tiff"
                 download_file.write(f"cp '{s3_file}' {mask_dir}\n")
                 s3_copy_file.write(f"aws s3 cp '{s3_file}' '{s3_dest_mask_dir}'\n")
@@ -289,9 +340,10 @@ def generate_download_list():
         ]
 
         # Create load data directory
-        local_dir = f"{LOCAL_PATH_WORKSPACE_OUTPUT}/load_data_csv/{BATCH_LOCAL}/Plate1/"
-        s3_dest_dir = f"{S3_DEST_WORKSPACE_OUTPUT}/load_data_csv/{BATCH_LOCAL}/Plate1/"
-        Path(local_dir).mkdir(parents=True, exist_ok=True)
+        relative_path = f"load_data_csv/{BATCH_LOCAL}/Plate1/"
+        local_dir, s3_dest_dir = get_paths(
+            relative_path, is_input=False, is_image=False
+        )
 
         # Add load data CSV files
         for csv_file in load_data_csvs:
@@ -301,9 +353,10 @@ def generate_download_list():
 
         # Metadata files
         # Create metadata directory
-        metadata_dir = f"{LOCAL_PATH_WORKSPACE_INPUT}/metadata/"
-        s3_dest_metadata_dir = f"{S3_DEST_WORKSPACE_INPUT}/metadata/"
-        Path(metadata_dir).mkdir(parents=True, exist_ok=True)
+        relative_path = "metadata/"
+        metadata_dir, s3_dest_metadata_dir = get_paths(
+            relative_path, is_input=True, is_image=False
+        )
 
         # Add Barcodes.csv file
         s3_file = f"{S3_PATH_WORKSPACE}/metadata/{BATCH_S3}/Barcodes.csv"
