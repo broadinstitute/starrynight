@@ -1,6 +1,7 @@
 import yaml
 import os
 import csv
+import argparse
 
 
 def get_file_size(path):
@@ -92,17 +93,32 @@ def build_file_paths(yaml_data):
 
 
 def main():
+    # Setup command line arguments
+    parser = argparse.ArgumentParser(
+        description="Parse YAML file and build full paths with sizes"
+    )
+    parser.add_argument("input_file", help="Input YAML file to process")
+    parser.add_argument(
+        "-o", "--output_file", help="Output file name (default: input_name_parsed.yaml)"
+    )
+    args = parser.parse_args()
+
+    # If output file not specified, derive it from input filename
+    if not args.output_file:
+        base, ext = os.path.splitext(args.input_file)
+        args.output_file = f"{base}_parsed{ext}"
+
     # Parse YAML and build full paths with sizes
-    with open("sample_files.yaml", "r") as f:
+    with open(args.input_file, "r") as f:
         yaml_data = yaml.safe_load(f)
 
     processed_data = build_file_paths(yaml_data)
 
     # Save processed data
-    with open("sample_files_parsed.yaml", "w") as f:
+    with open(args.output_file, "w") as f:
         yaml.dump(processed_data, f, default_flow_style=False, sort_keys=False)
 
-    print("Processed YAML file has been saved to: sample_files_parsed.yaml")
+    print(f"Processed YAML file has been saved to: {args.output_file}")
 
 
 if __name__ == "__main__":

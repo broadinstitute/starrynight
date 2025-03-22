@@ -1,0 +1,384 @@
+align:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/align/
+  files:
+    set1:
+    - folder: sbs
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Experiment.csv
+          size: 22539
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Image.csv
+          size: 187756
+          headers:
+          - Align_Xshift_Aligned_Corr_Cycle_1_A
+          - Align_Xshift_Aligned_Corr_Cycle_1_C
+          - Align_Xshift_Aligned_Corr_Cycle_1_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_1_G
+          - Align_Xshift_Aligned_Corr_Cycle_1_T
+          - Align_Xshift_Aligned_Corr_Cycle_2_A
+          - Align_Xshift_Aligned_Corr_Cycle_2_C
+          - Align_Xshift_Aligned_Corr_Cycle_2_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_2_G
+          - Align_Xshift_Aligned_Corr_Cycle_2_T
+          - Align_Xshift_Aligned_Corr_Cycle_3_A
+          - Align_Xshift_Aligned_Corr_Cycle_3_C
+          - Align_Xshift_Aligned_Corr_Cycle_3_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_3_G
+          - Align_Xshift_Aligned_Corr_Cycle_3_T
+          - Align_Yshift_Aligned_Corr_Cycle_1_A
+          - Align_Yshift_Aligned_Corr_Cycle_1_C
+          - Align_Yshift_Aligned_Corr_Cycle_1_DAPI
+          - Align_Yshift_Aligned_Corr_Cycle_1_G
+          - 692 more columns
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
+          size: 4418891
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
+          size: 4484449
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
+          size: 3400105
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
+          size: 4085971
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
+          size: 3849729
+cellprofiler_loaddata:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
+  files:
+    set1:
+    - folder: cp/illum
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/cp/illum/illum_apply/Batch1/illum_apply_Batch1_Plate1.csv
+          size: 13716
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_OrigPhalloAF750
+          - FileName_OrigZO1AF488
+          - FileName_OrigDAPI
+          - Frame_OrigPhalloAF750
+          - Frame_OrigZO1AF488
+          - Frame_OrigDAPI
+          - PathName_OrigPhalloAF750
+          - PathName_OrigZO1AF488
+          - PathName_OrigDAPI
+          - FileName_IllumPhalloAF750
+          - FileName_IllumZO1AF488
+          - FileName_IllumDAPI
+          - PathName_IllumPhalloAF750
+          - PathName_IllumZO1AF488
+          - PathName_IllumDAPI
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/cp/illum/illum_calc/Batch1/illum_calc_Batch1_Plate1.csv
+          size: 8372
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_OrigPhalloAF750
+          - FileName_OrigZO1AF488
+          - FileName_OrigDAPI
+          - Frame_OrigPhalloAF750
+          - Frame_OrigZO1AF488
+          - Frame_OrigDAPI
+          - PathName_OrigPhalloAF750
+          - PathName_OrigZO1AF488
+          - PathName_OrigDAPI
+    - folder: cp/presegcheck
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/cp/presegcheck/Batch1/pre_segcheck_Batch1_Plate1.csv
+          size: 699
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_CorrPhalloAF750
+          - FileName_CorrZO1AF488
+          - FileName_CorrDAPI
+          - PathName_CorrPhalloAF750
+          - PathName_CorrZO1AF488
+          - PathName_CorrDAPI
+    - folder: cp/segcheck
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/cp/segcheck/Batch1/segcheck_Batch1_Plate1.csv
+          size: 504
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_CorrDAPI
+          - FileName_CorrPhalloAF750
+          - PathName_CorrDAPI
+          - PathName_CorrPhalloAF750
+    - folder: sbs/align
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/sbs/align/Batch1/Plate1/align_Batch1_Plate1.csv
+          size: 29081
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - FileName_Corr_Cycle_2_C
+          - FileName_Corr_Cycle_3_C
+          - FileName_Corr_Cycle_1_C
+          - FileName_Corr_Cycle_2_A
+          - FileName_Corr_Cycle_3_A
+          - FileName_Corr_Cycle_1_A
+          - FileName_Corr_Cycle_2_T
+          - FileName_Corr_Cycle_3_T
+          - FileName_Corr_Cycle_1_T
+          - FileName_Corr_Cycle_2_G
+          - FileName_Corr_Cycle_3_G
+          - FileName_Corr_Cycle_1_G
+          - FileName_Corr_Cycle_2_DAPI
+          - FileName_Corr_Cycle_3_DAPI
+          - FileName_Corr_Cycle_1_DAPI
+          - 15 more columns
+    - folder: sbs/illum
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/sbs/illum/illum_apply/Batch1/Plate1/illum_calc_Batch1_Plate1_01.csv
+          size: 20175
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_OrigC
+          - FileName_OrigA
+          - FileName_OrigT
+          - FileName_OrigG
+          - FileName_OrigDAPI
+          - Frame_OrigC
+          - Frame_OrigA
+          - Frame_OrigT
+          - Frame_OrigG
+          - Frame_OrigDAPI
+          - PathName_OrigC
+          - PathName_OrigA
+          - PathName_OrigT
+          - PathName_OrigG
+          - 11 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/sbs/illum/illum_calc/Batch1/Plate1/illum_calc_Batch1_Plate1_01.csv
+          size: 11525
+          headers:
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Cycle
+          - FileName_OrigC
+          - FileName_OrigA
+          - FileName_OrigT
+          - FileName_OrigG
+          - FileName_OrigDAPI
+          - Frame_OrigC
+          - Frame_OrigA
+          - Frame_OrigT
+          - Frame_OrigG
+          - Frame_OrigDAPI
+          - PathName_OrigC
+          - PathName_OrigA
+          - PathName_OrigT
+          - PathName_OrigG
+          - PathName_OrigDAPI
+illum:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/illum/
+  files:
+    set1:
+    - folder: cp/illum_apply
+      files:
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_apply/Batch1_Plate1_Well_A1_Site_0_CorrDAPI.tiff
+          size: 3092798
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_apply/Batch1_Plate1_Well_A1_Site_0_CorrPhalloAF750.tiff
+          size: 3364106
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_apply/Batch1_Plate1_Well_A1_Site_0_CorrZO1AF488.tiff
+          size: 4363591
+    - folder: cp/illum_calc
+      files:
+      - npy:
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigDAPI.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigPhalloAF750.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_calc/Batch1_Plate1_IllumOrigZO1AF488.npy
+          size: 10240128
+    - folder: sbs/illum_apply
+      files:
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_apply/Batch1_Plate1_1_Well_A1_Site_0_CorrA.tiff
+          size: 4418891
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_apply/Batch1_Plate1_1_Well_A1_Site_0_CorrC.tiff
+          size: 4484449
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_apply/Batch1_Plate1_1_Well_A1_Site_0_CorrDAPI.tiff
+          size: 3400105
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_apply/Batch1_Plate1_1_Well_A1_Site_0_CorrG.tiff
+          size: 4085971
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_apply/Batch1_Plate1_1_Well_A1_Site_0_CorrT.tiff
+          size: 3849729
+    - folder: sbs/illum_calc
+      files:
+      - npy:
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigA.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigC.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigDAPI.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigG.npy
+          size: 10240128
+        - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigT.npy
+          size: 10240128
+presegcheck:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/presegcheck/
+  files:
+    set1:
+    - folder: cp
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_Cells.csv
+          size: 58199
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+        - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_ConfluentRegions.csv
+          size: 101
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+        - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_Experiment.csv
+          size: 8356
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_Image.csv
+          size: 2960
+          headers:
+          - Count_Cells
+          - Count_ConfluentRegions
+          - Count_Nuclei
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02IdentifyPrimaryObjects
+          - ExecutionTime_03MaskImage
+          - ExecutionTime_04MaskImage
+          - ExecutionTime_05MaskImage
+          - ExecutionTime_06IdentifyPrimaryObjects
+          - ExecutionTime_07IdentifySecondaryObjects
+          - FileName_CorrDAPI
+          - FileName_CorrPhalloAF750
+          - FileName_CorrZO1AF488
+          - Group_Index
+          - Group_Length
+          - Group_Number
+          - Height_CorrDAPI
+          - Height_CorrPhalloAF750
+          - Height_CorrZO1AF488
+          - 40 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_Nuclei.csv
+          size: 55982
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+segcheck:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/segcheck/
+  files:
+    set1:
+    - folder: cp
+      files:
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
+          size: 4792957
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Cells.csv
+          size: 87495
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_ConfluentRegions.csv
+          size: 101
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Experiment.csv
+          size: 12128
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Image.csv
+          size: 2819
+          headers:
+          - Count_Cells
+          - Count_ConfluentRegions
+          - Count_Nuclei
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02IdentifyPrimaryObjects
+          - ExecutionTime_03MaskImage
+          - ExecutionTime_04MaskImage
+          - ExecutionTime_05IdentifyPrimaryObjects
+          - ExecutionTime_06IdentifySecondaryObjects
+          - ExecutionTime_07RescaleIntensity
+          - ExecutionTime_08RescaleIntensity
+          - ExecutionTime_09GrayToColor
+          - ExecutionTime_10OverlayOutlines
+          - ExecutionTime_11SaveImages
+          - FileName_CorrDAPI
+          - FileName_CorrPhalloAF750
+          - Group_Index
+          - Group_Length
+          - Group_Number
+          - 41 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Nuclei.csv
+          size: 83762
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number

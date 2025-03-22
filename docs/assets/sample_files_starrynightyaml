@@ -1,0 +1,108 @@
+align:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/align/
+  files:
+    set1:
+      - folder: sbs
+        files:
+          - csv:
+            - Align_Experiment.csv
+            - Align_Image.csv
+          - tiff:
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
+
+cellprofiler_loaddata:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
+  files:
+    set1:
+      - folder: cp/illum
+        files:
+          - csv:
+            - illum_apply/Batch1/illum_apply_Batch1_Plate1.csv
+            - illum_calc/Batch1/illum_calc_Batch1_Plate1.csv
+      - folder: cp/presegcheck
+        files:
+          - csv:
+            - Batch1/pre_segcheck_Batch1_Plate1.csv
+      - folder: cp/segcheck
+        files:
+          - csv:
+            - Batch1/segcheck_Batch1_Plate1.csv
+      - folder: sbs/align
+        files:
+          - csv:
+            - Batch1/Plate1/align_Batch1_Plate1.csv
+      - folder: sbs/illum
+        files:
+          - csv:
+            - illum_apply/Batch1/Plate1/illum_calc_Batch1_Plate1_01.csv
+            - illum_calc/Batch1/Plate1/illum_calc_Batch1_Plate1_01.csv
+
+illum:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/illum/
+  files:
+    set1:
+      - folder: cp/illum_apply
+        files:
+          - tiff:
+            - Batch1_Plate1_Well_A1_Site_0_CorrDAPI.tiff
+            - Batch1_Plate1_Well_A1_Site_0_CorrPhalloAF750.tiff
+            - Batch1_Plate1_Well_A1_Site_0_CorrZO1AF488.tiff
+      - folder: cp/illum_calc
+        files:
+          - npy:
+            - Batch1_Plate1_IllumOrigDAPI.npy
+            - Batch1_Plate1_IllumOrigPhalloAF750.npy
+            - Batch1_Plate1_IllumOrigZO1AF488.npy
+      - folder: sbs/illum_apply
+        files:
+          - tiff:
+            - Batch1_Plate1_1_Well_A1_Site_0_CorrA.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CorrC.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CorrDAPI.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CorrG.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CorrT.tiff
+      - folder: sbs/illum_calc
+        files:
+          - npy:
+            - Batch1_Plate1_1_IllumOrigA.npy
+            - Batch1_Plate1_1_IllumOrigC.npy
+            - Batch1_Plate1_1_IllumOrigDAPI.npy
+            - Batch1_Plate1_1_IllumOrigG.npy
+            - Batch1_Plate1_1_IllumOrigT.npy
+
+presegcheck:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/presegcheck/
+  files:
+    set1:
+      - folder: cp
+        files:
+          - csv:
+            - PreSegcheck_Cells.csv
+            - PreSegcheck_ConfluentRegions.csv
+            - PreSegcheck_Experiment.csv
+            - PreSegcheck_Image.csv
+            - PreSegcheck_Nuclei.csv
+
+segcheck:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/segcheck/
+  files:
+    set1:
+      - folder: cp
+        files:
+          - tiff:
+            - Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
+          - csv:
+            - Segcheck_Cells.csv
+            - Segcheck_ConfluentRegions.csv
+            - Segcheck_Experiment.csv
+            - Segcheck_Image.csv
+            - Segcheck_Nuclei.csv
