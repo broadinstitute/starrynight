@@ -18,18 +18,6 @@ images:
             - 20X_c1_SBS-1/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
             - 20X_c1_SBS-1/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
             - 20X_c1_SBS-1/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-            - 20X_c2_SBS-2/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-            - 20X_c2_SBS-2/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-            - 20X_c2_SBS-2/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-            - 20X_c2_SBS-2/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-            - 20X_c2_SBS-2/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-            - 20X_c2_SBS-2/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-            - 20X_c3_SBS-3/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-            - 20X_c3_SBS-3/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-            - 20X_c3_SBS-3/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-            - 20X_c3_SBS-3/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-            - 20X_c3_SBS-3/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-            - 20X_c3_SBS-3/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
 
 load_data:
   level: plate
@@ -60,16 +48,6 @@ illum:
             - Plate1_Cycle1_IllumDNA.npy
             - Plate1_Cycle1_IllumG.npy
             - Plate1_Cycle1_IllumT.npy
-            - Plate1_Cycle2_IllumA.npy
-            - Plate1_Cycle2_IllumC.npy
-            - Plate1_Cycle2_IllumDNA.npy
-            - Plate1_Cycle2_IllumG.npy
-            - Plate1_Cycle2_IllumT.npy
-            - Plate1_Cycle3_IllumA.npy
-            - Plate1_Cycle3_IllumC.npy
-            - Plate1_Cycle3_IllumDNA.npy
-            - Plate1_Cycle3_IllumG.npy
-            - Plate1_Cycle3_IllumT.npy
             - Plate1_IllumDNA.npy
             - Plate1_IllumPhalloidin.npy
             - Plate1_IllumZO1.npy
@@ -90,16 +68,6 @@ images_aligned_barcoding:
             - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_DAPI.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_DAPI.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
 
 images_corrected_barcoding:
   level: site
@@ -120,14 +88,6 @@ images_corrected_barcoding:
             - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
 
 images_corrected_painting:
   level: well

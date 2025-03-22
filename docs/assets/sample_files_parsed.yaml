@@ -7,53 +7,29 @@ images:
       files:
       - tiff:
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
-          size: 443061
+          size: 25383758
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff
-          size: 437839
+          size: 25383758
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
-          size: 434185
+          size: 25383758
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome.tiff
-          size: 449423
+          size: 25383758
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome.tiff
-          size: 542899
+          size: 25383756
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome.tiff
-          size: 543339
+          size: 25383756
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-          size: 645635
+          size: 42279516
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-          size: 825373
+          size: 42279516
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-          size: 863985
+          size: 42279516
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-          size: 942693
+          size: 42279516
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-          size: 1166889
+          size: 42279516
         - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-          size: 1137649
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-          size: 785355
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-          size: 743745
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-          size: 898397
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-          size: 951129
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-          size: 1151493
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c2_SBS-2/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-          size: 1138313
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-          size: 681255
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-          size: 749869
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-          size: 870435
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-          size: 912763
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-          size: 1093157
-        - path: ../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c3_SBS-3/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-          size: 1095929
+          size: 42279516
 load_data:
   level: plate
   path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
@@ -220,26 +196,6 @@ illum:
           size: 10240128
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumT.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle2_IllumA.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle2_IllumC.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle2_IllumDNA.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle2_IllumG.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle2_IllumT.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle3_IllumA.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle3_IllumC.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle3_IllumDNA.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle3_IllumG.npy
-          size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle3_IllumT.npy
-          size: 10240128
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumDNA.npy
           size: 10240128
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumPhalloidin.npy
@@ -284,35 +240,15 @@ images_aligned_barcoding:
           - 8043 more columns
       - tiff:
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-          size: 150630
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-          size: 99632
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-          size: 98764
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-          size: 102358
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-          size: 109764
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
-          size: 184328
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
-          size: 186014
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_DAPI.tiff
-          size: 89708
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
-          size: 105852
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
-          size: 88600
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
-          size: 182654
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
-          size: 122502
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_DAPI.tiff
-          size: 92882
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
-          size: 90964
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
-          size: 85700
+          size: 5120256
 images_corrected_barcoding:
   level: site
   path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/
@@ -410,31 +346,15 @@ images_corrected_barcoding:
           - 838 more columns
       - tiff:
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-          size: 35440
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-          size: 31302
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-          size: 98764
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-          size: 36758
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-          size: 38480
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_A.tiff
-          size: 33910
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_C.tiff
-          size: 38222
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_G.tiff
-          size: 38420
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle02_T.tiff
-          size: 40110
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_A.tiff
-          size: 38614
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_C.tiff
-          size: 31340
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_G.tiff
-          size: 35026
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle03_T.tiff
-          size: 36366
+          size: 5120256
 images_corrected_painting:
   level: well
   path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
@@ -502,17 +422,17 @@ images_corrected_painting:
           - Number_Object_Number
       - tiff:
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
-          size: 90388
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
-          size: 50444
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
-          size: 225716
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
-          size: 89498
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
-          size: 48424
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
-          size: 224756
+          size: 5120256
 images_segmentation:
   level: plate
   path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/
@@ -800,11 +720,11 @@ analysis:
           - Parent_Foci
       - tiff:
         - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
-          size: 37932
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
-          size: 46988
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
-          size: 41266
+          size: 5120256
         - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
           size: 642302
         - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
