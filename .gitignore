@@ -163,3 +163,4 @@ scratch
 .devenv
 .direnv
 result
+/plugins
