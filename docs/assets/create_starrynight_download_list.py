@@ -366,6 +366,49 @@ def generate_download_list():
         download_file.write(f"cp '{s3_file}' {metadata_dir}\n")
         s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_metadata_dir}'\n")
 
+        # Add pipeline files
+        relative_path = "pipelines/"
+        # Pipeline directory structure and files
+        pipeline_subfolders = {
+            "1_CP_Illum": ["1_CP_Illum.cppipe", "1_Illum_Plate1_Plate2.cppipe"],
+            "2_CP_Apply_Illum": [
+                "2_CP_Apply_Illum.cppipe",
+                "2_CP_Apply_Illum_Plate3_Plate4.cppipe",
+            ],
+            "3_CP_SegmentationCheck": [
+                "3_CP_SegmentationCheck_Plate1_Plate2.cppipe",
+                "3_CP_SegmentationCheck_Plate3_Plate4.cppipe",
+            ],
+            "5_BC_Illum": ["5_BC_Illum.cppipe", "5_BC_Illum_byWell.cppipe"],
+            "6_BC_Apply_Illum": ["6_BC_Apply_Illum.cppipe"],
+            "7_BC_Preprocess": [
+                "7_BC_Preprocess.cppipe",
+                "7_BC_Preprocess_2.cppipe",
+                "7_BC_Preprocess_2strict.cppipe",
+                "7_BC_Preprocess_3.cppipe",
+                "7_BC_Preprocess_4.cppipe",
+            ],
+            "9_Analysis": [
+                "9_Analysis.cppipe",
+                "9_Analysis_Plate1_Plate2.cppipe",
+                "9_Analysis_Rerun.cppipe",
+                "9_Analysis_foci.cppipe",
+            ],
+        }
+
+        # Create pipeline directory structure and download the files
+        for subfolder, files in pipeline_subfolders.items():
+            subfolder_path = f"{relative_path}{BATCH_LOCAL}/{subfolder}"
+            subfolder_dir, s3_dest_subfolder_dir = get_paths(
+                subfolder_path, is_input=True, is_image=False
+            )
+
+            for pipeline_file in files:
+                # S3 path has all files in the base directory (not in subfolders)
+                s3_file = f"{S3_PATH_WORKSPACE}/pipelines/{BATCH_S3}/{pipeline_file}"
+                download_file.write(f"cp '{s3_file}' {subfolder_dir}/\n")
+                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_subfolder_dir}/'\n")
+
 
 def main():
     print("Creating directories and generating download and S3 copy lists")
