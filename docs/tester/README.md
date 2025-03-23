@@ -22,8 +22,7 @@ Decision: 1_Illum_Plate1_Plate2.cppipe
 
 Reason: We are focused on Plate1 for the fixture
 
-<details>
-5c5
+[diff](docs/tester/pipelines/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
 < ModuleCount:22
 ---
 > ModuleCount:16
@@ -173,45 +172,9 @@ Decision: 2_CP_Apply_Illum.cppipe
 
 Reason: We are focused on Plate1 for the fixture
 
-<details>
-23a24,31
->     Select the input image:OrigWGA
->     Name the output image:CorrWGA
->     Select the illumination function:IllumWGA
->     Select how the illumination function is applied:Divide
->     Select the input image:OrigZEB1
->     Name the output image:CorrZEB1
->     Select the illumination function:IllumZEB1
->     Select how the illumination function is applied:Divide
-40c48
-<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrDNA
----
->     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrDNA
-60c68
-<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZO1
----
->     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrZO1
-75c83
-< SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
----
-> SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-80c88
-<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZEB1
----
->     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrZEB1
-100c108
-<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrPhalloidin
----
->     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrPhalloidin
-115c123
-< SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
----
-> SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-120c128
-<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrWGA
----
->     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrWGA
-</details>
+
+[diff](docs/tester/pipelines/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
+
 
 ## 3_CP_SegmentationCheck
 
@@ -222,6 +185,9 @@ Decision:
 
 Reason:
 
+[diff](docs/tester/pipelines/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
+
+
 ## 5_BC_Illum
 
 ```
@@ -231,14 +197,15 @@ Decision:
 
 Reason:
 
+[diff](docs/tester/pipelines/)
+
+
 ## 6_BC_Apply_Illum
 
-```
-```
+Decision: 6_BC_Apply_Illum.cppipe
 
-Decision:
+Reason: We have a single pipeline
 
-Reason:
 
 ## 7_BC_Preprocess
 
@@ -249,6 +216,10 @@ Decision:
 
 Reason:
 
+[diff](docs/tester/pipelines/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
+[diff](docs/tester/pipelines/)
+
+
 ## 9_Analysis
 
 ```
@@ -257,3 +228,7 @@ Reason:
 Decision:
 
 Reason:
+
+[diff](docs/tester/pipelines/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
+[diff](docs/tester/pipelines/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
+[diff](docs/tester/pipelines/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
