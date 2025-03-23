@@ -1,21 +1,4 @@
-align:
-  level: plate
-  path: ../../scratch/starrynight_example_output/workspace/align/
-  files:
-    set1:
-      - folder: sbs
-        files:
-          - csv:
-            - Align_Experiment.csv
-            - Align_Image.csv
-          - tiff:
-            - Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
-            - Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
-            - Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
-            - Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
-            - Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
-
-cellprofiler_loaddata:
+load_data:
   level: plate
   path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
   files:
@@ -63,8 +46,8 @@ illum_calc:
             - Batch1_Plate1_1_IllumOrigG.npy
             - Batch1_Plate1_1_IllumOrigT.npy
 
-illum_apply:
-  level: site
+images_illum_corrected_painting:
+  level: plate
   path: ../../scratch/starrynight_example_output/workspace/illum/
   files:
     set1:
@@ -74,6 +57,68 @@ illum_apply:
             - Batch1_Plate1_Well_A1_Site_0_CorrDAPI.tiff
             - Batch1_Plate1_Well_A1_Site_0_CorrPhalloAF750.tiff
             - Batch1_Plate1_Well_A1_Site_0_CorrZO1AF488.tiff
+
+images_aligned_barcoding:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/align/
+  files:
+    set1:
+      - folder: sbs
+        files:
+          - csv:
+            - Align_Experiment.csv
+            - Align_Image.csv
+          - tiff:
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
+
+images_corrected_barcoding:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/preprocess/
+  files:
+    set1:
+      - folder: sbs
+        files:
+          - csv:
+            - Batch1_Plate1_PreProcessBarcodeFoci.csv
+            - Batch1_Plate1_PreProcessCells.csv
+            - Batch1_Plate1_PreProcessExperiment.csv
+            - Batch1_Plate1_PreProcessFoci.csv
+            - Batch1_Plate1_PreProcessImage.csv
+            - Batch1_Plate1_PreProcessNuclei.csv
+          - tiff:
+            - Batch1_Plate1_1_Well_A1_Site_0_CompensatedA.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CompensatedC.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CompensatedDAPI.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CompensatedG.tiff
+            - Batch1_Plate1_1_Well_A1_Site_0_CompensatedT.tiff
+          - png:
+            - Batch1_Plate1_Well_A1_Site_0_StdSqrt_Overlay.png
+
+images_segmentation:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/segcheck/
+  files:
+    set1:
+      - folder: cp
+        files:
+          - tiff:
+            - Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
+          - csv:
+            - Segcheck_Cells.csv
+            - Segcheck_ConfluentRegions.csv
+            - Segcheck_Experiment.csv
+            - Segcheck_Image.csv
+            - Segcheck_Nuclei.csv
+
+images_illum_corrected_barcoding:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/illum/
+  files:
+    set1:
       - folder: sbs/illum_apply
         files:
           - tiff:
@@ -96,19 +141,3 @@ presegcheck:
             - PreSegcheck_Experiment.csv
             - PreSegcheck_Image.csv
             - PreSegcheck_Nuclei.csv
-
-segcheck:
-  level: plate
-  path: ../../scratch/starrynight_example_output/workspace/segcheck/
-  files:
-    set1:
-      - folder: cp
-        files:
-          - tiff:
-            - Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
-          - csv:
-            - Segcheck_Cells.csv
-            - Segcheck_ConfluentRegions.csv
-            - Segcheck_Experiment.csv
-            - Segcheck_Image.csv
-            - Segcheck_Nuclei.csv

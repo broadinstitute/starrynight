@@ -35,7 +35,7 @@ load_data:
             - load_data_pipeline7.csv
             - load_data_pipeline9.csv
 
-illum:
+illum_calc:
   level: plate
   path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/
   files:
@@ -51,6 +51,27 @@ illum:
             - Plate1_IllumDNA.npy
             - Plate1_IllumPhalloidin.npy
             - Plate1_IllumZO1.npy
+
+images_corrected_painting:
+  level: well
+  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
+  files:
+    set1:
+      - folder: Plate1-WellA1
+        files:
+          - csv:
+            - PaintingIllumApplication_Cells.csv
+            - PaintingIllumApplication_ConfluentRegions.csv
+            - PaintingIllumApplication_Experiment.csv
+            - PaintingIllumApplication_Image.csv
+            - PaintingIllumApplication_Nuclei.csv
+          - tiff:
+            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+            - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+            - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
+            - Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
 
 images_aligned_barcoding:
   level: site
@@ -88,27 +109,6 @@ images_corrected_barcoding:
             - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-
-images_corrected_painting:
-  level: well
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
-  files:
-    set1:
-      - folder: Plate1-WellA1
-        files:
-          - csv:
-            - PaintingIllumApplication_Cells.csv
-            - PaintingIllumApplication_ConfluentRegions.csv
-            - PaintingIllumApplication_Experiment.csv
-            - PaintingIllumApplication_Image.csv
-            - PaintingIllumApplication_Nuclei.csv
-          - tiff:
-            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
-            - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
-            - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
 
 images_segmentation:
   level: plate
