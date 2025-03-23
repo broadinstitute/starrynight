@@ -61,7 +61,7 @@ Decision:
 
 Reason:
 
-[diff](pipelines/)
+[diff](pipelines/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
 
 
 ## 6_BC_Apply_Illum
@@ -81,7 +81,6 @@ Decision:
 Reason:
 
 [diff](pipelines/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
-[diff](pipelines/)
 
 
 ## 9_Analysis
