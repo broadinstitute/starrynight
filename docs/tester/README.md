@@ -22,7 +22,7 @@ Decision: 1_Illum_Plate1_Plate2.cppipe
 
 Reason: We are focused on Plate1 for the fixture
 
-[diff](docs/tester/pipelines/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
+[diff](pipelines/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
 
 ## 2_CP_Apply_Illum
 
@@ -37,7 +37,7 @@ Decision: 2_CP_Apply_Illum.cppipe
 Reason: We are focused on Plate1 for the fixture
 
 
-[diff](docs/tester/pipelines/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
+[diff](pipelines/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
 
 
 ## 3_CP_SegmentationCheck
@@ -49,7 +49,7 @@ Decision:
 
 Reason:
 
-[diff](docs/tester/pipelines/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
+[diff](pipelines/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
 
 
 ## 5_BC_Illum
@@ -61,7 +61,7 @@ Decision:
 
 Reason:
 
-[diff](docs/tester/pipelines/)
+[diff](pipelines/)
 
 
 ## 6_BC_Apply_Illum
@@ -80,8 +80,8 @@ Decision:
 
 Reason:
 
-[diff](docs/tester/pipelines/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
-[diff](docs/tester/pipelines/)
+[diff](pipelines/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
+[diff](pipelines/)
 
 
 ## 9_Analysis
@@ -93,6 +93,6 @@ Decision:
 
 Reason:
 
-[diff](docs/tester/pipelines/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
-[diff](docs/tester/pipelines/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
-[diff](docs/tester/pipelines/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
+[diff](pipelines/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
+[diff](pipelines/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
+[diff](pipelines/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
