@@ -286,9 +286,8 @@ This step generates the final dataset with:
 starrynight analysis loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
-    -c ${WKDIR}/illum/cp/illum_apply/ \
-    -a ${WKDIR}/align/sbs/ \
-    -n DAPI
+    -c ${WKDIR}/illum/sbs/illum_apply/ \
+    -p ${WKDIR}/preprocess/sbs/
 
 # Generate CellProfiler pipelines for analysis
 starrynight analysis cppipe \
@@ -296,7 +295,9 @@ starrynight analysis cppipe \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/analysis/ \
     -w ${WKDIR}/analysis/sbs/ \
     -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
-    -n DAPI
+    --nuclei DAPI \
+    --cell PhalloAF750 \
+    --mito ZO1-AF488
 
 # Execute analysis pipelines
 starrynight cp \
