@@ -8,14 +8,11 @@ StarryNight is composed of four main components:
 
 ### StarryNight Core
 
-The foundation of the platform providing specialized algorithms for microscopy image analysis:
+A CellProfiler-based system for generating and executing specialized microscopy image analysis pipelines:
 
-- Image inventory and indexing
-- Illumination correction
-- Image alignment
-- Preprocessing and quality control
-- Cell Painting specific analyses
-- Sequencing-based image processing
+- Image processing and analysis powered by CellProfiler
+- Supports key operations including illumination correction, alignment, preprocessing, and feature extraction
+- Designed for efficient processing of large-scale optical pooled screening data
 
 ### PipeCraft
 
