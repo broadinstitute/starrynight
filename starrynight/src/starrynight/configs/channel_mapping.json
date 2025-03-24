@@ -1,0 +1,48 @@
+{
+    "channel_mapping": {
+        "DAPI": "DNA",
+        "Hoechst": "DNA",
+        "405 nm": "DNA",
+        "447 nm": "DNA",
+        "Phalloidin": "Cell",
+        "PhalloAF750": "Cell",
+        "CellMask": "Cell",
+        "ZO1": "Junction",
+        "ZO1-AF488": "Junction",
+        "488 nm": "GFP",
+        "GFP": "GFP",
+        "nIR": "nIR",
+        "A": "SBS_A",
+        "C": "SBS_C",
+        "G": "SBS_G",
+        "T": "SBS_T"
+    },
+    "channel_types": {
+        "segmentation": {
+            "nuclei": [
+                "DNA"
+            ],
+            "cell": [
+                "Cell"
+            ],
+            "junction": [
+                "Junction"
+            ]
+        },
+        "readouts": {
+            "dna": [
+                "DNA"
+            ],
+            "general": [
+                "GFP",
+                "nIR"
+            ],
+            "sbs": [
+                "SBS_A",
+                "SBS_C",
+                "SBS_G",
+                "SBS_T"
+            ]
+        }
+    }
+}
