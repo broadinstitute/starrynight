@@ -2,6 +2,8 @@
 
 # ruff: noqa: ANN001, D102, N802
 
+from pathlib import Path
+
 from starrynight.parsers.common import BaseTransformer
 
 
@@ -13,14 +15,57 @@ class VincentAstToIR(BaseTransformer):
     pipeline.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, channel_map_path: Path = None) -> None:
         """Initialize the transformer.
 
         Initializes the channel dictionary, which is used to keep track of
         channels as they are encountered in the input data.
+
+        Parameters
+        ----------
+        channel_map_path : Path, optional
+            Path to a channel mapping configuration file. If not provided,
+            will attempt to use the default config path.
+
         """
-        super().__init__()
+        # If no config path is provided, use the default location
+        if channel_map_path is None:
+            # Try to locate the default config file
+            default_config_path = (
+                Path(__file__).parent.parent / "configs" / "channel_mapping.json"
+            )
+            if default_config_path.exists():
+                channel_map_path = default_config_path
+
+        super().__init__(visit_tokens=True, channel_map_path=channel_map_path)
+
+        # If no config was loaded, set up some basic defaults
+        if not self.channel_mapping:
+            self.channel_mapping = {
+                # Common DNA stains
+                "DAPI": "DNA",
+                "Hoechst": "DNA",
+                "405 nm": "DNA",
+                # Common cell membrane/cytoskeleton stains
+                "Phalloidin": "Cell",
+                "PhalloAF750": "Cell",
+                "CellMask": "Cell",
+                # Other common stains with functional names
+                "ZO1": "Junction",
+                "ZO1-AF488": "Junction",
+                "GFP": "GFP",
+                "nIR": "nIR",
+                # SBS channels
+                "A": "SBS_A",
+                "C": "SBS_C",
+                "G": "SBS_G",
+                "T": "SBS_T",
+            }
+
         self.channel_dict: dict[str, list[str]] = {"channel_dict": []}
+
+        # Reverse mapping to store the raw channel name for each functional name
+        self.raw_channel_mapping = {}
 
     def start(self, items) -> dict:
         return {"start": items}
@@ -61,9 +106,22 @@ class VincentAstToIR(BaseTransformer):
     def channel(self, items) -> dict:
         channel_len = len(self.channel_dict["channel_dict"])
         # important for cellprofiler ("-" in channel name is not allowed)
-        normalized_channel = items[0].replace("-", "")
-        self.channel_dict["channel_dict"].append(normalized_channel)
-        return {f"channel_{channel_len}": normalized_channel}
+        raw_channel = items[0].replace("-", "")
+
+        # Map the raw channel name to a functional name if it exists in the mapping
+        functional_name = self.channel_mapping.get(raw_channel, raw_channel)
+
+        # Store the raw channel name for each functional name for reference
+        self.raw_channel_mapping[functional_name] = raw_channel
+
+        # Add the functional name to the channel_dict
+        self.channel_dict["channel_dict"].append(functional_name)
+
+        # Return the channel with both the raw and functional names
+        return {
+            f"channel_{channel_len}": functional_name,
+            f"raw_channel_{channel_len}": raw_channel,
+        }
 
     def filename(self, items) -> dict:
         # assert len(set(items)) == 1

@@ -65,6 +65,7 @@ def write_loaddata(
     for index in images_df.to_dicts():
         index = PCPIndex(**index)
         # make sure frame heads are matched with their order in the filenames
+        # Now using the functional channel names from channel_dict
         frame_index = [
             index.channel_dict.index(channel.replace("Frame_Orig", ""))
             for channel in frame_heads
@@ -102,7 +103,7 @@ def write_loaddata_csv_by_batch_plate(
 ) -> None:
     pass
 
-    # Setup channel list for that plate
+    # Setup channel list for that plate - now contains functional channel names
     plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
 
     # setup df by filtering for plate id
@@ -127,7 +128,7 @@ def write_loaddata_csv_by_batch_plate_cycle(
 ) -> None:
     pass
 
-    # Setup channel list for that plate
+    # Setup channel list for that plate - now contains functional channel names
     plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
 
     # setup df by filtering for plate id
@@ -213,6 +214,7 @@ def generate_illum_calculate_pipeline(
     pipeline: Pipeline, load_data_path: Path | CloudPath, for_sbs: bool = False
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
+    # This now gets the functional channel names
     channel_list = [
         col.split("_")[1] for col in load_data_df.columns if col.startswith("Frame")
     ]

@@ -59,8 +59,7 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
-from cloudpathlib import AnyPath, CloudPath
-from numpy import exp
+from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
@@ -68,9 +67,9 @@ from starrynight.utils.dfutils import (
     gen_image_hierarchy,
     get_channels_by_batch_plate,
     get_cycles_by_batch_plate,
+    get_functional_channel,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
-from starrynight.utils.misc import resolve_path_loaddata
 
 ###############################
 ## Load data generation
@@ -80,38 +79,22 @@ from starrynight.utils.misc import resolve_path_loaddata
 def write_loaddata(
     images_df: pl.DataFrame,
     plate_channel_list: list[str],
-    corr_images_path: Path | CloudPath,
-    nuclei_channel: str,
-    cell_channel: str,
     path_mask: str,
     f: TextIOWrapper,
+    nuclei_channel: str,
+    cell_channel: str,
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
     ]
+    # We now use the functional channel names for the headers
     filename_heads = [f"FileName_Corr{col}" for col in [nuclei_channel, cell_channel]]
     pathname_heads = [f"PathName_Corr{col}" for col in [nuclei_channel, cell_channel]]
-    loaddata_writer.writerow(
-        [
-            *metadata_heads,
-            *filename_heads,
-            *pathname_heads,
-        ]
-    )
+    loaddata_writer.writerow([*metadata_heads, *filename_heads, *pathname_heads])
     for index in images_df.to_dicts():
         index = PCPIndex(**index)
-        filenames = [
-            f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-            for col in [nuclei_channel, cell_channel]
-        ]
-        pathnames = [
-            resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
-            for _ in range(len(pathname_heads))
-        ]
-
-        # make sure frame heads are matched with their order in the filenames
         assert index.key is not None
         loaddata_writer.writerow(
             [
@@ -120,11 +103,16 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id or 0,
-                # Filename heads
-                *filenames,
+                f"{int(index.cycle_id):02}" if index.cycle_id is not None else 0,
+                # Filename heads - now using the functional channel name in the filename
+                *[f"Corr{col}.tiff" for col in [nuclei_channel, cell_channel]],
                 # Pathname heads
-                *pathnames,
+                *[
+                    # We need to remove the file name from the "key"
+                    # (expected by cellprofiler)
+                    f"{path_mask.rstrip('/')}/{'/'.join(index.key.split('/')[0:-1])}/"
+                    for col in [nuclei_channel, cell_channel]
+                ],
             ]
         )
 
@@ -132,17 +120,30 @@ def write_loaddata(
 def write_loaddata_csv_by_batch_plate(
     images_df: pl.DataFrame,
     out_path: Path | CloudPath,
-    corr_images_path: Path | CloudPath,
-    nuclei_channel: str,
-    cell_channel: str,
     path_mask: str,
     batch: str,
     plate: str,
+    nuclei_channel: str,
+    cell_channel: str,
 ) -> None:
     pass
 
     # Setup channel list for that plate
     plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
+
+    # If nuclei_channel or cell_channel are not explicitly provided,
+    # find the appropriate channels based on function
+    if not nuclei_channel:
+        nuclei_channel = get_functional_channel(images_df, batch, plate, "nuclei")
+        if not nuclei_channel:
+            raise ValueError(
+                f"No nuclei channel found for batch {batch}, plate {plate}"
+            )
+
+    if not cell_channel:
+        cell_channel = get_functional_channel(images_df, batch, plate, "cell")
+        if not cell_channel:
+            raise ValueError(f"No cell channel found for batch {batch}, plate {plate}")
 
     # setup df by filtering for plate id
     df_plate = images_df.filter(
@@ -156,11 +157,10 @@ def write_loaddata_csv_by_batch_plate(
         write_loaddata(
             df_plate,
             plate_channel_list,
-            corr_images_path,
-            nuclei_channel,
-            cell_channel,
             path_mask,
             f,
+            nuclei_channel,
+            cell_channel,
         )
 
 
@@ -199,8 +199,6 @@ def write_loaddata_csv_by_batch_plate_cycle(
             corr_images_path,
             nuclei_channel,
             cell_channel,
-            path_mask,
-            f,
         )
 
 
@@ -271,12 +269,11 @@ def gen_segcheck_load_data_by_batch_plate(
                 write_loaddata_csv_by_batch_plate(
                     images_df,
                     out_path,
-                    corr_images_path,
-                    nuclei_channel,
-                    cell_channel,
                     path_mask,
                     batch,
                     plate,
+                    nuclei_channel,
+                    cell_channel,
                 )
             else:
                 # Write loaddata assuming image nesting with cycles

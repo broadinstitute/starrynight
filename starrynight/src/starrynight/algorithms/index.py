@@ -30,7 +30,8 @@ class PCPIndex(BaseModel):
     magnification : File magnification. If image file.
     well_id : File well ID.
     site_id : File site ID.
-    channel_dict : File channel dictionary. If image file.
+    channel_dict : File channel dictionary with functional names. If image file.
+    raw_channel_mapping : Mapping between functional channel names and raw channel names.
     filename : File name.
     extension : File extension.
     is_sbs_image : Is this file an SBS image?
@@ -49,6 +50,7 @@ class PCPIndex(BaseModel):
     well_id: str | None = None
     site_id: str | None = None
     channel_dict: list[str] | None = None
+    raw_channel_mapping: dict[str, str] | None = None
     filename: str | None = None
     extension: str | None = None
     is_sbs_image: Annotated[
@@ -88,6 +90,7 @@ def ast_to_pcp_index(
 
     """
     ast = path_parser.parse(parsed_inv.key)
+    # Initialize the transformer, which will automatically load the channel mapping
     transformer = ast_transformer()
     ir = transformer.transform(ast)
     pcp_index_dict = {
@@ -107,6 +110,7 @@ def ast_to_pcp_index(
         key=parsed_inv.key,
         prefix=parsed_inv.prefix,
         channel_dict=transformer.channel_dict["channel_dict"],
+        raw_channel_mapping=transformer.raw_channel_mapping,
     )
 
 
