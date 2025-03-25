@@ -1,24 +1,3 @@
-images:
-  level: plate
-  path: ../../scratch/starrynight_example_input/Source1/Batch1/images/
-  files:
-    set1:
-      - folder: Plate1
-        files:
-          - tiff:
-            - 20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
-            - 20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff
-            - 20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
-            - 20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome.tiff
-            - 20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome.tiff
-            - 20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome.tiff
-            - 20X_c1_SBS-1/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
-            - 20X_c1_SBS-1/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
-            - 20X_c1_SBS-1/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
-            - 20X_c1_SBS-1/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
-            - 20X_c1_SBS-1/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
-            - 20X_c1_SBS-1/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
-
 load_data:
   level: plate
   path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
@@ -42,7 +21,7 @@ illum_calc:
     set1:
       - folder: Plate1
         files:
-          - tiff:
+          - npy:
             - Plate1_Cycle1_IllumA.npy
             - Plate1_Cycle1_IllumC.npy
             - Plate1_Cycle1_IllumDNA.npy
@@ -69,9 +48,6 @@ images_corrected_painting:
             - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
             - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
             - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrDNA.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrPhalloidin.tiff
-            - Plate_Plate1_Well_WellA1_Site_1_CorrZO1.tiff
 
 images_aligned_barcoding:
   level: site
@@ -126,8 +102,6 @@ images_segmentation:
             - SegmentationCheck_PreCells.csv
           - png:
             - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
-            - Plate_Plate1_Well_WellA2_Site_0_CorrDNA_SegmentCheck.png
-            - Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
 
 analysis:
   level: site
