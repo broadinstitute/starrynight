@@ -1,51 +1,4 @@
-align:
-  level: plate
-  path: ../../scratch/starrynight_example_output/workspace/align/
-  files:
-    set1:
-    - folder: sbs
-      files:
-      - csv:
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Experiment.csv
-          size: 22539
-          headers:
-          - Key
-          - Value
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Image.csv
-          size: 187756
-          headers:
-          - Align_Xshift_Aligned_Corr_Cycle_1_A
-          - Align_Xshift_Aligned_Corr_Cycle_1_C
-          - Align_Xshift_Aligned_Corr_Cycle_1_DAPI
-          - Align_Xshift_Aligned_Corr_Cycle_1_G
-          - Align_Xshift_Aligned_Corr_Cycle_1_T
-          - Align_Xshift_Aligned_Corr_Cycle_2_A
-          - Align_Xshift_Aligned_Corr_Cycle_2_C
-          - Align_Xshift_Aligned_Corr_Cycle_2_DAPI
-          - Align_Xshift_Aligned_Corr_Cycle_2_G
-          - Align_Xshift_Aligned_Corr_Cycle_2_T
-          - Align_Xshift_Aligned_Corr_Cycle_3_A
-          - Align_Xshift_Aligned_Corr_Cycle_3_C
-          - Align_Xshift_Aligned_Corr_Cycle_3_DAPI
-          - Align_Xshift_Aligned_Corr_Cycle_3_G
-          - Align_Xshift_Aligned_Corr_Cycle_3_T
-          - Align_Yshift_Aligned_Corr_Cycle_1_A
-          - Align_Yshift_Aligned_Corr_Cycle_1_C
-          - Align_Yshift_Aligned_Corr_Cycle_1_DAPI
-          - Align_Yshift_Aligned_Corr_Cycle_1_G
-          - 692 more columns
-      - tiff:
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
-          size: 4418891
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
-          size: 4484449
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
-          size: 3400105
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
-          size: 4085971
-        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
-          size: 3849729
-cellprofiler_loaddata:
+load_data:
   level: plate
   path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
   files:
@@ -227,8 +180,8 @@ illum_calc:
           size: 10240128
         - path: ../../scratch/starrynight_example_output/workspace/illum/sbs/illum_calc/Batch1_Plate1_1_IllumOrigT.npy
           size: 10240128
-illum_apply:
-  level: site
+images_illum_corrected_painting:
+  level: plate
   path: ../../scratch/starrynight_example_output/workspace/illum/
   files:
     set1:
@@ -241,6 +194,259 @@ illum_apply:
           size: 3364106
         - path: ../../scratch/starrynight_example_output/workspace/illum/cp/illum_apply/Batch1_Plate1_Well_A1_Site_0_CorrZO1AF488.tiff
           size: 4363591
+images_aligned_barcoding:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/align/
+  files:
+    set1:
+    - folder: sbs
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Experiment.csv
+          size: 22539
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Align_Image.csv
+          size: 187756
+          headers:
+          - Align_Xshift_Aligned_Corr_Cycle_1_A
+          - Align_Xshift_Aligned_Corr_Cycle_1_C
+          - Align_Xshift_Aligned_Corr_Cycle_1_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_1_G
+          - Align_Xshift_Aligned_Corr_Cycle_1_T
+          - Align_Xshift_Aligned_Corr_Cycle_2_A
+          - Align_Xshift_Aligned_Corr_Cycle_2_C
+          - Align_Xshift_Aligned_Corr_Cycle_2_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_2_G
+          - Align_Xshift_Aligned_Corr_Cycle_2_T
+          - Align_Xshift_Aligned_Corr_Cycle_3_A
+          - Align_Xshift_Aligned_Corr_Cycle_3_C
+          - Align_Xshift_Aligned_Corr_Cycle_3_DAPI
+          - Align_Xshift_Aligned_Corr_Cycle_3_G
+          - Align_Xshift_Aligned_Corr_Cycle_3_T
+          - Align_Yshift_Aligned_Corr_Cycle_1_A
+          - Align_Yshift_Aligned_Corr_Cycle_1_C
+          - Align_Yshift_Aligned_Corr_Cycle_1_DAPI
+          - Align_Yshift_Aligned_Corr_Cycle_1_G
+          - 692 more columns
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedA.tiff
+          size: 4418891
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedC.tiff
+          size: 4484449
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedDAPI.tiff
+          size: 3400105
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedG.tiff
+          size: 4085971
+        - path: ../../scratch/starrynight_example_output/workspace/align/sbs/Batch1_Plate1_1_Well_A1_Site_0_AlignedT.tiff
+          size: 3849729
+images_corrected_barcoding:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/preprocess/
+  files:
+    set1:
+    - folder: sbs
+      files:
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessBarcodeFoci.csv
+          size: 30579851
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Intensity_IntegratedIntensityEdge_Barcodes_Barcodes
+          - Intensity_IntegratedIntensityEdge_Barcodes_Scores
+          - Intensity_IntegratedIntensity_Barcodes_Barcodes
+          - Intensity_IntegratedIntensity_Barcodes_Scores
+          - Intensity_LowerQuartileIntensity_Barcodes_Barcodes
+          - Intensity_LowerQuartileIntensity_Barcodes_Scores
+          - Intensity_MADIntensity_Barcodes_Barcodes
+          - Intensity_MADIntensity_Barcodes_Scores
+          - Intensity_MassDisplacement_Barcodes_Barcodes
+          - Intensity_MassDisplacement_Barcodes_Scores
+          - Intensity_MaxIntensityEdge_Barcodes_Barcodes
+          - Intensity_MaxIntensityEdge_Barcodes_Scores
+          - Intensity_MaxIntensity_Barcodes_Barcodes
+          - 35 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessCells.csv
+          size: 15176496
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Children_BarcodeFoci_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Mean_BarcodeFoci_Intensity_IntegratedIntensityEdge_Barcodes_Barcodes
+          - Mean_BarcodeFoci_Intensity_IntegratedIntensityEdge_Barcodes_Scores
+          - Mean_BarcodeFoci_Intensity_IntegratedIntensity_Barcodes_Barcodes
+          - Mean_BarcodeFoci_Intensity_IntegratedIntensity_Barcodes_Scores
+          - Mean_BarcodeFoci_Intensity_LowerQuartileIntensity_Barcodes_Barcodes
+          - Mean_BarcodeFoci_Intensity_LowerQuartileIntensity_Barcodes_Scores
+          - Mean_BarcodeFoci_Intensity_MADIntensity_Barcodes_Barcodes
+          - Mean_BarcodeFoci_Intensity_MADIntensity_Barcodes_Scores
+          - Mean_BarcodeFoci_Intensity_MassDisplacement_Barcodes_Barcodes
+          - 39 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessExperiment.csv
+          size: 53937
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessFoci.csv
+          size: 200198846
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Barcode_BarcodeCalled
+          - Barcode_MatchedTo_Barcode
+          - Barcode_MatchedTo_GeneCode
+          - Barcode_MatchedTo_ID
+          - Barcode_MatchedTo_Score
+          - Barcode_MeanQualityScore
+          - Children_BarcodeFoci_Count
+          - Intensity_IntegratedIntensityEdge_Cycle1_A_Compensated
+          - Intensity_IntegratedIntensityEdge_Cycle1_C_Compensated
+          - Intensity_IntegratedIntensityEdge_Cycle1_G_Compensated
+          - Intensity_IntegratedIntensityEdge_Cycle1_T_Compensated
+          - Intensity_IntegratedIntensityEdge_Cycle2_A_Compensated
+          - Intensity_IntegratedIntensityEdge_Cycle2_C_Compensated
+          - 250 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessImage.csv
+          size: 83386
+          headers:
+          - Barcode_MeanBarcodeScore
+          - Barcode_MeanQualityScore
+          - Count_BarcodeFoci
+          - Count_Cells
+          - Count_Foci
+          - Count_Nuclei
+          - Divide20_Divide20Flag
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02ImageMath
+          - ExecutionTime_03ImageMath
+          - ExecutionTime_04ImageMath
+          - ExecutionTime_05ImageMath
+          - ExecutionTime_06CorrectIlluminationCalculate
+          - ExecutionTime_07CorrectIlluminationCalculate
+          - ExecutionTime_08CorrectIlluminationCalculate
+          - ExecutionTime_09CorrectIlluminationCalculate
+          - ExecutionTime_10CorrectIlluminationApply
+          - ExecutionTime_11CorrectIlluminationApply
+          - ExecutionTime_12CorrectIlluminationApply
+          - 206 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_PreProcessNuclei.csv
+          size: 2144675
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Batch
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_1_Well_A1_Site_0_CompensatedA.tiff
+          size: 100539
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_1_Well_A1_Site_0_CompensatedC.tiff
+          size: 106253
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_1_Well_A1_Site_0_CompensatedDAPI.tiff
+          size: 3400105
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_1_Well_A1_Site_0_CompensatedG.tiff
+          size: 24567
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_1_Well_A1_Site_0_CompensatedT.tiff
+          size: 123222
+      - png:
+        - path: ../../scratch/starrynight_example_output/workspace/preprocess/sbs/Batch1_Plate1_Well_A1_Site_0_StdSqrt_Overlay.png
+          size: 1592558
+images_segmentation:
+  level: plate
+  path: ../../scratch/starrynight_example_output/workspace/segcheck/
+  files:
+    set1:
+    - folder: cp
+      files:
+      - tiff:
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
+          size: 4792957
+      - csv:
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Cells.csv
+          size: 87495
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_ConfluentRegions.csv
+          size: 101
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Experiment.csv
+          size: 12128
+          headers:
+          - Key
+          - Value
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Image.csv
+          size: 2819
+          headers:
+          - Count_Cells
+          - Count_ConfluentRegions
+          - Count_Nuclei
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02IdentifyPrimaryObjects
+          - ExecutionTime_03MaskImage
+          - ExecutionTime_04MaskImage
+          - ExecutionTime_05IdentifyPrimaryObjects
+          - ExecutionTime_06IdentifySecondaryObjects
+          - ExecutionTime_07RescaleIntensity
+          - ExecutionTime_08RescaleIntensity
+          - ExecutionTime_09GrayToColor
+          - ExecutionTime_10OverlayOutlines
+          - ExecutionTime_11SaveImages
+          - FileName_CorrDAPI
+          - FileName_CorrPhalloAF750
+          - Group_Index
+          - Group_Length
+          - Group_Number
+          - 41 more columns
+        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Nuclei.csv
+          size: 83762
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+images_illum_corrected_barcoding:
+  level: site
+  path: ../../scratch/starrynight_example_output/workspace/illum/
+  files:
+    set1:
     - folder: sbs/illum_apply
       files:
       - tiff:
@@ -311,74 +517,6 @@ presegcheck:
           - 40 more columns
         - path: ../../scratch/starrynight_example_output/workspace/presegcheck/cp/PreSegcheck_Nuclei.csv
           size: 55982
-          headers:
-          - ImageNumber
-          - ObjectNumber
-          - Children_Cells_Count
-          - Location_Center_X
-          - Location_Center_Y
-          - Location_Center_Z
-          - Number_Object_Number
-segcheck:
-  level: plate
-  path: ../../scratch/starrynight_example_output/workspace/segcheck/
-  files:
-    set1:
-    - folder: cp
-      files:
-      - tiff:
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Batch1_Plate1_Well_B1_Site_3076_OrigOverlay.tiff
-          size: 4792957
-      - csv:
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Cells.csv
-          size: 87495
-          headers:
-          - ImageNumber
-          - ObjectNumber
-          - Location_Center_X
-          - Location_Center_Y
-          - Location_Center_Z
-          - Number_Object_Number
-          - Parent_Nuclei
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_ConfluentRegions.csv
-          size: 101
-          headers:
-          - ImageNumber
-          - ObjectNumber
-          - Location_Center_X
-          - Location_Center_Y
-          - Location_Center_Z
-          - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Experiment.csv
-          size: 12128
-          headers:
-          - Key
-          - Value
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Image.csv
-          size: 2819
-          headers:
-          - Count_Cells
-          - Count_ConfluentRegions
-          - Count_Nuclei
-          - ExecutionTime_01LoadData
-          - ExecutionTime_02IdentifyPrimaryObjects
-          - ExecutionTime_03MaskImage
-          - ExecutionTime_04MaskImage
-          - ExecutionTime_05IdentifyPrimaryObjects
-          - ExecutionTime_06IdentifySecondaryObjects
-          - ExecutionTime_07RescaleIntensity
-          - ExecutionTime_08RescaleIntensity
-          - ExecutionTime_09GrayToColor
-          - ExecutionTime_10OverlayOutlines
-          - ExecutionTime_11SaveImages
-          - FileName_CorrDAPI
-          - FileName_CorrPhalloAF750
-          - Group_Index
-          - Group_Length
-          - Group_Number
-          - 41 more columns
-        - path: ../../scratch/starrynight_example_output/workspace/segcheck/cp/Segcheck_Nuclei.csv
-          size: 83762
           headers:
           - ImageNumber
           - ObjectNumber
