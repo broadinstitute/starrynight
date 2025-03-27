@@ -9,6 +9,27 @@ from cellprofiler.modules.correctilluminationapply import (
     DOS_DIVIDE,
     CorrectIlluminationApply,
 )
+from cellprofiler.modules.exporttospreadsheet import (
+    DELIMITER_COMMA,
+    GP_NAME_METADATA,
+    NANS_AS_NANS,
+    ExportToSpreadsheet,
+)
+from cellprofiler.modules.identifyprimaryobjects import (
+    DEFAULT_MAXIMA_COLOR,
+    FH_DECLUMP,
+    LIMIT_NONE,
+    UN_INTENSITY,
+    UN_SHAPE,
+    WA_NONE,
+    WA_SHAPE,
+    IdentifyPrimaryObjects,
+)
+from cellprofiler.modules.identifysecondaryobjects import (
+    M_WATERSHED_I,
+    IdentifySecondaryObjects,
+)
+from cellprofiler.modules.maskimage import MaskImage
 from cellprofiler.modules.saveimages import (
     AXIS_T,
     BIT_DEPTH_16,
@@ -18,6 +39,16 @@ from cellprofiler.modules.saveimages import (
     WS_EVERY_CYCLE,
     SaveImages,
 )
+from cellprofiler.modules.threshold import (
+    O_BACKGROUND,
+    O_FOREGROUND,
+    O_THREE_CLASS,
+    O_TWO_CLASS,
+    RB_MEAN,
+    RB_SD,
+    TM_OTSU,
+    TS_GLOBAL,
+)
 from cellprofiler_core.constants.modules.load_data import (
     ABSOLUTE_FOLDER_NAME,
     DEFAULT_OUTPUT_FOLDER_NAME,
@@ -25,10 +56,10 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
-from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
+from starrynight.modules.cp_illum_calc.constants import CP_ILLUM_CALC_OUT_PATH_SUFFIX
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
     gen_image_hierarchy,
@@ -193,7 +224,6 @@ def gen_illum_apply_load_data_by_batch_plate(
     out_path: Path | CloudPath,
     path_mask: str | None,
     illum_path: Path | CloudPath | None = None,
-    for_sbs: bool = False,
 ) -> None:
     """Generate load data for illum calc pipeline.
 
@@ -207,26 +237,15 @@ def gen_illum_apply_load_data_by_batch_plate(
         Path prefix mask to use.
     illum_path : Path | CloudPath
         Path | CloudPath to illum directory.
-    for_sbs : str | None
-        Generate illums for SBS images.
 
     """
     # Construct illum path if not given
-    if illum_path is None and not for_sbs:
-        illum_path = index_path.parents[1].joinpath("illum/cp/illum_calc")
-    elif illum_path is None and for_sbs:
-        illum_path = index_path.parents[1].joinpath("illum/sbs/illum_calc")
+    if illum_path:
+        illum_path = index_path.parents[1].joinpath(CP_ILLUM_CALC_OUT_PATH_SUFFIX)
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    if not for_sbs:
-        images_df = df.filter(
-            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        )
-    else:
-        images_df = df.filter(
-            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        )
+    images_df = df.filter(pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True))
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
@@ -240,18 +259,10 @@ def gen_illum_apply_load_data_by_batch_plate(
     # Setup chunking and write loaddata for each batch/plate
     for batch in images_hierarchy_dict.keys():
         for plate in images_hierarchy_dict[batch].keys():
-            if not for_sbs:
-                # Write loaddata assuming no image nesting with cycles
-                write_loaddata_csv_by_batch_plate(
-                    images_df, out_path, illum_path, path_mask, batch, plate
-                )
-            else:
-                # Write loaddata assuming image nesting with cycles
-                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
-                for cycle in plate_cycles_list:
-                    write_loaddata_csv_by_batch_plate_cycle(
-                        images_df, out_path, illum_path, path_mask, batch, plate, cycle
-                    )
+            # Write loaddata assuming no image nesting with cycles
+            write_loaddata_csv_by_batch_plate(
+                images_df, out_path, illum_path, path_mask, batch, plate
+            )
 
 
 ###################################
@@ -260,7 +271,11 @@ def gen_illum_apply_load_data_by_batch_plate(
 
 
 def generate_illum_apply_pipeline(
-    pipeline: Pipeline, load_data_path: Path | CloudPath, for_sbs: bool = False
+    pipeline: Pipeline,
+    load_data_path: Path | CloudPath,
+    nuclei_channel: str,
+    cell_channel: str,
+    for_sbs: bool = False,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = [
@@ -288,12 +303,12 @@ def generate_illum_apply_pipeline(
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
+    # INFO: Create and configure required modules
+    # correct_illum_calculate -> save(corrected)
     correct_illum_apply = CorrectIlluminationApply()
     module_counter += 1
     correct_illum_apply.module_num = module_counter
 
-    # INFO: Create and configure required modules
-    # correct_illum_calculate -> save(corrected)
     for col in range(len(channel_list) - 1):  # One image is already added by default
         correct_illum_apply.add_image()
 
@@ -307,6 +322,9 @@ def generate_illum_apply_pipeline(
         # how illum function is applied
         correct_illum_apply.images[i].settings[3] = DOS_DIVIDE
     pipeline.add_module(correct_illum_apply)
+
+    if not for_sbs:
+        pass
 
     for col in channel_list:
         save_image = SaveImages()
@@ -334,6 +352,182 @@ def generate_illum_apply_pipeline(
         else:
             save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
         pipeline.add_module(save_image)
+
+    # only add this for painting
+    if not for_sbs:
+        # INFO: Create and configure required modules
+        # identifyPrimaryObject(confluent regions) -> mask -> identifyPrimaryObject(nuclei)
+        # -> identifySecondaryObject(cells) -> ExportToSpreadSheet
+
+        # Confluent regions identification
+        identify_primary_object_cfregions = IdentifyPrimaryObjects()
+        module_counter += 1
+        identify_primary_object_cfregions.module_num = module_counter
+        identify_primary_object_cfregions.x_name.value = f"Corr{nuclei_channel}"
+        identify_primary_object_cfregions.y_name.value = "ConfluentRegions"
+        identify_primary_object_cfregions.size_range.value = (500, 5000)
+        identify_primary_object_cfregions.exclude_size.value = True
+        identify_primary_object_cfregions.exclude_border_objects.value = False
+        identify_primary_object_cfregions.unclump_method.value = UN_INTENSITY
+        identify_primary_object_cfregions.watershed_method.value = WA_NONE
+        identify_primary_object_cfregions.automatic_smoothing.value = True
+        identify_primary_object_cfregions.smoothing_filter_size.value = 10
+        identify_primary_object_cfregions.automatic_suppression.value = True
+        identify_primary_object_cfregions.maxima_suppression_size.value = 7.0
+        identify_primary_object_cfregions.low_res_maxima.value = True
+        identify_primary_object_cfregions.fill_holes.value = FH_DECLUMP
+        identify_primary_object_cfregions.limit_choice.value = LIMIT_NONE
+        identify_primary_object_cfregions.maximum_object_count.value = 500
+        identify_primary_object_cfregions.want_plot_maxima.value = True
+        identify_primary_object_cfregions.maxima_color.value = DEFAULT_MAXIMA_COLOR
+        identify_primary_object_cfregions.use_advanced.value = True
+        identify_primary_object_cfregions.threshold_setting_version.value = 12
+        identify_primary_object_cfregions.threshold.threshold_scope.value = TS_GLOBAL
+        identify_primary_object_cfregions.threshold.global_operation.value = TM_OTSU
+        identify_primary_object_cfregions.threshold.local_operation.value = TM_OTSU
+        identify_primary_object_cfregions.threshold.threshold_smoothing_scale.value = (
+            2.0
+        )
+        identify_primary_object_cfregions.threshold.threshold_correction_factor.value = 0.5
+        identify_primary_object_cfregions.threshold.threshold_range.value = (0.0, 1.0)
+        identify_primary_object_cfregions.threshold.manual_threshold.value = 0.0
+        identify_primary_object_cfregions.threshold.thresholding_measurement.value = (
+            None
+        )
+        identify_primary_object_cfregions.threshold.two_class_otsu.value = O_TWO_CLASS
+        identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+        identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = 0.05
+        identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = 0.05
+        identify_primary_object_cfregions.threshold.averaging_method.value = RB_MEAN
+        identify_primary_object_cfregions.threshold.variance_method.value = RB_SD
+        identify_primary_object_cfregions.threshold.number_of_deviations.value = 2.0
+        identify_primary_object_cfregions.threshold.adaptive_window_size.value = 50
+        identify_primary_object_cfregions.threshold.log_transform.value = False
+        pipeline.add_module(identify_primary_object_cfregions)
+
+        # Masking confluentRegions in all channels
+        for ch in channel_list:
+            mask_image_cfregion = MaskImage()
+            module_counter += 1
+            mask_image_cfregion.module_num = module_counter
+            mask_image_cfregion.image_name.value = f"Corr{nuclei_channel}"
+            mask_image_cfregion.masked_image_name.value = f"Masked{ch}"
+            mask_image_cfregion.object_name.value = "ConfluentRegions"
+            mask_image_cfregion.invert_mask.value = True
+            pipeline.add_module(mask_image_cfregion)
+
+        # identify nuclei with dna channel
+        identify_primary_object_nuclei = IdentifyPrimaryObjects()
+        module_counter += 1
+        identify_primary_object_nuclei.module_num = module_counter
+        identify_primary_object_nuclei.x_name.value = f"Corr{nuclei_channel}"
+        identify_primary_object_nuclei.y_name.value = "Nuclei"
+        identify_primary_object_nuclei.size_range.value = (10, 80)
+        identify_primary_object_nuclei.exclude_size.value = True
+        identify_primary_object_nuclei.exclude_border_objects.value = True
+        identify_primary_object_nuclei.unclump_method.value = UN_SHAPE
+        identify_primary_object_nuclei.watershed_method.value = WA_SHAPE
+        identify_primary_object_nuclei.automatic_smoothing.value = False
+        identify_primary_object_nuclei.smoothing_filter_size.value = 8
+        identify_primary_object_nuclei.automatic_suppression.value = False
+        identify_primary_object_nuclei.maxima_suppression_size.value = 8.0
+        identify_primary_object_nuclei.low_res_maxima.value = True
+        identify_primary_object_nuclei.fill_holes.value = FH_DECLUMP
+        identify_primary_object_nuclei.limit_choice.value = LIMIT_NONE
+        identify_primary_object_nuclei.maximum_object_count.value = 500
+        identify_primary_object_nuclei.want_plot_maxima.value = False
+        identify_primary_object_nuclei.maxima_color.value = DEFAULT_MAXIMA_COLOR
+        identify_primary_object_nuclei.use_advanced.value = True
+        identify_primary_object_nuclei.threshold_setting_version.value = 12
+        identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
+        identify_primary_object_nuclei.threshold.global_operation.value = TM_OTSU
+        identify_primary_object_nuclei.threshold.local_operation.value = TM_OTSU
+        identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = (
+            1.3488
+        )
+        identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.0
+        identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
+        identify_primary_object_nuclei.threshold.manual_threshold.value = 0.0
+        identify_primary_object_nuclei.threshold.thresholding_measurement.value = None
+        identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
+        identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = (
+            O_FOREGROUND
+        )
+        identify_primary_object_nuclei.threshold.lower_outlier_fraction.value = 0.05
+        identify_primary_object_nuclei.threshold.upper_outlier_fraction.value = 0.05
+        identify_primary_object_nuclei.threshold.averaging_method.value = RB_MEAN
+        identify_primary_object_nuclei.threshold.variance_method.value = RB_SD
+        identify_primary_object_nuclei.threshold.number_of_deviations.value = 2.0
+        identify_primary_object_nuclei.threshold.adaptive_window_size.value = 50
+        identify_primary_object_nuclei.threshold.log_transform.value = False
+        pipeline.add_module(identify_primary_object_nuclei)
+
+        # identify cells
+        identify_secondary_object_cells = IdentifySecondaryObjects()
+        module_counter += 1
+        identify_secondary_object_cells.module_num = module_counter
+        identify_secondary_object_cells.x_name.value = "Nuclei"
+        identify_secondary_object_cells.y_name.value = "Cells"
+        identify_secondary_object_cells.method.value = M_WATERSHED_I
+        identify_secondary_object_cells.image_name.value = f"Masked{cell_channel}"
+        identify_secondary_object_cells.distance_to_dilate.value = 10
+        identify_secondary_object_cells.regularization_factor.value = 0.05
+        identify_secondary_object_cells.wants_discard_edge.value = False
+        identify_secondary_object_cells.wants_discard_primary.value = False
+        identify_secondary_object_cells.fill_holes.value = False
+        identify_secondary_object_cells.new_primary_objects_name.value = (
+            "FilteredNuclei"
+        )
+        identify_secondary_object_cells.threshold_setting_version.value = 12
+        identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
+        identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
+        identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
+        identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 2.0
+        identify_secondary_object_cells.threshold.threshold_correction_factor.value = (
+            0.7
+        )
+        identify_secondary_object_cells.threshold.threshold_range.value = (0.0005, 1.0)
+        identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
+        identify_secondary_object_cells.threshold.thresholding_measurement.value = None
+        identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
+        identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = (
+            O_BACKGROUND
+        )
+        identify_secondary_object_cells.threshold.lower_outlier_fraction.value = 0.05
+        identify_secondary_object_cells.threshold.upper_outlier_fraction.value = 0.05
+        identify_secondary_object_cells.threshold.averaging_method.value = RB_MEAN
+        identify_secondary_object_cells.threshold.variance_method.value = RB_SD
+        identify_secondary_object_cells.threshold.number_of_deviations.value = 2.0
+        identify_secondary_object_cells.threshold.adaptive_window_size.value = 50
+        identify_secondary_object_cells.threshold.log_transform.value = False
+        pipeline.add_module(identify_secondary_object_cells)
+
+        # export measurements to spreadsheet
+        export_measurements = ExportToSpreadsheet()
+        module_counter += 1
+        export_measurements.module_num = module_counter
+        export_measurements.delimiter.value = DELIMITER_COMMA
+        export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
+        export_measurements.wants_prefix.value = True
+        if not for_sbs:
+            export_measurements.prefix.value = "PreSegcheck_"
+        else:
+            export_measurements.prefix.value = "PreSegcheck_"
+        export_measurements.wants_overwrite_without_warning.value = False
+        export_measurements.add_metadata.value = False
+        export_measurements.add_filepath.value = False
+        export_measurements.nan_representation.value = NANS_AS_NANS
+        export_measurements.pick_columns.value = False
+        export_measurements.wants_aggregate_means.value = False
+        export_measurements.wants_aggregate_medians.value = False
+        export_measurements.wants_aggregate_std.value = False
+        export_measurements.wants_genepattern_file.value = False
+        export_measurements.how_to_specify_gene_name.value = GP_NAME_METADATA
+        export_measurements.gene_name_column.value = None
+        export_measurements.use_which_image_for_gene_name.value = None
+        export_measurements.wants_everything.value = True
+        pipeline.add_module(export_measurements)
+
     return pipeline
 
 

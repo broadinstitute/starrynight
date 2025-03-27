@@ -44,7 +44,6 @@ from cellprofiler_core.constants.modules.load_data import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cloudpathlib import AnyPath, CloudPath
-from numpy import exp
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
