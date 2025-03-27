@@ -9,7 +9,12 @@ from tqdm import tqdm
 from starrynight.utils.cellprofiler import CellProfilerContext
 
 
-def run_cp(uow_list: list[tuple[Path, Path]], out_dir: Path, job_idx: int = 0) -> None:
+def run_cp(
+    uow_list: list[tuple[Path, Path]],
+    out_dir: Path,
+    plugin_dir: Path | None = None,
+    job_idx: int = 0,
+) -> None:
     """Run cellprofiler for a list of unit-of-work (UOW) items.
 
     Parameters
@@ -18,6 +23,8 @@ def run_cp(uow_list: list[tuple[Path, Path]], out_dir: Path, job_idx: int = 0) -
         List of tuples containing the paths to the pipeline and load data files.
     out_dir : Path
         Output directory path.
+    plugin_dir : Path
+        Path to cellprofiler plugin directory.
     job_idx : int, optional
         Job index for tqdm progress bar (default is 0).
 
@@ -36,13 +43,17 @@ def run_cp(uow_list: list[tuple[Path, Path]], out_dir: Path, job_idx: int = 0) -
             out_dir=out_dir,
             loaddata_path=load_data_path,
             require_jvm=False,
+            plugin_dir=plugin_dir,
         ) as cpipe:
             cpipe.load(str(pipe_path.resolve()))
             cpipe.run()
 
 
 def run_cp_parallel(
-    uow_list: list[tuple[Path, Path]], out_dir: Path, jobs: int = 20
+    uow_list: list[tuple[Path, Path]],
+    out_dir: Path,
+    plugin_dir: Path | None = None,
+    jobs: int = 20,
 ) -> None:
     """Run cellprofiler on multiple unit-of-work (UOW) items in parallel.
 
@@ -52,6 +63,8 @@ def run_cp_parallel(
         List of tuples containing the paths to the pipeline and load data files.
     out_dir : Path
         Output directory path.
+    plugin_dir : Path
+        Path to cellprofiler plugin directory.
     jobs : int, optional
         Number of parallel jobs to use (default is 20).
 
@@ -67,5 +80,5 @@ def run_cp_parallel(
 
     """
     cellprofiler_core.utilities.java.start_java()
-    parallel(uow_list, run_cp, [out_dir], jobs)
+    parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
     cellprofiler_core.utilities.java.stop_java()
