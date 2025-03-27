@@ -1037,16 +1037,12 @@ def gen_preprocess_cppipe_by_batch_plate(
     # Get all the generated load data files by batch
     files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
 
-    # flatten all the levels to reduce nested loops
-    files_by_hierarchy_flatten = flatten_dict(files_by_hierarchy)
-    for hierarchy, files in files_by_hierarchy_flatten:
-        files_out_dir = out_dir.joinpath(*hierarchy)
-        files_out_dir.mkdir(exist_ok=True, parents=True)
-        for file in files:
-            with CellProfilerContext(out_dir=workspace_path) as cpipe:
-                cpipe = generate_preprocess_pipeline(
-                    cpipe, file, barcode_csv_path, nuclei_channel
-                )
-                filename = f"{file.stem}.cppipe"
-                with files_out_dir.joinpath(filename).open("w") as f:
-                    cpipe.dump(f)
+    # get one of the load data file for generating cppipe
+    _, files = flatten_dict(files_by_hierarchy)[0]
+    with CellProfilerContext(out_dir=workspace_path) as cpipe:
+        cpipe = generate_preprocess_pipeline(
+            cpipe, files[0], barcode_csv_path, nuclei_channel
+        )
+        filename = "preprocess_sbs.cppipe"
+        with out_dir.joinpath(filename).open("w") as f:
+            cpipe.dump(f)

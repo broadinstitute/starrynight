@@ -18,7 +18,7 @@ def invoke_cp(cppipe: str, loaddata: str, out: str, jobs: int, sbs: bool) -> Non
     Parameters
     ----------
     cppipe : str
-        cppipe dir path. Can be local or a cloud path.
+        cppipe file path. Can be local or a cloud path.
     loaddata : str
         loaddata dir path. Can be local or a cloud path.
     out : str
@@ -29,49 +29,15 @@ def invoke_cp(cppipe: str, loaddata: str, out: str, jobs: int, sbs: bool) -> Non
         Flag for treating as sbs images.
 
     """
-    batches = [batch.stem for batch in AnyPath(loaddata).glob("*") if batch.is_dir()]
+    # Check if cppipe path is not a dir
+    if AnyPath(cppipe).is_dir():
+        raise Exception("CPPIPE path is a dir, please provide path to a file.")
+
+    load_data_files = [file for file in AnyPath(loaddata).glob("**/*.csv")]
     uow = []
-    if not sbs:
-        cppipe_by_batch = {
-            batch: [file for file in AnyPath(cppipe).joinpath(batch).glob("*.cppipe")]
-            for batch in batches
-        }
-        for batch in batches:
-            for cfile in cppipe_by_batch[batch]:
-                uow.append(
-                    (
-                        cfile.resolve(),
-                        AnyPath(loaddata).joinpath(f"{batch}/{cfile.stem}.csv"),
-                    )
-                )
+    for file in load_data_files:
+        uow.append((cppipe.resolve(), file.resolve()))
 
-    else:
-        for batch in batches:
-            plates = [
-                plate.stem
-                for plate in AnyPath(loaddata).resolve().joinpath(batch).glob("*")
-                if plate.is_dir()
-            ]
-
-            for plate in plates:
-                cppipe_by_batch_plate = {
-                    f"{batch}_{plate}": [
-                        file
-                        for file in AnyPath(cppipe)
-                        .joinpath(batch, plate)
-                        .glob("*.cppipe")
-                    ]
-                    for batch in batches
-                }
-                for cfile in cppipe_by_batch_plate[f"{batch}_{plate}"]:
-                    uow.append(
-                        (
-                            cfile.resolve(),
-                            AnyPath(loaddata).joinpath(
-                                f"{batch}/{plate}/{cfile.stem}.csv"
-                            ),
-                        )
-                    )
     if len(uow) == 0:
         print("Found 0 cppipe files. No work to be done. Exiting...")
         return
