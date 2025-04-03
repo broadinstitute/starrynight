@@ -7,6 +7,10 @@ from starrynight.algorithms.illum_apply import (
     gen_illum_apply_cppipe_by_batch_plate,
     gen_illum_apply_load_data_by_batch_plate,
 )
+from starrynight.algorithms.illum_apply_sbs import (
+    gen_illum_apply_sbs_cppipe_by_batch_plate,
+    gen_illum_apply_sbs_load_data_by_batch_plate,
+)
 from starrynight.algorithms.illum_calc import (
     gen_illum_calc_load_data_by_batch_plate,
     gen_illum_calculate_cppipe_by_batch_plate,
@@ -93,17 +97,26 @@ def gen_illum_apply_load_data(
     """
     if illum is not None:
         illum = AnyPath(illum)
-    gen_illum_apply_load_data_by_batch_plate(
-        AnyPath(index), AnyPath(out), illum, path_mask, sbs
-    )
+    if not sbs:
+        gen_illum_apply_load_data_by_batch_plate(
+            AnyPath(index), AnyPath(out), illum, path_mask
+        )
+    else:
+        gen_illum_apply_sbs_load_data_by_batch_plate(
+            AnyPath(index), AnyPath(out), illum, path_mask
+        )
 
 
 @click.command(name="cppipe")
 @click.option("-l", "--loaddata", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
+@click.option("-n", "--nuclei", required=True)
+@click.option("-c", "--cell", default=None)
 @click.option("--sbs", is_flag=True, default=False)
-def gen_illum_apply_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) -> None:
+def gen_illum_apply_cppipe(
+    loaddata: str, out: str, workspace: str, nuclei: str, cell: str | None, sbs: bool
+) -> None:
     """Generate illum apply cppipe file.
 
     Parameters
@@ -114,13 +127,23 @@ def gen_illum_apply_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) -
         Path to output directory. Can be local or a cloud path.
     workspace : str
         Path to workspace directory. Can be local or a cloud path.
+    nuclei : str
+        Channel to use for nuceli
+    cell : str
+        Channel to use for cell
     sbs : str | Mask
         Flag for treating as sbs images.
 
     """
-    gen_illum_apply_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), sbs
-    )
+    if not sbs:
+        assert cell is not None
+        gen_illum_apply_cppipe_by_batch_plate(
+            AnyPath(loaddata), AnyPath(out), AnyPath(workspace), nuclei, cell
+        )
+    else:
+        gen_illum_apply_sbs_cppipe_by_batch_plate(
+            AnyPath(loaddata), AnyPath(out), AnyPath(workspace), nuclei
+        )
 
 
 @click.group()
