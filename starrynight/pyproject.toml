@@ -9,14 +9,14 @@ dependencies = [
   "pipecraft>=0.16",
   # "cytoskel~=0.2",
   "lark[interegular]>=1.2",
-  "cpgdata~=0.4",
+  "cpgdata~=0.5",
   "click~=8.1",
   "numpy<=1.26.4",
   "cloudpathlib[all]>=0.18,<1.0",
   "joblib<=1.4",
   "linkml>=1.8",
-  "marimo[sql]",
-  "pyimagej>=1.6"
+  "pyimagej>=1.6",
+  "marimo[sql]>=0.11",
 ]
 
 [project.optional-dependencies]
@@ -48,3 +48,6 @@ ignore = ["ANN101"]
 
 [tool.basedpyright]
 typeCheckingMode = "basic"
+
+[tool.marimo.runtime]
+watcher_on_save = "autorun"
