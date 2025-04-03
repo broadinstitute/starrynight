@@ -6,8 +6,6 @@ This document outlines requirements for a next-generation system for processing,
 
 Key:
 
-
-
 - starrynight roadmap: 🟦 planned 🟨 in progress 🔲 not planned
 - priority: ☑️ low ☑️☑️ medium ☑️☑️☑️ high
 
@@ -93,11 +91,8 @@ TODO:
     - Processing history for each image
     - Parameters used at each stage
     - Software versions and dependencies
-
-Implementation should prioritize critical tracking elements needed for reproducibility while balancing system performance.
-
+    - Note: Implementation should prioritize critical tracking elements needed for reproducibility while balancing system performance.
 - 🟨 ☑️☑️☑️: **Must handle large data volumes** (terabytes) with AWS backend.
-
 - 🟨 ☑️☑️☑️: **Must implement flexible path parsing and data organization**:
     - Standardized but configurable system for extracting metadata from file paths
     - Support for mapping from various microscope vendor file organizations to internal structure
@@ -113,7 +108,7 @@ Implementation should prioritize critical tracking elements needed for reproduci
     - Web-based UI must provide two abstraction levels:
         - Simplified interface for non-computational scientists with guided workflows and sensible defaults
         - Advanced interface with full parameter control for experienced users
-      - Command-line interface and programmatic API will target computational experts only, with comprehensive documentation"
+    - Command-line interface and programmatic API will target computational experts only, with comprehensive documentation
 - 🟨 ☑️☑️☑️: **Must integrate result visualization and quality control**:
     - Built-in visualization tools for reviewing processing results, including cell segmentation, barcode calling, and feature data
     - Integrated quality control metrics with contextual interpretations
@@ -129,7 +124,6 @@ Implementation should prioritize critical tracking elements needed for reproduci
 ### 3.2 Extensibility
 
 - 🟦 ☑️☑️☑️: **Must allow addition of new processing tools** beyond CellProfiler.
-
 - 🟦 ☑️: **Must support custom analysis modules** for specialized experiments.
 
 ### 3.3 Documentation and Support
