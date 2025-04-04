@@ -6,113 +6,147 @@ body { font-family: Arial, sans-serif; margin: 20px; }
 .added { color: green; }
 .removed { color: red; }
 .modified { color: blue; }
-table { border-collapse: collapse; width: 100%; }
+.note { background-color: #f8f8f8; padding: 10px; border-left: 5px solid #ccc; }
+.high-impact { background-color: #ffeeee; font-weight: bold; }
+.refactoring { background-color: #eeeeff; padding: 10px; margin-bottom: 10px; border-left: 5px solid #88f; }
+.version-change { background-color: #eeffee; padding: 5px; margin: 5px 0; border-left: 3px solid #8f8; }
+.metadata-change { background-color: #fff8e8; padding: 5px; margin: 5px 0; border-left: 3px solid #fc3; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
 table, th, td { border: 1px solid #ddd; }
 th, td { padding: 8px; text-align: left; }
 th { background-color: #f2f2f2; }
 tr:nth-child(even) { background-color: #f9f9f9; }
 h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+summary { cursor: pointer; font-weight: bold; padding: 5px; background-color: #f8f8f8; }
+details { margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
+details[open] summary { background-color: #e8e8e8; }
 </style>
 <title>CellProfiler Pipeline Diff</title>
 </head>
 <body>
 <h1>CellProfiler Pipeline Diff Report</h1>
+<div class='note'>
+<p><strong>Pipeline 1:</strong> 13 enabled modules, 3 disabled modules</p>
+<p><strong>Pipeline 2:</strong> 21 enabled modules, 1 disabled modules</p>
+<p><strong>Module change:</strong> 13 → 21 (+8)</p>
+</div>
+<h2>Detected Refactoring Patterns</h2>
+<div class='refactoring'>Channel ZO1 was likely replaced by Mito with similar processing workflow (100% similar)</div>
+<div class='refactoring'>Channel ZO1 was likely replaced by WGA with similar processing workflow (100% similar)</div>
+<div class='refactoring'>Channel ZO1 was likely replaced by ER with similar processing workflow (100% similar)</div>
 <h2>Channel Summary</h2>
-<p><span class='added'>Added channels:</span> Mito, ER</p>
-<p><span class='removed'>Removed channels:</span> ZEB1, ZO1</p>
-<p>Common channels: Phalloidin, DNA, WGA</p>
+<p><span class='added'>Added channels:</span> Mito, WGA, ER</p>
+<p><span class='removed'>Removed channels:</span> ZO1</p>
+<p>Common channels: Phalloidin, DNA</p>
 <h2>Channel Processing Changes</h2>
 <table>
 <tr><th>Channel</th><th>Status</th></tr>
-<tr><td>DNA</td><td>changed parameters (19 differences)</td></tr>
-<tr><td>ER</td><td>added</td></tr>
-<tr><td>Mito</td><td>added</td></tr>
-<tr><td>Phalloidin</td><td>changed parameters (19 differences)</td></tr>
-<tr><td>WGA</td><td>added</td></tr>
-<tr><td>ZO1</td><td>removed</td></tr>
+<tr><td>DNA</td><td class='modified'>changed parameters (10 differences)</td></tr>
+<tr><td>ER</td><td class='added'>added</td></tr>
+<tr><td>Mito</td><td class='added'>added</td></tr>
+<tr><td>Phalloidin</td><td class='modified'>changed parameters (10 differences)</td></tr>
+<tr><td>WGA</td><td class='added'>added</td></tr>
+<tr><td>ZO1</td><td class='removed'>removed</td></tr>
 </table>
 <h2>Added Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr><td>5</td><td>Resize</td><td>ER</td><td>Name the output image: DownsampledER, Select the input image: OrigER</td></tr>
-<tr><td>6</td><td>CorrectIlluminationCalculate</td><td>ER</td><td>Name the output image: IllumER, Select the input image: DownsampledER</td></tr>
-<tr><td>7</td><td>Resize</td><td>ER</td><td>Name the output image: UpsampledIllumER, Select the input image: IllumER</td></tr>
-<tr><td>11</td><td>Resize</td><td>Mito</td><td>Select the input image: OrigMito, Name the output image: DownsampledMito</td></tr>
-<tr><td>12</td><td>CorrectIlluminationCalculate</td><td>Mito</td><td>Name the output image: IllumMito, Select the input image: DownsampledMito</td></tr>
-<tr><td>13</td><td>Resize</td><td>Mito</td><td>Select the input image: IllumMito, Name the output image: UpsampledIllumMito</td></tr>
-<tr><td>14</td><td>Resize</td><td>WGA</td><td>Select the input image: OrigWGA, Name the output image: DownsampledWGA</td></tr>
-<tr><td>15</td><td>CorrectIlluminationCalculate</td><td>WGA</td><td>Select the input image: DownsampledWGA, Name the output image: IllumWGA</td></tr>
-<tr><td>16</td><td>Resize</td><td>WGA</td><td>Name the output image: UpsampledIllumWGA, Select the input image: IllumWGA</td></tr>
+<tr class='added'><td>11</td><td>Resize</td><td>Mito</td><td>Select the input image: OrigMito, Name the output image: DownsampledMito</td></tr>
+<tr class='added'><td>12</td><td>CorrectIlluminationCalculate</td><td>Mito</td><td>Name the output image: IllumMito, Select the input image: DownsampledMito</td></tr>
+<tr class='added'><td>13</td><td>Resize</td><td>Mito</td><td>Select the input image: IllumMito, Name the output image: UpsampledIllumMito</td></tr>
+<tr class='added'><td>14</td><td>Resize</td><td>WGA</td><td>Select the input image: OrigWGA, Name the output image: DownsampledWGA</td></tr>
+<tr class='added'><td>15</td><td>CorrectIlluminationCalculate</td><td>WGA</td><td>Select the input image: DownsampledWGA, Name the output image: IllumWGA</td></tr>
+<tr class='added'><td>16</td><td>Resize</td><td>WGA</td><td>Name the output image: UpsampledIllumWGA, Select the input image: IllumWGA</td></tr>
+<tr class='added'><td>19</td><td>SaveImages</td><td>ER</td><td>Select the image to save: UpsampledIllumER</td></tr>
+<tr class='added'><td>20</td><td>SaveImages</td><td>Mito</td><td>Select the image to save: UpsampledIllumMito</td></tr>
+<tr class='added'><td>21</td><td>SaveImages</td><td>WGA</td><td>Select the image to save: UpsampledIllumWGA</td></tr>
 </table>
 <h2>Removed Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr><td>8</td><td>Resize</td><td>ZO1</td><td>Select the input image: OrigZO1, Name the output image: DownsampledZO1</td></tr>
-<tr><td>9</td><td>CorrectIlluminationCalculate</td><td>ZO1</td><td>Select the input image: DownsampledZO1, Name the output image: IllumZO1</td></tr>
-<tr><td>10</td><td>Resize</td><td>ZO1</td><td>Select the input image: IllumZO1, Name the output image: UpsampledIllumZO1</td></tr>
+<tr class='removed'><td>14</td><td>SaveImages</td><td>ZO1</td><td>Select the image to save: UpsampledIllumZO1</td></tr>
 </table>
 <h2>Modified Modules</h2>
-<h3>SaveImages (Module 15 → 21, Channel: WGA)</h3>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Save with lossless compression?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
-</table>
-<h3>LoadData (Module 1 → 1, Channel: unknown)</h3>
+<details>
+<summary>LoadData (Module 1 → 1, Channel: unknown)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
 <tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Input Folder sub-folder|Desktop/load_data_csv/BATCH/Plate3</td><td>Default Input Folder|Desktop/PCP_lambda/load_data_csv/20200211_6W_CP151A2</td></tr>
 <tr><td>Name of the file</td><td class='modified'>Modified</td><td>load_data_pipeline1.csv</td><td>load_data_pipeline1_local.csv</td></tr>
 </table>
-<h3>Resize (Module 7 → 10, Channel: Phalloidin)</h3>
+</details>
+<details>
+<summary>Resize (Module 2 → 2, Channel: DNA, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>4</td><td>-</td></tr>
-<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>4</td></tr>
-<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
-<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
-<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
-<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>4</td><td>-</td></tr>
-<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
 </table>
-<h3>Resize (Module 4 → 4, Channel: DNA)</h3>
+</details>
+<details>
+<summary>Resize (Module 4 → 4, Channel: DNA, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>4</td><td>-</td></tr>
-<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>4</td></tr>
-<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
-<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
-<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
-<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>4</td><td>-</td></tr>
-<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
 </table>
-<h3>Resize (Module 5 → 8, Channel: Phalloidin)</h3>
+</details>
+<details>
+<summary>Resize (Module 5 → 8, Channel: Phalloidin, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>0.25</td><td>-</td></tr>
-<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>0.25</td></tr>
-<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
-<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
-<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
-<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>0.25</td><td>-</td></tr>
-<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
 </table>
-<h3>Resize (Module 2 → 2, Channel: DNA)</h3>
+</details>
+<details>
+<summary>Resize (Module 7 → 10, Channel: Phalloidin, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>0.25</td><td>-</td></tr>
-<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>0.25</td></tr>
-<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
-<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
-<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
-<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>0.25</td><td>-</td></tr>
-<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
-<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
 </table>
+</details>
+<details>
+<summary>Resize (Module 8 → 5, Channel: ZO1, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select the input image</td><td class='modified'>Modified</td><td>OrigZO1</td><td>OrigER</td></tr>
+<tr><td>Name the output image</td><td class='modified'>Modified</td><td>DownsampledZO1</td><td>DownsampledER</td></tr>
+</table>
+</details>
+<details>
+<summary>CorrectIlluminationCalculate (Module 9 → 6, Channel: ZO1)</summary>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select the input image</td><td class='modified'>Modified</td><td>DownsampledZO1</td><td>DownsampledER</td></tr>
+<tr><td>Name the output image</td><td class='modified'>Modified</td><td>IllumZO1</td><td>IllumER</td></tr>
+</table>
+</details>
+<details>
+<summary>Resize (Module 10 → 7, Channel: ZO1, Revision: 5 → 4)</summary>
+<div class='version-change'>Updated from separate X/Y/Z resize factors to single resize factor</div>
+<div class='version-change'>Updated from X/Y/Z dimensions to simpler Width/Height parameters</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select the input image</td><td class='modified'>Modified</td><td>IllumZO1</td><td>IllumER</td></tr>
+<tr><td>Name the output image</td><td class='modified'>Modified</td><td>UpsampledIllumZO1</td><td>UpsampledIllumER</td></tr>
+</table>
+</details>
+<details>
+<summary>SaveImages (Module 11 → 17, Channel: Phalloidin, Revision: 16 → 15)</summary>
+<div class='version-change'>Removed deprecated compression parameter</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+</table>
+</details>
+<details>
+<summary>SaveImages (Module 12 → 18, Channel: DNA, Revision: 16 → 15)</summary>
+<div class='version-change'>Removed deprecated compression parameter</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+</table>
+</details>
 </body></html>

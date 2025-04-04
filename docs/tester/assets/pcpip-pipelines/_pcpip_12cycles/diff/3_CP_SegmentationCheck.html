@@ -6,71 +6,117 @@ body { font-family: Arial, sans-serif; margin: 20px; }
 .added { color: green; }
 .removed { color: red; }
 .modified { color: blue; }
-table { border-collapse: collapse; width: 100%; }
+.note { background-color: #f8f8f8; padding: 10px; border-left: 5px solid #ccc; }
+.high-impact { background-color: #ffeeee; font-weight: bold; }
+.refactoring { background-color: #eeeeff; padding: 10px; margin-bottom: 10px; border-left: 5px solid #88f; }
+.version-change { background-color: #eeffee; padding: 5px; margin: 5px 0; border-left: 3px solid #8f8; }
+.metadata-change { background-color: #fff8e8; padding: 5px; margin: 5px 0; border-left: 3px solid #fc3; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
 table, th, td { border: 1px solid #ddd; }
 th, td { padding: 8px; text-align: left; }
 th { background-color: #f2f2f2; }
 tr:nth-child(even) { background-color: #f9f9f9; }
 h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+summary { cursor: pointer; font-weight: bold; padding: 5px; background-color: #f8f8f8; }
+details { margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
+details[open] summary { background-color: #e8e8e8; }
 </style>
 <title>CellProfiler Pipeline Diff</title>
 </head>
 <body>
 <h1>CellProfiler Pipeline Diff Report</h1>
+<div class='note'>
+<p><strong>Pipeline 1:</strong> 16 enabled modules, 1 disabled modules</p>
+<p><strong>Pipeline 2:</strong> 12 enabled modules, 1 disabled modules</p>
+<p><strong>Module change:</strong> 16 → 12 (-4)</p>
+</div>
 <h2>Channel Summary</h2>
 <p><span class='removed'>Removed channels:</span> ZO1</p>
 <p>Common channels: Phalloidin, DNA, Overlay</p>
 <h2>Channel Processing Changes</h2>
 <table>
 <tr><th>Channel</th><th>Status</th></tr>
-<tr><td>DNA</td><td>changed parameters (2 differences)</td></tr>
-<tr><td>Overlay</td><td>changed parameters (2 differences)</td></tr>
-<tr><td>Phalloidin</td><td>changed parameters (1 differences)</td></tr>
-<tr><td>ZO1</td><td>removed</td></tr>
+<tr><td>DNA</td><td class='modified'>changed parameters (2 differences)</td></tr>
+<tr><td>Overlay</td><td class='modified'>changed parameters (2 differences)</td></tr>
+<tr><td>Phalloidin</td><td class='modified'>changed parameters (1 differences)</td></tr>
+<tr><td>ZO1</td><td class='removed'>removed</td></tr>
 </table>
 <h2>Added Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr><td>4</td><td>MaskImage</td><td>Phalloidin</td><td>Select the input image: Phalloidin, Name the output image: MaskedAGP</td></tr>
-<tr><td>5</td><td>IdentifyPrimaryObjects</td><td>unknown</td><td>Select the input image: MaskedDAPI</td></tr>
-<tr><td>6</td><td>IdentifySecondaryObjects</td><td>unknown</td><td>Select the input image: MaskedAGP</td></tr>
+<tr class='added'><td>5</td><td>IdentifyPrimaryObjects</td><td>unknown</td><td>Select the input image: MaskedDAPI</td></tr>
 </table>
 <h2>Removed Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr><td>4</td><td>MaskImage</td><td>Phalloidin</td><td>Select the input image: Phalloidin, Name the output image: MaskedPhalloidin</td></tr>
-<tr><td>5</td><td>MaskImage</td><td>ZO1</td><td>Name the output image: MaskedZO1, Select the input image: ZO1</td></tr>
-<tr><td>6</td><td>RunCellpose</td><td>unknown</td><td>Select the input image: MaskedDAPI</td></tr>
-<tr><td>8</td><td>IdentifySecondaryObjects</td><td>ZO1</td><td>Select the input image: MaskedZO1</td></tr>
-<tr><td>11</td><td>RescaleIntensity</td><td>ZO1</td><td>Name the output image: RescaleZO1forvis, Select the input image: ZO1</td></tr>
-<tr><td>13</td><td>RescaleIntensity</td><td>unknown</td><td>Select the input image: ColorImage, Name the output image: RescaleIntensity</td></tr>
+<tr class='removed'><td>5</td><td>MaskImage</td><td>ZO1</td><td>Select the input image: ZO1</td></tr>
+<tr class='removed'><td>6</td><td>RunCellpose</td><td>unknown</td><td>Select the input image: MaskedDAPI</td></tr>
+<tr class='removed'><td>11</td><td>RescaleIntensity</td><td>ZO1</td><td>Name the output image: RescaleZO1forvis, Select the input image: ZO1</td></tr>
+<tr class='removed'><td>13</td><td>RescaleIntensity</td><td>unknown</td><td>Select the input image: ColorImage, Name the output image: RescaleIntensity</td></tr>
 </table>
 <h2>Modified Modules</h2>
-<h3>IdentifyPrimaryObjects (Module 2 → 2, Channel: DNA)</h3>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
-<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
-</table>
-<h3>SaveImages (Module 15 → 11, Channel: Overlay)</h3>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Save with lossless compression?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
-</table>
-<h3>LoadData (Module 1 → 1, Channel: unknown)</h3>
+<details>
+<summary>LoadData (Module 1 → 1, Channel: unknown)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
 <tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Input Folder sub-folder|Downloads</td><td>Default Input Folder|</td></tr>
 <tr><td>Name of the file</td><td class='modified'>Modified</td><td>load_data_pipeline3.csv</td><td>load_data_pipeline3_local.csv</td></tr>
 </table>
-<h3>OverlayOutlines (Module 14 → 10, Channel: Overlay)</h3>
+</details>
+<details>
+<summary>IdentifyPrimaryObjects (Module 2 → 2, Channel: DNA, Revision: 15 → 14)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Select image on which to display outlines</td><td class='modified'>Modified</td><td>RescaleIntensity</td><td>ColorImage</td></tr>
+<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
 </table>
-<h3>GrayToColor (Module 12 → 9, Channel: unknown)</h3>
+</details>
+<details>
+<summary>MaskImage (Module 4 → 4, Channel: Phalloidin)</summary>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Name the output image</td><td class='modified'>Modified</td><td>MaskedPhalloidin</td><td>MaskedAGP</td></tr>
+</table>
+</details>
+<details>
+<summary>IdentifySecondaryObjects (Module 8 → 6, Channel: ZO1)</summary>
+<div style='margin: 10px 0;'>
+<p><span class='added'>+ Added to Lower and upper bounds on threshold:</span> .000001, 1</p>
+<p><span class='removed'>- Removed from Lower and upper bounds on threshold:</span> 0.0, 1.0</p>
+</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr class='high-impact'><td>Thresholding method</td><td class='modified'>Modified</td><td>Minimum Cross-Entropy</td><td>Otsu</td></tr>
+<tr class='high-impact'><td>Lower and upper bounds on threshold</td><td class='modified'>Modified</td><td>0.0,1.0</td><td>.000001,1</td></tr>
+<tr class='high-impact'><td>Threshold correction factor</td><td class='modified'>Modified</td><td>.5</td><td>0.7</td></tr>
+<tr class='high-impact'><td>Threshold smoothing scale</td><td class='modified'>Modified</td><td>5</td><td>2</td></tr>
+<tr class='high-impact'><td>Assign pixels in the middle intensity class to the foreground or the background?</td><td class='modified'>Modified</td><td>Foreground</td><td>Background</td></tr>
+<tr class='high-impact'><td>Select the method to identify the secondary objects</td><td class='modified'>Modified</td><td>Propagation</td><td>Watershed - Image</td></tr>
+<tr><td>Fill holes in identified objects?</td><td class='modified'>Modified</td><td>Yes</td><td>No</td></tr>
+<tr><td>Select the input objects</td><td class='modified'>Modified</td><td>PreCells</td><td>Nuclei</td></tr>
+<tr><td>Select the input image</td><td class='modified'>Modified</td><td>MaskedZO1</td><td>MaskedAGP</td></tr>
+<tr><td>Regularization factor</td><td class='modified'>Modified</td><td>0</td><td>0.0001</td></tr>
+</table>
+</details>
+<details>
+<summary>GrayToColor (Module 12 → 9, Channel: unknown)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
 <tr><td>Select the image to be colored red</td><td class='modified'>Modified</td><td>RescaleZO1forvis</td><td>RescaleDAPIPaintingForVis</td></tr>
 </table>
+</details>
+<details>
+<summary>OverlayOutlines (Module 14 → 10, Channel: Overlay)</summary>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select image on which to display outlines</td><td class='modified'>Modified</td><td>RescaleIntensity</td><td>ColorImage</td></tr>
+</table>
+</details>
+<details>
+<summary>SaveImages (Module 15 → 11, Channel: Overlay, Revision: 16 → 15)</summary>
+<div class='version-change'>Removed deprecated compression parameter</div>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+</table>
+</details>
 </body></html>
