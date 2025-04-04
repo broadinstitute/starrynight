@@ -43,12 +43,15 @@ def parse_cppipe(filepath):
     return {"header": header, "modules": modules}
 
 
-def extract_channels(pipeline):
+def extract_channels(pipeline, enabled_only=True):
     """Identify channels used in the pipeline"""
     channels = set()
 
     # Look for channel patterns in image names
     for module in pipeline["modules"]:
+        if enabled_only and not module["enabled"]:
+            continue
+
         for param, value in module["parameters"].items():
             if param in [
                 "Select the input image",
@@ -131,9 +134,9 @@ def compare_pipelines(pipeline1, pipeline2, enabled_only=True):
         "channel_processing": {},
     }
 
-    # Extract channels
-    channels1 = extract_channels(pipeline1)
-    channels2 = extract_channels(pipeline2)
+    # Extract channels (respecting enabled_only flag)
+    channels1 = extract_channels(pipeline1, enabled_only)
+    channels2 = extract_channels(pipeline2, enabled_only)
 
     result["channels"]["added"] = list(channels2 - channels1)
     result["channels"]["removed"] = list(channels1 - channels2)
