@@ -38,34 +38,6 @@ ImageMath:[module_num:2|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the third image:Cycle03_A
     Multiply the third image by:1.0
     Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_A
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_A
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_A
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_A
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_A
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_A
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_A
-    Multiply the tenth image by:1.0
-    Measurement:
 
 ImageMath:[module_num:3|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Operation:Average
@@ -88,34 +60,6 @@ ImageMath:[module_num:3|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Image or measurement?:Image
     Select the third image:Cycle03_C
     Multiply the third image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_C
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_C
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_C
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_C
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_C
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_C
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_C
-    Multiply the tenth image by:1.0
     Measurement:
 
 ImageMath:[module_num:4|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
@@ -140,34 +84,6 @@ ImageMath:[module_num:4|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Select the third image:Cycle03_G
     Multiply the third image by:1.0
     Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_G
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_G
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_G
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_G
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_G
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_G
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_G
-    Multiply the tenth image by:1.0
-    Measurement:
 
 ImageMath:[module_num:5|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Operation:Average
@@ -190,34 +106,6 @@ ImageMath:[module_num:5|svn_version:'Unknown'|variable_revision_number:5|show_wi
     Image or measurement?:Image
     Select the third image:Cycle03_T
     Multiply the third image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_T
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_T
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_T
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_T
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_T
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_T
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_T
-    Multiply the tenth image by:1.0
     Measurement:
 
 CorrectIlluminationCalculate:[module_num:6|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
@@ -333,34 +221,6 @@ CorrectIlluminationApply:[module_num:10|svn_version:'Unknown'|variable_revision_
     Name the output image:Cycle03_A_BackSub
     Select the illumination function:IllumMeanA
     Select how the illumination function is applied:Subtract
-    Select the input image:Cycle04_A
-    Name the output image:Cycle04_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle05_A
-    Name the output image:Cycle05_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle06_A
-    Name the output image:Cycle06_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle07_A
-    Name the output image:Cycle07_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle08_A
-    Name the output image:Cycle08_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle09_A
-    Name the output image:Cycle09_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle10_A
-    Name the output image:Cycle10_A_BackSub
-    Select the illumination function:IllumMeanA
-    Select how the illumination function is applied:Subtract
     Set output image values less than 0 equal to 0?:Yes
     Set output image values greater than 1 equal to 1?:Yes
 
@@ -375,34 +235,6 @@ CorrectIlluminationApply:[module_num:11|svn_version:'Unknown'|variable_revision_
     Select how the illumination function is applied:Subtract
     Select the input image:Cycle03_C
     Name the output image:Cycle03_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle04_C
-    Name the output image:Cycle04_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle05_C
-    Name the output image:Cycle05_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle06_C
-    Name the output image:Cycle06_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle07_C
-    Name the output image:Cycle07_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle08_C
-    Name the output image:Cycle08_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle09_C
-    Name the output image:Cycle09_C_BackSub
-    Select the illumination function:IllumMeanC
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle10_C
-    Name the output image:Cycle10_C_BackSub
     Select the illumination function:IllumMeanC
     Select how the illumination function is applied:Subtract
     Set output image values less than 0 equal to 0?:Yes
@@ -421,34 +253,6 @@ CorrectIlluminationApply:[module_num:12|svn_version:'Unknown'|variable_revision_
     Name the output image:Cycle03_G_BackSub
     Select the illumination function:IllumMeanG
     Select how the illumination function is applied:Subtract
-    Select the input image:Cycle04_G
-    Name the output image:Cycle04_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle05_G
-    Name the output image:Cycle05_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle06_G
-    Name the output image:Cycle06_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle07_G
-    Name the output image:Cycle07_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle08_G
-    Name the output image:Cycle08_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle09_G
-    Name the output image:Cycle09_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle10_G
-    Name the output image:Cycle10_G_BackSub
-    Select the illumination function:IllumMeanG
-    Select how the illumination function is applied:Subtract
     Set output image values less than 0 equal to 0?:Yes
     Set output image values greater than 1 equal to 1?:Yes
 
@@ -463,34 +267,6 @@ CorrectIlluminationApply:[module_num:13|svn_version:'Unknown'|variable_revision_
     Select how the illumination function is applied:Subtract
     Select the input image:Cycle03_T
     Name the output image:Cycle03_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle04_T
-    Name the output image:Cycle04_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle05_T
-    Name the output image:Cycle05_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle06_T
-    Name the output image:Cycle06_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle07_T
-    Name the output image:Cycle07_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle08_T
-    Name the output image:Cycle08_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle09_T
-    Name the output image:Cycle09_T_BackSub
-    Select the illumination function:IllumMeanT
-    Select how the illumination function is applied:Subtract
-    Select the input image:Cycle10_T
-    Name the output image:Cycle10_T_BackSub
     Select the illumination function:IllumMeanT
     Select how the illumination function is applied:Subtract
     Set output image values less than 0 equal to 0?:Yes
@@ -518,34 +294,6 @@ ImageMath:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_w
     Select the third image:Cycle03_A
     Multiply the third image by:1.0
     Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_A
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_A
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_A
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_A
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_A
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_A
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_A
-    Multiply the tenth image by:1.0
-    Measurement:
 
 ImageMath:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Operation:Standard Deviation
@@ -568,34 +316,6 @@ ImageMath:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_w
     Image or measurement?:Image
     Select the third image:Cycle03_C
     Multiply the third image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_C
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_C
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_C
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_C
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_C
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_C
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_C
-    Multiply the tenth image by:1.0
     Measurement:
 
 ImageMath:[module_num:16|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
@@ -620,34 +340,6 @@ ImageMath:[module_num:16|svn_version:'Unknown'|variable_revision_number:5|show_w
     Select the third image:Cycle03_G
     Multiply the third image by:1.0
     Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_G
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_G
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_G
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_G
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_G
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_G
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_G
-    Multiply the tenth image by:1.0
-    Measurement:
 
 ImageMath:[module_num:17|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Operation:Standard Deviation
@@ -670,34 +362,6 @@ ImageMath:[module_num:17|svn_version:'Unknown'|variable_revision_number:5|show_w
     Image or measurement?:Image
     Select the third image:Cycle03_T
     Multiply the third image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fourth image:Cycle04_T
-    Multiply the fourth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the fifth image:Cycle05_T
-    Multiply the fifth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the sixth image:Cycle06_T
-    Multiply the sixth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the seventh image:Cycle07_T
-    Multiply the seventh image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the eighth image:Cycle08_T
-    Multiply the eighth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the ninth image:Cycle09_T
-    Multiply the ninth image by:1.0
-    Measurement:
-    Image or measurement?:Image
-    Select the tenth image:Cycle10_T
-    Multiply the tenth image by:1.0
     Measurement:
 
 ImageMath:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
@@ -782,31 +446,43 @@ IdentifyPrimaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_nu
     # of deviations:2.0
     Thresholding method:Otsu
 
-RunCellpose:[module_num:21|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+IdentifyPrimaryObjects:[module_num:21|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the input image:Cycle01_DAPI
-    Rescale images before running Cellpose:Yes
-    Run CellPose in docker or local python environment:Python
-    Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:0.1
-    Expected object diameter:20
-    Detection mode:nuclei
-    Name the output object:Nuclei
-    Use GPU:No
-    Use averaging:No
-    Supply nuclei image as well?:No
-    Select the nuclei image:None
-    Save probability image?:No
-    Name the probability image:Probabilities
-    Location of the pre-trained model file:Elsewhere...|
-    Pre-trained model file name:cyto_0
-    Flow threshold:0.4
-    Cell probability threshold:0.0
-    GPU memory share for each worker:0.1
-    Stitch Threshold:0.0
-    Use 3D:No
-    Minimum size:15
-    Use Omnipose for mask reconstruction:No
-    Invert images:No
-    Remove objects that are touching the edge?:Yes
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:8
+    Suppress local maxima that are closer than this minimum allowed distance:8
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Display accepted local maxima?:No
+    Select maxima color:Blue
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.4
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
 
 IdentifySecondaryObjects:[module_num:22|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select the input objects:Nuclei
@@ -950,7 +626,7 @@ FilterObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:10|s
     Allow fuzzy feature matching?:No
 
 CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
-    Hidden:40
+    Hidden:12
     Hidden:1
     Select an image to measure:Cycle01_A_BackSub
     What compensation class does this image belong to?:1
@@ -961,21 +637,6 @@ CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1
     Select an image to measure:Cycle03_A_BackSub
     What compensation class does this image belong to?:1
     Select an output image name:CorrCycle03_A
-    Select an image to measure:Cycle04_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle04_A
-    Select an image to measure:Cycle05_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle05_A
-    Select an image to measure:Cycle06_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle06_A
-    Select an image to measure:Cycle07_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle07_A
-    Select an image to measure:Cycle08_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle08_A
     Select an image to measure:Cycle01_C_BackSub
     What compensation class does this image belong to?:2
     Select an output image name:CorrCycle01_C
@@ -985,21 +646,6 @@ CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1
     Select an image to measure:Cycle03_C_BackSub
     What compensation class does this image belong to?:2
     Select an output image name:CorrCycle03_C
-    Select an image to measure:Cycle04_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle04_C
-    Select an image to measure:Cycle05_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle05_C
-    Select an image to measure:Cycle06_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle06_C
-    Select an image to measure:Cycle07_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle07_C
-    Select an image to measure:Cycle08_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle08_C
     Select an image to measure:Cycle01_G_BackSub
     What compensation class does this image belong to?:3
     Select an output image name:CorrCycle01_G
@@ -1009,21 +655,6 @@ CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1
     Select an image to measure:Cycle03_G_BackSub
     What compensation class does this image belong to?:3
     Select an output image name:CorrCycle03_G
-    Select an image to measure:Cycle04_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle04_G
-    Select an image to measure:Cycle05_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle05_G
-    Select an image to measure:Cycle06_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle06_G
-    Select an image to measure:Cycle07_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle07_G
-    Select an image to measure:Cycle08_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle08_G
     Select an image to measure:Cycle01_T_BackSub
     What compensation class does this image belong to?:4
     Select an output image name:CorrCycle01_T
@@ -1033,45 +664,6 @@ CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1
     Select an image to measure:Cycle03_T_BackSub
     What compensation class does this image belong to?:4
     Select an output image name:CorrCycle03_T
-    Select an image to measure:Cycle04_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle04_T
-    Select an image to measure:Cycle05_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle05_T
-    Select an image to measure:Cycle06_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle06_T
-    Select an image to measure:Cycle07_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle07_T
-    Select an image to measure:Cycle08_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle08_T
-    Select an image to measure:Cycle09_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle09_A
-    Select an image to measure:Cycle09_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle09_C
-    Select an image to measure:Cycle09_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle09_G
-    Select an image to measure:Cycle09_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle09_T
-    Select an image to measure:Cycle10_A_BackSub
-    What compensation class does this image belong to?:1
-    Select an output image name:CorrCycle10_A
-    Select an image to measure:Cycle10_C_BackSub
-    What compensation class does this image belong to?:2
-    Select an output image name:CorrCycle10_C
-    Select an image to measure:Cycle10_G_BackSub
-    What compensation class does this image belong to?:3
-    Select an output image name:CorrCycle10_G
-    Select an image to measure:Cycle10_T_BackSub
-    What compensation class does this image belong to?:4
-    Select an output image name:CorrCycle10_T
     Select where to perform color compensation:Within objects
     Select an object to perform compensation within:Foci
     Should individual images be rescaled 0-1 before compensating pre-masking or on unmasked images?:No
@@ -1090,11 +682,11 @@ CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1
     What size radius should be used for the DoG low sigma?:1
 
 MeasureObjectIntensity:[module_num:30|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T, CorrCycle04_A, CorrCycle04_C, CorrCycle04_G, CorrCycle04_T, CorrCycle05_A, CorrCycle05_C, CorrCycle05_G, CorrCycle05_T, CorrCycle06_A, CorrCycle06_C, CorrCycle06_G, CorrCycle06_T, CorrCycle07_A, CorrCycle07_C, CorrCycle07_G, CorrCycle07_T, CorrCycle08_A, CorrCycle08_C, CorrCycle08_G, CorrCycle08_T, CorrCycle09_A, CorrCycle09_C, CorrCycle09_G, CorrCycle09_T, CorrCycle10_A, CorrCycle10_C, CorrCycle10_G, CorrCycle10_T
+    Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T
     Select objects to measure:Foci
 
 CallBarcodes:[module_num:31|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Number of cycles:10
+    Number of cycles:3
     Input object name:Foci
     Select one of the measures from Cycle 1 to use for calling:Intensity_MaxIntensity_CorrCycle01_A
     Input data file location:Default Input Folder|Desktop\metadata\20200211_6W_CP151A1
@@ -1487,566 +1079,6 @@ SaveImages:[module_num:48|svn_version:'Unknown'|variable_revision_number:16|show
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cycle03_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:49|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle04_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle04_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle04_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:50|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle04_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle04_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle04_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:51|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle04_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle04_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle04_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:52|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle04_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle04_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle04_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:53|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle05_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle05_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle05_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:54|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle05_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle05_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle05_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:55|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle05_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle05_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle05_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:56|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle05_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle05_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle05_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:57|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle06_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle06_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle06_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:58|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle06_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle06_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle06_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:59|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle06_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle06_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle06_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:60|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle06_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle06_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle06_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:61|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle07_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle07_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle07_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:62|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle07_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle07_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle07_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:63|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle07_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle07_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle07_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle07_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle07_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle07_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:65|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle08_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle08_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle08_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:66|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle08_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle08_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle08_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:67|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle08_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle08_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle08_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:68|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle08_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle08_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle08_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:69|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle09_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle09_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle09_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:70|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle09_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle09_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle09_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:71|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle09_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle09_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle09_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:72|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle09_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle09_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle09_T
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:73|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle10_A
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle10_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_A
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle10_A
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle10_C
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle10_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_C
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle10_C
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:75|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle10_G
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle10_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_G
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle10_G
-    Saved file format:tiff
-    Output file location:Default Output Folder|Cycle01
-    Image bit depth:16-bit integer
-    Overwrite existing files without warning?:No
-    When to save:Every cycle
-    Record the file and path information to the saved image?:No
-    Create subfolders in the output folder?:No
-    Base image folder:Elsewhere...|
-    How to save the series:T (Time)
-    Save with lossless compression?:No
-
-SaveImages:[module_num:76|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the type of image to save:Image
-    Select the image to save:CorrCycle10_T
-    Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle10_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_T
-    Number of digits:4
-    Append a suffix to the image file name?:Yes
-    Text to append to the image name:__Cycle10_T
     Saved file format:tiff
     Output file location:Default Output Folder|Cycle01
     Image bit depth:16-bit integer

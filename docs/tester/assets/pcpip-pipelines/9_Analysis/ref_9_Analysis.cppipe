@@ -360,32 +360,43 @@ MaskImage:[module_num:24|svn_version:'Unknown'|variable_revision_number:3|show_w
     Select image for mask:None
     Invert the mask?:Yes
 
-RunCellpose:[module_num:25|svn_version:'Unknown'|variable_revision_number:6|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+IdentifyPrimaryObjects:[module_num:25|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the input image:MaskedDAPI_Painting
-    Rescale images before running Cellpose:Yes
-    Run CellPose in docker or local python environment:Python
-    Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:0.1
-    Expected object diameter:30
-    Detection mode:nuclei
-    Name the output object:Nuclei
-    Use GPU:No
-    Use averaging:No
-    Supply nuclei image as well?:No
-    Select the nuclei image:None
-    Save probability image?:No
-    Name the probability image:Probabilities
-    Location of the pre-trained model file:Elsewhere...|
-    Pre-trained model file name:cyto_0
-    Flow threshold:0.4
-    Cell probability threshold:0.0
-    GPU memory share for each worker:0.1
-    Stitch Threshold:0.0
-    Use 3D:No
-    Minimum size:15
-    Use Omnipose for mask reconstruction:No
-    Invert images:No
-    Remove objects that are touching the edge?:Yes
-    Rescale probability map?:No
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:8
+    Suppress local maxima that are closer than this minimum allowed distance:8
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Display accepted local maxima?:No
+    Select maxima color:Blue
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.4
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
 
 IdentifyPrimaryObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select the input image:MaskedDAPI_Painting
