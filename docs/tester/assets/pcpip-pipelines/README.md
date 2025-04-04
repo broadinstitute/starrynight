@@ -109,9 +109,5 @@ cp original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe 9_Analysis/ref_9_Analysis
 ## Modifications needed:
 
 -  Refer to nuclear channel as `DNA` in CP pipelines, and `DAPI` in BC pipelines and be consistent about it
-- `ref_7_BC_Preprocess.cppipe`:
-    - The pipeline does not seem to have `SaveImage` or `ExportToSpreadsheet`
-- `ref_9_Analysis.cppipe`:
-    - The pipeline does not seem to have SaveImage or ExportToSpreadsheet
-    - It refers to ZEB1 and WGA, which cannot be disabled without deleting.
+- `ref_9_Analysis.cppipe`: refers to ZEB1 and WGA, which cannot be disabled without deleting.
 - `ref_6_BC_Apply_Illum.cppipe`, `ref_7_BC_Preprocess.cppipe`, `ref_9_Analysis.cppipe` - trim Cycles to 1-3, for testing
