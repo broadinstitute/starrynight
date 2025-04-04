@@ -110,8 +110,16 @@ cp _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe 9_Analysis/ref_9_Analysi
 
 ## Compare reference pipelines sources with PCPIP repo pipelines
 
+```bash
+mkdir -p _pcpip_12cycles/diff
+diff -w _original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe _pcpip_12cycles/1_CP_Illum.cppipe > _pcpip_12cycles/diff/1_CP_Illum.diff
+diff -w _original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe _pcpip_12cycles/2_CP_Apply_Illum.cppipe > _pcpip_12cycles/diff/2_CP_Apply_Illum.diff
+diff -w _original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe _pcpip_12cycles/3_CP_SegmentationCheck.cppipe > _pcpip_12cycles/diff/3_CP_SegmentationCheck.diff
+diff -w _original/5_BC_Illum/5_BC_Illum.cppipe _pcpip_12cycles/5_BC_Illum.cppipe > _pcpip_12cycles/diff/5_BC_Illum.diff
+diff -w _original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe _pcpip_12cycles/6_BC_Apply_Illum.cppipe > _pcpip_12cycles/diff/6_BC_Apply_Illum.diff
+diff -w _original/7_BC_Preprocess/7_BC_Preprocess.cppipe _pcpip_12cycles/7_BC_Preprocess.cppipe > _pcpip_12cycles/diff/7_BC_Preprocess.diff
+diff -w _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe _pcpip_12cycles/9_Analysis.cppipe > _pcpip_12cycles/diff/9_Analysis.diff
 ```
-
 ```
 
 ## Modifications needed:

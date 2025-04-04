@@ -1,0 +1,96 @@
+3c3
+< DateRevision:426
+---
+> DateRevision:413
+9c9
+<     Input data file location:Default Input Folder sub-folder|Downloads
+---
+>     Input data file location:Default Input Folder|Downloads
+24,26c24,34
+<     Select the input image:OrigZO1
+<     Name the output image:CorrZO1
+<     Select the illumination function:IllumZO1
+---
+>     Select the input image:OrigWGA
+>     Name the output image:CorrWGA
+>     Select the illumination function:IllumWGA
+>     Select how the illumination function is applied:Divide
+>     Select the input image:OrigMito
+>     Name the output image:CorrMito
+>     Select the illumination function:IllumMito
+>     Select how the illumination function is applied:Divide
+>     Select the input image:OrigER
+>     Name the output image:CorrER
+>     Select the illumination function:IllumER
+35c43
+< SaveImages:[module_num:3|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> SaveImages:[module_num:3|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+40c48
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrDNA
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrDNA
+53d60
+<     Save with lossless compression?:No
+55c62
+< SaveImages:[module_num:4|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:4|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+57c64
+<     Select the image to save:CorrZO1
+---
+>     Select the image to save:CorrER
+60c67
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZO1
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrER
+73d79
+<     Save with lossless compression?:No
+75c81
+< SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+77c83
+<     Select the image to save:CorrZEB1
+---
+>     Select the image to save:CorrMito
+80c86
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZEB1
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrMito
+93d98
+<     Save with lossless compression?:No
+95c100
+< SaveImages:[module_num:6|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:6|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+100c105
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrPhalloidin
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrPhalloidin
+113d117
+<     Save with lossless compression?:No
+115c119
+< SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+120c124
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrWGA
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrWGA
+133d136
+<     Save with lossless compression?:No
+135c138
+< IdentifyPrimaryObjects:[module_num:8|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:8|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+150a154,155
+>     Display accepted local maxima?:No
+>     Select maxima color:Blue
+187c192
+< IdentifyPrimaryObjects:[module_num:11|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:11|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+202a208,209
+>     Display accepted local maxima?:No
+>     Select maxima color:Blue

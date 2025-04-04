@@ -1,0 +1,272 @@
+3c3
+< DateRevision:426
+---
+> DateRevision:413
+5c5
+< ModuleCount:16
+---
+> ModuleCount:22
+9,10c9,10
+<     Input data file location:Default Input Folder sub-folder|Desktop/load_data_csv/BATCH/Plate3
+<     Name of the file:load_data_pipeline1.csv
+---
+>     Input data file location:Default Input Folder|Desktop/PCP_lambda/load_data_csv/20200211_6W_CP151A2
+>     Name of the file:load_data_pipeline1_local.csv
+19c19
+< Resize:[module_num:2|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:2|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+23,28c23,25
+<     X Resizing factor:0.25
+<     Y Resizing factor:0.25
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:0.25
+>     Width of the final image:100
+>     Height of the final image:100
+59c56
+< Resize:[module_num:4|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:4|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+63,68c60,62
+<     X Resizing factor:4
+<     Y Resizing factor:4
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:4
+>     Width of the final image:100
+>     Height of the final image:100
+74c68,117
+< Resize:[module_num:5|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:5|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:OrigER
+>     Name the output image:DownsampledER
+>     Resizing method:Resize by a fraction or multiple of the original size
+>     Resizing factor:0.25
+>     Width of the final image:100
+>     Height of the final image:100
+>     Interpolation method:Bilinear
+>     Method to specify the dimensions:Manual
+>     Select the image with the desired dimensions:None
+>     Additional image count:0
+>
+> CorrectIlluminationCalculate:[module_num:6|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:DownsampledER
+>     Name the output image:IllumER
+>     Select how the illumination function is calculated:Regular
+>     Dilate objects in the final averaged image?:No
+>     Dilation radius:1
+>     Block size:60
+>     Rescale the illumination function?:Yes
+>     Calculate function for each image individually, or based on all images?:All: Across cycles
+>     Smoothing method:Median Filter
+>     Method to calculate smoothing filter size:Manually
+>     Approximate object diameter:10
+>     Smoothing filter size:10
+>     Retain the averaged image?:No
+>     Name the averaged image:IllumBlueAvg
+>     Retain the dilated image?:No
+>     Name the dilated image:IllumBlueDilated
+>     Automatically calculate spline parameters?:Yes
+>     Background mode:auto
+>     Number of spline points:5
+>     Background threshold:2
+>     Image resampling factor:2
+>     Maximum number of iterations:40
+>     Residual value for convergence:0.001
+>
+> Resize:[module_num:7|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:IllumER
+>     Name the output image:UpsampledIllumER
+>     Resizing method:Resize by a fraction or multiple of the original size
+>     Resizing factor:4
+>     Width of the final image:100
+>     Height of the final image:100
+>     Interpolation method:Bilinear
+>     Method to specify the dimensions:Manual
+>     Select the image with the desired dimensions:None
+>     Additional image count:0
+>
+> Resize:[module_num:8|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+78,83c121,123
+<     X Resizing factor:0.25
+<     Y Resizing factor:0.25
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:0.25
+>     Width of the final image:100
+>     Height of the final image:100
+89c129
+< CorrectIlluminationCalculate:[module_num:6|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CorrectIlluminationCalculate:[module_num:9|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+114c154
+< Resize:[module_num:7|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:10|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+118,123c158,160
+<     X Resizing factor:4
+<     Y Resizing factor:4
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:4
+>     Width of the final image:100
+>     Height of the final image:100
+129,131c166,168
+< Resize:[module_num:8|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:OrigZO1
+<     Name the output image:DownsampledZO1
+---
+> Resize:[module_num:11|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:OrigMito
+>     Name the output image:DownsampledMito
+133,138c170,172
+<     X Resizing factor:0.25
+<     Y Resizing factor:0.25
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:0.25
+>     Width of the final image:100
+>     Height of the final image:100
+144,146c178,229
+< CorrectIlluminationCalculate:[module_num:9|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:DownsampledZO1
+<     Name the output image:IllumZO1
+---
+> CorrectIlluminationCalculate:[module_num:12|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:DownsampledMito
+>     Name the output image:IllumMito
+>     Select how the illumination function is calculated:Regular
+>     Dilate objects in the final averaged image?:No
+>     Dilation radius:1
+>     Block size:60
+>     Rescale the illumination function?:Yes
+>     Calculate function for each image individually, or based on all images?:All: Across cycles
+>     Smoothing method:Median Filter
+>     Method to calculate smoothing filter size:Manually
+>     Approximate object diameter:10
+>     Smoothing filter size:10
+>     Retain the averaged image?:No
+>     Name the averaged image:IllumBlueAvg
+>     Retain the dilated image?:No
+>     Name the dilated image:IllumBlueDilated
+>     Automatically calculate spline parameters?:Yes
+>     Background mode:auto
+>     Number of spline points:5
+>     Background threshold:2
+>     Image resampling factor:2
+>     Maximum number of iterations:40
+>     Residual value for convergence:0.001
+>
+> Resize:[module_num:13|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:IllumMito
+>     Name the output image:UpsampledIllumMito
+>     Resizing method:Resize by a fraction or multiple of the original size
+>     Resizing factor:4
+>     Width of the final image:100
+>     Height of the final image:100
+>     Interpolation method:Bilinear
+>     Method to specify the dimensions:Manual
+>     Select the image with the desired dimensions:None
+>     Additional image count:0
+>
+> Resize:[module_num:14|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:OrigWGA
+>     Name the output image:DownsampledWGA
+>     Resizing method:Resize by a fraction or multiple of the original size
+>     Resizing factor:0.25
+>     Width of the final image:100
+>     Height of the final image:100
+>     Interpolation method:Bilinear
+>     Method to specify the dimensions:Manual
+>     Select the image with the desired dimensions:None
+>     Additional image count:0
+>
+> CorrectIlluminationCalculate:[module_num:15|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:DownsampledWGA
+>     Name the output image:IllumWGA
+169,171c252,254
+< Resize:[module_num:10|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:IllumZO1
+<     Name the output image:UpsampledIllumZO1
+---
+> Resize:[module_num:16|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:IllumWGA
+>     Name the output image:UpsampledIllumWGA
+173,178c256,258
+<     X Resizing factor:4
+<     Y Resizing factor:4
+<     Z Resizing factor:1.0
+<     Width (x) of the final image:100
+<     Height (y) of the final image:100
+<     # of planes (z) in the final image:10
+---
+>     Resizing factor:4
+>     Width of the final image:100
+>     Height of the final image:100
+184c264
+< SaveImages:[module_num:11|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+202d281
+<     Save with lossless compression?:No
+204c283
+< SaveImages:[module_num:12|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+222d300
+<     Save with lossless compression?:No
+224c302
+< SaveImages:[module_num:13|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+226c304
+<     Select the image to save:UpsampledIllumZEB1
+---
+>     Select the image to save:UpsampledIllumER
+229c307
+<     Enter single file name:\g<Plate>_IllumZEB1
+---
+>     Enter single file name:\g<Plate>_IllumER
+242d319
+<     Save with lossless compression?:No
+244c321
+< SaveImages:[module_num:14|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+246c323
+<     Select the image to save:UpsampledIllumZO1
+---
+>     Select the image to save:UpsampledIllumMito
+249c326
+<     Enter single file name:\g<Plate>_IllumZO1
+---
+>     Enter single file name:\g<Plate>_IllumMito
+262d338
+<     Save with lossless compression?:No
+264c340
+< SaveImages:[module_num:15|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:21|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+282d357
+<     Save with lossless compression?:No
+284c359
+< CreateBatchFiles:[module_num:16|svn_version:'Unknown'|variable_revision_number:8|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> CreateBatchFiles:[module_num:22|svn_version:'Unknown'|variable_revision_number:8|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
