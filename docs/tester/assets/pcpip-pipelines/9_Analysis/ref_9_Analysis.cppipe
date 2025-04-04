@@ -692,11 +692,11 @@ ResizeObjects:[module_num:40|svn_version:'Unknown'|variable_revision_number:3|sh
     Select the image with the desired dimensions:None
 
 MeasureObjectIntensity:[module_num:41|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G, Cycle03_T, Cycle04_A, Cycle04_C, Cycle04_G, Cycle04_T, Cycle05_A, Cycle05_C, Cycle05_G, Cycle05_T, Cycle06_A, Cycle06_C, Cycle06_G, Cycle06_T, Cycle07_A, Cycle07_C, Cycle07_G, Cycle07_T, Cycle08_A, Cycle08_C, Cycle08_G, Cycle08_T, Cycle09_A, Cycle09_C, Cycle09_G, Cycle09_T, Cycle10_A, Cycle10_C, Cycle10_G, Cycle10_T
+    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G, Cycle03_T
     Select objects to measure:Foci
 
 CallBarcodes:[module_num:42|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Number of cycles:10
+    Number of cycles:3
     Input object name:Foci
     Select one of the measures from Cycle 1 to use for calling:Intensity_MaxIntensity_Cycle01_A
     Input data file location:Default Input Folder|C:\Users\Administrator\Desktop\metadata\20200805_A549_WG_Screen
@@ -1011,7 +1011,7 @@ MeasureImageQuality:[module_num:65|svn_version:'Unknown'|variable_revision_numbe
     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
 
 MeasureColocalization:[module_num:66|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_DAPI, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G, Cycle03_T, Cycle04_A, Cycle04_C, Cycle04_G, Cycle04_T, Cycle05_A, Cycle05_C, Cycle05_G, Cycle05_T, Cycle06_A, Cycle06_C, Cycle06_G, Cycle06_T, Cycle07_A, Cycle07_C, Cycle07_G, Cycle07_T, Cycle08_A, Cycle08_C, Cycle08_G, Cycle08_T, Cycle09_A, Cycle09_C, Cycle09_G, Cycle09_T
+    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_DAPI, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G
     Set threshold as percentage of maximum intensity for the images:15.0
     Select where to measure correlation:Across entire image
     Select objects to measure:

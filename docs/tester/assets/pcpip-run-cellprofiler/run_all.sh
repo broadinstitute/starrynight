@@ -61,3 +61,15 @@ cellprofiler \
     --data-file ${LOAD_DATA_DIR}/load_data_pipeline7.csv \
     --output-directory ${REPRODUCE_DIR}/Source1/Batch1/images_preprocessed/barcoding/ \
     --plugins-directory ${STARRYNIGHT_REPO_REL}/plugins/CellProfiler-plugins/active_plugins/
+
+
+# 9_Analysis
+
+cellprofiler \
+    -c \
+    -L 10 \
+    -i ${METADATA_DIR}/ \
+    --pipeline ${PIPELINE_DIR}/9_Analysis/ref_9_Analysis.cppipe \
+    --data-file ${LOAD_DATA_DIR}/load_data_pipeline9.csv \
+    --output-directory ${REPRODUCE_DIR}/Source1/Batch1/analysis/ \
+    --plugins-directory ${STARRYNIGHT_REPO_REL}/plugins/CellProfiler-plugins/active_plugins/
