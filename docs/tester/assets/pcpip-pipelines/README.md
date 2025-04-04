@@ -4,8 +4,10 @@ This document tracks the selection process for CellProfiler image analysis pipel
 
 ## Diffs
 
+The pipelines in `_original` are from the `pipelines` directory of `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
+
 ```bash
-cd original
+cd _original
 diff 1_CP_Illum/1_CP_Illum.cppipe 1_CP_Illum/1_Illum_Plate1_Plate2.cppipe > 1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff
 diff 2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe 2_CP_Apply_Illum/2_CP_Apply_Illum_Plate3_Plate4.cppipe > 2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff
 diff 3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4.cppipe 3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe > 3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff
@@ -21,7 +23,7 @@ cd -
 
 ### 1_CP_Illum
 
-[diff](original/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
+[diff](_original/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
 
 Differences: 1_CP_Illum.cppipe has downsampling/upsampling but 1_Illum_Plate1_Plate2.cppipe does not
 
@@ -32,7 +34,7 @@ Reason: We are focused on Plate1 for the fixture
 
 ### 2_CP_Apply_Illum
 
-[diff](original/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
+[diff](_original/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
 
 Differences: 2_CP_Apply_Illum_Plate3_Plate4 has a different naming convention of output images. Also there's some extra bit in the CorrectIlluminationApply module that's likely wrong because those channels likely don't exist.
 
@@ -43,7 +45,7 @@ Reason: We are focused on Plate1 for the fixture
 
 ### 3_CP_SegmentationCheck
 
-[diff](original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2__3_CP_SegmentationCheck_Plate3_Plate4.diff)
+[diff](_original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2__3_CP_SegmentationCheck_Plate3_Plate4.diff)
 
 Differences: TODO
 
@@ -54,7 +56,7 @@ Reason: TODO
 
 ### 5_BC_Illum
 
-[diff](original/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
+[diff](_original/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
 
 Differences: TODO
 
@@ -72,7 +74,7 @@ Reason: We have a single pipeline
 
 ### 7_BC_Preprocess
 
-[diff](original/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
+[diff](_original/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
 
 Differences: TODO
 
@@ -83,9 +85,9 @@ Reason: TODO
 
 ### 9_Analysis
 
-[diff](original/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
-[diff](original/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
-[diff](original/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
+[diff](_original/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
+[diff](_original/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
+[diff](_original/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
 
 Differences: TODO
 
@@ -97,13 +99,19 @@ Reason: TODO
 ## Create reference pipelines
 
 ```bash
-cp original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe 1_CP_Illum/ref_1_CP_Illum.cppipe
-cp original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe 2_CP_Apply_Illum/ref_2_CP_Apply_Illum.cppipe
-cp original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe 3_CP_SegmentationCheck/ref_3_CP_SegmentationCheck.cppipe
-cp original/5_BC_Illum/5_BC_Illum.cppipe 5_BC_Illum/ref_5_BC_Illum.cppipe
-cp original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe 6_BC_Apply_Illum/ref_6_BC_Apply_Illum.cppipe
-cp original/7_BC_Preprocess/7_BC_Preprocess.cppipe 7_BC_Preprocess/ref_7_BC_Preprocess.cppipe
-cp original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe 9_Analysis/ref_9_Analysis.cppipe
+cp _original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe 1_CP_Illum/ref_1_CP_Illum.cppipe
+cp _original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe 2_CP_Apply_Illum/ref_2_CP_Apply_Illum.cppipe
+cp _original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe 3_CP_SegmentationCheck/ref_3_CP_SegmentationCheck.cppipe
+cp _original/5_BC_Illum/5_BC_Illum.cppipe 5_BC_Illum/ref_5_BC_Illum.cppipe
+cp _original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe 6_BC_Apply_Illum/ref_6_BC_Apply_Illum.cppipe
+cp _original/7_BC_Preprocess/7_BC_Preprocess.cppipe 7_BC_Preprocess/ref_7_BC_Preprocess.cppipe
+cp _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe 9_Analysis/ref_9_Analysis.cppipe
+```
+
+## Compare reference pipelines sources with PCPIP repo pipelines
+
+```
+
 ```
 
 ## Modifications needed:
