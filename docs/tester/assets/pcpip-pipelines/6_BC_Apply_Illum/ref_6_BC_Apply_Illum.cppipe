@@ -170,7 +170,7 @@ MeasureColocalization:[module_num:17|svn_version:'Unknown'|variable_revision_num
 
 FlagImage:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Hidden:1
-    Hidden:8
+    Hidden:2
     Name the flag's category:Metadata
     Name the flag:Unaligned
     How should measurements be linked?:Flag if any fail
@@ -189,72 +189,6 @@ FlagImage:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_w
     Flag is based on:Whole-image measurement
     Select the object to be used for flagging:None
     Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle03_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle04_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle05_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle06_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle07_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle08_DAPI
-    Flag images based on low values?:Yes
-    Minimum value:0.9
-    Flag images based on high values?:No
-    Maximum value:1.0
-    Rules file location:Elsewhere...|
-    Rules file name:rules.txt
-    Class number:
-    Allow fuzzy feature matching?:No
-    Flag is based on:Whole-image measurement
-    Select the object to be used for flagging:None
-    Which measurement?:Correlation_Correlation_Cycle01_DAPI_Cycle09_DAPI
     Flag images based on low values?:Yes
     Minimum value:0.9
     Flag images based on high values?:No
