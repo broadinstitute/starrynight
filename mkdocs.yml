@@ -29,4 +29,5 @@ nav:
     - Analysis: user/algorithms/analysis.md
   - Development:
     - Developer Guide: developer/developer-guide.md
+    - Requirements: developer/requirements.md
   - FAQ: misc/faq.md
