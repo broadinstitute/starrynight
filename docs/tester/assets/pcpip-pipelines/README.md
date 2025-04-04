@@ -120,10 +120,3 @@ diff -w _original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe _pcpip_12cycles/6_BC_
 diff -w _original/7_BC_Preprocess/7_BC_Preprocess.cppipe _pcpip_12cycles/7_BC_Preprocess.cppipe > _pcpip_12cycles/diff/7_BC_Preprocess.diff
 diff -w _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe _pcpip_12cycles/9_Analysis.cppipe > _pcpip_12cycles/diff/9_Analysis.diff
 ```
-
-
-## Modifications needed:
-
--  Refer to nuclear channel as `DNA` in CP pipelines, and `DAPI` in BC pipelines and be consistent about it
-- `ref_9_Analysis.cppipe`: refers to ZEB1 and WGA, which cannot be disabled without deleting.
-- `ref_6_BC_Apply_Illum.cppipe`, `ref_7_BC_Preprocess.cppipe`, `ref_9_Analysis.cppipe` - trim Cycles to 1-3, for testing
