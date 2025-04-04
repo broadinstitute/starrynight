@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+.added { color: green; }
+.removed { color: red; }
+.modified { color: blue; }
+table { border-collapse: collapse; width: 100%; }
+table, th, td { border: 1px solid #ddd; }
+th, td { padding: 8px; text-align: left; }
+th { background-color: #f2f2f2; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+</style>
+<title>CellProfiler Pipeline Diff</title>
+</head>
+<body>
+<h1>CellProfiler Pipeline Diff Report</h1>
+<h2>Channel Summary</h2>
+<p>Common channels: </p>
+<h2>Channel Processing Changes</h2>
+<table>
+<tr><th>Channel</th><th>Status</th></tr>
+</table>
+<h2>Added Modules</h2>
+<table>
+<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
+<tr><td>10</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle12_A_BackSub, Select the input image: Cycle12_A</td></tr>
+<tr><td>11</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle12_C_BackSub, Select the input image: Cycle12_C</td></tr>
+<tr><td>12</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle12_G_BackSub, Select the input image: Cycle12_G</td></tr>
+<tr><td>13</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle12_T_BackSub, Select the input image: Cycle12_T</td></tr>
+<tr><td>19</td><td>IdentifyPrimaryObjects</td><td>unknown</td><td>Select the input image: Cycle01_DAPI</td></tr>
+</table>
+<h2>Removed Modules</h2>
+<table>
+<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
+<tr><td>10</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle10_A_BackSub, Select the input image: Cycle10_A</td></tr>
+<tr><td>11</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle10_C_BackSub, Select the input image: Cycle10_C</td></tr>
+<tr><td>12</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle10_G_BackSub, Select the input image: Cycle10_G</td></tr>
+<tr><td>13</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Name the output image: Cycle10_T_BackSub, Select the input image: Cycle10_T</td></tr>
+<tr><td>19</td><td>ImageMath</td><td>unknown</td><td>Name the output image: SqrtDAPI</td></tr>
+<tr><td>20</td><td>IdentifyPrimaryObjects</td><td>unknown</td><td>Select the input image: SqrtDAPI</td></tr>
+<tr><td>21</td><td>RunCellpose</td><td>unknown</td><td>Select the input image: Cycle01_DAPI</td></tr>
+<tr><td>25</td><td>MeasureObjectOverlap</td><td>unknown</td><td></td></tr>
+</table>
+<h2>Modified Modules</h2>
+<h3>SaveImages (Module 86 → 89, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Save with lossless compression?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+</table>
+<h3>CompensateColors (Module 29 → 24, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select an image to measure</td><td class='modified'>Modified</td><td>Cycle10_T_BackSub</td><td>Cycle12_T_BackSub</td></tr>
+<tr><td>Select an output image name</td><td class='modified'>Modified</td><td>CorrCycle10_T</td><td>CorrCycle12_T</td></tr>
+</table>
+<h3>ImageMath (Module 2 → 2, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_A</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_A</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>ImageMath (Module 17 → 17, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_T</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_T</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>ImageMath (Module 14 → 14, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_A</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_A</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>LoadData (Module 1 → 1, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Output Folder|Desktop/PROJECT/workspace/load_data_csv/BATCH/Plate4</td><td>Default Input Folder|/Users/bcimini/Downloads/PCPTroubleshooting</td></tr>
+</table>
+<h3>ImageMath (Module 16 → 16, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_G</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_G</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>ImageMath (Module 4 → 4, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_G</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_G</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>FilterObjects (Module 28 → 23, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Keep removed objects as a separate set?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Allow fuzzy feature matching?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Name the objects removed by the filter</td><td class='removed'>Removed</td><td>RemovedObjects</td><td>-</td></tr>
+</table>
+<h3>ImageMath (Module 15 → 15, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_C</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_C</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>IdentifyPrimaryObjects (Module 24 → 22, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
+<tr><td># of deviations</td><td class='modified'>Modified</td><td>7</td><td>4</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+<tr><td>Name the primary objects to be identified</td><td class='modified'>Modified</td><td>AllFoci</td><td>Foci</td></tr>
+</table>
+<h3>ImageMath (Module 5 → 5, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_T</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_T</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>ImageMath (Module 3 → 3, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Multiply the twelfth image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+<tr><td>Select the eleventh image</td><td class='added'>Added</td><td>-</td><td>Cycle11_C</td></tr>
+<tr><td>Select the twelfth image</td><td class='added'>Added</td><td>-</td><td>Cycle12_C</td></tr>
+<tr><td>Multiply the eleventh image by</td><td class='added'>Added</td><td>-</td><td>1.0</td></tr>
+</table>
+<h3>CallBarcodes (Module 31 → 26, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select the column containing gene/transcript barcode names</td><td class='removed'>Removed</td><td>gene_symbol</td><td>-</td></tr>
+<tr><td>Select the column of barcodes to match against</td><td class='added'>Added</td><td>-</td><td>sgRNA</td></tr>
+<tr><td>What is the empty vector sequence?</td><td class='removed'>Removed</td><td>AAAAAAAAAAAAAAA</td><td>-</td></tr>
+<tr><td>Number of cycles</td><td class='modified'>Modified</td><td>10</td><td>12</td></tr>
+<tr><td>Select the column with gene/transcript barcode names</td><td class='added'>Added</td><td>-</td><td>gene_symbol</td></tr>
+<tr><td>Do you have an empty vector barcode you would like to add to the barcode list?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Select the column containing barcodes to match against</td><td class='removed'>Removed</td><td>sgRNA</td><td>-</td></tr>
+</table>
+<h3>FlagImage (Module 81 → 84, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Allow fuzzy feature matching?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+</table>
+<h3>OverlayOutlines (Module 84 → 87, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select objects to display</td><td class='modified'>Modified</td><td>Foci</td><td>Cells</td></tr>
+<tr><td>Select outline color</td><td class='modified'>Modified</td><td>red</td><td>#0080FF</td></tr>
+</table>
+</body></html>

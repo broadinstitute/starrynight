@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+.added { color: green; }
+.removed { color: red; }
+.modified { color: blue; }
+table { border-collapse: collapse; width: 100%; }
+table, th, td { border: 1px solid #ddd; }
+th, td { padding: 8px; text-align: left; }
+th { background-color: #f2f2f2; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+</style>
+<title>CellProfiler Pipeline Diff</title>
+</head>
+<body>
+<h1>CellProfiler Pipeline Diff Report</h1>
+<h2>Channel Summary</h2>
+<p><span class='added'>Added channels:</span> WGA</p>
+<p><span class='removed'>Removed channels:</span> ZEB1, ZO1</p>
+<p>Common channels: Phalloidin, Mito, Overlay</p>
+<h2>Channel Processing Changes</h2>
+<table>
+<tr><th>Channel</th><th>Status</th></tr>
+<tr><td>Mito</td><td>added</td></tr>
+<tr><td>Overlay</td><td>changed parameters (1 differences)</td></tr>
+<tr><td>Phalloidin</td><td>changed (2 modules differ)</td></tr>
+<tr><td>WGA</td><td>added</td></tr>
+<tr><td>ZO1</td><td>removed</td></tr>
+</table>
+<h2>Added Modules</h2>
+<table>
+<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
+<tr><td>4</td><td>Align</td><td>WGA</td><td>Name the output image: WGA</td></tr>
+<tr><td>24</td><td>IdentifySecondaryObjects</td><td>Phalloidin</td><td>Select the input image: MaskedPhalloidin</td></tr>
+</table>
+<h2>Removed Modules</h2>
+<table>
+<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
+<tr><td>4</td><td>Align</td><td>Phalloidin</td><td>Name the output image: Phalloidin</td></tr>
+<tr><td>12</td><td>MaskImage</td><td>ZO1</td><td>Name the output image: ZO1_EdgeMasked, Select the input image: ZO1</td></tr>
+<tr><td>24</td><td>MaskImage</td><td>ZO1</td><td>Name the output image: MaskedZO1, Select the input image: ZO1_EdgeMasked</td></tr>
+<tr><td>25</td><td>RunCellpose</td><td>unknown</td><td>Select the input image: MaskedDAPI_Painting</td></tr>
+<tr><td>27</td><td>IdentifySecondaryObjects</td><td>ZEB1</td><td>Select the input image: MaskedZEB1</td></tr>
+<tr><td>29</td><td>IdentifySecondaryObjects</td><td>ZO1</td><td>Select the input image: MaskedZO1</td></tr>
+</table>
+<h2>Modified Modules</h2>
+<h3>IdentifyPrimaryObjects (Module 19 → 18, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+</table>
+<h3>SaveImages (Module 84 → 79, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Save with lossless compression?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+</table>
+<h3>IdentifyPrimaryObjects (Module 37 → 32, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Upper outlier fraction</td><td class='modified'>Modified</td><td>0.005</td><td>0.05</td></tr>
+<tr><td>Typical diameter of objects, in pixel units (Min,Max)</td><td class='modified'>Modified</td><td>3,20</td><td>7,20</td></tr>
+<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
+<tr><td># of deviations</td><td class='modified'>Modified</td><td>4</td><td>3</td></tr>
+<tr><td>Size of smoothing filter</td><td class='modified'>Modified</td><td>2</td><td>3</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+</table>
+<h3>Resize (Module 70 → 65, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>0.5</td></tr>
+<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
+<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
+<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+</table>
+<h3>IdentifyPrimaryObjects (Module 26 → 23, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+</table>
+<h3>MeasureTexture (Module 63 → 58, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select images to measure</td><td class='modified'>Modified</td><td>DAPI_Painting, Phalloidin, ZO1</td><td>ConA, DAPI_Painting, Mito, Phalloidin, WGA</td></tr>
+</table>
+<h3>LoadData (Module 1 → 1, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Input Folder sub-folder|Downloads</td><td>Default Input Folder|Desktop/20210124_6W_CP228</td></tr>
+</table>
+<h3>FilterObjects (Module 67 → 62, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Keep removed objects as a separate set?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Allow fuzzy feature matching?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Name the objects removed by the filter</td><td class='removed'>Removed</td><td>RemovedObjects</td><td>-</td></tr>
+</table>
+<h3>ResizeObjects (Module 40 → 35, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>X Factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Y Factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Planes (Z)</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
+<tr><td>Height</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+<tr><td>Width</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+<tr><td>Width (X)</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Factor</td><td class='added'>Added</td><td>-</td><td>0.5</td></tr>
+<tr><td>Z Factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
+<tr><td>Height (Y)</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+</table>
+<h3>Resize (Module 69 → 64, Channel: Phalloidin)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>0.5</td></tr>
+<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
+<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
+<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+</table>
+<h3>MeasureGranularity (Module 62 → 57, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select images to measure</td><td class='modified'>Modified</td><td>DAPI_Painting, Phalloidin, ZO1</td><td>WGA, Phalloidin, Mito, ConA, DAPI_Painting</td></tr>
+</table>
+<h3>Resize (Module 75 → 70, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>X Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Resizing factor</td><td class='added'>Added</td><td>-</td><td>0.5</td></tr>
+<tr><td>Width of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+<tr><td>Z Resizing factor</td><td class='removed'>Removed</td><td>1.0</td><td>-</td></tr>
+<tr><td># of planes (z) in the final image</td><td class='removed'>Removed</td><td>10</td><td>-</td></tr>
+<tr><td>Height (y) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Y Resizing factor</td><td class='removed'>Removed</td><td>0.5</td><td>-</td></tr>
+<tr><td>Width (x) of the final image</td><td class='removed'>Removed</td><td>100</td><td>-</td></tr>
+<tr><td>Height of the final image</td><td class='added'>Added</td><td>-</td><td>100</td></tr>
+</table>
+<h3>FlagImage (Module 56 → 51, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Allow fuzzy feature matching?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+</table>
+<h3>CallBarcodes (Module 42 → 37, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select the column containing gene/transcript barcode names</td><td class='removed'>Removed</td><td>gene_symbol</td><td>-</td></tr>
+<tr><td>Select the column of barcodes to match against</td><td class='added'>Added</td><td>-</td><td>sgRNA</td></tr>
+<tr><td>What is the empty vector sequence?</td><td class='removed'>Removed</td><td>AAAAAAAAAAAAAAA</td><td>-</td></tr>
+<tr><td>Number of cycles</td><td class='modified'>Modified</td><td>10</td><td>12</td></tr>
+<tr><td>Select the column with gene/transcript barcode names</td><td class='added'>Added</td><td>-</td><td>gene_symbol</td></tr>
+<tr><td>Do you have an empty vector barcode you would like to add to the barcode list?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
+<tr><td>Select the column containing barcodes to match against</td><td class='removed'>Removed</td><td>sgRNA</td><td>-</td></tr>
+</table>
+<h3>MeasureObjectIntensity (Module 58 → 53, Channel: unknown)</h3>
+<table>
+<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Select images to measure</td><td class='modified'>Modified</td><td>DAPI_Painting, Phalloidin, ZO1</td><td>DAPI_Painting, ConA, Mito, Phalloidin, WGA</td></tr>
+</table>
+</body></html>
