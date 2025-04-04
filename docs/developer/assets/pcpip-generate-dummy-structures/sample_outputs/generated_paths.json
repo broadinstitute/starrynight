@@ -1,0 +1,285 @@
+{
+  "0_Microscope": {
+    "cp_images": [
+      "Batch1/images/Plate1/20x_CP_Plate1/IMAGE_A1_0_DAPI.tiff",
+      "Batch1/images/Plate1/20x_CP_Plate1/IMAGE_A1_0_PhalloAF750.tiff",
+      "Batch1/images/Plate1/20x_CP_Plate1/IMAGE_A1_0_ZO1-AF488.tiff"
+    ],
+    "bc_images": [
+      "Batch1/images/Plate1/20x_SBS_01/IMAGE_A1_0_C.tiff",
+      "Batch1/images/Plate1/20x_SBS_01/IMAGE_A1_0_A.tiff",
+      "Batch1/images/Plate1/20x_SBS_01/IMAGE_A1_0_T.tiff",
+      "Batch1/images/Plate1/20x_SBS_01/IMAGE_A1_0_G.tiff",
+      "Batch1/images/Plate1/20x_SBS_01/IMAGE_A1_0_DAPI.tiff"
+    ]
+  },
+  "1_CP_Illum": {
+    "illum_functions": [
+      "Batch1/illum/Plate1/Plate1_IllumDNA.npy",
+      "Batch1/illum/Plate1/Plate1_IllumPhalloidin.npy",
+      "Batch1/illum/Plate1/Plate1_IllumZO1.npy"
+    ]
+  },
+  "2_CP_Apply_Illum": {
+    "corrected_images": [
+      "Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff",
+      "Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff",
+      "Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff"
+    ],
+    "csvs": [
+      "Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv",
+      "Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv",
+      "Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv",
+      "Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_ConfluentRegions.csv",
+      "Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Experiment.csv"
+    ]
+  },
+  "3_CP_SegmentCheck": {
+    "overlay_images": [
+      "Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png",
+      "Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin_SegmentCheck.png",
+      "Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1_SegmentCheck.png"
+    ],
+    "csvs": [
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv",
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_ConfluentRegions.csv",
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_Experiment.csv",
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_Image.csv",
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_Nuclei.csv",
+      "Batch1/images_segmentation/Plate1/SegmentationCheck_PreCells.csv"
+    ]
+  },
+  "4_CP_Stitching": {
+    "stitched_images": [
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedDNA.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedPhalloidin.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedZO1.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopLeftDNA.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopLeftPhalloidin.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopLeftZO1.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopRightDNA.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopRightPhalloidin.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedTopRightZO1.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomLeftDNA.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomLeftPhalloidin.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomLeftZO1.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomRightDNA.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomRightPhalloidin.tiff",
+      "Batch1/images_corrected_stitched/cellpainting/Plate1/Plate1_WellA1/StitchedBottomRightZO1.tiff"
+    ],
+    "cropped_tiles": [
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_DNA/Corr_DNA_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_DNA/Corr_DNA_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_DNA/Corr_DNA_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_DNA/Corr_DNA_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_Phalloidin/Corr_Phalloidin_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_Phalloidin/Corr_Phalloidin_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_Phalloidin/Corr_Phalloidin_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_Phalloidin/Corr_Phalloidin_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_ZO1/Corr_ZO1_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_ZO1/Corr_ZO1_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_ZO1/Corr_ZO1_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/cellpainting/Plate1/Plate1_WellA1/Corr_ZO1/Corr_ZO1_Tile_3.tiff"
+    ],
+    "previews": [
+      "Batch1/images_corrected_stitched_10X/cellpainting/Plate1/Plate1_WellA1/StitchedDNA.tiff",
+      "Batch1/images_corrected_stitched_10X/cellpainting/Plate1/Plate1_WellA1/StitchedPhalloidin.tiff",
+      "Batch1/images_corrected_stitched_10X/cellpainting/Plate1/Plate1_WellA1/StitchedZO1.tiff"
+    ]
+  },
+  "5_BC_Illum": {
+    "illum_functions": [
+      "Batch1/illum/Plate1/Plate1_Cycle01_IllumC.npy",
+      "Batch1/illum/Plate1/Plate1_Cycle01_IllumA.npy",
+      "Batch1/illum/Plate1/Plate1_Cycle01_IllumT.npy",
+      "Batch1/illum/Plate1/Plate1_Cycle01_IllumG.npy",
+      "Batch1/illum/Plate1/Plate1_Cycle01_IllumDAPI.npy"
+    ]
+  },
+  "6_BC_Apply_Illum": {
+    "aligned_images": [
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff",
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff",
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff",
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff",
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff"
+    ],
+    "csvs": [
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv",
+      "Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv"
+    ]
+  },
+  "7_BC_Preprocess": {
+    "images_corrected": [
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff"
+    ],
+    "overlay_images": [
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Max_Overlay.png"
+    ],
+    "csvs": [
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Experiment.csv",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Nuclei.csv",
+      "Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_PreFoci.csv"
+    ]
+  },
+  "8_BC_Stitching": {
+    "stitched_images": [
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_DAPI.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopLeft_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopLeft_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopLeft_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopLeft_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopLeft_Cycle01_DAPI.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopRight_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopRight_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopRight_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopRight_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedTopRight_Cycle01_DAPI.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomLeft_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomLeft_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomLeft_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomLeft_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomLeft_Cycle01_DAPI.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomRight_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomRight_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomRight_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomRight_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched/barcoding/Plate1/Plate1_WellA1/StitchedBottomRight_Cycle01_DAPI.tiff"
+    ],
+    "cropped_tiles": [
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_C/Cycle01_C_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_C/Cycle01_C_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_C/Cycle01_C_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_C/Cycle01_C_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_A/Cycle01_A_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_A/Cycle01_A_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_A/Cycle01_A_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_A/Cycle01_A_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_T/Cycle01_T_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_T/Cycle01_T_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_T/Cycle01_T_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_T/Cycle01_T_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_G/Cycle01_G_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_G/Cycle01_G_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_G/Cycle01_G_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_G/Cycle01_G_Tile_3.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_DAPI/Cycle01_DAPI_Tile_0.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_DAPI/Cycle01_DAPI_Tile_1.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_DAPI/Cycle01_DAPI_Tile_2.tiff",
+      "Batch1/images_corrected_cropped/barcoding/Plate1/Plate1_WellA1/Cycle01_DAPI/Cycle01_DAPI_Tile_3.tiff"
+    ],
+    "previews": [
+      "Batch1/images_corrected_stitched_10X/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_C.tiff",
+      "Batch1/images_corrected_stitched_10X/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_A.tiff",
+      "Batch1/images_corrected_stitched_10X/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_T.tiff",
+      "Batch1/images_corrected_stitched_10X/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_G.tiff",
+      "Batch1/images_corrected_stitched_10X/barcoding/Plate1/Plate1_WellA1/Stitched_Cycle01_DAPI.tiff"
+    ]
+  },
+  "9_Analysis": {
+    "segmentation_masks": [
+      "workspace/analysis/Plate1-WellA1-Tile0/segmentation_masks/Plate_Plate1_Well_A1_Tile_0_Nuclei_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile0/segmentation_masks/Plate_Plate1_Well_A1_Tile_0_Cells_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile0/segmentation_masks/Plate_Plate1_Well_A1_Tile_0_Cytoplasm_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile1/segmentation_masks/Plate_Plate1_Well_A1_Tile_1_Nuclei_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile1/segmentation_masks/Plate_Plate1_Well_A1_Tile_1_Cells_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile1/segmentation_masks/Plate_Plate1_Well_A1_Tile_1_Cytoplasm_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile2/segmentation_masks/Plate_Plate1_Well_A1_Tile_2_Nuclei_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile2/segmentation_masks/Plate_Plate1_Well_A1_Tile_2_Cells_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile2/segmentation_masks/Plate_Plate1_Well_A1_Tile_2_Cytoplasm_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile3/segmentation_masks/Plate_Plate1_Well_A1_Tile_3_Nuclei_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile3/segmentation_masks/Plate_Plate1_Well_A1_Tile_3_Cells_Objects.tiff",
+      "workspace/analysis/Plate1-WellA1-Tile3/segmentation_masks/Plate_Plate1_Well_A1_Tile_3_Cytoplasm_Objects.tiff"
+    ],
+    "overlay_images": [
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrDNA_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrDNA_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrDNA_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrDNA_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrPhalloidin_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrPhalloidin_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrPhalloidin_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrPhalloidin_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrZO1_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrZO1_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrZO1_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrZO1_Overlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrDNA_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrDNA_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrDNA_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrDNA_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrPhalloidin_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrPhalloidin_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrPhalloidin_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrPhalloidin_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile0/Plate_Plate1_Well_A1_Tile_0_CorrZO1_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile1/Plate_Plate1_Well_A1_Tile_1_CorrZO1_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile2/Plate_Plate1_Well_A1_Tile_2_CorrZO1_SpotOverlay.png",
+      "workspace/analysis/Plate1-WellA1-Tile3/Plate_Plate1_Well_A1_Tile_3_CorrZO1_SpotOverlay.png"
+    ],
+    "csvs": [
+      "workspace/analysis/Plate1-WellA1-Tile0/BarcodeFoci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/BarcodeFoci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/BarcodeFoci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/BarcodeFoci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Cells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Cells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Cells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Cells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/ConfluentRegions.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/ConfluentRegions.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/ConfluentRegions.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/ConfluentRegions.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Cytoplasm.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Cytoplasm.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Cytoplasm.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Cytoplasm.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Experiment.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Experiment.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Experiment.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Experiment.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Foci_NonCellEdge.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Foci_NonCellEdge.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Foci_NonCellEdge.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Foci_NonCellEdge.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Foci_PreMask.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Foci_PreMask.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Foci_PreMask.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Foci_PreMask.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Image.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Image.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Image.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Image.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Nuclei.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Nuclei.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Nuclei.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Nuclei.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/PreCells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/PreCells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/PreCells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/PreCells.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/RelateObjects.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/RelateObjects.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/RelateObjects.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/RelateObjects.csv",
+      "workspace/analysis/Plate1-WellA1-Tile0/Resize_Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile1/Resize_Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile2/Resize_Foci.csv",
+      "workspace/analysis/Plate1-WellA1-Tile3/Resize_Foci.csv"
+    ]
+  }
+}
