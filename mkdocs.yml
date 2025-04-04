@@ -29,5 +29,6 @@ nav:
     - Analysis: user/algorithms/analysis.md
   - Development:
     - Developer Guide: developer/developer-guide.md
+    - PCPIP Specs: developer/pcpip-specs.md
     - Requirements: developer/requirements.md
   - FAQ: misc/faq.md
