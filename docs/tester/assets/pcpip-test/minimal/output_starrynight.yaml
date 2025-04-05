@@ -1,6 +1,6 @@
 load_data:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
+  path: ../../../../scratch/starrynight_example_output/workspace/cellprofiler/loaddata/
   files:
     set1:
       - folder: cp/illum
@@ -28,7 +28,7 @@ load_data:
 
 illum_calc:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/illum/
+  path: ../../../../scratch/starrynight_example_output/workspace/illum/
   files:
     set1:
       - folder: cp/illum_calc
@@ -48,7 +48,7 @@ illum_calc:
 
 images_illum_corrected_painting:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/illum/
+  path: ../../../../scratch/starrynight_example_output/workspace/illum/
   files:
     set1:
       - folder: cp/illum_apply
@@ -60,7 +60,7 @@ images_illum_corrected_painting:
 
 images_aligned_barcoding:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/align/
+  path: ../../../../scratch/starrynight_example_output/workspace/align/
   files:
     set1:
       - folder: sbs
@@ -77,7 +77,7 @@ images_aligned_barcoding:
 
 images_corrected_barcoding:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/preprocess/
+  path: ../../../../scratch/starrynight_example_output/workspace/preprocess/
   files:
     set1:
       - folder: sbs
@@ -100,7 +100,7 @@ images_corrected_barcoding:
 
 images_segmentation:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/segcheck/
+  path: ../../../../scratch/starrynight_example_output/workspace/segcheck/
   files:
     set1:
       - folder: cp
@@ -116,7 +116,7 @@ images_segmentation:
 
 images_illum_corrected_barcoding:
   level: site
-  path: ../../scratch/starrynight_example_output/workspace/illum/
+  path: ../../../../scratch/starrynight_example_output/workspace/illum/
   files:
     set1:
       - folder: sbs/illum_apply
@@ -130,7 +130,7 @@ images_illum_corrected_barcoding:
 
 presegcheck:
   level: plate
-  path: ../../scratch/starrynight_example_output/workspace/presegcheck/
+  path: ../../../../scratch/starrynight_example_output/workspace/presegcheck/
   files:
     set1:
       - folder: cp

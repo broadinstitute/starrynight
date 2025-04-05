@@ -1,12 +1,12 @@
 load_data:
   level: plate
-  path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
   files:
     set1:
     - folder: Plate1
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline1.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline1.csv
           size: 2341308
           headers:
           - Metadata_Plate
@@ -21,7 +21,7 @@ load_data:
           - Frame_OrigDNA
           - Frame_OrigZO1
           - Frame_OrigPhalloidin
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline2.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline2.csv
           size: 3514030
           headers:
           - Metadata_Plate
@@ -42,7 +42,7 @@ load_data:
           - PathName_IllumZO1
           - FileName_IllumPhalloidin
           - PathName_IllumPhalloidin
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline3.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline3.csv
           size: 122258
           headers:
           - Metadata_Plate
@@ -55,7 +55,7 @@ load_data:
           - FileName_Phalloidin
           - PathName_ZO1
           - FileName_ZO1
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline5.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline5.csv
           size: 31201977
           headers:
           - Metadata_Plate
@@ -77,7 +77,7 @@ load_data:
           - Frame_OrigC
           - Frame_OrigDNA
           - Metadata_Well
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline6.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline6.csv
           size: 63843508
           headers:
           - Metadata_Plate
@@ -100,7 +100,7 @@ load_data:
           - PathName_Cycle02_OrigT
           - PathName_Cycle02_OrigDNA
           - 285 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline7.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline7.csv
           size: 31187852
           headers:
           - Metadata_Plate
@@ -123,7 +123,7 @@ load_data:
           - PathName_Cycle04_C
           - PathName_Cycle04_G
           - 67 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline9.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline9.csv
           size: 27139102
           headers:
           - Metadata_Plate
@@ -148,37 +148,37 @@ load_data:
           - 73 more columns
 illum_calc:
   level: plate
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/
   files:
     set1:
     - folder: Plate1
       files:
       - npy:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumA.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumA.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumC.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumC.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumDNA.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumDNA.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumG.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumG.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumT.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumT.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumDNA.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumDNA.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumPhalloidin.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumPhalloidin.npy
           size: 10240128
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumZO1.npy
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/Plate1/Plate1_IllumZO1.npy
           size: 10240128
 images_corrected_painting:
   level: well
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
   files:
     set1:
     - folder: Plate1-WellA1
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
           size: 82855762
           headers:
           - ImageNumber
@@ -188,7 +188,7 @@ images_corrected_painting:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Nuclei
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_ConfluentRegions.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_ConfluentRegions.csv
           size: 1965
           headers:
           - ImageNumber
@@ -197,12 +197,12 @@ images_corrected_painting:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Experiment.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Experiment.csv
           size: 14520
           headers:
           - Key
           - Value
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
           size: 2520717
           headers:
           - Count_Cells
@@ -225,7 +225,7 @@ images_corrected_painting:
           - FileName_OrigPhalloidin
           - FileName_OrigZO1
           - 68 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv
           size: 79157885
           headers:
           - ImageNumber
@@ -236,26 +236,26 @@ images_corrected_painting:
           - Location_Center_Z
           - Number_Object_Number
       - tiff:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
           size: 5120256
 images_aligned_barcoding:
   level: site
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/
   files:
     set1:
     - folder: Plate1-WellA1-0
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
           size: 78285
           headers:
           - Key
           - Value
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
           size: 415072
           headers:
           - Align_Xshift_AlignedRed
@@ -279,25 +279,25 @@ images_aligned_barcoding:
           - Align_Xshift_Cycle05_DAPI
           - 8043 more columns
       - tiff:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
           size: 5120256
 images_corrected_barcoding:
   level: site
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/
   files:
     set1:
     - folder: Plate1-WellA1-0
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
           size: 1229777
           headers:
           - ImageNumber
@@ -320,12 +320,12 @@ images_corrected_barcoding:
           - Intensity_MaxIntensityEdge_Barcodes_Scores
           - Intensity_MaxIntensity_Barcodes_Barcodes
           - 34 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Experiment.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Experiment.csv
           size: 145135
           headers:
           - Key
           - Value
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
           size: 30002
           headers:
           - Barcode_MeanBarcodeScore
@@ -348,7 +348,7 @@ images_corrected_barcoding:
           - ExecutionTime_102SaveImages
           - ExecutionTime_103SaveImages
           - 522 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Nuclei.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Nuclei.csv
           size: 79001
           headers:
           - ImageNumber
@@ -361,7 +361,7 @@ images_corrected_barcoding:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_PreFoci.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_PreFoci.csv
           size: 25612677
           headers:
           - ImageNumber
@@ -385,25 +385,25 @@ images_corrected_barcoding:
           - Intensity_IntegratedIntensityEdge_PreCycle02_C
           - 838 more columns
       - tiff:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
           size: 5120256
 images_segmentation:
   level: plate
-  path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/
   files:
     set1:
     - folder: Plate1
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
           size: 4956879
           headers:
           - ImageNumber
@@ -417,7 +417,7 @@ images_segmentation:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_PreCells
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_ConfluentRegions.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_ConfluentRegions.csv
           size: 164
           headers:
           - ImageNumber
@@ -430,12 +430,12 @@ images_segmentation:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Experiment.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Experiment.csv
           size: 16129
           headers:
           - Key
           - Value
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Image.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Image.csv
           size: 107471
           headers:
           - Count_Cells
@@ -458,7 +458,7 @@ images_segmentation:
           - ExecutionTime_14OverlayOutlines
           - ExecutionTime_15SaveImages
           - 56 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Nuclei.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Nuclei.csv
           size: 4798869
           headers:
           - ImageNumber
@@ -472,7 +472,7 @@ images_segmentation:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_PreCells.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_PreCells.csv
           size: 5086127
           headers:
           - ImageNumber
@@ -488,17 +488,17 @@ images_segmentation:
           - Number_Object_Number
           - Parent_Nuclei
       - png:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
           size: 4851592
 analysis:
   level: site
-  path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/
+  path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/
   files:
     set1:
     - folder: Plate1-WellA1-0
       files:
       - csv:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/BarcodeFoci.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/BarcodeFoci.csv
           size: 1251307
           headers:
           - ImageNumber
@@ -521,7 +521,7 @@ analysis:
           - Intensity_MADIntensity_CellOutlineImage
           - Intensity_MassDisplacement_Barcodes_Barcodes
           - 56 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Cells.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cells.csv
           size: 746692
           headers:
           - ImageNumber
@@ -544,7 +544,7 @@ analysis:
           - Mean_BarcodeFoci_Intensity_LowerQuartileIntensity_Barcodes_Scores
           - Mean_BarcodeFoci_Intensity_LowerQuartileIntensity_CellOutlineImage
           - 60 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/ConfluentRegions.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/ConfluentRegions.csv
           size: 101
           headers:
           - ImageNumber
@@ -553,7 +553,7 @@ analysis:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Cytoplasm.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cytoplasm.csv
           size: 62634
           headers:
           - ImageNumber
@@ -563,12 +563,12 @@ analysis:
           - Number_Object_Number
           - Parent_Cells
           - Parent_Nuclei
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Experiment.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Experiment.csv
           size: 66085
           headers:
           - Key
           - Value
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Foci.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci.csv
           size: 16632583
           headers:
           - ImageNumber
@@ -591,7 +591,7 @@ analysis:
           - Intensity_IntegratedIntensityEdge_Cycle02_T
           - Intensity_IntegratedIntensityEdge_Cycle03_A
           - 835 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Foci_NonCellEdge.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_NonCellEdge.csv
           size: 45024
           headers:
           - ImageNumber
@@ -601,7 +601,7 @@ analysis:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_BarcodeFoci
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Foci_PreMask.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_PreMask.csv
           size: 70721
           headers:
           - ImageNumber
@@ -611,7 +611,7 @@ analysis:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Image.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Image.csv
           size: 28134
           headers:
           - Align_Xshift_AlignedRed
@@ -634,7 +634,7 @@ analysis:
           - Count_ConfluentRegions
           - Count_Cytoplasm
           - 472 more columns
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Nuclei.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Nuclei.csv
           size: 59865
           headers:
           - ImageNumber
@@ -645,7 +645,7 @@ analysis:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/PreCells.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/PreCells.csv
           size: 62708
           headers:
           - ImageNumber
@@ -656,7 +656,7 @@ analysis:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Nuclei
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/RelateObjects.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/RelateObjects.csv
           size: 71618
           headers:
           - ImageNumber
@@ -666,7 +666,7 @@ analysis:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_BarcodeFoci
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Resize_Foci.csv
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Resize_Foci.csv
           size: 61321
           headers:
           - ImageNumber
@@ -677,13 +677,13 @@ analysis:
           - Number_Object_Number
           - Parent_Foci
       - tiff:
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
           size: 5120256
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
           size: 642302
-        - path: ../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/20231011_batch_1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
+        - path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
           size: 23658

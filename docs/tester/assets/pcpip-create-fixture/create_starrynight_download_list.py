@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# FIXME: Ensure that the folder created is workspace/analysis/Batch1 and not workspace/analysis/20...
 import itertools
 from pathlib import Path
 

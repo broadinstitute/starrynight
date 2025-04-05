@@ -1,6 +1,6 @@
 images:
     level: plate
-    path: ../../scratch/starrynight_example_input/Source1/Batch1/images/
+    path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/
     files:
       set1:
         - folder: Plate1
