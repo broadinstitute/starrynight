@@ -89,6 +89,11 @@ def read_csv_headers(file_path, max_headers=20):
 def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
     """Generate path for storing file embeddings.
 
+    This function creates a consistent, organized directory structure for embeddings:
+    - Groups files by semantic type (e.g., metadata_csv, raw_image)
+    - Uses hashing to create a balanced directory structure
+    - Preserves original filename while ensuring uniqueness
+
     Args:
         file_path (str): Original file path
         embedding_base_dir (str): Base directory for embeddings
@@ -100,16 +105,19 @@ def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
     if not p.exists() or not embedding_base_dir:
         return None
 
-    # Create a unique filename based on the original path
+    # Hash the file path to create a unique identifier
+    # This prevents filename collisions while keeping the original name for readability
     file_hash = hashlib.md5(str(p).encode("utf-8")).hexdigest()[:10]
     embedding_filename = f"{p.stem}_{file_hash}_embedding.npy"
 
-    # Preserve relative path structure within the embedding directory
+    # Hash the parent directory to create a consistent directory structure
+    # This prevents excessive nesting while grouping related files together
     rel_path = p.absolute()
     rel_dir = rel_path.parent
     rel_hash = hashlib.md5(str(rel_dir).encode("utf-8")).hexdigest()[:8]
 
-    # Create embeddings directory structure
+    # Create embeddings directory structure:
+    # embedding_base_dir/semantic_type/rel_hash/filename_filehash_embedding.npy
     embedding_path = Path(embedding_base_dir) / semantic_type / rel_hash
     embedding_path.mkdir(parents=True, exist_ok=True)
 
@@ -127,7 +135,18 @@ def handle_generic_file(file_path, embedding_dir=None, semantic_type=None):
     Returns:
         dict: Basic file information with path and size
     """
-    return {"path": str(file_path), "size": get_file_size(file_path)}
+    file_info = {"path": str(file_path), "size": get_file_size(file_path)}
+
+    # Add embedding information if requested and file exists
+    if file_info["size"] is not None and embedding_dir and semantic_type:
+        embedding_path = generate_embedding_path(
+            file_path, embedding_dir, semantic_type
+        )
+        if embedding_path:
+            file_info["embedding_path"] = embedding_path
+            file_info["has_embedding"] = True
+
+    return file_info
 
 
 # CSV File Handlers
@@ -141,19 +160,31 @@ def handle_metadata_csv(file_path, embedding_dir=None, semantic_type="metadata_c
     Returns:
         dict: File info with headers and embedding path if available
     """
-    file_info = handle_generic_file(file_path)
+    file_info = handle_generic_file(file_path, embedding_dir, semantic_type)
 
+    # Add CSV-specific information if file exists
     if file_info["size"] is not None:
         file_info["headers"] = read_csv_headers(file_path)
 
-        # Add embedding information
-        if embedding_dir:
-            embedding_path = generate_embedding_path(
-                file_path, embedding_dir, semantic_type
-            )
-            if embedding_path:
-                file_info["embedding_path"] = embedding_path
-                file_info["has_embedding"] = True
+        # If we have an embedding path, save a simple embedding (just a hash)
+        if "embedding_path" in file_info and embedding_dir:
+            try:
+                # Read part of the file to generate a hash
+                with open(file_path, "r", newline="") as f:
+                    content = f.read(4096)  # Read first 4KB
+
+                # Generate a simple hash as our "embedding"
+                file_hash = hashlib.md5(content.encode()).hexdigest()
+
+                # Save the hash to the embedding path
+                embedding_file = Path(file_info["embedding_path"])
+                embedding_file.parent.mkdir(parents=True, exist_ok=True)
+
+                with open(embedding_file, "w") as f:
+                    f.write(file_hash)
+
+            except Exception as e:
+                click.echo(f"Error saving embedding for {file_path}: {e}", err=True)
 
     return file_info
 
@@ -168,21 +199,12 @@ def handle_analysis_csv(file_path, embedding_dir=None, semantic_type="analysis_c
     Returns:
         dict: File info with headers and embedding path if available
     """
-    file_info = handle_generic_file(file_path)
+    file_info = handle_generic_file(file_path, embedding_dir, semantic_type)
 
+    # Add CSV-specific information if file exists
     if file_info["size"] is not None:
         file_info["headers"] = read_csv_headers(file_path)
-
         # Additional analysis for this file type could be added here
-
-        # Add embedding information
-        if embedding_dir:
-            embedding_path = generate_embedding_path(
-                file_path, embedding_dir, semantic_type
-            )
-            if embedding_path:
-                file_info["embedding_path"] = embedding_path
-                file_info["has_embedding"] = True
 
     return file_info
 
@@ -198,18 +220,8 @@ def handle_raw_image(file_path, embedding_dir=None, semantic_type="raw_image"):
     Returns:
         dict: File info with embedding path if available
     """
-    file_info = handle_generic_file(file_path)
-
-    if file_info["size"] is not None and embedding_dir:
-        # Add embedding information
-        embedding_path = generate_embedding_path(
-            file_path, embedding_dir, semantic_type
-        )
-        if embedding_path:
-            file_info["embedding_path"] = embedding_path
-            file_info["has_embedding"] = True
-
-    return file_info
+    # Raw images just use the generic file handler with embedding support
+    return handle_generic_file(file_path, embedding_dir, semantic_type)
 
 
 def handle_processed_image(
@@ -224,18 +236,8 @@ def handle_processed_image(
     Returns:
         dict: File info with embedding path if available
     """
-    file_info = handle_generic_file(file_path)
-
-    if file_info["size"] is not None and embedding_dir:
-        # Add embedding information
-        embedding_path = generate_embedding_path(
-            file_path, embedding_dir, semantic_type
-        )
-        if embedding_path:
-            file_info["embedding_path"] = embedding_path
-            file_info["has_embedding"] = True
-
-    return file_info
+    # Processed images just use the generic file handler with embedding support
+    return handle_generic_file(file_path, embedding_dir, semantic_type)
 
 
 # Other File Handlers
@@ -251,18 +253,8 @@ def handle_illumination_file(
     Returns:
         dict: File info with embedding path if available
     """
-    file_info = handle_generic_file(file_path)
-
-    if file_info["size"] is not None and embedding_dir:
-        # Add embedding information
-        embedding_path = generate_embedding_path(
-            file_path, embedding_dir, semantic_type
-        )
-        if embedding_path:
-            file_info["embedding_path"] = embedding_path
-            file_info["has_embedding"] = True
-
-    return file_info
+    # Illumination files just use the generic file handler with embedding support
+    return handle_generic_file(file_path, embedding_dir, semantic_type)
 
 
 # Registry of handler functions by semantic type
