@@ -4,7 +4,7 @@ load_data:
   contents:
     set1:
       - folder: Plate1
-        files:
+        types:
           - type: metadata_csv
             files:
               - load_data_pipeline1.csv
@@ -21,7 +21,7 @@ illum_calc:
   contents:
     set1:
       - folder: Plate1
-        files:
+        types:
           - type: illumination_file
             files:
               - Plate1_Cycle1_IllumA.npy
@@ -39,15 +39,15 @@ images_corrected_painting:
   contents:
     set1:
       - folder: Plate1-WellA1
-        files:
-          - type: object_csv
+        types:
+          - type: analysis_csv
             files:
               - PaintingIllumApplication_Cells.csv
               - PaintingIllumApplication_ConfluentRegions.csv
               - PaintingIllumApplication_Experiment.csv
               - PaintingIllumApplication_Image.csv
               - PaintingIllumApplication_Nuclei.csv
-          - type: corrected_image
+          - type: processed_image
             files:
               - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
               - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
@@ -59,12 +59,12 @@ images_aligned_barcoding:
   contents:
     set1:
       - folder: Plate1-WellA1-0
-        files:
-          - type: object_csv
+        types:
+          - type: analysis_csv
             files:
               - BarcodingApplication_Experiment.csv
               - BarcodingApplication_Image.csv
-          - type: corrected_image
+          - type: processed_image
             files:
             - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
@@ -77,15 +77,15 @@ images_corrected_barcoding:
   contents:
     set1:
       - folder: Plate1-WellA1-0
-        files:
-          - type: object_csv
+        types:
+          - type: analysis_csv
             files:
               - BarcodePreprocessing_BarcodeFoci.csv
               - BarcodePreprocessing_Experiment.csv
               - BarcodePreprocessing_Image.csv
               - BarcodePreprocessing_Nuclei.csv
               - BarcodePreprocessing_PreFoci.csv
-          - type: corrected_image
+          - type: processed_image
             files:
               - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
               - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
@@ -99,8 +99,8 @@ images_segmentation:
   contents:
     set1:
       - folder: Plate1
-        files:
-          - type: object_csv
+        types:
+          - type: analysis_csv
             files:
               - SegmentationCheck_Cells.csv
               - SegmentationCheck_ConfluentRegions.csv
@@ -108,7 +108,7 @@ images_segmentation:
               - SegmentationCheck_Image.csv
               - SegmentationCheck_Nuclei.csv
               - SegmentationCheck_PreCells.csv
-          - type: corrected_image
+          - type: processed_image
             files:
               - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
 
@@ -118,8 +118,8 @@ analysis:
   contents:
     set1:
       - folder: Plate1-WellA1-0
-        files:
-          - type: object_csv
+        types:
+          - type: analysis_csv
             files:
               - BarcodeFoci.csv
               - Cells.csv
@@ -134,7 +134,7 @@ analysis:
               - PreCells.csv
               - RelateObjects.csv
               - Resize_Foci.csv
-          - type: corrected_image
+          - type: processed_image
             files:
               - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
               - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff

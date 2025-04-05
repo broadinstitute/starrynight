@@ -4,7 +4,7 @@ load_data:
   contents:
     set1:
     - folder: Plate1
-      files:
+      types:
       - type: metadata_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline1.csv
@@ -153,7 +153,7 @@ illum_calc:
   contents:
     set1:
     - folder: Plate1
-      files:
+      types:
       - type: illumination_file
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumA.npy
@@ -178,8 +178,8 @@ images_corrected_painting:
   contents:
     set1:
     - folder: Plate1-WellA1
-      files:
-      - type: object_csv
+      types:
+      - type: analysis_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
           size: 82855762
@@ -238,7 +238,7 @@ images_corrected_painting:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-      - type: corrected_image
+      - type: processed_image
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
           size: 5120256
@@ -252,8 +252,8 @@ images_aligned_barcoding:
   contents:
     set1:
     - folder: Plate1-WellA1-0
-      files:
-      - type: object_csv
+      types:
+      - type: analysis_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
           size: 78285
@@ -283,7 +283,7 @@ images_aligned_barcoding:
           - Align_Xshift_Cycle05_C
           - Align_Xshift_Cycle05_DAPI
           - 8043 more columns
-      - type: corrected_image
+      - type: processed_image
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
           size: 5120256
@@ -299,8 +299,8 @@ images_corrected_barcoding:
   contents:
     set1:
     - folder: Plate1-WellA1-0
-      files:
-      - type: object_csv
+      types:
+      - type: analysis_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
           size: 1229777
@@ -389,7 +389,7 @@ images_corrected_barcoding:
           - Intensity_IntegratedIntensityEdge_PreCycle02_A
           - Intensity_IntegratedIntensityEdge_PreCycle02_C
           - 838 more columns
-      - type: corrected_image
+      - type: processed_image
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
           size: 5120256
@@ -407,8 +407,8 @@ images_segmentation:
   contents:
     set1:
     - folder: Plate1
-      files:
-      - type: object_csv
+      types:
+      - type: analysis_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
           size: 4956879
@@ -494,7 +494,7 @@ images_segmentation:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Nuclei
-      - type: corrected_image
+      - type: processed_image
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
           size: 4851592
@@ -504,8 +504,8 @@ analysis:
   contents:
     set1:
     - folder: Plate1-WellA1-0
-      files:
-      - type: object_csv
+      types:
+      - type: analysis_csv
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/BarcodeFoci.csv
           size: 1251307
@@ -685,7 +685,7 @@ analysis:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Foci
-      - type: corrected_image
+      - type: processed_image
         files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
           size: 5120256

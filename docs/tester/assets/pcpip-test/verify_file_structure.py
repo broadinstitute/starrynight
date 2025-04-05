@@ -359,9 +359,9 @@ def build_file_paths(yaml_data, embedding_dir=None, path_replacement=None):
 
             for folder_item in folders:
                 folder_path = Path(base_path) / folder_item["folder"]
-                processed_folder = {"folder": folder_item["folder"], "files": []}
+                processed_folder = {"folder": folder_item["folder"], "types": []}
 
-                for file_group in folder_item["files"]:
+                for file_group in folder_item["types"]:
                     semantic_type = file_group["type"]
 
                     # Skip unknown semantic types with a warning
@@ -380,7 +380,7 @@ def build_file_paths(yaml_data, embedding_dir=None, path_replacement=None):
                         file_info = handler(full_path, embedding_dir, semantic_type)
                         processed_files.append(file_info)
 
-                    processed_folder["files"].append(
+                    processed_folder["types"].append(
                         {"type": semantic_type, "files": processed_files}
                     )
 
