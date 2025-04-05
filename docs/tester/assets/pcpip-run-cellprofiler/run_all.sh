@@ -88,6 +88,15 @@ declare -A PIPELINE_CONFIG=(
   [7,output]="images_corrected/barcoding/PLATE-WELL-SITE"
   [9,output]="../workspace/analysis/Batch1/PLATE-WELL-SITE"
 
+  # Log filename patterns (only include relevant parameters for each pipeline)
+  [1,log]="pipeline1_PLATE"
+  [2,log]="pipeline2_PLATE_WELL"
+  [3,log]="pipeline3_PLATE_WELL"
+  [5,log]="pipeline5_PLATE_SBSCYCLE"
+  [6,log]="pipeline6_PLATE_WELL_SITE"
+  [7,log]="pipeline7_PLATE_WELL_SITE"
+  [9,log]="pipeline9_PLATE_WELL_SITE"
+
   # Group patterns
   [1,group]="Metadata_Plate=PLATE"
   [2,group]="Metadata_Plate=PLATE,Metadata_Well=WELL"
@@ -170,28 +179,36 @@ apply_pattern() {
 #
 # Parameters:
 #   $1: Pipeline number
+#   $2: PLATE value (required)
+#   $3: WELL value (optional)
+#   $4: SITE value (optional)
+#   $5: SBSCYCLE value (optional)
 #
 # Returns:
 #   Log filename with path
 get_log_filename() {
   local pipeline=$1
+  local plate=$2
+  local well=$3
+  local site=$4
+  local sbscycle=$5
   local log_name="pipeline${pipeline}"
 
   # Add each defined parameter to the filename
-  if [[ -n "$PLATE" ]]; then
-    log_name="${log_name}_plate${PLATE}"
+  if [[ -n "$plate" ]]; then
+    log_name="${log_name}_plate${plate}"
   fi
 
-  if [[ -n "$WELL" ]]; then
-    log_name="${log_name}_${WELL}"
+  if [[ -n "$well" ]]; then
+    log_name="${log_name}_${well}"
   fi
 
-  if [[ -n "$SITE" ]]; then
-    log_name="${log_name}_site${SITE}"
+  if [[ -n "$site" ]]; then
+    log_name="${log_name}_site${site}"
   fi
 
-  if [[ -n "$SBSCYCLE" ]]; then
-    log_name="${log_name}_cycle${SBSCYCLE}"
+  if [[ -n "$sbscycle" ]]; then
+    log_name="${log_name}_cycle${sbscycle}"
   fi
 
   echo "${LOG_DIR}/${log_name}.log"
@@ -280,8 +297,9 @@ run_pipeline() {
     cmd+=" --plugins-directory ${STARRYNIGHT_REPO_REL}/plugins/CellProfiler-plugins/active_plugins/"
   fi
 
-  # Get log filename
-  local log_file=$(get_log_filename "$pipeline")
+  # Get log filename using pattern substitution
+  local log_pattern=${PIPELINE_CONFIG[$pipeline,log]}
+  local log_file="${LOG_DIR}/$(apply_pattern "$log_pattern").log"
 
   # Log the command execution
   echo "Running pipeline $pipeline, logging to: $log_file"
