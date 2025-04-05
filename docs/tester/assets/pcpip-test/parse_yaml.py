@@ -32,13 +32,25 @@ def read_csv_headers(file_path, max_headers=20):
         return []
 
 
-def build_file_paths(yaml_data):
-    """Process YAML and return structure with full paths and file sizes."""
+def build_file_paths(yaml_data, path_replacement=None):
+    """Process YAML and return structure with full paths and file sizes.
+
+    Args:
+        yaml_data: The parsed YAML data
+        path_replacement: Tuple of (old_path, new_path) to replace in all paths
+    """
     result = {}
 
     for section_name, section_data in yaml_data.items():
         result[section_name] = section_data.copy()
         base_path = section_data["path"]
+
+        # Apply path replacement if specified
+        if path_replacement:
+            old_path, new_path = path_replacement
+            if base_path.startswith(old_path):
+                base_path = base_path.replace(old_path, new_path, 1)
+                result[section_name]["path"] = base_path
 
         if "files" in section_data:
             for set_name, folders in section_data["files"].items():
@@ -101,6 +113,12 @@ def main():
     parser.add_argument(
         "-o", "--output_file", help="Output file name (default: input_name_parsed.yaml)"
     )
+    parser.add_argument(
+        "--replace-path",
+        nargs=2,
+        metavar=("OLD_PATH", "NEW_PATH"),
+        help="Replace OLD_PATH with NEW_PATH in all file paths",
+    )
     args = parser.parse_args()
 
     # If output file not specified, derive it from input filename
@@ -112,13 +130,19 @@ def main():
     with open(args.input_file, "r") as f:
         yaml_data = yaml.safe_load(f)
 
-    processed_data = build_file_paths(yaml_data)
+    # Apply path replacement if specified
+    path_replacement = args.replace_path if args.replace_path else None
+    processed_data = build_file_paths(yaml_data, path_replacement)
 
     # Save processed data
     with open(args.output_file, "w") as f:
         yaml.dump(processed_data, f, default_flow_style=False, sort_keys=False)
 
     print(f"Processed YAML file has been saved to: {args.output_file}")
+    if path_replacement:
+        print(
+            f"Path replacement applied: '{path_replacement[0]}' → '{path_replacement[1]}'"
+        )
 
 
 if __name__ == "__main__":

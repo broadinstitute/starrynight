@@ -1,6 +1,6 @@
 
 export INPUT_DIR='./scratch/starrynight_example_input'
-export OUTPUT_BASELINE_DIR='./scratch/starrynight_example_output_baseline'
+export OUTPUT_BASELINE_DIR='./scratch/pcpip_example_output'
 
 # Compress files to reduce disk usage after downloading
 echo "Compressing files to reduce disk usage..."

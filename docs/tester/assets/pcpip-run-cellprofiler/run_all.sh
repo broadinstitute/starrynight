@@ -45,8 +45,8 @@
 #
 
 STARRYNIGHT_REPO_REL="../../../.."
-LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
-REPRODUCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/reproduce_starrynight_example_output_baseline"
+LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
+REPRODUCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/reproduce_pcpip_example_output"
 METADATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/starrynight_example_input/Source1/workspace/metadata"
 
 PIPELINE_DIR="../pcpip-pipelines"

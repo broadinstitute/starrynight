@@ -25,7 +25,7 @@ BATCH_LOCAL = "Batch1"
 
 # Paths
 LOCAL_INPUT_DIR = "./scratch/starrynight_example_input"
-LOCAL_OUTPUT_DIR = "./scratch/starrynight_example_output_baseline"
+LOCAL_OUTPUT_DIR = "./scratch/pcpip_example_output"
 
 LOCAL_PATH_IMAGES_INPUT = f"{LOCAL_INPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 LOCAL_PATH_IMAGES_OUTPUT = f"{LOCAL_OUTPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
@@ -40,7 +40,9 @@ S3_DEST_BUCKET = f"s3://{DEST_BUCKET}"
 S3_DEST_INPUT_DIR = (
     f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/starrynight_example_input"
 )
-S3_DEST_OUTPUT_DIR = f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/starrynight_example_output_baseline"
+S3_DEST_OUTPUT_DIR = (
+    f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/pcpip_example_output"
+)
 S3_DEST_IMAGES_INPUT = f"{S3_DEST_INPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 S3_DEST_IMAGES_OUTPUT = f"{S3_DEST_OUTPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 S3_DEST_WORKSPACE_INPUT = f"{S3_DEST_INPUT_DIR}/{PROJECT_LOCAL}/workspace"

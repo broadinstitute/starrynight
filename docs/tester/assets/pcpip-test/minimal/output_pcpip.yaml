@@ -1,6 +1,6 @@
 load_data:
   level: plate
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/
+  path: ../../../../scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/
   files:
     set1:
       - folder: Plate1
@@ -16,7 +16,7 @@ load_data:
 
 illum_calc:
   level: plate
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/illum/
+  path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/
   files:
     set1:
       - folder: Plate1
@@ -33,7 +33,7 @@ illum_calc:
 
 images_corrected_painting:
   level: well
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/painting/
+  path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/
   files:
     set1:
       - folder: Plate1-WellA1
@@ -51,7 +51,7 @@ images_corrected_painting:
 
 images_aligned_barcoding:
   level: site
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_aligned/barcoding/
+  path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/
   files:
     set1:
       - folder: Plate1-WellA1-0
@@ -68,7 +68,7 @@ images_aligned_barcoding:
 
 images_corrected_barcoding:
   level: site
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_corrected/barcoding/
+  path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
   files:
     set1:
       - folder: Plate1-WellA1-0
@@ -88,7 +88,7 @@ images_corrected_barcoding:
 
 images_segmentation:
   level: plate
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/Batch1/images_segmentation/
+  path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/
   files:
     set1:
       - folder: Plate1
@@ -105,7 +105,7 @@ images_segmentation:
 
 analysis:
   level: site
-  path: ../../../../scratch/starrynight_example_output_baseline/Source1/workspace/analysis/Batch1/
+  path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/
   files:
     set1:
       - folder: Plate1-WellA1-0
