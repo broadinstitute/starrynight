@@ -2,16 +2,6 @@
 
 A test suite for validating and testing the outputs from optical pooled screening (OPS) data processing pipelines.
 
-## Purpose
-
-The tools here help:
-
-- Validate pipeline configurations against expected specifications
-- Test output file structures and organization
-- Verify data integrity across pipeline stages
-- Compare outputs between different pipeline runs
-- Support development of new pipeline components
-
 ## Components
 
 ### Current Tools
