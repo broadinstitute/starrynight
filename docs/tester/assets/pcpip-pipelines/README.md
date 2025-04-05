@@ -117,41 +117,41 @@ original_1="_original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe"
 pcpip_1="_pcpip_12cycles/1_CP_Illum.cppipe"
 diff_1="_pcpip_12cycles/diff/1_CP_Illum"
 diff -w ${original_1} ${pcpip_1} > ${diff_1}.diff
-python diff.py ${original_1} ${pcpip_1} --format html --output ${diff_1}.html
+python diff.py ${pcpip_1} ${original_1} --format html --output ${diff_1}.html
 
 original_2="_original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe"
 pcpip_2="_pcpip_12cycles/2_CP_Apply_Illum.cppipe"
 diff_2="_pcpip_12cycles/diff/2_CP_Apply_Illum"
 diff -w ${original_2} ${pcpip_2} > ${diff_2}.diff
-python diff.py ${original_2} ${pcpip_2} --format html --output ${diff_2}.html
+python diff.py ${pcpip_2} ${original_2} --format html --output ${diff_2}.html
 
 original_3="_original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe"
 pcpip_3="_pcpip_12cycles/3_CP_SegmentationCheck.cppipe"
 diff_3="_pcpip_12cycles/diff/3_CP_SegmentationCheck"
 diff -w ${original_3} ${pcpip_3} > ${diff_3}.diff
-python diff.py ${original_3} ${pcpip_3} --format html --output ${diff_3}.html
+python diff.py ${pcpip_3} ${original_3} --format html --output ${diff_3}.html
 
 original_5="_original/5_BC_Illum/5_BC_Illum.cppipe"
 pcpip_5="_pcpip_12cycles/5_BC_Illum.cppipe"
 diff_5="_pcpip_12cycles/diff/5_BC_Illum"
 diff -w ${original_5} ${pcpip_5} > ${diff_5}.diff
-python diff.py ${original_5} ${pcpip_5} --format html --output ${diff_5}.html
+python diff.py ${pcpip_5} ${original_5} --format html --output ${diff_5}.html
 
 original_6="_original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe"
 pcpip_6="_pcpip_12cycles/6_BC_Apply_Illum.cppipe"
 diff_6="_pcpip_12cycles/diff/6_BC_Apply_Illum"
 diff -w ${original_6} ${pcpip_6} > ${diff_6}.diff
-python diff.py ${original_6} ${pcpip_6} --format html --output ${diff_6}.html
+python diff.py ${pcpip_6} ${original_6} --format html --output ${diff_6}.html
 
 original_7="_original/7_BC_Preprocess/7_BC_Preprocess.cppipe"
 pcpip_7="_pcpip_12cycles/7_BC_Preprocess.cppipe"
 diff_7="_pcpip_12cycles/diff/7_BC_Preprocess"
 diff -w ${original_7} ${pcpip_7} > ${diff_7}.diff
-python diff.py ${original_7} ${pcpip_7} --format html --output ${diff_7}.html
+python diff.py ${pcpip_7} ${original_7} --format html --output ${diff_7}.html
 
 original_9="_original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe"
 pcpip_9="_pcpip_12cycles/9_Analysis.cppipe"
 diff_9="_pcpip_12cycles/diff/9_Analysis"
 diff -w ${original_9} ${pcpip_9} > ${diff_9}.diff
-python diff.py ${original_9} ${pcpip_9} --format html --output ${diff_9}.html
+python diff.py ${pcpip_9} ${original_9} --format html --output ${diff_9}.html
 ```

@@ -26,88 +26,86 @@ details[open] summary { background-color: #e8e8e8; }
 <body>
 <h1>CellProfiler Pipeline Diff Report</h1>
 <div class='note'>
-<p><strong>Pipeline 1:</strong> 11 enabled modules, 3 disabled modules</p>
-<p><strong>Pipeline 2:</strong> 13 enabled modules, 1 disabled modules</p>
-<p><strong>Module change:</strong> 11 → 13 (+2)</p>
+<p><strong>Pipeline 1:</strong> 13 enabled modules, 1 disabled modules</p>
+<p><strong>Pipeline 2:</strong> 11 enabled modules, 3 disabled modules</p>
+<p><strong>Module change:</strong> 13 → 11 (-2)</p>
 </div>
 <h2>Metadata Reference Changes</h2>
 <div class='metadata-change'>
 <p>The following metadata reference pattern changes were detected:</p>
 <ul>
 <li><strong>SaveImages</strong> (Module 3 → 3): Enter single file name<br>
-Metadata references changed: -Well +Well_Value</li>
+Metadata references changed: -Well_Value +Well</li>
 <li><strong>SaveImages</strong> (Module 6 → 6): Enter single file name<br>
-Metadata references changed: -Well +Well_Value</li>
+Metadata references changed: -Well_Value +Well</li>
 </ul>
 </div>
 <h2>Detected Refactoring Patterns</h2>
-<div class='refactoring'>Channel ZO1 was likely replaced by Mito with similar processing workflow (100% similar)</div>
-<div class='refactoring'>Channel ZO1 was likely replaced by WGA with similar processing workflow (100% similar)</div>
-<div class='refactoring'>Channel ZO1 was likely replaced by ER with similar processing workflow (100% similar)</div>
+<div class='refactoring'>Channel Mito was likely replaced by ZO1 with similar processing workflow (100% similar)</div>
+<div class='refactoring'>Channel WGA was likely replaced by ZO1 with similar processing workflow (100% similar)</div>
+<div class='refactoring'>Channel ER was likely replaced by ZO1 with similar processing workflow (100% similar)</div>
 <h2>Channel Summary</h2>
-<p><span class='added'>Added channels:</span> Mito, WGA, ER</p>
-<p><span class='removed'>Removed channels:</span> ZO1</p>
+<p><span class='added'>Added channels:</span> ZO1</p>
+<p><span class='removed'>Removed channels:</span> Mito, WGA, ER</p>
 <p>Common channels: Phalloidin, DNA</p>
 <h2>Channel Processing Changes</h2>
 <table>
 <tr><th>Channel</th><th>Status</th></tr>
-<tr><td>DNA</td><td class='modified'>changed parameters (4 differences)</td></tr>
-<tr><td>ER</td><td class='added'>added</td></tr>
-<tr><td>Mito</td><td class='added'>added</td></tr>
-<tr><td>Phalloidin</td><td class='modified'>changed parameters (2 differences)</td></tr>
-<tr><td>WGA</td><td class='added'>added</td></tr>
-<tr><td>ZO1</td><td class='removed'>removed</td></tr>
+<tr><td>DNA</td><td class='modified'>changed parameters (3 differences)</td></tr>
+<tr><td>ER</td><td class='removed'>removed</td></tr>
+<tr><td>Mito</td><td class='removed'>removed</td></tr>
+<tr><td>Phalloidin</td><td class='modified'>changed parameters (1 differences)</td></tr>
+<tr><td>WGA</td><td class='removed'>removed</td></tr>
+<tr><td>ZO1</td><td class='added'>added</td></tr>
 </table>
 <h2>Added Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr class='added'><td>4</td><td>SaveImages</td><td>ER</td><td>Select the image to save: CorrER</td></tr>
-<tr class='added'><td>5</td><td>SaveImages</td><td>Mito</td><td>Select the image to save: CorrMito</td></tr>
-<tr class='added'><td>7</td><td>SaveImages</td><td>WGA</td><td>Select the image to save: CorrWGA</td></tr>
+<tr class='added'><td>4</td><td>SaveImages</td><td>ZO1</td><td>Select the image to save: CorrZO1</td></tr>
 </table>
 <h2>Removed Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr class='removed'><td>4</td><td>SaveImages</td><td>ZO1</td><td>Select the image to save: CorrZO1</td></tr>
+<tr class='removed'><td>4</td><td>SaveImages</td><td>ER</td><td>Select the image to save: CorrER</td></tr>
+<tr class='removed'><td>5</td><td>SaveImages</td><td>Mito</td><td>Select the image to save: CorrMito</td></tr>
+<tr class='removed'><td>7</td><td>SaveImages</td><td>WGA</td><td>Select the image to save: CorrWGA</td></tr>
 </table>
 <h2>Modified Modules</h2>
 <details>
 <summary>LoadData (Module 1 → 1, Channel: unknown)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Input Folder sub-folder|Downloads</td><td>Default Input Folder|Downloads</td></tr>
+<tr><td>Input data file location</td><td class='modified'>Modified</td><td>Default Input Folder|Downloads</td><td>Default Input Folder sub-folder|Downloads</td></tr>
 </table>
 </details>
 <details>
-<summary>SaveImages (Module 3 → 3, Channel: DNA, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
+<summary>SaveImages (Module 3 → 3, Channel: DNA, Revision: 15 → 16)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr class='metadata-change'><td>Enter single file name</td><td class='modified'>Metadata Only</td><td colspan='2'>Metadata references changed: -Well +Well_Value</td></tr>
+<tr class='metadata-change'><td>Enter single file name</td><td class='modified'>Metadata Only</td><td colspan='2'>Metadata references changed: -Well_Value +Well</td></tr>
 </table>
 </details>
 <details>
-<summary>SaveImages (Module 6 → 6, Channel: Phalloidin, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
+<summary>SaveImages (Module 6 → 6, Channel: Phalloidin, Revision: 15 → 16)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr class='metadata-change'><td>Enter single file name</td><td class='modified'>Metadata Only</td><td colspan='2'>Metadata references changed: -Well +Well_Value</td></tr>
+<tr class='metadata-change'><td>Enter single file name</td><td class='modified'>Metadata Only</td><td colspan='2'>Metadata references changed: -Well_Value +Well</td></tr>
 </table>
 </details>
 <details>
-<summary>IdentifyPrimaryObjects (Module 8 → 8, Channel: DNA, Revision: 15 → 14)</summary>
+<summary>IdentifyPrimaryObjects (Module 8 → 8, Channel: DNA, Revision: 14 → 15)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
-<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+<tr><td>Select maxima color</td><td class='removed'>Removed</td><td>Blue</td><td>-</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
 </table>
 </details>
 <details>
-<summary>IdentifyPrimaryObjects (Module 11 → 11, Channel: unknown, Revision: 15 → 14)</summary>
+<summary>IdentifyPrimaryObjects (Module 11 → 11, Channel: DNA, Revision: 14 → 15)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-<tr><td>Select maxima color</td><td class='added'>Added</td><td>-</td><td>Blue</td></tr>
-<tr><td>Display accepted local maxima?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
+<tr><td>Select maxima color</td><td class='removed'>Removed</td><td>Blue</td><td>-</td></tr>
+<tr><td>Display accepted local maxima?</td><td class='removed'>Removed</td><td>No</td><td>-</td></tr>
 </table>
 </details>
 </body></html>

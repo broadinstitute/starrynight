@@ -123,25 +123,66 @@ def get_module_processing_channel(module):
             "Name the output image",
             "Select the image to save",
         ]:
+            # Extract cycle and channel information
+            cycle_match = re.search(r"Cycle(\d+)_", value)
+            cycle_num = cycle_match.group(1) if cycle_match else None
+
             # Extract channel from image name
             if value.startswith("Orig"):
-                return value[4:]
-            elif "DNA" in value:
+                channel = value[4:]
+                # Include cycle number in channel identification if available
+                if cycle_num:
+                    return f"Cycle{cycle_num}_{channel}"
+                return channel
+            elif "DNA" in value or "DAPI" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_DNA"
                 return "DNA"
             elif "ER" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_ER"
                 return "ER"
             elif "Mito" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_Mito"
                 return "Mito"
             elif "Phalloidin" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_Phalloidin"
                 return "Phalloidin"
             elif "WGA" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_WGA"
                 return "WGA"
             elif "ZEB1" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_ZEB1"
                 return "ZEB1"
             elif "ZO1" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_ZO1"
                 return "ZO1"
             elif "Overlay" in value:
+                if cycle_num:
+                    return f"Cycle{cycle_num}_Overlay"
                 return "Overlay"
+            # For single nucleotide channels (A, C, G, T), ensure we include cycle info
+            elif "_A" in value or value.endswith("A"):
+                if cycle_num:
+                    return f"Cycle{cycle_num}_A"
+                return "A"
+            elif "_C" in value or value.endswith("C"):
+                if cycle_num:
+                    return f"Cycle{cycle_num}_C"
+                return "C"
+            elif "_G" in value or value.endswith("G"):
+                if cycle_num:
+                    return f"Cycle{cycle_num}_G"
+                return "G"
+            elif "_T" in value or value.endswith("T"):
+                if cycle_num:
+                    return f"Cycle{cycle_num}_T"
+                return "T"
     return None
 
 
@@ -529,13 +570,43 @@ def compare_modules(module1, module2):
     if module1["type"] != module2["type"]:
         return False
 
-    # For channel-specific modules, check if they're processing the same channel
+    # For channel-specific modules, check if they're processing the same channel (and cycle)
     if module1["type"] in ["SaveImages", "CorrectIlluminationApply", "MaskImage"]:
         channel1 = get_module_processing_channel(module1)
         channel2 = get_module_processing_channel(module2)
 
         # If channels are explicitly defined and different, these are different modules
         if channel1 and channel2 and channel1 != channel2:
+            return False
+
+        # Extract cycle info to ensure we're comparing modules from the same cycle
+        cycle1 = None
+        cycle2 = None
+
+        for param, value in module1["parameters"].items():
+            if param in [
+                "Select the input image",
+                "Name the output image",
+                "Select the image to save",
+            ]:
+                cycle_match = re.search(r"Cycle(\d+)_", value)
+                if cycle_match:
+                    cycle1 = cycle_match.group(1)
+                    break
+
+        for param, value in module2["parameters"].items():
+            if param in [
+                "Select the input image",
+                "Name the output image",
+                "Select the image to save",
+            ]:
+                cycle_match = re.search(r"Cycle(\d+)_", value)
+                if cycle_match:
+                    cycle2 = cycle_match.group(1)
+                    break
+
+        # If both modules have cycle info and they're different, these are different modules
+        if cycle1 and cycle2 and cycle1 != cycle2:
             return False
 
         # Check image parameters to see if they're processing the same images
@@ -557,7 +628,7 @@ def compare_modules(module1, module2):
 
 def create_module_signature(module):
     """Create a more precise signature that includes channel information"""
-    # Extract channel info
+    # Extract channel info (now includes cycle information)
     channel = get_module_processing_channel(module)
 
     # For modules that process specific channels (like SaveImages)
@@ -568,15 +639,17 @@ def create_module_signature(module):
             for k, v in module["parameters"].items()
             if k in ["Select the image to save", "Select the input image"]
         }
+
+        # Create signature with cycle-aware channel info to prevent matching modules from different cycles
         return (module["type"], channel, frozenset(key_params.items()))
     else:
-        # For non-channel-specific modules, use the original approach
+        # For non-channel-specific modules, still include channel info to avoid cross-cycle matching
         key_params = {
             k: v
             for k, v in module["parameters"].items()
             if k in ["Select the input image", "Name the output image"]
         }
-        return (module["type"], frozenset(key_params.items()))
+        return (module["type"], channel, frozenset(key_params.items()))
 
 
 def compare_pipelines(pipeline1, pipeline2):
@@ -584,6 +657,9 @@ def compare_pipelines(pipeline1, pipeline2):
     # Get enabled module counts
     enabled_count1 = sum(1 for m in pipeline1["modules"] if m["enabled"])
     enabled_count2 = sum(1 for m in pipeline2["modules"] if m["enabled"])
+
+    # Parameters to ignore in the diff report
+    ignored_params = ["Save with lossless compression?"]
 
     result = {
         "header_changes": {},
@@ -645,12 +721,16 @@ def compare_pipelines(pipeline1, pipeline2):
                         f"changed ({diff_count} modules differ)"
                     )
                 else:
-                    # Check parameters
+                    # Check parameters, filtering out ignored parameters
                     param_diffs = {}
                     for m1, m2 in zip(mods1, mods2):
                         for param in set(m1["parameters"].keys()) | set(
                             m2["parameters"].keys()
                         ):
+                            # Skip ignored parameters
+                            if param in ignored_params:
+                                continue
+
                             if param not in m1["parameters"]:
                                 param_diffs[param] = (
                                     f"{m1['type']} added param: {param}"
@@ -810,6 +890,10 @@ def compare_pipelines(pipeline1, pipeline2):
 
 def generate_report(diff_result, format="text"):
     """Generate a human-readable diff report"""
+
+    # Parameters to ignore in the diff report
+    ignored_params = ["Save with lossless compression?"]
+
     if format == "text":
         report = []
 
@@ -871,7 +955,8 @@ def generate_report(diff_result, format="text"):
                     f"+ Module {mod['module_num']}: {mod['type']} (Channel: {mod['channel'] or 'unknown'})"
                 )
                 for k, v in mod["key_params"].items():
-                    report.append(f"  {k}: {v}")
+                    if k not in ignored_params:
+                        report.append(f"  {k}: {v}")
 
         if diff_result["module_changes"]["removed"]:
             report.append("\n=== REMOVED MODULES ===")
@@ -880,11 +965,51 @@ def generate_report(diff_result, format="text"):
                     f"- Module {mod['module_num']}: {mod['type']} (Channel: {mod['channel'] or 'unknown'})"
                 )
                 for k, v in mod["key_params"].items():
-                    report.append(f"  {k}: {v}")
+                    if k not in ignored_params:
+                        report.append(f"  {k}: {v}")
 
         if diff_result["module_changes"]["modified"]:
             report.append("\n=== MODIFIED MODULES ===")
             for mod in diff_result["module_changes"]["modified"]:
+                # Check if there are any non-ignored parameter changes
+                has_visible_changes = False
+
+                # Check for high impact changes
+                if (
+                    "parameter_analysis" in mod
+                    and mod["parameter_analysis"]["high_impact"]
+                ):
+                    for change in mod["parameter_analysis"]["high_impact"]:
+                        if change["parameter"] not in ignored_params:
+                            has_visible_changes = True
+                            break
+
+                # Check for list changes
+                if (
+                    not has_visible_changes
+                    and "parameter_analysis" in mod
+                    and mod["parameter_analysis"]["list_changes"]
+                ):
+                    for param, changes in mod["parameter_analysis"][
+                        "list_changes"
+                    ].items():
+                        if param not in ignored_params and (
+                            changes["added"] or changes["removed"]
+                        ):
+                            has_visible_changes = True
+                            break
+
+                # Check for other parameter changes
+                if not has_visible_changes:
+                    for param, diff in mod["parameter_diffs"].items():
+                        if param not in ignored_params:
+                            has_visible_changes = True
+                            break
+
+                # Skip modules that only have version changes without meaningful parameter changes
+                if not has_visible_changes and mod.get("version_change", False):
+                    continue
+
                 channel_info = f"Channel: {mod['channel'] or 'unknown'}"
                 version_info = ""
                 if mod.get("version_change", False):
@@ -912,9 +1037,10 @@ def generate_report(diff_result, format="text"):
                 ):
                     report.append("  [High Impact Changes]")
                     for change in mod["parameter_analysis"]["high_impact"]:
-                        report.append(
-                            f"  ! {change['parameter']}: {change['from']} → {change['to']}"
-                        )
+                        if change["parameter"] not in ignored_params:
+                            report.append(
+                                f"  ! {change['parameter']}: {change['from']} → {change['to']}"
+                            )
 
                 # Show list changes
                 if (
@@ -924,17 +1050,22 @@ def generate_report(diff_result, format="text"):
                     for param, changes in mod["parameter_analysis"][
                         "list_changes"
                     ].items():
-                        if changes["added"]:
-                            report.append(
-                                f"  + Added to {param}: {', '.join(changes['added'])}"
-                            )
-                        if changes["removed"]:
-                            report.append(
-                                f"  - Removed from {param}: {', '.join(changes['removed'])}"
-                            )
+                        if param not in ignored_params:
+                            if changes["added"]:
+                                report.append(
+                                    f"  + Added to {param}: {', '.join(changes['added'])}"
+                                )
+                            if changes["removed"]:
+                                report.append(
+                                    f"  - Removed from {param}: {', '.join(changes['removed'])}"
+                                )
 
                 # Show other parameter changes
                 for param, diff in mod["parameter_diffs"].items():
+                    # Skip ignored parameters
+                    if param in ignored_params:
+                        continue
+
                     # Skip parameters that were already reported in special sections
                     skip = False
                     if "parameter_analysis" in mod:
@@ -1096,7 +1227,13 @@ def generate_report(diff_result, format="text"):
                 "<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>"
             )
             for mod in diff_result["module_changes"]["added"]:
-                params = ", ".join([f"{k}: {v}" for k, v in mod["key_params"].items()])
+                # Filter out ignored parameters
+                filtered_params = {
+                    k: v
+                    for k, v in mod["key_params"].items()
+                    if k not in ignored_params
+                }
+                params = ", ".join([f"{k}: {v}" for k, v in filtered_params.items()])
                 html.append(
                     f"<tr class='added'><td>{mod['module_num']}</td><td>{mod['type']}</td><td>{mod['channel'] or 'unknown'}</td><td>{params}</td></tr>"
                 )
@@ -1109,7 +1246,13 @@ def generate_report(diff_result, format="text"):
                 "<tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>"
             )
             for mod in diff_result["module_changes"]["removed"]:
-                params = ", ".join([f"{k}: {v}" for k, v in mod["key_params"].items()])
+                # Filter out ignored parameters
+                filtered_params = {
+                    k: v
+                    for k, v in mod["key_params"].items()
+                    if k not in ignored_params
+                }
+                params = ", ".join([f"{k}: {v}" for k, v in filtered_params.items()])
                 html.append(
                     f"<tr class='removed'><td>{mod['module_num']}</td><td>{mod['type']}</td><td>{mod['channel'] or 'unknown'}</td><td>{params}</td></tr>"
                 )
@@ -1119,6 +1262,45 @@ def generate_report(diff_result, format="text"):
             html.append("<h2>Modified Modules</h2>")
 
             for mod in diff_result["module_changes"]["modified"]:
+                # Check if there are any non-ignored parameter changes for HTML output
+                has_visible_changes = False
+
+                # Check high impact changes
+                if (
+                    "parameter_analysis" in mod
+                    and mod["parameter_analysis"]["high_impact"]
+                ):
+                    for change in mod["parameter_analysis"]["high_impact"]:
+                        if change["parameter"] not in ignored_params:
+                            has_visible_changes = True
+                            break
+
+                # Check list changes
+                if (
+                    not has_visible_changes
+                    and "parameter_analysis" in mod
+                    and mod["parameter_analysis"]["list_changes"]
+                ):
+                    for param, changes in mod["parameter_analysis"][
+                        "list_changes"
+                    ].items():
+                        if param not in ignored_params and (
+                            changes["added"] or changes["removed"]
+                        ):
+                            has_visible_changes = True
+                            break
+
+                # Check for other parameter differences
+                if not has_visible_changes:
+                    for param, diff in mod["parameter_diffs"].items():
+                        if param not in ignored_params:
+                            has_visible_changes = True
+                            break
+
+                # Skip modules that only have version changes without other parameter changes
+                if not has_visible_changes and mod.get("version_change", False):
+                    continue
+
                 channel_info = f"Channel: {mod['channel'] or 'unknown'}"
                 version_info = ""
                 if mod.get("version_change", False):
@@ -1151,14 +1333,15 @@ def generate_report(diff_result, format="text"):
                     for param, changes in mod["parameter_analysis"][
                         "list_changes"
                     ].items():
-                        if changes["added"]:
-                            html.append(
-                                f"<p><span class='added'>+ Added to {param}:</span> {', '.join(changes['added'])}</p>"
-                            )
-                        if changes["removed"]:
-                            html.append(
-                                f"<p><span class='removed'>- Removed from {param}:</span> {', '.join(changes['removed'])}</p>"
-                            )
+                        if param not in ignored_params:
+                            if changes["added"]:
+                                html.append(
+                                    f"<p><span class='added'>+ Added to {param}:</span> {', '.join(changes['added'])}</p>"
+                                )
+                            if changes["removed"]:
+                                html.append(
+                                    f"<p><span class='removed'>- Removed from {param}:</span> {', '.join(changes['removed'])}</p>"
+                                )
                     html.append("</div>")
 
                 # Parameter table
@@ -1173,12 +1356,17 @@ def generate_report(diff_result, format="text"):
                     and mod["parameter_analysis"]["high_impact"]
                 ):
                     for change in mod["parameter_analysis"]["high_impact"]:
-                        html.append(
-                            f"<tr class='high-impact'><td>{change['parameter']}</td><td class='modified'>Modified</td><td>{change['from']}</td><td>{change['to']}</td></tr>"
-                        )
+                        if change["parameter"] not in ignored_params:
+                            html.append(
+                                f"<tr class='high-impact'><td>{change['parameter']}</td><td class='modified'>Modified</td><td>{change['from']}</td><td>{change['to']}</td></tr>"
+                            )
 
                 # Then show all other parameters
                 for param, diff in mod["parameter_diffs"].items():
+                    # Skip ignored parameters
+                    if param in ignored_params:
+                        continue
+
                     # Skip parameters shown in high impact section
                     skip = False
                     if "parameter_analysis" in mod:

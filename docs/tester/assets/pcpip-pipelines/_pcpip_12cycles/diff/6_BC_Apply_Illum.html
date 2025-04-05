@@ -26,412 +26,123 @@ details[open] summary { background-color: #e8e8e8; }
 <body>
 <h1>CellProfiler Pipeline Diff Report</h1>
 <div class='note'>
-<p><strong>Pipeline 1:</strong> 69 enabled modules, 0 disabled modules</p>
-<p><strong>Pipeline 2:</strong> 81 enabled modules, 0 disabled modules</p>
-<p><strong>Module change:</strong> 69 → 81 (+12)</p>
+<p><strong>Pipeline 1:</strong> 81 enabled modules, 0 disabled modules</p>
+<p><strong>Pipeline 2:</strong> 69 enabled modules, 0 disabled modules</p>
+<p><strong>Module change:</strong> 81 → 69 (-12)</p>
 </div>
+<h2>Detected Refactoring Patterns</h2>
+<div class='refactoring'>Similar processing steps for Cycle10_T but in different order</div>
 <h2>Channel Summary</h2>
 <p>Common channels: G, A, DNA, T, C</p>
 <h2>Channel Processing Changes</h2>
 <table>
 <tr><th>Channel</th><th>Status</th></tr>
-<tr><td>DNA</td><td class='modified'>changed parameters (3 differences)</td></tr>
+<tr><td>Cycle01_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle01_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle01_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle01_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle01_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle02_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle02_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle02_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle02_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle02_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle03_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle03_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle03_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle03_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle03_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle04_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle04_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle04_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle04_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle04_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle05_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle05_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle05_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle05_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle05_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle06_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle06_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle06_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle06_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle06_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle07_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle07_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle07_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle07_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle07_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle08_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle08_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle08_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle08_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle08_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle09_A</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle09_C</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle09_DNA</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle09_G</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle09_T</td><td class='modified'>unchanged</td></tr>
+<tr><td>Cycle10_A</td><td class='modified'>changed (module count: 1 → 2)</td></tr>
+<tr><td>Cycle10_C</td><td class='modified'>changed (module count: 1 → 2)</td></tr>
+<tr><td>Cycle10_DNA</td><td class='modified'>changed (module count: 1 → 2)</td></tr>
+<tr><td>Cycle10_G</td><td class='modified'>changed (module count: 1 → 2)</td></tr>
+<tr><td>Cycle10_T</td><td class='modified'>changed (module count: 2 → 3)</td></tr>
+<tr><td>Cycle11_A</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle11_C</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle11_DNA</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle11_G</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle11_T</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle12_A</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle12_C</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle12_DNA</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle12_G</td><td class='removed'>removed</td></tr>
+<tr><td>Cycle12_T</td><td class='removed'>removed</td></tr>
 </table>
 <h2>Added Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr class='added'><td>3</td><td>CorrectIlluminationApply</td><td>DNA</td><td>Select the input image: Cycle12_OrigDNA</td></tr>
-<tr class='added'><td>4</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle12_OrigA</td></tr>
-<tr class='added'><td>5</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle12_OrigC</td></tr>
-<tr class='added'><td>6</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle12_OrigG</td></tr>
-<tr class='added'><td>7</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle12_OrigT</td></tr>
-<tr class='added'><td>17</td><td>Align</td><td>unknown</td><td>Name the output image: Cycle11_T</td></tr>
-<tr class='added'><td>18</td><td>Align</td><td>unknown</td><td>Name the output image: Cycle12_T</td></tr>
-<tr class='added'><td>31</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle11_DAPI</td></tr>
-<tr class='added'><td>32</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle12_DAPI</td></tr>
-<tr class='added'><td>73</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle11_A</td></tr>
-<tr class='added'><td>74</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle11_C</td></tr>
-<tr class='added'><td>75</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle11_G</td></tr>
-<tr class='added'><td>76</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle11_T</td></tr>
-<tr class='added'><td>77</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle12_A</td></tr>
-<tr class='added'><td>78</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle12_C</td></tr>
-<tr class='added'><td>79</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle12_G</td></tr>
-<tr class='added'><td>80</td><td>SaveImages</td><td>unknown</td><td>Select the image to save: Cycle12_T</td></tr>
+<tr class='added'><td>3</td><td>CorrectIlluminationApply</td><td>Cycle10_DNA</td><td>Select the input image: Cycle10_OrigDNA</td></tr>
+<tr class='added'><td>4</td><td>CorrectIlluminationApply</td><td>Cycle10_A</td><td>Select the input image: Cycle10_OrigA</td></tr>
+<tr class='added'><td>5</td><td>CorrectIlluminationApply</td><td>Cycle10_C</td><td>Select the input image: Cycle10_OrigC</td></tr>
+<tr class='added'><td>6</td><td>CorrectIlluminationApply</td><td>Cycle10_G</td><td>Select the input image: Cycle10_OrigG</td></tr>
+<tr class='added'><td>7</td><td>CorrectIlluminationApply</td><td>Cycle10_T</td><td>Select the input image: Cycle10_OrigT</td></tr>
 </table>
 <h2>Removed Modules</h2>
 <table>
 <tr><th>Module #</th><th>Type</th><th>Channel</th><th>Parameters</th></tr>
-<tr class='removed'><td>3</td><td>CorrectIlluminationApply</td><td>DNA</td><td>Select the input image: Cycle10_OrigDNA</td></tr>
-<tr class='removed'><td>4</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle10_OrigA</td></tr>
-<tr class='removed'><td>5</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle10_OrigC</td></tr>
-<tr class='removed'><td>6</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle10_OrigG</td></tr>
-<tr class='removed'><td>7</td><td>CorrectIlluminationApply</td><td>unknown</td><td>Select the input image: Cycle10_OrigT</td></tr>
+<tr class='removed'><td>3</td><td>CorrectIlluminationApply</td><td>Cycle12_DNA</td><td>Select the input image: Cycle12_OrigDNA</td></tr>
+<tr class='removed'><td>4</td><td>CorrectIlluminationApply</td><td>Cycle12_A</td><td>Select the input image: Cycle12_OrigA</td></tr>
+<tr class='removed'><td>5</td><td>CorrectIlluminationApply</td><td>Cycle12_C</td><td>Select the input image: Cycle12_OrigC</td></tr>
+<tr class='removed'><td>6</td><td>CorrectIlluminationApply</td><td>Cycle12_G</td><td>Select the input image: Cycle12_OrigG</td></tr>
+<tr class='removed'><td>7</td><td>CorrectIlluminationApply</td><td>Cycle12_T</td><td>Select the input image: Cycle12_OrigT</td></tr>
+<tr class='removed'><td>17</td><td>Align</td><td>Cycle11_T</td><td>Name the output image: Cycle11_T</td></tr>
+<tr class='removed'><td>18</td><td>Align</td><td>Cycle12_T</td><td>Name the output image: Cycle12_T</td></tr>
+<tr class='removed'><td>31</td><td>SaveImages</td><td>Cycle11_DNA</td><td>Select the image to save: Cycle11_DAPI</td></tr>
+<tr class='removed'><td>32</td><td>SaveImages</td><td>Cycle12_DNA</td><td>Select the image to save: Cycle12_DAPI</td></tr>
+<tr class='removed'><td>73</td><td>SaveImages</td><td>Cycle11_A</td><td>Select the image to save: Cycle11_A</td></tr>
+<tr class='removed'><td>74</td><td>SaveImages</td><td>Cycle11_C</td><td>Select the image to save: Cycle11_C</td></tr>
+<tr class='removed'><td>75</td><td>SaveImages</td><td>Cycle11_G</td><td>Select the image to save: Cycle11_G</td></tr>
+<tr class='removed'><td>76</td><td>SaveImages</td><td>Cycle11_T</td><td>Select the image to save: Cycle11_T</td></tr>
+<tr class='removed'><td>77</td><td>SaveImages</td><td>Cycle12_A</td><td>Select the image to save: Cycle12_A</td></tr>
+<tr class='removed'><td>78</td><td>SaveImages</td><td>Cycle12_C</td><td>Select the image to save: Cycle12_C</td></tr>
+<tr class='removed'><td>79</td><td>SaveImages</td><td>Cycle12_G</td><td>Select the image to save: Cycle12_G</td></tr>
+<tr class='removed'><td>80</td><td>SaveImages</td><td>Cycle12_T</td><td>Select the image to save: Cycle12_T</td></tr>
 </table>
 <h2>Modified Modules</h2>
 <details>
-<summary>MeasureColocalization (Module 17 → 19, Channel: unknown)</summary>
+<summary>MeasureColocalization (Module 19 → 17, Channel: unknown)</summary>
 <div style='margin: 10px 0;'>
-<p><span class='added'>+ Added to Select images to measure:</span> Cycle11_A, Cycle11_C, Cycle11_DAPI, Cycle11_G, Cycle11_T, Cycle12_A, Cycle12_C, Cycle12_DAPI, Cycle12_G, Cycle12_T</p>
+<p><span class='removed'>- Removed from Select images to measure:</span> Cycle11_A, Cycle11_C, Cycle11_DAPI, Cycle11_G, Cycle11_T, Cycle12_A, Cycle12_C, Cycle12_DAPI, Cycle12_G, Cycle12_T</p>
 </div>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
 </table>
 </details>
 <details>
-<summary>FlagImage (Module 18 → 20, Channel: unknown, Revision: 5 → 4)</summary>
-<div class='version-change'>Removed deprecated fuzzy matching parameter</div>
+<summary>FlagImage (Module 20 → 18, Channel: unknown, Revision: 4 → 5)</summary>
 <table>
 <tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 19 → 21, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 20 → 22, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 21 → 23, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 22 → 24, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 23 → 25, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 24 → 26, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 25 → 27, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 26 → 28, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 27 → 29, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 28 → 30, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 29 → 33, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 30 → 34, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 31 → 35, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 32 → 36, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 33 → 37, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 34 → 38, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 35 → 39, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 36 → 40, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 37 → 41, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 38 → 42, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 39 → 43, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 40 → 44, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 41 → 45, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 42 → 46, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 43 → 47, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 44 → 48, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 45 → 49, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 46 → 50, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 47 → 51, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 48 → 52, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 49 → 53, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 50 → 54, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 51 → 55, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 52 → 56, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 53 → 57, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 54 → 58, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 55 → 59, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 56 → 60, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 57 → 61, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 58 → 62, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 59 → 63, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 60 → 64, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 61 → 65, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 62 → 66, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 63 → 67, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 64 → 68, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 65 → 69, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 66 → 70, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 67 → 71, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
-</table>
-</details>
-<details>
-<summary>SaveImages (Module 68 → 72, Channel: unknown, Revision: 16 → 15)</summary>
-<div class='version-change'>Removed deprecated compression parameter</div>
-<table>
-<tr><th>Parameter</th><th>Change</th><th>From</th><th>To</th></tr>
+<tr><td>Allow fuzzy feature matching?</td><td class='added'>Added</td><td>-</td><td>No</td></tr>
 </table>
 </details>
 </body></html>
