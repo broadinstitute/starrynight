@@ -198,7 +198,7 @@ def handle_metadata_csv(file_path, embedding_dir=None, semantic_type="metadata_c
     def generate_csv_embedding(csv_path):
         """Generate a simple hash-based embedding for a CSV file"""
         with open(csv_path, "r", newline="") as f:
-            content = f.read(4096)  # Read first 4KB
+            content = f.read()  # Read all of it
         return hashlib.md5(content.encode()).hexdigest()
 
     # Use generic handler to get file info and calculate embedding path
@@ -234,8 +234,7 @@ def handle_analysis_csv(file_path, embedding_dir=None, semantic_type="analysis_c
     def generate_analysis_embedding(csv_path):
         """Generate a simple hash-based embedding for an analysis CSV file"""
         with open(csv_path, "r", newline="") as f:
-            # For analysis files, we might want to capture more content
-            content = f.read(8192)  # Read first 8KB
+            content = f.read()  # Read all of it
         return hashlib.md5(content.encode()).hexdigest()
 
     file_info = handle_generic_file(file_path, embedding_dir, semantic_type)

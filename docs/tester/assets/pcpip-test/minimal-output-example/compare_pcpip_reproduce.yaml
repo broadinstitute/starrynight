@@ -1,4 +1,4 @@
-comparison_time: '2025-04-05T16:59:37.006741'
+comparison_time: '2025-04-05T17:22:58.457774'
 status: different_content
 first_structure: minimal-output-example/output_pcpip_parsed.yaml
 second_structure: minimal-output-example/reproduce_output_pcpip_parsed.yaml
@@ -51,7 +51,7 @@ sections:
                           second: 6
                         difference: []
                   PaintingIllumApplication_Nuclei.csv:
-                    status: identical
+                    status: different
                     details:
                       path:
                         first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv
@@ -60,8 +60,8 @@ sections:
                         first: 79157885
                         second: 110586
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
                       headers:
                         match: true
@@ -72,7 +72,7 @@ sections:
                           second: 7
                         difference: []
                   PaintingIllumApplication_Cells.csv:
-                    status: identical
+                    status: different
                     details:
                       path:
                         first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
@@ -81,8 +81,8 @@ sections:
                         first: 82855762
                         second: 115572
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
                       headers:
                         match: true
