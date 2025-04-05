@@ -25,23 +25,28 @@ Examples:
         python verify_pipeline_files.py input.yaml -o output_parsed.yaml
 
     With path replacement (to test against a different root directory):
-        python verify_pipeline_files.py input.yaml -o output_parsed.yaml --replace-path "/old/path" "/new/path"
+        python verify_pipeline_files.py input.yaml -o output_parsed.yaml --replace-path OLD_PATH NEW_PATH
+
+    With embedding directory specified:
+        python verify_pipeline_files.py input.yaml -o output_parsed.yaml --embedding-dir /path/to/embeddings
 
 Part of the StarryNight platform testing infrastructure.
 """
 
 import yaml
-import os
 import csv
-import argparse
+import hashlib
+from pathlib import Path
+import click
 
 
 def get_file_size(path):
     """Get file size in bytes or None if file doesn't exist."""
     try:
-        return os.path.getsize(path) if os.path.exists(path) else None
+        p = Path(path)
+        return p.stat().st_size if p.exists() else None
     except Exception as e:
-        print(f"Error getting file size for {path}: {e}")
+        click.echo(f"Error getting file size for {path}: {e}", err=True)
         return None
 
 
@@ -60,40 +65,104 @@ def read_csv_headers(file_path, max_headers=20):
             else:
                 return headers
     except Exception as e:
-        print(f"Error reading CSV headers from {file_path}: {e}")
+        click.echo(f"Error reading CSV headers from {file_path}: {e}", err=True)
         return []
 
 
+def generate_embedding_path(file_path, embedding_base_dir, file_type_dir="embeddings"):
+    """Generate a path for storing file embeddings in a central location.
+
+    Args:
+        file_path: The original file path
+        embedding_base_dir: Base directory for all embeddings
+        file_type_dir: Subdirectory for specific file type embeddings
+
+    Returns:
+        Path to the embedding file
+    """
+    p = Path(file_path)
+    if not p.exists() or not embedding_base_dir:
+        return None
+
+    # Create a unique filename based on the original path
+    file_hash = hashlib.md5(str(p).encode("utf-8")).hexdigest()[:10]
+    embedding_filename = f"{p.stem}_{file_hash}_embedding.npy"
+
+    # Preserve relative path structure within the embedding directory
+    rel_path = p.absolute()
+    rel_dir = rel_path.parent
+    rel_hash = hashlib.md5(str(rel_dir).encode("utf-8")).hexdigest()[:8]
+
+    # Create embeddings directory structure
+    embedding_path = Path(embedding_base_dir) / file_type_dir / rel_hash
+    embedding_path.mkdir(parents=True, exist_ok=True)
+
+    return str(embedding_path / embedding_filename)
+
+
 # Handler functions for different file types
-def handle_generic_file(file_path):
+def handle_generic_file(file_path, embedding_dir=None):
     """Handler for generic files"""
-    return {"path": file_path, "size": get_file_size(file_path)}
+    return {"path": str(file_path), "size": get_file_size(file_path)}
 
 
-def handle_csv_file(file_path):
+def handle_csv_file(file_path, embedding_dir=None):
     """Handler for CSV files"""
     file_info = handle_generic_file(file_path)
-    file_info["headers"] = read_csv_headers(file_path)
+
+    if file_info["size"] is not None:
+        file_info["headers"] = read_csv_headers(file_path)
+
+        # Add embedding information
+        if embedding_dir:
+            embedding_path = generate_embedding_path(
+                file_path, embedding_dir, "csv_embeddings"
+            )
+            if embedding_path:
+                file_info["embedding_path"] = embedding_path
+                file_info["has_embedding"] = True
+
     return file_info
 
 
-def handle_image_file(file_path):
+def handle_image_file(file_path, embedding_dir=None):
     """Handler for image files (tiff, png)"""
-    return handle_generic_file(file_path)
-    # Could extend with image-specific properties like dimensions if needed
+    file_info = handle_generic_file(file_path)
+
+    if file_info["size"] is not None and embedding_dir:
+        # Add embedding information
+        embedding_path = generate_embedding_path(
+            file_path, embedding_dir, "image_embeddings"
+        )
+        if embedding_path:
+            file_info["embedding_path"] = embedding_path
+            file_info["has_embedding"] = True
+
+    return file_info
 
 
-def handle_numpy_file(file_path):
+def handle_numpy_file(file_path, embedding_dir=None):
     """Handler for numpy files"""
-    return handle_generic_file(file_path)
-    # Could extend with numpy-specific properties if needed
+    file_info = handle_generic_file(file_path)
+
+    if file_info["size"] is not None and embedding_dir:
+        # Add embedding information
+        embedding_path = generate_embedding_path(
+            file_path, embedding_dir, "numpy_embeddings"
+        )
+        if embedding_path:
+            file_info["embedding_path"] = embedding_path
+            file_info["has_embedding"] = True
+
+    return file_info
 
 
-def build_file_paths(yaml_data, path_replacement=None):
+def build_file_paths(yaml_data, embedding_dir=None, path_replacement=None):
     """Process YAML and return structure with full paths and file sizes.
 
     Args:
         yaml_data: The parsed YAML data
+        embedding_dir: Base directory to store embeddings (optional)
         path_replacement: Tuple of (old_path, new_path) to replace in all paths
     """
     result = {}
@@ -122,7 +191,7 @@ def build_file_paths(yaml_data, path_replacement=None):
                 result[section_name]["files"][set_name] = []
 
                 for folder_item in folders:
-                    folder_path = os.path.join(base_path, folder_item["folder"])
+                    folder_path = Path(base_path) / folder_item["folder"]
                     processed_folder = {"folder": folder_item["folder"], "files": []}
 
                     for file_item in folder_item["files"]:
@@ -138,15 +207,17 @@ def build_file_paths(yaml_data, path_replacement=None):
                                 )
 
                                 for file_name in file_list:
-                                    full_path = os.path.join(folder_path, file_name)
-                                    file_info = handler(full_path)
+                                    full_path = folder_path / file_name
+                                    # Pass embedding_dir to the handler
+                                    file_info = handler(full_path, embedding_dir)
                                     processed_types[file_type].append(file_info)
 
                             processed_folder["files"].append(processed_types)
                         else:
                             # Files must be grouped by type, ungrouped files are not supported
-                            print(
-                                f"Warning: Ungrouped file '{file_item}' found in folder '{folder_item['folder']}'. Skipping."
+                            click.echo(
+                                f"Warning: Ungrouped file '{file_item}' found in folder '{folder_item['folder']}'. Skipping.",
+                                err=True,
                             )
                             continue
 
@@ -155,45 +226,58 @@ def build_file_paths(yaml_data, path_replacement=None):
     return result
 
 
-def main():
-    # Setup command line arguments
-    parser = argparse.ArgumentParser(
-        description="Parse YAML file and build full paths with sizes"
-    )
-    parser.add_argument("input_file", help="Input YAML file to process")
-    parser.add_argument(
-        "-o", "--output_file", help="Output file name (default: input_name_parsed.yaml)"
-    )
-    parser.add_argument(
-        "--replace-path",
-        nargs=2,
-        metavar=("OLD_PATH", "NEW_PATH"),
-        help="Replace OLD_PATH with NEW_PATH in all file paths",
-    )
-    args = parser.parse_args()
+@click.command()
+@click.argument(
+    "input_file", type=click.Path(exists=True, dir_okay=False, path_type=Path)
+)
+@click.option(
+    "-o",
+    "--output-file",
+    type=click.Path(dir_okay=False, path_type=Path),
+    help="Output file name (default: input_name_parsed.yaml)",
+)
+@click.option(
+    "--replace-path",
+    nargs=2,
+    type=str,
+    help="Replace OLD_PATH with NEW_PATH in all file paths",
+)
+@click.option(
+    "--embedding-dir",
+    type=click.Path(file_okay=False, path_type=Path),
+    help="Base directory to store file embeddings (optional)",
+)
+def main(input_file, output_file, replace_path, embedding_dir):
+    """
+    Parse YAML file defining pipeline file structure and validate against actual files.
 
+    INPUT_FILE: The YAML file to process.
+    """
     # If output file not specified, derive it from input filename
-    if not args.output_file:
-        base, ext = os.path.splitext(args.input_file)
-        args.output_file = f"{base}_parsed{ext}"
+    if not output_file:
+        output_file = input_file.with_name(
+            f"{input_file.stem}_parsed{input_file.suffix}"
+        )
 
     # Parse YAML and build full paths with sizes
-    with open(args.input_file, "r") as f:
+    with open(input_file, "r") as f:
         yaml_data = yaml.safe_load(f)
 
     # Apply path replacement if specified
-    path_replacement = args.replace_path if args.replace_path else None
-    processed_data = build_file_paths(yaml_data, path_replacement)
+    path_replacement = replace_path if replace_path else None
+    processed_data = build_file_paths(yaml_data, embedding_dir, path_replacement)
 
     # Save processed data
-    with open(args.output_file, "w") as f:
+    with open(output_file, "w") as f:
         yaml.dump(processed_data, f, default_flow_style=False, sort_keys=False)
 
-    print(f"Processed YAML file has been saved to: {args.output_file}")
+    click.echo(f"Processed YAML file has been saved to: {output_file}")
     if path_replacement:
-        print(
+        click.echo(
             f"Path replacement applied: '{path_replacement[0]}' → '{path_replacement[1]}'"
         )
+    if embedding_dir:
+        click.echo(f"Embeddings will be stored in: {embedding_dir}")
 
 
 if __name__ == "__main__":
