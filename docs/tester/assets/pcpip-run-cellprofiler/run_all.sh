@@ -1,3 +1,49 @@
+#!/bin/bash
+#
+# run_all.sh - CellProfiler Pipeline Runner
+#
+# Description:
+#   This script automates the execution of multiple CellProfiler pipelines in sequence,
+#   applying them to plate/well/site data according to a predefined workflow.
+#   The script uses a single configuration structure to manage all pipeline parameters
+#   and execution options, making it easier to maintain and extend.
+#
+# Usage:
+#   ./run_all.sh
+#
+# Configuration:
+#   The script uses a multi-dimensional associative array (PIPELINE_CONFIG) to store
+#   all configuration parameters for each pipeline. Each pipeline has the following
+#   configuration options:
+#
+#   - [pipeline,file]: Pipeline file name
+#   - [pipeline,data]: Data file name
+#   - [pipeline,output]: Output directory pattern (with PLATE/WELL/SITE placeholders)
+#   - [pipeline,group]: Group pattern for -g flag (with placeholders)
+#   - [pipeline,params]: Required parameters (comma-separated)
+#   - [pipeline,metadata]: Whether metadata directory is needed (true/false)
+#   - [pipeline,background]: Whether to run in background (true/false)
+#   - [pipeline,plugins]: Whether plugins are needed (true/false)
+#
+# Adding a new pipeline:
+#   1. Add entries for the new pipeline number in the PIPELINE_CONFIG array
+#   2. Create a new section at the bottom of the script that:
+#      a. Sets the PIPELINE variable to the new number
+#      b. Sets up any required loop variables (WELL, SITE, SBSCYCLE)
+#      c. Calls run_pipeline
+#      d. Calls wait if the pipeline runs in background
+#
+# Notes:
+#   - This script currently uses a single plate value for simplicity. The pattern
+#     substitution system can easily support multiple plates by:
+#     1. Changing PLATE="Plate1" to PLATES=("Plate1" "Plate2" "PlateN")
+#     2. Adding an outer loop: for PLATE in "${PLATES[@]}"; do ... done
+#     3. No changes to the pattern substitution or function calls are needed
+#
+# Dependencies:
+#   - CellProfiler
+#
+
 STARRYNIGHT_REPO_REL="../../../.."
 LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/starrynight_example_output_baseline/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
 REPRODUCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/reproduce_starrynight_example_output_baseline"
@@ -37,7 +83,7 @@ declare -A PIPELINE_CONFIG=(
   [5,output]="illum/PLATE"
   [6,output]="images_aligned/barcoding/PLATE-WELL-SITE"
   [7,output]="images_corrected/barcoding/PLATE-WELL-SITE"
-  [9,output]="workspace/analysis/Batch1/PLATE-WELL-SITE"
+  [9,output]="../workspace/analysis/Batch1/PLATE-WELL-SITE"
 
   # Group patterns
   [1,group]="Metadata_Plate=PLATE"
@@ -86,6 +132,14 @@ declare -A PIPELINE_CONFIG=(
 )
 
 # Function to apply variable substitution to a pattern
+# Replaces placeholders (PLATE, WELL, SITE, SBSCYCLE) with their values
+# if those variables are currently defined in the environment
+#
+# Parameters:
+#   $1: Pattern string with placeholders
+#
+# Returns:
+#   Pattern with placeholders replaced with actual values
 apply_pattern() {
   local pattern=$1
   local result=$pattern
@@ -109,6 +163,15 @@ apply_pattern() {
 }
 
 # Function to run a pipeline with the right parameters
+# This function builds and executes the cellprofiler command based on
+# the configuration for the specified pipeline number
+#
+# Parameters:
+#   $1: Pipeline number
+#
+# Environment:
+#   Uses global variables (PLATE, WELL, SITE, SBSCYCLE) depending on
+#   which pipeline is being run
 run_pipeline() {
   local pipeline=$1
   local required_params=${PIPELINE_CONFIG[$pipeline,params]}
@@ -146,8 +209,9 @@ run_pipeline() {
   eval "$cmd"
 }
 
-# 9_Analysis needs this directory
-mkdir -p ${REPRODUCE_DIR}/Source1/workspace/analysis/Batch1/
+# Pipeline execution sequence
+# --------------------------
+# Each section sets up the required variables for a pipeline and calls run_pipeline
 
 # 1_CP_Illum - PLATE only
 PIPELINE=1
@@ -166,7 +230,6 @@ for WELL in "${WELLS[@]}"; do
     run_pipeline $PIPELINE
 done
 wait
-
 
 # 5_BC_Illum - PLATE, SBSCYCLE
 PIPELINE=5
