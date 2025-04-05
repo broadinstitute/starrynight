@@ -2,9 +2,11 @@
 
 This document tracks the selection process for CellProfiler image analysis pipelines. It compares different pipeline versions, documents their differences, and records our decisions on which versions to use for the reference PCPIP workflow. The document includes diff commands, comparison notes, and final copy commands for the selected pipelines.
 
-## Diffs
+## Select among variants in `pipelines`
 
 The pipelines in `_original` are from the `pipelines` directory of `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
+
+We compared up to two versions of the variants of each pipeline.
 
 ```bash
 cd _original
@@ -19,7 +21,7 @@ diff 9_Analysis/9_Analysis_rerun.cppipe 9_Analysis/9_Analysis_Plate1_Plate2.cppi
 cd -
 ```
 
-## Selection
+For all but 1 and 2, we picked one of the variants that "looked right"
 
 ### 1_CP_Illum
 
@@ -47,22 +49,22 @@ Reason: We are focused on Plate1 for the fixture
 
 [diff](_original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2__3_CP_SegmentationCheck_Plate3_Plate4.diff)
 
-Differences: TODO
+Differences: SKIPPED
 
-Decision: TODO Likely `3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
+Decision: Likely `3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
 
-Reason: TODO
+Reason: SKIPPED
 
 
 ### 5_BC_Illum
 
 [diff](_original/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
 
-Differences: TODO
+Differences: SKIPPED
 
-Decision: TODO Likely `5_BC_Illum.cppipe`
+Decision: Likely `5_BC_Illum.cppipe`
 
-Reason: TODO
+Reason: SKIPPED
 
 
 ### 6_BC_Apply_Illum
@@ -76,11 +78,11 @@ Reason: We have a single pipeline
 
 [diff](_original/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
 
-Differences: TODO
+Differences: SKIPPED
 
-Decision: TODO Likely `7_BC_Preprocess.cppipe`
+Decision: Likely `7_BC_Preprocess.cppipe`
 
-Reason: TODO
+Reason: SKIPPED
 
 
 ### 9_Analysis
@@ -89,14 +91,16 @@ Reason: TODO
 [diff](_original/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
 [diff](_original/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
 
-Differences: TODO
+Differences: SKIPPED
 
-Decision: TODO Likely `9_Analysis_Plate1_Plate2.cppipe`
+Decision: Likely `9_Analysis_Plate1_Plate2.cppipe`
 
-Reason: TODO
+Reason: SKIPPED
 
 
 ## Create reference pipelines
+
+Copy the selected ones as `ref_*.cppipe`
 
 ```bash
 cp _original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
@@ -108,7 +112,12 @@ cp _original/7_BC_Preprocess/7_BC_Preprocess.cppipe ref_7_BC_Preprocess.cppipe
 cp _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe ref_9_Analysis.cppipe
 ```
 
-## Compare reference pipelines sources with PCPIP repo pipelines
+After copying, the reference pipelines were modified by hand to
+
+1. Drop cycles 4-10
+2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
+
+## Compare the unmodified reference pipelines sources with PCPIP repo pipelines
 
 ```bash
 mkdir -p _pcpip_12cycles/diff
