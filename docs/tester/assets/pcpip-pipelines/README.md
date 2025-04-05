@@ -99,13 +99,13 @@ Reason: TODO
 ## Create reference pipelines
 
 ```bash
-cp _original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe 1_CP_Illum/ref_1_CP_Illum.cppipe
-cp _original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe 2_CP_Apply_Illum/ref_2_CP_Apply_Illum.cppipe
-cp _original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe 3_CP_SegmentationCheck/ref_3_CP_SegmentationCheck.cppipe
-cp _original/5_BC_Illum/5_BC_Illum.cppipe 5_BC_Illum/ref_5_BC_Illum.cppipe
-cp _original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe 6_BC_Apply_Illum/ref_6_BC_Apply_Illum.cppipe
-cp _original/7_BC_Preprocess/7_BC_Preprocess.cppipe 7_BC_Preprocess/ref_7_BC_Preprocess.cppipe
-cp _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe 9_Analysis/ref_9_Analysis.cppipe
+cp _original/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
+cp _original/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe ref_2_CP_Apply_Illum.cppipe
+cp _original/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe ref_3_CP_SegmentationCheck.cppipe
+cp _original/5_BC_Illum/5_BC_Illum.cppipe ref_5_BC_Illum.cppipe
+cp _original/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe ref_6_BC_Apply_Illum.cppipe
+cp _original/7_BC_Preprocess/7_BC_Preprocess.cppipe ref_7_BC_Preprocess.cppipe
+cp _original/9_Analysis/9_Analysis_Plate1_Plate2.cppipe ref_9_Analysis.cppipe
 ```
 
 ## Compare reference pipelines sources with PCPIP repo pipelines
