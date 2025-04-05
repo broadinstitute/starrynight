@@ -51,8 +51,12 @@ METADATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/starrynight_example_input/Source1/
 
 PIPELINE_DIR="../pcpip-pipelines"
 
-# Directory for logs
-LOG_DIR="${REPRODUCE_DIR}/logs"
+# Create a timestamp for this run
+TIMESTAMP=$(date +"%Y-%m-%d_%H%M%S")
+
+# Directory for logs with timestamp
+LOG_DIR="${REPRODUCE_DIR}/logs/${TIMESTAMP}"
+mkdir -p ${LOG_DIR}
 
 PLATE=Plate1
 WELLS=("WellA1" "WellA2" "WellB1")
@@ -307,10 +311,6 @@ run_pipeline() {
   # Run with logging
   run_with_logging "$cmd" "$log_file" "$run_background"
 }
-
-# Create required directories
-mkdir -p ${REPRODUCE_DIR}/Source1/workspace/analysis/Batch1/
-mkdir -p ${LOG_DIR}
 
 # Pipeline execution sequence
 # --------------------------
