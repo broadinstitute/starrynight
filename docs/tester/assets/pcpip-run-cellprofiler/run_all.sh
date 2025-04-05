@@ -51,6 +51,9 @@ METADATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/starrynight_example_input/Source1/
 
 PIPELINE_DIR="../pcpip-pipelines"
 
+# Directory for logs
+LOG_DIR="${REPRODUCE_DIR}/logs"
+
 PLATE=Plate1
 WELLS=("WellA1" "WellA2" "WellB1")
 SITES=(0 1)
@@ -162,6 +165,83 @@ apply_pattern() {
   echo "$result"
 }
 
+# Function to generate a log filename based on pipeline and parameters
+# This creates descriptive log filenames containing all relevant parameters
+#
+# Parameters:
+#   $1: Pipeline number
+#
+# Returns:
+#   Log filename with path
+get_log_filename() {
+  local pipeline=$1
+  local log_name="pipeline${pipeline}"
+
+  # Add each defined parameter to the filename
+  if [[ -n "$PLATE" ]]; then
+    log_name="${log_name}_plate${PLATE}"
+  fi
+
+  if [[ -n "$WELL" ]]; then
+    log_name="${log_name}_${WELL}"
+  fi
+
+  if [[ -n "$SITE" ]]; then
+    log_name="${log_name}_site${SITE}"
+  fi
+
+  if [[ -n "$SBSCYCLE" ]]; then
+    log_name="${log_name}_cycle${SBSCYCLE}"
+  fi
+
+  echo "${LOG_DIR}/${log_name}.log"
+}
+
+# Function to run a command with logging
+# Redirects both stdout and stderr to a log file
+#
+# Parameters:
+#   $1: Command to run
+#   $2: Log filename
+#   $3: Whether to run in background (true/false)
+run_with_logging() {
+  local cmd=$1
+  local log_file=$2
+  local run_bg=$3
+
+  # Create log directory if it doesn't exist
+  mkdir -p "$(dirname "$log_file")"
+
+  # Add header to log file with timestamp and command
+  {
+    echo "===================================================="
+    echo "  STARTED: $(date)"
+    echo "  COMMAND: $cmd"
+    echo "===================================================="
+    echo ""
+  } > "$log_file"
+
+  # Run the command and log output
+  if [[ "$run_bg" == "true" ]]; then
+    # For background processes, redirect output to log
+    eval "$cmd" >> "$log_file" 2>&1 &
+  else
+    # For foreground processes, redirect output to log
+    eval "$cmd" >> "$log_file" 2>&1
+  fi
+
+  # Log completion for foreground processes
+  if [[ "$run_bg" != "true" ]]; then
+    {
+      echo ""
+      echo "===================================================="
+      echo "  COMPLETED: $(date)"
+      echo "  EXIT CODE: $?"
+      echo "===================================================="
+    } >> "$log_file"
+  fi
+}
+
 # Function to run a pipeline with the right parameters
 # This function builds and executes the cellprofiler command based on
 # the configuration for the specified pipeline number
@@ -200,14 +280,19 @@ run_pipeline() {
     cmd+=" --plugins-directory ${STARRYNIGHT_REPO_REL}/plugins/CellProfiler-plugins/active_plugins/"
   fi
 
-  # Add background processing if needed
-  if [[ "$run_background" == "true" ]]; then
-    cmd+=" &"
-  fi
+  # Get log filename
+  local log_file=$(get_log_filename "$pipeline")
 
-  # Execute the command
-  eval "$cmd"
+  # Log the command execution
+  echo "Running pipeline $pipeline, logging to: $log_file"
+
+  # Run with logging
+  run_with_logging "$cmd" "$log_file" "$run_background"
 }
+
+# Create required directories
+mkdir -p ${REPRODUCE_DIR}/Source1/workspace/analysis/Batch1/
+mkdir -p ${LOG_DIR}
 
 # Pipeline execution sequence
 # --------------------------
