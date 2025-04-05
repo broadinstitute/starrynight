@@ -1,3 +1,35 @@
+#!/usr/bin/env python3
+"""
+StarryNight Pipeline File Structure Validator
+
+This script validates file structures defined in YAML configuration files against the actual
+files present on disk. It's part of the testing infrastructure for the StarryNight platform,
+which processes and analyzes optical pooled screening (OPS) image data.
+
+The script performs the following operations:
+1. Reads a YAML file that defines an expected file structure for pipeline inputs/outputs
+2. Resolves all relative paths to absolute paths
+3. Checks if each specified file actually exists on disk
+4. Records file sizes for all files (or None if missing)
+5. For CSV files, extracts and records column headers
+6. Outputs a detailed report in YAML format showing the validation results
+
+This tool is particularly useful for:
+- Testing pipeline configurations before running expensive computations
+- Validating that pipeline outputs match expected specifications
+- Comparing outputs from different pipeline runs or implementations
+- Ensuring data organization follows the expected hierarchy
+
+Examples:
+    Basic usage:
+        python verify_pipeline_files.py input.yaml -o output_parsed.yaml
+
+    With path replacement (to test against a different root directory):
+        python verify_pipeline_files.py input.yaml -o output_parsed.yaml --replace-path "/old/path" "/new/path"
+
+Part of the StarryNight platform testing infrastructure.
+"""
+
 import yaml
 import os
 import csv

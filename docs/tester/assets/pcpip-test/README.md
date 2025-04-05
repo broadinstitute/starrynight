@@ -15,7 +15,7 @@ This folder contains testing utilities for the StarryNight optical pooled screen
 
 ### Current Tools
 
-- `parse_yaml.py` - Validation script that processes YAML specifications to check file existence and extract metadata
+- `verify_pipeline_files.py` - Validation script that processes YAML specifications to check file existence and extract metadata
 
 ### Test Fixtures
 
@@ -24,10 +24,10 @@ This folder contains testing utilities for the StarryNight optical pooled screen
   - `output_pcpip.yaml` - Example processed output for pcpip pipeline
   - `output_starrynight.yaml` - Example processed output for starrynight pipeline
 
-## Tool: parse_yaml.py
+## Tool: verify_pipeline_files.py
 
 ```bash
-python parse_yaml.py input.yaml [-o output_file] [--replace-path OLD_PATH NEW_PATH]
+python verify_pipeline_files.py input.yaml [-o output_file] [--replace-path OLD_PATH NEW_PATH]
 ```
 
 The script:
@@ -42,7 +42,7 @@ The script:
 The `--replace-path` option allows you to test a different output directory with the same structure by replacing path prefixes:
 
 ```bash
-python parse_yaml.py input.yaml --replace-path "../../../../scratch/starrynight_example_output" "../../../../scratch/reproduce_starrynight_example_output"
+python verify_pipeline_files.py input.yaml --replace-path "../../../../scratch/pcpip_example_output" "../../../../scratch/reproduce_pcpip_example_output"
 ```
 
 This is particularly useful when:
@@ -59,16 +59,16 @@ To create a minimal output example using the test fixtures:
    mkdir -p minimal-output-example
    ```
 
-2. Run parse_yaml.py on the input YAML files:
+2. Run verify_pipeline_files.py on the input YAML files:
    ```bash
    # Process the input.yaml file
-   python parse_yaml.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml
+   python verify_pipeline_files.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml
 
    # Process the output_pcpip.yaml file
-   python parse_yaml.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml
+   python verify_pipeline_files.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml
 
    # Process the output_starrynight.yaml file
-   python parse_yaml.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
+   python verify_pipeline_files.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
    ```
 
 3. Review the generated files in the minimal-output-example directory to see:
@@ -79,7 +79,7 @@ To create a minimal output example using the test fixtures:
 4. Test with an alternative output directory:
    ```bash
    # Process with path replacement (test a different output folder)
-   python parse_yaml.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml --replace-path "../../../../scratch/pcpip_example_output" "../../../../scratch/reproduce_pcpip_example_output"
+   python verify_pipeline_files.py minimal/output_pcpip.yaml -o minimal-output-example/reproduce_output_pcpip_parsed.yaml --replace-path "../../../../scratch/pcpip_example_output" "../../../../scratch/reproduce_pcpip_example_output"
    ```
 
 This provides a complete example of the tool's functionality with both inputs and expected outputs.
