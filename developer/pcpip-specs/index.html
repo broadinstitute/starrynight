@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+
+<html data-bs-theme="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>PCPIP Specs - StarryNight Documentation</title>
+<link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+<link href="../../css/fontawesome.min.css" rel="stylesheet"/>
+<link href="../../css/brands.min.css" rel="stylesheet"/>
+<link href="../../css/solid.min.css" rel="stylesheet"/>
+<link href="../../css/v4-font-face.min.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+<link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+<div class="container">
+<a class="navbar-brand" href="../..">StarryNight Documentation</a>
+<!-- Expander button -->
+<button aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar-collapse" data-bs-toggle="collapse" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<!-- Expanded navigation -->
+<div class="navbar-collapse collapse" id="navbar-collapse">
+<!-- Main navigation -->
+<ul class="nav navbar-nav">
+<li class="nav-item">
+<a class="nav-link" href="../..">Home</a>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Getting Started</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../getting-started/installation/">Installation</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../getting-started/quickstart/">Quick Start Guide</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">User Guide</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../user/core-concepts/">Core Concepts</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/parser-configuration/">Parser Configuration</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/modules/">Processing Modules</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/example-pipeline-cli/">Example CLI Pipeline</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Algorithms</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../user/algorithms/">Overview</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/DOCUMENTATION_GUIDE/">Documentation Guide</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/illum_calc/">Illumination Calculation</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/illum_apply/">Illumination Apply</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/presegcheck/">Pre-segmentation Check</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/segcheck/">Segmentation Check</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/align/">Alignment</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/preprocess/">Preprocessing</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/stitchcrop/">Stitch and Crop</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/analysis/">Analysis</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-current="page" aria-expanded="false" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button">Development</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../developer-guide/">Developer Guide</a>
+</li>
+<li>
+<a aria-current="page" class="dropdown-item active" href="./">PCPIP Specs</a>
+</li>
+<li>
+<a class="dropdown-item" href="../requirements/">Requirements</a>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="../../misc/faq/">FAQ</a>
+</li>
+</ul>
+<ul class="nav navbar-nav ms-md-auto">
+<li class="nav-item">
+<a class="nav-link" href="../developer-guide/" rel="prev">
+<i class="fa fa-arrow-left"></i> Previous
+                                </a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="../requirements/" rel="next">
+                                    Next <i class="fa fa-arrow-right"></i>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://github.com/broadinstitute/starrynight/blob/main/docs/developer/pcpip-specs.md"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+<div class="navbar-header">
+<button class="navbar-toggler collapsed" data-bs-target="#toc-collapse" data-bs-toggle="collapse" title="Table of Contents" type="button">
+<span class="fa fa-angle-down"></span>
+</button>
+</div>
+<div class="navbar-collapse collapse card bg-body-tertiary" id="toc-collapse">
+<ul class="nav flex-column">
+<li class="nav-item" data-bs-level="1"><a class="nav-link" href="#pcpip-cellprofiler-pipelines-and-aws-lambda-orchestration-for-pooled-cell-painting">PCPIP: CellProfiler Pipelines and AWS Lambda Orchestration for Pooled Cell Painting</a>
+<ul class="nav flex-column">
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#overview">Overview</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#lambda-function-architecture-and-implementation">Lambda Function Architecture and Implementation</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#pipeline-configuration-system">Pipeline Configuration System</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#pipeline-specifications">Pipeline Specifications</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#pipeline-configuration">Pipeline Configuration</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#pipeline-input-output-specifications">Pipeline Input Output Specifications</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#quality-control-steps-and-scripts">Quality Control Steps and Scripts</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div></div>
+<div class="col-md-9" role="main">
+<h1 id="pcpip-cellprofiler-pipelines-and-aws-lambda-orchestration-for-pooled-cell-painting">PCPIP: CellProfiler Pipelines and AWS Lambda Orchestration for Pooled Cell Painting</h1>
+<p>PCPIP (Pooled Cell Painting Image Processing) is a specialized image processing system that automates the analysis of large-scale optical pooled screening experiments. The system integrates CellProfiler's image analysis capabilities with AWS Lambda-based orchestration to process thousands of microscopy images through a series of coordinated pipelines. PCPIP handles two parallel processing tracks - one for Cell Painting images that capture cellular morphology and another for barcoding images that identify genetic perturbations - before combining them for comprehensive phenotypic analysis. This document details the complete implementation of this workflow, including pipeline specifications, cloud infrastructure configuration, and execution patterns that enable reproducible, scalable image processing for high-content screening.</p>
+<p>See <a href="../requirements/">Requirements</a> for a specification of the new system we want to build, based on PCPIP.</p>
+<h2 id="overview">Overview</h2>
+<p>The image processing workflow consists of two parallel tracks followed by a combined analysis:</p>
+<ol>
+<li><strong>Cell Painting Processing</strong> (Pipelines 1-4)</li>
+<li><strong>Barcoding Processing</strong> (Pipelines 5-8)</li>
+<li><strong>Combined Analysis</strong> (Pipeline 9)</li>
+</ol>
+<p>Each pipeline is launched by a corresponding AWS Lambda function that configures input/output paths, prepares metadata, and creates CSV files to drive the CellProfiler analysis.</p>
+<p><img alt="Pooled Cell Painting Workflow Overview" src="../assets/pcpip-overview.jpg"/></p>
+<p>The diagram above illustrates the complete workflow with both Cell Painting (top row) and Barcoding (middle row) image processing tracks, followed by the combined analysis step. The pipeline numbers correspond to the CellProfiler pipelines described in this document.</p>
+<p>The workflow is orchestrated by AWS Lambda functions, with each function responsible for a specific pipeline stage. These Lambda functions serve as the automation backbone that coordinates pipeline execution, handles configuration, and manages the processing of thousands of images across AWS resources.</p>
+<h2 id="lambda-function-architecture-and-implementation">Lambda Function Architecture and Implementation</h2>
+<h3 id="pipeline-flow-and-triggers">Pipeline Flow and Triggers</h3>
+<div class="mermaid">flowchart TD
+    %% Main pipelines with detailed descriptions
+    subgraph "Cell Painting Track"
+        PCP1["PCP-1-CP-IllumCorr
+        Calculate illum functions"] --&gt;
+        PCP2["PCP-2-CP-ApplyIllum
+        Apply correction
+        Segment cells
+        Get thresholds"] --&gt;
+        PCP3["PCP-3-CP-SegmentCheck
+        Verify segmentation quality
+        on subset of images"]
+        PCP3 --&gt; PCP4["PCP-4-CP-Stitching
+        Stitch FOVs into whole-well
+        Crop into tiles"]
+    end
+
+    subgraph "Barcoding Track"
+        PCP5["PCP-5-BC-IllumCorr
+        Calculate illum functions"] --&gt;
+        PCP6["PCP-6-BC-ApplyIllum
+        Apply correction
+        Align cycles"] --&gt;
+        PCP7["PCP-7-BC-Preprocess
+        Compensate channels
+        Identify &amp; call barcodes"] --&gt;
+        PCP8["PCP-8-BC-Stitching
+        Stitch FOVs into whole-well
+        Crop into tiles
+        (ensure match to CP crops)"]
+    end
+
+    PCP4 &amp; PCP8 --&gt; PCP9["PCP-9-Analysis
+        Align CP &amp; BC images
+        Segment cells
+        Measure features
+        Call barcodes
+        Measure QC"]
+
+    %% Troubleshooting/specialized pipelines
+    PCP8Y["PCP-8Y-BC-CheckAlignmentPostStitch
+    Validate alignment b/w
+    stitched CP &amp; BC images"] -.-&gt; PCP8
+    PCP8Z["PCP-8Z-StitchAlignedBarcoding
+    Stitch aligned images
+    (not corrected images)"] -.-&gt; PCP8
+
+    PCP7A["PCP-7A-BC-PreprocessTroubleshoot
+    Specialized version with
+    additional diagnostics"] -.-&gt; PCP7
+
+    PCP6A["PCP-6A-BC-ApplyIllum-DebrisMask
+    Alternative version that
+    identifies &amp; masks debris"] -.-&gt; PCP6
+
+    %% Processing platforms
+    classDef cellprofiler fill:#e6f3ff,stroke:#0066cc
+    classDef fiji fill:#e6ffe6,stroke:#009900
+
+    class PCP1,PCP2,PCP3,PCP5,PCP6,PCP7,PCP7A,PCP8Y,PCP9,PCP6A cellprofiler
+    class PCP4,PCP8,PCP8Z fiji
+</div>
+<p>Each pipeline in the workflow is orchestrated by a corresponding AWS Lambda function (PCP-1 through PCP-9). These Lambda functions automate the pipeline execution and handle the transition of data between stages in a sequential workflow:</p>
+<ol>
+<li>The workflow begins with two parallel tracks: cell painting processing (PCP-1 through PCP-4) and barcoding processing (PCP-5 through PCP-8)</li>
+<li>Each Lambda function is triggered by the output of the previous step (typically a file upload to S3)</li>
+<li>For example, PCP-1-CP-IllumCorr is triggered by the upload of the 1_CP_Illum.cppipe file, and produces illumination function files that then trigger PCP-2-CP-ApplyIllum</li>
+<li>The final Lambda function (PCP-9-Analysis) integrates the outputs from both tracks for comprehensive analysis</li>
+</ol>
+<h3 id="lambda-function-implementation-pattern">Lambda Function Implementation Pattern</h3>
+<p>All Lambda functions in the workflow follow a common implementation pattern:</p>
+<ol>
+<li><strong>Trigger Processing</strong>: Responds to S3 event or manual invocation</li>
+<li>Lambda's <code>lambda_handler</code> function is the entry point</li>
+<li>For S3 triggers: <code>event["Records"][0]["s3"]["object"]["key"]</code> extracts the triggering file path</li>
+<li>
+<p>For manual triggers (like PCP-9-Analysis): Empty event object is passed with hardcoded parameters</p>
+</li>
+<li>
+<p><strong>Configuration Loading</strong>:</p>
+</li>
+<li>Loads experiment configuration from metadata.json using <code>download_and_read_metadata_file()</code></li>
+<li>Contains pipeline-specific AWS resource requirements in <code>config_dict</code></li>
+<li>
+<p>May check if previous step's completion using <code>check_if_run_done()</code></p>
+</li>
+<li>
+<p><strong>Pipeline Selection and Plate Filtering</strong>:</p>
+</li>
+<li>Selects appropriate pipeline variant based on experiment configuration
+   <code>python
+   # Example from PCP-1-CP-IllumCorr
+   if len(Channeldict.keys()) == 1:  # Standard experiment
+       pipeline_name = "1_CP_Illum.cppipe"
+   if len(Channeldict.keys()) &gt; 1:   # SABER experiment
+       pipeline_name = "1_SABER_CP_Illum.cppipe"</code></li>
+<li>
+<p>Applies optional plate inclusion/exclusion filters</p>
+</li>
+<li>
+<p><strong>Input Discovery and CSV Generation</strong>:</p>
+</li>
+<li>Uses <code>paginate_a_folder()</code> to list all input files efficiently</li>
+<li>Parses image names using <code>parse_image_names()</code> to extract metadata (wells, sites, channels)</li>
+<li>Creates pipeline-specific CSV file using the appropriate <code>create_CSV_pipeline*()</code> function</li>
+<li>
+<p>Uploads the generated CSV to S3 for the CellProfiler pipeline to consume</p>
+</li>
+<li>
+<p><strong>AWS EC2 Job Configuration and Execution</strong>:</p>
+</li>
+<li>Sets up AWS environment with <code>run_setup()</code></li>
+<li>Configures batch jobs with the pipeline-specific <code>create_batch_jobs_*()</code> function</li>
+<li>Launches EC2 instances with Docker containers via <code>run_cluster()</code></li>
+<li>Sets up job completion monitoring with <code>run_monitor()</code></li>
+</ol>
+<h3 id="key-utility-functions">Key Utility Functions</h3>
+<p>Each Lambda function relies on a common set of utility modules:</p>
+<h4 id="from-helpful_functionspy">From helpful_functions.py:</h4>
+<ul>
+<li><strong>download_and_read_metadata_file()</strong>: Retrieves and parses experiment configuration</li>
+<li><strong>paginate_a_folder()</strong>: Lists S3 objects with pagination for large image sets</li>
+<li><strong>parse_image_names()</strong>: Extracts metadata from image filenames</li>
+<li><strong>write_metadata_file()</strong>: Updates metadata with processing results</li>
+<li><strong>check_if_run_done()</strong>: Validates job completion status</li>
+</ul>
+<h4 id="from-create_csvspy">From create_CSVs.py:</h4>
+<ul>
+<li><strong>create_CSV_pipelineN()</strong>: Pipeline-specific CSV generators</li>
+<li>Each translates experiment parameters into CellProfiler-compatible format</li>
+<li>Handles different acquisition modes (fast/slow, one/many files)</li>
+</ul>
+<h4 id="from-run_dcppy-and-create_batch_jobspy">From run_DCP.py and create_batch_jobs.py:</h4>
+<ul>
+<li>Functions for creating and monitoring AWS EC2 jobs</li>
+<li>Configures EC2 instances based on pipeline requirements</li>
+<li>Handles container setup and execution</li>
+</ul>
+<h2 id="pipeline-configuration-system">Pipeline Configuration System</h2>
+<p>This section details the configuration parameters and settings needed to set up the CellProfiler pipelines for Pooled Cell Painting experiments.</p>
+<h3 id="multi-layered-configuration-architecture">Multi-layered Configuration Architecture</h3>
+<p>The system employs a three-tiered configuration approach that separates experimental, computational, and infrastructure concerns. This separation allows independent modification of experimental parameters, resource allocation, and AWS infrastructure.</p>
+<div class="mermaid">flowchart TD
+    %% Color-coded configuration sources by layer
+    subgraph "Configuration Sources"
+        metadata["metadata.json
+        WHAT data to process
+        HOW to process it
+        (painting_rows, barcoding_cycles, Channeldict)"]:::experimentConfig
+        config_dict["Lambda config_dict
+        HOW MUCH compute power
+        WHEN jobs complete
+        (MACHINE_TYPE, MEMORY, EXPECTED_NUMBER_FILES)"]:::computeConfig
+        aws_config["AWS config files
+        WHERE in AWS to run
+        (AWS_REGION, ECS_CLUSTER, IamFleetRole)"]:::infraConfig
+    end
+
+    subgraph "Configuration Processing"
+        download_metadata["download_and_read_metadata_file
+        (in every Lambda function)"]
+        grab_config["grab_batch_config
+        (loads from S3)"]
+        loadConfig["loadConfig
+        (processes infrastructure settings)"]
+    end
+
+    subgraph "Configuration Consumers"
+        csv_gen["CSV Generation
+        Uses image grid, channels,
+        acquisition mode, cycles"]
+        batch_creation["Batch Job Creation
+        Experiment parameters +
+        Resource allocation +
+        Infrastructure location"]
+        pipeline_selection["Pipeline Selection
+        Based on cycle count, channels,
+        experiment type"]
+        ec2_config["EC2 Configuration
+        Subnet, security groups,
+        AMI, instance profile"]
+    end
+
+    %% Configuration flow with numbered sequence
+    metadata --&gt;|1 First loaded| download_metadata
+    config_dict --&gt;|2 Defined in each Lambda| batch_creation
+    aws_config --&gt;|3 Loaded when needed| grab_config
+
+    download_metadata --&gt; pipeline_selection
+    download_metadata --&gt; csv_gen
+    grab_config --&gt; loadConfig
+    loadConfig --&gt; ec2_config
+
+    pipeline_selection --&gt; batch_creation
+    csv_gen --&gt; batch_creation
+    ec2_config --&gt; batch_creation
+
+    %% Style definitions
+    classDef experimentConfig fill:#e6f3ff,stroke:#0066cc
+    classDef computeConfig fill:#e6ffe6,stroke:#009900
+    classDef infraConfig fill:#fff2e6,stroke:#ff8c1a
+</div>
+<h4 id="configuration-layer-relationships">Configuration Layer Relationships</h4>
+<p>Each layer serves a distinct purpose in the overall system:</p>
+<ul>
+<li><strong>Experiment Configuration</strong> (metadata.json): Controls WHAT data is processed and HOW it's processed</li>
+<li><strong>Computing Resource Configuration</strong> (Lambda config_dict): Specifies HOW MUCH computing power is allocated and WHEN jobs are considered complete</li>
+<li><strong>Infrastructure Configuration</strong> (AWS config files): Determines WHERE in AWS the processing happens</li>
+</ul>
+<h3 id="detailed-configuration-parameters">Detailed Configuration Parameters</h3>
+<h4 id="1-experiment-configuration-metadatajson">1. Experiment Configuration (metadata.json)</h4>
+<p>The <code>metadata.json</code> file (based on <code>configs/metadatatemplate.json</code>) defines all experiment-specific parameters:</p>
+<h5 id="image-grid-configuration">Image Grid Configuration</h5>
+<ul>
+<li><code>painting_rows</code>, <code>painting_columns</code>: Define cell painting image layout for square acquisitions</li>
+<li><code>painting_imperwell</code>: Defines total images per well for circular acquisitions (overrides rows/columns)</li>
+<li><code>barcoding_rows</code>, <code>barcoding_columns</code>: Define barcoding image layout for square acquisitions</li>
+<li><code>barcoding_imperwell</code>: Defines total images per well for circular acquisitions (overrides rows/columns)</li>
+<li>Note: Use rows/columns for square acquisition patterns; use imperwell for circular acquisition patterns</li>
+</ul>
+<h5 id="channel-dictionary-configuration">Channel Dictionary Configuration</h5>
+<pre><code class="language-json">"Channeldict":"{'round0':{'DAPI':['DNA_round0',0], 'GFP':['Phalloidin',1]}, 'round1':{'DAPI':['DNA_round1',0],'GFP':['GM130',1], ...}}"
+</code></pre>
+<ul>
+<li>Maps microscope channel names to biological stains and frame indices</li>
+<li>For multiple rounds (SABER) experiments:</li>
+<li>Keys are the folder names of the rounds (e.g., '20X_c0-SABER-0', '20X_c1-SABER-1')</li>
+<li>Common stains between rounds should include round identifiers (e.g., 'DNA_round0', 'DNA_round1')</li>
+<li>Example:
+    <code>json
+    "Channeldict":"{'20X_c0-SABER-0':{'DAPI':['DNA_round0',0], 'GFP':['Phalloidin',1]}, '20X_c1-SABER-1':{'DAPI':['DNA_round1',0],'GFP':['GM130',1], 'A594':['Tubulin',2], 'Cy5':['Calnexin', 3]}, '20X_c2-SABER-2':{'DAPI':['DNA_round2',0],'GFP':['COX-IV',1], 'A594':['TDP-43',2], 'Cy5':['G3BP1',3], '750':['LAMP1',4]}}"</code></li>
+<li>For single-round experiments:</li>
+<li>Single key matching the Cell Painting folder name (typically '20X_CP')</li>
+<li>Example:
+    <code>json
+    "Channeldict":"{'20X_CP':{'DAPI':['DNA', 0], 'GFP':['Phalloidin',1], 'A594':['Mito',2], 'Cy5':['ER',3], '750':['WGA',4]}}"</code></li>
+<li>First value in each array is the stain name, second is the frame index (0-based)</li>
+<li>Used to determine the pipeline variant (SABER vs. standard)</li>
+</ul>
+<h5 id="processing-configuration">Processing Configuration</h5>
+<ul>
+<li><code>one_or_many_files</code>: Controls if each well is stored as a single file (<code>"one"</code>) or multiple files (<code>"many"</code>)</li>
+<li>Should be locked to <code>"many"</code> for production runs</li>
+<li><code>fast_or_slow_mode</code>: Determines CSV generation strategy and processing path</li>
+<li>Should be locked to <code>"slow"</code> for production runs</li>
+<li><code>barcoding_cycles</code>: Sets the number of barcoding cycles to process</li>
+<li><code>range_skip</code>: Sets sampling frequency for Pipeline 3 (SegmentCheck), to process subset of images for validation</li>
+<li>Typically doesn't need to be changed from default</li>
+</ul>
+<h5 id="stitching-configuration">Stitching Configuration</h5>
+<ul>
+<li><code>overlap_pct</code>: Controls image overlap percentage between adjacent fields</li>
+<li><code>stitchorder</code>: Specifies tile arrangement</li>
+<li>For square acquisitions: "Grid: snake by rows" or "Grid: row-by-row"</li>
+<li>For round acquisitions: "Filename defined position"</li>
+<li><code>tileperside</code>: Number of tiles along each side of the stitched image grid</li>
+<li>Typically doesn't need to be changed from default</li>
+<li><code>final_tile_size</code>: Pixel dimensions of each output tile after cropping</li>
+<li>Typically doesn't need to be changed from default</li>
+<li><code>round_or_square</code>: Shape of the well for cropping calculations (<code>"round"</code> or <code>"square"</code>)</li>
+<li><code>quarter_if_round</code>: Whether to divide round wells into quarters for processing (<code>"True"</code> or <code>"False"</code>)</li>
+<li><code>*_xoffset_tiles</code>, <code>*_yoffset_tiles</code>: Optional offsets for troubleshooting stitching misalignments</li>
+<li>Should be 0 unless troubleshooting gross stitching misalignments</li>
+<li><code>compress</code>: Whether to compress output files (<code>"True"</code> or <code>"False"</code>)</li>
+<li>Should be set to <code>"True"</code> to save out compressed files from stitch-crop pipelines</li>
+</ul>
+<h4 id="2-computing-resource-configuration-lambda-config_dict">2. Computing Resource Configuration (Lambda config_dict)</h4>
+<p>Each Lambda function contains a specific <code>config_dict</code> with pipeline-appropriate settings:</p>
+<pre><code class="language-python">config_dict = {
+    "APP_NAME": "2018_11_20_Periscope_X_IllumPainting",
+    "DOCKERHUB_TAG": "cellprofiler/distributed-cellprofiler:2.0.0_4.2.1",
+    "TASKS_PER_MACHINE": "1",
+    "MACHINE_TYPE": ["c5.xlarge"],
+    "MEMORY": "7500",
+    "DOCKER_CORES": "4",
+    "CHECK_IF_DONE_BOOL": "True",
+    "EXPECTED_NUMBER_FILES": "5",  # Varies by pipeline
+    # Additional parameters...
+}
+</code></pre>
+<p>The key parameters that need configuration for each pipeline are:
+- <strong>APP_NAME</strong>: Unique identifier for the specific experiment
+- <strong>MACHINE_TYPE</strong>: EC2 instance type appropriate for the pipeline's computational needs
+- <strong>MEMORY</strong>: RAM allocation for the Docker container
+- <strong>EXPECTED_NUMBER_FILES</strong>: Number of output files to expect
+- <strong>CHECK_IF_DONE_BOOL</strong>: Controls validation of job completion</p>
+<h4 id="3-pipeline-specific-csv-configuration">3. Pipeline-Specific CSV Configuration</h4>
+<p>Each pipeline is driven by a CSV file with a specific structure generated by functions in <code>create_CSVs.py</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Pipeline</th>
+<th>CSV Generator Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1:  CP-Illum</td>
+<td><code>create_CSV_pipeline1()</code></td>
+</tr>
+<tr>
+<td>2:  CP-ApplyIllum</td>
+<td><code>create_CSV_pipeline1()</code></td>
+</tr>
+<tr>
+<td>3:  SegmentCheck</td>
+<td><code>create_CSV_pipeline3()</code></td>
+</tr>
+<tr>
+<td>4:  CP-Stitching</td>
+<td>(external FIJI script)</td>
+</tr>
+<tr>
+<td>5:  BC-Illum</td>
+<td><code>create_CSV_pipeline5()</code></td>
+</tr>
+<tr>
+<td>6:  BC-ApplyIllum</td>
+<td><code>create_CSV_pipeline6()</code></td>
+</tr>
+<tr>
+<td>7:  BC-Preprocess</td>
+<td><code>create_CSV_pipeline7()</code></td>
+</tr>
+<tr>
+<td>7A: BC-PreprocessTroubleshoot</td>
+<td><code>create_CSV_pipeline7()</code></td>
+</tr>
+<tr>
+<td>8:  BC-Stitching</td>
+<td>(external FIJI script)</td>
+</tr>
+<tr>
+<td>8Y: BC-CheckAlignment</td>
+<td><code>create_CSV_pipeline8Y()</code></td>
+</tr>
+<tr>
+<td>9:  Analysis</td>
+<td><code>create_CSV_pipeline9()</code></td>
+</tr>
+</tbody>
+</table>
+<p>The CSV files translate configuration parameters into CellProfiler-compatible format using:
+- <strong>FileName_X</strong> and <strong>PathName_X</strong> columns for each channel (essential for LoadData module)
+- <strong>Metadata_X</strong> columns for grouping and organization (Plate, Well, Site)
+- <strong>Frame_X</strong> and <strong>Series_X</strong> columns for multi-channel files in fast mode
+- <strong>Cycle</strong>-prefixed columns for barcoding data (Cycle01, Cycle02, etc.)
+- <strong>_Orig</strong> suffix for raw images and <strong>_Illum</strong> suffix for illumination files
+- <strong>_Corr</strong> suffix for corrected images that have had illumination applied</p>
+<h2 id="pipeline-specifications">Pipeline Specifications</h2>
+<p>This section provides detailed specifications for all nine primary CellProfiler and Fiji pipelines and their specialized variants, including their purposes, Lambda function triggers, key operations, inputs/outputs, and configuration requirements for implementing the complete Pooled Cell Painting workflow.</p>
+<h3 id="cell-painting">Cell Painting</h3>
+<h4 id="pipeline-1-cell-painting-illumination-correction-1_cp_illumcppipe">Pipeline 1: Cell Painting Illumination Correction (1_CP_Illum.cppipe)</h4>
+<p><strong>Purpose</strong>: Calculate per-plate illumination correction functions for each cell painting channel</p>
+<p><strong>Lambda Function</strong>: <code>PCP-1-CP-IllumCorr</code>
+- <strong>Trigger</strong>: S3 upload of 1_CP_Illum.cppipe
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline1()</code>
+- <strong>Output</strong>: Illumination function files (.npy)</p>
+<p><strong>Key Operations</strong>:
+1. Loads raw images via CSV configuration
+2. For each channel (DNA, ER, Phalloidin, Mito, WGA):
+   - Downsample images to 25% size for faster processing
+   - Calculate illumination function across all images using median filtering
+   - Upsample correction back to original size
+3. Save correction functions as .npy files with naming convention: <code>{Plate}_Illum{Channel}.npy</code></p>
+<h4 id="pipeline-2-cell-painting-illumination-application-2_cp_apply_illumcppipe">Pipeline 2: Cell Painting Illumination Application (2_CP_Apply_Illum.cppipe)</h4>
+<p><strong>Purpose</strong>: Apply illumination correction and segment cells for quality control</p>
+<p><strong>Lambda Function</strong>: <code>PCP-2-CP-ApplyIllum</code>
+- <strong>Trigger</strong>: S3 upload of IllumMito.npy (output from Pipeline 1)
+- <strong>CSV Generator</strong>: Created by <code>create_CSV_pipeline1()</code> (generates two CSVs at once)
+- <strong>Output</strong>: Corrected cell images (.tiff) and segmentation parameters</p>
+<p><strong>Key Operations</strong>:
+1. Apply illumination correction to all channels via division method
+2. Identify confluent regions to mask out problem areas
+3. Segment nuclei in DNA channel (10-80 pixel diameter)
+4. Identify cell boundaries from nuclei using watershed segmentation
+5. Export segmentation thresholds for quality control
+6. Save corrected images as TIFF files</p>
+<p><strong>Configuration Details</strong>:
+- Segmentation thresholds are automatically calculated and stored for Pipeline 3</p>
+<h4 id="pipeline-3-cell-painting-segmentation-check-3_cp_segmentationcheckcppipe">Pipeline 3: Cell Painting Segmentation Check (3_CP_SegmentationCheck.cppipe)</h4>
+<p><strong>Purpose</strong>: Verify segmentation quality on a subset of images</p>
+<p><strong>Lambda Function</strong>: <code>PCP-3-CP-SegmentCheck</code>
+- <strong>Trigger</strong>: S3 upload of PaintingIllumApplication_Image.csv (from Pipeline 2)
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline3()</code>
+- <strong>Output</strong>: Quality control overlay images showing segmentation</p>
+<p><strong>Key Operations</strong>:
+1. Load a subset of corrected images (skipping some sites per Lambda configuration)
+2. Apply segmentation using min/max thresholds from Pipeline 2
+3. Create color overlay images showing segmentation results
+4. Export metrics to validate segmentation quality</p>
+<p><strong>Configuration Details</strong>:
+- Uses <code>range_skip</code> parameter to process only a subset of images
+- Lambda reads segmentation thresholds from Pipeline 2 output</p>
+<h4 id="pipeline-4-cell-painting-stitching-and-cropping">Pipeline 4: Cell Painting Stitching and Cropping</h4>
+<p><strong>Purpose</strong>: Stitch field-of-view images into whole-well montages and create manageable tiles</p>
+<p><strong>Lambda Function</strong>: <code>PCP-4-CP-Stitching</code>
+- <strong>Trigger</strong>: S3 upload of SegmentationCheck_Experiment.csv (from Pipeline 3)
+- <strong>Implementation</strong>: Uses FIJI scripts rather than CellProfiler
+- <strong>Output</strong>: Stitched and cropped cell painting images</p>
+<p><strong>Key Operations</strong>:
+1. Stitch multiple fields of view into single whole-well image
+2. Generate a smaller (10x) version for preview
+3. Crop stitched image into standardized tiles
+4. Save output in tiered directory structure by batch and well</p>
+<h3 id="barcoding">Barcoding</h3>
+<h4 id="pipeline-5-barcoding-illumination-correction-5_bc_illumcppipe">Pipeline 5: Barcoding Illumination Correction (5_BC_Illum.cppipe)</h4>
+<p><strong>Purpose</strong>: Calculate illumination correction for barcoding images in each cycle</p>
+<p><strong>Lambda Function</strong>: <code>PCP-5-BC-IllumCorr</code>
+- <strong>Trigger</strong>: S3 upload of 5_BC_Illum.cppipe
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline5()</code>
+- <strong>Output</strong>: Cycle-specific illumination function files (.npy)</p>
+<p><strong>Key Operations</strong>:
+1. Load barcoding images from all cycles
+2. For each channel (DNA, A, C, G, T) in each cycle and plate:
+   - Downsample for faster processing
+   - Calculate illumination function with cycle-specific and plate-specific correction
+   - Upsample back to original size
+3. Save per-cycle, per-channel, per-plate correction functions</p>
+<h4 id="pipeline-6-barcoding-illumination-application-6_bc_apply_illumcppipe">Pipeline 6: Barcoding Illumination Application (6_BC_Apply_Illum.cppipe)</h4>
+<p><strong>Purpose</strong>: Apply illumination correction and align images across channels and cycles</p>
+<p><strong>Lambda Function</strong>: <code>PCP-6-BC-ApplyIllum</code>
+- <strong>Trigger</strong>: S3 upload of Cycle1_IllumA.npy (from Pipeline 5)
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline6()</code>
+- <strong>Output</strong>: Aligned barcoding images</p>
+<p><strong>Key Operations</strong>:
+1. Apply illumination correction by channel, cycle, and plate
+2. No alignment of A, C, G, T channels to DAPI within each cycle (fast mode is no longer supported)
+3. Align all cycle DAPI images to Cycle 1 DAPI
+4. Shift A, C, G, T channels by same amount as their DAPI image
+5. Save corrected and aligned images</p>
+<h4 id="pipeline-7-barcoding-preprocessing-7_bc_preprocesscppipe">Pipeline 7: Barcoding Preprocessing (7_BC_Preprocess.cppipe)</h4>
+<p><strong>Purpose</strong>: Process aligned barcoding images to identify and characterize barcode foci</p>
+<p><strong>Lambda Function</strong>: <code>PCP-7-BC-Preprocess</code>
+- <strong>Trigger</strong>: S3 upload of BarcodingApplication_Experiment.csv (from Pipeline 6)
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline7()</code>
+- <strong>Output</strong>: Processed barcoding images with foci identification</p>
+<p><strong>Key Operations</strong>:
+1. Perform per-image illumination correction grouped by cycle
+2. Calculate average and standard deviation images across cycles for quality control
+3. Identify nuclei using the DAPI channel and cells using propagation from nuclei. Note: <code>IdentifySecondaryObjects</code> module remains in the pipeline but cell segmentations are not used for meaningful analysis because:
+   - Cells identified without phenotypic stains are unreliable and have poor boundaries
+   - Getting accurate cell segmentations would require significant per-experiment tuning
+   - Barcode-only QC metrics provide sufficient data quality indicators that correlate well with downstream cell-based metrics
+   - Proper cell segmentation is performed in Pipeline 9 with full phenotypic stains
+4. Identify potential barcode foci in each channel
+5. The CompensateColors module includes many configurable parameters including:
+   - Histogram matching options (pre/post-masking, template selection)
+   - Channel compensation to correct for spectral bleed-through
+   - Filter-based processing (Laplacian of Gaussian, Tophat, Difference of Gaussians)
+   - Channel-specific background subtraction
+   - Processing sequence controls (pre/post masking rescaling)
+   - Within-object vs. whole-image processing options
+   - Percentile-based intensity normalization
+   - Spot size and intensity thresholding
+6. Analyze foci intensities and call barcodes
+7. Relate barcode foci to cell objects for spatial organization
+8. Create composite images for QC visualization</p>
+<h4 id="pipeline-8-barcoding-stitching-and-cropping">Pipeline 8: Barcoding Stitching and Cropping</h4>
+<p><strong>Purpose</strong>: Stitch and crop barcoding images similar to cell painting images</p>
+<p><strong>Lambda Function</strong>: <code>PCP-8-BC-Stitching</code>
+- <strong>Trigger</strong>: S3 upload of BarcodePreprocessing_Experiment.csv (from Pipeline 7)
+- <strong>Implementation</strong>: Uses FIJI scripts rather than CellProfiler
+- <strong>Output</strong>: Stitched barcoding images</p>
+<p><strong>Key Operations</strong>:
+1. Similar to Pipeline 4, but operates on barcoding images
+2. Stitches according to same grid layout as cell painting
+3. Produces consistent tile naming for alignment with cell painting tiles</p>
+<h3 id="final-analysis-pipeline">Final Analysis Pipeline</h3>
+<h4 id="pipeline-9-analysis-9_analysiscppipe">Pipeline 9: Analysis (9_Analysis.cppipe)</h4>
+<p><strong>Purpose</strong>: Integrate cell painting and barcoding data for downstream analysis</p>
+<p><strong>Lambda Function</strong>: <code>PCP-9-Analysis</code>
+- <strong>Trigger</strong>: Manual trigger (triggered after both tracks complete)
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline9()</code>
+- <strong>Output</strong>: Integrated analysis results and segmentation masks</p>
+<p><strong>Key Operations</strong>:
+1. Align cell painting images to barcoding images using DAPI channels
+2. Identify and mask overly-confluent regions
+3. Segment nuclei, cells, cytoplasm in cell painting images
+4. Locate barcode foci in aligned images
+5. Measure cell painting features across all compartments
+6. Call barcodes and annotate quality metrics
+7. Export segmentation masks and merged, annotated images for visualization</p>
+<h3 id="special-purpose-pipelines">Special-Purpose Pipelines</h3>
+<p>In addition to the main pipeline sequence, there are specialized pipelines for troubleshooting:</p>
+<h4 id="7a_bc_preprocess_troubleshootingcppipe">7A_BC_Preprocess_Troubleshooting.cppipe</h4>
+<p><strong>Purpose</strong>: Specialized version of Pipeline 7 with additional diagnostics</p>
+<p><strong>Lambda Function</strong>: <code>PCP-7A-BC-PreprocessTroubleshoot</code>
+- <strong>Trigger</strong>: Manual trigger for troubleshooting
+- <strong>Output</strong>: Diagnostic images and measurements</p>
+<p><strong>Key Differences</strong>:
+- Includes additional QC measurements
+- Outputs more diagnostic images
+- May use alternative image processing parameters
+- Used when standard pipeline produces unexpected results</p>
+<h4 id="6_bc_apply_illum_debrismaskcppipe">6_BC_Apply_Illum_DebrisMask.cppipe</h4>
+<p><strong>Purpose</strong>: Alternative version of Pipeline 6 that identifies and masks debris</p>
+<p><strong>Key Differences</strong>:
+- Adds debris identification and masking
+- Prevents debris from interfering with alignment
+- Used for samples with high debris content</p>
+<h4 id="8y_checkalignmentpoststitching">8Y_CheckAlignmentPostStitching</h4>
+<p><strong>Purpose</strong>: Validate alignment between stitched Cell Painting and Barcoding images</p>
+<p><strong>Lambda Function</strong>: <code>PCP-8Y-BC-CheckAlignmentPostStitch</code>
+- <strong>Trigger</strong>: Manual trigger or after completion of Pipelines 4 and 8
+- <strong>CSV Generator</strong>: <code>create_CSV_pipeline8Y()</code>
+- <strong>Implementation</strong>: Uses CellProfiler pipeline for alignment validation
+- <strong>Output</strong>: Alignment validation images and metrics</p>
+<p><strong>Key Operations</strong>:
+1. Takes the stitched Cell Painting DNA images and Cycle01 DAPI images from Barcoding
+2. Cross-references these images to validate their alignment
+3. Produces diagnostic images showing alignment quality
+4. Identifies any systematic misalignments that may need adjustment in the metadata</p>
+<p><strong>Configuration Details</strong>:
+- Uses the <code>Cycle01_DAPI</code> channel from barcoding as the reference
+- Compares with <code>CorrDNA</code> from Cell Painting track
+- Creates a CSV that links corresponding tiles from both imaging modalities
+- Runs on a site-by-site basis for detailed validation</p>
+<h4 id="8z_stitchalignedbarcoding">8Z_StitchAlignedBarcoding</h4>
+<p><strong>Purpose</strong>: Stitch and crop barcoding images from the aligned images directory instead of the corrected images directory</p>
+<p><strong>Lambda Function</strong>: <code>PCP-8Z-StitchAlignedBarcoding</code>
+- <strong>Trigger</strong>: Manual trigger, typically after alignment issues are discovered
+- <strong>Implementation</strong>: Uses the same FIJI script as Pipeline 8 but on different inputs
+- <strong>Output</strong>: Stitched and cropped barcoding images from aligned sources</p>
+<p><strong>Key Operations</strong>:
+1. Similar to Pipeline 8, but takes input from the <code>images_aligned</code> directory instead of <code>images_corrected</code>
+2. Uses the FIJI stitching script to create stitched whole-well images
+3. Also creates a smaller (10x) version for preview and visualization
+4. Crops stitched images into standardized tiles for downstream analysis
+5. Handles both square and round wells using the same configurable parameters as Pipeline 8</p>
+<p><strong>Configuration Details</strong>:
+- Uses identical configuration parameters to Pipeline 8
+- Allows separate adjustment of x/y offset tiles through metadata
+- Supports compression of output images when configured
+- Can divide round wells into quarters for more manageable processing</p>
+<h2 id="pipeline-configuration">Pipeline Configuration</h2>
+<p>This section explains how CellProfiler pipelines interact with the configuration system and detailed implementation considerations for each pipeline step.</p>
+<h3 id="pipeline-variant-selection">Pipeline Variant Selection</h3>
+<p>Lambda functions select specific pipeline variants based on experimental configuration:</p>
+<pre><code class="language-python"># Sample code from PCP-1-CP-IllumCorr
+if len(Channeldict.keys()) == 1:  # Standard experiment
+    pipeline_name = "1_CP_Illum.cppipe"
+if len(Channeldict.keys()) &gt; 1:   # SABER experiment
+    pipeline_name = "1_SABER_CP_Illum.cppipe"
+</code></pre>
+<p>This dynamic selection allows the same Lambda function to handle different experimental designs without code changes.</p>
+<h3 id="csv-generation-implementation">CSV Generation Implementation</h3>
+<p>Each pipeline stage has a specialized CSV generator function that translates metadata parameters into CellProfiler-compatible input:</p>
+<ol>
+<li>
+<p><strong>Channel Dictionary Parsing</strong>:
+   <code>python
+   # From create_CSV_pipeline1()
+   Channeldict = ast.literal_eval(Channeldict)
+   rounddict = {}
+   Channelrounds = list(Channeldict.keys())
+   for eachround in Channelrounds:
+       templist = []
+       templist += Channeldict[eachround].values()
+       channels += list(i[0] for i in templist)</code></p>
+</li>
+<li>
+<p><strong>Acquisition Mode Handling</strong>:
+   <code>python
+   # From create_CSV_pipeline6()
+   if one_or_many == "one" and fast_or_slow == "fast":
+       # One file structure
+   elif one_or_many == "many" and fast_or_slow == "slow":
+       # Many file structure</code></p>
+</li>
+<li>
+<p><strong>Cycle-Aware Configuration</strong>:
+   <code>python
+   # From create_CSV_pipeline7()
+   for cycle in range(1, (expected_cycles + 1)):
+       this_cycle = "Cycle%02d_" % cycle
+       # Configure cycle-specific columns</code></p>
+</li>
+</ol>
+<h3 id="cellprofiler-pipeline-parameterization">CellProfiler Pipeline Parameterization</h3>
+<p>CellProfiler pipelines are parameterized through CSV columns that control their behavior:</p>
+<ol>
+<li>
+<p><strong>Metadata Grouping</strong>: Controls how images are processed together
+   <code>Group images by metadata?:Yes
+   Select metadata tags for grouping:Plate</code></p>
+</li>
+<li>
+<p><strong>Channel Selection</strong>: Driven by metadata-derived CSV columns
+   <code>Select the input image:OrigDNA  # Comes from CSV FileName_OrigDNA column</code></p>
+</li>
+<li>
+<p><strong>Output Naming</strong>: Uses metadata variables from the CSV
+   <code>Enter single file name:\g&lt;Plate&gt;_IllumDNA  # \g&lt;&gt; syntax references metadata</code></p>
+</li>
+</ol>
+<p>This parameterization approach enables the same pipeline code to process different experimental designs based on the configuration-derived CSV input.</p>
+<h2 id="pipeline-input-output-specifications">Pipeline Input Output Specifications</h2>
+<p>Note:
+- The input / outputs are also in parseable form <a href="../assets/pcpip-io.json"><code>io.json</code></a>. Note that it uses <code>Tile</code> instead of <code>Site</code> when referring to the outputs of Pipelines 4 and 8.
+- In the jsons, <code>{1_CP_Illum|2_CP_Apply_Illum|5_BC_Illum|6_BC_Apply_Illum}.input.images.pattern</code> are mockups
+- Sample outputs of paths and LoadData CSVs generated using <a href="../assets/pcpip-io.json"><code>io.json</code></a> are <a href="assets/generate-structures/sample_outputs/generated_csvs.json">here</a>.
+- FIXME: We also need to specify as input, the channels that (1) will be used for nuclear segmentation (2) cell segmentation (3) mitochondria (for some filtering that happens in Pipeline 9)</p>
+<h3 id="cell-painting_1">Cell Painting</h3>
+<h4 id="pipeline-1-cell-painting-illumination-correction">Pipeline 1: Cell Painting Illumination Correction</h4>
+<ul>
+<li><strong>Input Images</strong>: Raw Cell Painting images</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_Orig{Channel}</code>, <code>PathName_Orig{Channel}</code> (raw Cell Painting images, where Channel = DNA, Phalloidin, etc.)</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li><strong>Output Files</strong>:</li>
+<li>Per-plate illumination correction functions for each channel</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/illum/{Plate}/</code></li>
+</ul>
+</li>
+<li><strong>NPY Naming Pattern</strong>:<ul>
+<li><code>{Plate}_Illum{Channel}.npy</code>: Illumination function</li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-2-cell-painting-illumination-application">Pipeline 2: Cell Painting Illumination Application</h4>
+<ul>
+<li><strong>Input Images</strong>:</li>
+<li>Raw Cell Painting images</li>
+<li>Illumination correction files (<code>.npy</code>) from Pipeline 1</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_Orig{Channel}</code>, <code>PathName_Orig{Channel}</code> (raw Cell Painting images, where Channel = DNA, Phalloidin, etc.)</li>
+<li><code>FileName_Illum{Channel}</code>, <code>PathName_Illum{Channel}</code> (corresponding illumination correction files)</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li><strong>Output Files</strong>:</li>
+<li>Illumination-corrected images for each channel and site</li>
+<li>CSV files with measurements</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/images_corrected/painting/{Plate}-{Well}/</code></li>
+</ul>
+</li>
+<li><strong>Image Naming Pattern</strong>:<ul>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_Corr{Channel}.tiff</code>: Illumination corrected image</li>
+</ul>
+</li>
+<li><strong>CSV Naming Pattern</strong>:<ul>
+<li><code>PaintingIllumApplication_Image.csv</code></li>
+<li><code>PaintingIllumApplication_Cells.csv</code></li>
+<li><code>PaintingIllumApplication_Nuclei.csv</code></li>
+<li><code>PaintingIllumApplication_ConfluentRegions.csv</code></li>
+<li><code>PaintingIllumApplication_Experiment.csv</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-3-cell-painting-segmentation-check">Pipeline 3: Cell Painting Segmentation Check</h4>
+<ul>
+<li><strong>Input Images</strong>: Corrected Cell Painting images from Pipeline 2</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_{Channel}</code>, <code>PathName_{Channel}</code> (corrected Cell Painting images, where Channel = DNA, Phalloidin, etc.)</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li><strong>Output Files</strong>:</li>
+<li>Quality control overlay images showing segmentation results</li>
+<li>CSV files with measurements</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/images_segmentation/{Plate}/</code></li>
+</ul>
+</li>
+<li><strong>Image Naming Pattern</strong>:<ul>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_Corr{Channel}_SegmentCheck.png</code>: Overlay image</li>
+</ul>
+</li>
+<li><strong>CSV Naming Pattern</strong>:<ul>
+<li><code>SegmentationCheck_Cells.csv</code></li>
+<li><code>SegmentationCheck_ConfluentRegions.csv</code></li>
+<li><code>SegmentationCheck_Experiment.csv</code></li>
+<li><code>SegmentationCheck_Image.csv</code></li>
+<li><code>SegmentationCheck_Nuclei.csv</code></li>
+<li><code>SegmentationCheck_PreCells.csv</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-4-cell-painting-stitching-and-cropping_1">Pipeline 4: Cell Painting Stitching and Cropping</h4>
+<ul>
+<li><strong>Input Images</strong>: Corrected Cell Painting images from Pipeline 2</li>
+<li><strong>FIJI Script Parameters</strong> (instead of LoadData CSV):</li>
+<li><code>input_file_location</code>: Path to corrected images directory</li>
+<li><code>subdir</code>: Specific subfolder containing images to process (e.g., <code>{batch}/images_corrected/painting/{Plate}-{Well}</code>)</li>
+<li><code>filterstring</code>: Pattern to match image files (typically contains well identifier)</li>
+<li><code>channame</code>: Channel name for processing (e.g., "DNA")</li>
+<li><code>rows</code>, <code>columns</code> or <code>imperwell</code>: Image grid layout</li>
+<li><code>stitchorder</code>: Tile arrangement method</li>
+<li><code>overlap_pct</code>: Image overlap percentage</li>
+<li><code>size</code>: Size of individual tiles</li>
+<li><code>round_or_square</code>: Well shape for processing</li>
+<li><code>tileperside</code>: Number of tiles to create along each axis</li>
+<li><code>final_tile_size</code>: Pixel dimensions for output tiles</li>
+<li><strong>Output Files</strong>:</li>
+<li>Stitched whole-well images for each channel</li>
+<li>Cropped tiles from stitched images</li>
+<li>Downsampled (10x) previews of stitched images</li>
+<li><strong>Output Directories</strong>:<ul>
+<li><code>{Batch}/images_corrected_stitched/cellpainting/{Plate}/{Plate}_{Well}/</code>: Stitched whole-well images</li>
+<li><code>{Batch}/images_corrected_cropped/cellpainting/{Plate}/{Plate}_{Well}/{Channel}/</code>: Cropped tile images</li>
+<li><code>{Batch}/images_corrected_stitched_10X/cellpainting/{Plate}/{Plate}_{Well}/Corr_{Channel}/</code>: Downsampled previews</li>
+</ul>
+</li>
+<li>
+<p><strong>Image Naming Pattern</strong>:</p>
+<ul>
+<li><code>Stitched{Channel}.tiff</code>: Stitched whole-well image (for square wells)</li>
+<li><code>Stitched[TopLeft|TopRight|BottomLeft|BottomRight]{Channel}.tiff</code>: Stitched quadrant images (for round wells)</li>
+<li><code>Corr_{Channel}_Site_{TileNumber}.tiff</code>: Cropped tile image</li>
+</ul>
+<p>{cp_channel}/Corr_{cp_channel}/Corr_{cp_channel}<em>Site</em>{tile_number}.tiff"</p>
+</li>
+</ul>
+<h3 id="barcoding_1">Barcoding</h3>
+<h4 id="pipeline-5-barcoding-illumination-correction">Pipeline 5: Barcoding Illumination Correction</h4>
+<ul>
+<li><strong>Input Images</strong>: Raw Barcoding images</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_Orig{Channel}</code>, <code>PathName_Orig{Channel}</code> (raw barcoding images, where Channel = DNA, A, C, G, T)</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code>, <code>Metadata_SBSCycle</code></li>
+<li><strong>Output Files</strong>: Per-plate, per-cycle illumination correction functions for each channel</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/illum/{Plate}/</code></li>
+</ul>
+</li>
+<li><strong>NPY Naming Pattern</strong>:<ul>
+<li><code>{Plate}_Cycle{K}_Illum{Channel}.npy</code>: Illumination function</li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-6-barcoding-illumination-application-and-alignment">Pipeline 6: Barcoding Illumination Application and Alignment</h4>
+<ul>
+<li><strong>Input Images</strong>:</li>
+<li>Raw Barcoding images</li>
+<li>Illumination correction files from Pipeline 5</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_Cycle{K}_{Channel}</code>, <code>PathName_Cycle{K}_{Channel}</code> (raw barcoding images, where Channel = DNA, A, C, G, T; and K = 1...N)</li>
+<li><code>FileName_Illum_Cycle{K}_{Channel}</code>, <code>PathName_Illum_Cycle{K}_{Channel}</code> (corresponding illumination correction files)</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li>
+<p>Note: Pipeline 5 uses <code>Metadata_SBSCycle</code> while Pipelines 6 and 7 drop that and instead encode the cycle in the <code>FileName</code> and <code>PathName</code> column names. This reflects a deliberate pivot transformation of the data structure between pipelines. Pipeline 5 uses a narrow format CSV where each row represents one image from one cycle (with cycle as a row value). Pipeline 6 pivots this into a wide format where each row contains all cycle data for a site (with cycle embedded in column names). This transformation is necessary because Pipeline 6 needs all cycle data simultaneously to perform cross-cycle alignment.</p>
+</li>
+<li>
+<p><strong>Output Files</strong>:</p>
+</li>
+<li>Illumination-corrected and aligned images for each cycle, channel, and site</li>
+<li>CSV files with measurements</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/images_aligned/barcoding/{Plate}-{Well}-{Site}/</code></li>
+</ul>
+</li>
+<li><strong>Image Naming Pattern</strong>:<ul>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_Cycle{K}_{Channel}.tiff</code>: Illumination corrected and aligned image</li>
+</ul>
+</li>
+<li><strong>CSV Naming Pattern</strong>:<ul>
+<li><code>BarcodingApplication_Image.csv</code></li>
+<li><code>BarcodingApplication_Experiment.csv</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-7-barcoding-preprocessing">Pipeline 7: Barcoding Preprocessing</h4>
+<ul>
+<li><strong>Input Images</strong>: Aligned Barcoding images from Pipeline 6</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_Cycle{K}_{Channel}</code>, <code>PathName_Cycle{K}_{Channel}</code> (aligned barcoding images; where Channel = DAPI, A, C, G, T; and K = 1...N, except for DAPI where K = 1).</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li>Note: <code>DNA</code> channel is called <code>DAPI</code> here to avoid name clash later when Cell Painting channels are brought it.</li>
+<li><strong>Output Files</strong>:</li>
+<li>Processed barcoding images with color compensation, background correction, etc.</li>
+<li>CSV files with barcode calling results</li>
+<li>Overlay images showing identified foci</li>
+<li><strong>Output Directory</strong>:<ul>
+<li><code>{Batch}/images_corrected/barcoding/{Plate}-{Well}-{Site}/</code></li>
+</ul>
+</li>
+<li><strong>Image Naming Pattern</strong>:<ul>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_Cycle{K}_{Channel}.tiff</code>: Processed image</li>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_Max_Overlay.png</code>: Overlay image</li>
+</ul>
+</li>
+<li><strong>CSV Naming Pattern</strong>:<ul>
+<li><code>BarcodePreprocessing_Foci.csv</code></li>
+<li><code>BarcodePreprocessing_Image.csv</code></li>
+<li><code>BarcodePreprocessing_Experiment.csv</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="pipeline-8-barcoding-stitching-and-cropping_1">Pipeline 8: Barcoding Stitching and Cropping</h4>
+<ul>
+<li><strong>Input Images</strong>: Processed Barcoding images from Pipeline 7</li>
+<li><strong>FIJI Script Parameters</strong>: Same as Pipeline 4, with these key differences:</li>
+<li><code>subdir</code>: Points to barcoding images (e.g., <code>{batch}/images_corrected/barcoding</code>)</li>
+<li><code>channame</code>: Uses "DAPI" instead of "DNA"</li>
+<li><code>rows</code>, <code>columns</code>, <code>imperwell</code>: Uses barcoding grid layout parameters</li>
+<li><code>scalingstring</code>: Set to "1.99" (vs. "1" for cell painting)</li>
+<li><strong>Output Files</strong>:</li>
+<li>Stitched whole-well images for each channel and cycle</li>
+<li>Cropped tiles from stitched images</li>
+<li>Downsampled (10x) previews of stitched images</li>
+<li><strong>Output Directories</strong>:<ul>
+<li><code>{Batch}/images_corrected_stitched/barcoding/{Plate}/{Plate}_{Well}/</code>: Stitched whole-well images</li>
+<li><code>{Batch}/images_corrected_cropped/barcoding/{Plate}/{Plate}_{Well}/{Channel}/</code>: Cropped tile images</li>
+<li><code>{Batch}/images_corrected_stitched_10X/barcoding/{Plate}/{Plate}_{Well}/Cycle{Cycle}_{bc_channel}/</code>: Downsampled previews</li>
+</ul>
+</li>
+<li><strong>Image Naming Pattern</strong>:<ul>
+<li><code>Stitched_Cycle{K}_{Channel}.tiff</code>: Stitched whole-well image (for square wells)</li>
+<li><code>StitchedTopLeft_Cycle{K}_{Channel}.tiff</code>, etc.: Stitched quadrant images (for round wells)</li>
+<li><code>Cycle{K}_{Channel}_Site_{TileNumber}.tiff</code>: Cropped tile image (includes cycle information)</li>
+</ul>
+</li>
+</ul>
+<h3 id="final-analysis-pipeline_1">Final Analysis Pipeline</h3>
+<h4 id="pipeline-9-combined-analysis">Pipeline 9: Combined Analysis</h4>
+<ul>
+<li><strong>Input Images</strong>:</li>
+<li>Cropped Cell Painting tiles from Pipeline 4</li>
+<li>Cropped Barcoding tiles from Pipeline 8</li>
+<li><strong>LoadData CSV Fields</strong>:</li>
+<li><code>FileName_{Channel}</code>, <code>PathName_{Channel}</code> (cropped Cell Painting images, where Channel = DNA, Phalloidin, etc.)</li>
+<li><code>FileName_Cycle{K}_{Channel}</code>, <code>PathName_Cycle{K}_{Channel}</code> (cropped barcoding images; where Channel = DAPI, A, C, G, T; and K = 1...N, except for DAPI where K = 1).</li>
+<li><code>Metadata_Plate</code>, <code>Metadata_Well</code>, <code>Metadata_Site</code></li>
+<li><strong>Additional Input</strong>:</li>
+<li><code>Barcodes.csv</code>: Contains reference barcode sequences for calling. Must include two case-sensitive columns: <code>sgRNA</code> (barcode sequences) and <code>gene_symbol</code> (gene names)</li>
+<li><strong>Output Files</strong>:<ol>
+<li>CSV files with measurements</li>
+<li>Segmentation mask images</li>
+<li>Overlay images showing segmentation and barcode foci</li>
+<li><strong>Output Directories</strong>:</li>
+<li><code>{Batch}/workspace/analysis/{Plate}-{Well}-{Site}/</code>: CSV and overlay</li>
+<li><code>{Batch}/workspace/analysis/{Plate}-{Well}-{Site}/segmentation_masks/</code>: segmentation mask</li>
+<li><strong>CSV Naming Pattern</strong>:</li>
+<li><code>BarcodeFoci.csv</code></li>
+<li><code>Cells.csv</code></li>
+<li><code>ConfluentRegions.csv</code></li>
+<li><code>Cytoplasm.csv</code></li>
+<li><code>Experiment.csv</code></li>
+<li><code>Foci.csv</code></li>
+<li><code>Foci_NonCellEdge.csv</code></li>
+<li><code>Foci_PreMask.csv</code></li>
+<li><code>Image.csv</code></li>
+<li><code>Nuclei.csv</code></li>
+<li><code>PreCells.csv</code></li>
+<li><code>RelateObjects.csv</code></li>
+<li><code>Resize_Foci.csv</code></li>
+<li><strong>Image Naming Pattern</strong>:</li>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_{ObjectType}_Objects.tiff</code>: Segmentation mask</li>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_CorrCh{ChannelNumber}_Overlay.png</code>: Overlay image</li>
+<li><code>Plate_{Plate}_Well_{Well}_Site_{Site}_CorrCh{ChannelNumber}_SpotOverlay.png</code>: Overlay image</li>
+</ol>
+</li>
+</ul>
+<h3 id="special-purpose-pipeline-outputs">Special-Purpose Pipeline Outputs</h3>
+<h4 id="pipeline-7a-barcoding-preprocessing-troubleshooting">Pipeline 7A: Barcoding Preprocessing Troubleshooting</h4>
+<ul>
+<li>Similar to Pipeline 7 but with additional diagnostic outputs:</li>
+<li><code>BarcodePreprocessingTroubleshoot_Foci.csv</code>: Enhanced foci metrics</li>
+<li>Additional overlay images with more detailed visualization</li>
+<li>Histogram plots of intensity distributions</li>
+</ul>
+<h4 id="pipeline-8y-barcoding-alignment-check">Pipeline 8Y: Barcoding Alignment Check</h4>
+<ul>
+<li><strong>Output Files</strong>:</li>
+<li>Alignment verification images showing overlay of Cell Painting and Barcoding channels</li>
+<li>CSV files with cross-modality alignment metrics</li>
+<li><strong>Example</strong>: <code>AlignmentCheck_Plate1_A01_Site_1.png</code></li>
+</ul>
+<h4 id="pipeline-8z-stitching-of-aligned-images">Pipeline 8Z: Stitching of Aligned Images</h4>
+<ul>
+<li>Similar to Pipeline 8 but operating on aligned images directory rather than corrected images</li>
+<li>Output naming follows the same pattern as Pipeline 8</li>
+</ul>
+<h2 id="quality-control-steps-and-scripts">Quality Control Steps and Scripts</h2>
+<p>Each pipeline stage includes specific quality control measures to ensure data quality and processing accuracy. The following scripts provide visualization and analysis tools for QC:</p>
+<p>Location: notebooks assets/pcpip_notebooks/</p>
+<h3 id="qc-scripts-and-their-applications">QC Scripts and Their Applications</h3>
+<ol>
+<li><strong><code>illum_montage.py</code></strong> (Not currently implemented)</li>
+<li>Purpose: Visualizes illumination correction functions across plates</li>
+<li>Functionality:<ul>
+<li>Creates montages of illumination correction functions (.npy files)</li>
+<li>Shows correction patterns for each channel</li>
+<li>Compares correction functions across plates</li>
+<li>Highlights potential issues in illumination correction</li>
+</ul>
+</li>
+<li>Used in:<ul>
+<li>Pipeline 1 (Cell Painting Illumination Correction): Validates illumination correction functions for cell painting channels</li>
+<li>Pipeline 5 (Barcoding Illumination Correction): Validates illumination correction functions for barcoding channels</li>
+</ul>
+</li>
+<li>QC Focus: Ensures consistent and appropriate illumination correction</li>
+<li>QC Metrics implemented:<ul>
+<li>None</li>
+</ul>
+</li>
+<li>
+<p>QC performed by expert:</p>
+<ul>
+<li>Compare correction patterns across channels</li>
+<li>Check for uniform illumination patterns</li>
+<li>Verify no extreme variations in correction functions</li>
+<li>Identify potential plate-specific issues</li>
+</ul>
+</li>
+<li>
+<p><strong><code>make_fiji_montages_std.py</code></strong></p>
+</li>
+<li>Purpose: Creates visual montages of segmentation check results</li>
+<li>Functionality:<ul>
+<li>Organizes PNG images by plate</li>
+<li>Creates a grid montage</li>
+<li>Uses FIJI's montage tool with appropriate scaling and borders</li>
+<li>Saves output as TIFF files named after each plate</li>
+</ul>
+</li>
+<li>Used in:<ul>
+<li>Pipeline 3 (Segmentation Check): Visual assessment of segmentation quality across wells</li>
+</ul>
+</li>
+<li>QC Focus: Visual assessment of segmentation quality across wells</li>
+<li>QC Metrics implemented:<ul>
+<li>None</li>
+</ul>
+</li>
+<li>
+<p>QC performed by expert:</p>
+<ul>
+<li>Visual inspection of segmentation across wells</li>
+<li>Check for consistent segmentation patterns</li>
+<li>Verify no systematic failures</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Visualize_stitched_images.py</code></strong></p>
+</li>
+<li>Purpose: Validates stitching quality for both cell painting and barcoding images</li>
+<li>Functionality:<ul>
+<li>Creates 2x2 grid visualization of stitched quadrants</li>
+<li>Shows TopLeft, TopRight, BottomLeft, BottomRight sections</li>
+<li>Uses square root transformation for better contrast</li>
+<li>Works with 10X downsampled images for efficient QC</li>
+<li>Removes axis ticks for cleaner visualization</li>
+</ul>
+</li>
+<li>Used in:<ul>
+<li>Pipeline 4 (Cell Painting Stitching): Validates stitching quality for cell painting images</li>
+<li>Pipeline 8 (Barcoding Stitching): Validates stitching quality for barcoding images</li>
+</ul>
+</li>
+<li>QC Focus: Verifies proper stitching and alignment of image quadrants</li>
+<li>QC Metrics implemented:<ul>
+<li>None</li>
+</ul>
+</li>
+<li>
+<p>QC performed by expert:</p>
+<ul>
+<li>Verify quadrant alignment</li>
+<li>Check for stitching artifacts</li>
+<li>Validate image continuity</li>
+</ul>
+</li>
+<li>
+<p><strong><code>6_Barcode_Align.py</code></strong></p>
+</li>
+<li>Purpose: Validates alignment between barcoding cycles</li>
+<li>Functionality:<ul>
+<li>Analyzes pixel shifts between cycles</li>
+<li>Calculates correlation scores between cycles</li>
+<li>Creates visualizations of:</li>
+<li>Pixel shifts (with -200 to 200 pixel limits)</li>
+<li>Correlation scores (with 0.9 threshold line)</li>
+<li>Provides statistical analysis:</li>
+<li>Counts of sites with large shifts (&gt;50 pixels)</li>
+<li>Sites with poor correlations (&lt;0.9, &lt;0.8)</li>
+<li>Spatial distribution of alignment issues</li>
+</ul>
+</li>
+<li>Used in:<ul>
+<li>Pipeline 6 (Barcoding Alignment): Ensures proper alignment between barcoding cycles</li>
+</ul>
+</li>
+<li>QC Focus: Ensures proper alignment between barcoding cycles</li>
+<li>QC Metrics implemented:<ul>
+<li>Pixel shifts should be within ±200 pixels (typically)</li>
+<li>Correlation scores should be &gt;0.9 (typically)</li>
+</ul>
+</li>
+<li>
+<p>QC performed by expert:</p>
+<ul>
+<li>Monitor spatial distribution of alignment issues</li>
+</ul>
+</li>
+<li>
+<p><strong><code>7_BarcodePreprocessing.py</code></strong></p>
+</li>
+<li>Purpose: Analyzes barcode preprocessing quality</li>
+<li>Functionality:<ul>
+<li>Analyzes barcode library composition:</li>
+<li>Nucleotide frequency by cycle</li>
+<li>Repeat sequence analysis (5-7 nucleotide repeats)</li>
+<li>Evaluates barcode calling quality:</li>
+<li>Perfect match percentages</li>
+<li>Score distributions</li>
+<li>Per-well performance visualization</li>
+<li>Creates spatial visualizations:</li>
+<li>Per-plate heatmaps of barcode quality</li>
+<li>Nucleotide frequency plots across cycles</li>
+</ul>
+</li>
+<li>Used in:<ul>
+<li>Pipeline 7 (Barcoding Preprocessing): Validates barcode detection and calling accuracy</li>
+</ul>
+</li>
+<li>QC Focus: Validates barcode detection and calling accuracy</li>
+<li>QC Metrics implemented:<ul>
+<li>As described above in functionality</li>
+</ul>
+</li>
+<li>QC performed by expert:<ul>
+<li>Inpsect the metrics</li>
+</ul>
+</li>
+</ol></div>
+</div>
+</div>
+<footer class="col-md-12">
+<hr/>
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+</footer>
+<script src="../../js/bootstrap.bundle.min.js"></script>
+<script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+<script src="../../js/base.js"></script>
+<div aria-hidden="true" aria-labelledby="keyboardModalLabel" class="modal" id="mkdocs_keyboard_modal" role="dialog" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<table class="table">
+<thead>
+<tr>
+<th style="width: 20%;">Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="help shortcut"><kbd>?</kbd></td>
+<td>Open this help</td>
+</tr>
+<tr>
+<td class="next shortcut"><kbd>n</kbd></td>
+<td>Next page</td>
+</tr>
+<tr>
+<td class="prev shortcut"><kbd>p</kbd></td>
+<td>Previous page</td>
+</tr>
+<tr>
+<td class="search shortcut"><kbd>s</kbd></td>
+<td>Search</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="modal-footer">
+</div>
+</div>
+</div>
+</div>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script></body>
+</html>

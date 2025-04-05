@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html data-bs-theme="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<title>Developer Guide - StarryNight Documentation</title>
+<link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+<link href="../../css/fontawesome.min.css" rel="stylesheet"/>
+<link href="../../css/brands.min.css" rel="stylesheet"/>
+<link href="../../css/solid.min.css" rel="stylesheet"/>
+<link href="../../css/v4-font-face.min.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+<link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+<div class="container">
+<a class="navbar-brand" href="../..">StarryNight Documentation</a>
+<!-- Expander button -->
+<button aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar-collapse" data-bs-toggle="collapse" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<!-- Expanded navigation -->
+<div class="navbar-collapse collapse" id="navbar-collapse">
+<!-- Main navigation -->
+<ul class="nav navbar-nav">
+<li class="nav-item">
+<a class="nav-link" href="../..">Home</a>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Getting Started</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../getting-started/installation/">Installation</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../getting-started/quickstart/">Quick Start Guide</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">User Guide</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../user/core-concepts/">Core Concepts</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/parser-configuration/">Parser Configuration</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/modules/">Processing Modules</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/example-pipeline-cli/">Example CLI Pipeline</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Algorithms</a>
+<ul class="dropdown-menu">
+<li>
+<a class="dropdown-item" href="../../user/algorithms/">Overview</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/DOCUMENTATION_GUIDE/">Documentation Guide</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/illum_calc/">Illumination Calculation</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/illum_apply/">Illumination Apply</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/presegcheck/">Pre-segmentation Check</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/segcheck/">Segmentation Check</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/align/">Alignment</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/preprocess/">Preprocessing</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/stitchcrop/">Stitch and Crop</a>
+</li>
+<li>
+<a class="dropdown-item" href="../../user/algorithms/analysis/">Analysis</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown">
+<a aria-current="page" aria-expanded="false" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button">Development</a>
+<ul class="dropdown-menu">
+<li>
+<a aria-current="page" class="dropdown-item active" href="./">Developer Guide</a>
+</li>
+<li>
+<a class="dropdown-item" href="../pcpip-specs/">PCPIP Specs</a>
+</li>
+<li>
+<a class="dropdown-item" href="../requirements/">Requirements</a>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="../../misc/faq/">FAQ</a>
+</li>
+</ul>
+<ul class="nav navbar-nav ms-md-auto">
+<li class="nav-item">
+<a class="nav-link" href="../../user/algorithms/analysis/" rel="prev">
+<i class="fa fa-arrow-left"></i> Previous
+                                </a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="../pcpip-specs/" rel="next">
+                                    Next <i class="fa fa-arrow-right"></i>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://github.com/broadinstitute/starrynight/blob/main/docs/developer/developer-guide.md"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+<div class="navbar-header">
+<button class="navbar-toggler collapsed" data-bs-target="#toc-collapse" data-bs-toggle="collapse" title="Table of Contents" type="button">
+<span class="fa fa-angle-down"></span>
+</button>
+</div>
+<div class="navbar-collapse collapse card bg-body-tertiary" id="toc-collapse">
+<ul class="nav flex-column">
+<li class="nav-item" data-bs-level="1"><a class="nav-link" href="#developer-guide">Developer Guide</a>
+<ul class="nav flex-column">
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#system-architecture">System Architecture</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#repository-structure">Repository Structure</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#development-environment-setup">Development Environment Setup</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#core-components-and-design-patterns">Core Components and Design Patterns</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#running-tests">Running Tests</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#running-components-locally">Running Components Locally</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#development-workflow">Development Workflow</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#coding-standards">Coding Standards</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#extending-starrynight">Extending StarryNight</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#configuration-and-error-handling">Configuration and Error Handling</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#performance-optimization">Performance Optimization</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#getting-help">Getting Help</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+<li class="nav-item" data-bs-level="2"><a class="nav-link" href="#additional-resources">Additional Resources</a>
+<ul class="nav flex-column">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div></div>
+<div class="col-md-9" role="main">
+<h1 id="developer-guide">Developer Guide</h1>
+<p>This guide provides information for developers who want to contribute to StarryNight.</p>
+<h2 id="system-architecture">System Architecture</h2>
+<p>StarryNight is a modular platform for high-throughput microscopy image processing with four main components that work together to process, analyze, and manage microscopy image data.</p>
+<div class="mermaid">graph TD
+    %% Data sources
+    RawData[Raw Image Files] --&gt; Index
+
+    %% StarryNight Core Components
+    subgraph StarryNightCore["StarryNight Core"]
+        Index[Image Indexing] --&gt; Processing
+        Processing[Image Processing]
+        Processing --&gt; QC[Quality Control]
+        IllumCorr[Illumination Correction]
+        Alignment[Image Alignment]
+        Preprocess[Preprocessing]
+        CellPainting[Cell Painting Analysis]
+        Processing --&gt; IllumCorr
+        Processing --&gt; Alignment
+        Processing --&gt; Preprocess
+        Processing --&gt; CellPainting
+    end
+
+    %% PipeCraft Components
+    subgraph PipeCraftEngine["PipeCraft"]
+        Pipeline[Pipeline Definition]
+        Nodes[Processing Nodes]
+        LocalBackend[Local Execution]
+        DockerBackend[Docker Execution]
+        AwsBackend[AWS Batch Execution]
+        Pipeline --&gt; Nodes
+        Nodes --&gt; LocalBackend
+        Nodes --&gt; DockerBackend
+        Nodes --&gt; AwsBackend
+    end
+
+    %% Conductor Components
+    subgraph ConductorService["Conductor"]
+        JobMgmt[Job Management]
+        Database[(Database)]
+        RestAPI[REST API]
+        WSNotify[WebSocket Notifications]
+        JobMgmt --&gt; Database
+        RestAPI --&gt; JobMgmt
+        JobMgmt --&gt; WSNotify
+    end
+
+    %% Canvas UI Components
+    subgraph CanvasUI["Canvas UI"]
+        Projects[Project Management]
+        JobConfig[Job Configuration]
+        Monitoring[Run Monitoring]
+        Results[Results Visualization]
+    end
+
+    %% Connections between components
+    StarryNightCore --&gt; PipeCraftEngine
+    PipeCraftEngine --&gt; ConductorService
+    ConductorService --&gt; CanvasUI
+
+    %% Data flow from UI to execution
+    Projects --&gt; JobConfig
+    JobConfig --&gt; RestAPI
+    WSNotify --&gt; Monitoring
+    Database --&gt; Results
+
+    %% Execution flow
+    LocalBackend &amp; DockerBackend &amp; AwsBackend --&gt; JobMgmt
+
+    %% Styling
+    classDef core fill:#d0e0ff,stroke:#0050a0;
+    classDef pipe fill:#ffe0d0,stroke:#a05000;
+    classDef conductor fill:#d0ffe0,stroke:#00a050;
+    classDef ui fill:#ffd0e0,stroke:#a00050;
+
+    class StarryNightCore core;
+    class PipeCraftEngine pipe;
+    class ConductorService conductor;
+    class CanvasUI ui;
+</div>
+<h3 id="component-overview">Component Overview</h3>
+<p><strong>StarryNight Core</strong>: The foundation library that provides specialized algorithms for microscopy image analysis</p>
+<ul>
+<li>Image indexing and inventory management</li>
+<li>Illumination correction, alignment, and preprocessing</li>
+<li>Cell Painting analysis algorithms</li>
+<li>Quality control and validation</li>
+</ul>
+<p><strong>PipeCraft</strong>: A workflow engine for defining and executing computational pipelines</p>
+<ul>
+<li>Pipeline definition framework</li>
+<li>Node-based processing graph</li>
+<li>Multiple execution backends (local, Docker, AWS)</li>
+<li>Template-based workflow generation</li>
+</ul>
+<p><strong>Conductor</strong>: A service for job management, monitoring, and API access</p>
+<ul>
+<li>RESTful API for job control</li>
+<li>Database for configuration and results storage</li>
+<li>Job scheduling and monitoring</li>
+<li>Real-time updates via WebSockets</li>
+</ul>
+<p><strong>Canvas</strong>: A web-based user interface for interacting with the system</p>
+<ul>
+<li>Project management interface</li>
+<li>Job configuration and submission</li>
+<li>Run monitoring and visualization</li>
+<li>Results exploration</li>
+</ul>
+<h3 id="key-design-principles">Key Design Principles</h3>
+<ul>
+<li><strong>Modularity</strong>: Each component has clear boundaries and interfaces</li>
+<li><strong>Extensibility</strong>: The system can be extended with new algorithms and processing modules</li>
+<li><strong>Reproducibility</strong>: Workflows are version-controlled and traceable</li>
+<li><strong>Scalability</strong>: Processing can scale from local development to cloud execution</li>
+</ul>
+<h2 id="repository-structure">Repository Structure</h2>
+<p>The StarryNight repository is organized as a monorepo with four main packages:</p>
+<pre><code>starrynight/
+├── canvas/              # Frontend UI (Next.js/React)
+├── conductor/           # Job orchestration service
+├── pipecraft/           # Pipeline definition framework
+├── starrynight/         # Core image processing algorithms
+├── docs/                # Documentation
+├── nix/                 # Nix configuration
+└── workspace/           # Development workspace
+</code></pre>
+<h2 id="development-environment-setup">Development Environment Setup</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Git</li>
+<li>Python 3.10+</li>
+<li>Node.js 18+ (for Canvas frontend)</li>
+<li>Nix package manager (recommended)</li>
+<li>Docker (for containerized development)</li>
+<li>AWS CLI (for cloud integrations)</li>
+</ul>
+<h3 id="setup-steps">Setup Steps</h3>
+<h4 id="option-1-using-nix-recommended">Option 1: Using Nix (Recommended)</h4>
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/broadinstitute/starrynight.git
+cd starrynight
+
+# Set up the Nix environment
+nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
+
+# Synchronize Python dependencies
+uv sync
+</code></pre>
+<h4 id="option-2-manual-setup">Option 2: Manual Setup</h4>
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/broadinstitute/starrynight.git
+cd starrynight
+
+# Create and activate a Python virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install Python packages in development mode
+pip install -e ".[dev]"
+pip install -e starrynight/
+pip install -e pipecraft/
+pip install -e conductor/
+
+# Set up the Canvas frontend
+cd canvas
+npm install
+</code></pre>
+<h2 id="core-components-and-design-patterns">Core Components and Design Patterns</h2>
+<h3 id="starrynight-core">StarryNight Core</h3>
+<p>The foundation of the platform providing specialized algorithms for microscopy image analysis:</p>
+<ul>
+<li><strong>CLI Tools</strong>: Command-line interfaces for each algorithm</li>
+<li><strong>Algorithms Module</strong>: Image processing algorithms for microscopy data</li>
+<li><strong>Modules System</strong>: Standardized module structure for algorithm implementation</li>
+<li><strong>Parsers</strong>: File path parsing and metadata extraction</li>
+<li><strong>Utilities</strong>: Common functions for file handling, data transformation, etc.</li>
+</ul>
+<h4 id="module-system-architecture">Module System Architecture</h4>
+<p>The module system is the primary extension mechanism and follows these patterns:</p>
+<ul>
+<li><strong>Registry Pattern</strong>: Modules register themselves with a central registry</li>
+<li><strong>Abstract Factory Pattern</strong>: Base abstract classes with concrete implementations</li>
+<li><strong>Template Method Pattern</strong>: Common workflow with customizable steps</li>
+</ul>
+<pre><code class="language-python"># Example module registration
+@register_module("illumination_correction")
+class IlluminationCorrectionModule(StarrynightModule):
+    """Module for calculating and applying illumination correction."""
+
+    @classmethod
+    def from_config(cls, config: dict) -&gt; "IlluminationCorrectionModule":
+        """Factory method to create module from configuration."""
+        return cls(**config)
+
+    def _spec(self) -&gt; dict:
+        """Define module specification."""
+        return {
+            "version": "1.0.0",
+            "parameters": {
+                # Parameter definitions...
+            }
+        }
+</code></pre>
+<h4 id="data-flow-architecture">Data Flow Architecture</h4>
+<p>Data flows through the system following a standard pattern:</p>
+<ol>
+<li><strong>Raw Data → Inventory</strong>: Create catalog of all image files</li>
+<li><strong>Inventory → Index</strong>: Parse inventory to create structured index with metadata</li>
+<li><strong>Index → Processing</strong>: Run specific algorithms on indexed data</li>
+<li><strong>Processing → Results</strong>: Store and manage processing results</li>
+</ol>
+<h3 id="pipecraft">PipeCraft</h3>
+<p>PipeCraft is the workflow engine, featuring:</p>
+<ul>
+<li><strong>Pipeline Definition</strong>: Python API for defining computational workflows</li>
+<li><strong>Node System</strong>: Individual processing steps as configurable nodes</li>
+<li><strong>Backend Abstraction</strong>: Support for local, Docker, and AWS Batch execution</li>
+<li><strong>Template System</strong>: Pre-defined templates for common workflows</li>
+</ul>
+<h4 id="workflow-design-patterns">Workflow Design Patterns</h4>
+<p>PipeCraft implements:</p>
+<ul>
+<li><strong>Strategy Pattern</strong>: Different execution strategies for different environments</li>
+<li><strong>Builder Pattern</strong>: Constructing complex pipelines from simple building blocks</li>
+<li><strong>Composite Pattern</strong>: Nested execution graphs for complex workflows</li>
+</ul>
+<pre><code class="language-python"># Pipeline construction example
+pipeline = (
+    Pipeline("illumination_correction")
+    .add_node("load_data", load_data_module)
+    .add_node("generate_pipeline", generate_cppipe_module)
+    .add_node("execute", execute_cp_module)
+    .link("load_data", "generate_pipeline")
+    .link("generate_pipeline", "execute")
+)
+</code></pre>
+<h3 id="conductor">Conductor</h3>
+<p>Conductor manages the execution environment:</p>
+<ul>
+<li><strong>REST API</strong>: API for job management and monitoring</li>
+<li><strong>Database</strong>: Storage for project configurations and job results</li>
+<li><strong>Job Management</strong>: Scheduling, execution, and monitoring of jobs</li>
+<li><strong>WebSockets</strong>: Real-time updates on job status</li>
+</ul>
+<h4 id="service-architecture">Service Architecture</h4>
+<p>Conductor implements:</p>
+<ul>
+<li><strong>Repository Pattern</strong>: Data access abstraction for database operations</li>
+<li><strong>Service Layer Pattern</strong>: Business logic encapsulation</li>
+<li><strong>Event-Driven Architecture</strong>: Status updates and notifications</li>
+</ul>
+<h3 id="canvas-ui">Canvas UI</h3>
+<p>The web-based user interface:</p>
+<ul>
+<li><strong>React Components</strong>: Modular UI components</li>
+<li><strong>State Management</strong>: Zustand for global state</li>
+<li><strong>API Integration</strong>: SWR for data fetching</li>
+<li><strong>Responsive Design</strong>: Mobile-friendly interfaces</li>
+</ul>
+<h4 id="frontend-architecture">Frontend Architecture</h4>
+<p>Canvas implements:</p>
+<ul>
+<li><strong>Atomic Design</strong>: Component hierarchy from atoms to templates</li>
+<li><strong>Container-Presenter Pattern</strong>: Separation of data and presentation</li>
+<li><strong>Hooks Pattern</strong>: Reusable behavior implementations</li>
+</ul>
+<h2 id="running-tests">Running Tests</h2>
+<h3 id="python-tests">Python Tests</h3>
+<pre><code class="language-bash"># Run all tests
+pytest
+
+# Run tests for a specific package
+pytest starrynight/tests/
+pytest pipecraft/tests/
+pytest conductor/tests/
+
+# Run a specific test
+pytest starrynight/tests/modules/test_gen_index.py::test_function_name
+</code></pre>
+<h3 id="frontend-tests">Frontend Tests</h3>
+<pre><code class="language-bash">cd canvas
+npm run test
+</code></pre>
+<h2 id="running-components-locally">Running Components Locally</h2>
+<h3 id="starrynight-core_1">StarryNight Core</h3>
+<pre><code class="language-bash"># Run StarryNight CLI directly
+python -m starrynight.cli.main --help
+</code></pre>
+<h3 id="conductor-service">Conductor Service</h3>
+<pre><code class="language-bash"># Start Conductor API service
+python -m conductor.cli.main start
+</code></pre>
+<h3 id="canvas-frontend">Canvas Frontend</h3>
+<pre><code class="language-bash">cd canvas
+npm run dev
+# Access the UI at http://localhost:3000
+</code></pre>
+<h2 id="development-workflow">Development Workflow</h2>
+<ol>
+<li>
+<p><strong>Create a feature branch</strong>:
+   <code>bash
+   git checkout -b feature/your-feature-name</code></p>
+</li>
+<li>
+<p><strong>Make changes</strong>: Implement your feature or fix</p>
+</li>
+<li>
+<p><strong>Run tests</strong>: Ensure functionality works as expected
+   <code>bash
+   pytest
+   ruff check .</code></p>
+</li>
+<li>
+<p><strong>Commit changes</strong>: Follow the project's commit conventions
+   <code>bash
+   git add .
+   git commit -m "feat: add new feature description"</code></p>
+</li>
+<li>
+<p><strong>Push changes</strong>: Share your work
+   <code>bash
+   git push -u origin feature/your-feature-name</code></p>
+</li>
+<li>
+<p><strong>Create a pull request</strong>: Submit your changes for review</p>
+</li>
+</ol>
+<h2 id="coding-standards">Coding Standards</h2>
+<h3 id="python">Python</h3>
+<ul>
+<li><strong>Style</strong>: Follow PEP 8 with a line length of 88 characters</li>
+<li><strong>Formatting</strong>: Use ruff for code formatting</li>
+<li><strong>Type Hints</strong>: Use type annotations for all function parameters and returns</li>
+<li><strong>Docstrings</strong>: Use NumPy style docstrings</li>
+<li><strong>Imports</strong>: Group imports (standard library, third-party, local)</li>
+<li><strong>Naming</strong>: Use snake_case for variables/functions, PascalCase for classes</li>
+</ul>
+<h3 id="typescript-canvas">TypeScript (Canvas)</h3>
+<ul>
+<li><strong>Style</strong>: Follow the project's TypeScript/React conventions</li>
+<li><strong>Formatting</strong>: Use ESLint and Prettier</li>
+<li><strong>Types</strong>: Define interfaces/types for all components and functions</li>
+<li><strong>Naming</strong>: Use camelCase for variables/functions, PascalCase for components/interfaces</li>
+</ul>
+<h2 id="extending-starrynight">Extending StarryNight</h2>
+<h3 id="adding-a-new-module">Adding a New Module</h3>
+<p>To add a new processing module:</p>
+<ol>
+<li>Create a new algorithm implementation in <code>starrynight/algorithms/</code></li>
+<li>Add CLI commands in <code>starrynight/cli/</code></li>
+<li>Implement module definition files in <code>starrynight/modules/</code></li>
+<li>Add tests for all components</li>
+<li>Update documentation</li>
+</ol>
+<p>Here's an example of creating a new module:</p>
+<h4 id="1-create-the-algorithm">1. Create the Algorithm</h4>
+<pre><code class="language-python"># starrynight/algorithms/new_algorithm.py
+import numpy as np
+from typing import Dict, List, Optional
+
+def process_image(image: np.ndarray, params: Dict) -&gt; np.ndarray:
+    """Process an image with the new algorithm.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        Input image
+    params : Dict
+        Processing parameters
+
+    Returns
+    -------
+    np.ndarray
+        Processed image
+    """
+    # Algorithm implementation
+    return processed_image
+</code></pre>
+<h4 id="2-create-cli-command">2. Create CLI Command</h4>
+<pre><code class="language-python"># starrynight/cli/new_algorithm.py
+import click
+from pathlib import Path
+from starrynight.algorithms import new_algorithm
+
+@click.command("new-algorithm")
+@click.option("-i", "--input", type=str, required=True, help="Input file path")
+@click.option("-o", "--output", type=str, required=True, help="Output directory")
+@click.option("--param", type=float, default=1.0, help="Algorithm parameter")
+def new_algorithm_command(input: str, output: str, param: float) -&gt; None:
+    """Run the new algorithm on input images."""
+    # Command implementation
+    pass
+</code></pre>
+<h4 id="3-create-module-definition">3. Create Module Definition</h4>
+<pre><code class="language-python"># starrynight/modules/new_algorithm/
+# __init__.py
+from .new_algorithm_module import NewAlgorithmModule
+
+# new_algorithm_module.py
+from starrynight.modules.common import StarrynightModule
+from starrynight.modules.registry import register_module
+
+@register_module("new_algorithm")
+class NewAlgorithmModule(StarrynightModule):
+    """Module for new algorithm processing."""
+
+    @classmethod
+    def from_config(cls, config: dict) -&gt; "NewAlgorithmModule":
+        return cls(**config)
+
+    def _spec(self) -&gt; dict:
+        return {
+            "version": "1.0.0",
+            "parameters": {
+                "input": {"type": "string", "description": "Input path"},
+                "output": {"type": "string", "description": "Output path"},
+                "param": {"type": "number", "default": 1.0, "description": "Algorithm parameter"}
+            }
+        }
+
+    def build_pipeline(self) -&gt; "Pipeline":
+        # Define pipeline for this module
+        pass
+</code></pre>
+<h3 id="creating-a-new-pipeline">Creating a New Pipeline</h3>
+<p>To create a new pipeline using existing modules:</p>
+<ol>
+<li>Define a pipeline configuration</li>
+<li>Create a pipeline definition in PipeCraft</li>
+<li>Register the pipeline with the system</li>
+</ol>
+<p>Example pipeline creation:</p>
+<pre><code class="language-python"># pipecraft/pipelines/my_pipeline.py
+from pipecraft.pipeline import Pipeline
+from pipecraft.node import Node
+from starrynight.modules import get_module
+
+def create_my_pipeline(config: dict) -&gt; Pipeline:
+    """Create a custom pipeline for image processing.
+
+    Parameters
+    ----------
+    config : dict
+        Pipeline configuration
+
+    Returns
+    -------
+    Pipeline
+        Configured pipeline
+    """
+    # Get modules
+    inventory_module = get_module("inventory")(config["inventory"])
+    index_module = get_module("index")(config["index"])
+    process_module = get_module("new_algorithm")(config["process"])
+
+    # Build pipeline
+    pipeline = Pipeline("my_pipeline")
+
+    # Add nodes
+    pipeline.add_node("inventory", inventory_module)
+    pipeline.add_node("index", index_module)
+    pipeline.add_node("process", process_module)
+
+    # Link nodes
+    pipeline.link("inventory", "index")
+    pipeline.link("index", "process")
+
+    return pipeline
+</code></pre>
+<h3 id="extending-conductor">Extending Conductor</h3>
+<p>To add a new API endpoint:</p>
+<ol>
+<li>Create a new route file in <code>conductor/deploy/local/routes/</code></li>
+<li>Implement handler functions in <code>conductor/handlers/</code></li>
+<li>Add models if needed in <code>conductor/models/</code></li>
+</ol>
+<h3 id="extending-canvas">Extending Canvas</h3>
+<p>To add new UI components:</p>
+<ol>
+<li>Create component files in <code>canvas/components/</code></li>
+<li>Update state management if needed</li>
+<li>Add new routes if creating new pages</li>
+</ol>
+<h2 id="configuration-and-error-handling">Configuration and Error Handling</h2>
+<h3 id="configuration-management">Configuration Management</h3>
+<p>StarryNight uses a structured approach to configuration:</p>
+<h4 id="schema-validation">Schema Validation</h4>
+<p>All configuration is validated against JSON schemas:</p>
+<pre><code class="language-python"># Example schema validation
+from starrynight.schema import validate_schema
+
+config = {
+    "input": "/path/to/input",
+    "output": "/path/to/output",
+    "parameters": {
+        "channel": "DAPI",
+        "sample_size": 100
+    }
+}
+
+# Validate against schema
+errors = validate_schema(config, "module_schema.json")
+if errors:
+    raise ValueError(f"Invalid configuration: {errors}")
+</code></pre>
+<h4 id="configuration-hierarchy">Configuration Hierarchy</h4>
+<p>Configuration is loaded from multiple sources in order:
+1. Default configurations embedded in code
+2. System-level configuration files
+3. Project-level configuration files
+4. Command-line overrides</p>
+<h4 id="environment-variables">Environment Variables</h4>
+<p>Some components use environment variables for configuration:
+- <code>STARRYNIGHT_WORKSPACE</code>: Default workspace location
+- <code>CONDUCTOR_DATABASE_URL</code>: Database connection string
+- <code>CONDUCTOR_ENV</code>: Environment type (dev, test, prod)</p>
+<h3 id="error-handling">Error Handling</h3>
+<p>StarryNight implements several error handling patterns:</p>
+<h4 id="result-objects">Result Objects</h4>
+<p>Functions return structured result objects rather than raising exceptions:</p>
+<pre><code class="language-python">from typing import NamedTuple, Optional, List
+
+class ProcessResult(NamedTuple):
+    success: bool
+    data: Optional[dict] = None
+    errors: List[str] = []
+
+def process_data(input_path: str) -&gt; ProcessResult:
+    try:
+        # Processing logic
+        return ProcessResult(success=True, data={"output": result})
+    except Exception as e:
+        return ProcessResult(success=False, errors=[str(e)])
+</code></pre>
+<h4 id="validation-layers">Validation Layers</h4>
+<p>The system performs validation at multiple layers:
+1. Input validation before processing
+2. Schema validation for configuration
+3. Type checking via Pydantic models
+4. Output validation after processing</p>
+<h4 id="logging-strategy">Logging Strategy</h4>
+<p>StarryNight uses a structured logging approach:</p>
+<pre><code class="language-python">import logging
+from typing import Dict, Any
+
+logger = logging.getLogger(__name__)
+
+def log_with_context(message: str, context: Dict[str, Any], level: int = logging.INFO) -&gt; None:
+    """Log a message with structured context."""
+    logger.log(level, message, extra={"context": context})
+
+# Usage example
+log_with_context(
+    "Processing image batch",
+    {
+        "batch_id": "batch_123",
+        "image_count": 50,
+        "job_id": "job_456"
+    }
+)
+</code></pre>
+<h2 id="performance-optimization">Performance Optimization</h2>
+<h3 id="parallel-processing">Parallel Processing</h3>
+<p>StarryNight supports parallel processing in several ways:</p>
+<h4 id="task-parallelism">Task Parallelism</h4>
+<p>Pipeline nodes can be executed in parallel when dependencies allow:</p>
+<pre><code class="language-python"># Parallel pipeline
+pipeline = (
+    Pipeline("parallel_processing")
+    .add_node("load_data", load_data_module)
+    .add_node("process_channel1", process_module, channel="ch1")
+    .add_node("process_channel2", process_module, channel="ch2")
+    .add_node("process_channel3", process_module, channel="ch3")
+    .add_node("merge_results", merge_module)
+    .link("load_data", ["process_channel1", "process_channel2", "process_channel3"])
+    .link(["process_channel1", "process_channel2", "process_channel3"], "merge_results")
+)
+</code></pre>
+<h4 id="batch-processing">Batch Processing</h4>
+<p>Processing large datasets in manageable batches:</p>
+<pre><code class="language-python">def batch_process(items, batch_size=100, process_fn):
+    """Process items in batches."""
+    results = []
+    for i in range(0, len(items), batch_size):
+        batch = items[i:i+batch_size]
+        results.extend(process_fn(batch))
+    return results
+</code></pre>
+<h4 id="distributed-execution">Distributed Execution</h4>
+<p>Pipecraft supports execution across multiple compute resources:</p>
+<ul>
+<li>Local execution for development</li>
+<li>AWS Batch for cloud-scale processing</li>
+<li>Custom execution backends for specific environments</li>
+</ul>
+<h2 id="getting-help">Getting Help</h2>
+<p>If you need assistance, you can:</p>
+<ul>
+<li>Check the existing documentation</li>
+<li>Browse the source code</li>
+<li>Contact the core team at imaging@broadinstitute.org</li>
+<li>Join community discussions on the issue tracker</li>
+</ul>
+<h2 id="additional-resources">Additional Resources</h2>
+<ul>
+<li>GitHub repository: https://github.com/broadinstitute/starrynight</li>
+<li>Issue tracker: https://github.com/broadinstitute/starrynight/issues</li>
+<li>Development roadmap: See project milestones on GitHub</li>
+<li>Related tools: CellProfiler, ImageJ, NumPy, scikit-image</li>
+</ul></div>
+</div>
+</div>
+<footer class="col-md-12">
+<hr/>
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+</footer>
+<script src="../../js/bootstrap.bundle.min.js"></script>
+<script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+<script src="../../js/base.js"></script>
+<div aria-hidden="true" aria-labelledby="keyboardModalLabel" class="modal" id="mkdocs_keyboard_modal" role="dialog" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<table class="table">
+<thead>
+<tr>
+<th style="width: 20%;">Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="help shortcut"><kbd>?</kbd></td>
+<td>Open this help</td>
+</tr>
+<tr>
+<td class="next shortcut"><kbd>n</kbd></td>
+<td>Next page</td>
+</tr>
+<tr>
+<td class="prev shortcut"><kbd>p</kbd></td>
+<td>Previous page</td>
+</tr>
+<tr>
+<td class="search shortcut"><kbd>s</kbd></td>
+<td>Search</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="modal-footer">
+</div>
+</div>
+</div>
+</div>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script></body>
+</html>
