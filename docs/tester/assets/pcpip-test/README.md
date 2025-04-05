@@ -1,10 +1,10 @@
 # pcpip-test
 
-A test suite for validating and testing the StarryNight pipeline specification system.
+A test suite for validating and testing the outputs from optical pooled screening (OPS) data processing pipelines.
 
 ## Purpose
 
-This folder contains testing utilities for the StarryNight optical pooled screening (OPS) data processing pipeline. The tools here help:
+The tools here help:
 
 - Validate pipeline configurations against expected specifications
 - Test output file structures and organization
