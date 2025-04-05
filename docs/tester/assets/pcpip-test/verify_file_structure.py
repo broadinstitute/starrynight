@@ -68,22 +68,27 @@ def read_csv_headers(file_path, max_headers=20):
         file_path (str): Path to the CSV file
         max_headers (int): Maximum headers before summarizing
     Returns:
-        list: CSV header names, possibly truncated with summary
+        tuple: (List of CSV header names (possibly truncated), Total header count)
     """
     try:
         with open(file_path, "r", newline="") as csvfile:
             reader = csv.reader(csvfile)
             headers = next(reader, [])
+            total_count = len(headers)
 
             # If we have more headers than max_headers, add a summary entry
-            if len(headers) > max_headers:
-                remaining = len(headers) - (max_headers - 1)
-                return headers[: max_headers - 1] + [f"{remaining} more columns"]
+            if total_count > max_headers:
+                remaining = total_count - (max_headers - 1)
+                visible_headers = headers[: max_headers - 1] + [
+                    f"{remaining} more columns"
+                ]
             else:
-                return headers
+                visible_headers = headers
+
+            return visible_headers, total_count
     except Exception as e:
         click.echo(f"Error reading CSV headers from {file_path}: {e}", err=True)
-        return []
+        return [], 0
 
 
 def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
@@ -108,7 +113,7 @@ def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
     # Hash the file path to create a unique identifier
     # This prevents filename collisions while keeping the original name for readability
     file_hash = hashlib.md5(str(p).encode("utf-8")).hexdigest()[:10]
-    embedding_filename = f"{p.stem}_{file_hash}_embedding.npy"
+    embedding_filename = f"{p.stem}_{file_hash}_embedding.emb"
 
     # Hash the parent directory to create a consistent directory structure
     # This prevents excessive nesting while grouping related files together
@@ -117,7 +122,7 @@ def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
     rel_hash = hashlib.md5(str(rel_dir).encode("utf-8")).hexdigest()[:8]
 
     # Create embeddings directory structure:
-    # embedding_base_dir/semantic_type/rel_hash/filename_filehash_embedding.npy
+    # embedding_base_dir/semantic_type/rel_hash/filename_filehash_embedding.emb
     embedding_path = Path(embedding_base_dir) / semantic_type / rel_hash
     embedding_path.mkdir(parents=True, exist_ok=True)
 
@@ -201,7 +206,9 @@ def handle_metadata_csv(file_path, embedding_dir=None, semantic_type="metadata_c
 
     # Add CSV-specific information if file exists
     if file_info["size"] is not None:
-        file_info["headers"] = read_csv_headers(file_path)
+        visible_headers, total_header_count = read_csv_headers(file_path)
+        file_info["headers"] = visible_headers
+        file_info["header_count"] = total_header_count
 
         # If we have an embedding path, generate and save the embedding
         if "embedding_path" in file_info and embedding_dir:
@@ -235,8 +242,9 @@ def handle_analysis_csv(file_path, embedding_dir=None, semantic_type="analysis_c
 
     # Add CSV-specific information if file exists
     if file_info["size"] is not None:
-        file_info["headers"] = read_csv_headers(file_path)
-        # Additional analysis for this file type could be added here
+        visible_headers, total_header_count = read_csv_headers(file_path)
+        file_info["headers"] = visible_headers
+        file_info["header_count"] = total_header_count
 
         # If we have an embedding path, generate and save the embedding
         if "embedding_path" in file_info and embedding_dir:
