@@ -1,66 +1,71 @@
 load_data:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/
-  files:
+  contents:
     set1:
       - folder: Plate1
         files:
-          - csv:
-            - load_data_pipeline1.csv
-            - load_data_pipeline2.csv
-            - load_data_pipeline3.csv
-            - load_data_pipeline5.csv
-            - load_data_pipeline6.csv
-            - load_data_pipeline7.csv
-            - load_data_pipeline9.csv
+          - type: metadata_csv
+            files:
+              - load_data_pipeline1.csv
+              - load_data_pipeline2.csv
+              - load_data_pipeline3.csv
+              - load_data_pipeline5.csv
+              - load_data_pipeline6.csv
+              - load_data_pipeline7.csv
+              - load_data_pipeline9.csv
 
 illum_calc:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/
-  files:
+  contents:
     set1:
       - folder: Plate1
         files:
-          - npy:
-            - Plate1_Cycle1_IllumA.npy
-            - Plate1_Cycle1_IllumC.npy
-            - Plate1_Cycle1_IllumDNA.npy
-            - Plate1_Cycle1_IllumG.npy
-            - Plate1_Cycle1_IllumT.npy
-            - Plate1_IllumDNA.npy
-            - Plate1_IllumPhalloidin.npy
-            - Plate1_IllumZO1.npy
+          - type: illumination_file
+            files:
+              - Plate1_Cycle1_IllumA.npy
+              - Plate1_Cycle1_IllumC.npy
+              - Plate1_Cycle1_IllumDNA.npy
+              - Plate1_Cycle1_IllumG.npy
+              - Plate1_Cycle1_IllumT.npy
+              - Plate1_IllumDNA.npy
+              - Plate1_IllumPhalloidin.npy
+              - Plate1_IllumZO1.npy
 
 images_corrected_painting:
   level: well
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/
-  files:
+  contents:
     set1:
       - folder: Plate1-WellA1
         files:
-          - csv:
-            - PaintingIllumApplication_Cells.csv
-            - PaintingIllumApplication_ConfluentRegions.csv
-            - PaintingIllumApplication_Experiment.csv
-            - PaintingIllumApplication_Image.csv
-            - PaintingIllumApplication_Nuclei.csv
-          - tiff:
-            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
-            - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
-            - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+          - type: object_csv
+            files:
+              - PaintingIllumApplication_Cells.csv
+              - PaintingIllumApplication_ConfluentRegions.csv
+              - PaintingIllumApplication_Experiment.csv
+              - PaintingIllumApplication_Image.csv
+              - PaintingIllumApplication_Nuclei.csv
+          - type: corrected_image
+            files:
+              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+              - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+              - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
 
 images_aligned_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/
-  files:
+  contents:
     set1:
       - folder: Plate1-WellA1-0
         files:
-          - csv:
-            - BarcodingApplication_Experiment.csv
-            - BarcodingApplication_Image.csv
-          - tiff:
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+          - type: object_csv
+            files:
+              - BarcodingApplication_Experiment.csv
+              - BarcodingApplication_Image.csv
+          - type: corrected_image
+            files:
             - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
             - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
@@ -69,64 +74,70 @@ images_aligned_barcoding:
 images_corrected_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
-  files:
+  contents:
     set1:
       - folder: Plate1-WellA1-0
         files:
-          - csv:
-            - BarcodePreprocessing_BarcodeFoci.csv
-            - BarcodePreprocessing_Experiment.csv
-            - BarcodePreprocessing_Image.csv
-            - BarcodePreprocessing_Nuclei.csv
-            - BarcodePreprocessing_PreFoci.csv
-          - tiff:
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+          - type: object_csv
+            files:
+              - BarcodePreprocessing_BarcodeFoci.csv
+              - BarcodePreprocessing_Experiment.csv
+              - BarcodePreprocessing_Image.csv
+              - BarcodePreprocessing_Nuclei.csv
+              - BarcodePreprocessing_PreFoci.csv
+          - type: corrected_image
+            files:
+              - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+              - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+              - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+              - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+              - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
 
 images_segmentation:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/
-  files:
+  contents:
     set1:
       - folder: Plate1
         files:
-          - csv:
-            - SegmentationCheck_Cells.csv
-            - SegmentationCheck_ConfluentRegions.csv
-            - SegmentationCheck_Experiment.csv
-            - SegmentationCheck_Image.csv
-            - SegmentationCheck_Nuclei.csv
-            - SegmentationCheck_PreCells.csv
-          - png:
-            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+          - type: object_csv
+            files:
+              - SegmentationCheck_Cells.csv
+              - SegmentationCheck_ConfluentRegions.csv
+              - SegmentationCheck_Experiment.csv
+              - SegmentationCheck_Image.csv
+              - SegmentationCheck_Nuclei.csv
+              - SegmentationCheck_PreCells.csv
+          - type: corrected_image
+            files:
+              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
 
 analysis:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/
-  files:
+  contents:
     set1:
       - folder: Plate1-WellA1-0
         files:
-          - csv:
-            - BarcodeFoci.csv
-            - Cells.csv
-            - ConfluentRegions.csv
-            - Cytoplasm.csv
-            - Experiment.csv
-            - Foci.csv
-            - Foci_NonCellEdge.csv
-            - Foci_PreMask.csv
-            - Image.csv
-            - Nuclei.csv
-            - PreCells.csv
-            - RelateObjects.csv
-            - Resize_Foci.csv
-          - tiff:
-            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
-            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
-            - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
-            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
-            - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
+          - type: object_csv
+            files:
+              - BarcodeFoci.csv
+              - Cells.csv
+              - ConfluentRegions.csv
+              - Cytoplasm.csv
+              - Experiment.csv
+              - Foci.csv
+              - Foci_NonCellEdge.csv
+              - Foci_PreMask.csv
+              - Image.csv
+              - Nuclei.csv
+              - PreCells.csv
+              - RelateObjects.csv
+              - Resize_Foci.csv
+          - type: corrected_image
+            files:
+              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
+              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
+              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
+              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
+              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png

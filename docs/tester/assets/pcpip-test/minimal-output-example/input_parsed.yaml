@@ -5,7 +5,8 @@ images:
     set1:
     - folder: Plate1
       files:
-      - tiff:
+      - type: raw_image
+        files:
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
           size: 25383758
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff

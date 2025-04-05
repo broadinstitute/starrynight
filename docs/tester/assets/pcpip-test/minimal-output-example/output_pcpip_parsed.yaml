@@ -1,11 +1,12 @@
 load_data:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/
-  files:
+  contents:
     set1:
     - folder: Plate1
       files:
-      - csv:
+      - type: metadata_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline1.csv
           size: 2341308
           headers:
@@ -149,11 +150,12 @@ load_data:
 illum_calc:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/
-  files:
+  contents:
     set1:
     - folder: Plate1
       files:
-      - npy:
+      - type: illumination_file
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumA.npy
           size: 10240128
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumC.npy
@@ -173,11 +175,12 @@ illum_calc:
 images_corrected_painting:
   level: well
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/
-  files:
+  contents:
     set1:
     - folder: Plate1-WellA1
       files:
-      - csv:
+      - type: object_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
           size: 82855762
           headers:
@@ -235,7 +238,8 @@ images_corrected_painting:
           - Location_Center_Y
           - Location_Center_Z
           - Number_Object_Number
-      - tiff:
+      - type: corrected_image
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
           size: 5120256
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
@@ -245,11 +249,12 @@ images_corrected_painting:
 images_aligned_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/
-  files:
+  contents:
     set1:
     - folder: Plate1-WellA1-0
       files:
-      - csv:
+      - type: object_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
           size: 78285
           headers:
@@ -278,9 +283,8 @@ images_aligned_barcoding:
           - Align_Xshift_Cycle05_C
           - Align_Xshift_Cycle05_DAPI
           - 8043 more columns
-      - tiff:
-        - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-          size: 5120256
+      - type: corrected_image
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
           size: 5120256
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
@@ -292,11 +296,12 @@ images_aligned_barcoding:
 images_corrected_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
-  files:
+  contents:
     set1:
     - folder: Plate1-WellA1-0
       files:
-      - csv:
+      - type: object_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
           size: 1229777
           headers:
@@ -384,7 +389,8 @@ images_corrected_barcoding:
           - Intensity_IntegratedIntensityEdge_PreCycle02_A
           - Intensity_IntegratedIntensityEdge_PreCycle02_C
           - 838 more columns
-      - tiff:
+      - type: corrected_image
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
           size: 5120256
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
@@ -398,11 +404,12 @@ images_corrected_barcoding:
 images_segmentation:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/
-  files:
+  contents:
     set1:
     - folder: Plate1
       files:
-      - csv:
+      - type: object_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
           size: 4956879
           headers:
@@ -487,17 +494,19 @@ images_segmentation:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Nuclei
-      - png:
+      - type: corrected_image
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
           size: 4851592
 analysis:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/
-  files:
+  contents:
     set1:
     - folder: Plate1-WellA1-0
       files:
-      - csv:
+      - type: object_csv
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/BarcodeFoci.csv
           size: 1251307
           headers:
@@ -676,7 +685,8 @@ analysis:
           - Location_Center_Z
           - Number_Object_Number
           - Parent_Foci
-      - tiff:
+      - type: corrected_image
+        files:
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
           size: 5120256
         - path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
