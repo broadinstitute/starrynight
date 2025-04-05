@@ -64,6 +64,31 @@ def read_csv_headers(file_path, max_headers=20):
         return []
 
 
+# Handler functions for different file types
+def handle_generic_file(file_path):
+    """Handler for generic files"""
+    return {"path": file_path, "size": get_file_size(file_path)}
+
+
+def handle_csv_file(file_path):
+    """Handler for CSV files"""
+    file_info = handle_generic_file(file_path)
+    file_info["headers"] = read_csv_headers(file_path)
+    return file_info
+
+
+def handle_image_file(file_path):
+    """Handler for image files (tiff, png)"""
+    return handle_generic_file(file_path)
+    # Could extend with image-specific properties like dimensions if needed
+
+
+def handle_numpy_file(file_path):
+    """Handler for numpy files"""
+    return handle_generic_file(file_path)
+    # Could extend with numpy-specific properties if needed
+
+
 def build_file_paths(yaml_data, path_replacement=None):
     """Process YAML and return structure with full paths and file sizes.
 
@@ -72,6 +97,14 @@ def build_file_paths(yaml_data, path_replacement=None):
         path_replacement: Tuple of (old_path, new_path) to replace in all paths
     """
     result = {}
+
+    # Setup file handlers for each supported type
+    file_handlers = {
+        "csv": handle_csv_file,
+        "tiff": handle_image_file,
+        "png": handle_image_file,
+        "npy": handle_numpy_file,
+    }
 
     for section_name, section_data in yaml_data.items():
         result[section_name] = section_data.copy()
@@ -94,42 +127,28 @@ def build_file_paths(yaml_data, path_replacement=None):
 
                     for file_item in folder_item["files"]:
                         if isinstance(file_item, dict):
-                            # Handle file type groups (csv, tiff, png)
+                            # Handle file type groups (csv, tiff, png, etc.)
                             processed_types = {}
                             for file_type, file_list in file_item.items():
                                 processed_types[file_type] = []
+
+                                # Get appropriate handler function for this file type
+                                handler = file_handlers.get(
+                                    file_type.lower(), handle_generic_file
+                                )
+
                                 for file_name in file_list:
                                     full_path = os.path.join(folder_path, file_name)
-                                    file_info = {
-                                        "path": full_path,
-                                        "size": get_file_size(full_path),
-                                    }
-
-                                    # Add headers for CSV files
-                                    if (
-                                        file_type.lower() == "csv"
-                                        or file_name.lower().endswith(".csv")
-                                    ):
-                                        file_info["headers"] = read_csv_headers(
-                                            full_path
-                                        )
-
+                                    file_info = handler(full_path)
                                     processed_types[file_type].append(file_info)
 
                             processed_folder["files"].append(processed_types)
                         else:
-                            # Handle direct file paths
-                            full_path = os.path.join(folder_path, file_item)
-                            file_info = {
-                                "path": full_path,
-                                "size": get_file_size(full_path),
-                            }
-
-                            # Add headers for CSV files
-                            if file_item.lower().endswith(".csv"):
-                                file_info["headers"] = read_csv_headers(full_path)
-
-                            processed_folder["files"].append(file_info)
+                            # Files must be grouped by type, ungrouped files are not supported
+                            print(
+                                f"Warning: Ungrouped file '{file_item}' found in folder '{folder_item['folder']}'. Skipping."
+                            )
+                            continue
 
                     result[section_name]["files"][set_name].append(processed_folder)
 
