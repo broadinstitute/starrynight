@@ -820,7 +820,7 @@ MeasureObjectSkeleton:[module_num:51|svn_version:'Unknown'|variable_revision_num
     Vertex file name:vertices.csv
     Edge file name:edges.csv
 
-MeasureObjectNeighbors:[module_num:52|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureObjectNeighbors:[module_num:52|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select objects to measure:Cells
     Select neighboring objects to measure:Cells
     Method to determine neighbors:Adjacent
@@ -833,7 +833,7 @@ MeasureObjectNeighbors:[module_num:52|svn_version:'Unknown'|variable_revision_nu
     Name the output image:PercentTouching
     Select colormap:Default
 
-MeasureObjectNeighbors:[module_num:53|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureObjectNeighbors:[module_num:53|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select objects to measure:Cells
     Select neighboring objects to measure:Cells
     Method to determine neighbors:Within a specified distance
@@ -846,7 +846,7 @@ MeasureObjectNeighbors:[module_num:53|svn_version:'Unknown'|variable_revision_nu
     Name the output image:PercentTouching
     Select colormap:Default
 
-MeasureObjectNeighbors:[module_num:54|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureObjectNeighbors:[module_num:54|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select objects to measure:Nuclei
     Select neighboring objects to measure:Nuclei
     Method to determine neighbors:Within a specified distance
@@ -905,7 +905,7 @@ MeasureObjectSizeShape:[module_num:59|svn_version:'Unknown'|variable_revision_nu
     Calculate the Zernike features?:Yes
     Calculate the advanced features?:Yes
 
-MeasureObjectIntensityDistribution:[module_num:60|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureObjectIntensityDistribution:[module_num:60|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select images to measure:DAPI_Painting, Phalloidin, ZO1
     Hidden:3
     Hidden:1
@@ -952,7 +952,7 @@ MeasureObjectIntensityDistribution:[module_num:61|svn_version:'Unknown'|variable
     Save display as image?:Yes
     Output image name:mito_radial_heatmap
 
-MeasureGranularity:[module_num:62|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureGranularity:[module_num:62|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select images to measure:DAPI_Painting, Phalloidin, ZO1
     Measure within objects?:Yes
     Select objects to measure:Cytoplasm, Cells, Nuclei
@@ -961,7 +961,7 @@ MeasureGranularity:[module_num:62|svn_version:'Unknown'|variable_revision_number
     Radius of structuring element:10
     Range of the granular spectrum:16
 
-MeasureTexture:[module_num:63|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+MeasureTexture:[module_num:63|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select images to measure:DAPI_Painting, Phalloidin, ZO1
     Select objects to measure:Cells, Cytoplasm, Nuclei
     Enter how many gray levels to measure the texture at:256
