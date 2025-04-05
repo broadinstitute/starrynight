@@ -2,63 +2,39 @@
 """
 File Structure Validator
 
-A general-purpose tool that validates file structures defined in YAML configurations
-against actual files on disk. This tool requires explicit semantic file typing for specialized
-processing based on file content and purpose.
+Validates file structures defined in YAML against actual files on disk.
+Requires explicit semantic file typing for specialized processing.
 
 Core Operations:
-1. Reads a YAML file defining expected file structure
-2. Resolves all relative paths to absolute paths
-3. Checks if each specified file exists on disk
-4. Records file sizes and metadata for all files
-5. Generates file embeddings (if requested)
-6. Outputs a detailed report in YAML format
+1. Reads YAML file defining expected structure
+2. Resolves paths and checks if files exist
+3. Records file sizes and metadata
+4. Generates embeddings (if requested)
+5. Outputs detailed report in YAML format
 
 Supported Semantic Types:
-┌───────────────────────┬────────────────────────────────────────────────────┐
-│ Type                  │ Description                                        │
-├───────────────────────┼────────────────────────────────────────────────────┤
-│ CSV Files:            │                                                    │
-│ - metadata_csv        │ Experiment settings, parameters, and metadata      │
-│ - analysis_csv        │ Measurement results and analysis data              │
-├───────────────────────┼────────────────────────────────────────────────────┤
-│ Image Files:          │                                                    │
-│ - raw_image           │ Original, unprocessed image data                   │
-│ - processed_image     │ Processed image                                    │
-├───────────────────────┼────────────────────────────────────────────────────┤
-│ Other Files:          │                                                    │
-│ - illumination_file   │ Illumination correction files                  │
-└───────────────────────┴────────────────────────────────────────────────────┘
+- CSV: metadata_csv, analysis_csv
+- Images: raw_image, processed_image
+- Other: illumination_file
 
-YAML Structure:
-The input YAML must follow this structure with explicit semantic types:
+YAML Structure Example:
 ```yaml
 section_name:
-  level: plate  # Organizational level
+  level: plate
   path: /path/to/base/
-  contents:     # Section contents
-    set1:       # Set identifier
+  contents:
+    set1:
       - folder: Folder1
-        files:  # Files in this folder
-          - type: metadata_csv  # Semantic file type (REQUIRED)
-            files:              # List of files of this type
-              - file1.csv
-              - file2.csv
-          - type: raw_image
+        types:
+          - type: metadata_csv
             files:
-              - image1.tiff
-              - image2.tiff
+              - file1.csv
 ```
 
 Examples:
-    Basic validation:
-        python verify_file_structure.py input.yaml -o validated_output.yaml
-
-    Compare against files in a different location:
-        python verify_file_structure.py input.yaml -o output.yaml --replace-path /original/path /new/path
-
-    Generate and track file embeddings:
-        python verify_file_structure.py input.yaml -o output.yaml --embedding-dir /path/to/embeddings
+    python verify_file_structure.py input.yaml -o validated_output.yaml
+    python verify_file_structure.py input.yaml --replace-path /original/path /new/path
+    python verify_file_structure.py input.yaml --embedding-dir /path/to/embeddings
 """
 
 import yaml
@@ -73,10 +49,9 @@ def get_file_size(path):
     """Get file size in bytes or None if file doesn't exist.
 
     Args:
-        path: Path to the file
-
+        path (Path): Path to the file
     Returns:
-        int: File size in bytes if file exists, None otherwise
+        int or None: File size in bytes if exists, otherwise None
     """
     try:
         p = Path(path)
@@ -87,14 +62,13 @@ def get_file_size(path):
 
 
 def read_csv_headers(file_path, max_headers=20):
-    """Read headers from a CSV file with optional truncation for large header sets.
+    """Read headers from CSV file with optional truncation.
 
     Args:
-        file_path: Path to the CSV file
-        max_headers: Maximum number of headers to return before summarizing
-
+        file_path (str): Path to the CSV file
+        max_headers (int): Maximum headers before summarizing
     Returns:
-        list: CSV header names, possibly truncated with a summary
+        list: CSV header names, possibly truncated with summary
     """
     try:
         with open(file_path, "r", newline="") as csvfile:
@@ -113,18 +87,14 @@ def read_csv_headers(file_path, max_headers=20):
 
 
 def generate_embedding_path(file_path, embedding_base_dir, semantic_type):
-    """Generate a path for storing file embeddings in a central location.
-
-    Creates a directory structure based on semantic type and source location,
-    with unique filenames derived from original file paths.
+    """Generate path for storing file embeddings.
 
     Args:
-        file_path: The original file path
-        embedding_base_dir: Base directory for all embeddings
-        semantic_type: The semantic type of the file
-
+        file_path (str): Original file path
+        embedding_base_dir (str): Base directory for embeddings
+        semantic_type (str): Semantic file type
     Returns:
-        str: Full path to the embedding file, or None if file doesn't exist
+        str or None: Path to embedding file, or None if file doesn't exist
     """
     p = Path(file_path)
     if not p.exists() or not embedding_base_dir:
@@ -151,29 +121,25 @@ def handle_generic_file(file_path, embedding_dir=None, semantic_type=None):
     """Handler for generic files without specialized processing.
 
     Args:
-        file_path: Path to the file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (optional)
-
+        file_path (str): Path to the file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str, optional): Semantic type identifier
     Returns:
-        dict: Basic file information
+        dict: Basic file information with path and size
     """
     return {"path": str(file_path), "size": get_file_size(file_path)}
 
 
 # CSV File Handlers
 def handle_metadata_csv(file_path, embedding_dir=None, semantic_type="metadata_csv"):
-    """Handler for metadata CSV files (experiment settings, parameters).
-
-    Extracts header information and generates embeddings if requested.
+    """Handler for metadata CSV files.
 
     Args:
-        file_path: Path to the CSV file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (defaults to "metadata_csv")
-
+        file_path (str): Path to the CSV file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str): Semantic type identifier
     Returns:
-        dict: File information including headers and embedding path if available
+        dict: File info with headers and embedding path if available
     """
     file_info = handle_generic_file(file_path)
 
@@ -193,17 +159,14 @@ def handle_metadata_csv(file_path, embedding_dir=None, semantic_type="metadata_c
 
 
 def handle_analysis_csv(file_path, embedding_dir=None, semantic_type="analysis_csv"):
-    """Handler for analysis CSV files (measurements, calculations).
-
-    Extracts header information and generates embeddings if requested.
+    """Handler for analysis CSV files.
 
     Args:
-        file_path: Path to the CSV file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (defaults to "analysis_csv")
-
+        file_path (str): Path to the CSV file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str): Semantic type identifier
     Returns:
-        dict: File information including headers and embedding path if available
+        dict: File info with headers and embedding path if available
     """
     file_info = handle_generic_file(file_path)
 
@@ -228,15 +191,12 @@ def handle_analysis_csv(file_path, embedding_dir=None, semantic_type="analysis_c
 def handle_raw_image(file_path, embedding_dir=None, semantic_type="raw_image"):
     """Handler for raw image files.
 
-    Generates embeddings if requested, with potential for future image-specific analysis.
-
     Args:
-        file_path: Path to the image file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (defaults to "raw_image")
-
+        file_path (str): Path to the image file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str): Semantic type identifier
     Returns:
-        dict: File information including embedding path if available
+        dict: File info with embedding path if available
     """
     file_info = handle_generic_file(file_path)
 
@@ -257,15 +217,12 @@ def handle_processed_image(
 ):
     """Handler for processed image files.
 
-    Generates embeddings if requested, with potential for future image-specific analysis.
-
     Args:
-        file_path: Path to the image file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (defaults to "processed_image")
-
+        file_path (str): Path to the image file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str): Semantic type identifier
     Returns:
-        dict: File information including embedding path if available
+        dict: File info with embedding path if available
     """
     file_info = handle_generic_file(file_path)
 
@@ -287,15 +244,12 @@ def handle_illumination_file(
 ):
     """Handler for illumination correction files.
 
-    Generates embeddings if requested, with potential for future illumination-specific analysis.
-
     Args:
-        file_path: Path to the illumination file
-        embedding_dir: Base directory for embeddings (optional)
-        semantic_type: Semantic type identifier (defaults to "illumination_file")
-
+        file_path (str): Path to the illumination file
+        embedding_dir (str, optional): Base directory for embeddings
+        semantic_type (str): Semantic type identifier
     Returns:
-        dict: File information including embedding path if available
+        dict: File info with embedding path if available
     """
     file_info = handle_generic_file(file_path)
 
@@ -325,19 +279,14 @@ HANDLERS = {
 
 
 def build_file_paths(yaml_data, embedding_dir=None, path_replacement=None):
-    """Process YAML data and validate against actual files on disk.
-
-    Resolves paths, checks file existence, extracts metadata, and generates
-    embeddings based on semantic types. This function assumes the YAML structure
-    follows the expected format with explicit semantic types.
+    """Process YAML data and validate against files on disk.
 
     Args:
-        yaml_data: Parsed YAML data defining expected file structure
-        embedding_dir: Base directory to store embeddings (optional)
-        path_replacement: Tuple of (old_path, new_path) to replace in all paths
-
+        yaml_data (dict): Parsed YAML defining expected file structure
+        embedding_dir (str, optional): Base directory for embeddings
+        path_replacement (tuple, optional): (old_path, new_path) for replacement
     Returns:
-        dict: Processed structure with full paths, file sizes, and extracted metadata
+        dict: Processed structure with paths, sizes, and metadata
     """
     result = {}
 
@@ -411,13 +360,13 @@ def build_file_paths(yaml_data, embedding_dir=None, path_replacement=None):
     help="Base directory to store file embeddings (optional)",
 )
 def main(input_file, output_file, replace_path, embedding_dir):
-    """Validate file structure against YAML definition and generate detailed report.
+    """Validate file structure against YAML definition.
 
-    The tool reads a YAML file that defines an expected file structure, checks if
-    those files exist on disk, records their sizes and other metadata, and produces
-    a detailed report.
-
-    INPUT_FILE: Path to the YAML file containing the expected file structure.
+    Args:
+        input_file (Path): YAML file with expected file structure
+        output_file (Path, optional): Output report file
+        replace_path (tuple, optional): Path replacement values
+        embedding_dir (Path, optional): Embeddings directory
     """
     # If output file not specified, derive it from input filename
     if not output_file:
