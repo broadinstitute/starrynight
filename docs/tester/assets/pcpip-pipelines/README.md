@@ -37,15 +37,15 @@ cd -
 
 After skimming the [diffs](https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines/_refsource) (e.g., [this](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)), these pipeline variants were selected:
 
-- `1_CP_Illum`: `1_Illum_Plate1_Plate2.cppipe` (Reason: Focused on Plate1 for the fixture)
-- `2_CP_Apply_Illum`: `2_CP_Apply_Illum.cppipe` (Reason: Focused on Plate1 for the fixture)
+- `1_CP_Illum`: `1_Illum_Plate1_Plate2.cppipe`
+- `2_CP_Apply_Illum`: `2_CP_Apply_Illum.cppipe`
 - `3_CP_SegmentationCheck`: `3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
 - `5_BC_Illum`: `5_BC_Illum.cppipe`
 - `6_BC_Apply_Illum`: `6_BC_Apply_Illum.cppipe`
 - `7_BC_Preprocess`: `7_BC_Preprocess.cppipe`
 - `9_Analysis`: `9_Analysis_Plate1_Plate2.cppipe`
-- `6_BC_Apply_Illum_DebrisMask`: PCPIP 12cycle [version](_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe)
-- `7A_BC_Preprocess_Troubleshooting`: PCPIP 12cycle [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe)
+- `6_BC_Apply_Illum_DebrisMask`: PCPIP `12cycle` [version](_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe)
+- `7A_BC_Preprocess_Troubleshooting`: PCPIP `12cycle` [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe)
 
 ### Reference Pipelines Creation
 
@@ -68,7 +68,9 @@ The reference pipelines were further modified by hand to
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
 
-TODO: Fix `ref_7A_BC_Preprocess_Troubleshooting` and `ref_6_BC_Apply_Illum_DebrisMask`
+See the commit history of pipeline in <https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines/> to review the edits.
+
+TODO: Edit `ref_7A_BC_Preprocess_Troubleshooting` and `ref_6_BC_Apply_Illum_DebrisMask`
 
 ### Comparison with PCPIP Pipelines
 

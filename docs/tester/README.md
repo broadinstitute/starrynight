@@ -6,16 +6,16 @@ Tools for testing, validating, and creating test fixtures for PCPIP (Pooled Cell
 
 The tester directory contains several specialized tools:
 
-- **pcpip-test**: Test suite for validating pipeline outputs using structure validation
-- **pcpip-create-fixture**: Tools for creating test fixtures from AWS S3 data
 - **pcpip-pipelines**: Documentation for pipeline selection and comparison
+- **pcpip-create-fixture**: Tools for creating test fixtures from AWS S3 data
+- **pcpip-test**: Test suite for validating pipeline outputs using structure validation
 - **pcpip-generate-dummy-structures**: Utilities to simulate directory structures
 
 ## Purpose
 
 These tools enable reliable testing of the PCPIP workflow by:
 
-1. Creating reproducible test fixtures from real data
-2. Validating file structure and contents produced by pipelines
-3. Ensuring consistency between pipeline versions
+1. Ensuring consistency between pipeline versions
+2. Creating reproducible test fixtures from real data
+3. Validating file structure and contents produced by pipelines
 4. Generating synthetic test structures when real data isn't available
