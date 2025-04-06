@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# run_all.sh - CellProfiler Pipeline Runner
+# run_pcpip.sh - Run the PCPIP test suite
 #
 # Description:
 #   This script automates the execution of multiple CellProfiler pipelines in sequence,

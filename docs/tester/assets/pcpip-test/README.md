@@ -6,6 +6,7 @@ A test suite for validating and testing the outputs from optical pooled screenin
 
 ### Current Tools
 
+- `run_pcpip.sh` - Shell script to run the PCPIP test suite
 - `verify_file_structure.py` - Validation script that processes YAML specifications to check file existence and extract metadata
 - `compare_structures.py` - Comparison tool that analyzes differences between two structure files produced by verify_file_structure.py
 
@@ -23,6 +24,14 @@ Both tools use a consistent semantic type system to handle different file types 
 - **CSV Types**: `metadata_csv`, `analysis_csv`
 - **Image Types**: `raw_image`, `processed_image`
 - **Other Types**: `illumination_file`
+
+## Tool: run_pcpip.py
+
+```bash
+bash run_pcpip.sh
+```
+
+The script runs the full PCPIP test suite. See the script documentation for details.
 
 ## Tool: verify_file_structure.py
 
