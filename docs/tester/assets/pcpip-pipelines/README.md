@@ -69,6 +69,14 @@ For all but 1 and 2, we picked one of the variants that "looked right", without 
 - [diff](_refsource/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
 - Decision: Likely `9_Analysis_Plate1_Plate2.cppipe`
 
+`6_BC_Apply_Illum_DebrisMask`
+
+- Decision: Use the PCPIP `12cycle` [version](_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe): `6_BC_Apply_Illum_DebrisMask.cppipe`
+
+`7A_BC_Preprocess_Troubleshooting`
+
+- Decision: Use the PCPIP `12cycle` [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe) `7A_BC_Preprocess_Troubleshooting.cppipe`
+
 ## 2. Create reference pipelines
 
 Copy the selected ones to `ref_{PIPELINE}.cppipe`
@@ -83,6 +91,8 @@ cp _refsource/5_BC_Illum/5_BC_Illum.cppipe ref_5_BC_Illum.cppipe
 cp _refsource/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe ref_6_BC_Apply_Illum.cppipe
 cp _refsource/7_BC_Preprocess/7_BC_Preprocess.cppipe ref_7_BC_Preprocess.cppipe
 cp _refsource/9_Analysis/9_Analysis_Plate1_Plate2.cppipe ref_9_Analysis.cppipe
+cp _pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe ref_7A_BC_Preprocess_Troubleshooting.cppipe
+cp _pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe ref_6_BC_Apply_Illum_DebrisMask.cppipe
 ```
 
 </details>
@@ -93,6 +103,8 @@ After copying, the reference pipelines were modified by hand to
 
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
+
+TODO: Fix `ref_7A_BC_Preprocess_Troubleshooting` and `ref_6_BC_Apply_Illum_DebrisMask`
 
 ## 4. Compare the _unmodified_ reference pipelines sources with PCPIP `12cycle` [pipelines](https://github.com/broadinstitute/pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles)
 
