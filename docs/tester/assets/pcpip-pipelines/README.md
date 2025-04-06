@@ -2,11 +2,13 @@
 
 This document tracks the selection process for CellProfiler image analysis pipelines. It compares different pipeline versions, documents their differences, and records our decisions on which versions to use for the reference PCPIP workflow. The document includes diff commands, comparison notes, and final copy commands for the selected pipelines.
 
-## Select among variants in `pipelines`
+## 1. Compare pipeline variants in `_refsource`
 
 The pipelines in `_refsource` are from the `pipelines` directory of `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
 
-We compared up to two versions of the variants of each pipeline.
+We compared up to three versions of the variants of each pipeline.
+
+<details>
 
 ```bash
 cd _refsource
@@ -21,85 +23,55 @@ diff 9_Analysis/9_Analysis_rerun.cppipe 9_Analysis/9_Analysis_Plate1_Plate2.cppi
 cd -
 ```
 
-For all but 1 and 2, we picked one of the variants that "looked right"
+</details>
 
-### 1_CP_Illum
+For all but 1 and 2, we picked one of the variants that "looked right", without carefully inspecting the diffs.
 
-[diff](_refsource/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
+`1_CP_Illum`
 
-Differences: 1_CP_Illum.cppipe has downsampling/upsampling but 1_Illum_Plate1_Plate2.cppipe does not
-
-Decision: `1_Illum_Plate1_Plate2.cppipe`
-
-Reason: We are focused on Plate1 for the fixture
-
-
-### 2_CP_Apply_Illum
-[diff](_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
-
-Differences: 2_CP_Apply_Illum_Plate3_Plate4 has a different naming convention of output images. Also there's some extra bit in the CorrectIlluminationApply module that's likely wrong because those channels likely don't exist.
-
-Decision: `2_CP_Apply_Illum.cppipe`
-
-Reason: We are focused on Plate1 for the fixture
+- [diff](_refsource/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
+- Differences: 1_CP_Illum.cppipe has downsampling/upsampling but 1_Illum_Plate1_Plate2.cppipe does not
+- Decision: `1_Illum_Plate1_Plate2.cppipe`
+- Reason: We are focused on Plate1 for the fixture
 
 
-### 3_CP_SegmentationCheck
+`2_CP_Apply_Illum`
 
-[diff](_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff)
+- [diff](_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
+- Differences: 2_CP_Apply_Illum_Plate3_Plate4 has a different naming convention of output images. Also there's some extra bit in the CorrectIlluminationApply module that's likely wrong because those channels likely don't exist.
+- Decision: `2_CP_Apply_Illum.cppipe`
+- Reason: We are focused on Plate1 for the fixture
 
-Differences: SKIPPED
+`3_CP_SegmentationCheck`
 
-Decision: Likely `3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
+- [diff](_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff)
+- Decision: Likely `3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
 
-Reason: SKIPPED
+`5_BC_Illum`
 
+- [diff](_refsource/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
+- Decision: Likely `5_BC_Illum.cppipe`
 
-### 5_BC_Illum
+`6_BC_Apply_Illum`
 
-[diff](_refsource/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
+- Decision: `6_BC_Apply_Illum.cppipe`
+- Reason: We have a single pipeline
 
-Differences: SKIPPED
+`7_BC_Preprocess`
 
-Decision: Likely `5_BC_Illum.cppipe`
+- [diff](_refsource/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
+- Decision: Likely `7_BC_Preprocess.cppipe`
 
-Reason: SKIPPED
+`9_Analysis`
 
+- [diff](_refsource/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
+- Decision: Likely `9_Analysis_Plate1_Plate2.cppipe`
 
-### 6_BC_Apply_Illum
+## 2. Create reference pipelines
 
-Decision: `6_BC_Apply_Illum.cppipe`
+Copy the selected ones to `ref_{PIPELINE}.cppipe`
 
-Reason: We have a single pipeline
-
-
-### 7_BC_Preprocess
-
-[diff](_refsource/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
-
-Differences: SKIPPED
-
-Decision: Likely `7_BC_Preprocess.cppipe`
-
-Reason: SKIPPED
-
-
-### 9_Analysis
-
-[diff](_refsource/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff)
-[diff](_refsource/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff)
-[diff](_refsource/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
-
-Differences: SKIPPED
-
-Decision: Likely `9_Analysis_Plate1_Plate2.cppipe`
-
-Reason: SKIPPED
-
-
-## Create reference pipelines
-
-Copy the selected ones as `ref_*.cppipe`
+<details>
 
 ```bash
 cp _refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
@@ -111,12 +83,16 @@ cp _refsource/7_BC_Preprocess/7_BC_Preprocess.cppipe ref_7_BC_Preprocess.cppipe
 cp _refsource/9_Analysis/9_Analysis_Plate1_Plate2.cppipe ref_9_Analysis.cppipe
 ```
 
+</details>
+
+## 3. Modify reference pipelines
+
 After copying, the reference pipelines were modified by hand to
 
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
 
-## Compare the unmodified reference pipelines sources with PCPIP repo pipelines
+## 4. Compare the _unmodified_ reference pipelines sources with PCPIP `12cycle` [pipelines](https://github.com/broadinstitute/pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles)
 
 ```bash
 mkdir -p _pcpip_12cycles/diff
@@ -163,3 +139,5 @@ diff_9="_pcpip_12cycles/diff/9_Analysis"
 diff -w ${refsource_9} ${pcpip_9} > ${diff_9}.diff
 python scripts/diff.py ${pcpip_9} ${refsource_9} --format html --output ${diff_9}.html
 ```
+
+This was discussed further in https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724
