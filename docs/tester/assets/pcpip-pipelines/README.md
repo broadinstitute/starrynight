@@ -155,3 +155,244 @@ python scripts/diff.py ${pcpip_9} ${refsource_9} --format html --output ${diff_9
 ```
 
 This was discussed further in https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724
+
+
+## Troubleshooting pipeline notes
+
+
+```sh
+diff <(cat _pcpip_12cycles/6_BC_Apply_Illum.cppipe | cleancat) <(cat _pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe|cleancat|grep -v "Save with lossless compression"|grep -v "Allow fuzzy feature matching?:No"| sed 's/_Masked$//g' |sed 's/_masked$//g')
+```
+
+```diff
+3c3
+< DateRevision:413
+---
+> DateRevision:425
+5c5
+< ModuleCount:81
+---
+> ModuleCount:95
+290a291,467
+>     Operation:Maximum
+>     Raise the power of the result by:1.0
+>     Multiply the result by:1.0
+>     Add to result:0.0
+>     Set values less than 0 equal to 0?:Yes
+>     Set values greater than 1 equal to 1?:Yes
+>     Replace invalid values with 0?:Yes
+>     Ignore the image masks?:No
+>     Name the output image:MaxAllDAPIs
+>     Image or measurement?:Image
+>     Select the first image:Cycle01_DAPI
+>     Multiply the first image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the second image:Cycle02_DAPI_PreAligned
+>     Multiply the second image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the third image:Cycle03_DAPI_PreAligned
+>     Multiply the third image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_DAPI_PreAligned
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_DAPI_PreAligned
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_DAPI_PreAligned
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_DAPI_PreAligned
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_DAPI_PreAligned
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_DAPI_PreAligned
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_DAPI_PreAligned
+>     Multiply the tenth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eleventh image:Cycle11_DAPI_PreAligned
+>     Multiply the eleventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the twelfth image:Cycle12_DAPI_PreAligned
+>     Multiply the twelfth image by:1.0
+>     Measurement:
+>
+>     Select the input image:MaxAllDAPIs
+>     Name the primary objects to be identified:Debris
+>     Typical diameter of objects, in pixel units (Min,Max):40,1000
+>     Discard objects outside the diameter range?:Yes
+>     Discard objects touching the border of the image?:No
+>     Method to distinguish clumped objects:Intensity
+>     Method to draw dividing lines between clumped objects:Intensity
+>     Size of smoothing filter:10
+>     Suppress local maxima that are closer than this minimum allowed distance:7.0
+>     Speed up by using lower-resolution image to find local maxima?:Yes
+>     Fill holes in identified objects?:After both thresholding and declumping
+>     Automatically calculate size of smoothing filter for declumping?:Yes
+>     Automatically calculate minimum allowed distance between local maxima?:Yes
+>     Handling of objects if excessive number of objects identified:Continue
+>     Maximum number of objects:500
+>     Use advanced settings?:Yes
+>     Threshold setting version:12
+>     Threshold strategy:Global
+>     Thresholding method:Minimum Cross-Entropy
+>     Threshold smoothing scale:1.3488
+>     Threshold correction factor:10
+>     Lower and upper bounds on threshold:0.0,1.0
+>     Manual threshold:0.0
+>     Select the measurement to threshold with:None
+>     Two-class or three-class thresholding?:Two classes
+>     Log transform before thresholding?:No
+>     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+>     Size of adaptive window:50
+>     Lower outlier fraction:0.05
+>     Upper outlier fraction:0.05
+>     Averaging method:Mean
+>     Variance method:Standard deviation
+>     # of deviations:2.0
+>     Thresholding method:Minimum Cross-Entropy
+>
+>     Select the input image:Cycle01_DAPI
+>     Name the output image:Cycle01_DAPI
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle02_DAPI_PreAligned
+>     Name the output image:Cycle02_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle03_DAPI_PreAligned
+>     Name the output image:Cycle03_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle04_DAPI_PreAligned
+>     Name the output image:Cycle04_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle05_DAPI_PreAligned
+>     Name the output image:Cycle05_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle06_DAPI_PreAligned
+>     Name the output image:Cycle06_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle07_DAPI_PreAligned
+>     Name the output image:Cycle07_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle08_DAPI_PreAligned
+>     Name the output image:Cycle08_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle09_DAPI_PreAligned
+>     Name the output image:Cycle09_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle10_DAPI_PreAligned
+>     Name the output image:Cycle10_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle11_DAPI_PreAligned
+>     Name the output image:Cycle11_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+>     Select the input image:Cycle12_DAPI_PreAligned
+>     Name the output image:Cycle12_DAPI_PreAligned
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Debris
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+308a486,488
+>     Select the additional image:Cycle02_DAPI_PreAligned
+>     Name the output image:Cycle02_DAPI
+>     Select how the alignment is to be applied:Similarly
+327a508,510
+>     Select the additional image:Cycle03_DAPI_PreAligned
+>     Name the output image:Cycle03_DAPI
+>     Select how the alignment is to be applied:Similarly
+346a530,532
+>     Select the additional image:Cycle04_DAPI_PreAligned
+>     Name the output image:Cycle04_DAPI
+>     Select how the alignment is to be applied:Similarly
+365a552,554
+>     Select the additional image:Cycle05_DAPI_PreAligned
+>     Name the output image:Cycle05_DAPI
+>     Select how the alignment is to be applied:Similarly
+384a574,576
+>     Select the additional image:Cycle06_DAPI_PreAligned
+>     Name the output image:Cycle06_DAPI
+>     Select how the alignment is to be applied:Similarly
+403a596,598
+>     Select the additional image:Cycle07_DAPI_PreAligned
+>     Name the output image:Cycle07_DAPI
+>     Select how the alignment is to be applied:Similarly
+422a618,620
+>     Select the additional image:Cycle08_DAPI_PreAligned
+>     Name the output image:Cycle08_DAPI
+>     Select how the alignment is to be applied:Similarly
+441a640,642
+>     Select the additional image:Cycle09_DAPI_PreAligned
+>     Name the output image:Cycle09_DAPI
+>     Select how the alignment is to be applied:Similarly
+460a662,664
+>     Select the additional image:Cycle10_DAPI_PreAligned
+>     Name the output image:Cycle10_DAPI
+>     Select how the alignment is to be applied:Similarly
+479a684,686
+>     Select the additional image:Cycle11_DAPI_PreAligned
+>     Name the output image:Cycle11_DAPI
+>     Select how the alignment is to be applied:Similarly
+497a705,707
+>     Select how the alignment is to be applied:Similarly
+>     Select the additional image:Cycle12_DAPI_PreAligned
+>     Name the output image:Cycle12_DAPI
+```
