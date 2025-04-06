@@ -31,4 +31,10 @@ nav:
     - Developer Guide: developer/developer-guide.md
     - PCPIP Specs: developer/pcpip-specs.md
     - Requirements: developer/requirements.md
+  - Testing:
+    - Testing Framework: tester/README.md
+    - PCPIP pipelines: tester/assets/pcpip-pipelines/README.md
+    - PCPIP fixtures: tester/assets/pcpip-create-fixture/README.md
+    - PCPIP tests: tester/assets/pcpip-test/README.md
+    - PCPIP dummy fixtures: tester/assets/pcpip-generate-dummy-structures/README.md
   - FAQ: misc/faq.md

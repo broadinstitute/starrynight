@@ -40,6 +40,7 @@ python verify_file_structure.py input.yaml [-o output_file] [--replace-path OLD_
 ```
 
 This tool:
+
 1. Reads a YAML file defining expected file structure
 2. Checks if each file exists and records its size
 3. For CSV files, extracts and records column headers
@@ -89,38 +90,47 @@ This allows detection of changes in file content even when metadata matches.
 
 To create a minimal output example using the test fixtures:
 
-1. Create a new directory for the outputs:
-   ```bash
-   mkdir -p minimal-output-example
-   ```
+Create a new directory for the outputs:
 
-2. Run verify_file_structure.py on the input YAML files:
-   ```bash
-   # Process the input.yaml file
-   python verify_file_structure.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml
+```bash
+mkdir -p minimal-output-example
+```
 
-   # Process the output_pcpip.yaml file
-   python verify_file_structure.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml
+Run verify_file_structure.py on the input YAML files:
 
-   # Process the output_starrynight.yaml file
-   python verify_file_structure.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
-   ```
+```bash
+# Process the input.yaml file
+python verify_file_structure.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml
 
-3. Review the generated files in the minimal-output-example directory to see:
+# Process the output_pcpip.yaml file
+python verify_file_structure.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml
+
+# Process the output_starrynight.yaml file
+python verify_file_structure.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
+```
+
+Review the generated files in the minimal-output-example directory to see:
+
    - Which files exist and which don't
    - File sizes of existing files
    - CSV headers for any CSV files referenced in the YAMLs
 
-4. Test with an alternative output directory:
-   ```bash
-   # Process with path replacement, i.e., test a different output folder
-   python verify_file_structure.py minimal/output_pcpip.yaml -o minimal-output-example/reproduce_output_pcpip_parsed.yaml --replace-path "../../../../scratch/pcpip_example_output" "../../../../scratch/reproduce_pcpip_example_output"
-   ```
+Test with an alternative output directory:
 
-5. Compare two output structures:
-   ```bash
-   # Compare the original and reproduced outputs
-   python compare_structures.py minimal-output-example/output_pcpip_parsed.yaml minimal-output-example/reproduce_output_pcpip_parsed.yaml -o comparison.yaml
-   ```
+```bash
+# Process with path replacement, i.e., test a different output folder
+python \
+  verify_file_structure.py minimal/output_pcpip.yaml \
+  -o minimal-output-example/reproduce_output_pcpip_parsed.yaml \
+  --replace-path "../../../../scratch/pcpip_example_output" \
+  "../../../../scratch/reproduce_pcpip_example_output"
+```
+
+Compare two output structures:
+
+```bash
+# Compare the original and reproduced outputs
+python compare_structures.py minimal-output-example/output_pcpip_parsed.yaml minimal-output-example/reproduce_output_pcpip_parsed.yaml -o comparison.yaml
+```
 
 This provides a complete example of the tools' functionality with both validation and comparison capabilities.

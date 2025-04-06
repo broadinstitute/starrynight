@@ -24,6 +24,7 @@ The typical workflow for creating test fixtures is:
 ### Creating Download Lists
 
 `create_starrynight_download_list.py` creates two files:
+
 - `download_list.txt`: Commands to download from S3 to local
 - `s3_copy_list.txt`: Commands to copy from one S3 bucket to another
 
@@ -85,6 +86,7 @@ parallel python validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pi
 ```
 
 This will:
+
 1. Check if files referenced in the CSV exist
 2. Output a summary of missing files
 3. Create a `missing_files.csv` if any files are missing

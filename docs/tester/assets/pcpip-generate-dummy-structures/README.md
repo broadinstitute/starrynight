@@ -29,6 +29,7 @@ This creates:
 ```
 
 This creates:
+
 - Simulated directory structure (optionally with placeholder files if `--create-files` is used)
 - `generated_paths.txt` with list of all paths
 

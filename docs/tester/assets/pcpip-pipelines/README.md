@@ -73,9 +73,9 @@ TODO: Fix `ref_7A_BC_Preprocess_Troubleshooting` and `ref_6_BC_Apply_Illum_Debri
 ### Comparison with PCPIP Pipelines
 
 Compare the _unmodified_ reference pipelines sources with PCPIP `12cycle` [pipelines](https://github.com/broadinstitute/
-pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles
+pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles)
 
-This was discussed further in https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724
+This was discussed further in <https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724>
 
 ```bash
 mkdir -p _pcpip_12cycles/diff
