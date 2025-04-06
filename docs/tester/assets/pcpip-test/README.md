@@ -103,13 +103,14 @@ Run verify_file_structure.py on the input YAML files:
 
 ```bash
 # Process the input.yaml file
-python verify_file_structure.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml
+python verify_file_structure.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml --embedding-dir embed
 
 # Process the output_pcpip.yaml file
-python verify_file_structure.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml
+python verify_file_structure.py minimal/output_pcpip.yaml -o minimal-output-example/output_pcpip_parsed.yaml --embedding-dir embed
 
 # Process the output_starrynight.yaml file
-python verify_file_structure.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
+# FIXME: Update this YAML
+# python verify_file_structure.py minimal/output_starrynight.yaml -o minimal-output-example/output_starrynight_parsed.yaml
 ```
 
 Review the generated files in the minimal-output-example directory to see:
@@ -126,14 +127,19 @@ python \
   verify_file_structure.py minimal/output_pcpip.yaml \
   -o minimal-output-example/reproduce_output_pcpip_parsed.yaml \
   --replace-path "../../../../scratch/pcpip_example_output" \
-  "../../../../scratch/reproduce_pcpip_example_output"
+  "../../../../scratch/reproduce_pcpip_example_output" \
+   --embedding-dir embed
 ```
 
 Compare two output structures:
 
 ```bash
 # Compare the original and reproduced outputs
-python compare_structures.py minimal-output-example/output_pcpip_parsed.yaml minimal-output-example/reproduce_output_pcpip_parsed.yaml -o comparison.yaml
+python compare_structures.py \
+   minimal-output-example/output_pcpip_parsed.yaml \
+   minimal-output-example/reproduce_output_pcpip_parsed.yaml \
+   -o minimal-output-example/compare_pcpip_reproduce.yaml \
+   --compare
 ```
 
 This provides a complete example of the tools' functionality with both validation and comparison capabilities.

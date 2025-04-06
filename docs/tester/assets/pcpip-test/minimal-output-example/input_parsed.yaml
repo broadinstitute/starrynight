@@ -9,25 +9,49 @@ images:
         files:
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome.tiff
           size: 25383758
+          embedding_path: embed/raw_image/569074fc/WellA1_PointA1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0000.ome_5d559e9758_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome.tiff
           size: 25383758
+          embedding_path: embed/raw_image/569074fc/WellA1_PointA1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq0001.ome_390eab1045_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome.tiff
           size: 25383758
+          embedding_path: embed/raw_image/569074fc/WellA2_PointA2_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1025.ome_47d53ac75a_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome.tiff
           size: 25383758
+          embedding_path: embed/raw_image/569074fc/WellA2_PointA2_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq1026.ome_e8a15e6c85_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome.tiff
           size: 25383756
+          embedding_path: embed/raw_image/569074fc/WellB1_PointB1_0000_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3075.ome_4a74658c0f_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_CP_Plate1_20240319_122800_179/WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome.tiff
           size: 25383756
+          embedding_path: embed/raw_image/569074fc/WellB1_PointB1_0001_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq3076.ome_e7d660b199_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellA1_PointA1_0000_ChannelC,A,T,G,DAPI_Seq0000.ome_d4dea572c8_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellA1_PointA1_0001_ChannelC,A,T,G,DAPI_Seq0001.ome_1ac0b837c9_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellA2_PointA2_0000_ChannelC,A,T,G,DAPI_Seq1025.ome_1d3604faef_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellA2_PointA2_0001_ChannelC,A,T,G,DAPI_Seq1026.ome_4d041adcf8_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellB1_PointB1_0000_ChannelC,A,T,G,DAPI_Seq3075.ome_1ddafc642a_embedding.emb
+          has_embedding: true
         - path: ../../../../scratch/starrynight_example_input/Source1/Batch1/images/Plate1/20X_c1_SBS-1/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome.tiff
           size: 42279516
+          embedding_path: embed/raw_image/259c5c26/WellB1_PointB1_0001_ChannelC,A,T,G,DAPI_Seq3076.ome_98aa0b01c2_embedding.emb
+          has_embedding: true

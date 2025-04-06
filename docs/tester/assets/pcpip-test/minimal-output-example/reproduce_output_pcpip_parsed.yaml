@@ -105,7 +105,7 @@ images_corrected_painting:
           - Value
           header_count: 2
         - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
-          size: 7971
+          size: 7640
           embedding_path: embed/analysis_csv/15e5df90/PaintingIllumApplication_Image_085330e0c1_embedding.emb
           has_embedding: true
           headers:
@@ -175,7 +175,7 @@ images_aligned_barcoding:
           - Value
           header_count: 2
         - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
-          size: 60581
+          size: 59679
           embedding_path: embed/analysis_csv/025277d2/BarcodingApplication_Image_974ca20ad5_embedding.emb
           has_embedding: true
           headers:
@@ -262,7 +262,7 @@ images_corrected_barcoding:
           - Value
           header_count: 2
         - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
-          size: 11577
+          size: 11145
           embedding_path: embed/analysis_csv/4b84fb99/BarcodePreprocessing_Image_fef19541ef_embedding.emb
           has_embedding: true
           headers:
@@ -514,7 +514,7 @@ analysis:
           - Number_Object_Number
           header_count: 7
         - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Image.csv
-          size: 39276
+          size: 38687
           embedding_path: embed/analysis_csv/ec1f00f9/Image_f250d5176b_embedding.emb
           has_embedding: true
           headers:

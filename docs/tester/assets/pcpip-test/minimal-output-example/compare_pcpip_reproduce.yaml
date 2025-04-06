@@ -1,4 +1,4 @@
-comparison_time: '2025-04-05T17:22:58.457774'
+comparison_time: '2025-04-06T11:53:25.223961'
 status: different_content
 first_structure: minimal-output-example/output_pcpip_parsed.yaml
 second_structure: minimal-output-example/reproduce_output_pcpip_parsed.yaml
@@ -100,7 +100,7 @@ sections:
                         second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
                       size:
                         first: 2520717
-                        second: 7971
+                        second: 7640
                       embedding:
                         match: false
                         similarity: 0.0
@@ -373,7 +373,7 @@ sections:
                         second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Image.csv
                       size:
                         first: 28134
-                        second: 39276
+                        second: 38687
                       embedding:
                         match: false
                         similarity: 0.0
@@ -824,7 +824,7 @@ sections:
                         second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
                       size:
                         first: 30002
-                        second: 11577
+                        second: 11145
                       embedding:
                         match: false
                         similarity: 0.0
@@ -973,7 +973,7 @@ sections:
                         second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
                       size:
                         first: 415072
-                        second: 60581
+                        second: 59679
                       embedding:
                         match: false
                         similarity: 0.0
