@@ -162,6 +162,7 @@ This was discussed further in https://github.com/broadinstitute/starrynight/issu
 <details>
 
 ```sh
+alias cleancat='sed "/module_num:[0-9]*|svn_version:.*|variable_revision_number:[0-9]*|/d"'
 diff <(cat _pcpip_12cycles/6_BC_Apply_Illum.cppipe | cleancat) <(cat _pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe|cleancat|grep -v "Save with lossless compression"|grep -v "Allow fuzzy feature matching?:No"| sed 's/_Masked$//g' |sed 's/_masked$//g')
 ```
 
