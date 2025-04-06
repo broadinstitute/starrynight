@@ -692,9 +692,9 @@ This parameterization approach enables the same pipeline code to process differe
 
 Note:
 
-- The input / outputs are also in parseable form [`io.json`](assets/pcpip-io.json). Note that it uses `Tile` instead of `Site` when referring to the outputs of Pipelines 4 and 8.
+- The input / outputs are also in parseable form [`pcpip-io.json`](assets/pcpip-io.json). Note that it uses `Tile` instead of `Site` when referring to the outputs of Pipelines 4 and 8.
 - In the jsons, `{1_CP_Illum|2_CP_Apply_Illum|5_BC_Illum|6_BC_Apply_Illum}.input.images.pattern` are mockups
-- Sample outputs of paths and LoadData CSVs generated using [`io.json`](assets/pcpip-io.json) are [here](assets/generate-structures/sample_outputs/generated_csvs.json).
+- Sample outputs of paths and LoadData CSVs generated using [`pcpip-io.json`](assets/pcpip-io.json) are [here](../tester/assets/pcpip-generate-dummy-structures/sample_outputs/generated_csvs.json).
 - FIXME: We also need to specify as input, the channels that (1) will be used for nuclear segmentation (2) cell segmentation (3) mitochondria (for some filtering that happens in Pipeline 9)
 
 ### Cell Painting

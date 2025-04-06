@@ -35,7 +35,6 @@ Reason: We are focused on Plate1 for the fixture
 
 
 ### 2_CP_Apply_Illum
-
 [diff](_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
 
 Differences: 2_CP_Apply_Illum_Plate3_Plate4 has a different naming convention of output images. Also there's some extra bit in the CorrectIlluminationApply module that's likely wrong because those channels likely don't exist.
@@ -47,7 +46,7 @@ Reason: We are focused on Plate1 for the fixture
 
 ### 3_CP_SegmentationCheck
 
-[diff](_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2__3_CP_SegmentationCheck_Plate3_Plate4.diff)
+[diff](_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff)
 
 Differences: SKIPPED
 
