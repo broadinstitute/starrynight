@@ -25,7 +25,7 @@ Both tools use a consistent semantic type system to handle different file types 
 - **Image Types**: `raw_image`, `processed_image`
 - **Other Types**: `illumination_file`
 
-## Tool: run_pcpip.py
+## Tool: run_pcpip.sh
 
 ```bash
 bash run_pcpip.sh
