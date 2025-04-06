@@ -2,6 +2,8 @@
 
 This document tracks the selection process for CellProfiler image analysis pipelines. It compares different pipeline versions, documents their differences, and records our decisions on which versions to use for the reference PCPIP workflow. The document includes diff commands, comparison notes, and final copy commands for the selected pipelines.
 
+TODO: Once this [issue](https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724) is settled, `ref_*.cppipe` will be the selected reference pipelines for development.
+
 ## 1. Compare pipeline variants in `_refsource`
 
 The pipelines in `_refsource` are from the `pipelines` directory of `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
