@@ -2,6 +2,8 @@
 
 Tools to simulate and validate directory structures for pooled Cell Painting experiments.
 
+<https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-generate-dummy-structures>
+
 ## Components
 
 - `generate_csvs.py`: Generates CSV files with metadata and file paths based on experiment configuration

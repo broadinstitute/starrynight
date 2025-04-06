@@ -2,6 +2,8 @@
 
 Documentation for selecting and comparing CellProfiler pipelines to create a reference set for the PCPIP workflow.
 
+<https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines>
+
 ## Components
 
 - Selected reference CellProfiler pipeline files (`.cppipe`) for the PCPIP workflow

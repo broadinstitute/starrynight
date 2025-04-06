@@ -2,6 +2,8 @@
 
 Test suite for validating and testing outputs from optical pooled screening (OPS) data processing pipelines.
 
+<https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-test>
+
 ## Components
 
 - `run_pcpip.sh`: Shell script to run the PCPIP test suite

@@ -2,6 +2,8 @@
 
 Tools for creating and manipulating test fixtures for PCPIP workflow.
 
+<https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-create-fixture>
+
 ## Components
 
 - `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures from AWS S3 buckets
