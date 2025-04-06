@@ -74,6 +74,7 @@ This tool compares two file structure YAML files to identify differences in orga
 #### Output Formats
 
 The tool supports multiple output formats:
+
 - `yaml` (default): YAML format for both human and machine readability
 - `json`: JSON format for programmatic processing
 - `text`: Text summary for quick human review
