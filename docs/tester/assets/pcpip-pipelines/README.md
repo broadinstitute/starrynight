@@ -1,14 +1,20 @@
-# Pipelines
+# pcpip-pipelines
 
-This document tracks the selection process for CellProfiler image analysis pipelines. It compares different pipeline versions, documents their differences, and records our decisions on which versions to use for the reference PCPIP workflow. The document includes diff commands, comparison notes, and final copy commands for the selected pipelines.
+Documentation for selecting and comparing CellProfiler pipelines to create a reference set for the PCPIP workflow.
 
-TODO: Once this [issue](https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724) is settled, `ref_*.cppipe` will be the selected reference pipelines for development.
+## Components
 
-## 1. Compare pipeline variants in `_refsource`
+- Selected reference CellProfiler pipeline files (`.cppipe`) for the PCPIP workflow
+- Comparison scripts to analyze differences between pipeline versions
+- Pipeline selection documentation
 
-The pipelines in `_refsource` are from the `pipelines` directory of `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
+## Pipeline Selection Process
 
-We compared up to three versions of the variants of each pipeline.
+This documents the selection of CellProfiler pipelines, comparing different versions and recording decisions on which to use as references.
+
+### Pipeline Variants Comparison
+
+Pipeline variants in `_refsource` are from `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`
 
 <details>
 
@@ -27,61 +33,21 @@ cd -
 
 </details>
 
-For all but 1 and 2, we picked one of the variants that "looked right", without carefully inspecting the diffs.
+### Pipeline Selection Decisions
 
-`1_CP_Illum`
+After skimming the [diffs](https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines/_refsource) (e.g., [this](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)), these pipeline variants were selected:
 
-- [diff](_refsource/1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff)
-- Differences: 1_CP_Illum.cppipe has downsampling/upsampling but 1_Illum_Plate1_Plate2.cppipe does not
-- Decision: `1_Illum_Plate1_Plate2.cppipe`
-- Reason: We are focused on Plate1 for the fixture
+- `1_CP_Illum`: `1_Illum_Plate1_Plate2.cppipe` (Reason: Focused on Plate1 for the fixture)
+- `2_CP_Apply_Illum`: `2_CP_Apply_Illum.cppipe` (Reason: Focused on Plate1 for the fixture)
+- `3_CP_SegmentationCheck`: `3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
+- `5_BC_Illum`: `5_BC_Illum.cppipe`
+- `6_BC_Apply_Illum`: `6_BC_Apply_Illum.cppipe`
+- `7_BC_Preprocess`: `7_BC_Preprocess.cppipe`
+- `9_Analysis`: `9_Analysis_Plate1_Plate2.cppipe`
+- `6_BC_Apply_Illum_DebrisMask`: PCPIP 12cycle [version](_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe)
+- `7A_BC_Preprocess_Troubleshooting`: PCPIP 12cycle [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe)
 
-
-`2_CP_Apply_Illum`
-
-- [diff](_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff)
-- Differences: 2_CP_Apply_Illum_Plate3_Plate4 has a different naming convention of output images. Also there's some extra bit in the CorrectIlluminationApply module that's likely wrong because those channels likely don't exist.
-- Decision: `2_CP_Apply_Illum.cppipe`
-- Reason: We are focused on Plate1 for the fixture
-
-`3_CP_SegmentationCheck`
-
-- [diff](_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff)
-- Decision: Likely `3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe`
-
-`5_BC_Illum`
-
-- [diff](_refsource/5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff)
-- Decision: Likely `5_BC_Illum.cppipe`
-
-`6_BC_Apply_Illum`
-
-- Decision: `6_BC_Apply_Illum.cppipe`
-- Reason: We have a single pipeline
-
-`7_BC_Preprocess`
-
-- [diff](_refsource/7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff)
-- Decision: Likely `7_BC_Preprocess.cppipe`
-
-`9_Analysis`
-
-- [diff](_refsource/9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff), [diff](_refsource/9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff)
-- Decision: Likely `9_Analysis_Plate1_Plate2.cppipe`
-
-`6_BC_Apply_Illum_DebrisMask`
-
-- Decision: Use the PCPIP `12cycle` [version](_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe): `6_BC_Apply_Illum_DebrisMask.cppipe`
-
-`7A_BC_Preprocess_Troubleshooting`
-
-- Decision: Use the PCPIP `12cycle` [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe) `7A_BC_Preprocess_Troubleshooting.cppipe`
-
-## 2. Create reference pipelines
-
-Copy the selected ones to `ref_{PIPELINE}.cppipe`
-
-<details>
+### Reference Pipelines Creation
 
 ```bash
 cp _refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
@@ -95,18 +61,21 @@ cp _pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe ref_7A_BC_Preprocess_
 cp _pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe ref_6_BC_Apply_Illum_DebrisMask.cppipe
 ```
 
-</details>
+## Reference Pipelines Modifications
 
-## 3. Modify reference pipelines
-
-After copying, the reference pipelines were modified by hand to
+The reference pipelines were further modified by hand to
 
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
 
 TODO: Fix `ref_7A_BC_Preprocess_Troubleshooting` and `ref_6_BC_Apply_Illum_DebrisMask`
 
-## 4. Compare the _unmodified_ reference pipelines sources with PCPIP `12cycle` [pipelines](https://github.com/broadinstitute/pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles)
+### Comparison with PCPIP Pipelines
+
+Compare the _unmodified_ reference pipelines sources with PCPIP `12cycle` [pipelines](https://github.com/broadinstitute/
+pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles
+
+This was discussed further in https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724
 
 ```bash
 mkdir -p _pcpip_12cycles/diff
@@ -153,9 +122,6 @@ diff_9="_pcpip_12cycles/diff/9_Analysis"
 diff -w ${refsource_9} ${pcpip_9} > ${diff_9}.diff
 python scripts/diff.py ${pcpip_9} ${refsource_9} --format html --output ${diff_9}.html
 ```
-
-This was discussed further in https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724
-
 
 ## Troubleshooting pipeline notes
 

@@ -1,13 +1,13 @@
 # pcpip-create-fixture
 
-This directory contains scripts for creating and manipulating test fixtures for the PCPIP workflow.
+Tools for creating and manipulating test fixtures for PCPIP workflow.
 
-## Files Overview
+## Components
 
-- `create_starrynight_download_list.py`: Creates download and S3 copy lists for creating test fixtures from AWS S3 buckets.
-- `compress_starrynight_example.sh`: Compresses TIFF and CSV files to reduce disk usage after downloading.
-- `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets.
-- `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist.
+- `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures from AWS S3 buckets
+- `compress_starrynight_example.sh`: Compresses TIFF and CSV files to reduce disk usage
+- `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
+- `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 
 ## Workflow
 
