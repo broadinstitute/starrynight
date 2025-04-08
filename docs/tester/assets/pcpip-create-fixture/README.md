@@ -41,6 +41,37 @@ export DEST_BUCKET="your-destination-bucket"
 python create_starrynight_download_list.py
 ```
 
+### Download the files
+
+These commands download the test fixture files from AWS S3 using the previously generated download list.
+
+```bash
+# Define repository paths
+STARRYNIGHT_REPO_REL="../../../.."
+SCRATCH_DIR=${STARRYNIGHT_REPO_REL}/scratch
+
+# Backup existing scratch directory if it exists
+if [ -d "${SCRATCH_DIR}" ]; then
+    mv ${SCRATCH_DIR} ${SCRATCH_DIR}_archive
+fi
+
+# Create scratch directory structure
+mkdir -p ${SCRATCH_DIR}
+
+# Copy the download list to scratch directory
+cp download_list.txt ${SCRATCH_DIR}/
+
+# Change to scratch directory
+cd ${SCRATCH_DIR}
+
+# Download files using s5cmd (fast S3 command line client)
+# Install s5cmd first if not available: https://github.com/peak/s5cmd
+s5cmd run download_list.txt
+
+# Verify download completion
+echo "Downloads completed. Verify files were downloaded successfully."
+```
+
 ### Compressing Files
 
 ```bash
