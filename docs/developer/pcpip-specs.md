@@ -974,8 +974,8 @@ Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree
         - Works with 10X downsampled images for efficient QC
         - Removes axis ticks for cleaner visualization
     - Used in:
-        - Pipeline 4 (Cell Painting Stitching): Validates stitching quality for cell painting images
-        - Pipeline 8 (Barcoding Stitching): Validates stitching quality for barcoding images
+        - Pipeline 4 (Cell Painting Stitching): Validates stitching quality for Cell Painting images, specifically examining 10X downscaled whole-well stitches of the DAPI channel only
+        - Pipeline 8 (Barcoding Stitching): Validates stitching quality for barcoding images, specifically examining 10X downscaled whole-well stitches of the DAPI channel across all cycles
     - QC Focus: Verifies proper stitching and alignment of image quadrants
     - QC Metrics implemented:
         - None
