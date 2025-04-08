@@ -38,7 +38,7 @@ images_corrected_painting:
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/
   contents:
     set1:
-      - folder: Plate1-WellA1
+      - folder: Plate1-WellB1
         types:
           - type: analysis_csv
             files:
@@ -49,16 +49,16 @@ images_corrected_painting:
               - PaintingIllumApplication_Nuclei.csv
           - type: processed_image
             files:
-              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
-              - Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
-              - Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+              - Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff
+              - Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff
+              - Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff
 
 images_aligned_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/
   contents:
     set1:
-      - folder: Plate1-WellA1-0
+      - folder: Plate1-WellB1-0
         types:
           - type: analysis_csv
             files:
@@ -66,17 +66,17 @@ images_aligned_barcoding:
               - BarcodingApplication_Image.csv
           - type: processed_image
             files:
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-            - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+            - Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+            - Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+            - Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+            - Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
 
 images_corrected_barcoding:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
   contents:
     set1:
-      - folder: Plate1-WellA1-0
+      - folder: Plate1-WellB1-0
         types:
           - type: analysis_csv
             files:
@@ -84,21 +84,21 @@ images_corrected_barcoding:
               - BarcodePreprocessing_Experiment.csv
               - BarcodePreprocessing_Image.csv
               - BarcodePreprocessing_Nuclei.csv
-              - BarcodePreprocessing_PreFoci.csv
           - type: processed_image
             files:
-              - Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-              - Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-              - Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-              - Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-              - Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+              - Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+              - Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+              - Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+              - Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+              - Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+              - overlay/Plate_Plate1_Well_B1_Site_0_StDev_Overlay.tiff
 
 images_segmentation:
   level: plate
   path: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/
   contents:
     set1:
-      - folder: Plate1
+      - folder: Plate1-WellB1
         types:
           - type: analysis_csv
             files:
@@ -110,14 +110,14 @@ images_segmentation:
               - SegmentationCheck_PreCells.csv
           - type: processed_image
             files:
-              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+              - Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
 
 analysis:
   level: site
   path: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/
   contents:
     set1:
-      - folder: Plate1-WellA1-0
+      - folder: Plate1-WellB1-0
         types:
           - type: analysis_csv
             files:
@@ -136,8 +136,8 @@ analysis:
               - Resize_Foci.csv
           - type: processed_image
             files:
-              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
-              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
-              - segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
-              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
-              - Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
+              - segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff
+              - segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff
+              - segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff
+              - Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png
+              - Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png

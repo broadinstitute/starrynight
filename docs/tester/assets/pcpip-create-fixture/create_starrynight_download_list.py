@@ -262,10 +262,11 @@ def generate_download_list():
 
         # Segmentation images
         for well in wells:
-            relative_path = "images_segmentation/Plate1/"
+            relative_path = f"images_segmentation/Plate1-Well{well}/"
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
+            relative_path = "images_segmentation/Plate1/"
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_Plate1_Well_Well{well}_Site_0_CorrDNA_SegmentCheck.png"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
@@ -278,10 +279,11 @@ def generate_download_list():
             "PreCells",
             "ConfluentRegions",
         ]:
-            relative_path = "images_segmentation/Plate1/"
+            relative_path = f"images_segmentation/Plate1-Well{well}/"
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
+            relative_path = "images_segmentation/Plate1/"
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}SegmentationCheck_{csvfile}.csv"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")

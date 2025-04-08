@@ -208,17 +208,17 @@
         "outputs": {
             "overlay_images": {
                 "patterns": [
-                    "{batch}/images_segmentation/{plate}/Plate_{plate}_Well_Well{well}_Site_{site}_Corr{cp_channel}_SegmentCheck.png"
+                    "{batch}/images_segmentation/{plate}-{well}/Plate_{plate}_Well_Well{well}_Site_{site}_Corr{cp_channel}_SegmentCheck.png"
                 ]
             },
             "csvs": {
                 "patterns": [
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_Cells.csv",
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_ConfluentRegions.csv",
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_Experiment.csv",
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_Image.csv",
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_Nuclei.csv",
-                    "{batch}/images_segmentation/{plate}/SegmentationCheck_PreCells.csv"
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_Cells.csv",
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_ConfluentRegions.csv",
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_Experiment.csv",
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_Image.csv",
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_Nuclei.csv",
+                    "{batch}/images_segmentation/{plate}-{well}/SegmentationCheck_PreCells.csv"
                 ]
             }
         },
@@ -408,7 +408,7 @@
             },
             "overlay_images": {
                 "patterns": [
-                    "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/Plate_{plate}_Well_{well}_Site_{site}_Max_Overlay.png"
+                    "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/overlay/Plate_{plate}_Well_{well}_Site_{site_StDev_Overlay.tiff"
                 ]
             },
             "csvs": {
@@ -416,8 +416,7 @@
                     "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_BarcodeFoci.csv",
                     "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_Experiment.csv",
                     "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_Image.csv",
-                    "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_Nuclei.csv",
-                    "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_PreFoci.csv"
+                    "{batch}/images_corrected/barcoding/{plate}-Well{well}-{site}/BarcodePreprocessing_Nuclei.csv"
                 ]
             }
         },

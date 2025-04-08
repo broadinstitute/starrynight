@@ -1269,7 +1269,7 @@ SaveImages:[module_num:85|svn_version:'Unknown'|variable_revision_number:16|show
     How to save the series:T (Time)
     Save with lossless compression?:No
 
-SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
     Select the type of image to save:Image
     Select the image to save:StDev_Overlay
     Select method for constructing file names:Single name

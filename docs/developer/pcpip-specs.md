@@ -745,7 +745,7 @@ Note:
     1. Quality control overlay images showing segmentation results
     2. CSV files with measurements
 - **Output Directory**:
-    - `{Batch}/images_segmentation/{Plate}/`
+    - `{Batch}/images_segmentation/{Plate}-{Well}/`
 - **Image Naming Pattern**:
     - `Plate_{Plate}_Well_{Well}_Site_{Site}_Corr{Channel}_SegmentCheck.png`: Overlay image
 - **CSV Naming Pattern**:
@@ -831,14 +831,16 @@ Note:
     2. CSV files with barcode calling results
     3. Overlay images showing identified foci
 - **Output Directory**:
-    - `{Batch}/images_corrected/barcoding/{Plate}-{Well}-{Site}/`
+    - `{Batch}/images_corrected/barcoding/{Plate}-{Well}-{Site}/overlay/`: Overlay image
+    - `{Batch}/images_corrected/barcoding/{Plate}-{Well}-{Site}/`: Everything else
 - **Image Naming Pattern**:
     - `Plate_{Plate}_Well_{Well}_Site_{Site}_Cycle{K}_{Channel}.tiff`: Processed image
-    - `Plate_{Plate}_Well_{Well}_Site_{Site}_Max_Overlay.png`: Overlay image
+    - `Plate_{Plate}_Well_{Well}_Site_{Site}_StDev_Overlay.png`: Overlay image
 - **CSV Naming Pattern**:
-    - `BarcodePreprocessing_Foci.csv`
+    - `BarcodePreprocessing_BarcodeFoci.csv`
     - `BarcodePreprocessing_Image.csv`
     - `BarcodePreprocessing_Experiment.csv`
+    - `BarcodePreprocessing_Nuclei.csv`
 
 #### Pipeline 8: Barcoding Stitching and Cropping
 
