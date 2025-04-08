@@ -71,7 +71,7 @@ nav:
 
 plugins:
 - mermaid2:
-    arguments:
-        # test if its __palette_0/1 (dark) or __palette_1/2 (light)
-      theme: |
-        ^(JSON.parse(__md_get("__palette").index == 1)) ? 'dark' : 'light'
+    # arguments:
+    #     # test if its __palette_0/1 (dark) or __palette_1/2 (light)
+    #   theme: |
+    #     ^(JSON.parse(__md_get("__palette").index == 1)) ? 'dark' : 'light'
