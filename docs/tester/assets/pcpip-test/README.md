@@ -139,7 +139,7 @@ python compare_structures.py \
    minimal-output-example/output_pcpip_parsed.yaml \
    minimal-output-example/reproduce_output_pcpip_parsed.yaml \
    -o minimal-output-example/compare_pcpip_reproduce.yaml \
-   --compare
+   --compare-embeddings
 ```
 
 This provides a complete example of the tools' functionality with both validation and comparison capabilities.

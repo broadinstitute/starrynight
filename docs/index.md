@@ -1,6 +1,6 @@
-# StarryNight Documentation
+# StarryNight
 
-Welcome to the StarryNight platform documentation. StarryNight is a comprehensive toolkit for processing, analyzing, and managing optical pooled screening (OPS) image data.
+StarryNight is a comprehensive toolkit for processing, analyzing, and managing optical pooled screening (OPS) image data.
 
 ## Platform Overview
 
