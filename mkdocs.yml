@@ -70,7 +70,8 @@ nav:
   - FAQ: misc/faq.md
 
 plugins:
-- mermaid2:
+  - search
+  - mermaid2:
     # arguments:
     #     # test if its __palette_0/1 (dark) or __palette_1/2 (light)
     #   theme: |
