@@ -1,4 +1,4 @@
-comparison_time: '2025-04-06T11:53:25.223961'
+comparison_time: '2025-04-08T13:10:40.775445'
 status: different_content
 first_structure: minimal-output-example/output_pcpip_parsed.yaml
 second_structure: minimal-output-example/reproduce_output_pcpip_parsed.yaml
@@ -18,8 +18,8 @@ sections:
           first: 1
           second: 1
         folders:
-          Plate1-WellA1:
-            folder: Plate1-WellA1
+          Plate1-WellB1:
+            folder: Plate1-WellB1
             status: different_content
             types:
               analysis_csv:
@@ -33,11 +33,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_ConfluentRegions.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_ConfluentRegions.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_ConfluentRegions.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_ConfluentRegions.csv
                       size:
-                        first: 1965
-                        second: 101
+                        first: 1096
+                        second: 146
                       embedding:
                         match: false
                         similarity: 0.0
@@ -54,11 +54,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Nuclei.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Nuclei.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Nuclei.csv
                       size:
-                        first: 79157885
-                        second: 110586
+                        first: 65335308
+                        second: 152953
                       embedding:
                         match: false
                         similarity: 0.0
@@ -75,11 +75,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Cells.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Cells.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Cells.csv
                       size:
-                        first: 82855762
-                        second: 115572
+                        first: 68163293
+                        second: 160219
                       embedding:
                         match: false
                         similarity: 0.0
@@ -96,11 +96,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Image.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Image.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Image.csv
                       size:
-                        first: 2520717
-                        second: 7640
+                        first: 2520772
+                        second: 7629
                       embedding:
                         match: false
                         similarity: 0.0
@@ -117,8 +117,8 @@ sections:
                     status: possibly_identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Experiment.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/PaintingIllumApplication_Experiment.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Experiment.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Experiment.csv
                       size:
                         first: 14520
                         second: 14520
@@ -141,12 +141,12 @@ sections:
                   first: 3
                   second: 3
                 files:
-                  Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff:
+                  Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrPhalloidin.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -154,12 +154,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff:
+                  Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -167,12 +167,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff:
+                  Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellA1/Plate_Plate1_Well_WellA1_Site_0_CorrZO1.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -192,8 +192,8 @@ sections:
           first: 1
           second: 1
         folders:
-          Plate1-WellA1-0:
-            folder: Plate1-WellA1-0
+          Plate1-WellB1-0:
+            folder: Plate1-WellB1-0
             status: different_content
             types:
               analysis_csv:
@@ -207,11 +207,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/PreCells.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/PreCells.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/PreCells.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/PreCells.csv
                       size:
-                        first: 62708
-                        second: 60221
+                        first: 101108
+                        second: 93190
                       embedding:
                         match: false
                         similarity: 0.0
@@ -228,11 +228,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cells.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cells.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cells.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cells.csv
                       size:
-                        first: 746692
-                        second: 4700891
+                        first: 1040725
+                        second: 7107771
                       embedding:
                         match: false
                         similarity: 0.0
@@ -282,17 +282,17 @@ sections:
                         - AreaShape_CentralMoment_2_0
                         - 319 more columns
                   Foci_PreMask.csv:
-                    status: identical
+                    status: possibly_identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_PreMask.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_PreMask.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_PreMask.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_PreMask.csv
                       size:
-                        first: 70721
-                        second: 70721
+                        first: 99915
+                        second: 99915
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
                       headers:
                         match: true
@@ -303,17 +303,17 @@ sections:
                           second: 7
                         difference: []
                   RelateObjects.csv:
-                    status: identical
+                    status: possibly_identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/RelateObjects.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/RelateObjects.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/RelateObjects.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/RelateObjects.csv
                       size:
-                        first: 71618
-                        second: 71618
+                        first: 102869
+                        second: 102869
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
                       headers:
                         match: true
@@ -327,11 +327,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/BarcodeFoci.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/BarcodeFoci.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/BarcodeFoci.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/BarcodeFoci.csv
                       size:
-                        first: 1251307
-                        second: 1029061
+                        first: 1543282
+                        second: 1449996
                       embedding:
                         match: false
                         similarity: 0.0
@@ -345,17 +345,17 @@ sections:
                           second: 75
                         difference: []
                   Resize_Foci.csv:
-                    status: identical
+                    status: possibly_identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Resize_Foci.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Resize_Foci.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Resize_Foci.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Resize_Foci.csv
                       size:
-                        first: 61321
-                        second: 61321
+                        first: 86532
+                        second: 86532
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
                       headers:
                         match: true
@@ -369,11 +369,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Image.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Image.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Image.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Image.csv
                       size:
-                        first: 28134
-                        second: 38687
+                        first: 28060
+                        second: 38736
                       embedding:
                         match: false
                         similarity: 0.0
@@ -404,8 +404,8 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Experiment.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Experiment.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Experiment.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Experiment.csv
                       size:
                         first: 66085
                         second: 66347
@@ -425,11 +425,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci.csv
                       size:
-                        first: 16632583
-                        second: 5089167
+                        first: 20984875
+                        second: 6404313
                       embedding:
                         match: false
                         similarity: 0.0
@@ -448,8 +448,8 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/ConfluentRegions.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/ConfluentRegions.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/ConfluentRegions.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/ConfluentRegions.csv
                       size:
                         first: 101
                         second: 132
@@ -470,11 +470,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_NonCellEdge.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Foci_NonCellEdge.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_NonCellEdge.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_NonCellEdge.csv
                       size:
-                        first: 45024
-                        second: 45270
+                        first: 46062
+                        second: 46889
                       embedding:
                         match: false
                         similarity: 0.0
@@ -491,11 +491,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cytoplasm.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Cytoplasm.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cytoplasm.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cytoplasm.csv
                       size:
-                        first: 62634
-                        second: 3752631
+                        first: 101625
+                        second: 5693840
                       embedding:
                         match: false
                         similarity: 0.0
@@ -535,11 +535,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Nuclei.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Nuclei.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Nuclei.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Nuclei.csv
                       size:
-                        first: 59865
-                        second: 3732946
+                        first: 95931
+                        second: 5675270
                       embedding:
                         match: false
                         similarity: 0.0
@@ -583,67 +583,67 @@ sections:
                   first: 5
                   second: 5
                 files:
-                  Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff:
-                    status: identical
-                    details:
-                      path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Nuclei_Objects.tiff
-                      size:
-                        first: 5120256
-                        second: 5120256
-                      embedding:
-                        match: true
-                        similarity: 1.0
-                        method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff:
-                    status: identical
-                    details:
-                      path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cells_Objects.tiff
-                      size:
-                        first: 5120256
-                        second: 5120256
-                      embedding:
-                        match: true
-                        similarity: 1.0
-                        method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png:
+                  Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SpotOverlay.png
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png
                       size:
-                        first: 23658
-                        second: 25469
+                        first: 798808
+                        second: 812710
                       embedding:
                         match: false
                         similarity: 0.0
                         method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff:
-                    status: identical
+                  Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff:
+                    status: possibly_identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/segmentation_masks/Plate_Plate1_Well_WellA1_Site_0_Cytoplasm_Objects.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff
                       size:
                         first: 5120256
                         second: 5120256
                       embedding:
-                        match: true
-                        similarity: 1.0
+                        match: false
+                        similarity: 0.0
                         method: hash
-                  Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png:
+                  Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff:
+                    status: possibly_identical
+                    details:
+                      path:
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff
+                      size:
+                        first: 5120256
+                        second: 5120256
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                  Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellA1-0/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_Overlay.png
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png
                       size:
-                        first: 642302
-                        second: 661352
+                        first: 34925
+                        second: 37455
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                  Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff:
+                    status: possibly_identical
+                    details:
+                      path:
+                        first: ../../../../scratch/pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff
+                      size:
+                        first: 5120256
+                        second: 5120256
                       embedding:
                         match: false
                         similarity: 0.0
@@ -660,87 +660,167 @@ sections:
           first: 1
           second: 1
         folders:
-          Plate1:
-            folder: Plate1
+          Plate1-WellB1:
+            folder: Plate1-WellB1
             status: different_content
             types:
               analysis_csv:
                 type: analysis_csv
-                status: different_files
+                status: different_content
                 file_count:
                   first: 6
                   second: 6
                 files:
                   SegmentationCheck_Nuclei.csv:
-                    status: missing_in_second
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Nuclei.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Nuclei.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Nuclei.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Nuclei.csv
                       size:
                         first: 4798869
-                        second: null
+                        second: 115594
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                      headers:
+                        match: true
+                        visible_match: true
+                        truncated: false
+                        count:
+                          first: 11
+                          second: 11
+                        difference: []
                   SegmentationCheck_Cells.csv:
-                    status: missing_in_second
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Cells.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Cells.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Cells.csv
                       size:
                         first: 4956879
-                        second: null
+                        second: 119975
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                      headers:
+                        match: true
+                        visible_match: true
+                        truncated: false
+                        count:
+                          first: 11
+                          second: 11
+                        difference: []
                   SegmentationCheck_PreCells.csv:
-                    status: missing_in_second
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_PreCells.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_PreCells.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_PreCells.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_PreCells.csv
                       size:
                         first: 5086127
-                        second: null
+                        second: 123318
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                      headers:
+                        match: true
+                        visible_match: true
+                        truncated: false
+                        count:
+                          first: 12
+                          second: 12
+                        difference: []
                   SegmentationCheck_Experiment.csv:
-                    status: missing_in_second
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Experiment.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Experiment.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Experiment.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Experiment.csv
                       size:
                         first: 16129
-                        second: null
+                        second: 16857
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                      headers:
+                        match: true
+                        visible_match: true
+                        truncated: false
+                        count:
+                          first: 2
+                          second: 2
+                        difference: []
                   SegmentationCheck_Image.csv:
-                    status: missing_in_second
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Image.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_Image.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Image.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Image.csv
                       size:
                         first: 107471
-                        second: null
+                        second: 3831
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                      headers:
+                        match: false
+                        visible_match: false
+                        truncated: true
+                        count:
+                          first: 75
+                          second: 79
+                        difference:
+                        - ExecutionTime_06RunCellpose
+                        - 56 more columns
+                        - ExecutionTime_06IdentifyPrimaryObjects
+                        - 60 more columns
                   SegmentationCheck_ConfluentRegions.csv:
-                    status: missing_in_second
+                    status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_ConfluentRegions.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/SegmentationCheck_ConfluentRegions.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_ConfluentRegions.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_ConfluentRegions.csv
                       size:
                         first: 164
-                        second: null
+                        second: 164
+                      embedding:
+                        match: true
+                        similarity: 1.0
+                        method: hash
+                      headers:
+                        match: true
+                        visible_match: true
+                        truncated: false
+                        count:
+                          first: 10
+                          second: 10
+                        difference: []
               processed_image:
                 type: processed_image
-                status: different_files
+                status: different_content
                 file_count:
                   first: 1
                   second: 1
                 files:
-                  Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png:
-                    status: missing_in_second
+                  Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png:
+                    status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1/Plate_Plate1_Well_WellA1_Site_0_CorrDNA_SegmentCheck.png
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
                       size:
-                        first: 4851592
-                        second: null
+                        first: 5235733
+                        second: 5252113
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
   images_corrected_barcoding:
     path:
       first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
@@ -753,26 +833,26 @@ sections:
           first: 1
           second: 1
         folders:
-          Plate1-WellA1-0:
-            folder: Plate1-WellA1-0
+          Plate1-WellB1-0:
+            folder: Plate1-WellB1-0
             status: different_content
             types:
               analysis_csv:
                 type: analysis_csv
-                status: different_files
+                status: different_content
                 file_count:
-                  first: 5
-                  second: 5
+                  first: 4
+                  second: 4
                 files:
                   BarcodePreprocessing_BarcodeFoci.csv:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_BarcodeFoci.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_BarcodeFoci.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_BarcodeFoci.csv
                       size:
-                        first: 1229777
-                        second: 531075
+                        first: 1267086
+                        second: 921585
                       embedding:
                         match: false
                         similarity: 0.0
@@ -789,11 +869,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Nuclei.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Nuclei.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Nuclei.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Nuclei.csv
                       size:
-                        first: 79001
-                        second: 76344
+                        first: 129663
+                        second: 118782
                       embedding:
                         match: false
                         similarity: 0.0
@@ -807,24 +887,15 @@ sections:
                           second: 11
                         difference:
                         - Children_AllFoci_Count
-                  BarcodePreprocessing_PreFoci.csv:
-                    status: missing_in_second
-                    details:
-                      path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_PreFoci.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_PreFoci.csv
-                      size:
-                        first: 25612677
-                        second: null
                   BarcodePreprocessing_Image.csv:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Image.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Image.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Image.csv
                       size:
-                        first: 30002
-                        second: 11145
+                        first: 30049
+                        second: 11110
                       embedding:
                         match: false
                         similarity: 0.0
@@ -853,11 +924,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Experiment.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/BarcodePreprocessing_Experiment.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Experiment.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Experiment.csv
                       size:
                         first: 145135
-                        second: 58151
+                        second: 58152
                       embedding:
                         match: false
                         similarity: 0.0
@@ -872,43 +943,26 @@ sections:
                         difference: []
               processed_image:
                 type: processed_image
-                status: possibly_identical
+                status: different_files
                 file_count:
-                  first: 5
-                  second: 5
+                  first: 6
+                  second: 6
                 files:
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff:
-                    status: possibly_identical
+                  Plate_Plate1_Well_B1_Site_0_StDev_Overlay.tiff:
+                    status: missing_in_first
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/overlay/Plate_Plate1_Well_B1_Site_0_StDev_Overlay.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/overlay/Plate_Plate1_Well_B1_Site_0_StDev_Overlay.tiff
                       size:
-                        first: 5120256
-                        second: 5120256
-                      embedding:
-                        match: false
-                        similarity: 0.0
-                        method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff:
-                    status: possibly_identical
-                    details:
-                      path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-                      size:
-                        first: 5120256
-                        second: 5120256
-                      embedding:
-                        match: false
-                        similarity: 0.0
-                        method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff:
+                        first: null
+                        second: 7680272
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -916,12 +970,38 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff:
+                    status: possibly_identical
+                    details:
+                      path:
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+                      size:
+                        first: 5120256
+                        second: 5120256
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff:
+                    status: possibly_identical
+                    details:
+                      path:
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+                      size:
+                        first: 5120256
+                        second: 5120256
+                      embedding:
+                        match: false
+                        similarity: 0.0
+                        method: hash
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -929,12 +1009,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_A.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -954,8 +1034,8 @@ sections:
           first: 1
           second: 1
         folders:
-          Plate1-WellA1-0:
-            folder: Plate1-WellA1-0
+          Plate1-WellB1-0:
+            folder: Plate1-WellB1-0
             status: different_content
             types:
               analysis_csv:
@@ -969,11 +1049,11 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Image.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Image.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Image.csv
                       size:
-                        first: 415072
-                        second: 59679
+                        first: 415026
+                        second: 59647
                       embedding:
                         match: false
                         similarity: 0.0
@@ -1008,8 +1088,8 @@ sections:
                     status: different
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/BarcodingApplication_Experiment.csv
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Experiment.csv
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Experiment.csv
                       size:
                         first: 78285
                         second: 26476
@@ -1032,12 +1112,12 @@ sections:
                   first: 4
                   second: 4
                 files:
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_T.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -1045,12 +1125,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_C.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -1058,12 +1138,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_DAPI.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
                       size:
                         first: 5120256
                         second: 5120256
@@ -1071,12 +1151,12 @@ sections:
                         match: true
                         similarity: 1.0
                         method: hash
-                  Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff:
+                  Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff:
                     status: identical
                     details:
                       path:
-                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
-                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellA1-0/Plate_Plate1_Well_A1_Site_0_Cycle01_G.tiff
+                        first: ../../../../scratch/pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+                        second: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
                       size:
                         first: 5120256
                         second: 5120256
