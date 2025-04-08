@@ -66,7 +66,6 @@ nav:
     - PCPIP pipelines: tester/assets/pcpip-pipelines/README.md
     - PCPIP fixtures: tester/assets/pcpip-create-fixture/README.md
     - PCPIP tests: tester/assets/pcpip-test/README.md
-    - PCPIP dummy fixtures: tester/assets/pcpip-generate-dummy-structures/README.md
   - FAQ: misc/faq.md
 
 plugins:
