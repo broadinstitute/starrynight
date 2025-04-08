@@ -999,8 +999,7 @@ Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree
          - Pipeline 6 (Barcoding Alignment): Ensures proper alignment between barcoding cycles
     - QC Focus: Ensures proper alignment between barcoding cycles
     - QC Metrics implemented:
-        - Pixel shifts should be within ±200 pixels (typically)
-        - Correlation scores should be >0.9 (typically)
+        - See detailed specifications in QC Input Output Specifications section
     - QC performed by expert:
         - Monitor spatial distribution of alignment issues
 5. **`7_BarcodePreprocessing.py`**
@@ -1020,6 +1019,114 @@ Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree
         - Pipeline 7 (Barcoding Preprocessing): Validates barcode detection and calling accuracy
     - QC Focus: Validates barcode detection and calling accuracy
     - QC Metrics implemented:
-        - As described above in functionality
+        - See detailed specifications in QC Input Output Specifications section
     - QC performed by expert:
-        - Inpsect the metrics
+        - Inspect the metrics
+
+### QC Input Output Specifications
+
+#### `6_Barcode_Align.py`
+
+- **Input CSV Files**: CSV output files from Pipeline 6 (Barcoding Illumination Application and Alignment)
+- **Input Directory**:
+    - `{Batch}/images_aligned/barcoding/`
+- **Input CSV Names**:
+    - `BarcodingApplication_Image.csv`
+- **Required CSV Fields**:
+    - `Metadata_Plate`, `Metadata_Well`, `Metadata_Site`: Image identifiers
+    - `Align_Xshift_Cycle{N}_DAPI`, `Align_Yshift_Cycle{N}_DAPI`: Pixel shift values for DAPI alignment (where N = 2...M for all cycles)
+    - `Correlation_Correlation_Cycle{N}_DAPI_Cycle{M}_DAPI`: Correlation scores between cycle pairs (where N, M = 1...total cycles)
+- **Configuration Parameters**:
+    - `numcycles`: Number of barcoding cycles in the experiment
+    - `imperwell`: Number of images per well
+    - `row_widths`: Array defining the circular acquisition pattern layout
+- **Analysis Outputs**: (displayed interactively, not saved as files)
+    1. Catplots of pixel shifts between cycles
+    2. Catplots of correlation scores between cycles
+    3. Statistics on sites with large shifts (>50 pixels)
+    4. Spatial visualization of alignment issues
+    5. Lists of problematic sites (poor correlation or extreme shifts)
+- **QC Thresholds**:
+    - Pixel shifts: Should be within ±200 pixels range
+    - Correlation scores: Should be >0.9 (0.8 minimum threshold)
+
+#### `7_BarcodePreprocessing.py`
+
+- **Input CSV Files**:
+     1. CSV output files from Pipeline 7 (Barcoding Preprocessing)
+     2. Reference barcode library file
+- **Input Directories**:
+     - `{Batch}/images_corrected/barcoding/`: For Pipeline 7 outputs
+     - Reference directory for barcode library (configurable)
+- **Input CSV Names**:
+     - `BarcodePreprocessing_Foci.csv`: Contains barcode calling results
+     - `Barcodes.csv`: Reference file containing expected barcode sequences and gene annotations
+- **Required CSV Fields**:
+     - From BarcodePreprocessing_Foci.csv:
+          - `ImageNumber`, `ObjectNumber`: Object identifiers
+          - `Metadata_Plate`, `Metadata_Well`, `Metadata_Site`, `Metadata_Well_Value`: Image identifiers
+          - `Barcode_BarcodeCalled`: Raw called barcode sequence
+          - `Barcode_MatchedTo_Barcode`: Best matched reference barcode
+          - `Barcode_MatchedTo_GeneCode`: Gene name for matched barcode
+          - `Barcode_MatchedTo_ID`: Barcode identifier
+          - `Barcode_MatchedTo_Score`: Match quality score (0-1)
+     - From Barcodes.csv:
+          - `sgRNA`: Barcode sequence
+          - `Gene`: Gene name/symbol
+- **Configuration Parameters**:
+     - `BATCH_ID`: Batch identifier
+     - `numcycles`: Number of barcoding cycles in the experiment
+     - `imperwell`: Number of images per well
+     - `row_widths`: Array defining the circular acquisition pattern layout
+- **Analysis Outputs**: (displayed interactively, not saved as files)
+     1. Barcode library analysis:
+           - Nucleotide frequency by position plots
+           - Statistics on repeat sequences (5-7 nucleotide repeats)
+     2. Barcode calling quality:
+           - Perfect match percentage overall and by well
+           - Score distribution histograms (overall and per-well)
+           - Per-cycle nucleotide frequency analysis
+           - Mismatch cycle identification for near-matches
+     3. Spatial analysis:
+           - Heatmaps showing percent perfect barcodes by well and site
+           - Spatial distribution of quality metrics
+     4. Gene/barcode coverage:
+           - Statistics on gene and barcode detection coverage
+           - Lists of most frequently detected genes and barcodes
+- **QC Metrics Evaluated**:
+     - Percentage of perfect barcode matches (Score = 1)
+     - Distribution and patterns of barcode calling quality
+     - Nucleotide frequency comparison between expected and observed
+     - Cycle-specific error patterns
+     - Gene and barcode coverage metrics
+
+#### `make_fiji_montages_std.py`
+
+- **Input Image Files**: PNG overlay images from Pipeline 3 (Segmentation Check)
+- **Input Directory**:
+     - `{Batch}/images_segmentation/`: Root directory containing segmentation check results
+     - Subdirectories follow pattern `{Plate}-{Well}/`
+- **Input Image Naming Pattern**:
+     - `Plate_{Plate}_Well_Well{Well}_Site_{Site}_Corr{Channel}_SegmentCheck.png`: Segmentation overlay images
+- **Script Parameters**:
+     - `topdir`: Root directory for processing (e.g., C:\\Users\\Administrator\\Desktop\\assaydev)
+     - `ncols`: Number of columns in the montage grid (10 for 96-well plates, 24 for 384-well plates)
+     - `nrows`: Number of rows in the montage grid (6 for 96-well plates, 16 for 384-well plates)
+     - `scale`: Scaling factor for images in the montage (default: 0.75)
+     - `border`: Border width between images in pixels (default: 1)
+- **Processing Steps**:
+     1. Reorganizes images by plate (moves images from well folders to plate folders)
+     2. For each plate folder:
+           - Loads all PNG images in sequence
+           - Creates a montage grid with configured dimensions
+           - Saves as a single TIFF file
+- **Output Files**:
+     - Single TIFF montage per plate showing segmentation results across wells
+- **Output Directory**:
+     - Same as input root directory
+- **Output Naming Pattern**:
+     - `{Plate}.tif`: Montage file named after the plate
+- **QC Purpose**:
+     - Enables visual assessment of segmentation quality across entire plates
+     - Allows quick identification of problematic wells or patterns in segmentation
+     - Provides overview of experiment quality for expert review
