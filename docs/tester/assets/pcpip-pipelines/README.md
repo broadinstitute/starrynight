@@ -148,6 +148,6 @@ Files in `_ref_graph_format` were created as follows:
 - **SVG/PNG files**: Generated from DOT files using Graphviz:
   ```bash
   cd _ref_graph_format
-  find dot -name "*.dot" | parallel dot -Tpng {} -o png/{/.}.png
+  find dot -name "*.dot" | parallel dot -Gdpi=50 -Tpng {} -o png/{/.}.png
   find dot -name "*.dot" | parallel dot -Tsvg {} -o svg/{/.}.svg
   ```
