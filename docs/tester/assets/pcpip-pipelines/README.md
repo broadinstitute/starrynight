@@ -142,9 +142,12 @@ Files in `_ref_graph_format` were created as follows:
 - **JSON files**: Exported from CellProfiler 4.2.8
 - **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph) tool:
   ```bash
-  find . -name "*.json" | parallel uv run --script ${CP_GRAPH} {} {.}.dot
+  cd _ref_graph_format
+  find json -name "*.json" | parallel uv run --script ${CP_GRAPH} {} dot/{/.}.dot
   ```
-- **PNG files**: Generated from DOT files using Graphviz:
+- **SVG/PNG files**: Generated from DOT files using Graphviz:
   ```bash
-  find . -name "*.dot" | parallel dot -Tpng {} -o {.}.png
+  cd _ref_graph_format
+  find dot -name "*.dot" | parallel dot -Tpng {} -o png/{/.}.png
+  find dot -name "*.dot" | parallel dot -Tsvg {} -o svg/{/.}.svg
   ```
