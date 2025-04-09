@@ -134,3 +134,17 @@ The 6_BC_Apply_Illum_DebrisMask pipeline is a specialized variant of 6_BC_Apply_
 See PCPIP `12cycle` [version](_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe).
 
 If starrynight successfully implements module iteration capabilities, pipeline 7A becomes largely redundant. The 7A pipeline was created as a workaround for testing multiple CompensateColors parameter settings within a single pipeline execution. A truly modular system would allow iterative parameter testing without requiring specialized pipeline variants.
+
+## Pipeline Visualization Files
+
+Files in `_ref_graph_format` were created as follows:
+
+- **JSON files**: Exported from CellProfiler 4.2.8
+- **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph) tool:
+  ```bash
+  find . -name "*.json" | parallel uv run --script ${CP_GRAPH} {} {.}.dot
+  ```
+- **PNG files**: Generated from DOT files using Graphviz:
+  ```bash
+  find . -name "*.dot" | parallel dot -Tpng {} -o {.}.png
+  ```
