@@ -28,6 +28,7 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline.io import dump as dumpit
 from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import CloudPath
 
@@ -392,3 +393,6 @@ def gen_illum_calculate_cppipe_by_batch_plate(
         filename = f"illum_calc_{type_suffix}.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+        filename = f"illum_calc_{type_suffix}.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)

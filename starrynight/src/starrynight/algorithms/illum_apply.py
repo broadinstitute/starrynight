@@ -56,6 +56,7 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline.io import dump as dumpit
 from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
@@ -64,7 +65,6 @@ from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
     gen_image_hierarchy,
     get_channels_by_batch_plate,
-    get_cycles_by_batch_plate,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
 
@@ -549,3 +549,6 @@ def gen_illum_apply_cppipe_by_batch_plate(
         filename = "illum_apply_painting.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+        filename = "illum_apply_painting.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)

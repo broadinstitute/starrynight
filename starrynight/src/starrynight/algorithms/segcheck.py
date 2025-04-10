@@ -59,8 +59,8 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline.io import dump as dumpit
 from cloudpathlib import AnyPath, CloudPath
-from numpy import exp
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
@@ -645,3 +645,6 @@ def gen_segcheck_cppipe_by_batch_plate(
         filename = f"segcheck_{type_suffix}.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+        filename = f"segcheck_{type_suffix}.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)
