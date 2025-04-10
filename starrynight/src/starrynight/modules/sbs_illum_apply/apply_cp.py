@@ -177,7 +177,11 @@ class SBSApplyIllumInvokeCPModule(StarrynightModule):
         if spec is None:
             spec = SBSApplyIllumInvokeCPModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath(SBS_ILLUM_APPLY_CP_CPPIPE_OUT_PATH_SUFFIX)
+                list(
+                    data.workspace_path.joinpath(
+                        SBS_ILLUM_APPLY_CP_CPPIPE_OUT_PATH_SUFFIX
+                    ).glob("*.cppipe")
+                )[0]
                 .resolve()
                 .__str__()
             )

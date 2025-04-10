@@ -177,7 +177,11 @@ class SBSPreSegcheckInvokeCPModule(StarrynightModule):
         if spec is None:
             spec = SBSPreSegcheckInvokeCPModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath(SBS_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
+                list(
+                    data.workspace_path.joinpath(
+                        SBS_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX
+                    ).glob("*.cppipe")
+                )[0]
                 .resolve()
                 .__str__()
             )
