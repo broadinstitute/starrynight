@@ -140,10 +140,10 @@ If starrynight successfully implements module iteration capabilities, pipeline 7
 Files in `_ref_graph_format` were created as follows:
 
 - **JSON files**: Exported from CellProfiler 4.2.8
-- **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.4.0/cp_graph.py) tool:
+- **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.7.0/cp_graph.py) tool:
   ```bash
   cd _ref_graph_format
-  find json -name "*.json" | parallel uv run --script ${CP_GRAPH} {} dot/{/.}.dot
+  find json/ -name "*.json" | parallel uv run --script ${CP_GRAPH} {} dot/{/.}.dot
   ```
 - **SVG/PNG files**: Generated from DOT files using Graphviz:
   ```bash
