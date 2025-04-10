@@ -24,6 +24,9 @@ class SBSConfig(BaseModel):
     channel_list: list[str]
     acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
     barcode_csv_path: Path | CloudPath
+    nuclei_channel: str = Field("DAPI")
+    cell_channel: str = Field("CELL")
+    mito_channel: str = Field("MITO")
 
 
 class CPConfig(BaseModel):
@@ -34,6 +37,9 @@ class CPConfig(BaseModel):
     img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
     channel_list: list[str]
     acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+    nuclei_channel: str = Field("DAPI")
+    cell_channel: str = Field("CELL")
+    mito_channel: str = Field("MITO")
 
 
 class PCPGenericInitConfig(BaseModel):
@@ -46,6 +52,12 @@ class PCPGenericInitConfig(BaseModel):
     sbs_img_overlap_pct: int = Field(10)
     sbs_img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
     sbs_acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+    cp_nuclei_channel: str = Field("DAPI")
+    cp_cell_channel: str = Field("CELL")
+    cp_mito_channel: str = Field("MITO")
+    sbs_nuclei_channel: str = Field("DAPI")
+    sbs_cell_channel: str = Field("CELL")
+    sbs_mito_channel: str = Field("MITO")
 
 
 class PCPGeneric(Experiment):
@@ -85,7 +97,7 @@ class PCPGeneric(Experiment):
 
         # Extract images per well
         cp_im_per_well = (
-            cp_images_df.group_by(pl.col("well_id"))
+            cp_images_df.group_by("batch_id", "plate_id", "well_id")
             .agg(pl.col("key").count())
             .collect()
             .select(pl.col("key"))
@@ -106,11 +118,17 @@ class PCPGeneric(Experiment):
 
         # Extract images per well
         sbs_im_per_well = (
-            sbs_images_df.group_by(pl.col("well_id"))
+            sbs_images_df.group_by("batch_id", "plate_id", "cycle_id", "well_id")
             .agg(pl.col("key").count())
             .collect()
             .select(pl.col("key"))
             .unique()
+            .rows()[0][0]
+        )
+        # Extract number of cycles
+        sbs_n_cycles = (
+            sbs_images_df.select(pl.col("cycle_id").unique().count())
+            .collect()
             .rows()[0][0]
         )
 
@@ -131,13 +149,20 @@ class PCPGeneric(Experiment):
                 img_frame_type=init_config_parsed.cp_img_frame_type,
                 channel_list=cp_channel_list[0],
                 acquisition_order=init_config_parsed.cp_acquisition_order,
+                nuclei_channel=init_config_parsed.cp_nuclei_channel,
+                cell_channel=init_config_parsed.cp_cell_channel,
+                mito_channel=init_config_parsed.cp_mito_channel,
             ),
             sbs_config=SBSConfig(
+                n_cycles=sbs_n_cycles,
                 im_per_well=sbs_im_per_well,
                 img_overlap_pct=init_config_parsed.sbs_img_overlap_pct,
                 img_frame_type=init_config_parsed.sbs_img_frame_type,
                 channel_list=sbs_channel_list[0],
                 acquisition_order=init_config_parsed.sbs_acquisition_order,
                 barcode_csv_path=init_config_parsed.barcode_csv_path,
+                nuclei_channel=init_config_parsed.sbs_nuclei_channel,
+                cell_channel=init_config_parsed.sbs_cell_channel,
+                mito_channel=init_config_parsed.sbs_mito_channel,
             ),
         )
