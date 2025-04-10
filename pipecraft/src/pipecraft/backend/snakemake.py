@@ -3,6 +3,7 @@
 import os
 import signal
 from pathlib import Path
+from pprint import pprint
 from subprocess import Popen, run
 from types import NotImplementedType
 
@@ -30,6 +31,7 @@ class SnakeMakeConfig(BackendConfig):
     apptainer: bool = False
     print_exec: bool = False
     use_fluent_bit: bool = True
+    force_execution: bool = True
 
 
 class SnakeMakeBackendRun(BaseBackendRun):
@@ -44,6 +46,16 @@ class SnakeMakeBackendRun(BaseBackendRun):
         print(f"sending kill signal to PID: {self.pid}")
         os.kill(self.pid, signal.SIGKILL)
         os.kill(self.pid, signal.SIGKILL)
+
+    def get_log(self) -> None:
+        """Get run log."""
+        with self.log_path.open() as f:
+            return f.readlines()
+
+    def print_log(self) -> None:
+        """Print run log."""
+        with self.log_path.open() as f:
+            pprint(f.readlines())
 
 
 class SnakeMakeBackend(Backend):
@@ -162,7 +174,9 @@ class SnakeMakeBackend(Backend):
         cmd = []
         if self.config.background:
             cmd += ["nohup"]
-        cmd += ["snakemake", "-F", "-c", str(self.config.cores)]
+        cmd += ["snakemake", "-c", str(self.config.cores)]
+        if self.config.force_execution:
+            cmd += ["-F"]
         if self.config.apptainer:
             cmd += ["--use-apptainer"]
         if self.config.print_exec:
