@@ -15,6 +15,9 @@
   cellprofiler-core,
   cellprofiler-library,
   joblib,
+  pyimagej,
+  linkml,
+  marimo,
 }:
 buildPythonPackage {
   pname = "starrynight";
@@ -48,6 +51,9 @@ buildPythonPackage {
     cellprofiler-core
     cellprofiler-library
     joblib
+    pyimagej
+    linkml
+    marimo
   ];
   pythonImportsCheck = [ "starrynight" ];
 

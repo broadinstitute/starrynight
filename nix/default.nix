@@ -12,7 +12,7 @@ let
   inherit (inputs.nix2container.packages.${pkgs.system}) nix2container;
   # Apps
   packages = rec {
-    cp-pkgs = inputs.cp-flake.packages.${pkgs.system};
+    cp-pkgs = inputs.cp-flake.packages.${pkgs.system}.override { inherit python3Packages; };
     pipecraft = python3Packages.callPackage ./pipecraft.nix { };
     cpgparser = python3Packages.callPackage ./cpgparser.nix { };
     cpgdata = python3Packages.callPackage ./cpgdata.nix { inherit cpgparser; };
