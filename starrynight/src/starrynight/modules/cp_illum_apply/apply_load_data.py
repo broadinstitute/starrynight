@@ -12,6 +12,7 @@ from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_apply.constants import (
     CP_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX,
 )
+from starrynight.modules.cp_illum_calc.constants import CP_ILLUM_CALC_OUT_PATH_SUFFIX
 from starrynight.modules.schema import (
     Container as SpecContainer,
 )
@@ -76,10 +77,12 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
+        "--illum",
+        spec.inputs[1].path,
     ]
     # Use user provided parser if available
-    if spec.inputs[1].path is not None:
+    if spec.inputs[2].path is not None:
         cmd += ["--path_mask", spec.inputs[1].path]
     gen_load_data_pipe = Seq(
         [
@@ -115,6 +118,13 @@ class CPApplyIllumGenLoadDataModule(StarrynightModule):
                     name="index_path",
                     type=TypeEnum.files,
                     description="Path to the index.",
+                    optional=False,
+                    path="path/to/the/index",
+                ),
+                TypeInput(
+                    name="illum_path",
+                    type=TypeEnum.files,
+                    description="Path to the generated illums.",
                     optional=False,
                     path="path/to/the/index",
                 ),
@@ -174,6 +184,11 @@ class CPApplyIllumGenLoadDataModule(StarrynightModule):
             spec = CPApplyIllumGenLoadDataModule._spec()
             spec.inputs[0].path = (
                 data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
+            )
+            spec.inputs[1].path = (
+                data.workspace_path.joinpath(CP_ILLUM_CALC_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
             )
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(CP_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX)

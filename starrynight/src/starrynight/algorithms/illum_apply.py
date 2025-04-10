@@ -240,7 +240,7 @@ def gen_illum_apply_load_data_by_batch_plate(
 
     """
     # Construct illum path if not given
-    if illum_path:
+    if not illum_path:
         illum_path = index_path.parents[1].joinpath(CP_ILLUM_CALC_OUT_PATH_SUFFIX)
     df = pl.read_parquet(index_path.resolve().__str__())
 
@@ -255,6 +255,10 @@ def gen_illum_apply_load_data_by_batch_plate(
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
+
+    # Convert path mask to str
+    if isinstance(path_mask, Path | CloudPath):
+        path_mask = path_mask.resolve().__str__()
 
     # Setup chunking and write loaddata for each batch/plate
     for batch in images_hierarchy_dict.keys():
@@ -452,7 +456,7 @@ def generate_illum_apply_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_WATERSHED_I
-    identify_secondary_object_cells.image_name.value = f"Masked{cell_channel}"
+    identify_secondary_object_cells.image_name.value = f"MaskedOrig{cell_channel}"
     identify_secondary_object_cells.distance_to_dilate.value = 10
     identify_secondary_object_cells.regularization_factor.value = 0.05
     identify_secondary_object_cells.wants_discard_edge.value = False

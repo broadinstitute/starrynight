@@ -35,7 +35,8 @@ def invoke_cp(
 
     """
     # Check if cppipe path is not a dir
-    if AnyPath(cppipe).is_dir():
+    cppipe = AnyPath(cppipe)
+    if cppipe.is_dir():
         raise Exception("CPPIPE path is a dir, please provide path to a file.")
 
     # Check if plugin_dir is passed

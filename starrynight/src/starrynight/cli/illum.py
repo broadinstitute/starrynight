@@ -75,9 +75,15 @@ def gen_illum_calc_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) ->
 @click.option("-o", "--out", required=True)
 @click.option("--illum", default=None)
 @click.option("-m", "--path_mask", default=None)
+@click.option("-n", "--nuclei", default=None)
 @click.option("--sbs", is_flag=True, default=False)
 def gen_illum_apply_load_data(
-    index: str, out: str, illum: str, path_mask: str | None, sbs: bool
+    index: str,
+    out: str,
+    illum: str,
+    path_mask: str | None,
+    nuclei: str | None,
+    sbs: bool,
 ) -> None:
     """Generate illum apply loaddata file.
 
@@ -91,6 +97,8 @@ def gen_illum_apply_load_data(
         Illum dir. Can be local or a cloud path.
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
+    nuclei : str
+        Channel to use for nuceli in sbs pipeline
     sbs : str | Mask
         Flag for treating as sbs images.
 
@@ -99,11 +107,11 @@ def gen_illum_apply_load_data(
         illum = AnyPath(illum)
     if not sbs:
         gen_illum_apply_load_data_by_batch_plate(
-            AnyPath(index), AnyPath(out), illum, path_mask
+            AnyPath(index), AnyPath(out), path_mask, illum
         )
     else:
         gen_illum_apply_sbs_load_data_by_batch_plate(
-            AnyPath(index), AnyPath(out), illum, path_mask
+            AnyPath(index), AnyPath(out), path_mask, nuclei, illum
         )
 
 

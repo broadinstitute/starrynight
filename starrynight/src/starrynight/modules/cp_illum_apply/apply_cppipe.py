@@ -81,6 +81,10 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         spec.outputs[0].path,
         "-w",
         spec.inputs[1].path,
+        "--nuclei",
+        spec.inputs[2].path,
+        "--cell",
+        spec.inputs[3].path,
     ]
 
     gen_load_data_pipe = Seq(
@@ -125,6 +129,20 @@ class CPApplyIllumGenCPPipeModule(StarrynightModule):
                     type=TypeEnum.file,
                     description="Workspace path.",
                     optional=True,
+                    path=None,
+                ),
+                TypeInput(
+                    name="nuclei_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for nuclei segmentation.",
+                    optional=False,
+                    path=None,
+                ),
+                TypeInput(
+                    name="cell_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for cell segmentation.",
+                    optional=False,
                     path=None,
                 ),
             ],
@@ -185,6 +203,9 @@ class CPApplyIllumGenCPPipeModule(StarrynightModule):
                 .resolve()
                 .__str__()
             )
+
+            spec.inputs[2].path = experiment.cp_config.nuclei_channel
+            spec.inputs[3].path = experiment.cp_config.cell_channel
 
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(CP_ILLUM_APPLY_CP_CPPIPE_OUT_PATH_SUFFIX)
