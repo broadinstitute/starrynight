@@ -1,13 +1,12 @@
 [project]
 name = "starrynight"
-version = "0.1.2"
+version = "0.1.3"
 description = "Pooled cellpainting pipelines"
 authors = [{ name = "Ankur Kumar", email = "ank@leoank.me" }]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "pipecraft>=0.16",
-  # "cytoskel~=0.2",
   "lark[interegular]>=1.2",
   "cpgdata~=0.5",
   "click~=8.1",
@@ -25,7 +24,7 @@ dependencies = [
 #   "cellprofiler-library",
 #   "Cellprofiler",
 # ]
-dev = ["pytest", "ruff", "build", "twine"]
+dev = ["pytest", "ruff", "build", "twine", "jupytext", "ipython"]
 
 [tools.uv.sources]
 pipecraft = { workspace = true }
