@@ -252,7 +252,7 @@ def gen_illum_apply_sbs_load_data_by_batch_plate(
         Path prefix mask to use.
     nuclei_channel: str
         Channel to use for doing nuclei segmentation
-    corr_images_path : Path | CloudPath
+    illum_path : Path | CloudPath
         Path | CloudPath to generated illums directory.
 
     """
