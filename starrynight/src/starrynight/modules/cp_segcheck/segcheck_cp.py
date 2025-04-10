@@ -176,7 +176,11 @@ class CPSegcheckInvokeCPModule(StarrynightModule):
         if spec is None:
             spec = CPSegcheckInvokeCPModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
+                list(
+                    data.workspace_path.joinpath(
+                        CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX
+                    ).glob("*.cppipe")
+                )[0]
                 .resolve()
                 .__str__()
             )

@@ -76,9 +76,13 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
         "-c",
-        Path(spec.inputs[2].path).resolve().__str__(),
+        spec.inputs[4].path,
+        "--nuclei",
+        spec.inputs[2].path,
+        "--cell",
+        spec.inputs[3].path,
     ]
     # Use user provided parser if available
     if spec.inputs[1].path is not None:
@@ -125,6 +129,20 @@ class CPSegcheckGenLoadDataModule(StarrynightModule):
                     type=TypeEnum.file,
                     description="Path prefix mask to use.",
                     optional=True,
+                    path=None,
+                ),
+                TypeInput(
+                    name="nuclei_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for nuclei segmentation.",
+                    optional=False,
+                    path=None,
+                ),
+                TypeInput(
+                    name="cell_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for cell segmentation.",
+                    optional=False,
                     path=None,
                 ),
                 TypeInput(
@@ -184,7 +202,9 @@ class CPSegcheckGenLoadDataModule(StarrynightModule):
             spec.inputs[0].path = (
                 data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
             )
-            spec.inputs[2].path = (
+            spec.inputs[2].path = experiment.cp_config.nuclei_channel
+            spec.inputs[3].path = experiment.cp_config.cell_channel
+            spec.inputs[4].path = (
                 data.workspace_path.joinpath(CP_ILLUM_APPLY_OUT_PATH_SUFFIX)
                 .resolve()
                 .__str__()

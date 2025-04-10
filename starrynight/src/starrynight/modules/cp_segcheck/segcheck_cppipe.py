@@ -201,8 +201,8 @@ class CPSegcheckGenCPPipeModule(StarrynightModule):
                 .__str__()
             )
 
-            spec.inputs[2].path = "changeme"
-            spec.inputs[3].path = "changeme"
+            spec.inputs[2].path = experiment.cp_config.nuclei_channel
+            spec.inputs[3].path = experiment.cp_config.cell_channel
 
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
