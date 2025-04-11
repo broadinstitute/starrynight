@@ -9,6 +9,7 @@ This document provides a reference guide to the key tools used in StarryNight va
 **Source**: [cp_graph.py](https://github.com/shntnu/cp_graph) (external repository)
 
 **Key Features**:
+
 - Extracts pipeline structural information to DOT graph format
 - Provides visualization of module connections and data flow
 - Enables "ultra-minimal" mode for precise diff comparisons
@@ -33,6 +34,7 @@ dot -Tpng pipeline_visual.dot -o pipeline.png
 **Source**: [`docs/tester/assets/pcpip-test/verify_file_structure.py`](../assets/pcpip-test/verify_file_structure.py)
 
 **Key Features**:
+
 - Semantic typing for different file categories (CSV, images, etc.)
 - Detailed reporting on file existence, sizes, and metadata
 - Optional embedding generation for content comparison
@@ -54,6 +56,7 @@ python verify_file_structure.py \
 **Source**: [`docs/tester/assets/pcpip-test/compare_structures.py`](../assets/pcpip-test/compare_structures.py)
 
 **Key Features**:
+
 - Hierarchical comparison (sections → sets → folders → types → files)
 - Multiple output formats (YAML, JSON, text)
 - Content-aware comparison using embeddings
@@ -76,6 +79,7 @@ python compare_structures.py \
 **Source**: [`docs/tester/assets/pcpip-test/run_pcpip.sh`](../assets/pcpip-test/run_pcpip.sh)
 
 **Key Features**:
+
 - Pipeline configuration and dependency management
 - Consistent execution environment
 - Output path management
