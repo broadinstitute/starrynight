@@ -93,7 +93,7 @@ graph TD
    - Cell Painting analysis algorithms
    - Quality control and validation
 
-**PipeCraft**: A workflow engine for defining and executing computational pipelines
+**PipeCraft**: A pipeline compiler for defining and executing computational pipelines
 
    - Pipeline definition framework
    - Node-based processing graph
@@ -103,7 +103,7 @@ graph TD
 **Conductor**: A service for job management, monitoring, and API access
 
    - RESTful API for job control
-   - Database for configuration and results storage
+   - Database for configuration and tracking results
    - Job scheduling and monitoring
    - Real-time updates via WebSockets
 
@@ -157,7 +157,7 @@ git clone https://github.com/broadinstitute/starrynight.git
 cd starrynight
 
 # Set up the Nix environment
-nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
+nix develop --extra-experimental-features nix-command --extra-experimental-features flakes .
 
 # Synchronize Python dependencies
 uv sync
@@ -192,39 +192,10 @@ npm install
 The foundation of the platform providing specialized algorithms for microscopy image analysis:
 
 - **CLI Tools**: Command-line interfaces for each algorithm
-- **Algorithms Module**: Image processing algorithms for microscopy data
+- **Algorithms**: Image processing algorithms for microscopy data
 - **Modules System**: Standardized module structure for algorithm implementation
 - **Parsers**: File path parsing and metadata extraction
 - **Utilities**: Common functions for file handling, data transformation, etc.
-
-#### Module System Architecture
-
-The module system is the primary extension mechanism and follows these patterns:
-
-- **Registry Pattern**: Modules register themselves with a central registry
-- **Abstract Factory Pattern**: Base abstract classes with concrete implementations
-- **Template Method Pattern**: Common workflow with customizable steps
-
-```python
-# Example module registration
-@register_module("illumination_correction")
-class IlluminationCorrectionModule(StarrynightModule):
-    """Module for calculating and applying illumination correction."""
-
-    @classmethod
-    def from_config(cls, config: dict) -> "IlluminationCorrectionModule":
-        """Factory method to create module from configuration."""
-        return cls(**config)
-
-    def _spec(self) -> dict:
-        """Define module specification."""
-        return {
-            "version": "1.0.0",
-            "parameters": {
-                # Parameter definitions...
-            }
-        }
-```
 
 #### Data Flow Architecture
 
@@ -237,12 +208,12 @@ Data flows through the system following a standard pattern:
 
 ### PipeCraft
 
-PipeCraft is the workflow engine, featuring:
+PipeCraft is the pipeline compiler, featuring:
 
 - **Pipeline Definition**: Python API for defining computational workflows
 - **Node System**: Individual processing steps as configurable nodes
 - **Backend Abstraction**: Support for local, Docker, and AWS Batch execution
-- **Template System**: Pre-defined templates for common workflows
+- **Template System**: Pre-defined templates for common backends
 
 #### Workflow Design Patterns
 
@@ -254,14 +225,30 @@ PipeCraft implements:
 
 ```python
 # Pipeline construction example
-pipeline = (
-    Pipeline("illumination_correction")
-    .add_node("load_data", load_data_module)
-    .add_node("generate_pipeline", generate_cppipe_module)
-    .add_node("execute", execute_cp_module)
-    .link("load_data", "generate_pipeline")
-    .link("generate_pipeline", "execute")
-)
+from pipecraft.pipeline import Parallel, PyFunction, Seq
+pipeline = Seq(
+        [
+            PyFunction("A", ["in path"], ["out path"]),
+            Seq(
+                [
+                    PyFunction("B", ["in path"], ["out path"]),
+                    PyFunction("C", ["in path"], ["out path"]),
+                    Parallel(
+                        [
+                            Parallel(
+                                [
+                                    PyFunction("H", ["in path"], ["out path"]),
+                                ]
+                            ),
+                            PyFunction("F", ["in path"], ["out path"]),
+                            PyFunction("G", ["in path"], ["out path"]),
+                        ]
+                    ),
+                ]
+            ),
+            PyFunction("D", ["in path"], ["out path"]),
+        ]
+    )
 ```
 
 ### Conductor
@@ -279,7 +266,6 @@ Conductor implements:
 
 - **Repository Pattern**: Data access abstraction for database operations
 - **Service Layer Pattern**: Business logic encapsulation
-- **Event-Driven Architecture**: Status updates and notifications
 
 ### Canvas UI
 
@@ -328,14 +314,15 @@ npm run test
 
 ```bash
 # Run StarryNight CLI directly
-python -m starrynight.cli.main --help
+starrynight --help
 ```
 
 ### Conductor Service
 
 ```bash
 # Start Conductor API service
-python -m conductor.cli.main start
+cd conductor
+fastapi dev ./src/conductor/main.py
 ```
 
 ### Canvas Frontend
@@ -454,14 +441,9 @@ def new_algorithm_command(input: str, output: str, param: float) -> None:
 
 ```python
 # starrynight/modules/new_algorithm/
-# __init__.py
-from .new_algorithm_module import NewAlgorithmModule
-
 # new_algorithm_module.py
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.registry import register_module
 
-@register_module("new_algorithm")
 class NewAlgorithmModule(StarrynightModule):
     """Module for new algorithm processing."""
 
@@ -496,9 +478,9 @@ Example pipeline creation:
 
 ```python
 # pipecraft/pipelines/my_pipeline.py
-from pipecraft.pipeline import Pipeline
+from pipecraft.pipeline import Seq
 from pipecraft.node import Node
-from starrynight.modules import get_module
+from starrynight.modules.new_algorithm_module import NewAlgorithmModule
 
 def create_my_pipeline(config: dict) -> Pipeline:
     """Create a custom pipeline for image processing.
@@ -513,22 +495,9 @@ def create_my_pipeline(config: dict) -> Pipeline:
     Pipeline
         Configured pipeline
     """
-    # Get modules
-    inventory_module = get_module("inventory")(config["inventory"])
-    index_module = get_module("index")(config["index"])
-    process_module = get_module("new_algorithm")(config["process"])
 
     # Build pipeline
-    pipeline = Pipeline("my_pipeline")
-
-    # Add nodes
-    pipeline.add_node("inventory", inventory_module)
-    pipeline.add_node("index", index_module)
-    pipeline.add_node("process", process_module)
-
-    # Link nodes
-    pipeline.link("inventory", "index")
-    pipeline.link("index", "process")
+    pipeline = Seq([NewAlgorithmModule.from_config(config).pipe])
 
     return pipeline
 ```
@@ -557,7 +526,7 @@ StarryNight uses a structured approach to configuration:
 
 #### Schema Validation
 
-All configuration is validated against JSON schemas:
+All configuration is validated using `pydantic` schemas:
 
 ```python
 # Example schema validation
@@ -578,78 +547,6 @@ if errors:
     raise ValueError(f"Invalid configuration: {errors}")
 ```
 
-#### Configuration Hierarchy
-
-Configuration is loaded from multiple sources in order:
-1. Default configurations embedded in code
-2. System-level configuration files
-3. Project-level configuration files
-4. Command-line overrides
-
-#### Environment Variables
-
-Some components use environment variables for configuration:
-- `STARRYNIGHT_WORKSPACE`: Default workspace location
-- `CONDUCTOR_DATABASE_URL`: Database connection string
-- `CONDUCTOR_ENV`: Environment type (dev, test, prod)
-
-### Error Handling
-
-StarryNight implements several error handling patterns:
-
-#### Result Objects
-
-Functions return structured result objects rather than raising exceptions:
-
-```python
-from typing import NamedTuple, Optional, List
-
-class ProcessResult(NamedTuple):
-    success: bool
-    data: Optional[dict] = None
-    errors: List[str] = []
-
-def process_data(input_path: str) -> ProcessResult:
-    try:
-        # Processing logic
-        return ProcessResult(success=True, data={"output": result})
-    except Exception as e:
-        return ProcessResult(success=False, errors=[str(e)])
-```
-
-#### Validation Layers
-
-The system performs validation at multiple layers:
-1. Input validation before processing
-2. Schema validation for configuration
-3. Type checking via Pydantic models
-4. Output validation after processing
-
-#### Logging Strategy
-
-StarryNight uses a structured logging approach:
-
-```python
-import logging
-from typing import Dict, Any
-
-logger = logging.getLogger(__name__)
-
-def log_with_context(message: str, context: Dict[str, Any], level: int = logging.INFO) -> None:
-    """Log a message with structured context."""
-    logger.log(level, message, extra={"context": context})
-
-# Usage example
-log_with_context(
-    "Processing image batch",
-    {
-        "batch_id": "batch_123",
-        "image_count": 50,
-        "job_id": "job_456"
-    }
-)
-```
-
 ## Performance Optimization
 
 ### Parallel Processing
@@ -662,30 +559,31 @@ Pipeline nodes can be executed in parallel when dependencies allow:
 
 ```python
 # Parallel pipeline
-pipeline = (
-    Pipeline("parallel_processing")
-    .add_node("load_data", load_data_module)
-    .add_node("process_channel1", process_module, channel="ch1")
-    .add_node("process_channel2", process_module, channel="ch2")
-    .add_node("process_channel3", process_module, channel="ch3")
-    .add_node("merge_results", merge_module)
-    .link("load_data", ["process_channel1", "process_channel2", "process_channel3"])
-    .link(["process_channel1", "process_channel2", "process_channel3"], "merge_results")
-)
-```
 
-#### Batch Processing
-
-Processing large datasets in manageable batches:
-
-```python
-def batch_process(items, batch_size=100, process_fn):
-    """Process items in batches."""
-    results = []
-    for i in range(0, len(items), batch_size):
-        batch = items[i:i+batch_size]
-        results.extend(process_fn(batch))
-    return results
+from pipecraft.pipeline import Parallel, PyFunction, Seq
+pipeline = Seq(
+        [
+            PyFunction("A", ["in path"], ["out path"]),
+            Seq(
+                [
+                    PyFunction("B", ["in path"], ["out path"]),
+                    PyFunction("C", ["in path"], ["out path"]),
+                    Parallel(
+                        [
+                            Parallel(
+                                [
+                                    PyFunction("H", ["in path"], ["out path"]),
+                                ]
+                            ),
+                            PyFunction("F", ["in path"], ["out path"]),
+                            PyFunction("G", ["in path"], ["out path"]),
+                        ]
+                    ),
+                ]
+            ),
+            PyFunction("D", ["in path"], ["out path"]),
+        ]
+    )
 ```
 
 #### Distributed Execution
