@@ -70,9 +70,9 @@ Beyond the [standard StarryNight installation](../getting-started/installation.m
 
 - **Standard Dependencies**: Complete the [StarryNight installation](../getting-started/installation.md)
 - **Testing Tools**:
-  - Graphviz (`sudo apt install graphviz` or `brew install graphviz`)
-  - [cp_graph.py](https://github.com/shntnu/cp_graph) (used for pipeline structure comparison)
-  - Python libraries: `matplotlib`, `networkx` (for visualization)
+    - Graphviz (`sudo apt install graphviz` or `brew install graphviz`)
+    - [cp_graph.py](https://github.com/shntnu/cp_graph) (used for pipeline structure comparison)
+    - Python libraries: `matplotlib`, `networkx` (for visualization)
 
 ### Test Dataset
 
@@ -221,11 +221,11 @@ For questions or suggestions about the testing framework, please create a GitHub
 
 The validation process uses these key tools:
 
-| Tool | Purpose | Source | Used In |
-|------|---------|--------|---------|
-| **cp_graph.py** | Creates graph visualizations of pipeline structure | [External repo](https://github.com/shntnu/cp_graph) | Stage 1 |
-| **verify_file_structure.py** | Validates output file existence and structure | [pcpip-test](assets/pcpip-test/verify_file_structure.py) | Stages 3-5 |
-| **compare_structures.py** | Compares output structures for differences | [pcpip-test](assets/pcpip-test/compare_structures.py) | Stages 4-5 |
-| **run_pcpip.sh** | Executes CellProfiler pipeline workflows | [pcpip-test](assets/pcpip-test/run_pcpip.sh) | Stage 3-4 |
+| Tool                         | Purpose                                            | Source                                                   | Used In    |
+| ---------------------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
+| **cp_graph.py**              | Creates graph visualizations of pipeline structure | [External repo](https://github.com/shntnu/cp_graph)      | Stage 1    |
+| **verify_file_structure.py** | Validates output file existence and structure      | [pcpip-test](assets/pcpip-test/verify_file_structure.py) | Stages 3-5 |
+| **compare_structures.py**    | Compares output structures for differences         | [pcpip-test](assets/pcpip-test/compare_structures.py)    | Stages 4-5 |
+| **run_pcpip.sh**             | Executes CellProfiler pipeline workflows           | [pcpip-test](assets/pcpip-test/run_pcpip.sh)             | Stage 3-4  |
 
 > **Note**: For detailed usage instructions and examples, see the [Pipeline 1 Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) document, which contains concrete examples of each tool in action.
