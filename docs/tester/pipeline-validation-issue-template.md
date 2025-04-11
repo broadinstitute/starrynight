@@ -27,11 +27,12 @@ export REF_LOADDATA="${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/wo
 
 # StarryNight output locations
 export SN_LOADDATA="${WKDIR}/cellprofiler/loaddata/cp/illum_calc/Batch1/illum_calc_Batch1_Plate1.csv"
-export SN_PIPELINE="${WKDIR}/cellprofiler/cppipe/cp/illum_calc" # FIXME: THis is the dir. The file is illum_calc_painting.json and illum_calc_painting.cppipe. So create two vars SN_PIPELINE_CPPIPE and SN_PIPELINE_JSON and then use SN_PIPELINE_CPPIPE for running cellprofiler and SN_PIPELINE_JSON for cp_graph. So you will need to make changes downstream too. Note that you will still neeed SN_PIPELINE the directory because that is what starrynight wants
-export SN_PIPELINE_DOT="${SN_PIPELINE}/illum_calc_painting.dot"
-export SN_PIPELINE_PNG="${SN_PIPELINE}/illum_calc_painting.png"
-export SN_PIPELINE_VISUAL_DOT="${SN_PIPELINE}/illum_calc_painting_visual.dot"
-export SN_JSON="${SN_PIPELINE}/illum_calc_painting.json"
+export SN_PIPELINE_DIR="${WKDIR}/cellprofiler/cppipe/cp/illum_calc"  # Directory containing pipeline files
+export SN_PIPELINE_CPPIPE="${SN_PIPELINE_DIR}/illum_calc_painting.cppipe"  # CellProfiler pipeline file
+export SN_PIPELINE_JSON="${SN_PIPELINE_DIR}/illum_calc_painting.json"  # JSON representation
+export SN_PIPELINE_DOT="${SN_PIPELINE_DIR}/illum_calc_painting.dot"
+export SN_PIPELINE_PNG="${SN_PIPELINE_DIR}/illum_calc_painting.png"
+export SN_PIPELINE_VISUAL_DOT="${SN_PIPELINE_DIR}/illum_calc_painting_visual.dot"
 export SN_OUTPUT="${WKDIR}/illum/cp/illum_calc"
 
 # Validation outputs
@@ -60,7 +61,7 @@ mkdir -p ${EMBEDDING_DIR}
 # Generate pipeline
 starrynight illum calc cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc/ \
-    -o ${SN_PIPELINE} \
+    -o ${SN_PIPELINE_DIR} \
     -w ${WKDIR}
 
 # Note: StarryNight automatically generates JSON version alongside the .cppipe file
@@ -72,10 +73,10 @@ starrynight illum calc cppipe \
 # From: https://github.com/shntnu/cp_graph/blob/v0.8.0/cp_graph.py
 
 # 1. Generate ultra-minimal DOT graph for exact comparison
-uv run --script cp_graph.py ${SN_JSON} ${SN_PIPELINE_DOT} --ultra-minimal
+uv run --script cp_graph.py ${SN_PIPELINE_JSON} ${SN_PIPELINE_DOT} --ultra-minimal
 
 # 2. Generate visual DOT graph for human inspection
-uv run --script cp_graph.py ${SN_JSON} ${SN_PIPELINE_VISUAL_DOT}
+uv run --script cp_graph.py ${SN_PIPELINE_JSON} ${SN_PIPELINE_VISUAL_DOT}
 
 # 3. Create PNG visualization from the visual DOT file
 # Requires Graphviz to be installed
@@ -112,8 +113,7 @@ starrynight illum calc loaddata \
 
 **Comparison Command**:
 ```bash
-# TODO_FOR_LATER: compare_structures.py may need to be modified to allow comparing load data CSVs more specifically and then also specify two exact files to compare
-# Compare sample StarryNight LoadData with refeQrence
+# Compare sample StarryNight LoadData with reference
 # Note: compare_structures.py expects two file structure YAML files
 # For comparing CSVs directly, we should extract headers and row counts first
 
@@ -148,7 +148,6 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 
 **Command**:
 ```bash
-# TODO_FOR_LATER: run_pcpip.sh should be update to accept as parameter, the output base path
 # Note: The run_pcpip.sh script can be used to run specific PCPIP steps
 # By default, outputs go to ${STARRYNIGHT_REPO}/scratch/reproduce_pcpip_example_output
 # To modify output location, update the REPRODUCE_DIR variable in the script
@@ -189,15 +188,15 @@ cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
 cp run_pcpip.sh run_starrynight.sh
 # Update output directory and pipeline path in the script
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${SN_TEST_OUTPUT}\"|" run_starrynight.sh
-# TODO: run_pcpip.sh should be update to accept as parameter, the pipeline path OR have a way of standardizing locations of starrynight pipelines so that it is symmetric
 # Update pipeline path in PIPELINE_CONFIG array - line ~80
-# TODO: Use sed to update pipeline path
+# Use sed to update pipeline path
+sed -i.bak "s|1,pipeline_path=.*|1,pipeline_path=${SN_PIPELINE_CPPIPE}|" run_starrynight.sh
 # Run the modified script
 ./run_starrynight.sh 1
 
 # Option 2: Run directly with CellProfiler
 cellprofiler -c -r \
-    -p ${SN_PIPELINE}/*.cppipe \ # FIXME: fix this path
+    -p ${SN_PIPELINE_CPPIPE} \
     -i $(dirname ${REF_LOADDATA}) \
     -o ${SN_TEST_OUTPUT}
 
@@ -248,12 +247,12 @@ starrynight illum calc loaddata \
 # Generate CellProfiler pipelines
 starrynight illum calc cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc/ \
-    -o ${SN_PIPELINE} \
+    -o ${SN_PIPELINE_DIR} \
     -w ${WKDIR}
 
 # Execute pipelines
 starrynight cp \
-    -p ${SN_PIPELINE}/ \
+    -p ${SN_PIPELINE_DIR}/ \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc \
     -o ${SN_OUTPUT}
 
@@ -315,3 +314,16 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
 
 ## Test Runs
 - **YYYY-MM-DD**: [Stage] - [Command] - [Result]
+
+## Future Improvements
+These are notes for future enhancements to the validation process:
+
+1. **Tool Improvements**:
+   - `compare_structures.py` should be modified to allow direct comparison of LoadData CSVs and specify exact files to compare
+   - `run_pcpip.sh` should be updated to accept the output base path as a parameter
+   - `run_pcpip.sh` should be updated to accept pipeline paths as parameters or standardize locations of StarryNight pipelines for symmetry
+
+2. **Automation**:
+   - Consider creating a wrapper script that handles all validation stages with a single command
+   - Implement automatic generation of validation reports with pass/fail status
+   - Add automatic population of the Results and Discrepancies sections
