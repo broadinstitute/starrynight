@@ -1,11 +1,13 @@
 # Pipeline Validation: 1_CP_Illum (illum_calc)
 
 ## Pipeline Overview
+
 - **Reference Pipeline**: `ref_1_CP_Illum.cppipe`
 - **StarryNight Module**: `illum_calc`
 - **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across microscopy images.
 
 ## Validation Status
+
 - [ ] **Stage 1 - Graph Topology**
 - [ ] **Stage 2 - LoadData Generation**
 - [ ] **Stage 3 - Reference Execution**
@@ -90,14 +92,17 @@ dot -Tpng ${REF_GRAPH} -o "${VALIDATION_DIR}/ref_1_CP_Illum.png"
 ```
 
 **Results**:
+
 ```
 # Results will be added here
 ```
 
 **Discrepancies**:
+
 - None identified yet
 
 **Resolution**:
+
 - None required yet
 
 ## Stage 2: LoadData Generation
@@ -141,6 +146,7 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 ```
 
 **Discrepancies**:
+
 - None identified yet
 
 ## Stage 3: Reference Execution
@@ -288,19 +294,6 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
 **Discrepancies**:
 - None identified yet
 
-## Implementation Notes
-
-### Key Module Requirements
-- Processes microscopy images to generate background illumination functions
-- Uses downsampling (0.25x) and upsampling (4x) with bilinear interpolation
-- Supports both standard (batch/plate) and SBS (batch/plate/cycle) image structures
-- Produces illumination correction files in .npy format
-
-### Important Settings
-- **Block Size**: 60 (median filtering for background model)
-- **Filter Size**: 20 (smoothing parameter for illumination function)
-- **Rescaling**: 0.25x downsampling for processing, 4x upsampling for output
-- **Output Format**: NumPy (.npy) files for illumination functions
 
 ## Test Runs
 - **YYYY-MM-DD**: [Stage] - [Command] - [Result]
@@ -309,11 +302,13 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
 These are notes for future enhancements to the validation process:
 
 1. **Tool Improvements**:
+
    - `compare_structures.py` should be modified to allow direct comparison of LoadData CSVs and specify exact files to compare
    - `run_pcpip.sh` should be updated to accept the output base path as a parameter
    - `run_pcpip.sh` should be updated to accept pipeline paths as parameters or standardize locations of StarryNight pipelines for symmetry
 
 2. **Automation**:
+
    - Consider creating a wrapper script that handles all validation stages with a single command
    - Implement automatic generation of validation reports with pass/fail status
    - Add automatic population of the Results and Discrepancies sections
