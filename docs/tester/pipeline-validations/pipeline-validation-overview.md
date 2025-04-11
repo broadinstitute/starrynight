@@ -4,15 +4,15 @@ This section contains detailed validation procedures for each of the 7 CellProfi
 
 ## Pipeline Mapping
 
-| # | Reference Pipeline | StarryNight Module | Description |
-|---|-------------------|-------------------|-------------|
-| 1 | ref_1_CP_Illum.cppipe | illum_calc | Illumination correction function calculation |
-| 2 | ref_2_CP_Apply_Illum.cppipe | illum_apply | Apply illumination correction to images |
-| 3 | ref_3_CP_SegmentationCheck.cppipe | segcheck | Quality control on segmentation |
-| 5 | ref_5_BC_Illum.cppipe | sbs_illum_calc | Seq-based illumination calculation |
-| 6 | ref_6_BC_Apply_Illum.cppipe | sbs_illum_apply | Apply seq-based illumination correction |
-| 7 | ref_7_BC_Preprocess.cppipe | preprocess | Preprocessing for barcode calling |
-| 9 | ref_9_Analysis.cppipe | analysis | Final analysis and measurements |
+| #   | Reference Pipeline                | StarryNight Module | Description                                  |
+| --- | --------------------------------- | ------------------ | -------------------------------------------- |
+| 1   | ref_1_CP_Illum.cppipe             | illum_calc         | Illumination correction function calculation |
+| 2   | ref_2_CP_Apply_Illum.cppipe       | illum_apply        | Apply illumination correction to images      |
+| 3   | ref_3_CP_SegmentationCheck.cppipe | segcheck           | Quality control on segmentation              |
+| 5   | ref_5_BC_Illum.cppipe             | sbs_illum_calc     | Seq-based illumination calculation           |
+| 6   | ref_6_BC_Apply_Illum.cppipe       | sbs_illum_apply    | Apply seq-based illumination correction      |
+| 7   | ref_7_BC_Preprocess.cppipe        | preprocess         | Preprocessing for barcode calling            |
+| 9   | ref_9_Analysis.cppipe             | analysis           | Final analysis and measurements              |
 
 ## Validation Process
 
@@ -23,8 +23,6 @@ Each pipeline validation follows a standardized 5-stage process:
 3. **Reference Execution**: Run reference pipelines with reference LoadData to establish baseline
 4. **StarryNight Pipeline**: Run StarryNight-generated pipelines with reference LoadData
 5. **End-to-End**: Execute complete StarryNight workflow and compare with reference
-
-For details on all the testing tools used in these stages, refer to the [Testing Tools](../README.md#testing-tools) section in the main testing framework document.
 
 ## Validation Document Structure
 

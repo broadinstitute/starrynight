@@ -7,17 +7,13 @@ Welcome to the StarryNight testing framework! This is your comprehensive guide f
 StarryNight reimagines the Pooled Cell Painting Image Processing (PCPIP) pipeline with a more maintainable architecture, but we must ensure scientific equivalence with the original implementation. The testing framework outlined here provides a systematic approach to verify that StarryNight produces functionally equivalent results to the reference PCPIP pipeline, giving users confidence in the transition.
 
 **What is validation?** In this context, validation means comparing StarryNight outputs against the original PCPIP implementation at multiple levels:
+
 - Pipeline structure comparison
 - Output file verification
 - Content similarity analysis
 - End-to-end workflow execution
 
-Our validation follows these key principles:
-
-1. **Progressive Testing**: We validate each component individually before testing them together
-2. **Multiple Levels of Comparison**: From pipeline structure to final outputs
-3. **Tolerance for Non-Critical Differences**: Accept numerical differences while ensuring functional equivalence
-4. **Documentation-Driven Development**: Clear testing procedures that can be reproduced by anyone
+Our validation employs progressive testing of individual components before integration, multiple levels of comparison from pipeline structure to final outputs, tolerance for non-critical numerical differences while ensuring functional equivalence, and documentation-driven development with clear, reproducible testing procedures.
 
 > **Core Principle**: The goal is not byte-for-byte identical outputs, but functionally equivalent results that ensure StarryNight delivers the same scientific value as the original PCPIP implementation.
 
@@ -29,10 +25,10 @@ This guide serves different types of testers. Find your path based on your role:
 
 If you're new to the testing framework and want to understand the process:
 
-1. **Start here**: Read the introduction and "Validation Process Overview" sections to understand the big picture
+1. **Start here**: Read the introduction and [Validation Process Overview](#validation-process-overview) sections to understand the big picture
 2. Look at the [Pipeline Validation Overview](pipeline-validations/pipeline-validation-overview.md) to see all the pipelines that need validation
 3. Review [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example with detailed commands
-4. See the "Testing Tools Summary" for an overview of the available tools
+4. See the [Testing Tools Summary](#testing-tools-summary) for an overview of the available tools
 
 ### I need to validate a specific pipeline module
 
@@ -47,7 +43,7 @@ If you need to validate a specific StarryNight module:
 
 If you're developing tools for the testing framework:
 
-1. Understand the existing tools in the "Testing Tools Summary" at the end of this document
+1. Understand the existing tools in the [Testing Tools Summary](#testing-tools-summary) at the end of this document
 2. Review the "Reference Assets" section to understand available test fixtures
 3. Follow the modular structure of existing tools for compatibility
 
