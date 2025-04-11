@@ -66,13 +66,18 @@ The testing framework includes these key resources:
 
 Beyond the [standard StarryNight installation](../getting-started/installation.md), validation requires additional setup:
 
-### Testing Prerequisites
+### Prerequisites
 
-- **Standard Dependencies**: Complete the [StarryNight installation](../getting-started/installation.md)
-- **Testing Tools**:
-    - Graphviz (`sudo apt install graphviz` or `brew install graphviz`)
-    - [cp_graph.py](https://github.com/shntnu/cp_graph) (used for pipeline structure comparison)
-    - Python libraries: `matplotlib`, `networkx` (for visualization)
+- **Nix**: For setting up the complete development environment
+    - Follow the [standard StarryNight installation](../getting-started/installation.md)
+- **Additional Tools**:
+    - **Graphviz**: For pipeline visualization (`apt install graphviz` or `brew install graphviz`)
+    - **cp_graph.py**: For CellProfiler pipeline graph analysis (clone from `https://github.com/shntnu/cp_graph`)
+- **AWS Access** (optional): For downloading reference datasets
+    - AWS CLI configured with access to `s3://imaging-platform/projects/2024_03_12_starrynight/`
+-  **Test Data Alternatives** (if no AWS access):
+    - Use the minimal test fixtures in `/docs/tester/assets/pcpip-test/minimal/`
+    - Or generate test data with tools in `/docs/tester/assets/pcpip-generate-dummy-structures/`
 
 ### Test Dataset
 
@@ -111,35 +116,38 @@ See individual validation documents for pipeline-specific variables.
 The following diagram illustrates the 5-stage validation process and the key tools used at each stage:
 
 ```mermaid
-graph TD
-    subgraph "Stage 1: Graph Topology"
+flowchart TD
+    subgraph Stage1["Stage 1: Graph Topology"]
         A1[Reference Pipeline] -->|cp_graph.py| B1[Reference Graph]
         A2[StarryNight Pipeline] -->|cp_graph.py| B2[StarryNight Graph]
         B1 ---|diff| B2
     end
 
-    subgraph "Stage 2: LoadData Generation"
-        C1[Reference LoadData CSV]
-        C2[StarryNight LoadData CSV]
-        C1 ---|Python script| C2
+    subgraph Stage2["Stage 2: LoadData Generation"]
+        C1[Reference LoadData CSV] --> C3[Python script]
+        C3 --> C2[StarryNight LoadData CSV]
     end
 
-    subgraph "Stage 3: Reference Execution"
+    subgraph Stage3["Stage 3: Reference Execution"]
         D1[Reference Pipeline] -->|run_pcpip.sh| E1[Reference Output]
         E1 -->|verify_file_structure.py| F1[Reference Structure]
     end
 
-    subgraph "Stage 4: StarryNight Pipeline"
+    subgraph Stage4["Stage 4: StarryNight Pipeline"]
         D2[StarryNight Pipeline] -->|run_pcpip.sh| E2[StarryNight Output]
         E2 -->|verify_file_structure.py| F2[StarryNight Structure]
-        F1 ---|compare_structures.py| F2
     end
 
-    subgraph "Stage 5: End-to-End"
+    subgraph Stage5["Stage 5: End-to-End"]
         G1[StarryNight CLI] -->|starrynight commands| G2[End-to-End Output]
         G2 -->|verify_file_structure.py| G3[E2E Structure]
-        F1 ---|compare_structures.py| G3
     end
+
+    Stage1 --> Stage2 --> Stage3
+    Stage3 --> Stage4
+    Stage3 --> Stage5
+    F1 ---|compare_structures.py| F2
+    F1 ---|compare_structures.py| G3
 ```
 
 ## Validation Stages
