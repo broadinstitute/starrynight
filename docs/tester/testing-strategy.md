@@ -68,12 +68,26 @@ This document outlines our structured approach to validate StarryNight against t
     - Visualizes data flow between modules
     - Supports structural comparison of pipelines
 
-## Issue Tracking
+## Validation Documentation and Issue Tracking
 
+### Documentation Structure
+- Detailed validation procedures are maintained in version-controlled documentation:
+  - `/docs/tester/pipeline-validations/`: Directory containing all pipeline validations
+    - `/docs/tester/pipeline-validations/pipeline-validation-overview.md`: Overview of validation approach
+    - `/docs/tester/pipeline-validations/pipeline-1-validation-illum-calc.md`: Pipeline 1 validation
+  - `/docs/tester/tools/`: Directory containing testing tool documentation
+    - `/docs/tester/tools/overview.md`: Overview of testing tools
+    - `/docs/tester/tools/cp_graph.md`: cp_graph documentation
+    - `/docs/tester/tools/verify_file_structure.md`: verify_file_structure documentation
+    - `/docs/tester/tools/compare_structures.md`: compare_structures documentation
+    - `/docs/tester/tools/run_pcpip.md`: run_pcpip documentation
+  - `/docs/tester/testing-strategy.md`: General testing strategy (this document)
+
+### Issue Tracking
 - One GitHub issue will be created for each of the 7 CellProfiler pipelines
-- Issues will track discrepancies and iterative improvements
-- Each issue will follow the testing stages defined above
-- Validation statuses will be updated as stages are completed
+- Issues will link to the documentation and track high-level progress
+- Issues provide a place for discussions while documentation provides detailed procedures
+- Each issue will use a simple template that refers to the detailed documentation
 
 ## Test Dataset
 
