@@ -39,24 +39,13 @@ If you need to validate a specific StarryNight module:
 3. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
 4. Create a new validation document for your module following the guidelines in [Creating New Validation Documents](#creating-new-validation-documents)
 
-### I'm developing new validation tools
-
-If you're developing tools for the testing framework:
-
-1. Understand the existing tools in the [Testing Tools Summary](#testing-tools-summary) at the end of this document
-2. Review the "Reference Assets" section to understand available test fixtures
-3. Follow the modular structure of existing tools for compatibility
-
 ## Reference Materials
 
 The testing framework includes these key resources:
 
-- **Pipeline Validations**: See [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) for a detailed example
 - [**pcpip-pipelines**](assets/pcpip-pipelines/README.md): Reference CellProfiler pipeline files
 - [**pcpip-create-fixture**](assets/pcpip-create-fixture/README.md): Tools for creating test fixtures
 - [**pcpip-test**](assets/pcpip-test/README.md): Scripts for pipeline execution and comparison
-
-> **How We Track Validation Progress**: Each pipeline validation has a corresponding GitHub issue that links to the detailed documentation. The issue tracks high-level progress with checkboxes, while the documentation contains all technical details, results, and discrepancies. This approach separates discussion (in issues) from reference documentation (in markdown files).
 
 ## Testing Environment Setup
 
@@ -145,20 +134,6 @@ flowchart TD
     F1 ---|compare_structures.py| G3
 ```
 
-## Pipeline Mapping
-
-This table maps the reference CellProfiler pipelines to their corresponding StarryNight modules:
-
-| Reference Pipeline                | StarryNight Module |
-| --------------------------------- | ------------------ |
-| ref_1_CP_Illum.cppipe             | illum_calc         |
-| ref_2_CP_Apply_Illum.cppipe       | illum_apply        |
-| ref_3_CP_SegmentationCheck.cppipe | segcheck           |
-| ref_5_BC_Illum.cppipe             | REFACTORING        |
-| ref_6_BC_Apply_Illum.cppipe       | REFACTORING        |
-| ref_7_BC_Preprocess.cppipe        | preprocess         |
-| ref_9_Analysis.cppipe             | analysis           |
-
 ## Validation Stages
 
 ### Stage 1: Pipeline Graph Topology Validation
@@ -201,52 +176,35 @@ This table maps the reference CellProfiler pipelines to their corresponding Star
     - Iterate on orchestration system until outputs match
 - **Success Criteria**: End-to-end process produces equivalent results to reference
 
-## Creating New Validation Documents
+## Validation Documents
 
-To create a validation document for a new pipeline:
+Currently, a validation document has been created only for [Pipeline 1: illum_calc](pipeline-validations/pipeline-1-validation-illum-calc.md). To create validation documents for other pipelines, use this as a template and adjust the pipeline-specific details accordingly.
 
-1. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
-2. Update all references to the specific pipeline (pipeline number, paths, module names)
-3. Adjust environment variables, reference paths, and commands
-4. Add module-specific implementation notes
+Here are the reference CellProfiler pipelines and their StarryNight module counterparts:
 
-## Available Validation Documents
+- `ref_1_CP_Illum.cppipe` → `illum_calc`
+- `ref_2_CP_Apply_Illum.cppipe` → `illum_apply`
+- `ref_3_CP_SegmentationCheck.cppipe` → `segcheck`
+- `ref_5_BC_Illum.cppipe` → REFACTORING
+- `ref_6_BC_Apply_Illum.cppipe` → REFACTORING
+- `ref_7_BC_Preprocess.cppipe` → `preprocess`
+- `ref_9_Analysis.cppipe` → `analysis`
 
-Currently implemented validation documents:
+## Validation Strategy and Success Criteria
 
-- [Pipeline 1: illum_calc](pipeline-validations/pipeline-1-validation-illum-calc.md) - Illumination correction function calculation
+To ensure StarryNight can confidently replace the original PCPIP implementation, our validation approach:
 
-## Issue Tracking
+- **Tracks progress** through GitHub issues (one per pipeline) linked to detailed documentation, where issues serve as discussion forums while validation documents contain the actual technical details and results
+- **Uses a balanced test fixture** from `/docs/tester/assets/pcpip-create-fixture` that's small yet representative
+- **Defines success** through:
+    - Structural equivalence: Identical data flow between modules
+    - Functional equivalence: Comparable outputs (with acceptable numerical differences)
+    - Reproducibility: Consistent results across executions
+    - Traceability: Clear documentation of validation results
 
-- One GitHub issue will be created for each of the 7 CellProfiler pipelines
-- Issues will link to the documentation and track high-level progress
-- Issues provide a place for discussions while documentation provides detailed procedures
-- Each issue will use a simple template that refers to the detailed documentation
+The goal isn't byte-for-byte identical outputs, but functionally equivalent results that deliver the same scientific value with improved maintainability and extensibility.
 
-## Test Dataset
-
-We'll use the test fixture created in `/docs/tester/assets/pcpip-create-fixture` as our reference dataset. This provides a balance between:
-
-- Being small enough for efficient testing
-- Being representative enough to validate all features
-- Having clear expected outputs for validation
-
-## Success Factors
-
-- **Structural Equivalence**: Maintaining identical data flow between modules
-- **Functional Equivalence**: Producing comparable outputs (allowing for numerical differences)
-- **Reproducibility**: Consistent results across executions
-- **Traceability**: Clear documentation of validation results and issues
-
-The goal is not byte-for-byte identical outputs, but functionally equivalent results that ensure StarryNight delivers the same scientific value as the original PCPIP implementation while providing a more maintainable and extensible architecture.
-
-## Conclusion
-
-Thorough validation is essential to ensure StarryNight can confidently replace the original PCPIP implementation. By following this structured approach, we build trust in the new architecture while preserving the scientific integrity of the pipeline.
-
-For questions or suggestions about the testing framework, please create a GitHub issue or reach out to the team directly.
-
-> **Documentation Roadmap**: Future documentation improvements should include alternative test data sources for users without AWS access, environment verification commands to ensure proper setup, troubleshooting guidance for common issues, time and resource estimates for validation stages, standardized reporting templates for results, examples for all seven pipeline validations, and instructions for integrating validation into CI/CD workflows.
+> **Testing Framework Roadmap**: `compare_structures.py` should be modified to allow direct comparison of LoadData CSVs and specify exact files to compare, `run_pcpip.sh` should be updated to accept the output base path as a parameter and pipeline paths as parameters or standardize locations of StarryNight pipelines for symmetry.
 
 ## Testing Tools Summary
 
@@ -258,5 +216,3 @@ The validation process uses these key tools:
 | **verify_file_structure.py** | Validates output file existence and structure      | [pcpip-test](assets/pcpip-test/verify_file_structure.py) | Stages 3-5 |
 | **compare_structures.py**    | Compares output structures for differences         | [pcpip-test](assets/pcpip-test/compare_structures.py)    | Stages 4-5 |
 | **run_pcpip.sh**             | Executes CellProfiler pipeline workflows           | [pcpip-test](assets/pcpip-test/run_pcpip.sh)             | Stage 3-4  |
-
-> **Note**: For detailed usage instructions and examples, see the [Pipeline 1 Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) document, which contains concrete examples of each tool in action.

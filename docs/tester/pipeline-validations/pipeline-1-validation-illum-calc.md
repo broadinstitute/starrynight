@@ -4,7 +4,7 @@
 
 - **Reference Pipeline**: `ref_1_CP_Illum.cppipe`
 - **StarryNight Module**: `illum_calc`
-- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across microscopy images.
+- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across cell painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../../developer/pcpip-specs.md) for details on all pipelines.
 
 ## Validation Status
 
@@ -49,11 +49,11 @@ mkdir -p ${EMBEDDING_DIR}
 ```
 
 ## Reference Materials
-- [Reference Pipeline](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe)
-- [Reference Graph](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot)
-- [Reference JSON](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json)
-- [Test Dataset](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-create-fixture)
-- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`
+- Reference Pipeline: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe>
+- Reference Graph: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot>
+- Reference JSON: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json>
+- Test Dataset: `${STARRYNIGHT_REPO}/starrynight_example_input/`, created using [pcpip-create-fixture](../assets/pcpip-create-fixture/README.md)
+- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`, created using [pcpip-create-fixture](../assets/pcpip-create-fixture/README.md)
 
 ## Stage 1: Graph Topology
 **Objective**: Verify StarryNight pipeline structure matches reference
@@ -298,18 +298,3 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
 
 ## Test Runs
 - **YYYY-MM-DD**: [Stage] - [Command] - [Result]
-
-## Future Improvements
-These are notes for future enhancements to the validation process:
-
-1. **Tool Improvements**:
-
-   - `compare_structures.py` should be modified to allow direct comparison of LoadData CSVs and specify exact files to compare
-   - `run_pcpip.sh` should be updated to accept the output base path as a parameter
-   - `run_pcpip.sh` should be updated to accept pipeline paths as parameters or standardize locations of StarryNight pipelines for symmetry
-
-2. **Automation**:
-
-   - Consider creating a wrapper script that handles all validation stages with a single command
-   - Implement automatic generation of validation reports with pass/fail status
-   - Add automatic population of the Results and Discrepancies sections
