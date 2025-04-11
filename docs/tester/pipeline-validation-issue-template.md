@@ -27,8 +27,10 @@ export REF_LOADDATA="${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/wo
 
 # StarryNight output locations
 export SN_LOADDATA="${WKDIR}/cellprofiler/loaddata/cp/illum_calc/Batch1/illum_calc_Batch1_Plate1.csv"
-export SN_PIPELINE="${WKDIR}/cellprofiler/cppipe/cp/illum_calc"
+export SN_PIPELINE="${WKDIR}/cellprofiler/cppipe/cp/illum_calc" # FIXME: THis is the dir. The file is illum_calc_painting.json and illum_calc_painting.cppipe. So create two vars SN_PIPELINE_CPPIPE and SN_PIPELINE_JSON and then use SN_PIPELINE_CPPIPE for running cellprofiler and SN_PIPELINE_JSON for cp_graph. So you will need to make changes downstream too. Note that you will still neeed SN_PIPELINE the directory because that is what starrynight wants
 export SN_PIPELINE_DOT="${SN_PIPELINE}/illum_calc_painting.dot"
+export SN_PIPELINE_PNG="${SN_PIPELINE}/illum_calc_painting.png"
+export SN_PIPELINE_VISUAL_DOT="${SN_PIPELINE}/illum_calc_painting_visual.dot"
 export SN_JSON="${SN_PIPELINE}/illum_calc_painting.json"
 export SN_OUTPUT="${WKDIR}/illum/cp/illum_calc"
 
@@ -36,9 +38,11 @@ export SN_OUTPUT="${WKDIR}/illum/cp/illum_calc"
 export VALIDATION_DIR="${WKDIR}/validation/illum_calc"
 export REF_OUTPUT="${VALIDATION_DIR}/reference_output"
 export SN_TEST_OUTPUT="${VALIDATION_DIR}/starrynight_output"
+export EMBEDDING_DIR="${VALIDATION_DIR}/embeddings"
 
 # Make validation directories
 mkdir -p ${VALIDATION_DIR}
+mkdir -p ${EMBEDDING_DIR}
 ```
 
 ## Reference Materials
@@ -67,13 +71,21 @@ starrynight illum calc cppipe \
 # First get the cp_graph.py tool (if not already available)
 # From: https://github.com/shntnu/cp_graph/blob/v0.8.0/cp_graph.py
 
-# FIXME: Read /Users/shsingh/Documents/GitHub/cp_graph/README.md carefully to see how we can also output the png files so we can also see it visually (and dont use ultra-minimal for that)
-
-# Generate DOT graph from pipeline JSON with ultra-minimal flag
+# 1. Generate ultra-minimal DOT graph for exact comparison
 uv run --script cp_graph.py ${SN_JSON} ${SN_PIPELINE_DOT} --ultra-minimal
 
-# Compare generated DOT with reference
+# 2. Generate visual DOT graph for human inspection
+uv run --script cp_graph.py ${SN_JSON} ${SN_PIPELINE_VISUAL_DOT}
+
+# 3. Create PNG visualization from the visual DOT file
+# Requires Graphviz to be installed
+dot -Tpng ${SN_PIPELINE_VISUAL_DOT} -o ${SN_PIPELINE_PNG}
+
+# 4. Compare generated DOT with reference for exact structural matching
 diff ${SN_PIPELINE_DOT} ${REF_GRAPH}
+
+# 5. Optional: Also generate PNG from reference for visual comparison
+dot -Tpng ${REF_GRAPH} -o "${VALIDATION_DIR}/ref_1_CP_Illum.png"
 ```
 
 **Results**:
@@ -100,7 +112,8 @@ starrynight illum calc loaddata \
 
 **Comparison Command**:
 ```bash
-# Compare sample StarryNight LoadData with reference
+# TODO_FOR_LATER: compare_structures.py may need to be modified to allow comparing load data CSVs more specifically and then also specify two exact files to compare
+# Compare sample StarryNight LoadData with refeQrence
 # Note: compare_structures.py expects two file structure YAML files
 # For comparing CSVs directly, we should extract headers and row counts first
 
@@ -135,6 +148,7 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 
 **Command**:
 ```bash
+# TODO_FOR_LATER: run_pcpip.sh should be update to accept as parameter, the output base path
 # Note: The run_pcpip.sh script can be used to run specific PCPIP steps
 # By default, outputs go to ${STARRYNIGHT_REPO}/scratch/reproduce_pcpip_example_output
 # To modify output location, update the REPRODUCE_DIR variable in the script
@@ -151,6 +165,12 @@ cellprofiler -c -r \
     -p ${REF_PIPELINE} \
     -i $(dirname ${REF_LOADDATA}) \
     -o ${REF_OUTPUT}
+
+# Validate the reference output structure
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+    --directory ${REF_OUTPUT} \
+    --output ${VALIDATION_DIR}/reference_structure.yaml \
+    --embedding-dir ${EMBEDDING_DIR}
 ```
 
 **Results**:
@@ -169,6 +189,7 @@ cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
 cp run_pcpip.sh run_starrynight.sh
 # Update output directory and pipeline path in the script
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${SN_TEST_OUTPUT}\"|" run_starrynight.sh
+# TODO: run_pcpip.sh should be update to accept as parameter, the pipeline path OR have a way of standardizing locations of starrynight pipelines so that it is symmetric
 # Update pipeline path in PIPELINE_CONFIG array - line ~80
 # TODO: Use sed to update pipeline path
 # Run the modified script
@@ -176,27 +197,34 @@ sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${SN_TEST_OUTPUT}\"|" run_starryn
 
 # Option 2: Run directly with CellProfiler
 cellprofiler -c -r \
-    -p ${SN_PIPELINE}/*.cppipe \
+    -p ${SN_PIPELINE}/*.cppipe \ # FIXME: fix this path
     -i $(dirname ${REF_LOADDATA}) \
     -o ${SN_TEST_OUTPUT}
+
+# Validate the StarryNight output structure
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+    --directory ${SN_TEST_OUTPUT} \
+    --output ${VALIDATION_DIR}/starrynight_structure.yaml \
+    --embedding-dir ${EMBEDDING_DIR}
 ```
 
 **Comparison Command**:
 ```bash
-#FIXME: Read ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/README.md carefully to make sure these will work right
-# Validate output structure and compare with reference
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
-    --directory ${SN_TEST_OUTPUT} \
-    --output ${VALIDATION_DIR}/starrynight_structure.yaml
-
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
-    --directory ${REF_OUTPUT} \
-    --output ${VALIDATION_DIR}/reference_structure.yaml
-
+# Compare reference and StarryNight output structures using multiple formats
+# YAML format (default, machine-readable)
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/starrynight_structure.yaml \
-    --output-file ${VALIDATION_DIR}/stage4_comparison.yaml
+    --output-file ${VALIDATION_DIR}/stage4_comparison.yaml \
+    --compare-embeddings
+
+# Text format (human-readable summary)
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+    ${VALIDATION_DIR}/reference_structure.yaml \
+    ${VALIDATION_DIR}/starrynight_structure.yaml \
+    --output-file ${VALIDATION_DIR}/stage4_comparison.txt \
+    --output-format text \
+    --compare-embeddings
 ```
 
 **Results**:
@@ -228,20 +256,39 @@ starrynight cp \
     -p ${SN_PIPELINE}/ \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc \
     -o ${SN_OUTPUT}
+
+# Validate the StarryNight end-to-end output structure
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+    --directory ${SN_OUTPUT} \
+    --output ${VALIDATION_DIR}/e2e_structure.yaml \
+    --embedding-dir ${EMBEDDING_DIR}
 ```
 
 **Comparison Command**:
 ```bash
-#FIXME: Read ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/README.md carefully to make sure these will work right
-# Validate output structure and compare with reference
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
-    --directory ${SN_OUTPUT} \
-    --output ${VALIDATION_DIR}/e2e_structure.yaml
-
+# Compare reference and StarryNight end-to-end output structures
+# YAML format (default, machine-readable)
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/e2e_structure.yaml \
-    --output-file ${VALIDATION_DIR}/e2e_comparison.yaml
+    --output-file ${VALIDATION_DIR}/e2e_comparison.yaml \
+    --compare-embeddings
+
+# Text format (human-readable summary)
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+    ${VALIDATION_DIR}/reference_structure.yaml \
+    ${VALIDATION_DIR}/e2e_structure.yaml \
+    --output-file ${VALIDATION_DIR}/e2e_comparison.txt \
+    --output-format text \
+    --compare-embeddings
+
+# Set custom tolerance for numerical differences (if needed)
+python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+    ${VALIDATION_DIR}/reference_structure.yaml \
+    ${VALIDATION_DIR}/e2e_structure.yaml \
+    --output-file ${VALIDATION_DIR}/e2e_comparison_tolerance.yaml \
+    --compare-embeddings \
+    --tolerance 0.01
 ```
 
 **Results**:
