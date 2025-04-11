@@ -4,7 +4,7 @@ repo_url: https://github.com/broadinstitute/starrynight
 edit_uri: blob/main/docs/
 
 validation:
-  omitted_files: warn
+  omitted_files: ignore
   absolute_links: relative_to_docs
   unrecognized_links: warn
   anchors: warn

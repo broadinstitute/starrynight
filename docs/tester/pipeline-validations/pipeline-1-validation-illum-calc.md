@@ -49,11 +49,11 @@ mkdir -p ${EMBEDDING_DIR}
 ```
 
 ## Reference Materials
-- [Reference Pipeline](docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe)
-- [Reference Graph](docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot)
-- [Reference JSON](docs/tester/assets/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json)
-- [Test Dataset](docs/tester/assets/pcpip-create-fixture)
-- [Reference LoadData CSV](${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv)
+- [Reference Pipeline](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe)
+- [Reference Graph](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot)
+- [Reference JSON](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json)
+- [Test Dataset](https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-create-fixture)
+- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`
 
 ## Stage 1: Graph Topology
 **Objective**: Verify StarryNight pipeline structure matches reference
