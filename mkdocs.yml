@@ -67,12 +67,7 @@ nav:
     - Pipeline Validations:
       - Overview: tester/pipeline-validations/pipeline-validation-overview.md
       - Pipeline 1 (illum_calc): tester/pipeline-validations/pipeline-1-validation-illum-calc.md
-    - Testing Tools:
-      - Tools Overview: tester/tools/overview.md
-      - cp_graph: tester/tools/cp_graph.md
-      - verify_file_structure: tester/tools/verify_file_structure.md
-      - compare_structures: tester/tools/compare_structures.md
-      - run_pcpip: tester/tools/run_pcpip.md
+    - Testing Tools: tester/tools/overview.md
     - Reference Assets:
       - PCPIP pipelines: tester/assets/pcpip-pipelines/README.md
       - PCPIP fixtures: tester/assets/pcpip-create-fixture/README.md

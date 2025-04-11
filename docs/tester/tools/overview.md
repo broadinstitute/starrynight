@@ -1,73 +1,114 @@
-# Testing Tools Overview
+# Testing Tools Reference
 
-This section documents the essential tools used for StarryNight validation and testing. These tools provide systematic ways to compare StarryNight implementations with reference PCPIP implementations.
+This document provides a reference guide to the key tools used in StarryNight validation and testing. Rather than duplicating documentation, this guide summarizes each tool's purpose, usage patterns, and where to find more detailed information.
 
-## Core Testing Tools
+## cp_graph
 
-### cp_graph
+**Purpose**: Converts CellProfiler pipelines to graph representations for structural comparison.
 
-The `cp_graph.py` tool converts CellProfiler pipelines into standardized graph representations for analyzing data flow and module dependencies. It enables precise comparison of pipeline structures while deliberately excluding module settings.
+**Source**: [cp_graph.py](https://github.com/shntnu/cp_graph) (external repository)
 
-- **Primary Use**: Compare the topology of pipeline module connections
-- **Key Features**:
-  - Standardized graph representation
-  - Visual output for human inspection
-  - Ultra-minimal mode for exact comparison
-  - Support for multiple output formats (DOT, PNG, etc.)
-- [Detailed Documentation](cp_graph.md)
+**Key Features**:
+- Extracts pipeline structural information to DOT graph format
+- Provides visualization of module connections and data flow
+- Enables "ultra-minimal" mode for precise diff comparisons
+- Ignores irrelevant differences (like module numbering) for meaningful comparison
 
-### verify_file_structure
+**Usage in Validation**:
+```bash
+# Generate ultra-minimal graph for comparison (Stage 1)
+uv run --script cp_graph.py pipeline.json pipeline.dot --ultra-minimal
 
-The `verify_file_structure.py` tool validates file existence, sizes, and metadata against expected structures. It categorizes different file types and generates detailed validation reports.
+# Generate visual graph (Stage 1)
+uv run --script cp_graph.py pipeline.json pipeline_visual.dot
 
-- **Primary Use**: Verify pipeline output structure
-- **Key Features**:
-  - Semantic file typing (CSV, images, illumination files)
-  - File size and existence checking
-  - Embedding generation for content comparison
-  - YAML report generation
-- [Detailed Documentation](verify_file_structure.md)
+# Create PNG visualization
+dot -Tpng pipeline_visual.dot -o pipeline.png
+```
 
-### compare_structures
+## verify_file_structure.py
 
-The `compare_structures.py` tool compares validation reports from `verify_file_structure.py` to identify detailed differences between file sets.
+**Purpose**: Validates file existence, sizes, and metadata against expected structures.
 
-- **Primary Use**: Compare reference and StarryNight outputs
-- **Key Features**:
-  - Hierarchical comparison (sections → sets → folders → types → files)
-  - Multiple output formats (YAML, JSON, text)
-  - Content-aware comparison using embeddings
-  - Tolerance settings for numerical differences
-- [Detailed Documentation](compare_structures.md)
+**Source**: [`docs/tester/assets/pcpip-test/verify_file_structure.py`](../assets/pcpip-test/verify_file_structure.py)
 
-### run_pcpip
+**Key Features**:
+- Semantic typing for different file categories (CSV, images, etc.)
+- Detailed reporting on file existence, sizes, and metadata
+- Optional embedding generation for content comparison
+- Path replacement for comparing files in different locations
 
-The `run_pcpip.sh` script orchestrates the execution of CellProfiler pipelines for PCPIP workflows.
+**Usage in Validation**:
+```bash
+# Validate output structure (Stages 3-5)
+python verify_file_structure.py \
+    --directory ${OUTPUT_DIR} \
+    --output structure.yaml \
+    --embedding-dir ${EMBEDDING_DIR}
+```
 
-- **Primary Use**: Run reference pipelines end-to-end
-- **Key Features**:
-  - Pipeline configuration and dependency management
-  - Consistent execution environment
-  - Output path management
-  - Logging and error handling
-- [Detailed Documentation](run_pcpip.md)
+## compare_structures.py
+
+**Purpose**: Compares validation reports to identify detailed differences between file sets.
+
+**Source**: [`docs/tester/assets/pcpip-test/compare_structures.py`](../assets/pcpip-test/compare_structures.py)
+
+**Key Features**:
+- Hierarchical comparison (sections → sets → folders → types → files)
+- Multiple output formats (YAML, JSON, text)
+- Content-aware comparison using embeddings
+- Tolerance settings for numerical differences
+
+**Usage in Validation**:
+```bash
+# Compare output structures (Stages 4-5)
+python compare_structures.py \
+    reference_structure.yaml \
+    target_structure.yaml \
+    --output-file comparison.yaml \
+    --compare-embeddings
+```
+
+## run_pcpip.sh
+
+**Purpose**: Orchestrates the execution of CellProfiler pipelines for PCPIP workflows.
+
+**Source**: [`docs/tester/assets/pcpip-test/run_pcpip.sh`](../assets/pcpip-test/run_pcpip.sh)
+
+**Key Features**:
+- Pipeline configuration and dependency management
+- Consistent execution environment
+- Output path management
+- Support for running individual pipelines
+
+**Usage in Validation**:
+```bash
+# Execute reference pipeline (Stage 3)
+cd docs/tester/assets/pcpip-test/
+./run_pcpip.sh 1  # Run pipeline 1
+```
 
 ## How These Tools Work Together
 
-The tools form a comprehensive validation workflow:
+The validation process uses these tools in a coordinated workflow:
 
-1. **Graph Comparison**: Use `cp_graph.py` to verify structural equivalence between pipeline implementations
-2. **Execution**: Run pipelines with `run_pcpip.sh` to generate outputs
-3. **Validation**: Use `verify_file_structure.py` to catalog and validate outputs
-4. **Comparison**: Use `compare_structures.py` to identify and report differences
+1. **Graph Comparison** (Stage 1):
+   - Use `cp_graph.py` to generate graph representations of both reference and StarryNight pipelines
+   - Compare with `diff` to identify structural differences
 
-## Usage in Pipeline Validation
+2. **LoadData Validation** (Stage 2):
+   - Generate LoadData CSVs with StarryNight
+   - Use Python or custom scripts to compare with reference LoadData CSVs
 
-Each pipeline validation document uses these tools in a coordinated way:
+3. **Output Validation** (Stages 3-5):
+   - Use `run_pcpip.sh` to execute reference pipelines
+   - Use `verify_file_structure.py` to catalog outputs
+   - Run StarryNight pipelines to generate comparable outputs
+   - Use `compare_structures.py` to identify differences
 
-- **Stage 1**: `cp_graph.py` for structural comparison
-- **Stage 3/4**: `run_pcpip.sh` for pipeline execution
-- **Stage 4/5**: `verify_file_structure.py` for output validation
-- **Stage 4/5**: `compare_structures.py` for detailed comparison
+## Example Command Sequences
 
-For detailed usage examples, refer to the individual pipeline validation documents.
+See the pipeline validation documents for detailed command sequences for each stage:
+
+- [Pipeline 1: illum_calc validation](../pipeline-validations/pipeline-1-validation-illum-calc.md)
+- [Pipeline Validation Overview](../pipeline-validations/pipeline-validation-overview.md)
