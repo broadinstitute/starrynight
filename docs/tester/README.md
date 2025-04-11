@@ -62,6 +62,50 @@ The testing framework includes these key resources:
 
 > **How We Track Validation Progress**: Each pipeline validation has a corresponding GitHub issue that links to the detailed documentation. The issue tracks high-level progress with checkboxes, while the documentation contains all technical details, results, and discrepancies. This approach separates discussion (in issues) from reference documentation (in markdown files).
 
+## Testing Environment Setup
+
+Beyond the [standard StarryNight installation](../getting-started/installation.md), validation requires additional setup:
+
+### Testing Prerequisites
+
+- **Standard Dependencies**: Complete the [StarryNight installation](../getting-started/installation.md)
+- **Testing Tools**:
+  - Graphviz (`sudo apt install graphviz` or `brew install graphviz`)
+  - [cp_graph.py](https://github.com/shntnu/cp_graph) (used for pipeline structure comparison)
+  - Python libraries: `matplotlib`, `networkx` (for visualization)
+
+### Test Dataset
+
+Set up the validation dataset:
+
+```bash
+# Set up environment
+export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
+mkdir -p ${STARRYNIGHT_REPO}/scratch
+
+# Download test fixture (if you have AWS access)
+aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_input ${STARRYNIGHT_REPO}/scratch/starrynight_example_input
+
+# Create validation workspace
+mkdir -p ${STARRYNIGHT_REPO}/scratch/starrynight_example_output/workspace/validation
+```
+
+### Common Environment Variables
+
+Use these in all validation scripts:
+
+```bash
+# Base directories
+export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
+export WKDIR="${STARRYNIGHT_REPO}/scratch/starrynight_example_output/workspace"
+export VALIDATION_DIR="${WKDIR}/validation"
+
+# Reference locations (common across validations)
+export REF_PIPELINES="${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-pipelines"
+```
+
+See individual validation documents for pipeline-specific variables.
+
 ## Validation Process Overview
 
 The following diagram illustrates the 5-stage validation process and the key tools used at each stage:
@@ -170,6 +214,8 @@ The goal is not byte-for-byte identical outputs, but functionally equivalent res
 Thorough validation is essential to ensure StarryNight can confidently replace the original PCPIP implementation. By following this structured approach, we build trust in the new architecture while preserving the scientific integrity of the pipeline.
 
 For questions or suggestions about the testing framework, please create a GitHub issue or reach out to the team directly.
+
+> **Documentation Roadmap**: Future documentation improvements should include alternative test data sources for users without AWS access, environment verification commands to ensure proper setup, troubleshooting guidance for common issues, time and resource estimates for validation stages, standardized reporting templates for results, examples for all seven pipeline validations, and instructions for integrating validation into CI/CD workflows.
 
 ## Testing Tools Summary
 
