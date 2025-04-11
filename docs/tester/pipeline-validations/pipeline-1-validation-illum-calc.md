@@ -75,6 +75,7 @@ starrynight illum calc cppipe \
 # From: https://github.com/shntnu/cp_graph/blob/v0.8.0/cp_graph.py
 
 # 1. Generate ultra-minimal DOT graph for exact comparison
+# See README.md for more information on cp_graph.py usage
 uv run --script cp_graph.py ${SN_PIPELINE_JSON} ${SN_PIPELINE_DOT} --ultra-minimal
 
 # 2. Generate visual DOT graph for human inspection

@@ -63,15 +63,11 @@ nav:
     - Requirements: developer/requirements.md
   - Testing:
     - Testing Framework: tester/README.md
-    - Testing Strategy: tester/testing-strategy.md
-    - Pipeline Validations:
-      - Overview: tester/pipeline-validations/pipeline-validation-overview.md
-      - Pipeline 1 (illum_calc): tester/pipeline-validations/pipeline-1-validation-illum-calc.md
-    - Testing Tools: tester/tools/overview.md
-    - Reference Assets:
-      - PCPIP pipelines: tester/assets/pcpip-pipelines/README.md
-      - PCPIP fixtures: tester/assets/pcpip-create-fixture/README.md
-      - PCPIP tests: tester/assets/pcpip-test/README.md
+    - Pipeline Validations Overview: tester/pipeline-validations/pipeline-validation-overview.md
+    - Pipeline 1 - illum_calc: tester/pipeline-validations/pipeline-1-validation-illum-calc.md
+    - PCPIP Reference Pipelines: tester/assets/pcpip-pipelines/README.md
+    - PCPIP Test Fixtures: tester/assets/pcpip-create-fixture/README.md
+    - PCPIP Test Scripts: tester/assets/pcpip-test/README.md
   - FAQ: misc/faq.md
 
 plugins:

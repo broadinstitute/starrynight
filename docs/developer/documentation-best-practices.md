@@ -26,7 +26,7 @@ Example from testing documentation:
 
 **New to StarryNight Testing?** Follow these steps:
 
-1. Read the [Testing Strategy](testing-strategy.md) to understand the overall validation approach
+1. Read this document to understand the overall validation approach
 2. Review the [Pipeline Validation Overview](pipeline-validations/pipeline-validation-overview.md)
 3. Examine the [Pipeline 1 Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example
 ```
@@ -42,13 +42,10 @@ Match directory structure to conceptual organization:
 Example:
 ```
 docs/tester/
-├── README.md                              # Entry point
-├── testing-strategy.md                    # General concepts
-├── pipeline-validations/                  # Detailed procedures
-│   ├── pipeline-validation-overview.md    # Subdirectory overview
-│   └── pipeline-1-validation-illum-calc.md # Specific example
-└── tools/                                 # Tool references
-    └── overview.md                        # Tools index
+├── README.md                              # Entry point (including testing strategy and tools reference)
+└── pipeline-validations/                  # Detailed procedures
+    ├── pipeline-validation-overview.md    # Subdirectory overview
+    └── pipeline-1-validation-illum-calc.md # Specific example
 ```
 
 ### 4. Visual Communication
@@ -122,17 +119,25 @@ Example:
 - Match the navigation structure to the conceptual organization
 - Group related items under meaningful section headers
 - Limit navigation depth to preserve usability
-- Use descriptive labels that make sense out of context
+- **Important**: MkDocs only supports 2 levels of nesting (parent and child)
+- Use descriptive item names to indicate hierarchy when nesting limits apply
 
-Example:
+Example of MkDocs nesting limitation:
 ```yaml
+# INCORRECT - Exceeds MkDocs nesting limit:
 nav:
-  - Testing:
+  - Testing:                        # Level 1
     - Testing Framework: tester/README.md
-    - Testing Strategy: tester/testing-strategy.md
-    - Pipeline Validations:
-      - Overview: tester/pipeline-validations/pipeline-validation-overview.md
-      - Pipeline 1 (illum_calc): tester/pipeline-validations/pipeline-1-validation-illum-calc.md
+    - Pipeline Validations:         # Level 2
+      - Overview: pipeline-validation-overview.md  # Level 3 - won't display correctly!
+      - Pipeline 1: pipeline-1-validation-illum-calc.md
+
+# CORRECT - Flattens structure with naming conventions:
+nav:
+  - Testing:                        # Level 1
+    - Testing Framework: tester/README.md
+    - Pipeline Validations Overview: tester/pipeline-validations/pipeline-validation-overview.md  # Level 2
+    - Pipeline 1 - illum_calc: tester/pipeline-validations/pipeline-1-validation-illum-calc.md   # Level 2
 ```
 
 ### 2. File Naming Conventions
@@ -179,7 +184,7 @@ Periodically review documentation for:
 1. **Start with structure first**, then fill in content
 2. **Create concrete examples** before generalizing
 3. **Use visual diagrams** for complex workflows
-4. **Consolidate reference material** rather than fragmenting it
+4. **Consolidate reference material** rather than fragmenting it - integrate tools, concepts, and strategies into a single comprehensive document
 5. **Consider the new user experience** at every level
 6. **Create clear entry points** with explicit "next steps"
 7. **Review from the perspective of different user types**

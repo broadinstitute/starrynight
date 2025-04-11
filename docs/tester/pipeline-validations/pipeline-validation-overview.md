@@ -24,6 +24,8 @@ Each pipeline validation follows a standardized 5-stage process:
 4. **StarryNight Pipeline**: Run StarryNight-generated pipelines with reference LoadData
 5. **End-to-End**: Execute complete StarryNight workflow and compare with reference
 
+For details on all the testing tools used in these stages, refer to the [Testing Tools](../README.md#testing-tools) section in the main testing framework document.
+
 ## Validation Document Structure
 
 Each pipeline validation document follows a consistent structure:
