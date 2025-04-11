@@ -1,0 +1,723 @@
+load_data:
+  level: plate
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/
+  contents:
+    set1:
+    - folder: Plate1
+      types:
+      - type: metadata_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline1.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline2.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline3.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline5.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline6.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline7.csv
+          size: null
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1/load_data_pipeline9.csv
+          size: null
+illum_calc:
+  level: plate
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/
+  contents:
+    set1:
+    - folder: Plate1
+      types:
+      - type: illumination_file
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumA.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_Cycle1_IllumA_43c89f124c_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumC.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_Cycle1_IllumC_12ea82404a_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumDNA.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_Cycle1_IllumDNA_1c117f283c_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumG.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_Cycle1_IllumG_d793ae6231_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_Cycle1_IllumT.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_Cycle1_IllumT_dd6429a746_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_IllumDNA.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_IllumDNA_57d64a1e9a_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_IllumPhalloidin.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_IllumPhalloidin_ee11e3da46_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/illum/Plate1/Plate1_IllumZO1.npy
+          size: 10240128
+          embedding_path: embed/illumination_file/c96880e0/Plate1_IllumZO1_00f535016e_embedding.emb
+          has_embedding: true
+images_corrected_painting:
+  level: well
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/
+  contents:
+    set1:
+    - folder: Plate1-WellB1
+      types:
+      - type: analysis_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Cells.csv
+          size: 160219
+          embedding_path: embed/analysis_csv/d70d719d/PaintingIllumApplication_Cells_4e7b0d10f5_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+          header_count: 7
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_ConfluentRegions.csv
+          size: 146
+          embedding_path: embed/analysis_csv/d70d719d/PaintingIllumApplication_ConfluentRegions_e2517cd20e_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 6
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Experiment.csv
+          size: 14520
+          embedding_path: embed/analysis_csv/d70d719d/PaintingIllumApplication_Experiment_85351f1ac6_embedding.emb
+          has_embedding: true
+          headers:
+          - Key
+          - Value
+          header_count: 2
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Image.csv
+          size: 7629
+          embedding_path: embed/analysis_csv/d70d719d/PaintingIllumApplication_Image_3b7a607773_embedding.emb
+          has_embedding: true
+          headers:
+          - Count_Cells
+          - Count_ConfluentRegions
+          - Count_Nuclei
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02CorrectIlluminationApply
+          - ExecutionTime_03SaveImages
+          - ExecutionTime_04SaveImages
+          - ExecutionTime_06SaveImages
+          - ExecutionTime_08IdentifyPrimaryObjects
+          - ExecutionTime_09MaskImage
+          - ExecutionTime_10MaskImage
+          - ExecutionTime_11IdentifyPrimaryObjects
+          - ExecutionTime_12IdentifySecondaryObjects
+          - FileName_IllumDNA
+          - FileName_IllumPhalloidin
+          - FileName_IllumZO1
+          - FileName_OrigDNA
+          - FileName_OrigPhalloidin
+          - FileName_OrigZO1
+          - 68 more columns
+          header_count: 87
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/PaintingIllumApplication_Nuclei.csv
+          size: 152953
+          embedding_path: embed/analysis_csv/d70d719d/PaintingIllumApplication_Nuclei_ad162d452d_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 7
+      - type: processed_image
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/d70d719d/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_c810859f8e_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/d70d719d/Plate_Plate1_Well_WellB1_Site_0_CorrPhalloidin_c5db4b9683_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/painting/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrZO1.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/d70d719d/Plate_Plate1_Well_WellB1_Site_0_CorrZO1_bfd18e53b0_embedding.emb
+          has_embedding: true
+images_aligned_barcoding:
+  level: site
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/
+  contents:
+    set1:
+    - folder: Plate1-WellB1-0
+      types:
+      - type: analysis_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Experiment.csv
+          size: 26476
+          embedding_path: embed/analysis_csv/17a32d21/BarcodingApplication_Experiment_d682e2cbd3_embedding.emb
+          has_embedding: true
+          headers:
+          - Key
+          - Value
+          header_count: 2
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/BarcodingApplication_Image.csv
+          size: 59647
+          embedding_path: embed/analysis_csv/17a32d21/BarcodingApplication_Image_bfdbc4a566_embedding.emb
+          has_embedding: true
+          headers:
+          - Align_Xshift_AlignedRed
+          - Align_Xshift_Cycle02_A
+          - Align_Xshift_Cycle02_C
+          - Align_Xshift_Cycle02_DAPI
+          - Align_Xshift_Cycle02_G
+          - Align_Xshift_Cycle02_T
+          - Align_Xshift_Cycle03_A
+          - Align_Xshift_Cycle03_C
+          - Align_Xshift_Cycle03_DAPI
+          - Align_Xshift_Cycle03_G
+          - Align_Xshift_Cycle03_T
+          - Align_Yshift_AlignedRed
+          - Align_Yshift_Cycle02_A
+          - Align_Yshift_Cycle02_C
+          - Align_Yshift_Cycle02_DAPI
+          - Align_Yshift_Cycle02_G
+          - Align_Yshift_Cycle02_T
+          - Align_Yshift_Cycle03_A
+          - Align_Yshift_Cycle03_C
+          - 1099 more columns
+          header_count: 1118
+      - type: processed_image
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/17a32d21/Plate_Plate1_Well_B1_Site_0_Cycle01_C_662402e9bc_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/17a32d21/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI_c1fa59c76a_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/17a32d21/Plate_Plate1_Well_B1_Site_0_Cycle01_G_e8c0699da9_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_aligned/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/17a32d21/Plate_Plate1_Well_B1_Site_0_Cycle01_T_e16ed37783_embedding.emb
+          has_embedding: true
+images_corrected_barcoding:
+  level: site
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/
+  contents:
+    set1:
+    - folder: Plate1-WellB1-0
+      types:
+      - type: analysis_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_BarcodeFoci.csv
+          size: 921585
+          embedding_path: embed/analysis_csv/2ceca4b6/BarcodePreprocessing_BarcodeFoci_25ff0f04c0_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Intensity_IntegratedIntensityEdge_Barcodes_Barcodes
+          - Intensity_IntegratedIntensityEdge_Barcodes_Scores
+          - Intensity_IntegratedIntensity_Barcodes_Barcodes
+          - Intensity_IntegratedIntensity_Barcodes_Scores
+          - Intensity_LowerQuartileIntensity_Barcodes_Barcodes
+          - Intensity_LowerQuartileIntensity_Barcodes_Scores
+          - Intensity_MADIntensity_Barcodes_Barcodes
+          - Intensity_MADIntensity_Barcodes_Scores
+          - Intensity_MassDisplacement_Barcodes_Barcodes
+          - Intensity_MassDisplacement_Barcodes_Scores
+          - Intensity_MaxIntensityEdge_Barcodes_Barcodes
+          - Intensity_MaxIntensityEdge_Barcodes_Scores
+          - Intensity_MaxIntensity_Barcodes_Barcodes
+          - 34 more columns
+          header_count: 53
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Experiment.csv
+          size: 58152
+          embedding_path: embed/analysis_csv/2ceca4b6/BarcodePreprocessing_Experiment_2f3ab07093_embedding.emb
+          has_embedding: true
+          headers:
+          - Key
+          - Value
+          header_count: 2
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Image.csv
+          size: 11110
+          embedding_path: embed/analysis_csv/2ceca4b6/BarcodePreprocessing_Image_573e4ebc0e_embedding.emb
+          has_embedding: true
+          headers:
+          - Barcode_MeanBarcodeScore
+          - Barcode_MeanQualityScore
+          - Count_AllFoci
+          - Count_BarcodeFoci
+          - Count_Foci
+          - Count_Nuclei
+          - Divide20_Divide20Flag
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02ImageMath
+          - ExecutionTime_03ImageMath
+          - ExecutionTime_04ImageMath
+          - ExecutionTime_05ImageMath
+          - ExecutionTime_06CorrectIlluminationCalculate
+          - ExecutionTime_07CorrectIlluminationCalculate
+          - ExecutionTime_08CorrectIlluminationCalculate
+          - ExecutionTime_09CorrectIlluminationCalculate
+          - ExecutionTime_10CorrectIlluminationApply
+          - ExecutionTime_11CorrectIlluminationApply
+          - ExecutionTime_12CorrectIlluminationApply
+          - 184 more columns
+          header_count: 203
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/BarcodePreprocessing_Nuclei.csv
+          size: 118782
+          embedding_path: embed/analysis_csv/2ceca4b6/BarcodePreprocessing_Nuclei_7286996a0c_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Children_AllFoci_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 11
+      - type: processed_image
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_A.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/2ceca4b6/Plate_Plate1_Well_B1_Site_0_Cycle01_A_8fc8c2a782_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_C.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/2ceca4b6/Plate_Plate1_Well_B1_Site_0_Cycle01_C_60da97d6c2_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/2ceca4b6/Plate_Plate1_Well_B1_Site_0_Cycle01_DAPI_ac1d2e2209_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_G.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/2ceca4b6/Plate_Plate1_Well_B1_Site_0_Cycle01_G_f9ca1d19f5_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/Plate_Plate1_Well_B1_Site_0_Cycle01_T.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/2ceca4b6/Plate_Plate1_Well_B1_Site_0_Cycle01_T_dc9d864077_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_corrected/barcoding/Plate1-WellB1-0/overlay/Plate_Plate1_Well_B1_Site_0_StDev_Overlay.tiff
+          size: 7680272
+          embedding_path: embed/processed_image/433f28c3/Plate_Plate1_Well_B1_Site_0_StDev_Overlay_9f34077f90_embedding.emb
+          has_embedding: true
+images_segmentation:
+  level: plate
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/
+  contents:
+    set1:
+    - folder: Plate1-WellB1
+      types:
+      - type: analysis_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Cells.csv
+          size: 119975
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_Cells_6fd3f90f36_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_PreCells
+          header_count: 11
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_ConfluentRegions.csv
+          size: 164
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_ConfluentRegions_57e41f2a11_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 10
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Experiment.csv
+          size: 16857
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_Experiment_4642feeead_embedding.emb
+          has_embedding: true
+          headers:
+          - Key
+          - Value
+          header_count: 2
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Image.csv
+          size: 3831
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_Image_7ff8d030c8_embedding.emb
+          has_embedding: true
+          headers:
+          - Count_Cells
+          - Count_ConfluentRegions
+          - Count_Nuclei
+          - Count_PreCells
+          - ExecutionTime_01LoadData
+          - ExecutionTime_02IdentifyPrimaryObjects
+          - ExecutionTime_03MaskImage
+          - ExecutionTime_04MaskImage
+          - ExecutionTime_05MaskImage
+          - ExecutionTime_06IdentifyPrimaryObjects
+          - ExecutionTime_07IdentifySecondaryObjects
+          - ExecutionTime_08IdentifySecondaryObjects
+          - ExecutionTime_09RescaleIntensity
+          - ExecutionTime_10RescaleIntensity
+          - ExecutionTime_11RescaleIntensity
+          - ExecutionTime_12GrayToColor
+          - ExecutionTime_13RescaleIntensity
+          - ExecutionTime_14OverlayOutlines
+          - ExecutionTime_15SaveImages
+          - 60 more columns
+          header_count: 79
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_Nuclei.csv
+          size: 115594
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_Nuclei_41c2503c63_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Children_PreCells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 11
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/SegmentationCheck_PreCells.csv
+          size: 123318
+          embedding_path: embed/analysis_csv/7a598ed2/SegmentationCheck_PreCells_f5ec26ccb3_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Metadata_Plate
+          - Metadata_Site
+          - Metadata_Well
+          - Metadata_Well_Value
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+          header_count: 12
+      - type: processed_image
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/Batch1/images_segmentation/Plate1-WellB1/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck.png
+          size: 5252113
+          embedding_path: embed/processed_image/7a598ed2/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SegmentCheck_10f1ca7cf5_embedding.emb
+          has_embedding: true
+analysis:
+  level: site
+  path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/
+  contents:
+    set1:
+    - folder: Plate1-WellB1-0
+      types:
+      - type: analysis_csv
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/BarcodeFoci.csv
+          size: 1449996
+          embedding_path: embed/analysis_csv/e8da0888/BarcodeFoci_d56545f780_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Foci_NonCellEdge_Count
+          - Children_RelateObjects_Count
+          - Distance_Centroid_Cells
+          - Distance_Minimum_Cells
+          - Intensity_IntegratedIntensityEdge_Barcodes_Barcodes
+          - Intensity_IntegratedIntensityEdge_Barcodes_Scores
+          - Intensity_IntegratedIntensityEdge_CellOutlineImage
+          - Intensity_IntegratedIntensity_Barcodes_Barcodes
+          - Intensity_IntegratedIntensity_Barcodes_Scores
+          - Intensity_IntegratedIntensity_CellOutlineImage
+          - Intensity_LowerQuartileIntensity_Barcodes_Barcodes
+          - Intensity_LowerQuartileIntensity_Barcodes_Scores
+          - Intensity_LowerQuartileIntensity_CellOutlineImage
+          - Intensity_MADIntensity_Barcodes_Barcodes
+          - Intensity_MADIntensity_Barcodes_Scores
+          - Intensity_MADIntensity_CellOutlineImage
+          - Intensity_MassDisplacement_Barcodes_Barcodes
+          - 56 more columns
+          header_count: 75
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cells.csv
+          size: 7107771
+          embedding_path: embed/analysis_csv/e8da0888/Cells_08c2a1835a_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - AreaShape_Area
+          - AreaShape_BoundingBoxArea
+          - AreaShape_BoundingBoxMaximum_X
+          - AreaShape_BoundingBoxMaximum_Y
+          - AreaShape_BoundingBoxMinimum_X
+          - AreaShape_BoundingBoxMinimum_Y
+          - AreaShape_Center_X
+          - AreaShape_Center_Y
+          - AreaShape_CentralMoment_0_0
+          - AreaShape_CentralMoment_0_1
+          - AreaShape_CentralMoment_0_2
+          - AreaShape_CentralMoment_0_3
+          - AreaShape_CentralMoment_1_0
+          - AreaShape_CentralMoment_1_1
+          - AreaShape_CentralMoment_1_2
+          - AreaShape_CentralMoment_1_3
+          - AreaShape_CentralMoment_2_0
+          - 319 more columns
+          header_count: 338
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/ConfluentRegions.csv
+          size: 132
+          embedding_path: embed/analysis_csv/e8da0888/ConfluentRegions_2f66101dbf_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_ResizeConfluent_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 7
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Cytoplasm.csv
+          size: 5693840
+          embedding_path: embed/analysis_csv/e8da0888/Cytoplasm_b28737232c_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - AreaShape_Area
+          - AreaShape_BoundingBoxArea
+          - AreaShape_BoundingBoxMaximum_X
+          - AreaShape_BoundingBoxMaximum_Y
+          - AreaShape_BoundingBoxMinimum_X
+          - AreaShape_BoundingBoxMinimum_Y
+          - AreaShape_Center_X
+          - AreaShape_Center_Y
+          - AreaShape_CentralMoment_0_0
+          - AreaShape_CentralMoment_0_1
+          - AreaShape_CentralMoment_0_2
+          - AreaShape_CentralMoment_0_3
+          - AreaShape_CentralMoment_1_0
+          - AreaShape_CentralMoment_1_1
+          - AreaShape_CentralMoment_1_2
+          - AreaShape_CentralMoment_1_3
+          - AreaShape_CentralMoment_2_0
+          - 183 more columns
+          header_count: 202
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Experiment.csv
+          size: 66347
+          embedding_path: embed/analysis_csv/e8da0888/Experiment_7b64179664_embedding.emb
+          has_embedding: true
+          headers:
+          - Key
+          - Value
+          header_count: 2
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci.csv
+          size: 6404313
+          embedding_path: embed/analysis_csv/e8da0888/Foci_3eb25a05a9_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Barcode_BarcodeCalled
+          - Barcode_MatchedTo_Barcode
+          - Barcode_MatchedTo_GeneCode
+          - Barcode_MatchedTo_ID
+          - Barcode_MatchedTo_Score
+          - Barcode_MeanQualityScore
+          - Children_BarcodeFoci_Count
+          - Children_Resize_Foci_Count
+          - Intensity_IntegratedIntensityEdge_Cycle01_A
+          - Intensity_IntegratedIntensityEdge_Cycle01_C
+          - Intensity_IntegratedIntensityEdge_Cycle01_G
+          - Intensity_IntegratedIntensityEdge_Cycle01_T
+          - Intensity_IntegratedIntensityEdge_Cycle02_A
+          - Intensity_IntegratedIntensityEdge_Cycle02_C
+          - Intensity_IntegratedIntensityEdge_Cycle02_G
+          - Intensity_IntegratedIntensityEdge_Cycle02_T
+          - Intensity_IntegratedIntensityEdge_Cycle03_A
+          - 247 more columns
+          header_count: 266
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_NonCellEdge.csv
+          size: 46889
+          embedding_path: embed/analysis_csv/e8da0888/Foci_NonCellEdge_ff371d0715_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_BarcodeFoci
+          header_count: 7
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Foci_PreMask.csv
+          size: 99915
+          embedding_path: embed/analysis_csv/e8da0888/Foci_PreMask_da60360aee_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Foci_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          header_count: 7
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Image.csv
+          size: 38736
+          embedding_path: embed/analysis_csv/e8da0888/Image_94febe5d32_embedding.emb
+          has_embedding: true
+          headers:
+          - Align_Xshift_AlignedRed
+          - Align_Xshift_DAPI_Painting
+          - Align_Xshift_Phalloidin
+          - Align_Xshift_ZO1
+          - Align_Yshift_AlignedRed
+          - Align_Yshift_DAPI_Painting
+          - Align_Yshift_Phalloidin
+          - Align_Yshift_ZO1
+          - AreaOccupied_AreaOccupied_ConfluentRegions
+          - AreaOccupied_Perimeter_ConfluentRegions
+          - AreaOccupied_TotalArea_ConfluentRegions
+          - Barcode_MeanBarcodeScore
+          - Barcode_MeanQualityScore
+          - Correlation_Correlation_Cycle01_A_Cycle01_C
+          - Correlation_Correlation_Cycle01_A_Cycle01_DAPI
+          - Correlation_Correlation_Cycle01_A_Cycle01_G
+          - Correlation_Correlation_Cycle01_A_Cycle01_T
+          - Correlation_Correlation_Cycle01_A_Cycle02_A
+          - Correlation_Correlation_Cycle01_A_Cycle02_C
+          - 720 more columns
+          header_count: 739
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Nuclei.csv
+          size: 5675270
+          embedding_path: embed/analysis_csv/e8da0888/Nuclei_23e4beab11_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - AreaShape_Area
+          - AreaShape_BoundingBoxArea
+          - AreaShape_BoundingBoxMaximum_X
+          - AreaShape_BoundingBoxMaximum_Y
+          - AreaShape_BoundingBoxMinimum_X
+          - AreaShape_BoundingBoxMinimum_Y
+          - AreaShape_Center_X
+          - AreaShape_Center_Y
+          - AreaShape_CentralMoment_0_0
+          - AreaShape_CentralMoment_0_1
+          - AreaShape_CentralMoment_0_2
+          - AreaShape_CentralMoment_0_3
+          - AreaShape_CentralMoment_1_0
+          - AreaShape_CentralMoment_1_1
+          - AreaShape_CentralMoment_1_2
+          - AreaShape_CentralMoment_1_3
+          - AreaShape_CentralMoment_2_0
+          - 185 more columns
+          header_count: 204
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/PreCells.csv
+          size: 93190
+          embedding_path: embed/analysis_csv/e8da0888/PreCells_56f0be36aa_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Children_Cells_Count
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Nuclei
+          header_count: 8
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/RelateObjects.csv
+          size: 102869
+          embedding_path: embed/analysis_csv/e8da0888/RelateObjects_754da65018_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_BarcodeFoci
+          header_count: 7
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Resize_Foci.csv
+          size: 86532
+          embedding_path: embed/analysis_csv/e8da0888/Resize_Foci_a5b1a0db5c_embedding.emb
+          has_embedding: true
+          headers:
+          - ImageNumber
+          - ObjectNumber
+          - Location_Center_X
+          - Location_Center_Y
+          - Location_Center_Z
+          - Number_Object_Number
+          - Parent_Foci
+          header_count: 7
+      - type: processed_image
+        files:
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cells_Objects.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/984c1917/Plate_Plate1_Well_WellB1_Site_0_Cells_Objects_1e507e33b5_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/984c1917/Plate_Plate1_Well_WellB1_Site_0_Cytoplasm_Objects_065dd6d2a7_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/segmentation_masks/Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects.tiff
+          size: 5120256
+          embedding_path: embed/processed_image/984c1917/Plate_Plate1_Well_WellB1_Site_0_Nuclei_Objects_e0787528f3_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay.png
+          size: 812710
+          embedding_path: embed/processed_image/e8da0888/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_Overlay_cd032fa716_embedding.emb
+          has_embedding: true
+        - path: ../../../../scratch/reproduce_pcpip_example_output/Source1/workspace/analysis/Batch1/Plate1-WellB1-0/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay.png
+          size: 37455
+          embedding_path: embed/processed_image/e8da0888/Plate_Plate1_Well_WellB1_Site_0_CorrDNA_SpotOverlay_267b7a951a_embedding.emb
+          has_embedding: true
