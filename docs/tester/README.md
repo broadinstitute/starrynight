@@ -26,18 +26,18 @@ This guide serves different types of testers. Find your path based on your role:
 If you're new to the testing framework and want to understand the process:
 
 1. **Start here**: Read the introduction and [Validation Process Overview](#validation-process-overview) sections to understand the big picture
-2. Look at the [Pipeline Validation Overview](pipeline-validations/pipeline-validation-overview.md) to see all the pipelines that need validation
-3. Review [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example with detailed commands
+2. Review the [Pipeline Mapping](#pipeline-mapping) section below to see all the pipelines that need validation
+3. Look at the [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example with detailed commands
 4. See the [Testing Tools Summary](#testing-tools-summary) for an overview of the available tools
 
 ### I need to validate a specific pipeline module
 
 If you need to validate a specific StarryNight module:
 
-1. Check the [Pipeline Validation Overview](pipeline-validations/pipeline-validation-overview.md) to find the corresponding pipeline
-2. Follow the 5-stage validation process outlined in the "Validation Stages" section below
+1. Check the [Pipeline Mapping](#pipeline-mapping) section below to find the corresponding pipeline
+2. Follow the 5-stage validation process outlined in the [Validation Stages](#validation-stages) section
 3. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
-4. Create a new validation document for your module following the same structure
+4. Create a new validation document for your module following the guidelines in [Creating New Validation Documents](#creating-new-validation-documents)
 
 ### I'm developing new validation tools
 
@@ -51,7 +51,7 @@ If you're developing tools for the testing framework:
 
 The testing framework includes these key resources:
 
-- [**Pipeline Validations**](pipeline-validations/pipeline-validation-overview.md): Detailed procedures for each pipeline
+- **Pipeline Validations**: See [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) for a detailed example
 - [**pcpip-pipelines**](assets/pcpip-pipelines/README.md): Reference CellProfiler pipeline files
 - [**pcpip-create-fixture**](assets/pcpip-create-fixture/README.md): Tools for creating test fixtures
 - [**pcpip-test**](assets/pcpip-test/README.md): Scripts for pipeline execution and comparison
@@ -73,7 +73,6 @@ Beyond the [standard StarryNight installation](../getting-started/installation.m
     - AWS CLI configured with access to `s3://imaging-platform/projects/2024_03_12_starrynight/`
 -  **Test Data Alternatives** (if no AWS access):
     - Use the minimal test fixtures in `/docs/tester/assets/pcpip-test/minimal/`
-    - Or generate test data with tools in `/docs/tester/assets/pcpip-generate-dummy-structures/`
 
 ### Test Dataset
 
@@ -146,6 +145,20 @@ flowchart TD
     F1 ---|compare_structures.py| G3
 ```
 
+## Pipeline Mapping
+
+This table maps the reference CellProfiler pipelines to their corresponding StarryNight modules:
+
+| Reference Pipeline                | StarryNight Module |
+| --------------------------------- | ------------------ |
+| ref_1_CP_Illum.cppipe             | illum_calc         |
+| ref_2_CP_Apply_Illum.cppipe       | illum_apply        |
+| ref_3_CP_SegmentationCheck.cppipe | segcheck           |
+| ref_5_BC_Illum.cppipe             | REFACTORING        |
+| ref_6_BC_Apply_Illum.cppipe       | REFACTORING        |
+| ref_7_BC_Preprocess.cppipe        | preprocess         |
+| ref_9_Analysis.cppipe             | analysis           |
+
 ## Validation Stages
 
 ### Stage 1: Pipeline Graph Topology Validation
@@ -188,6 +201,20 @@ flowchart TD
     - Iterate on orchestration system until outputs match
 - **Success Criteria**: End-to-end process produces equivalent results to reference
 
+## Creating New Validation Documents
+
+To create a validation document for a new pipeline:
+
+1. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
+2. Update all references to the specific pipeline (pipeline number, paths, module names)
+3. Adjust environment variables, reference paths, and commands
+4. Add module-specific implementation notes
+
+## Available Validation Documents
+
+Currently implemented validation documents:
+
+- [Pipeline 1: illum_calc](pipeline-validations/pipeline-1-validation-illum-calc.md) - Illumination correction function calculation
 
 ## Issue Tracking
 

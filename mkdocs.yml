@@ -4,7 +4,7 @@ repo_url: https://github.com/broadinstitute/starrynight
 edit_uri: blob/main/docs/
 
 validation:
-  omitted_files: ignore
+  omitted_files: warn
   absolute_links: relative_to_docs
   unrecognized_links: warn
   anchors: warn
@@ -61,13 +61,7 @@ nav:
     - Developer Guide: developer/developer-guide.md
     - PCPIP Specs: developer/pcpip-specs.md
     - Requirements: developer/requirements.md
-  - Testing:
-    - Testing Framework: tester/README.md
-    - Pipeline Validations Overview: tester/pipeline-validations/pipeline-validation-overview.md
-    - Pipeline 1 - illum_calc: tester/pipeline-validations/pipeline-1-validation-illum-calc.md
-    - PCPIP Reference Pipelines: tester/assets/pcpip-pipelines/README.md
-    - PCPIP Test Fixtures: tester/assets/pcpip-create-fixture/README.md
-    - PCPIP Test Scripts: tester/assets/pcpip-test/README.md
+  - Testing: tester/README.md
   - FAQ: misc/faq.md
 
 plugins:
