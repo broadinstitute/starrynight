@@ -4,6 +4,42 @@
 
 This document outlines our structured approach to validate StarryNight against the reference PCPIP implementation. We'll use a progressive validation strategy, incrementally testing components before integrating them into the complete system.
 
+## Validation Process Overview
+
+The following diagram illustrates the 5-stage validation process and the key tools used at each stage:
+
+```mermaid
+graph TD
+    subgraph "Stage 1: Graph Topology"
+        A1[Reference Pipeline] -->|cp_graph.py| B1[Reference Graph]
+        A2[StarryNight Pipeline] -->|cp_graph.py| B2[StarryNight Graph]
+        B1 ---|diff| B2
+    end
+
+    subgraph "Stage 2: LoadData Generation"
+        C1[Reference LoadData CSV]
+        C2[StarryNight LoadData CSV]
+        C1 ---|Python script| C2
+    end
+
+    subgraph "Stage 3: Reference Execution"
+        D1[Reference Pipeline] -->|run_pcpip.sh| E1[Reference Output]
+        E1 -->|verify_file_structure.py| F1[Reference Structure]
+    end
+
+    subgraph "Stage 4: StarryNight Pipeline"
+        D2[StarryNight Pipeline] -->|run_pcpip.sh| E2[StarryNight Output]
+        E2 -->|verify_file_structure.py| F2[StarryNight Structure]
+        F1 ---|compare_structures.py| F2
+    end
+
+    subgraph "Stage 5: End-to-End"
+        G1[StarryNight CLI] -->|starrynight commands| G2[End-to-End Output]
+        G2 -->|verify_file_structure.py| G3[E2E Structure]
+        F1 ---|compare_structures.py| G3
+    end
+```
+
 ## Testing Stages
 
 ### Stage 1: Pipeline Graph Topology Validation
