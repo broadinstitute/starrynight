@@ -148,22 +148,16 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 
 **Command**:
 ```bash
-# Note: The run_pcpip.sh script can be used to run specific PCPIP steps
+# Note: The run_pcpip.sh script must be used to run PCPIP steps
 # By default, outputs go to ${STARRYNIGHT_REPO}/scratch/reproduce_pcpip_example_output
 # To modify output location, update the REPRODUCE_DIR variable in the script
 
-# Option 1: Run using run_pcpip.sh script (recommended)
+# Run using run_pcpip.sh script
 cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
 # First modify the script to output to the reference output location
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${REF_OUTPUT}\"|" run_pcpip.sh
 # Run only pipeline 1
 ./run_pcpip.sh 1
-
-# Option 2: Run directly with CellProfiler
-cellprofiler -c -r \
-    -p ${REF_PIPELINE} \
-    -i $(dirname ${REF_LOADDATA}) \
-    -o ${REF_OUTPUT}
 
 # Validate the reference output structure
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
@@ -177,28 +171,21 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 # Results will be added here
 ```
 
-## Stage 4: StarryNight Pipeline
-**Objective**: Verify StarryNight pipeline with reference LoadData
+## Stage 4: StarryNight-Generated Pipeline Execution
+**Objective**: Verify StarryNight-generated CellProfiler pipeline with reference LoadData
 
 **Command**:
 ```bash
-# Option 1: Modify run_pcpip.sh to use StarryNight pipeline
+# Modify run_pcpip.sh to use StarryNight-generated pipeline
 cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
 # Make a copy for StarryNight testing
 cp run_pcpip.sh run_starrynight.sh
 # Update output directory and pipeline path in the script
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${SN_TEST_OUTPUT}\"|" run_starrynight.sh
 # Update pipeline path in PIPELINE_CONFIG array - line ~80
-# Use sed to update pipeline path
 sed -i.bak "s|1,pipeline_path=.*|1,pipeline_path=${SN_PIPELINE_CPPIPE}|" run_starrynight.sh
 # Run the modified script
 ./run_starrynight.sh 1
-
-# Option 2: Run directly with CellProfiler
-cellprofiler -c -r \
-    -p ${SN_PIPELINE_CPPIPE} \
-    -i $(dirname ${REF_LOADDATA}) \
-    -o ${SN_TEST_OUTPUT}
 
 # Validate the StarryNight output structure
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
@@ -255,6 +242,9 @@ starrynight cp \
     -p ${SN_PIPELINE_DIR}/ \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc \
     -o ${SN_OUTPUT}
+
+# Note: In the future, the SN_OUTPUT path may need to be adjusted to match
+# the expected output path structure from run_pcpip.sh for proper comparison
 
 # Validate the StarryNight end-to-end output structure
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
