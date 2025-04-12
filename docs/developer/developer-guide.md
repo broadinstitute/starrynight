@@ -57,28 +57,15 @@ graph TD
     subgraph StarryNightCore["StarryNight Core"]
         Index[Image Indexing] --> Processing
         Processing[Image Processing]
-        Processing --> QC[Quality Control]
-        IllumCorr[Illumination Correction]
-        Alignment[Image Alignment]
-        Preprocess[Preprocessing]
-        CellPainting[Cell Painting Analysis]
-        Processing --> IllumCorr
-        Processing --> Alignment
-        Processing --> Preprocess
-        Processing --> CellPainting
     end
 
     %% PipeCraft Components
     subgraph PipeCraftEngine["PipeCraft"]
         Pipeline[Pipeline Definition]
         Nodes[Processing Nodes]
-        LocalBackend[Local Execution]
-        DockerBackend[Docker Execution]
-        AwsBackend[AWS Batch Execution]
+        Backend[Execution]
         Pipeline --> Nodes
-        Nodes --> LocalBackend
-        Nodes --> DockerBackend
-        Nodes --> AwsBackend
+        Nodes --> Backend
     end
 
     %% Conductor Components
@@ -102,8 +89,6 @@ graph TD
 
     %% Connections between components
     StarryNightCore --> PipeCraftEngine
-    PipeCraftEngine --> ConductorService
-    ConductorService --> CanvasUI
 
     %% Data flow from UI to execution
     Projects --> JobConfig
@@ -112,7 +97,7 @@ graph TD
     Database --> Results
 
     %% Execution flow
-    LocalBackend & DockerBackend & AwsBackend --> JobMgmt
+    Backend --> JobMgmt
 
     %% Styling
     classDef core fill:#d0e0ff,stroke:#0050a0;
