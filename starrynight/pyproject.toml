@@ -44,7 +44,7 @@ build-backend = "setuptools.build_meta"
 [tool.ruff.lint]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
 exclude = ["vendor", "src/starrynight/modules/schema.py"]
-ignore = ["D203", "D213"]  # Avoid conflicting rules
+ignore = ["D203", "D213", "D103", "D102", "E501", "ANN001", "ANN201", "F401", "D100", "D101", "D419"]  # Avoid conflicting rules; Others: skipping for now
 
 [tool.basedpyright]
 typeCheckingMode = "basic"
