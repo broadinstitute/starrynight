@@ -4,7 +4,7 @@
 
 - **Reference Pipeline**: `ref_1_CP_Illum.cppipe`
 - **StarryNight Module**: `illum_calc`
-- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across cell painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../../developer/pcpip-specs.md) for details on all pipelines.
+- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across Cell Painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../../developer/pcpip-specs.md) for details on all pipelines.
 
 ## Validation Status
 
@@ -17,7 +17,7 @@
 ## Setup and Environment
 Set up required environment variables before running any commands:
 
-```bash
+```sh
 # Base directories
 export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
 export WKDIR="./scratch/starrynight_example_output/workspace"
@@ -59,7 +59,7 @@ mkdir -p ${EMBEDDING_DIR}
 **Objective**: Verify StarryNight pipeline structure matches reference
 
 **StarryNight Command**:
-```bash
+```sh
 # Generate pipeline
 starrynight illum calc cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum_calc/ \
@@ -70,7 +70,7 @@ starrynight illum calc cppipe \
 ```
 
 **Comparison Command**:
-```bash
+```sh
 # First get the cp_graph.py tool (if not already available)
 # From: https://github.com/shntnu/cp_graph/blob/v0.8.0/cp_graph.py
 
@@ -110,7 +110,7 @@ dot -Tpng ${REF_GRAPH} -o "${VALIDATION_DIR}/ref_1_CP_Illum.png"
 **Objective**: Verify StarryNight generates compatible LoadData CSVs
 
 **StarryNight Command**:
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -118,7 +118,7 @@ starrynight illum calc loaddata \
 ```
 
 **Comparison Command**:
-```bash
+```sh
 # Compare sample StarryNight LoadData with reference
 # Note: compare_structures.py expects two file structure YAML files
 # For comparing CSVs directly, we should extract headers and row counts first
@@ -154,7 +154,7 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 **Objective**: Establish baseline outputs from reference pipeline
 
 **Command**:
-```bash
+```sh
 # Note: The run_pcpip.sh script must be used to run PCPIP steps
 # By default, outputs go to ${STARRYNIGHT_REPO}/scratch/reproduce_pcpip_example_output
 # To modify output location, update the REPRODUCE_DIR variable in the script
@@ -182,7 +182,7 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 **Objective**: Verify StarryNight-generated CellProfiler pipeline with reference LoadData
 
 **Command**:
-```bash
+```sh
 # Modify run_pcpip.sh to use StarryNight-generated pipeline
 cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
 # Make a copy for StarryNight testing
@@ -202,7 +202,7 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 ```
 
 **Comparison Command**:
-```bash
+```sh
 # Compare reference and StarryNight output structures using multiple formats
 # YAML format (default, machine-readable)
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
@@ -232,7 +232,7 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
 **Objective**: Verify complete StarryNight workflow
 
 **Command**:
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -261,7 +261,7 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 ```
 
 **Comparison Command**:
-```bash
+```sh
 # Compare reference and StarryNight end-to-end output structures
 # YAML format (default, machine-readable)
 python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \

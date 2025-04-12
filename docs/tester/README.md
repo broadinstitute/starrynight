@@ -26,7 +26,7 @@ This guide serves different types of testers. Find your path based on your role:
 If you're new to the testing framework and want to understand the process:
 
 1. **Start here**: Read the introduction and [Validation Process Overview](#validation-process-overview) sections to understand the big picture
-2. Review the [Pipeline Mapping](#pipeline-mapping) section below to see all the pipelines that need validation
+2. Review the [Validation Documents](#validation-documents) section below to see all the pipelines that need validation
 3. Look at the [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example with detailed commands
 4. See the [Testing Tools Summary](#testing-tools-summary) for an overview of the available tools
 
@@ -34,10 +34,9 @@ If you're new to the testing framework and want to understand the process:
 
 If you need to validate a specific StarryNight module:
 
-1. Check the [Pipeline Mapping](#pipeline-mapping) section below to find the corresponding pipeline
+1. Check the [Validation Documents](#validation-documents) section below to find the corresponding pipeline
 2. Follow the 5-stage validation process outlined in the [Validation Stages](#validation-stages) section
 3. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
-4. Create a new validation document for your module following the guidelines in [Creating New Validation Documents](#creating-new-validation-documents)
 
 ## Reference Materials
 

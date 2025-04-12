@@ -35,6 +35,7 @@ theme:
   - navigation.tabs
   - navigation.top
   - navigation.tracking
+  - content.code.copy
 
 nav:
   - Home: index.md
@@ -73,5 +74,19 @@ plugins:
     #     ^(JSON.parse(__md_get("__palette").index == 1)) ? 'dark' : 'light'
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.snippets
+  # - pymdownx.superfences
   - pymdownx.tasklist:
       custom_checkbox: true
+  # - pymdownx.superfences:
+  #     custom_fences:
+  #       - name: mermaid
+  #         class: mermaid
+  #         format: !!python/name:pymdownx.superfences.fence_code_format
