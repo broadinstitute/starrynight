@@ -44,7 +44,9 @@ This guide provides information for developers who want to contribute to StarryN
 
 ## System Architecture
 
-StarryNight is a modular platform for high-throughput microscopy image processing with four main components that work together to process, analyze, and manage microscopy image data.
+StarryNight is a modular platform for high-throughput microscopy image processing with four main components. For an overview of each component and its purpose, please refer to the [over](../index.md#platform-overview).
+
+The following diagram illustrates how these components interact:
 
 ```mermaid
 graph TD
@@ -124,42 +126,37 @@ graph TD
     class CanvasUI ui;
 ```
 
-### Component Overview
-
-**StarryNight Core**: The foundation library that provides specialized algorithms for microscopy image analysis
-
-   - Image indexing and inventory management
-   - Illumination correction, alignment, and preprocessing
-   - Cell Painting analysis algorithms
-   - Quality control and validation
-
-**PipeCraft**: A pipeline compiler for defining and executing computational pipelines
-
-   - Pipeline definition framework
-   - Node-based processing graph
-   - Multiple execution backends (local, Docker, AWS)
-   - Template-based workflow generation
-
-**Conductor**: A service for job management, monitoring, and API access
-
-   - RESTful API for job control
-   - Database for configuration and tracking results
-   - Job scheduling and monitoring
-   - Real-time updates via WebSockets
-
-**Canvas**: A web-based user interface for interacting with the system
-
-   - Project management interface
-   - Job configuration and submission
-   - Run monitoring and visualization
-   - Results exploration
-
 ### Key Design Principles
 
 - **Modularity**: Each component has clear boundaries and interfaces
 - **Extensibility**: The system can be extended with new algorithms and processing modules
 - **Reproducibility**: Workflows are version-controlled and traceable
 - **Scalability**: Processing can scale from local development to cloud execution
+
+### Technical Implementations
+
+From a developer perspective, each component has the following technical characteristics:
+
+- **StarryNight Core**:
+    - Python-based library with CellProfiler integration
+    - Module system for algorithm registration and discovery
+    - CLI interfaces for direct command-line usage
+    - Standardized I/O interfaces for data flow between modules
+- **PipeCraft**:
+    - Python pipeline compiler and execution framework
+    - Node-based directed acyclic graph (DAG) for workflow definition
+    - Backend abstraction for executing on different compute environments
+    - Containerization support for reproducible execution
+- **Conductor**:
+    - FastAPI-based REST service
+    - SQLAlchemy ORM for database interactions
+    - Async WebSocket implementation for real-time notifications
+    - JWT-based authentication and role-based access control
+- **Canvas**:
+    - React-based frontend with Next.js framework
+    - Zustand for state management
+    - SWR for data fetching and caching
+    - WebSocket integration for real-time updates
 
 ## Repository Structure
 
