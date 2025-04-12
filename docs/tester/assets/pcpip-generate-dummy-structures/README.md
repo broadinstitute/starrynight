@@ -14,7 +14,7 @@ Tools to simulate and validate directory structures for pooled Cell Painting exp
 
 ### Generating CSV Files
 
-```bash
+```sh
 # Generate CSV files and filelist
 ./run_generate_csvs.sh
 ```
@@ -25,7 +25,7 @@ This creates:
 
 ### Generating File Structure
 
-```bash
+```sh
 # Generate simulated file structure
 ./run_generate_files.sh
 ```
@@ -37,7 +37,7 @@ This creates:
 
 ### Comparing Generated Paths
 
-```bash
+```sh
 # Compare paths from both methods to check for discrepancies
 comm -23 generated_paths_from_csvs.txt generated_paths.txt
 ```

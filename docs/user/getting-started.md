@@ -7,32 +7,28 @@ This guide will help you install StarryNight and run your first illumination cor
 StarryNight uses the Nix package manager to provide a consistent and reproducible environment:
 
 1. **Install Nix** (if not already installed):
-   ```bash
-   sh <(curl -L https://nixos.org/nix/install) --daemon
-   ```
 
-2. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/broadinstitute/starrynight.git
-   cd starrynight
-   ```
+        sh <(curl -L https://nixos.org/nix/install) --daemon
 
-3. **Set Up the Environment**:
-   ```bash
-   nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
-   ```
 
-4. **Synchronize Dependencies**:
-   ```bash
-   uv sync
-   ```
+1. **Clone the Repository**:
 
-5. **Verify Installation**:
-   ```bash
-   starrynight --help
-   pipecraft --help
-   conductor --help
-   ```
+        git clone https://github.com/broadinstitute/starrynight.git
+        cd starrynight
+
+2. **Set Up the Environment**:
+
+        nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
+
+3. **Synchronize Dependencies**:
+
+        uv sync
+
+4. **Verify Installation**:
+
+        starrynight --help
+        pipecraft --help
+        conductor --help
 
 ## Quick Start Workflow
 
@@ -40,7 +36,7 @@ This section walks you through running a basic illumination correction workflow.
 
 ### Step 0: Download Sample Data
 
-```bash
+```sh
 # Create a directory for the sample data
 mkdir -p scratch
 
@@ -50,7 +46,7 @@ aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_ex
 
 Before running any commands, set up your data and workspace directories as environment variables:
 
-```bash
+```sh
 export DATADIR='./scratch/starrynight_example_input'
 export WKDIR='./scratch/starrynight_example_output/workspace'
 ```
@@ -59,7 +55,7 @@ export WKDIR='./scratch/starrynight_example_output/workspace'
 
 Create a catalog of all image files in your dataset:
 
-```bash
+```sh
 # Generate the inventory
 starrynight inventory gen \
     -d ${DATADIR} \
@@ -78,7 +74,7 @@ ${WKDIR}/inventory/
 
 Parse the inventory to create a structured index with metadata:
 
-```bash
+```sh
 starrynight index gen \
     -i ${WKDIR}/inventory/inventory.parquet \
     -o ${WKDIR}/index/
@@ -90,7 +86,7 @@ The result will be an `index.parquet` file containing structured metadata for ea
 
 #### 3.1: Generate LoadData Files
 
-```bash
+```sh
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc
@@ -98,7 +94,7 @@ starrynight illum calc loaddata \
 
 #### 3.2: Generate CellProfiler Pipelines
 
-```bash
+```sh
 starrynight illum calc cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc/ \
     -o ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc \
@@ -107,7 +103,7 @@ starrynight illum calc cppipe \
 
 #### 3.3: Execute CellProfiler Pipelines
 
-```bash
+```sh
 starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc/ \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc \

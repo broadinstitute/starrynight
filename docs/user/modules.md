@@ -28,7 +28,7 @@ Most StarryNight modules follow a similar three-step workflow:
 
 The inventory module catalogs all image files in a dataset:
 
-```bash
+```sh
 starrynight inventory gen -d INPUT_DIRECTORY -o OUTPUT_DIRECTORY
 ```
 
@@ -42,7 +42,7 @@ Key features:
 
 The index module extracts structured metadata from file paths:
 
-```bash
+```sh
 starrynight index gen -i INVENTORY_FILE -o OUTPUT_DIRECTORY
 ```
 
@@ -56,7 +56,7 @@ Key features:
 
 The illumination correction module compensates for uneven illumination across the field of view:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
 
@@ -71,7 +71,7 @@ starrynight cp -p PIPELINE_DIRECTORY -l LOADDATA_DIRECTORY -o OUTPUT_DIRECTORY
 
 The alignment module handles registration of images across different channels and cycles:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight align loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
 
@@ -92,7 +92,7 @@ Key features:
 
 The preprocessing module prepares images for downstream analysis:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight preprocess loaddata -i INDEX_FILE -o OUTPUT_DIRECTORY
 
@@ -114,7 +114,7 @@ Key features:
 
 The cell painting module handles cell segmentation and feature extraction:
 
-```bash
+```sh
 # Multiple steps for cell segmentation and feature extraction
 # See CLI reference for detailed options
 ```
@@ -129,7 +129,7 @@ Key features:
 
 The sequencing module processes sequencing-based image data:
 
-```bash
+```sh
 # Multiple steps for cycle alignment and barcode calling
 # See CLI reference for detailed options
 ```

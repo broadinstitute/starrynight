@@ -29,7 +29,7 @@ Both tools use a consistent semantic type system to handle different file types 
 
 ### Running Full Test Suite
 
-```bash
+```sh
 bash run_pcpip.sh
 ```
 
@@ -37,7 +37,7 @@ The script runs the full PCPIP test suite.
 
 ### File Structure Verification
 
-```bash
+```sh
 python verify_file_structure.py input.yaml [-o output_file] [--replace-path OLD_PATH NEW_PATH] [--embedding-dir DIR]
 ```
 
@@ -51,7 +51,7 @@ This tool:
 
 #### Path Replacement
 
-```bash
+```sh
 python verify_file_structure.py input.yaml --replace-path "../../../../scratch/pcpip_example_output" "../../../../scratch/reproduce_pcpip_example_output"
 ```
 
@@ -59,7 +59,7 @@ This is useful for comparing output from different runs or testing reproduction 
 
 #### Embedding Generation
 
-```bash
+```sh
 python verify_file_structure.py input.yaml --embedding-dir path/to/embeddings
 ```
 
@@ -67,7 +67,7 @@ Embeddings provide a content fingerprint for detecting changes in file content.
 
 ### Structure Comparison
 
-```bash
+```sh
 python compare_structures.py first.yaml second.yaml [-o output_file] [--output-format FORMAT] [--compare-embeddings]
 ```
 
@@ -83,7 +83,7 @@ The tool supports multiple output formats:
 
 #### Embedding Comparison
 
-```bash
+```sh
 python compare_structures.py first.yaml second.yaml --compare-embeddings --tolerance 0.01
 ```
 
@@ -95,13 +95,13 @@ To create a minimal output example using the test fixtures:
 
 Create a new directory for the outputs:
 
-```bash
+```sh
 mkdir -p minimal-output-example
 ```
 
 Run verify_file_structure.py on the input YAML files:
 
-```bash
+```sh
 # Process the input.yaml file
 python verify_file_structure.py minimal/input.yaml -o minimal-output-example/input_parsed.yaml --embedding-dir embed
 
@@ -121,7 +121,7 @@ Review the generated files in the minimal-output-example directory to see:
 
 Test with an alternative output directory:
 
-```bash
+```sh
 # Process with path replacement, i.e., test a different output folder
 python \
   verify_file_structure.py minimal/output_pcpip.yaml \
@@ -133,7 +133,7 @@ python \
 
 Compare two output structures:
 
-```bash
+```sh
 # Compare the original and reproduced outputs
 python compare_structures.py \
    minimal-output-example/output_pcpip_parsed.yaml \

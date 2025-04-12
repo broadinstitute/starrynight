@@ -48,7 +48,7 @@ starrynight/
 
 ## Common CLI Patterns
 
-```bash
+```sh
 # General pattern for most modules:
 starrynight [module] loaddata -i [index] -o [output]
 starrynight [module] cppipe -l [loaddata] -o [output] -w [workspace]

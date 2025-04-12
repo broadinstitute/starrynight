@@ -30,7 +30,7 @@ The typical workflow for creating test fixtures is:
 - `download_list.txt`: Commands to download from S3 to local
 - `s3_copy_list.txt`: Commands to copy from one S3 bucket to another
 
-```bash
+```sh
 # Set required environment variables
 export BUCKET="your-source-bucket"
 export PROJECT="your-project-path"
@@ -45,7 +45,7 @@ python create_starrynight_download_list.py
 
 These commands download the test fixture files from AWS S3 using the previously generated download list.
 
-```bash
+```sh
 # Define repository paths
 STARRYNIGHT_REPO_REL="../../../.."
 SCRATCH_DIR=${STARRYNIGHT_REPO_REL}/scratch
@@ -74,14 +74,14 @@ echo "Downloads completed. Verify files were downloaded successfully."
 
 ### Compressing Files
 
-```bash
+```sh
 # Compress TIFF and CSV files to reduce disk usage
 ./compress_starrynight_example.sh
 ```
 
 ### Filtering LoadData CSVs
 
-```bash
+```sh
 STARRYNIGHT_REPO_REL="../../../.."
 LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1"
 LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
@@ -99,7 +99,7 @@ LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
 
 After filtering, you may need to update paths in the CSV files:
 
-```bash
+```sh
 # Update this
 STARRYNIGHT_REPO=/Users/shsingh/Documents/GitHub/starrynight
 BASE_DIR=${STARRYNIGHT_REPO}/scratch/pcpip_example_output
@@ -112,7 +112,7 @@ find ${LOAD_DATA_DIR_TRIMMED} \
 
 ### Validating LoadData Paths
 
-```bash
+```sh
 STARRYNIGHT_REPO_REL="../../../.."
 TRIMMED_LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
 parallel python validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9

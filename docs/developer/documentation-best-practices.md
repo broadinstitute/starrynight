@@ -89,7 +89,7 @@ Example:
 - Include complete, runnable command sequences
 
 Example:
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -108,7 +108,7 @@ Example:
 **Objective**: Verify StarryNight pipeline structure matches reference
 
 **StarryNight Command**:
-```bash
+```sh
 # Command details
 ```
 

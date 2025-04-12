@@ -37,7 +37,7 @@ Yes, you can install StarryNight using a standard Python virtual environment, bu
 
 To upgrade StarryNight to the latest version:
 
-```bash
+```sh
 # Using Nix
 git pull
 nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
@@ -93,17 +93,17 @@ See the Canvas UI guide for details.
 If you see errors about CellProfiler not being found:
 
 1. Using Nix: Ensure you're in the Nix environment
-   ```bash
+   ```sh
    nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
    ```
 
 2. Manual installation: Install CellProfiler
-   ```bash
+   ```sh
    pip install cellprofiler
    ```
 
 3. Set the path explicitly:
-   ```bash
+   ```sh
    export STARRYNIGHT_CELLPROFILER_PATH=/path/to/cellprofiler
    ```
 
@@ -112,7 +112,7 @@ If you see errors about CellProfiler not being found:
 If you see out of memory errors:
 
 1. Reduce the memory usage:
-   ```bash
+   ```sh
    starrynight cp -p /path/to/pipeline -l /path/to/loaddata -o /path/to/output --memory-limit 1024
    ```
 

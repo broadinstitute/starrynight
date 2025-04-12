@@ -191,7 +191,7 @@ starrynight/
 
 #### Option 1: Using Nix (Recommended)
 
-```bash
+```sh
 # Clone the repository
 git clone https://github.com/broadinstitute/starrynight.git
 cd starrynight
@@ -205,7 +205,7 @@ uv sync
 
 #### Option 2: Manual Setup
 
-```bash
+```sh
 # Clone the repository
 git clone https://github.com/broadinstitute/starrynight.git
 cd starrynight
@@ -328,7 +328,7 @@ Canvas implements:
 
 ### Python Tests
 
-```bash
+```sh
 # Run all tests
 pytest
 
@@ -343,7 +343,7 @@ pytest starrynight/tests/modules/test_gen_index.py::test_function_name
 
 ### Frontend Tests
 
-```bash
+```sh
 cd canvas
 npm run test
 ```
@@ -352,14 +352,14 @@ npm run test
 
 ### StarryNight Core
 
-```bash
+```sh
 # Run StarryNight CLI directly
 starrynight --help
 ```
 
 ### Conductor Service
 
-```bash
+```sh
 # Start Conductor API service
 cd conductor
 fastapi dev ./src/conductor/main.py
@@ -367,7 +367,7 @@ fastapi dev ./src/conductor/main.py
 
 ### Canvas Frontend
 
-```bash
+```sh
 cd canvas
 npm run dev
 # Access the UI at http://localhost:3000
@@ -376,26 +376,26 @@ npm run dev
 ## Development Workflow
 
 1. **Create a feature branch**:
-   ```bash
+   ```sh
    git checkout -b feature/your-feature-name
    ```
 
 2. **Make changes**: Implement your feature or fix
 
 3. **Run tests**: Ensure functionality works as expected
-   ```bash
+   ```sh
    pytest
    ruff check .
    ```
 
 4. **Commit changes**: Follow the project's commit conventions
-   ```bash
+   ```sh
    git add .
    git commit -m "feat: add new feature description"
    ```
 
 5. **Push changes**: Share your work
-   ```bash
+   ```sh
    git push -u origin feature/your-feature-name
    ```
 

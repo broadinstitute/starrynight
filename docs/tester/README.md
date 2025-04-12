@@ -48,12 +48,12 @@ The testing framework includes these key resources:
 
 ## Testing Environment Setup
 
-Beyond the [standard StarryNight installation](../getting-started/installation.md), validation requires additional setup:
+Beyond the [standard StarryNight installation](../user/getting-started.md), validation requires additional setup:
 
 ### Prerequisites
 
 - **Nix**: For setting up the complete development environment
-    - Follow the [standard StarryNight installation](../getting-started/installation.md)
+    - Follow the [standard StarryNight installation](../user/getting-started.md)
 - **Additional Tools**:
     - **Graphviz**: For pipeline visualization (`apt install graphviz` or `brew install graphviz`)
     - **cp_graph.py**: For CellProfiler pipeline graph analysis (clone from `https://github.com/shntnu/cp_graph`)
@@ -66,7 +66,7 @@ Beyond the [standard StarryNight installation](../getting-started/installation.m
 
 Set up the validation dataset:
 
-```bash
+```sh
 # Set up environment
 export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
 mkdir -p ${STARRYNIGHT_REPO}/scratch
@@ -82,7 +82,7 @@ mkdir -p ${STARRYNIGHT_REPO}/scratch/starrynight_example_output/workspace/valida
 
 Use these in all validation scripts:
 
-```bash
+```sh
 # Base directories
 export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
 export WKDIR="${STARRYNIGHT_REPO}/scratch/starrynight_example_output/workspace"

@@ -25,7 +25,7 @@ Most StarryNight modules follow a consistent three-step pattern:
 
 Before running any commands, set up your workspace directory as an environment variable for convenience:
 
-```bash
+```sh
 export WKDIR='./scratch/starrynight_example_output/workspace'
 ```
 
@@ -37,7 +37,7 @@ Illumination correction compensates for uneven lighting across the field of view
 
 First, generate correction functions for each channel:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -56,7 +56,7 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_calc
 ```
 
-```bash
+```sh
 # Generate LoadData files
 starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -87,7 +87,7 @@ Module-specific parameters:
 
 Next, apply the correction functions to your images:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight illum apply loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -106,7 +106,7 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_apply
 ```
 
-```bash
+```sh
 # Generate LoadData files
 starrynight illum apply loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -141,7 +141,7 @@ Quality control modules evaluate image and segmentation quality to ensure optima
 
 Pre-segmentation checking evaluates whether images are suitable for segmentation before investing computational resources:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight presegcheck loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -171,7 +171,7 @@ starrynight cp \
 
 Segmentation checking validates the quality of completed segmentation, providing metrics and visualizations:
 
-```bash
+```sh
 # Generate LoadData files
 starrynight segcheck loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -201,7 +201,7 @@ Image alignment is a critical step SBS images, ensuring that images from differe
 
 This step registers all images from different cycles using the nuclei channel as a reference. The alignment process generates transformed images with consistent spatial coordinates across all cycles, which is crucial for accurately matching cells across multiple imaging rounds.
 
-```bash
+```sh
 # Generate LoadData files for alignment
 starrynight align loaddata \
     -i ${WKDIR}/index/index.parquet \
@@ -237,7 +237,7 @@ This step performs the following operations:
 4. Barcode calling to match detected signals to known barcode sequences
 5. Association of barcodes with segmented cells
 
-```bash
+```sh
 # Set input directory with barcode information
 export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
 
@@ -281,7 +281,7 @@ This step generates the final dataset with:
 3. Barcode identity associations with cells
 4. Quality control metrics for all analyzed objects
 
-```bash
+```sh
 # Generate LoadData files for analysis
 starrynight analysis loaddata \
     -i ${WKDIR}/index/index.parquet \

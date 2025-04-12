@@ -20,7 +20,7 @@ Pipeline variants in `_refsource` are from `s3://BUCKET/projects/PROJECT/workspa
 
 <details>
 
-```bash
+```sh
 cd _refsource
 diff 1_CP_Illum/1_CP_Illum.cppipe 1_CP_Illum/1_Illum_Plate1_Plate2.cppipe > 1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff
 diff 2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe 2_CP_Apply_Illum/2_CP_Apply_Illum_Plate3_Plate4.cppipe > 2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff
@@ -49,7 +49,7 @@ After skimming the [diffs](https://github.com/broadinstitute/starrynight/tree/ma
 
 ### Reference Pipelines Creation
 
-```bash
+```sh
 cp _refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
 cp _refsource/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe ref_2_CP_Apply_Illum.cppipe
 cp _refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe ref_3_CP_SegmentationCheck.cppipe
@@ -75,7 +75,7 @@ pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6
 
 This was discussed further in <https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724>
 
-```bash
+```sh
 mkdir -p _pcpip_12cycles/diff
 
 refsource_1="_refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe"
@@ -141,12 +141,12 @@ Files in `_ref_graph_format` were created as follows:
 
 - **JSON files**: Exported from CellProfiler 4.2.8
 - **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.7.0/cp_graph.py) tool:
-  ```bash
+  ```sh
   cd _ref_graph_format
   find json/ -name "*.json" | parallel uv run --script ${CP_GRAPH} {} dot/{/.}.dot
   ```
 - **SVG/PNG files**: Generated from DOT files using Graphviz:
-  ```bash
+  ```sh
   cd _ref_graph_format
   find dot -name "*.dot" | parallel dot -Gdpi=50 -Tpng {} -o png/{/.}.png
   find dot -name "*.dot" | parallel dot -Tsvg {} -o svg/{/.}.svg

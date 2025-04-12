@@ -41,7 +41,7 @@ Each rule identifies specific components of the path, such as dataset ID, batch 
 
 When generating an index, you can specify a custom parser path:
 
-```bash
+```sh
 starrynight index gen -i ./workspace/inventory/inventory.parquet \
                       -o ./workspace/index/ \
                       --parser /path/to/custom/parser.lark
