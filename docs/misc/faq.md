@@ -1,5 +1,8 @@
 # Frequently Asked Questions
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 This page addresses common questions and issues when using StarryNight.
 
 ## General Questions

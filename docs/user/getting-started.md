@@ -1,15 +1,44 @@
-# Quick Start Guide
+# Getting Started with StarryNight
 
-This guide will walk you through running a basic illumination correction workflow with StarryNight.
+This guide will help you install StarryNight and run your first illumination correction workflow.
 
-## Prerequisites
+## Installation
 
-Before starting, ensure you have installed StarryNight (see the [Installation Guide](installation.md))
+StarryNight uses the Nix package manager to provide a consistent and reproducible environment:
 
+1. **Install Nix** (if not already installed):
+   ```bash
+   sh <(curl -L https://nixos.org/nix/install) --daemon
+   ```
 
-## Step 0: Download sample data
+2. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/broadinstitute/starrynight.git
+   cd starrynight
+   ```
 
-Download this example dataset:
+3. **Set Up the Environment**:
+   ```bash
+   nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
+   ```
+
+4. **Synchronize Dependencies**:
+   ```bash
+   uv sync
+   ```
+
+5. **Verify Installation**:
+   ```bash
+   starrynight --help
+   pipecraft --help
+   conductor --help
+   ```
+
+## Quick Start Workflow
+
+This section walks you through running a basic illumination correction workflow.
+
+### Step 0: Download Sample Data
 
 ```bash
 # Create a directory for the sample data
@@ -19,18 +48,16 @@ mkdir -p scratch
 aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_input scratch/starrynight_example_input
 ```
 
-</details>
-
-Before running any commands, set up your data and workspace directories as environment variables for convenience:
+Before running any commands, set up your data and workspace directories as environment variables:
 
 ```bash
 export DATADIR='./scratch/starrynight_example_input'
 export WKDIR='./scratch/starrynight_example_output/workspace'
 ```
 
-## Step 1: Generate Inventory
+### Step 1: Generate Inventory
 
-First, create a catalog of all image files in your dataset:
+Create a catalog of all image files in your dataset:
 
 ```bash
 # Generate the inventory
@@ -39,7 +66,7 @@ starrynight inventory gen \
     -o ${WKDIR}/inventory
 ```
 
-This command will scan all files in the input directory and create an inventory file:
+This command will create an inventory file:
 
 ```
 ${WKDIR}/inventory/
@@ -47,9 +74,9 @@ ${WKDIR}/inventory/
 └── inventory.parquet   # Main inventory file
 ```
 
-## Step 2: Generate Index
+### Step 2: Generate Index
 
-Next, parse the inventory to create a structured index with metadata:
+Parse the inventory to create a structured index with metadata:
 
 ```bash
 starrynight index gen \
@@ -59,14 +86,9 @@ starrynight index gen \
 
 The result will be an `index.parquet` file containing structured metadata for each image.
 
-> **Note**:
+### Step 3: Run Illumination Correction
 
-
-## Step 3: Run Illumination Correction
-
-### 3.1: Generate LoadData Files
-
-Create CSV files for CellProfiler to load images:
+#### 3.1: Generate LoadData Files
 
 ```bash
 starrynight illum calc loaddata \
@@ -74,9 +96,7 @@ starrynight illum calc loaddata \
     -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc
 ```
 
-### 3.2: Generate CellProfiler Pipelines
-
-Create CellProfiler pipeline files:
+#### 3.2: Generate CellProfiler Pipelines
 
 ```bash
 starrynight illum calc cppipe \
@@ -85,9 +105,7 @@ starrynight illum calc cppipe \
     -w ${WKDIR}
 ```
 
-### 3.3: Execute CellProfiler Pipelines
-
-Run the pipelines to generate illumination correction files:
+#### 3.3: Execute CellProfiler Pipelines
 
 ```bash
 starrynight cp \
@@ -96,7 +114,7 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_calc
 ```
 
-## Step 4: Verify Results
+### Step 4: Verify Results
 
 The illumination correction files will be created in the output directory:
 
@@ -128,5 +146,6 @@ plt.show()
 
 ## Next Steps
 
-- Learn about other [Processing Modules](../user/modules.md)
-- Understand [Core Concepts](../user/core-concepts.md) of StarryNight
+- Learn about [Core Concepts](core-concepts.md) of the StarryNight platform
+- Explore available [Processing Modules](modules.md)
+- Try an [end-to-end pipeline example](example-pipeline-cli.md)

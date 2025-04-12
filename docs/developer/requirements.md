@@ -1,5 +1,9 @@
 # Requirements
 
+!!! Note
+    - The status indicators may not reflect the current state of development, as the document is only reviewed and updated periodically.
+    - No requirements-to-implementation mapping exists yet.
+
 ## 1. System Overview
 
 This document outlines requirements for a next-generation system for processing, analyzing, and managing high-throughput microscopy data from image-based profiling experiments, in particular, pooled optical screens. The system will orchestrate complex image processing workflows, manage computational resources efficiently, and provide mechanisms for both automated and manual intervention during the processing pipeline.
