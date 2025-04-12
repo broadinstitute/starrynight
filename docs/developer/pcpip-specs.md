@@ -91,7 +91,7 @@ flowchart TD
 
 Each pipeline in the workflow is orchestrated by a corresponding AWS Lambda function (PCP-1 through PCP-9). These Lambda functions automate the pipeline execution and handle the transition of data between stages in a sequential workflow:
 
-1. The workflow begins with two parallel tracks: cell painting processing (PCP-1 through PCP-4) and barcoding processing (PCP-5 through PCP-8)
+1. The workflow begins with two parallel tracks: Cell Painting processing (PCP-1 through PCP-4) and barcoding processing (PCP-5 through PCP-8)
 2. Each Lambda function is triggered by the output of the previous step (typically a file upload to S3)
 3. For example, PCP-1-CP-IllumCorr is triggered by the upload of the 1_CP_Illum.cppipe file, and produces illumination function files that then trigger PCP-2-CP-ApplyIllum
 4. The final Lambda function (PCP-9-Analysis) integrates the outputs from both tracks for comprehensive analysis
@@ -228,7 +228,7 @@ Each layer serves a distinct purpose in the overall system:
 The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all experiment-specific parameters:
 
 ##### Image Grid Configuration
-- `painting_rows`, `painting_columns`: Define cell painting image layout for square acquisitions
+- `painting_rows`, `painting_columns`: Define Cell Painting image layout for square acquisitions
 - `painting_imperwell`: Defines total images per well for circular acquisitions (overrides rows/columns)
 - `barcoding_rows`, `barcoding_columns`: Define barcoding image layout for square acquisitions
 - `barcoding_imperwell`: Defines total images per well for circular acquisitions (overrides rows/columns)
@@ -343,7 +343,7 @@ This section provides detailed specifications for all nine primary CellProfiler 
 
 #### Pipeline 1: Cell Painting Illumination Correction (1_CP_Illum.cppipe)
 
-**Purpose**: Calculate per-plate illumination correction functions for each cell painting channel
+**Purpose**: Calculate per-plate illumination correction functions for each Cell Painting channel
 
 **Lambda Function**: `PCP-1-CP-IllumCorr`
 
@@ -413,7 +413,7 @@ This section provides detailed specifications for all nine primary CellProfiler 
 
 - **Trigger**: S3 upload of SegmentationCheck_Experiment.csv (from Pipeline 3)
 - **Implementation**: Uses FIJI scripts rather than CellProfiler
-- **Output**: Stitched and cropped cell painting images
+- **Output**: Stitched and cropped Cell Painting images
 
 **Key Operations**:
 
@@ -496,7 +496,7 @@ This section provides detailed specifications for all nine primary CellProfiler 
 
 #### Pipeline 8: Barcoding Stitching and Cropping
 
-**Purpose**: Stitch and crop barcoding images similar to cell painting images
+**Purpose**: Stitch and crop barcoding images similar to Cell Painting images
 
 **Lambda Function**: `PCP-8-BC-Stitching`
 
@@ -507,14 +507,14 @@ This section provides detailed specifications for all nine primary CellProfiler 
 **Key Operations**:
 
 1. Similar to Pipeline 4, but operates on barcoding images
-2. Stitches according to same grid layout as cell painting
-3. Produces consistent tile naming for alignment with cell painting tiles
+2. Stitches according to same grid layout as Cell Painting
+3. Produces consistent tile naming for alignment with Cell Painting tiles
 
 ### Final Analysis Pipeline
 
 #### Pipeline 9: Analysis (9_Analysis.cppipe)
 
-**Purpose**: Integrate cell painting and barcoding data for downstream analysis
+**Purpose**: Integrate Cell Painting and barcoding data for downstream analysis
 
 **Lambda Function**: `PCP-9-Analysis`
 
@@ -524,11 +524,11 @@ This section provides detailed specifications for all nine primary CellProfiler 
 
 **Key Operations**:
 
-1. Align cell painting images to barcoding images using DAPI channels
+1. Align Cell Painting images to barcoding images using DAPI channels
 2. Identify and mask overly-confluent regions
-3. Segment nuclei, cells, cytoplasm in cell painting images
+3. Segment nuclei, cells, cytoplasm in Cell Painting images
 4. Locate barcode foci in aligned images
-5. Measure cell painting features across all compartments
+5. Measure Cell Painting features across all compartments
 6. Call barcodes and annotate quality metrics
 7. Export segmentation masks and merged, annotated images for visualization
 
@@ -849,7 +849,7 @@ Note:
     - `subdir`: Points to barcoding images (e.g., `{batch}/images_corrected/barcoding`)
     - `channame`: Uses "DAPI" instead of "DNA"
     - `rows`, `columns`, `imperwell`: Uses barcoding grid layout parameters
-    - `scalingstring`: Set to "1.99" (vs. "1" for cell painting)
+    - `scalingstring`: Set to "1.99" (vs. "1" for Cell Painting)
 - **Output Files**:
     1. Stitched whole-well images for each channel and cycle
     2. Cropped tiles from stitched images
@@ -939,7 +939,7 @@ Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree
         - Compares correction functions across plates
         - Highlights potential issues in illumination correction
     - Used in:
-        - Pipeline 1 (Cell Painting Illumination Correction): Validates illumination correction functions for cell painting channels
+        - Pipeline 1 (Cell Painting Illumination Correction): Validates illumination correction functions for Cell Painting channels
         - Pipeline 5 (Barcoding Illumination Correction): Validates illumination correction functions for barcoding channels
     - QC Focus: Ensures consistent and appropriate illumination correction
     - QC Metrics implemented:
@@ -966,7 +966,7 @@ Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree
         - Check for consistent segmentation patterns
         - Verify no systematic failures
 3. **`Visualize_stitched_images.py`**
-    - Purpose: Validates stitching quality for both cell painting and barcoding images
+    - Purpose: Validates stitching quality for both Cell Painting and barcoding images
     - Functionality:
         - Creates 2x2 grid visualization of stitched quadrants
         - Shows TopLeft, TopRight, BottomLeft, BottomRight sections

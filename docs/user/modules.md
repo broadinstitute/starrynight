@@ -116,7 +116,7 @@ Key features:
 
 ## Cell Painting Analysis Module
 
-The cell painting module handles cell segmentation and feature extraction:
+The Cell Painting module handles cell segmentation and feature extraction:
 
 ```sh
 # Multiple steps for cell segmentation and feature extraction
