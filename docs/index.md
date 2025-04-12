@@ -14,13 +14,11 @@ A CellProfiler-based system for generating and executing specialized microscopy 
 
 - Image processing and analysis powered by CellProfiler
 - Supports key operations including illumination correction, alignment, preprocessing, and feature extraction
-- Designed for efficient processing of large-scale optical pooled screening data
 
 ### PipeCraft
 
-A workflow engine for orchestrating complex analysis pipelines:
+A Python pipeline compiler and execution framework:
 
-- Pipeline definition framework
 - Support for multiple execution backends
 - Predefined workflow templates
 - Scaling from local to cloud environments
@@ -29,7 +27,6 @@ A workflow engine for orchestrating complex analysis pipelines:
 
 Job management and monitoring system:
 
-- Project organization
 - Job configuration and execution
 - Run monitoring and results management
 - API and database services
@@ -38,7 +35,6 @@ Job management and monitoring system:
 
 Web-based user interface:
 
-- Intuitive project management
 - Job configuration interface
 - Run monitoring and visualization
 - Results exploration
