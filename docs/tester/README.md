@@ -98,39 +98,47 @@ See individual validation documents for pipeline-specific variables.
 
 The following diagram illustrates the 5-stage validation process and the key tools used at each stage:
 
+
 ```mermaid
 flowchart TD
-    subgraph Stage1["Stage 1: Graph Topology"]
-        A1[Reference Pipeline] -->|cp_graph.py| B1[Reference Graph]
-        A2[StarryNight Pipeline] -->|cp_graph.py| B2[StarryNight Graph]
-        B1 ---|diff| B2
+    subgraph Stage1["Stage 1: Topology"]
+        RefPipe[Reference Pipeline] -->|cp_graph.py| RefGraph[Reference Graph]
+        SNPipe[StarryNight Pipeline] -->|cp_graph.py| SNGraph[StarryNight Graph]
+        RefGraph -->|diff| GraphComp
+        SNGraph -->|diff| GraphComp
+        GraphComp[Graph Comparison]
     end
 
-    subgraph Stage2["Stage 2: LoadData Generation"]
-        C1[Reference LoadData CSV] --> C3[Python script]
-        C3 --> C2[StarryNight LoadData CSV]
+    subgraph Stage2["Stage 2: LoadData"]
+        RefLD -->|diff| LDComp
+        SNLD -->|diff| LDComp
+        LDComp[LoadData Comparison]
     end
 
-    subgraph Stage3["Stage 3: Reference Execution"]
-        D1[Reference Pipeline] -->|run_pcpip.sh| E1[Reference Output]
-        E1 -->|verify_file_structure.py| F1[Reference Structure]
+    subgraph Stage3["Stage 3: Reference Run"]
+        RefPipeExec[Reference Pipeline] -->|run_pcpip.sh| RefOut[Reference Output]
+        RefOut -->|verify_file_structure.py| RefStruct[Reference Structure]
     end
 
-    subgraph Stage4["Stage 4: StarryNight Pipeline"]
-        D2[StarryNight Pipeline] -->|run_pcpip.sh| E2[StarryNight Output]
-        E2 -->|verify_file_structure.py| F2[StarryNight Structure]
+    subgraph Stage4["Stage 4: StarryNight Run"]
+        SNPipeExec[StarryNight Pipeline] -->|run_pcpip.sh| SNOut[StarryNight Output]
+        SNOut -->|verify_file_structure.py| SNStruct[StarryNight Structure]
     end
 
     subgraph Stage5["Stage 5: End-to-End"]
-        G1[StarryNight CLI] -->|starrynight commands| G2[End-to-End Output]
-        G2 -->|verify_file_structure.py| G3[E2E Structure]
+        SNCLI[StarryNight CLI] -->|starrynight commands| E2EOut[End-to-End Output]
+        E2EOut -->|verify_file_structure.py| E2EStruct[E2E Structure]
     end
 
     Stage1 --> Stage2 --> Stage3
-    Stage3 --> Stage4
-    Stage3 --> Stage5
-    F1 ---|compare_structures.py| F2
-    F1 ---|compare_structures.py| G3
+    SNStruct -->|compare_structures.py| RefComp1
+    RefStruct -->|compare_structures.py| RefComp1
+    RefComp1[Run Comparison 1]
+
+    RefStruct -->|compare_structures.py| RefComp2
+    E2EStruct -->|compare_structures.py| RefComp2
+    RefComp2[Run Comparison 2]
+
 ```
 
 ## Validation Stages
