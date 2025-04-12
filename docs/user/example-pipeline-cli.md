@@ -1,5 +1,8 @@
 # Image Processing Pipeline Example
 
+!!! Warning
+    - The documented has not been updated to reflect recent CLI changes
+
 This guide walks through a complete example of processing microscopy images using StarryNight's key modules.
 
 ## Prerequisites
