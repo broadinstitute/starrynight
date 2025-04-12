@@ -2,6 +2,46 @@
 
 This guide provides information for developers who want to contribute to StarryNight.
 
+!!! warning
+
+    **This is a first draft of the document.**
+
+    Several updates are pending
+
+    Setup Steps
+
+      - Remove Option 2 (manual setup) entirely.
+      - Only include Option 1 (Nix) and clearly state that it is mandatory.
+
+    Running Tests
+
+    - Indicate that tests are not currently passing because of the refactor
+    - Indicat that the tests are minimal
+
+    Running Components Locally
+
+    - Verify that the instructions accurately reflect what can be executed now.
+    - For components like the Conductor Service and Canvas Frontend, note if their commands refer to features scheduled for a future release.
+
+    Development Workflow
+
+    - Consider dropping the Development Workflow section to reduce bloat, as it mainly outlines basic feature-branch practices.
+
+    Coding Standards
+
+    - Consider removing or relocating the Coding Standards section.
+    - Optionally, add a brief note to follow existing standards and move detailed guidelines to a separate contributing document.
+
+    Extending StarryNight
+
+    - Ensure that instructions for extending StarryNight (e.g., creating algorithms, CLI commands, and module definitions) are accurate and reflect current capabilities.
+    - For extending the Conductor and Canvas, clearly indicate if these features are fully implemented or are planned for future updates.
+
+    Distributed Execution
+
+    - Double-check that the distributed execution section (including AWS Batch support) is correct and up to date.
+
+
 ## System Architecture
 
 StarryNight is a modular platform for high-throughput microscopy image processing with four main components that work together to process, analyze, and manage microscopy image data.
@@ -593,19 +633,3 @@ Pipecraft supports execution across multiple compute resources:
 - Local execution for development
 - AWS Batch for cloud-scale processing
 - Custom execution backends for specific environments
-
-## Getting Help
-
-If you need assistance, you can:
-
-- Check the existing documentation
-- Browse the source code
-- Contact the core team at imaging@broadinstitute.org
-- Join community discussions on the issue tracker
-
-## Additional Resources
-
-- GitHub repository: https://github.com/broadinstitute/starrynight
-- Issue tracker: https://github.com/broadinstitute/starrynight/issues
-- Development roadmap: See project milestones on GitHub
-- Related tools: CellProfiler, ImageJ, NumPy, scikit-image
