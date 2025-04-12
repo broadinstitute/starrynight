@@ -18,7 +18,7 @@ StarryNight uses the Nix package manager to provide a consistent and reproducibl
 
 2. **Set Up the Environment**:
 
-        nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
+        nix develop --extra-experimental-features nix-command --extra-experimental-features flakes .
 
 3. **Synchronize Dependencies**:
 
