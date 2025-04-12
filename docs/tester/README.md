@@ -110,35 +110,48 @@ flowchart TD
     end
 
     subgraph Stage2["Stage 2: LoadData"]
-        RefLD -->|diff| LDComp
-        SNLD -->|diff| LDComp
+        RefLD[Reference LoadData] -->|diff| LDComp
+        SNLD[StarryNight LoadData] -->|diff| LDComp
         LDComp[LoadData Comparison]
     end
 
     subgraph Stage3["Stage 3: Reference Run"]
-        RefPipeExec[Reference Pipeline] -->|run_pcpip.sh| RefOut[Reference Output]
-        RefOut -->|verify_file_structure.py| RefStruct[Reference Structure]
+        RefPipeExec[Reference Pipeline] -->|run_pcpip.sh| RefOut
+        RefOut -->|verify_file_structure.py| RefStruct
+        RefOut[Reference Output]
+        RefStruct[Reference Structure]
     end
 
-    subgraph Stage4["Stage 4: StarryNight Run"]
-        SNPipeExec[StarryNight Pipeline] -->|run_pcpip.sh| SNOut[StarryNight Output]
-        SNOut -->|verify_file_structure.py| SNStruct[StarryNight Structure]
+    subgraph Stage4["Stage 4: StarryNight by hand"]
+        SNPipeExec[StarryNight Pipeline] -->|run_pcpip.sh| SN1Out
+        SN1Out -->|verify_file_structure.py| SN1Struct
+        SN1Out[StarryNight Output]
+        SN1Struct[StarryNight Structure]
+
+        SN1Out -->|diff| RefSN1Comp
+        Ref1Struct -->|diff| RefSN1Comp
+
+        RefSN1Comp[Output Comparison]
+        Ref1Struct[Reference Structure]
     end
 
-    subgraph Stage5["Stage 5: End-to-End"]
-        SNCLI[StarryNight CLI] -->|starrynight commands| E2EOut[End-to-End Output]
-        E2EOut -->|verify_file_structure.py| E2EStruct[E2E Structure]
+    subgraph Stage5["Stage 5: StarryNight End-to-End"]
+        SNCLI[StarryNight CLI] -->|starrynight commands| SN2Out
+        SN2Out -->|verify_file_structure.py| SN2Struct
+        SN2Out[End-to-End Output]
+        SN2Struct[E2E Structure]
+
+        SN2Out -->|diff| RefSN2Comp
+        Ref2Struct -->|diff| RefSN2Comp
+
+        RefSN2Comp[Output Comparison]
+        Ref2Struct[Reference Structure]
+
     end
 
     Stage1 --> Stage2 --> Stage3
-    SNStruct -->|compare_structures.py| RefComp1
-    RefStruct -->|compare_structures.py| RefComp1
-    RefComp1[Run Comparison 1]
-
-    RefStruct -->|compare_structures.py| RefComp2
-    E2EStruct -->|compare_structures.py| RefComp2
-    RefComp2[Run Comparison 2]
-
+    Stage3 --> Stage4
+    Stage3 --> Stage5
 ```
 
 ## Validation Stages
