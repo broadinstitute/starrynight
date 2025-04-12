@@ -1,5 +1,8 @@
 # Getting Started with StarryNight
 
+!!! Warning
+    - The documented has not been updated to reflect recent CLI changes
+
 This guide will help you install StarryNight and run your first illumination correction workflow.
 
 ## Installation
