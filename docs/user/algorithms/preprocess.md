@@ -1,5 +1,8 @@
 # Image Preprocessing (preprocess.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Implements a comprehensive preprocessing pipeline for sequencing-based (SBS) microscopy images to prepare them for downstream analysis, performing background subtraction, fluorescence compensation, cell segmentation, and barcode spot detection.
 
 ## Key Components

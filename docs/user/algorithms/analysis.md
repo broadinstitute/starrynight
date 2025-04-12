@@ -1,5 +1,8 @@
 # Analysis (analysis.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Implements a comprehensive analysis pipeline for microscopy images that integrates quality control, segmentation, feature extraction, and barcode calling to enable detailed phenotypic analysis of optical pooled screening experiments.
 
 ## Key Components

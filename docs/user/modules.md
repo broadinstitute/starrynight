@@ -1,5 +1,9 @@
 # Processing Modules
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
+
 This guide provides an overview of the processing modules available in StarryNight.
 
 ## Module Overview

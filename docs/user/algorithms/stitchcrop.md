@@ -1,5 +1,8 @@
 # Stitch and Crop (stitchcrop.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Stitches together multiple microscopy image tiles into a single composite image, enabling reconstruction of complete wells from multiple fields of view (FOVs).
 
 ## Key Components

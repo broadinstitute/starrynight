@@ -1,5 +1,8 @@
 # Parser Configuration
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 This guide explains how to configure and customize path parsers in StarryNight to work with your own data organization.
 
 ## Understanding Path Parsers

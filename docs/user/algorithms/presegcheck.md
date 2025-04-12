@@ -1,5 +1,8 @@
 # Pre-Segmentation Check (presegcheck.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Assesses image quality and segmentation feasibility prior to full image analysis by identifying confluent regions, nuclei, and cells to evaluate whether images are suitable for downstream processing.
 
 ## Key Components

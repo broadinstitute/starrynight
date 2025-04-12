@@ -1,5 +1,8 @@
 # Segmentation Check (segcheck.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Validates cell segmentation quality in microscopy images by performing cell and nuclei segmentation and generating visualizations that allow researchers to assess quality before proceeding with full analysis.
 
 ## Key Components

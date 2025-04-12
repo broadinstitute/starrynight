@@ -1,5 +1,8 @@
 # Algorithm Documentation
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 This directory contains concise technical documentation for algorithms in the StarryNight project, focusing on unique aspects and implementation details not obvious from the code.
 
 ## CellProfiler as the Foundation

@@ -1,5 +1,8 @@
 # Image Alignment (align.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Registers images across different cycles in sequencing-based imaging (SBS) experiments, enabling accurate tracking of cells across multiple imaging cycles for applications like optical pooled screening.
 
 ## Key Components

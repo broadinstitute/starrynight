@@ -1,5 +1,8 @@
 # Illumination Calculation (illum_calc.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Calculates illumination correction functions for microscopy images to normalize uneven illumination patterns, a critical preprocessing step that improves downstream analysis quality.
 
 ## Key Components

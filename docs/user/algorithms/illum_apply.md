@@ -1,5 +1,8 @@
 # Illumination Apply (illum_apply.py)
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 Applies previously calculated illumination correction functions to microscopy images, normalizing uneven illumination patterns to improve downstream analysis accuracy.
 
 ## Key Components
