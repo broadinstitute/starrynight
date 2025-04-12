@@ -41,6 +41,8 @@ requires = ["setuptools>=64.0.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.ruff]
+line-length = 80
+
 [tool.ruff.lint]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
 exclude = ["vendor", "src/starrynight/modules/schema.py"]
