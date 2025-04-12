@@ -1,15 +1,19 @@
 """Execute PCP generic pipeline."""
 
 # %%
-from pathlib import Path
+from pathlib import Path  # noqa: I001
 
 from pipecraft.backend.snakemake import SnakeMakeBackend, SnakeMakeConfig
 
 from starrynight.experiments.pcp_generic import PCPGeneric, PCPGenericInitConfig
 
 # cp_illum_apply
-from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
-from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
+from starrynight.modules.cp_illum_apply.apply_cp import (
+    CPApplyIllumInvokeCPModule,
+)
+from starrynight.modules.cp_illum_apply.apply_cppipe import (
+    CPApplyIllumGenCPPipeModule,
+)
 from starrynight.modules.cp_illum_apply.apply_load_data import (
     CPApplyIllumGenLoadDataModule,
 )
@@ -24,9 +28,7 @@ from starrynight.modules.cp_illum_calc.calc_load_data import (
 )
 
 # cp_segcheck
-from starrynight.modules.cp_segcheck.segcheck_cp import (
-    CPSegcheckInvokeCPModule,
-)
+from starrynight.modules.cp_segcheck.segcheck_cp import CPSegcheckInvokeCPModule
 from starrynight.modules.cp_segcheck.segcheck_cppipe import (
     CPSegcheckGenCPPipeModule,
 )
@@ -128,7 +130,10 @@ cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_calc_illum_load_data_mod.pipe, backend_config, exec_runs / "run003", exec_mounts
+    cp_calc_illum_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run003",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -138,7 +143,10 @@ cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_calc_illum_cppipe_mod.pipe, backend_config, exec_runs / "run004", exec_mounts
+    cp_calc_illum_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run004",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -148,7 +156,10 @@ cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_calc_illum_invoke_mod.pipe, backend_config, exec_runs / "run005", exec_mounts
+    cp_calc_illum_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run005",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -164,7 +175,10 @@ cp_apply_illum_load_data_mod = CPApplyIllumGenLoadDataModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_apply_illum_load_data_mod.pipe, backend_config, exec_runs / "run006", exec_mounts
+    cp_apply_illum_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run006",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -174,7 +188,10 @@ cp_apply_illum_cppipe_mod = CPApplyIllumGenCPPipeModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_apply_illum_cppipe_mod.pipe, backend_config, exec_runs / "run007", exec_mounts
+    cp_apply_illum_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run007",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -184,7 +201,10 @@ cp_apply_illum_invoke_mod = CPApplyIllumInvokeCPModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_apply_illum_invoke_mod.pipe, backend_config, exec_runs / "run008", exec_mounts
+    cp_apply_illum_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run008",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -200,7 +220,10 @@ cp_segcheck_load_data_mod = CPSegcheckGenLoadDataModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_segcheck_load_data_mod.pipe, backend_config, exec_runs / "run009", exec_mounts
+    cp_segcheck_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run009",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -210,7 +233,10 @@ cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_segcheck_cppipe_mod.pipe, backend_config, exec_runs / "run010", exec_mounts
+    cp_segcheck_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run010",
+    exec_mounts,
 )
 run = exec_backend.run()
 
@@ -220,6 +246,9 @@ cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    cp_segcheck_invoke_mod.pipe, backend_config, exec_runs / "run011", exec_mounts
+    cp_segcheck_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run011",
+    exec_mounts,
 )
 run = exec_backend.run()
