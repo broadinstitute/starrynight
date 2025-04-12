@@ -57,7 +57,7 @@ pip install -e conductor/
 1. Organize your data with a consistent file structure
 2. Generate an inventory and index
 3. Run the appropriate processing modules
-4. See the [Quick Start Guide](../getting-started/quickstart.md) for details
+4. See the [Quick Start Guide](../user/getting-started.md) for details
 
 ### What file formats does StarryNight support?
 

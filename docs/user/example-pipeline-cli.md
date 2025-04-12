@@ -6,7 +6,7 @@ This guide walks through a complete example of processing microscopy images usin
 
 Before starting this workflow, you need:
 
-- A generated inventory and index (see [Quick Start Guide](../getting-started/quickstart.md))
+- A generated inventory and index (see [Quick Start Guide](../user/getting-started.md))
 - Sufficient disk space for intermediate and output files
 
 ## Pipeline Overview
