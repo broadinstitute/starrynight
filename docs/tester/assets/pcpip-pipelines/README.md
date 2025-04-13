@@ -143,8 +143,8 @@ Files in `_ref_graph_format` were created as follows:
 - **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.10.0/cp_graph.py) tool. **SVG/PNG files**: Generated from DOT files using Graphviz.
   ```sh
   cd _ref_graph_format/
-  rm -rf dot png svg
-  mkdir -p dot png svg
+  rm -rf dot dotmin png svg
+  mkdir -p dot dotmin png svg
 
   CP_GRAPH="${HOME}/Documents/GitHub/cp_graph/cp_graph.py"
   ROOT_NODES_FILE=root_nodes.txt
@@ -162,4 +162,14 @@ Files in `_ref_graph_format` were created as follows:
   find dot -name "*.dot" | parallel dot -Gdpi=50 -Tpng {} -o png/{/.}.png
 
   find dot -name "*.dot" | parallel dot -Tsvg {} -o svg/{/.}.svg
+
+  find json/ -name "*.json" | \
+  parallel uv run --script ${CP_GRAPH} \
+    {} \
+    dotmin/{/.}.dot \
+    --remove-unused-data \
+    --exclude-module-types=ExportToSpreadsheet \
+    --root-nodes=${ROOT_NODES} \
+    --ultra-minimal # --highlight-filtered
+
   ```
