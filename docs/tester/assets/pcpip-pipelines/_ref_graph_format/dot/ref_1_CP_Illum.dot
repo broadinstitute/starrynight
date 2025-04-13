@@ -14,8 +14,6 @@ SaveImages_4cf7a938 [type=module, label="SaveImages #12", module_name=SaveImages
 image__DownsampledDNA [type=image, label=DownsampledDNA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__DownsampledPhalloidin [type=image, label=DownsampledPhalloidin, shape=ellipse, style=filled, fillcolor=lightgray];
 image__DownsampledZO1 [type=image, label=DownsampledZO1, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueAvg [type=image, label=IllumBlueAvg, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueDilated [type=image, label=IllumBlueDilated, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumDNA [type=image, label=IllumDNA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumPhalloidin [type=image, label=IllumPhalloidin, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumZO1 [type=image, label=IllumZO1, shape=ellipse, style=filled, fillcolor=lightgray];
@@ -25,14 +23,8 @@ image__OrigZO1 [type=image, label=OrigZO1, shape=ellipse, style=filled, fillcolo
 image__UpsampledIllumDNA [type=image, label=UpsampledIllumDNA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__UpsampledIllumPhalloidin [type=image, label=UpsampledIllumPhalloidin, shape=ellipse, style=filled, fillcolor=lightgray];
 image__UpsampledIllumZO1 [type=image, label=UpsampledIllumZO1, shape=ellipse, style=filled, fillcolor=lightgray];
-CorrectIlluminationCalculate_2ab137a7 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_2ab137a7 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_2ab137a7 -> image__IllumPhalloidin [type="image_output"];
-CorrectIlluminationCalculate_cd0871b -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_cd0871b -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_cd0871b -> image__IllumZO1 [type="image_output"];
-CorrectIlluminationCalculate_e3750f2a -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_e3750f2a -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_e3750f2a -> image__IllumDNA [type="image_output"];
 Resize_32606b38 -> image__DownsampledDNA [type="image_output"];
 Resize_6f9ec43f -> image__UpsampledIllumZO1 [type="image_output"];
@@ -52,4 +44,7 @@ image__OrigZO1 -> Resize_b00c8387 [type="image_input"];
 image__UpsampledIllumDNA -> SaveImages_4cf7a938 [type="image_input"];
 image__UpsampledIllumPhalloidin -> SaveImages_392621f0 [type="image_input"];
 image__UpsampledIllumZO1 -> SaveImages_46180921 [type="image_input"];
+
+  {rank = min; image__OrigDNA; image__OrigPhalloidin; image__OrigZO1;}
+  {rank = max; SaveImages_392621f0; SaveImages_4cf7a938; SaveImages_46180921;}
 }

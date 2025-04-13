@@ -49,4 +49,7 @@ image__OrigZO1 -> CorrectIlluminationApply_4841df99 [type="image_input"];
 object__ConfluentRegions -> MaskImage_76b70196 [type="object_input"];
 object__ConfluentRegions -> MaskImage_9954d6b5 [type="object_input"];
 object__Nuclei -> IdentifySecondaryObjects_242958a0 [type="object_input"];
+
+  {rank = min; image__OrigPhalloidin; image__IllumPhalloidin; image__OrigZO1; image__IllumZO1; image__OrigDNA; image__IllumDNA;}
+  {rank = max; SaveImages_1f63435b; SaveImages_2a9b1e28; SaveImages_4195e184;}
 }

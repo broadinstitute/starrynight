@@ -87,8 +87,6 @@ image__Cycle03_G_BackSub [type=image, label="Cycle03_G_BackSub", shape=ellipse, 
 image__Cycle03_T [type=image, label="Cycle03_T", shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle03_T_BackSub [type=image, label="Cycle03_T_BackSub", shape=ellipse, style=filled, fillcolor=lightgray];
 image__EnhanceOrSuppressFeatures [type=image, label=EnhanceOrSuppressFeatures, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueAvg [type=image, label=IllumBlueAvg, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueDilated [type=image, label=IllumBlueDilated, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumMeanA [type=image, label=IllumMeanA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumMeanC [type=image, label=IllumMeanC, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumMeanG [type=image, label=IllumMeanG, shape=ellipse, style=filled, fillcolor=lightgray];
@@ -137,17 +135,9 @@ CorrectIlluminationApply_cff9cb5d -> image__Cycle03_G_BackSub [type="image_outpu
 CorrectIlluminationApply_d60b7604 -> image__Cycle01_C_BackSub [type="image_output"];
 CorrectIlluminationApply_d60b7604 -> image__Cycle02_C_BackSub [type="image_output"];
 CorrectIlluminationApply_d60b7604 -> image__Cycle03_C_BackSub [type="image_output"];
-CorrectIlluminationCalculate_334755f5 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_334755f5 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_334755f5 -> image__IllumMeanA [type="image_output"];
-CorrectIlluminationCalculate_8af30a76 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_8af30a76 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_8af30a76 -> image__IllumMeanT [type="image_output"];
-CorrectIlluminationCalculate_d64cc7e1 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_d64cc7e1 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_d64cc7e1 -> image__IllumMeanC [type="image_output"];
-CorrectIlluminationCalculate_e6ea05d7 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_e6ea05d7 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_e6ea05d7 -> image__IllumMeanG [type="image_output"];
 EnhanceOrSuppressFeatures_6375e4b9 -> image__EnhanceOrSuppressFeatures [type="image_output"];
 FilterObjects_489d0938 -> object__Foci [type="object_output"];
@@ -276,4 +266,7 @@ object__Foci -> FilterObjects_a0d8b12f [type="object_input"];
 object__Foci -> MeasureObjectIntensity_23398fff [type="object_list_input"];
 object__Foci -> OverlayOutlines_87b87059 [type="object_input"];
 object__Nuclei -> RelateObjects_129b8099 [type="object_input"];
+
+  {rank = min; image__Cycle01_A; image__Cycle02_A; image__Cycle03_A; image__Cycle01_C; image__Cycle02_C; image__Cycle03_C; image__Cycle01_G; image__Cycle02_G; image__Cycle03_G; image__Cycle01_T; image__Cycle02_T; image__Cycle03_T; image__Cycle01_DAPI;}
+  {rank = max; MeasureObjectIntensity_23398fff; MeasureObjectIntensity_310244a3; SaveImages_a76d743b; SaveImages_7d82f3ed; SaveImages_706ac2ab; SaveImages_b9169d9c; SaveImages_b4f4c030; SaveImages_fb525429; SaveImages_e221a61a; SaveImages_449be876; SaveImages_d0452ebc; SaveImages_d6bbc055; SaveImages_edba6f32; SaveImages_d7642dbf; SaveImages_605e9e6a; SaveImages_330c0388;}
 }

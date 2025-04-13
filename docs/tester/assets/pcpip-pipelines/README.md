@@ -140,14 +140,26 @@ If starrynight successfully implements module iteration capabilities, pipeline 7
 Files in `_ref_graph_format` were created as follows:
 
 - **JSON files**: Exported from CellProfiler 4.2.8
-- **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.7.0/cp_graph.py) tool:
+- **DOT files**: Generated using [cp_graph](https://github.com/shntnu/cp_graph/blob/v0.10.0/cp_graph.py) tool. **SVG/PNG files**: Generated from DOT files using Graphviz.
   ```sh
-  cd _ref_graph_format
-  find json/ -name "*.json" | parallel uv run --script ${CP_GRAPH} {} dot/{/.}.dot
-  ```
-- **SVG/PNG files**: Generated from DOT files using Graphviz:
-  ```sh
-  cd _ref_graph_format
+  cd _ref_graph_format/
+  rm -rf dot png svg
+  mkdir -p dot png svg
+
+  CP_GRAPH="${HOME}/Documents/GitHub/cp_graph/cp_graph.py"
+  ROOT_NODES_FILE=root_nodes.txt
+  ROOT_NODES=$(cat ${ROOT_NODES_FILE}| tr ',' '\n' | paste -sd "," -)
+  find json/ -name "*.json" | \
+  parallel uv run --script ${CP_GRAPH} \
+    {} \
+    dot/{/.}.dot \
+    --rank-nodes \
+    --remove-unused-data \
+    --exclude-module-types=ExportToSpreadsheet \
+    --rank-ignore-filtered \
+    --root-nodes=${ROOT_NODES}  # --highlight-filtered
+
   find dot -name "*.dot" | parallel dot -Gdpi=50 -Tpng {} -o png/{/.}.png
+
   find dot -name "*.dot" | parallel dot -Tsvg {} -o svg/{/.}.svg
   ```

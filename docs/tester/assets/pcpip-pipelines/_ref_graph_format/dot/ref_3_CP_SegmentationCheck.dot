@@ -1,5 +1,4 @@
 strict digraph {
-ExportToSpreadsheet_1de119ea [type=module, label="ExportToSpreadsheet #16", module_name=ExportToSpreadsheet, module_num=16, original_num=16, stable_id="ExportToSpreadsheet_1de119ea", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 GrayToColor_d1a21ac6 [type=module, label="GrayToColor #12", module_name=GrayToColor, module_num=12, original_num=12, stable_id="GrayToColor_d1a21ac6", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 IdentifyPrimaryObjects_2a46ae0b [type=module, label="IdentifyPrimaryObjects #2", module_name=IdentifyPrimaryObjects, module_num=2, original_num=2, stable_id="IdentifyPrimaryObjects_2a46ae0b", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 IdentifyPrimaryObjects_4c20beda [type=module, label="IdentifyPrimaryObjects #6", module_name=IdentifyPrimaryObjects, module_num=6, original_num=6, stable_id="IdentifyPrimaryObjects_4c20beda", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
@@ -14,12 +13,9 @@ RescaleIntensity_4210b283 [type=module, label="RescaleIntensity #9", module_name
 RescaleIntensity_5d3ba968 [type=module, label="RescaleIntensity #13", module_name=RescaleIntensity, module_num=13, original_num=13, stable_id="RescaleIntensity_5d3ba968", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 RescaleIntensity_5da0ec4a [type=module, label="RescaleIntensity #10", module_name=RescaleIntensity, module_num=10, original_num=10, stable_id="RescaleIntensity_5da0ec4a", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 SaveImages_491701a3 [type=module, label="SaveImages #15", module_name=SaveImages, module_num=15, original_num=15, stable_id="SaveImages_491701a3", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
-image__Barcodes_Barcodes [type=image, label="Barcodes_Barcodes", shape=ellipse, style=filled, fillcolor=lightgray];
 image__ColorImage [type=image, label=ColorImage, shape=ellipse, style=filled, fillcolor=lightgray];
 image__DNA [type=image, label=DNA, shape=ellipse, style=filled, fillcolor=lightgray];
-"image__Leave this black" [type=image, label="Leave this black", shape=ellipse, style=filled, fillcolor=lightgray];
 image__MaskedDAPI [type=image, label=MaskedDAPI, shape=ellipse, style=filled, fillcolor=lightgray];
-image__MaskedPhalloidin [type=image, label=MaskedPhalloidin, shape=ellipse, style=filled, fillcolor=lightgray];
 image__MaskedZO1 [type=image, label=MaskedZO1, shape=ellipse, style=filled, fillcolor=lightgray];
 image__OrigOverlay [type=image, label=OrigOverlay, shape=ellipse, style=filled, fillcolor=lightgray];
 image__Phalloidin [type=image, label=Phalloidin, shape=ellipse, style=filled, fillcolor=lightgray];
@@ -40,7 +36,6 @@ IdentifySecondaryObjects_7ee30c54 -> object__Cells [type="object_output"];
 IdentifySecondaryObjects_7ee30c54 -> object__FilteredNuclei [type="object_output"];
 IdentifySecondaryObjects_e49539f5 -> object__FilteredNuclei [type="object_output"];
 IdentifySecondaryObjects_e49539f5 -> object__PreCells [type="object_output"];
-MaskImage_15781b3c -> image__MaskedPhalloidin [type="image_output"];
 MaskImage_3d148662 -> image__MaskedDAPI [type="image_output"];
 MaskImage_6a245811 -> image__MaskedZO1 [type="image_output"];
 OverlayOutlines_e700eb17 -> image__OrigOverlay [type="image_output"];
@@ -48,12 +43,10 @@ RescaleIntensity_3e52e236 -> image__RescaleZO1forvis [type="image_output"];
 RescaleIntensity_4210b283 -> image__RescaleDAPIPaintingForVis [type="image_output"];
 RescaleIntensity_5d3ba968 -> image__RescaleIntensity [type="image_output"];
 RescaleIntensity_5da0ec4a -> image__RescalePhalloidinForVis [type="image_output"];
-image__Barcodes_Barcodes -> ExportToSpreadsheet_1de119ea [type="image_input"];
 image__ColorImage -> RescaleIntensity_5d3ba968 [type="image_input"];
 image__DNA -> IdentifyPrimaryObjects_2a46ae0b [type="image_input"];
 image__DNA -> MaskImage_3d148662 [type="image_input"];
 image__DNA -> RescaleIntensity_4210b283 [type="image_input"];
-"image__Leave this black" -> GrayToColor_d1a21ac6 [type="image_input"];
 image__MaskedDAPI -> IdentifyPrimaryObjects_4c20beda [type="image_input"];
 image__MaskedZO1 -> IdentifySecondaryObjects_7ee30c54 [type="image_input"];
 image__MaskedZO1 -> IdentifySecondaryObjects_e49539f5 [type="image_input"];
@@ -74,4 +67,7 @@ object__ConfluentRegions -> OverlayOutlines_e700eb17 [type="object_input"];
 object__Nuclei -> IdentifySecondaryObjects_e49539f5 [type="object_input"];
 object__Nuclei -> OverlayOutlines_e700eb17 [type="object_input"];
 object__PreCells -> IdentifySecondaryObjects_7ee30c54 [type="object_input"];
+
+  {rank = min; image__DNA; image__Phalloidin; image__ZO1;}
+  {rank = max; SaveImages_491701a3;}
 }

@@ -25,8 +25,6 @@ image__DownsampledDNA [type=image, label=DownsampledDNA, shape=ellipse, style=fi
 image__DownsampledG [type=image, label=DownsampledG, shape=ellipse, style=filled, fillcolor=lightgray];
 image__DownsampledT [type=image, label=DownsampledT, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumA [type=image, label=IllumA, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueAvg [type=image, label=IllumBlueAvg, shape=ellipse, style=filled, fillcolor=lightgray];
-image__IllumBlueDilated [type=image, label=IllumBlueDilated, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumC [type=image, label=IllumC, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumDNA [type=image, label=IllumDNA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__IllumG [type=image, label=IllumG, shape=ellipse, style=filled, fillcolor=lightgray];
@@ -41,20 +39,10 @@ image__UpsampledIllumC [type=image, label=UpsampledIllumC, shape=ellipse, style=
 image__UpsampledIllumDNA [type=image, label=UpsampledIllumDNA, shape=ellipse, style=filled, fillcolor=lightgray];
 image__UpsampledIllumG [type=image, label=UpsampledIllumG, shape=ellipse, style=filled, fillcolor=lightgray];
 image__UpsampledIllumT [type=image, label=UpsampledIllumT, shape=ellipse, style=filled, fillcolor=lightgray];
-CorrectIlluminationCalculate_64a10849 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_64a10849 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_64a10849 -> image__IllumG [type="image_output"];
-CorrectIlluminationCalculate_6ec6ba36 -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_6ec6ba36 -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_6ec6ba36 -> image__IllumC [type="image_output"];
-CorrectIlluminationCalculate_794dc52b -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_794dc52b -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_794dc52b -> image__IllumT [type="image_output"];
 CorrectIlluminationCalculate_b9384aaa -> image__IllumA [type="image_output"];
-CorrectIlluminationCalculate_b9384aaa -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_b9384aaa -> image__IllumBlueDilated [type="image_output"];
-CorrectIlluminationCalculate_e3750f2a -> image__IllumBlueAvg [type="image_output"];
-CorrectIlluminationCalculate_e3750f2a -> image__IllumBlueDilated [type="image_output"];
 CorrectIlluminationCalculate_e3750f2a -> image__IllumDNA [type="image_output"];
 Resize_32606b38 -> image__DownsampledDNA [type="image_output"];
 Resize_5f66d6a6 -> image__UpsampledIllumA [type="image_output"];
@@ -86,4 +74,7 @@ image__UpsampledIllumC -> SaveImages_e7bb47f5 [type="image_input"];
 image__UpsampledIllumDNA -> SaveImages_4cf7a938 [type="image_input"];
 image__UpsampledIllumG -> SaveImages_445ce30e [type="image_input"];
 image__UpsampledIllumT -> SaveImages_a33ceda0 [type="image_input"];
+
+  {rank = min; image__OrigDNA; image__OrigA; image__OrigC; image__OrigG; image__OrigT;}
+  {rank = max; SaveImages_25230cf0; SaveImages_4cf7a938; SaveImages_e7bb47f5; SaveImages_445ce30e; SaveImages_a33ceda0;}
 }

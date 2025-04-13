@@ -5,530 +5,458 @@
  -->
 <!-- Pages: 1 -->
 <svg width="1191pt" height="548pt"
- viewBox="0.00 0.00 1191.25 548.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 1191.00 548.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-544 1187.25,-544 1187.25,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-544 1187,-544 1187,4 -4,4"/>
 <!-- CorrectIlluminationCalculate_64a10849 -->
 <g id="node1" class="node">
 <title>CorrectIlluminationCalculate_64a10849</title>
-<polygon fill="lightblue" stroke="black" points="464,-324 237.25,-324 237.25,-288 464,-288 464,-324"/>
-<text text-anchor="middle" x="350.62" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #12</text>
-</g>
-<!-- image__IllumBlueAvg -->
-<g id="node27" class="node">
-<title>image__IllumBlueAvg</title>
-<ellipse fill="lightgray" stroke="black" cx="436.62" cy="-234" rx="64.66" ry="18"/>
-<text text-anchor="middle" x="436.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumBlueAvg</text>
-</g>
-<!-- CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumBlueAvg -->
-<g id="edge1" class="edge">
-<title>CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumBlueAvg</title>
-<path fill="none" stroke="black" d="M371.88,-287.7C382.74,-278.86 396.12,-267.97 407.88,-258.4"/>
-<polygon fill="black" stroke="black" points="409.78,-261.37 415.32,-252.34 405.36,-255.94 409.78,-261.37"/>
-</g>
-<!-- image__IllumBlueDilated -->
-<g id="node28" class="node">
-<title>image__IllumBlueDilated</title>
-<ellipse fill="lightgray" stroke="black" cx="595.62" cy="-234" rx="75.92" ry="18"/>
-<text text-anchor="middle" x="595.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumBlueDilated</text>
-</g>
-<!-- CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumBlueDilated -->
-<g id="edge2" class="edge">
-<title>CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumBlueDilated</title>
-<path fill="none" stroke="black" d="M411.82,-287.52C450.39,-276.5 499.88,-262.35 537.8,-251.52"/>
-<polygon fill="black" stroke="black" points="538.55,-254.95 547.21,-248.83 536.63,-248.22 538.55,-254.95"/>
+<polygon fill="lightblue" stroke="black" points="226.75,-324 0,-324 0,-288 226.75,-288 226.75,-324"/>
+<text text-anchor="middle" x="113.38" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #12</text>
 </g>
 <!-- image__IllumG -->
-<g id="node31" class="node">
+<g id="node29" class="node">
 <title>image__IllumG</title>
-<ellipse fill="lightgray" stroke="black" cx="315.62" cy="-234" rx="38.04" ry="18"/>
-<text text-anchor="middle" x="315.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumG</text>
+<ellipse fill="lightgray" stroke="black" cx="113.38" cy="-234" rx="38.04" ry="18"/>
+<text text-anchor="middle" x="113.38" y="-228.95" font-family="Times,serif" font-size="14.00">IllumG</text>
 </g>
 <!-- CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumG -->
-<g id="edge3" class="edge">
+<g id="edge1" class="edge">
 <title>CorrectIlluminationCalculate_64a10849&#45;&gt;image__IllumG</title>
-<path fill="none" stroke="black" d="M341.97,-287.7C338.06,-279.87 333.34,-270.44 328.99,-261.73"/>
-<polygon fill="black" stroke="black" points="332.22,-260.36 324.61,-252.98 325.95,-263.49 332.22,-260.36"/>
+<path fill="none" stroke="black" d="M113.38,-287.7C113.38,-280.41 113.38,-271.73 113.38,-263.54"/>
+<polygon fill="black" stroke="black" points="116.88,-263.62 113.38,-253.62 109.88,-263.62 116.88,-263.62"/>
 </g>
 <!-- CorrectIlluminationCalculate_6ec6ba36 -->
 <g id="node2" class="node">
 <title>CorrectIlluminationCalculate_6ec6ba36</title>
-<polygon fill="lightblue" stroke="black" points="219.25,-324 0,-324 0,-288 219.25,-288 219.25,-324"/>
-<text text-anchor="middle" x="109.62" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #9</text>
-</g>
-<!-- CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumBlueAvg -->
-<g id="edge4" class="edge">
-<title>CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumBlueAvg</title>
-<path fill="none" stroke="black" d="M195.2,-287.5C244.26,-277.36 306.96,-264.22 362.62,-252 367.26,-250.98 372.05,-249.91 376.87,-248.83"/>
-<polygon fill="black" stroke="black" points="377.64,-252.25 386.62,-246.62 376.09,-245.42 377.64,-252.25"/>
-</g>
-<!-- CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumBlueDilated -->
-<g id="edge5" class="edge">
-<title>CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumBlueDilated</title>
-<path fill="none" stroke="black" d="M219.52,-289.24C222.59,-288.82 225.63,-288.41 228.62,-288 353.84,-271.07 385.93,-272.4 510.62,-252 516.66,-251.01 522.92,-249.91 529.18,-248.76"/>
-<polygon fill="black" stroke="black" points="529.74,-252.21 538.92,-246.91 528.44,-245.33 529.74,-252.21"/>
+<polygon fill="lightblue" stroke="black" points="464,-324 244.75,-324 244.75,-288 464,-288 464,-324"/>
+<text text-anchor="middle" x="354.38" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #9</text>
 </g>
 <!-- image__IllumC -->
-<g id="node29" class="node">
+<g id="node27" class="node">
 <title>image__IllumC</title>
-<ellipse fill="lightgray" stroke="black" cx="109.62" cy="-234" rx="37.53" ry="18"/>
-<text text-anchor="middle" x="109.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumC</text>
+<ellipse fill="lightgray" stroke="black" cx="354.38" cy="-234" rx="37.53" ry="18"/>
+<text text-anchor="middle" x="354.38" y="-228.95" font-family="Times,serif" font-size="14.00">IllumC</text>
 </g>
 <!-- CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumC -->
-<g id="edge6" class="edge">
+<g id="edge2" class="edge">
 <title>CorrectIlluminationCalculate_6ec6ba36&#45;&gt;image__IllumC</title>
-<path fill="none" stroke="black" d="M109.62,-287.7C109.62,-280.41 109.62,-271.73 109.62,-263.54"/>
-<polygon fill="black" stroke="black" points="113.13,-263.62 109.63,-253.62 106.13,-263.62 113.13,-263.62"/>
+<path fill="none" stroke="black" d="M354.38,-287.7C354.38,-280.41 354.38,-271.73 354.38,-263.54"/>
+<polygon fill="black" stroke="black" points="357.88,-263.62 354.38,-253.62 350.88,-263.62 357.88,-263.62"/>
 </g>
 <!-- CorrectIlluminationCalculate_794dc52b -->
 <g id="node3" class="node">
 <title>CorrectIlluminationCalculate_794dc52b</title>
-<polygon fill="lightblue" stroke="black" points="709,-324 482.25,-324 482.25,-288 709,-288 709,-324"/>
-<text text-anchor="middle" x="595.62" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #15</text>
-</g>
-<!-- CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumBlueAvg -->
-<g id="edge7" class="edge">
-<title>CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumBlueAvg</title>
-<path fill="none" stroke="black" d="M555.91,-287.52C533.02,-277.44 504.2,-264.75 480.62,-254.37"/>
-<polygon fill="black" stroke="black" points="482.14,-251.21 471.58,-250.39 479.32,-257.62 482.14,-251.21"/>
-</g>
-<!-- CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumBlueDilated -->
-<g id="edge8" class="edge">
-<title>CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumBlueDilated</title>
-<path fill="none" stroke="black" d="M595.62,-287.7C595.62,-280.41 595.62,-271.73 595.62,-263.54"/>
-<polygon fill="black" stroke="black" points="599.13,-263.62 595.63,-253.62 592.13,-263.62 599.13,-263.62"/>
+<polygon fill="lightblue" stroke="black" points="708.75,-324 482,-324 482,-288 708.75,-288 708.75,-324"/>
+<text text-anchor="middle" x="595.38" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #15</text>
 </g>
 <!-- image__IllumT -->
-<g id="node32" class="node">
+<g id="node30" class="node">
 <title>image__IllumT</title>
-<ellipse fill="lightgray" stroke="black" cx="726.62" cy="-234" rx="37.02" ry="18"/>
-<text text-anchor="middle" x="726.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumT</text>
+<ellipse fill="lightgray" stroke="black" cx="595.38" cy="-234" rx="37.02" ry="18"/>
+<text text-anchor="middle" x="595.38" y="-228.95" font-family="Times,serif" font-size="14.00">IllumT</text>
 </g>
 <!-- CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumT -->
-<g id="edge9" class="edge">
+<g id="edge3" class="edge">
 <title>CorrectIlluminationCalculate_794dc52b&#45;&gt;image__IllumT</title>
-<path fill="none" stroke="black" d="M628.34,-287.52C647.87,-277.08 672.64,-263.85 692.42,-253.28"/>
-<polygon fill="black" stroke="black" points="694.04,-256.38 701.21,-248.58 690.75,-250.2 694.04,-256.38"/>
+<path fill="none" stroke="black" d="M595.38,-287.7C595.38,-280.41 595.38,-271.73 595.38,-263.54"/>
+<polygon fill="black" stroke="black" points="598.88,-263.62 595.38,-253.62 591.88,-263.62 598.88,-263.62"/>
 </g>
 <!-- CorrectIlluminationCalculate_b9384aaa -->
 <g id="node4" class="node">
 <title>CorrectIlluminationCalculate_b9384aaa</title>
-<polygon fill="lightblue" stroke="black" points="1183.25,-324 964,-324 964,-288 1183.25,-288 1183.25,-324"/>
-<text text-anchor="middle" x="1073.62" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #6</text>
+<polygon fill="lightblue" stroke="black" points="946,-324 726.75,-324 726.75,-288 946,-288 946,-324"/>
+<text text-anchor="middle" x="836.38" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #6</text>
 </g>
 <!-- image__IllumA -->
 <g id="node26" class="node">
 <title>image__IllumA</title>
-<ellipse fill="lightgray" stroke="black" cx="1073.62" cy="-234" rx="38.04" ry="18"/>
-<text text-anchor="middle" x="1073.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumA</text>
+<ellipse fill="lightgray" stroke="black" cx="836.38" cy="-234" rx="38.04" ry="18"/>
+<text text-anchor="middle" x="836.38" y="-228.95" font-family="Times,serif" font-size="14.00">IllumA</text>
 </g>
 <!-- CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumA -->
-<g id="edge10" class="edge">
+<g id="edge4" class="edge">
 <title>CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumA</title>
-<path fill="none" stroke="black" d="M1073.62,-287.7C1073.62,-280.41 1073.62,-271.73 1073.62,-263.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-263.62 1073.63,-253.62 1070.13,-263.62 1077.13,-263.62"/>
-</g>
-<!-- CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumBlueAvg -->
-<g id="edge11" class="edge">
-<title>CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumBlueAvg</title>
-<path fill="none" stroke="black" d="M963.73,-288.94C961.01,-288.61 958.3,-288.3 955.62,-288 758.44,-265.84 706.72,-282.29 510.62,-252 505.37,-251.19 499.92,-250.21 494.49,-249.14"/>
-<polygon fill="black" stroke="black" points="495.39,-245.75 484.88,-247.13 493.96,-252.6 495.39,-245.75"/>
-</g>
-<!-- CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumBlueDilated -->
-<g id="edge12" class="edge">
-<title>CorrectIlluminationCalculate_b9384aaa&#45;&gt;image__IllumBlueDilated</title>
-<path fill="none" stroke="black" d="M963.71,-289.12C960.99,-288.74 958.29,-288.37 955.62,-288 833.51,-271.21 802.24,-272.1 680.62,-252 674.59,-251 668.34,-249.89 662.07,-248.73"/>
-<polygon fill="black" stroke="black" points="662.82,-245.31 652.34,-246.89 661.51,-252.19 662.82,-245.31"/>
+<path fill="none" stroke="black" d="M836.38,-287.7C836.38,-280.41 836.38,-271.73 836.38,-263.54"/>
+<polygon fill="black" stroke="black" points="839.88,-263.62 836.38,-253.62 832.88,-263.62 839.88,-263.62"/>
 </g>
 <!-- CorrectIlluminationCalculate_e3750f2a -->
 <g id="node5" class="node">
 <title>CorrectIlluminationCalculate_e3750f2a</title>
-<polygon fill="lightblue" stroke="black" points="946.25,-324 727,-324 727,-288 946.25,-288 946.25,-324"/>
-<text text-anchor="middle" x="836.62" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #3</text>
-</g>
-<!-- CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumBlueAvg -->
-<g id="edge13" class="edge">
-<title>CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumBlueAvg</title>
-<path fill="none" stroke="black" d="M726.53,-288.91C663.2,-279.21 582.23,-266.03 510.62,-252 505.69,-251.03 500.58,-249.98 495.46,-248.88"/>
-<polygon fill="black" stroke="black" points="496.29,-245.48 485.77,-246.75 494.79,-252.32 496.29,-245.48"/>
-</g>
-<!-- CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumBlueDilated -->
-<g id="edge14" class="edge">
-<title>CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumBlueDilated</title>
-<path fill="none" stroke="black" d="M776.43,-287.52C738.62,-276.53 690.13,-262.45 652.89,-251.63"/>
-<polygon fill="black" stroke="black" points="654.24,-248.38 643.66,-248.95 652.29,-255.1 654.24,-248.38"/>
+<polygon fill="lightblue" stroke="black" points="1183,-324 963.75,-324 963.75,-288 1183,-288 1183,-324"/>
+<text text-anchor="middle" x="1073.38" y="-300.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">CorrectIlluminationCalculate #3</text>
 </g>
 <!-- image__IllumDNA -->
-<g id="node30" class="node">
+<g id="node28" class="node">
 <title>image__IllumDNA</title>
-<ellipse fill="lightgray" stroke="black" cx="842.62" cy="-234" rx="51.35" ry="18"/>
-<text text-anchor="middle" x="842.62" y="-228.95" font-family="Times,serif" font-size="14.00">IllumDNA</text>
+<ellipse fill="lightgray" stroke="black" cx="1073.38" cy="-234" rx="51.35" ry="18"/>
+<text text-anchor="middle" x="1073.38" y="-228.95" font-family="Times,serif" font-size="14.00">IllumDNA</text>
 </g>
 <!-- CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumDNA -->
-<g id="edge15" class="edge">
+<g id="edge5" class="edge">
 <title>CorrectIlluminationCalculate_e3750f2a&#45;&gt;image__IllumDNA</title>
-<path fill="none" stroke="black" d="M838.11,-287.7C838.73,-280.41 839.48,-271.73 840.18,-263.54"/>
-<polygon fill="black" stroke="black" points="843.66,-263.87 841.03,-253.61 836.69,-263.28 843.66,-263.87"/>
+<path fill="none" stroke="black" d="M1073.38,-287.7C1073.38,-280.41 1073.38,-271.73 1073.38,-263.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-263.62 1073.38,-253.62 1069.88,-263.62 1076.88,-263.62"/>
 </g>
 <!-- Resize_32606b38 -->
 <g id="node6" class="node">
 <title>Resize_32606b38</title>
-<polygon fill="lightblue" stroke="black" points="875.38,-468 797.88,-468 797.88,-432 875.38,-432 875.38,-468"/>
-<text text-anchor="middle" x="836.62" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #2</text>
+<polygon fill="lightblue" stroke="black" points="1112.12,-468 1034.62,-468 1034.62,-432 1112.12,-432 1112.12,-468"/>
+<text text-anchor="middle" x="1073.38" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #2</text>
 </g>
 <!-- image__DownsampledDNA -->
 <g id="node23" class="node">
 <title>image__DownsampledDNA</title>
-<ellipse fill="lightgray" stroke="black" cx="836.62" cy="-378" rx="84.62" ry="18"/>
-<text text-anchor="middle" x="836.62" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledDNA</text>
+<ellipse fill="lightgray" stroke="black" cx="1073.38" cy="-378" rx="84.62" ry="18"/>
+<text text-anchor="middle" x="1073.38" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledDNA</text>
 </g>
 <!-- Resize_32606b38&#45;&gt;image__DownsampledDNA -->
-<g id="edge16" class="edge">
+<g id="edge6" class="edge">
 <title>Resize_32606b38&#45;&gt;image__DownsampledDNA</title>
-<path fill="none" stroke="black" d="M836.62,-431.7C836.62,-424.41 836.62,-415.73 836.62,-407.54"/>
-<polygon fill="black" stroke="black" points="840.13,-407.62 836.63,-397.62 833.13,-407.62 840.13,-407.62"/>
+<path fill="none" stroke="black" d="M1073.38,-431.7C1073.38,-424.41 1073.38,-415.73 1073.38,-407.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-407.62 1073.38,-397.62 1069.88,-407.62 1076.88,-407.62"/>
 </g>
 <!-- Resize_5f66d6a6 -->
 <g id="node7" class="node">
 <title>Resize_5f66d6a6</title>
-<polygon fill="lightblue" stroke="black" points="1112.38,-180 1034.88,-180 1034.88,-144 1112.38,-144 1112.38,-180"/>
-<text text-anchor="middle" x="1073.62" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #7</text>
+<polygon fill="lightblue" stroke="black" points="875.12,-180 797.62,-180 797.62,-144 875.12,-144 875.12,-180"/>
+<text text-anchor="middle" x="836.38" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #7</text>
 </g>
 <!-- image__UpsampledIllumA -->
-<g id="node38" class="node">
+<g id="node36" class="node">
 <title>image__UpsampledIllumA</title>
-<ellipse fill="lightgray" stroke="black" cx="1073.62" cy="-90" rx="80.52" ry="18"/>
-<text text-anchor="middle" x="1073.62" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumA</text>
+<ellipse fill="lightgray" stroke="black" cx="836.38" cy="-90" rx="80.52" ry="18"/>
+<text text-anchor="middle" x="836.38" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumA</text>
 </g>
 <!-- Resize_5f66d6a6&#45;&gt;image__UpsampledIllumA -->
-<g id="edge17" class="edge">
+<g id="edge7" class="edge">
 <title>Resize_5f66d6a6&#45;&gt;image__UpsampledIllumA</title>
-<path fill="none" stroke="black" d="M1073.62,-143.7C1073.62,-136.41 1073.62,-127.73 1073.62,-119.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-119.62 1073.63,-109.62 1070.13,-119.62 1077.13,-119.62"/>
+<path fill="none" stroke="black" d="M836.38,-143.7C836.38,-136.41 836.38,-127.73 836.38,-119.54"/>
+<polygon fill="black" stroke="black" points="839.88,-119.62 836.38,-109.62 832.88,-119.62 839.88,-119.62"/>
 </g>
 <!-- Resize_67d834a7 -->
 <g id="node8" class="node">
 <title>Resize_67d834a7</title>
-<polygon fill="lightblue" stroke="black" points="148.38,-468 70.88,-468 70.88,-432 148.38,-432 148.38,-468"/>
-<text text-anchor="middle" x="109.62" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #8</text>
+<polygon fill="lightblue" stroke="black" points="393.12,-468 315.62,-468 315.62,-432 393.12,-432 393.12,-468"/>
+<text text-anchor="middle" x="354.38" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #8</text>
 </g>
 <!-- image__DownsampledC -->
 <g id="node22" class="node">
 <title>image__DownsampledC</title>
-<ellipse fill="lightgray" stroke="black" cx="109.62" cy="-378" rx="70.8" ry="18"/>
-<text text-anchor="middle" x="109.62" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledC</text>
+<ellipse fill="lightgray" stroke="black" cx="354.38" cy="-378" rx="70.8" ry="18"/>
+<text text-anchor="middle" x="354.38" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledC</text>
 </g>
 <!-- Resize_67d834a7&#45;&gt;image__DownsampledC -->
-<g id="edge18" class="edge">
+<g id="edge8" class="edge">
 <title>Resize_67d834a7&#45;&gt;image__DownsampledC</title>
-<path fill="none" stroke="black" d="M109.62,-431.7C109.62,-424.41 109.62,-415.73 109.62,-407.54"/>
-<polygon fill="black" stroke="black" points="113.13,-407.62 109.63,-397.62 106.13,-407.62 113.13,-407.62"/>
+<path fill="none" stroke="black" d="M354.38,-431.7C354.38,-424.41 354.38,-415.73 354.38,-407.54"/>
+<polygon fill="black" stroke="black" points="357.88,-407.62 354.38,-397.62 350.88,-407.62 357.88,-407.62"/>
 </g>
 <!-- Resize_774d03d7 -->
 <g id="node9" class="node">
 <title>Resize_774d03d7</title>
-<polygon fill="lightblue" stroke="black" points="358.12,-180 273.12,-180 273.12,-144 358.12,-144 358.12,-180"/>
-<text text-anchor="middle" x="315.62" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #13</text>
+<polygon fill="lightblue" stroke="black" points="155.88,-180 70.88,-180 70.88,-144 155.88,-144 155.88,-180"/>
+<text text-anchor="middle" x="113.38" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #13</text>
 </g>
 <!-- image__UpsampledIllumG -->
-<g id="node41" class="node">
+<g id="node39" class="node">
 <title>image__UpsampledIllumG</title>
-<ellipse fill="lightgray" stroke="black" cx="315.62" cy="-90" rx="80.52" ry="18"/>
-<text text-anchor="middle" x="315.62" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumG</text>
+<ellipse fill="lightgray" stroke="black" cx="113.38" cy="-90" rx="80.52" ry="18"/>
+<text text-anchor="middle" x="113.38" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumG</text>
 </g>
 <!-- Resize_774d03d7&#45;&gt;image__UpsampledIllumG -->
-<g id="edge19" class="edge">
+<g id="edge9" class="edge">
 <title>Resize_774d03d7&#45;&gt;image__UpsampledIllumG</title>
-<path fill="none" stroke="black" d="M315.62,-143.7C315.62,-136.41 315.62,-127.73 315.62,-119.54"/>
-<polygon fill="black" stroke="black" points="319.13,-119.62 315.63,-109.62 312.13,-119.62 319.13,-119.62"/>
+<path fill="none" stroke="black" d="M113.38,-143.7C113.38,-136.41 113.38,-127.73 113.38,-119.54"/>
+<polygon fill="black" stroke="black" points="116.88,-119.62 113.38,-109.62 109.88,-119.62 116.88,-119.62"/>
 </g>
 <!-- Resize_98d2757f -->
 <g id="node10" class="node">
 <title>Resize_98d2757f</title>
-<polygon fill="lightblue" stroke="black" points="393.12,-468 308.12,-468 308.12,-432 393.12,-432 393.12,-468"/>
-<text text-anchor="middle" x="350.62" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #11</text>
+<polygon fill="lightblue" stroke="black" points="155.88,-468 70.88,-468 70.88,-432 155.88,-432 155.88,-468"/>
+<text text-anchor="middle" x="113.38" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #11</text>
 </g>
 <!-- image__DownsampledG -->
 <g id="node24" class="node">
 <title>image__DownsampledG</title>
-<ellipse fill="lightgray" stroke="black" cx="350.62" cy="-378" rx="71.31" ry="18"/>
-<text text-anchor="middle" x="350.62" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledG</text>
+<ellipse fill="lightgray" stroke="black" cx="113.38" cy="-378" rx="71.31" ry="18"/>
+<text text-anchor="middle" x="113.38" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledG</text>
 </g>
 <!-- Resize_98d2757f&#45;&gt;image__DownsampledG -->
-<g id="edge20" class="edge">
+<g id="edge10" class="edge">
 <title>Resize_98d2757f&#45;&gt;image__DownsampledG</title>
-<path fill="none" stroke="black" d="M350.62,-431.7C350.62,-424.41 350.62,-415.73 350.62,-407.54"/>
-<polygon fill="black" stroke="black" points="354.13,-407.62 350.63,-397.62 347.13,-407.62 354.13,-407.62"/>
+<path fill="none" stroke="black" d="M113.38,-431.7C113.38,-424.41 113.38,-415.73 113.38,-407.54"/>
+<polygon fill="black" stroke="black" points="116.88,-407.62 113.38,-397.62 109.88,-407.62 116.88,-407.62"/>
 </g>
 <!-- Resize_a3b11500 -->
 <g id="node11" class="node">
 <title>Resize_a3b11500</title>
-<polygon fill="lightblue" stroke="black" points="887.38,-180 809.88,-180 809.88,-144 887.38,-144 887.38,-180"/>
-<text text-anchor="middle" x="848.62" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #4</text>
+<polygon fill="lightblue" stroke="black" points="1112.12,-180 1034.62,-180 1034.62,-144 1112.12,-144 1112.12,-180"/>
+<text text-anchor="middle" x="1073.38" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #4</text>
 </g>
 <!-- image__UpsampledIllumDNA -->
-<g id="node40" class="node">
+<g id="node38" class="node">
 <title>image__UpsampledIllumDNA</title>
-<ellipse fill="lightgray" stroke="black" cx="859.62" cy="-90" rx="93.83" ry="18"/>
-<text text-anchor="middle" x="859.62" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumDNA</text>
+<ellipse fill="lightgray" stroke="black" cx="1073.38" cy="-90" rx="93.83" ry="18"/>
+<text text-anchor="middle" x="1073.38" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumDNA</text>
 </g>
 <!-- Resize_a3b11500&#45;&gt;image__UpsampledIllumDNA -->
-<g id="edge21" class="edge">
+<g id="edge11" class="edge">
 <title>Resize_a3b11500&#45;&gt;image__UpsampledIllumDNA</title>
-<path fill="none" stroke="black" d="M851.34,-143.7C852.5,-136.32 853.89,-127.52 855.19,-119.25"/>
-<polygon fill="black" stroke="black" points="858.61,-120.02 856.7,-109.6 851.69,-118.93 858.61,-120.02"/>
+<path fill="none" stroke="black" d="M1073.38,-143.7C1073.38,-136.41 1073.38,-127.73 1073.38,-119.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-119.62 1073.38,-109.62 1069.88,-119.62 1076.88,-119.62"/>
 </g>
 <!-- Resize_a7dba801 -->
 <g id="node12" class="node">
 <title>Resize_a7dba801</title>
-<polygon fill="lightblue" stroke="black" points="638.12,-468 553.12,-468 553.12,-432 638.12,-432 638.12,-468"/>
-<text text-anchor="middle" x="595.62" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #14</text>
+<polygon fill="lightblue" stroke="black" points="637.88,-468 552.88,-468 552.88,-432 637.88,-432 637.88,-468"/>
+<text text-anchor="middle" x="595.38" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #14</text>
 </g>
 <!-- image__DownsampledT -->
 <g id="node25" class="node">
 <title>image__DownsampledT</title>
-<ellipse fill="lightgray" stroke="black" cx="595.62" cy="-378" rx="70.29" ry="18"/>
-<text text-anchor="middle" x="595.62" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledT</text>
+<ellipse fill="lightgray" stroke="black" cx="595.38" cy="-378" rx="70.29" ry="18"/>
+<text text-anchor="middle" x="595.38" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledT</text>
 </g>
 <!-- Resize_a7dba801&#45;&gt;image__DownsampledT -->
-<g id="edge22" class="edge">
+<g id="edge12" class="edge">
 <title>Resize_a7dba801&#45;&gt;image__DownsampledT</title>
-<path fill="none" stroke="black" d="M595.62,-431.7C595.62,-424.41 595.62,-415.73 595.62,-407.54"/>
-<polygon fill="black" stroke="black" points="599.13,-407.62 595.63,-397.62 592.13,-407.62 599.13,-407.62"/>
+<path fill="none" stroke="black" d="M595.38,-431.7C595.38,-424.41 595.38,-415.73 595.38,-407.54"/>
+<polygon fill="black" stroke="black" points="598.88,-407.62 595.38,-397.62 591.88,-407.62 598.88,-407.62"/>
 </g>
 <!-- Resize_b62893b -->
 <g id="node13" class="node">
 <title>Resize_b62893b</title>
-<polygon fill="lightblue" stroke="black" points="740.12,-180 655.12,-180 655.12,-144 740.12,-144 740.12,-180"/>
-<text text-anchor="middle" x="697.62" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #16</text>
+<polygon fill="lightblue" stroke="black" points="637.88,-180 552.88,-180 552.88,-144 637.88,-144 637.88,-180"/>
+<text text-anchor="middle" x="595.38" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #16</text>
 </g>
 <!-- image__UpsampledIllumT -->
-<g id="node42" class="node">
+<g id="node40" class="node">
 <title>image__UpsampledIllumT</title>
-<ellipse fill="lightgray" stroke="black" cx="668.62" cy="-90" rx="79.5" ry="18"/>
-<text text-anchor="middle" x="668.62" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumT</text>
+<ellipse fill="lightgray" stroke="black" cx="595.38" cy="-90" rx="79.5" ry="18"/>
+<text text-anchor="middle" x="595.38" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumT</text>
 </g>
 <!-- Resize_b62893b&#45;&gt;image__UpsampledIllumT -->
-<g id="edge23" class="edge">
+<g id="edge13" class="edge">
 <title>Resize_b62893b&#45;&gt;image__UpsampledIllumT</title>
-<path fill="none" stroke="black" d="M690.46,-143.7C687.33,-136.15 683.59,-127.12 680.09,-118.68"/>
-<polygon fill="black" stroke="black" points="683.35,-117.4 676.29,-109.5 676.88,-120.08 683.35,-117.4"/>
+<path fill="none" stroke="black" d="M595.38,-143.7C595.38,-136.41 595.38,-127.73 595.38,-119.54"/>
+<polygon fill="black" stroke="black" points="598.88,-119.62 595.38,-109.62 591.88,-119.62 598.88,-119.62"/>
 </g>
 <!-- Resize_ca7cb3e5 -->
 <g id="node14" class="node">
 <title>Resize_ca7cb3e5</title>
-<polygon fill="lightblue" stroke="black" points="152.12,-180 67.12,-180 67.12,-144 152.12,-144 152.12,-180"/>
-<text text-anchor="middle" x="109.62" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #10</text>
+<polygon fill="lightblue" stroke="black" points="396.88,-180 311.88,-180 311.88,-144 396.88,-144 396.88,-180"/>
+<text text-anchor="middle" x="354.38" y="-156.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #10</text>
 </g>
 <!-- image__UpsampledIllumC -->
-<g id="node39" class="node">
+<g id="node37" class="node">
 <title>image__UpsampledIllumC</title>
-<ellipse fill="lightgray" stroke="black" cx="109.62" cy="-90" rx="80.01" ry="18"/>
-<text text-anchor="middle" x="109.62" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumC</text>
+<ellipse fill="lightgray" stroke="black" cx="354.38" cy="-90" rx="80.01" ry="18"/>
+<text text-anchor="middle" x="354.38" y="-84.95" font-family="Times,serif" font-size="14.00">UpsampledIllumC</text>
 </g>
 <!-- Resize_ca7cb3e5&#45;&gt;image__UpsampledIllumC -->
-<g id="edge24" class="edge">
+<g id="edge14" class="edge">
 <title>Resize_ca7cb3e5&#45;&gt;image__UpsampledIllumC</title>
-<path fill="none" stroke="black" d="M109.62,-143.7C109.62,-136.41 109.62,-127.73 109.62,-119.54"/>
-<polygon fill="black" stroke="black" points="113.13,-119.62 109.63,-109.62 106.13,-119.62 113.13,-119.62"/>
+<path fill="none" stroke="black" d="M354.38,-143.7C354.38,-136.41 354.38,-127.73 354.38,-119.54"/>
+<polygon fill="black" stroke="black" points="357.88,-119.62 354.38,-109.62 350.88,-119.62 357.88,-119.62"/>
 </g>
 <!-- Resize_fed3fa8c -->
 <g id="node15" class="node">
 <title>Resize_fed3fa8c</title>
-<polygon fill="lightblue" stroke="black" points="1112.38,-468 1034.88,-468 1034.88,-432 1112.38,-432 1112.38,-468"/>
-<text text-anchor="middle" x="1073.62" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #5</text>
+<polygon fill="lightblue" stroke="black" points="875.12,-468 797.62,-468 797.62,-432 875.12,-432 875.12,-468"/>
+<text text-anchor="middle" x="836.38" y="-444.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Resize #5</text>
 </g>
 <!-- image__DownsampledA -->
 <g id="node21" class="node">
 <title>image__DownsampledA</title>
-<ellipse fill="lightgray" stroke="black" cx="1073.62" cy="-378" rx="71.31" ry="18"/>
-<text text-anchor="middle" x="1073.62" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledA</text>
+<ellipse fill="lightgray" stroke="black" cx="836.38" cy="-378" rx="71.31" ry="18"/>
+<text text-anchor="middle" x="836.38" y="-372.95" font-family="Times,serif" font-size="14.00">DownsampledA</text>
 </g>
 <!-- Resize_fed3fa8c&#45;&gt;image__DownsampledA -->
-<g id="edge25" class="edge">
+<g id="edge15" class="edge">
 <title>Resize_fed3fa8c&#45;&gt;image__DownsampledA</title>
-<path fill="none" stroke="black" d="M1073.62,-431.7C1073.62,-424.41 1073.62,-415.73 1073.62,-407.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-407.62 1073.63,-397.62 1070.13,-407.62 1077.13,-407.62"/>
+<path fill="none" stroke="black" d="M836.38,-431.7C836.38,-424.41 836.38,-415.73 836.38,-407.54"/>
+<polygon fill="black" stroke="black" points="839.88,-407.62 836.38,-397.62 832.88,-407.62 839.88,-407.62"/>
 </g>
 <!-- SaveImages_25230cf0 -->
 <g id="node16" class="node">
 <title>SaveImages_25230cf0</title>
-<polygon fill="lightblue" stroke="black" points="1134.12,-36 1013.12,-36 1013.12,0 1134.12,0 1134.12,-36"/>
-<text text-anchor="middle" x="1073.62" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #17</text>
+<polygon fill="lightblue" stroke="black" points="896.88,-36 775.88,-36 775.88,0 896.88,0 896.88,-36"/>
+<text text-anchor="middle" x="836.38" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #17</text>
 </g>
 <!-- SaveImages_445ce30e -->
 <g id="node17" class="node">
 <title>SaveImages_445ce30e</title>
-<polygon fill="lightblue" stroke="black" points="376.12,-36 255.12,-36 255.12,0 376.12,0 376.12,-36"/>
-<text text-anchor="middle" x="315.62" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #20</text>
+<polygon fill="lightblue" stroke="black" points="173.88,-36 52.88,-36 52.88,0 173.88,0 173.88,-36"/>
+<text text-anchor="middle" x="113.38" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #20</text>
 </g>
 <!-- SaveImages_4cf7a938 -->
 <g id="node18" class="node">
 <title>SaveImages_4cf7a938</title>
-<polygon fill="lightblue" stroke="black" points="920.12,-36 799.12,-36 799.12,0 920.12,0 920.12,-36"/>
-<text text-anchor="middle" x="859.62" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #18</text>
+<polygon fill="lightblue" stroke="black" points="1133.88,-36 1012.88,-36 1012.88,0 1133.88,0 1133.88,-36"/>
+<text text-anchor="middle" x="1073.38" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #18</text>
 </g>
 <!-- SaveImages_a33ceda0 -->
 <g id="node19" class="node">
 <title>SaveImages_a33ceda0</title>
-<polygon fill="lightblue" stroke="black" points="729.12,-36 608.12,-36 608.12,0 729.12,0 729.12,-36"/>
-<text text-anchor="middle" x="668.62" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #21</text>
+<polygon fill="lightblue" stroke="black" points="655.88,-36 534.88,-36 534.88,0 655.88,0 655.88,-36"/>
+<text text-anchor="middle" x="595.38" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #21</text>
 </g>
 <!-- SaveImages_e7bb47f5 -->
 <g id="node20" class="node">
 <title>SaveImages_e7bb47f5</title>
-<polygon fill="lightblue" stroke="black" points="170.12,-36 49.12,-36 49.12,0 170.12,0 170.12,-36"/>
-<text text-anchor="middle" x="109.62" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #19</text>
+<polygon fill="lightblue" stroke="black" points="414.88,-36 293.88,-36 293.88,0 414.88,0 414.88,-36"/>
+<text text-anchor="middle" x="354.38" y="-12.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">SaveImages #19</text>
 </g>
 <!-- image__DownsampledA&#45;&gt;CorrectIlluminationCalculate_b9384aaa -->
-<g id="edge26" class="edge">
+<g id="edge16" class="edge">
 <title>image__DownsampledA&#45;&gt;CorrectIlluminationCalculate_b9384aaa</title>
-<path fill="none" stroke="black" d="M1073.62,-359.7C1073.62,-352.41 1073.62,-343.73 1073.62,-335.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-335.62 1073.63,-325.62 1070.13,-335.62 1077.13,-335.62"/>
+<path fill="none" stroke="black" d="M836.38,-359.7C836.38,-352.41 836.38,-343.73 836.38,-335.54"/>
+<polygon fill="black" stroke="black" points="839.88,-335.62 836.38,-325.62 832.88,-335.62 839.88,-335.62"/>
 </g>
 <!-- image__DownsampledC&#45;&gt;CorrectIlluminationCalculate_6ec6ba36 -->
-<g id="edge27" class="edge">
+<g id="edge17" class="edge">
 <title>image__DownsampledC&#45;&gt;CorrectIlluminationCalculate_6ec6ba36</title>
-<path fill="none" stroke="black" d="M109.62,-359.7C109.62,-352.41 109.62,-343.73 109.62,-335.54"/>
-<polygon fill="black" stroke="black" points="113.13,-335.62 109.63,-325.62 106.13,-335.62 113.13,-335.62"/>
+<path fill="none" stroke="black" d="M354.38,-359.7C354.38,-352.41 354.38,-343.73 354.38,-335.54"/>
+<polygon fill="black" stroke="black" points="357.88,-335.62 354.38,-325.62 350.88,-335.62 357.88,-335.62"/>
 </g>
 <!-- image__DownsampledDNA&#45;&gt;CorrectIlluminationCalculate_e3750f2a -->
-<g id="edge28" class="edge">
+<g id="edge18" class="edge">
 <title>image__DownsampledDNA&#45;&gt;CorrectIlluminationCalculate_e3750f2a</title>
-<path fill="none" stroke="black" d="M836.62,-359.7C836.62,-352.41 836.62,-343.73 836.62,-335.54"/>
-<polygon fill="black" stroke="black" points="840.13,-335.62 836.63,-325.62 833.13,-335.62 840.13,-335.62"/>
+<path fill="none" stroke="black" d="M1073.38,-359.7C1073.38,-352.41 1073.38,-343.73 1073.38,-335.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-335.62 1073.38,-325.62 1069.88,-335.62 1076.88,-335.62"/>
 </g>
 <!-- image__DownsampledG&#45;&gt;CorrectIlluminationCalculate_64a10849 -->
-<g id="edge29" class="edge">
+<g id="edge19" class="edge">
 <title>image__DownsampledG&#45;&gt;CorrectIlluminationCalculate_64a10849</title>
-<path fill="none" stroke="black" d="M350.62,-359.7C350.62,-352.41 350.62,-343.73 350.62,-335.54"/>
-<polygon fill="black" stroke="black" points="354.13,-335.62 350.63,-325.62 347.13,-335.62 354.13,-335.62"/>
+<path fill="none" stroke="black" d="M113.38,-359.7C113.38,-352.41 113.38,-343.73 113.38,-335.54"/>
+<polygon fill="black" stroke="black" points="116.88,-335.62 113.38,-325.62 109.88,-335.62 116.88,-335.62"/>
 </g>
 <!-- image__DownsampledT&#45;&gt;CorrectIlluminationCalculate_794dc52b -->
-<g id="edge30" class="edge">
+<g id="edge20" class="edge">
 <title>image__DownsampledT&#45;&gt;CorrectIlluminationCalculate_794dc52b</title>
-<path fill="none" stroke="black" d="M595.62,-359.7C595.62,-352.41 595.62,-343.73 595.62,-335.54"/>
-<polygon fill="black" stroke="black" points="599.13,-335.62 595.63,-325.62 592.13,-335.62 599.13,-335.62"/>
+<path fill="none" stroke="black" d="M595.38,-359.7C595.38,-352.41 595.38,-343.73 595.38,-335.54"/>
+<polygon fill="black" stroke="black" points="598.88,-335.62 595.38,-325.62 591.88,-335.62 598.88,-335.62"/>
 </g>
 <!-- image__IllumA&#45;&gt;Resize_5f66d6a6 -->
-<g id="edge31" class="edge">
+<g id="edge21" class="edge">
 <title>image__IllumA&#45;&gt;Resize_5f66d6a6</title>
-<path fill="none" stroke="black" d="M1073.62,-215.7C1073.62,-208.41 1073.62,-199.73 1073.62,-191.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-191.62 1073.63,-181.62 1070.13,-191.62 1077.13,-191.62"/>
+<path fill="none" stroke="black" d="M836.38,-215.7C836.38,-208.41 836.38,-199.73 836.38,-191.54"/>
+<polygon fill="black" stroke="black" points="839.88,-191.62 836.38,-181.62 832.88,-191.62 839.88,-191.62"/>
 </g>
 <!-- image__IllumC&#45;&gt;Resize_ca7cb3e5 -->
-<g id="edge32" class="edge">
+<g id="edge22" class="edge">
 <title>image__IllumC&#45;&gt;Resize_ca7cb3e5</title>
-<path fill="none" stroke="black" d="M109.62,-215.7C109.62,-208.41 109.62,-199.73 109.62,-191.54"/>
-<polygon fill="black" stroke="black" points="113.13,-191.62 109.63,-181.62 106.13,-191.62 113.13,-191.62"/>
+<path fill="none" stroke="black" d="M354.38,-215.7C354.38,-208.41 354.38,-199.73 354.38,-191.54"/>
+<polygon fill="black" stroke="black" points="357.88,-191.62 354.38,-181.62 350.88,-191.62 357.88,-191.62"/>
 </g>
 <!-- image__IllumDNA&#45;&gt;Resize_a3b11500 -->
-<g id="edge33" class="edge">
+<g id="edge23" class="edge">
 <title>image__IllumDNA&#45;&gt;Resize_a3b11500</title>
-<path fill="none" stroke="black" d="M844.11,-215.7C844.73,-208.41 845.48,-199.73 846.18,-191.54"/>
-<polygon fill="black" stroke="black" points="849.66,-191.87 847.03,-181.61 842.69,-191.28 849.66,-191.87"/>
+<path fill="none" stroke="black" d="M1073.38,-215.7C1073.38,-208.41 1073.38,-199.73 1073.38,-191.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-191.62 1073.38,-181.62 1069.88,-191.62 1076.88,-191.62"/>
 </g>
 <!-- image__IllumG&#45;&gt;Resize_774d03d7 -->
-<g id="edge34" class="edge">
+<g id="edge24" class="edge">
 <title>image__IllumG&#45;&gt;Resize_774d03d7</title>
-<path fill="none" stroke="black" d="M315.62,-215.7C315.62,-208.41 315.62,-199.73 315.62,-191.54"/>
-<polygon fill="black" stroke="black" points="319.13,-191.62 315.63,-181.62 312.13,-191.62 319.13,-191.62"/>
+<path fill="none" stroke="black" d="M113.38,-215.7C113.38,-208.41 113.38,-199.73 113.38,-191.54"/>
+<polygon fill="black" stroke="black" points="116.88,-191.62 113.38,-181.62 109.88,-191.62 116.88,-191.62"/>
 </g>
 <!-- image__IllumT&#45;&gt;Resize_b62893b -->
-<g id="edge35" class="edge">
+<g id="edge25" class="edge">
 <title>image__IllumT&#45;&gt;Resize_b62893b</title>
-<path fill="none" stroke="black" d="M719.6,-216.05C716.45,-208.43 712.64,-199.23 709.08,-190.65"/>
-<polygon fill="black" stroke="black" points="712.42,-189.57 705.36,-181.67 705.96,-192.25 712.42,-189.57"/>
+<path fill="none" stroke="black" d="M595.38,-215.7C595.38,-208.41 595.38,-199.73 595.38,-191.54"/>
+<polygon fill="black" stroke="black" points="598.88,-191.62 595.38,-181.62 591.88,-191.62 598.88,-191.62"/>
 </g>
 <!-- image__OrigA -->
-<g id="node33" class="node">
+<g id="node31" class="node">
 <title>image__OrigA</title>
-<ellipse fill="lightgray" stroke="black" cx="1073.62" cy="-522" rx="34.46" ry="18"/>
-<text text-anchor="middle" x="1073.62" y="-516.95" font-family="Times,serif" font-size="14.00">OrigA</text>
+<ellipse fill="lightgray" stroke="black" cx="836.38" cy="-522" rx="34.46" ry="18"/>
+<text text-anchor="middle" x="836.38" y="-516.95" font-family="Times,serif" font-size="14.00">OrigA</text>
 </g>
 <!-- image__OrigA&#45;&gt;Resize_fed3fa8c -->
-<g id="edge36" class="edge">
+<g id="edge26" class="edge">
 <title>image__OrigA&#45;&gt;Resize_fed3fa8c</title>
-<path fill="none" stroke="black" d="M1073.62,-503.7C1073.62,-496.41 1073.62,-487.73 1073.62,-479.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-479.62 1073.63,-469.62 1070.13,-479.62 1077.13,-479.62"/>
+<path fill="none" stroke="black" d="M836.38,-503.7C836.38,-496.41 836.38,-487.73 836.38,-479.54"/>
+<polygon fill="black" stroke="black" points="839.88,-479.62 836.38,-469.62 832.88,-479.62 839.88,-479.62"/>
 </g>
 <!-- image__OrigC -->
-<g id="node34" class="node">
+<g id="node32" class="node">
 <title>image__OrigC</title>
-<ellipse fill="lightgray" stroke="black" cx="109.62" cy="-522" rx="33.95" ry="18"/>
-<text text-anchor="middle" x="109.62" y="-516.95" font-family="Times,serif" font-size="14.00">OrigC</text>
+<ellipse fill="lightgray" stroke="black" cx="354.38" cy="-522" rx="33.95" ry="18"/>
+<text text-anchor="middle" x="354.38" y="-516.95" font-family="Times,serif" font-size="14.00">OrigC</text>
 </g>
 <!-- image__OrigC&#45;&gt;Resize_67d834a7 -->
-<g id="edge37" class="edge">
+<g id="edge27" class="edge">
 <title>image__OrigC&#45;&gt;Resize_67d834a7</title>
-<path fill="none" stroke="black" d="M109.62,-503.7C109.62,-496.41 109.62,-487.73 109.62,-479.54"/>
-<polygon fill="black" stroke="black" points="113.13,-479.62 109.63,-469.62 106.13,-479.62 113.13,-479.62"/>
+<path fill="none" stroke="black" d="M354.38,-503.7C354.38,-496.41 354.38,-487.73 354.38,-479.54"/>
+<polygon fill="black" stroke="black" points="357.88,-479.62 354.38,-469.62 350.88,-479.62 357.88,-479.62"/>
 </g>
 <!-- image__OrigDNA -->
-<g id="node35" class="node">
+<g id="node33" class="node">
 <title>image__OrigDNA</title>
-<ellipse fill="lightgray" stroke="black" cx="836.62" cy="-522" rx="47.77" ry="18"/>
-<text text-anchor="middle" x="836.62" y="-516.95" font-family="Times,serif" font-size="14.00">OrigDNA</text>
+<ellipse fill="lightgray" stroke="black" cx="1073.38" cy="-522" rx="47.77" ry="18"/>
+<text text-anchor="middle" x="1073.38" y="-516.95" font-family="Times,serif" font-size="14.00">OrigDNA</text>
 </g>
 <!-- image__OrigDNA&#45;&gt;Resize_32606b38 -->
-<g id="edge38" class="edge">
+<g id="edge28" class="edge">
 <title>image__OrigDNA&#45;&gt;Resize_32606b38</title>
-<path fill="none" stroke="black" d="M836.62,-503.7C836.62,-496.41 836.62,-487.73 836.62,-479.54"/>
-<polygon fill="black" stroke="black" points="840.13,-479.62 836.63,-469.62 833.13,-479.62 840.13,-479.62"/>
+<path fill="none" stroke="black" d="M1073.38,-503.7C1073.38,-496.41 1073.38,-487.73 1073.38,-479.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-479.62 1073.38,-469.62 1069.88,-479.62 1076.88,-479.62"/>
 </g>
 <!-- image__OrigG -->
-<g id="node36" class="node">
+<g id="node34" class="node">
 <title>image__OrigG</title>
-<ellipse fill="lightgray" stroke="black" cx="350.62" cy="-522" rx="34.46" ry="18"/>
-<text text-anchor="middle" x="350.62" y="-516.95" font-family="Times,serif" font-size="14.00">OrigG</text>
+<ellipse fill="lightgray" stroke="black" cx="113.38" cy="-522" rx="34.46" ry="18"/>
+<text text-anchor="middle" x="113.38" y="-516.95" font-family="Times,serif" font-size="14.00">OrigG</text>
 </g>
 <!-- image__OrigG&#45;&gt;Resize_98d2757f -->
-<g id="edge39" class="edge">
+<g id="edge29" class="edge">
 <title>image__OrigG&#45;&gt;Resize_98d2757f</title>
-<path fill="none" stroke="black" d="M350.62,-503.7C350.62,-496.41 350.62,-487.73 350.62,-479.54"/>
-<polygon fill="black" stroke="black" points="354.13,-479.62 350.63,-469.62 347.13,-479.62 354.13,-479.62"/>
+<path fill="none" stroke="black" d="M113.38,-503.7C113.38,-496.41 113.38,-487.73 113.38,-479.54"/>
+<polygon fill="black" stroke="black" points="116.88,-479.62 113.38,-469.62 109.88,-479.62 116.88,-479.62"/>
 </g>
 <!-- image__OrigT -->
-<g id="node37" class="node">
+<g id="node35" class="node">
 <title>image__OrigT</title>
-<ellipse fill="lightgray" stroke="black" cx="595.62" cy="-522" rx="33.44" ry="18"/>
-<text text-anchor="middle" x="595.62" y="-516.95" font-family="Times,serif" font-size="14.00">OrigT</text>
+<ellipse fill="lightgray" stroke="black" cx="595.38" cy="-522" rx="33.44" ry="18"/>
+<text text-anchor="middle" x="595.38" y="-516.95" font-family="Times,serif" font-size="14.00">OrigT</text>
 </g>
 <!-- image__OrigT&#45;&gt;Resize_a7dba801 -->
-<g id="edge40" class="edge">
+<g id="edge30" class="edge">
 <title>image__OrigT&#45;&gt;Resize_a7dba801</title>
-<path fill="none" stroke="black" d="M595.62,-503.7C595.62,-496.41 595.62,-487.73 595.62,-479.54"/>
-<polygon fill="black" stroke="black" points="599.13,-479.62 595.63,-469.62 592.13,-479.62 599.13,-479.62"/>
+<path fill="none" stroke="black" d="M595.38,-503.7C595.38,-496.41 595.38,-487.73 595.38,-479.54"/>
+<polygon fill="black" stroke="black" points="598.88,-479.62 595.38,-469.62 591.88,-479.62 598.88,-479.62"/>
 </g>
 <!-- image__UpsampledIllumA&#45;&gt;SaveImages_25230cf0 -->
-<g id="edge41" class="edge">
+<g id="edge31" class="edge">
 <title>image__UpsampledIllumA&#45;&gt;SaveImages_25230cf0</title>
-<path fill="none" stroke="black" d="M1073.62,-71.7C1073.62,-64.41 1073.62,-55.73 1073.62,-47.54"/>
-<polygon fill="black" stroke="black" points="1077.13,-47.62 1073.63,-37.62 1070.13,-47.62 1077.13,-47.62"/>
+<path fill="none" stroke="black" d="M836.38,-71.7C836.38,-64.41 836.38,-55.73 836.38,-47.54"/>
+<polygon fill="black" stroke="black" points="839.88,-47.62 836.38,-37.62 832.88,-47.62 839.88,-47.62"/>
 </g>
 <!-- image__UpsampledIllumC&#45;&gt;SaveImages_e7bb47f5 -->
-<g id="edge42" class="edge">
+<g id="edge32" class="edge">
 <title>image__UpsampledIllumC&#45;&gt;SaveImages_e7bb47f5</title>
-<path fill="none" stroke="black" d="M109.62,-71.7C109.62,-64.41 109.62,-55.73 109.62,-47.54"/>
-<polygon fill="black" stroke="black" points="113.13,-47.62 109.63,-37.62 106.13,-47.62 113.13,-47.62"/>
+<path fill="none" stroke="black" d="M354.38,-71.7C354.38,-64.41 354.38,-55.73 354.38,-47.54"/>
+<polygon fill="black" stroke="black" points="357.88,-47.62 354.38,-37.62 350.88,-47.62 357.88,-47.62"/>
 </g>
 <!-- image__UpsampledIllumDNA&#45;&gt;SaveImages_4cf7a938 -->
-<g id="edge43" class="edge">
+<g id="edge33" class="edge">
 <title>image__UpsampledIllumDNA&#45;&gt;SaveImages_4cf7a938</title>
-<path fill="none" stroke="black" d="M859.62,-71.7C859.62,-64.41 859.62,-55.73 859.62,-47.54"/>
-<polygon fill="black" stroke="black" points="863.13,-47.62 859.63,-37.62 856.13,-47.62 863.13,-47.62"/>
+<path fill="none" stroke="black" d="M1073.38,-71.7C1073.38,-64.41 1073.38,-55.73 1073.38,-47.54"/>
+<polygon fill="black" stroke="black" points="1076.88,-47.62 1073.38,-37.62 1069.88,-47.62 1076.88,-47.62"/>
 </g>
 <!-- image__UpsampledIllumG&#45;&gt;SaveImages_445ce30e -->
-<g id="edge44" class="edge">
+<g id="edge34" class="edge">
 <title>image__UpsampledIllumG&#45;&gt;SaveImages_445ce30e</title>
-<path fill="none" stroke="black" d="M315.62,-71.7C315.62,-64.41 315.62,-55.73 315.62,-47.54"/>
-<polygon fill="black" stroke="black" points="319.13,-47.62 315.63,-37.62 312.13,-47.62 319.13,-47.62"/>
+<path fill="none" stroke="black" d="M113.38,-71.7C113.38,-64.41 113.38,-55.73 113.38,-47.54"/>
+<polygon fill="black" stroke="black" points="116.88,-47.62 113.38,-37.62 109.88,-47.62 116.88,-47.62"/>
 </g>
 <!-- image__UpsampledIllumT&#45;&gt;SaveImages_a33ceda0 -->
-<g id="edge45" class="edge">
+<g id="edge35" class="edge">
 <title>image__UpsampledIllumT&#45;&gt;SaveImages_a33ceda0</title>
-<path fill="none" stroke="black" d="M668.62,-71.7C668.62,-64.41 668.62,-55.73 668.62,-47.54"/>
-<polygon fill="black" stroke="black" points="672.13,-47.62 668.63,-37.62 665.13,-47.62 672.13,-47.62"/>
+<path fill="none" stroke="black" d="M595.38,-71.7C595.38,-64.41 595.38,-55.73 595.38,-47.54"/>
+<polygon fill="black" stroke="black" points="598.88,-47.62 595.38,-37.62 591.88,-47.62 598.88,-47.62"/>
 </g>
 </g>
 </svg>

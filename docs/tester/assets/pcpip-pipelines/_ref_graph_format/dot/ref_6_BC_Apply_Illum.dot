@@ -22,7 +22,6 @@ SaveImages_a76d743b [type=module, label="SaveImages #12", module_name=SaveImages
 SaveImages_b493bd46 [type=module, label="SaveImages #26", module_name=SaveImages, module_num=26, original_num=26, stable_id="SaveImages_b493bd46", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 SaveImages_d57fd6c6 [type=module, label="SaveImages #20", module_name=SaveImages, module_num=20, original_num=20, stable_id="SaveImages_d57fd6c6", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
 SaveImages_d601fd4e [type=module, label="SaveImages #22", module_name=SaveImages, module_num=22, original_num=22, stable_id="SaveImages_d601fd4e", enabled=True, shape=box, style=filled, fontname="Helvetica-Bold", fillcolor=lightblue];
-image__AlignedRed [type=image, label=AlignedRed, shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle01_A [type=image, label="Cycle01_A", shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle01_C [type=image, label="Cycle01_C", shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle01_DAPI [type=image, label="Cycle01_DAPI", shape=ellipse, style=filled, fillcolor=lightgray];
@@ -78,13 +77,11 @@ image__Cycle03_OrigG [type=image, label="Cycle03_OrigG", shape=ellipse, style=fi
 image__Cycle03_OrigT [type=image, label="Cycle03_OrigT", shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle03_T [type=image, label="Cycle03_T", shape=ellipse, style=filled, fillcolor=lightgray];
 image__Cycle03_T_PreAligned [type=image, label="Cycle03_T_PreAligned", shape=ellipse, style=filled, fillcolor=lightgray];
-Align_3639f4c2 -> image__AlignedRed [type="image_output"];
 Align_3639f4c2 -> image__Cycle02_A [type="image_output"];
 Align_3639f4c2 -> image__Cycle02_C [type="image_output"];
 Align_3639f4c2 -> image__Cycle02_DAPI [type="image_output"];
 Align_3639f4c2 -> image__Cycle02_G [type="image_output"];
 Align_3639f4c2 -> image__Cycle02_T [type="image_output"];
-Align_ba3c1e0a -> image__AlignedRed [type="image_output"];
 Align_ba3c1e0a -> image__Cycle03_A [type="image_output"];
 Align_ba3c1e0a -> image__Cycle03_C [type="image_output"];
 Align_ba3c1e0a -> image__Cycle03_DAPI [type="image_output"];
@@ -177,4 +174,7 @@ image__Cycle03_OrigT -> CorrectIlluminationApply_e198cdd7 [type="image_input"];
 image__Cycle03_T -> MeasureColocalization_1c806ec0 [type="image_list_input"];
 image__Cycle03_T -> SaveImages_b493bd46 [type="image_input"];
 image__Cycle03_T_PreAligned -> Align_ba3c1e0a [type="image_input"];
+
+  {rank = min; image__Cycle01_OrigDNA; image__Cycle01_IllumDNA; image__Cycle02_OrigDNA; image__Cycle02_IllumDNA; image__Cycle03_OrigDNA; image__Cycle03_IllumDNA; image__Cycle01_OrigA; image__Cycle01_IllumA; image__Cycle02_OrigA; image__Cycle02_IllumA; image__Cycle03_OrigA; image__Cycle03_IllumA; image__Cycle01_OrigC; image__Cycle01_IllumC; image__Cycle02_OrigC; image__Cycle02_IllumC; image__Cycle03_OrigC; image__Cycle03_IllumC; image__Cycle01_OrigG; image__Cycle01_IllumG; image__Cycle02_OrigG; image__Cycle02_IllumG; image__Cycle03_OrigG; image__Cycle03_IllumG; image__Cycle01_OrigT; image__Cycle01_IllumT; image__Cycle02_OrigT; image__Cycle02_IllumT; image__Cycle03_OrigT; image__Cycle03_IllumT;}
+  {rank = max; MeasureColocalization_1c806ec0; SaveImages_a76d743b; SaveImages_a08bcbd8; SaveImages_25d71e65; SaveImages_82399f89; SaveImages_8a753349; SaveImages_80c39bf5; SaveImages_83684cd7; SaveImages_27ebf127; SaveImages_d57fd6c6; SaveImages_209666; SaveImages_d601fd4e; SaveImages_6e8089a9; SaveImages_50a8fa7; SaveImages_166e376d; SaveImages_b493bd46;}
 }
