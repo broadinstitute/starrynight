@@ -60,7 +60,6 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 - Modules with a single cycle count parameter
 - Simple to update manually (just changing a number)
-- Examples include barcode calling modules
 
 **Specific Examples:**
 
