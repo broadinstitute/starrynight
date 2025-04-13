@@ -59,7 +59,7 @@ nav:
   - Development:
     - Developer Guide: developer/developer-guide.md
     - PCPIP Specs: developer/pcpip-specs.md
-    - Pipeline Automation Analysis: developer/pipeline-automation-analysis.md
+    - Pipeline Automation: developer/pipeline-automation.md
     - Requirements: developer/requirements.md
   - Testing: tester/README.md
   - FAQ: misc/faq.md

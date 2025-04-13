@@ -1,4 +1,4 @@
-# PCPIP Pipeline Automation Analysis
+# Value and Limitations of Pipeline Automation
 
 This document explores the value and limitations of automating CellProfiler pipeline generation for the next generation of Pooled Cell Painting Image Processing (PCPIP). It explains different module customization categories, their customization requirements, and the overall importance of programmatic pipeline creation.
 
@@ -101,7 +101,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 ![Pipeline_9_IdentifySecondaryObjects](assets/sample_modules/p9_IdentifySecondaryObjects.png)
 
-## Conclusion on Automation Priority
+## Automation Priority
 
 While automating pipeline generation would be beneficial, particularly for repetitive cycle-specific configurations, it's not a critical priority given:
 
