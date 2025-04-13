@@ -73,7 +73,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 2 (CP_Apply_Illum): `CorrectIlluminationApply` modules. Module count = # channels.
+- Pipeline 2 (CP_Apply_Illum): `CorrectIlluminationApply` modules. Module count = 1. Setting count/module = # channels.
 - Pipeline 9 (Analysis): `MeasureObjectIntensity` modules (and all `Measure*` modules in general). Module count = 1. Setting count/module = # channels.
 
 **Automation Value:** Moderate - useful templates but easy to manually adjust
