@@ -112,7 +112,21 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 ![Pipeline_9_IdentifySecondaryObjects](sample_modules/p9_IdentifySecondaryObjects.png)
 
-## Pipeline Diagrams
+## Conclusion on Automation Priority
+
+While automating pipeline generation would be beneficial, particularly for repetitive cycle-specific configurations, it's not a critical priority given:
+
+1. **Bounded Problem Space:** The finite range of cycle counts (3-12) means templates for common configurations can cover most use cases.
+2. **Existing Resources:** Pipelines for most common cycle counts already exist and can be adapted.
+3. **Human Expertise Requirement:** The most complex pipeline elements require expert tuning regardless of automation.
+4. **Reasonable Manual Effort:** Modifying pipelines for a new experiment typically takes only a couple of hours of work.
+5. **Higher-Value Automation Targets:** Other areas offer greater automation benefits:
+      - File-to-LoadData parsing
+      - Workflow step chaining
+      - QC report generation
+      - Computing resource orchestration
+
+## Addendum: Pipeline Diagrams
 
 Pipeline 2 (CP_Apply_Illum)
 
@@ -129,46 +143,3 @@ Pipeline 7 (BC_Preprocess)
 Pipeline 9 (Analysis)
 
 ![Pipeline 9: Analysis](_ref_graph_format/svg/ref_9_Analysis.svg)
-
-## Assessment of Automation Value
-
-### For Type 1 & 2 (Repetitive cycle-specific modules):
-
-- **Challenge:** Most tedious to manually configure
-- **Mitigating Factor:** Finite set of cycle counts (3-12)
-- **Solution:** Create templates once for each possible cycle count (10 options)
-- **Practical Impact:** With templates for common cycle counts, this becomes manageable
-
-### For Type 3 (Simple cycle count parameters):
-
-- **Challenge:** Minimal - just updating a single number
-- **Practical Impact:** Takes seconds to manually adjust, automation provides little benefit
-
-### For Type 4 (Phenotype measurement modules):
-
-- **Challenge:** Moderate - need channel name updates
-- **Mitigating Factor:** CellProfiler provides error checking
-- **Solution:** Simple templates with channel name placeholders
-- **Practical Impact:** Low to moderate effort to manually customize
-
-### For Type 5 (Phenotype segmentation modules):
-
-- **Challenge:** High - requires expertise and experimentation
-- **Mitigating Factor:** Automation cannot replace human expertise
-- **Practical Impact:** Automation offers limited value as human tuning is essential
-
-## Conclusion on Automation Priority
-
-While automating pipeline generation would be beneficial, particularly for repetitive cycle-specific configurations, it's not a critical priority given:
-
-1. **Bounded Problem Space:** The finite range of cycle counts (3-12) means templates for common configurations can cover most use cases.
-2. **Existing Resources:** Pipelines for most common cycle counts already exist and can be adapted.
-3. **Human Expertise Requirement:** The most complex pipeline elements require expert tuning regardless of automation.
-4. **Reasonable Manual Effort:** Modifying pipelines for a new experiment typically takes only a couple of hours of work.
-5. **Higher-Value Automation Targets:** Other areas offer greater automation benefits:
-      - File-to-LoadData parsing
-      - Workflow step chaining
-      - QC report generation
-      - Computing resource orchestration
-
-This analysis provides a balanced view of where automation efforts would be most valuable in the PCPIP pipeline ecosystem, prioritizing workflow orchestration and QC over pipeline generation.
