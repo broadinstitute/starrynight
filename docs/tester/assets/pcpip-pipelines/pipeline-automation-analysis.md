@@ -24,9 +24,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 5 (BC_Illum): SaveImages modules #17, #18, #19, #20, #21 (for each cycle's illumination functions)
-- Pipeline 6 (BC_Apply_Illum): CorrectIlluminationApply modules #1, #6, #11, #16, #21 (one for each cycle's DAPI)
-- Pipeline 6 (BC_Apply_Illum): SaveImages modules #3, #8, #13, #18, #23 (saving corrected images for cycle-specific channels)
+- Pipeline 6 (BC_Apply_Illum): SaveImages modules (saving corrected images for cycle-specific channels)
 
 **Automation Value:** High for initial creation, but moderate overall since there are finite cycle counts (3-12)
 
@@ -40,9 +38,8 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 7 (BC_Preprocess): CompensateColors module #25 takes multiple cycle inputs (Cycle01_T_BackSub, Cycle02_T_BackSub, etc.)
-- Pipeline 7 (BC_Preprocess): ImageMath modules #2, #5, #6, #18 that perform operations across cycles
-- Pipeline 7 (BC_Preprocess): RelateObjects module #26 that relates nuclei to barcode spots across cycles
+- Pipeline 6 (BC_Apply_Illum): CorrectIlluminationApply modules (one for each A, C, G, T, DAPI channel, then setting per cycle with the module)
+- Pipeline 7 (BC_Preprocess): CompensateColors module takes multiple cycle inputs (Cycle01_T_BackSub, Cycle02_T_BackSub, etc.)
 
 **Automation Value:** High for maintenance, but again limited by finite cycle count range
 
@@ -56,9 +53,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 7 (BC_Preprocess): FilterObjects module #27 with filtering based on cycle count
-- Pipeline 9 (Analysis): CallBarcodes module #51 with a "Number of cycles" parameter that needs a single integer value
-- Pipeline 9 (Analysis): MeasureObjectIntensity modules that process data from a specified cycle count
+- Pipeline 9 (Analysis): CallBarcodes module with a "Number of cycles" parameter that needs a single integer value
 
 **Automation Value:** Low - these are trivial to update manually
 
@@ -72,9 +67,8 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 9 (Analysis): MeasureObjectIntensity modules #40, #50, #55, #58 that measure intensity in phenotype channels
-- Pipeline 9 (Analysis): MeasureTexture module #63 that needs channel-specific references
-- Pipeline 9 (Analysis): MeasureObjectSizeShape module #46 that works consistently regardless of channel configuration
+- Pipeline 2 (CP_Apply_Illum): CorrectIlluminationApply modules (one module, then setting per channel within the module)
+- Pipeline 9 (Analysis): MeasureObjectIntensity modules that measure intensity in phenotype channels
 
 **Automation Value:** Moderate - useful templates but easy to manually adjust
 
@@ -89,8 +83,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 **Specific Examples:**
 
 - Pipeline 2 (CP_Apply_Illum): IdentifyPrimaryObjects module with manually tuned diameter ranges and thresholding methods
-- Pipeline 9 (Analysis): IdentifyPrimaryObjects module #17 for nuclei segmentation with threshold settings
-- Pipeline 9 (Analysis): IdentifySecondaryObjects module #20 for cell segmentation that uses nuclei as seeds
+- Pipeline 9 (Analysis): IdentifySecondaryObjects module for cell segmentation that uses nuclei as seeds
 
 **Automation Value:** Low - human expertise required regardless of automation
 
@@ -101,21 +94,29 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 ![Pipeline 2: Cell Painting Apply Illumination](_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
 
-*Pipeline 5 (BC_Illum) demonstrates Type 1 repetitive modules, with parallel processing chains for each barcoding channel (A, C, G, T, DAPI). Each channel follows an identical pattern of Resize → CorrectIlluminationCalculate → Resize → SaveImages, differing only in channel references.*
-
-![Pipeline 5: Barcoding Illumination Correction](_ref_graph_format/svg/ref_5_BC_Illum.svg)
-
-*Pipeline 6 (BC_Apply_Illum) exemplifies Type 1 modules with numerous cycle-specific CorrectIlluminationApply modules (#1, #6, #11, #16, #21). The repetitive pattern requires a separate correction module and SaveImages module for each channel in each cycle, resulting in a highly repetitive structure that would benefit from templating.*
+*Pipeline 6 (BC_Apply_Illum) exemplifies Type 1 modules with numerous cycle-specific CorrectIlluminationApply modules. The repetitive pattern requires a separate correction module and SaveImages module for each channel in each cycle, resulting in a highly repetitive structure that would benefit from templating.*
 
 ![Pipeline 6: Barcoding Apply Illumination](_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
 
-*Pipeline 7 (BC_Preprocess) illustrates Type 2 modules through its central CompensateColors module (#25), which requires inputs from all cycles (all Cycle01_*, Cycle02_*, Cycle03_* BackSub images). The module takes these multiple inputs and processes them together, requiring updates to all references when cycle count changes.*
+*Pipeline 7 (BC_Preprocess) illustrates Type 2 modules through its central CompensateColors module, which requires inputs from all cycles (all Cycle01_, Cycle02_, Cycle03_ BackSub images). The module takes these multiple inputs and processes them together, requiring updates to all references when cycle count changes.*
 
 ![Pipeline 7: Barcoding Preprocessing](_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
 
-*Pipeline 9 (Analysis) showcases multiple module types: Type 3 modules like CallBarcodes (#51) with simple cycle count parameters, Type 4 measurement modules like MeasureObjectIntensity (#40, #50, #55, #58) that need channel name updates, and Type 5 segmentation modules like IdentifyPrimaryObjects (#17) that require expert tuning for each experiment.*
+*Pipeline 9 (Analysis) showcases multiple module types: Type 3 modules like CallBarcodes with simple cycle count parameters, Type 4 measurement modules like MeasureObjectIntensity that need channel name updates, and Type 5 segmentation modules like IdentifyPrimaryObjects that require expert tuning for each experiment.*
 
 ![Pipeline 9: Analysis](_ref_graph_format/svg/ref_9_Analysis.svg)
+
+## Module Screenshots
+
+![Pipeline_2_CorrectIlluminationApply](sample_modules/p2_CorrectIlluminationApply.png)
+![Pipeline_2_IdentifyPrimaryObjects](sample_modules/p2_IdentifyPrimaryObjects.png)
+![Pipeline_2_SaveImages](sample_modules/p2_SaveImages.png)
+![Pipeline_6_CorrectIlluminationApply](sample_modules/p6_CorrectIlluminationApply.png)
+![Pipeline_7_CompensateColors](sample_modules/p7_CompensateColors.png)
+![Pipeline_9_CallBarcodes](sample_modules/p9_CallBarcodes.png)
+![Pipeline_9_IdentifySecondaryObjects](sample_modules/p9_IdentifySecondaryObjects.png)
+![Pipeline_9_MeasureObjectIntensity1](sample_modules/p9_MeasureObjectIntensity1.png)
+![Pipeline_9_MeasureObjectIntensity2](sample_modules/p9_MeasureObjectIntensity2.png)
 
 ## Assessment of Automation Value
 
