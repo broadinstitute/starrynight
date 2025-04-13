@@ -45,6 +45,7 @@ The testing framework includes these key resources:
 - [**pcpip-pipelines**](assets/pcpip-pipelines/README.md): Reference CellProfiler pipeline files
 - [**pcpip-create-fixture**](assets/pcpip-create-fixture/README.md): Tools for creating test fixtures
 - [**pcpip-test**](assets/pcpip-test/README.md): Scripts for pipeline execution and comparison
+- [**Pipeline Automation Analysis**](assets/pcpip-pipelines/pipeline-automation-analysis.md): Analysis of pipeline customization patterns and automation potential
 
 ## Testing Environment Setup
 
