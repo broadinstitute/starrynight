@@ -153,9 +153,9 @@ While automating pipeline generation would be beneficial, particularly for repet
 3. **Human Expertise Requirement:** The most complex pipeline elements require expert tuning regardless of automation.
 4. **Reasonable Manual Effort:** Modifying pipelines for a new experiment typically takes only a couple of hours of work.
 5. **Higher-Value Automation Targets:** Other areas offer greater automation benefits:
-   - File-to-LoadData parsing
-   - Workflow step chaining
-   - QC report generation
-   - Computing resource orchestration
+      - File-to-LoadData parsing
+      - Workflow step chaining
+      - QC report generation
+      - Computing resource orchestration
 
 This analysis provides a balanced view of where automation efforts would be most valuable in the PCPIP pipeline ecosystem, prioritizing workflow orchestration and QC over pipeline generation.
