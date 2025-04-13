@@ -18,32 +18,43 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Description:**
 
-- Modules that repeat once per base per cycle (e.g., SaveImages for each A, C, G, T, DAPI channel in every cycle)
+> Related to barcoding - one module in the pipeline per base-times-cycle (like saving out each channel)
+
+- Modules that repeat once per base per cycle
 - Highly repetitive with minor variations in channel references
 - Most tedious to manually configure
 
 **Specific Examples:**
 
-- Pipeline 6 (BC_Apply_Illum): SaveImages modules (saving corrected images for cycle-specific channels)
+- Pipeline 6 (BC_Apply_Illum): `SaveImages` modules. Module count = A,T,G,C,DAPI x # cycles
 
 **Automation Value:** High for initial creation, but moderate overall since there are finite cycle counts (3-12)
 
+![Pipeline_6_SaveImages](sample_modules/p6_SaveImages.png)
+
 ### 2. All-Cycles-In-One Barcoding Modules
+
+> Related to barcoding - module occurs once (or once per channel) in the pipeline, but needs to have all cycles listed (like when we take a standard-deviation-projection-across-cycles) in the module settings
 
 **Description:**
 
 - Modules that appear once but list all cycles in their settings
 - Need updates to all cycle references when cycle count changes
-- Examples include standard deviation projection or color compensation modules
 
 **Specific Examples:**
 
-- Pipeline 6 (BC_Apply_Illum): CorrectIlluminationApply modules (one for each A, C, G, T, DAPI channel, then setting per cycle with the module)
-- Pipeline 7 (BC_Preprocess): CompensateColors module takes multiple cycle inputs (Cycle01_T_BackSub, Cycle02_T_BackSub, etc.)
+- Pipeline 6 (BC_Apply_Illum): `CorrectIlluminationApply` modules. Module count = A,T,G,C,DAPI. Setting count/module = # cycles
+- Pipeline 7 (BC_Preprocess): `CompensateColors` module. Module count = 1. Setting count/module = A,T,G,C,DAPI x # cycles.
 
 **Automation Value:** High for maintenance, but again limited by finite cycle count range
 
+![Pipeline_6_CorrectIlluminationApply](sample_modules/p6_CorrectIlluminationApply.png)
+
+![Pipeline_7_CompensateColors](sample_modules/p7_CompensateColors.png)
+
 ### 3. Cycle-Count-Parameter Barcoding Modules
+
+> Related to barcoding - module occurs only once in the pipeline and is generally unconcerned with the number of cycles (like barcode spot detection or actual barcode calling, where "number of cycles" is just a single setting you give an int value for)
 
 **Description:**
 
@@ -53,11 +64,15 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 9 (Analysis): CallBarcodes module with a "Number of cycles" parameter that needs a single integer value
+- Pipeline 9 (Analysis): `CallBarcodes` module. Module count = 1. Setting count/module = 1.
 
 **Automation Value:** Low - these are trivial to update manually
 
+![Pipeline_9_CallBarcodes](sample_modules/p9_CallBarcodes.png)
+
 ### 4. Phenotype Measurement Modules
+
+> Related to phenotype image measurement - need to adjust for number and name of channels each experiment, but otherwise more-or-less-invariant (all measurements, phenotype illum correction)
 
 **Description:**
 
@@ -67,12 +82,19 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 2 (CP_Apply_Illum): CorrectIlluminationApply modules (one module, then setting per channel within the module)
-- Pipeline 9 (Analysis): MeasureObjectIntensity modules that measure intensity in phenotype channels
+- Pipeline 2 (CP_Apply_Illum): `CorrectIlluminationApply` modules. Module count = # channels.
+- Pipeline 9 (Analysis): `MeasureObjectIntensity` modules. Module count = 1. Setting count/module = # channels.
 
 **Automation Value:** Moderate - useful templates but easy to manually adjust
 
+![Pipeline_2_CorrectIlluminationApply](sample_modules/p2_CorrectIlluminationApply.png)
+
+![Pipeline_9_MeasureObjectIntensity1](sample_modules/p9_MeasureObjectIntensity1.png)
+
+
 ### 5. Phenotype Segmentation Modules
+
+> Related to phenotype segmentation - need to adjust for name of channels but also highly likely to need individual tuning each time
 
 **Description:**
 
@@ -82,41 +104,32 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Specific Examples:**
 
-- Pipeline 2 (CP_Apply_Illum): IdentifyPrimaryObjects module with manually tuned diameter ranges and thresholding methods
-- Pipeline 9 (Analysis): IdentifySecondaryObjects module for cell segmentation that uses nuclei as seeds
+- Pipeline 2 (CP_Apply_Illum): `IdentifyPrimaryObjects` module with manually tuned diameter ranges and thresholding methods
+- Pipeline 9 (Analysis): `IdentifySecondaryObjects` module for cell segmentation that uses nuclei as seeds
 
 **Automation Value:** Low - human expertise required regardless of automation
 
+![Pipeline_2_IdentifyPrimaryObjects](sample_modules/p2_IdentifyPrimaryObjects.png)
+
+![Pipeline_9_IdentifySecondaryObjects](sample_modules/p9_IdentifySecondaryObjects.png)
 
 ## Pipeline Diagrams
 
-*Pipeline 2 (CP_Apply_Illum) demonstrates Type 5 phenotype segmentation modules that require expert tuning. It applies illumination correction to Cell Painting images, then performs nuclei and cell segmentation with carefully adjusted size and threshold parameters that are experiment-specific and cannot be easily templated.*
+Pipeline 2 (CP_Apply_Illum)
 
 ![Pipeline 2: Cell Painting Apply Illumination](_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
 
-*Pipeline 6 (BC_Apply_Illum) exemplifies Type 1 modules with numerous cycle-specific CorrectIlluminationApply modules. The repetitive pattern requires a separate correction module and SaveImages module for each channel in each cycle, resulting in a highly repetitive structure that would benefit from templating.*
+Pipeline 6 (BC_Apply_Illum)
 
 ![Pipeline 6: Barcoding Apply Illumination](_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
 
-*Pipeline 7 (BC_Preprocess) illustrates Type 2 modules through its central CompensateColors module, which requires inputs from all cycles (all Cycle01_, Cycle02_, Cycle03_ BackSub images). The module takes these multiple inputs and processes them together, requiring updates to all references when cycle count changes.*
+Pipeline 7 (BC_Preprocess)
 
 ![Pipeline 7: Barcoding Preprocessing](_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
 
-*Pipeline 9 (Analysis) showcases multiple module types: Type 3 modules like CallBarcodes with simple cycle count parameters, Type 4 measurement modules like MeasureObjectIntensity that need channel name updates, and Type 5 segmentation modules like IdentifyPrimaryObjects that require expert tuning for each experiment.*
+Pipeline 9 (Analysis)
 
 ![Pipeline 9: Analysis](_ref_graph_format/svg/ref_9_Analysis.svg)
-
-## Module Screenshots
-
-![Pipeline_2_CorrectIlluminationApply](sample_modules/p2_CorrectIlluminationApply.png)
-![Pipeline_2_IdentifyPrimaryObjects](sample_modules/p2_IdentifyPrimaryObjects.png)
-![Pipeline_2_SaveImages](sample_modules/p2_SaveImages.png)
-![Pipeline_6_CorrectIlluminationApply](sample_modules/p6_CorrectIlluminationApply.png)
-![Pipeline_7_CompensateColors](sample_modules/p7_CompensateColors.png)
-![Pipeline_9_CallBarcodes](sample_modules/p9_CallBarcodes.png)
-![Pipeline_9_IdentifySecondaryObjects](sample_modules/p9_IdentifySecondaryObjects.png)
-![Pipeline_9_MeasureObjectIntensity1](sample_modules/p9_MeasureObjectIntensity1.png)
-![Pipeline_9_MeasureObjectIntensity2](sample_modules/p9_MeasureObjectIntensity2.png)
 
 ## Assessment of Automation Value
 
