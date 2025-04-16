@@ -47,8 +47,6 @@ TODO:
     - Multi-round experiment support (e.g., SABER) with round identifiers
     - Single-round experiment support with simpler configuration
 - 🟦 ☑️☑️☑️: **Must support processing configuration settings**:
-    - `one_or_many_files`: File organization strategy per well
-    - `fast_or_slow_mode`: CSV generation and processing strategy
     - `barcoding_cycles`: Number of barcoding cycles to process
     - `range_skip`: Sampling frequency for quality control
 - 🟦 ☑️☑️☑️: **Must support detailed stitching configuration**:
