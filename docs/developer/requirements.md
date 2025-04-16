@@ -29,8 +29,6 @@ Key:
 
 ### 2.2 Experimental Configuration
 
-Note: This section has been intentionally over-specified to capture everything but should be pruned as needed
-
 
 - 🟦 ☑️☑️☑️: **Must support all image grid configuration parameters**:
     - `painting_rows`, `painting_columns`: For square acquisition patterns
@@ -73,10 +71,13 @@ Note: This section has been intentionally over-specified to capture everything b
     - Scale resources based on workload
     - Optimize resource allocation for memory-intensive vs. CPU-intensive tasks
     - Support parallel processing of independent tasks
-- 🟨 ☑️☑️: **Must work across diverse compute environments**:
-    - Cloud platforms (☑️☑️☑️: AWS, 🔲: Azure, 🔲: GCP)
-    - 🔲: On-premises high-performance computing clusters
-    - ☑️☑️☑️: Local workstations (with appropriate scaling)
+- **Must work across diverse compute environments**:
+    - Cloud platforms
+      - 🟨 ☑️☑️☑️: AWS
+      - 🔲 ☑️: Azure
+      - 🔲 ☑️: GCP
+    - 🔲 ☑️: On-premises high-performance computing clusters
+    - 🟨 ☑️☑️☑️: Local workstations (with appropriate scaling)
 
 ### 2.5 Data Management
 
@@ -116,7 +117,10 @@ Note: This section has been intentionally over-specified to capture everything b
 
 ### 3.1 Cross-Platform Support
 
-- 🟦 ☑️: **Must run on ☑️☑️☑️Linux, ☑️☑️MacOS, and ☑️Windows (WSL)** operating systems.
+-  **Must run on multiple operation systems**
+  - 🟨 ☑️☑️☑️ Linux
+  - 🟨 ☑️☑️ MacOS
+  - 🔲 ☑️ Windows (WSL)
 
 ### 3.2 Extensibility
 
