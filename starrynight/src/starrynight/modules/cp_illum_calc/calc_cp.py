@@ -1,15 +1,16 @@
 """CPCalculate illumination correction calculate invoke cellprofiler module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
-from cloudpathlib import CloudPath
+from cloudpathlib import AnyPath, CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_calc.constants import (
+    CP_ILLUM_CALC_CP_CPPIPE_OUT_NAME,
     CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_OUT_PATH_SUFFIX,
@@ -45,9 +46,13 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
@@ -86,10 +91,14 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
             Container(
                 name=uid,
                 input_paths={
-                    "cppipe_path": [spec.inputs[0].path],
-                    "load_data_path": [spec.inputs[1].path],
+                    "cppipe_path": [
+                        AnyPath(spec.inputs[0].path).parent.__str__()
+                    ],
+                    "load_data_path": [spec.inputs[1].path.__str__()],
                 },
-                output_paths={"illum_dir": [spec.outputs[0].path]},
+                output_paths={
+                    "cp_illum_calc_dir": [spec.outputs[0].path.__str__()]
+                },
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -110,7 +119,7 @@ class CPCalcIllumInvokeCPModule(StarrynightModule):
         return "cp_calc_illum_invoke_cp"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -171,22 +180,23 @@ class CPCalcIllumInvokeCPModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "CPCalcIllumInvokeCPModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = CPCalcIllumInvokeCPModule._spec()
             spec.inputs[0].path = (
-                list(
-                    data.workspace_path.joinpath(
-                        CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX
-                    ).glob("*.cppipe")
-                )[0]
+                data.workspace_path.joinpath(
+                    CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
+                    CP_ILLUM_CALC_CP_CPPIPE_OUT_NAME,
+                )
                 .resolve()
                 .__str__()
             )
 
             spec.inputs[1].path = (
-                data.workspace_path.joinpath(CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -200,6 +210,8 @@ class CPCalcIllumInvokeCPModule(StarrynightModule):
             uid=CPCalcIllumInvokeCPModule.uid(),
             spec=spec,
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return CPCalcIllumInvokeCPModule(spec=spec, pipe=pipe, uow=uow)

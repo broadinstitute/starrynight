@@ -164,3 +164,4 @@ scratch
 .direnv
 result
 /plugins
+__marimo__/

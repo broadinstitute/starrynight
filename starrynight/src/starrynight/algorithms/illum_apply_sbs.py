@@ -46,7 +46,9 @@ from cellprofiler_core.pipeline import Pipeline
 from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.index import PCPIndex
-from starrynight.modules.sbs_illum_calc.constants import SBS_ILLUM_CALC_OUT_PATH_SUFFIX
+from starrynight.modules.sbs_illum_calc.constants import (
+    SBS_ILLUM_CALC_OUT_PATH_SUFFIX,
+)
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
     gen_image_hierarchy,
@@ -73,7 +75,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{ch}" for ch in ["Batch", "Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{ch}" for ch in ["Batch", "Plate", "Site", "Well"]
+    ]
 
     filename_heads = [
         f"FileName_Orig_Cycle_{int(cycle)}_{ch}"
@@ -128,19 +132,25 @@ def write_loaddata(
             # Construct file and pathnames with the metadata to index map
             filenames = [
                 AnyPath(
-                    metadata_to_index_dict[f"{int(cycle)}_{well_id}_{int(site_id)}"].key
+                    metadata_to_index_dict[
+                        f"{int(cycle)}_{well_id}_{int(site_id)}"
+                    ].key
                 ).name
                 for _ in plate_channel_list
                 for cycle in plate_cycles_list
             ]
             pathnames = [
                 AnyPath(
-                    resolve_path_loaddata(AnyPath(path_mask), AnyPath(sample_index.key))
+                    resolve_path_loaddata(
+                        AnyPath(path_mask), AnyPath(sample_index.key)
+                    )
                 ).parent
                 for _ in range(len(pathname_heads))
             ]
 
             # map frame index with image channels
+
+            assert sample_index.channel_dict is not None
             frame_index = [
                 sample_index.channel_dict.index(channel.split("_")[-1])
                 for channel in frame_heads
@@ -148,7 +158,9 @@ def write_loaddata(
 
             # setup illums
             illum_pathname_values = [
-                illum_by_cycle_channel_dict[cycle][ch].parent.resolve().__str__()
+                illum_by_cycle_channel_dict[cycle][ch]
+                .parent.resolve()
+                .__str__()
                 for ch in plate_channel_list
                 for cycle in plate_cycles_list
             ]
@@ -201,7 +213,9 @@ def write_loaddata_csv_by_batch_plate_cycle(
     # find illum files for this plate and cycle
     illum_by_cycle_channel_dict = {
         cycle: {
-            ch: illum_path.joinpath(f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy")
+            ch: illum_path.joinpath(
+                f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy"
+            )
             for ch in plate_channel_list
         }
         for cycle in plate_cycles_list
@@ -258,12 +272,16 @@ def gen_illum_apply_sbs_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if not illum_path:
-        illum_path = index_path.parents[1].joinpath(SBS_ILLUM_CALC_OUT_PATH_SUFFIX)
+        illum_path = index_path.parents[1].joinpath(
+            SBS_ILLUM_CALC_OUT_PATH_SUFFIX
+        )
 
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
+    images_df = df.filter(
+        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+    )
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
@@ -348,16 +366,24 @@ def generate_illum_apply_sbs_pipeline(
         module_counter += 1
         correct_illum_apply.module_num = module_counter
 
-        for ch in range(len(channel_list) - 1):  # One image is already added by default
+        for ch in range(
+            len(channel_list) - 1
+        ):  # One image is already added by default
             correct_illum_apply.add_image()
 
         for i, ch in enumerate(channel_list):
             # image_name
-            correct_illum_apply.images[i].settings[0].value = f"Orig_Cycle_{cycle}_{ch}"
+            correct_illum_apply.images[i].settings[
+                0
+            ].value = f"Orig_Cycle_{cycle}_{ch}"
             # corrected_image_name
-            correct_illum_apply.images[i].settings[1].value = f"Corr_Cycle_{cycle}_{ch}"
+            correct_illum_apply.images[i].settings[
+                1
+            ].value = f"Corr_Cycle_{cycle}_{ch}"
             # illum correct function image name
-            correct_illum_apply.images[i].settings[2].value = f"Illum_{cycle}_{ch}"
+            correct_illum_apply.images[i].settings[
+                2
+            ].value = f"Illum_{cycle}_{ch}"
             # how illum function is applied
             correct_illum_apply.images[i].settings[3] = DOS_DIVIDE
         pipeline.add_module(correct_illum_apply)
@@ -380,12 +406,10 @@ def generate_illum_apply_sbs_pipeline(
             save_image.update_file_names.value = False
             save_image.create_subdirectories.value = False
             # save_image.root_dir.value = ""
-            save_image.stack_axis.value = AXIS_T
+            # save_image.stack_axis.value = AXIS_T
             # save_image.tiff_compress.value = ""
 
-            save_image.single_file_name.value = (
-                f"\\g<Batch>_\\g<Plate>_{cycle}_Well_\\g<Well>_Site_\\g<Site>_Corr{ch}"
-            )
+            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_{cycle}_Well_\\g<Well>_Site_\\g<Site>_Corr{ch}"
             pipeline.add_module(save_image)
 
     # INFO: Create and configure required modules
@@ -403,14 +427,20 @@ def generate_illum_apply_sbs_pipeline(
         align_channel_list = channel_list.copy()
         align_channel_list.remove(nuclei_channel)
         align.first_input_image.value = f"Corr_Cycle_1_{nuclei_channel}"
-        align.first_output_image.value = f"Aligned_Corr_Cycle_1_{nuclei_channel}"
+        align.first_output_image.value = (
+            f"Aligned_Corr_Cycle_1_{nuclei_channel}"
+        )
         align.second_input_image.value = f"Corr_Cycle_{cycle}_{nuclei_channel}"
-        align.second_output_image.value = f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}"
+        align.second_output_image.value = (
+            f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}"
+        )
 
         for i, ch in enumerate(align_channel_list):
             align.add_image()
             # input_image_name
-            align.additional_images[i].settings[1].value = f"Corr_Cycle_{cycle}_{ch}"
+            align.additional_images[i].settings[
+                1
+            ].value = f"Corr_Cycle_{cycle}_{ch}"
             # output_image_name
             align.additional_images[i].settings[
                 2
@@ -467,14 +497,22 @@ def generate_illum_apply_sbs_pipeline(
         flag_unaligned.flags[i].wants_skip.value = False
 
         # Measurement settings, One measurement is added by default for each flag
-        flag_unaligned.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].source_choice.value = S_IMAGE
         flag_unaligned.flags[i].measurement_settings[0].object_name.value = None
         flag_unaligned.flags[i].measurement_settings[
             0
         ].measurement.value = f"Correlation_Correlation_Aligned_Corr_Cycle_1_{nuclei_channel}_{flag_image}"
-        flag_unaligned.flags[i].measurement_settings[0].wants_minimum.value = True
-        flag_unaligned.flags[i].measurement_settings[0].minimum_value.value = 0.9
-        flag_unaligned.flags[i].measurement_settings[0].wants_maximum.value = False
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].wants_minimum.value = True
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].minimum_value.value = 0.9
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].wants_maximum.value = False
     pipeline.add_module(flag_unaligned)
 
     # Save image (combined overlay)
@@ -553,13 +591,32 @@ def gen_illum_apply_sbs_cppipe_by_batch_plate(
     out_dir.mkdir(exist_ok=True, parents=True)
 
     # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+    files_by_hierarchy = get_files_by(
+        ["batch", "plate"], load_data_path, "*.csv"
+    )
 
     # get one of the load data file for generating cppipe
     _, files = flatten_dict(files_by_hierarchy)[0]
 
     with CellProfilerContext(out_dir=workspace_path) as cpipe:
-        cpipe = generate_illum_apply_sbs_pipeline(cpipe, files[0], nuclei_channel)
-        filename = "align_sbs.cppipe"
+        cpipe = generate_illum_apply_sbs_pipeline(
+            cpipe, files[0], nuclei_channel
+        )
+        filename = "illum_apply_sbs.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+
+
+# ------------------------------------------------------
+# Run QC checks
+# ------------------------------------------------------
+
+
+def gen_illum_apply_qc(
+    workspace_path: Path | CloudPath,
+):
+    pass
+
+
+def run_illum_apply_qc():
+    pass

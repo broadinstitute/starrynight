@@ -60,7 +60,9 @@ from cellprofiler_core.pipeline.io import dump as dumpit
 from cloudpathlib import CloudPath
 
 from starrynight.algorithms.index import PCPIndex
-from starrynight.modules.cp_illum_calc.constants import CP_ILLUM_CALC_OUT_PATH_SUFFIX
+from starrynight.modules.cp_illum_calc.constants import (
+    CP_ILLUM_CALC_OUT_PATH_SUFFIX,
+)
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
     gen_image_hierarchy,
@@ -89,13 +91,17 @@ def write_loaddata(
     frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
     pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
     # Add illum apply specific columns
-    illum_pathname_heads = [f"PathName_Illum{col}" for col in plate_channel_list]
+    illum_pathname_heads = [
+        f"PathName_Illum{col}" for col in plate_channel_list
+    ]
     # Assuming that paths already resolve with the path mask applied
     illum_pathname_values = [
         illum_by_channel_dict[ch].parent.resolve().__str__()
         for ch in plate_channel_list
     ]
-    illum_filename_heads = [f"FileName_Illum{col}" for col in plate_channel_list]
+    illum_filename_heads = [
+        f"FileName_Illum{col}" for col in plate_channel_list
+    ]
     illum_filename_values = [
         illum_by_channel_dict[ch].name.__str__() for ch in plate_channel_list
     ]
@@ -171,7 +177,9 @@ def write_loaddata_csv_by_batch_plate(
     # Write load data csv for the plate
     batch_out_path = out_path.joinpath(batch)
     batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"illum_apply_{batch}_{plate}.csv").open("w") as f:
+    with batch_out_path.joinpath(f"illum_apply_{batch}_{plate}.csv").open(
+        "w"
+    ) as f:
         write_loaddata(
             df_plate, plate_channel_list, illum_by_channel_dict, path_mask, f
         )
@@ -200,7 +208,9 @@ def write_loaddata_csv_by_batch_plate_cycle(
 
     # find illum files for this plate and cycle
     illum_by_channel_dict = {
-        ch: illum_path.joinpath(f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy")
+        ch: illum_path.joinpath(
+            f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy"
+        )
         for ch in plate_channel_list
     }
 
@@ -241,16 +251,22 @@ def gen_illum_apply_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if not illum_path:
-        illum_path = index_path.parents[1].joinpath(CP_ILLUM_CALC_OUT_PATH_SUFFIX)
+        illum_path = index_path.parents[1].joinpath(
+            CP_ILLUM_CALC_OUT_PATH_SUFFIX
+        )
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True))
+    images_df = df.filter(
+        pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
+    )
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -282,7 +298,9 @@ def generate_illum_apply_pipeline(
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = [
-        col.split("_")[1] for col in load_data_df.columns if col.startswith("Frame")
+        col.split("_")[1]
+        for col in load_data_df.columns
+        if col.startswith("Frame")
     ]
     module_counter = 0
 
@@ -309,16 +327,22 @@ def generate_illum_apply_pipeline(
     module_counter += 1
     correct_illum_apply.module_num = module_counter
 
-    for col in range(len(channel_list) - 1):  # One image is already added by default
+    for col in range(
+        len(channel_list) - 1
+    ):  # One image is already added by default
         correct_illum_apply.add_image()
 
     for i, col in enumerate(channel_list):
         # image_name
         correct_illum_apply.images[i].settings[0].value = col
         # corrected_image_name
-        correct_illum_apply.images[i].settings[1].value = col.replace("Orig", "Corr")
+        correct_illum_apply.images[i].settings[1].value = col.replace(
+            "Orig", "Corr"
+        )
         # illum correct function image name
-        correct_illum_apply.images[i].settings[2].value = col.replace("Orig", "Illum")
+        correct_illum_apply.images[i].settings[2].value = col.replace(
+            "Orig", "Illum"
+        )
         # how illum function is applied
         correct_illum_apply.images[i].settings[3] = DOS_DIVIDE
     pipeline.add_module(correct_illum_apply)
@@ -373,20 +397,29 @@ def generate_illum_apply_pipeline(
     identify_primary_object_cfregions.maxima_color.value = DEFAULT_MAXIMA_COLOR
     identify_primary_object_cfregions.use_advanced.value = True
     identify_primary_object_cfregions.threshold_setting_version.value = 12
-    identify_primary_object_cfregions.threshold.threshold_scope.value = TS_GLOBAL
+    identify_primary_object_cfregions.threshold.threshold_scope.value = (
+        TS_GLOBAL
+    )
     identify_primary_object_cfregions.threshold.global_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.local_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.threshold_smoothing_scale.value = 2.0
     identify_primary_object_cfregions.threshold.threshold_correction_factor.value = 0.5
-    identify_primary_object_cfregions.threshold.threshold_range.value = (0.0, 1.0)
+    identify_primary_object_cfregions.threshold.threshold_range.value = (
+        0.0,
+        1.0,
+    )
     identify_primary_object_cfregions.threshold.manual_threshold.value = 0.0
     identify_primary_object_cfregions.threshold.thresholding_measurement.value = None
-    identify_primary_object_cfregions.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_cfregions.threshold.two_class_otsu.value = (
+        O_TWO_CLASS
     )
-    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = 0.05
-    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = 0.05
+    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_primary_object_cfregions.threshold.averaging_method.value = RB_MEAN
     identify_primary_object_cfregions.threshold.variance_method.value = RB_SD
     identify_primary_object_cfregions.threshold.number_of_deviations.value = 2.0
@@ -431,15 +464,17 @@ def generate_illum_apply_pipeline(
     identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
     identify_primary_object_nuclei.threshold.global_operation.value = TM_OTSU
     identify_primary_object_nuclei.threshold.local_operation.value = TM_OTSU
-    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = 1.3488
+    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
     identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.0
     identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
     identify_primary_object_nuclei.threshold.manual_threshold.value = 0.0
-    identify_primary_object_nuclei.threshold.thresholding_measurement.value = None
-    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_nuclei.threshold.thresholding_measurement.value = (
+        None
     )
+    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
+    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = O_FOREGROUND
     identify_primary_object_nuclei.threshold.lower_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.upper_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.averaging_method.value = RB_MEAN
@@ -456,28 +491,41 @@ def generate_illum_apply_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_WATERSHED_I
-    identify_secondary_object_cells.image_name.value = f"MaskedOrig{cell_channel}"
+    identify_secondary_object_cells.image_name.value = (
+        f"MaskedOrig{cell_channel}"
+    )
     identify_secondary_object_cells.distance_to_dilate.value = 10
     identify_secondary_object_cells.regularization_factor.value = 0.05
     identify_secondary_object_cells.wants_discard_edge.value = False
     identify_secondary_object_cells.wants_discard_primary.value = False
     identify_secondary_object_cells.fill_holes.value = False
-    identify_secondary_object_cells.new_primary_objects_name.value = "FilteredNuclei"
+    identify_secondary_object_cells.new_primary_objects_name.value = (
+        "FilteredNuclei"
+    )
     identify_secondary_object_cells.threshold_setting_version.value = 12
     identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
     identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 2.0
     identify_secondary_object_cells.threshold.threshold_correction_factor.value = 0.7
-    identify_secondary_object_cells.threshold.threshold_range.value = (0.0005, 1.0)
-    identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
-    identify_secondary_object_cells.threshold.thresholding_measurement.value = None
-    identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
-    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = (
-        O_BACKGROUND
+    identify_secondary_object_cells.threshold.threshold_range.value = (
+        0.0005,
+        1.0,
     )
-    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = 0.05
-    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = 0.05
+    identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
+    identify_secondary_object_cells.threshold.thresholding_measurement.value = (
+        None
+    )
+    identify_secondary_object_cells.threshold.two_class_otsu.value = (
+        O_THREE_CLASS
+    )
+    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = O_BACKGROUND
+    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_secondary_object_cells.threshold.averaging_method.value = RB_MEAN
     identify_secondary_object_cells.threshold.variance_method.value = RB_SD
     identify_secondary_object_cells.threshold.number_of_deviations.value = 2.0

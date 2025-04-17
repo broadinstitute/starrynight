@@ -27,7 +27,11 @@ from cellprofiler.modules.identifysecondaryobjects import (
     IdentifySecondaryObjects,
 )
 from cellprofiler.modules.maskimage import MaskImage
-from cellprofiler.modules.overlayoutlines import MAX_IMAGE, WANTS_COLOR, OverlayOutlines
+from cellprofiler.modules.overlayoutlines import (
+    MAX_IMAGE,
+    WANTS_COLOR,
+    OverlayOutlines,
+)
 from cellprofiler.modules.rescaleintensity import (
     CUSTOM_VALUE,
     M_STRETCH,
@@ -91,8 +95,12 @@ def write_loaddata(
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
     ]
-    filename_heads = [f"FileName_Corr{col}" for col in [nuclei_channel, cell_channel]]
-    pathname_heads = [f"PathName_Corr{col}" for col in [nuclei_channel, cell_channel]]
+    filename_heads = [
+        f"FileName_Corr{col}" for col in [nuclei_channel, cell_channel]
+    ]
+    pathname_heads = [
+        f"PathName_Corr{col}" for col in [nuclei_channel, cell_channel]
+    ]
     loaddata_writer.writerow(
         [
             *metadata_heads,
@@ -152,7 +160,9 @@ def write_loaddata_csv_by_batch_plate(
     # Write load data csv for the plate
     batch_out_path = out_path.joinpath(batch)
     batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"segcheck_{batch}_{plate}.csv").open("w") as f:
+    with batch_out_path.joinpath(f"segcheck_{batch}_{plate}.csv").open(
+        "w"
+    ) as f:
         write_loaddata(
             df_plate,
             plate_channel_list,
@@ -235,9 +245,13 @@ def gen_segcheck_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None and not for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/cp/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath(
+            "illum/cp/illum_apply"
+        )
     elif corr_images_path is None and for_sbs:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath(
+            "illum/sbs/illum_apply"
+        )
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
@@ -257,7 +271,9 @@ def gen_segcheck_load_data_by_batch_plate(
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -280,7 +296,9 @@ def gen_segcheck_load_data_by_batch_plate(
                 )
             else:
                 # Write loaddata assuming image nesting with cycles
-                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+                plate_cycles_list = get_cycles_by_batch_plate(
+                    images_df, batch, plate
+                )
                 for cycle in plate_cycles_list:
                     write_loaddata_csv_by_batch_plate_cycle(
                         images_df,
@@ -368,20 +386,29 @@ def generate_segcheck_pipeline(
     identify_primary_object_cfregions.maxima_color.value = DEFAULT_MAXIMA_COLOR
     identify_primary_object_cfregions.use_advanced.value = True
     identify_primary_object_cfregions.threshold_setting_version.value = 12
-    identify_primary_object_cfregions.threshold.threshold_scope.value = TS_GLOBAL
+    identify_primary_object_cfregions.threshold.threshold_scope.value = (
+        TS_GLOBAL
+    )
     identify_primary_object_cfregions.threshold.global_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.local_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.threshold_smoothing_scale.value = 2.0
     identify_primary_object_cfregions.threshold.threshold_correction_factor.value = 0.5
-    identify_primary_object_cfregions.threshold.threshold_range.value = (0.0, 1.0)
+    identify_primary_object_cfregions.threshold.threshold_range.value = (
+        0.0,
+        1.0,
+    )
     identify_primary_object_cfregions.threshold.manual_threshold.value = 0.0
     identify_primary_object_cfregions.threshold.thresholding_measurement.value = None
-    identify_primary_object_cfregions.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_cfregions.threshold.two_class_otsu.value = (
+        O_TWO_CLASS
     )
-    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = 0.05
-    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = 0.05
+    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_primary_object_cfregions.threshold.averaging_method.value = RB_MEAN
     identify_primary_object_cfregions.threshold.variance_method.value = RB_SD
     identify_primary_object_cfregions.threshold.number_of_deviations.value = 2.0
@@ -426,15 +453,17 @@ def generate_segcheck_pipeline(
     identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
     identify_primary_object_nuclei.threshold.global_operation.value = TM_OTSU
     identify_primary_object_nuclei.threshold.local_operation.value = TM_OTSU
-    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = 1.3488
+    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
     identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.0
     identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
     identify_primary_object_nuclei.threshold.manual_threshold.value = 0.0
-    identify_primary_object_nuclei.threshold.thresholding_measurement.value = None
-    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_nuclei.threshold.thresholding_measurement.value = (
+        None
     )
+    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
+    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = O_FOREGROUND
     identify_primary_object_nuclei.threshold.lower_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.upper_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.averaging_method.value = RB_MEAN
@@ -457,22 +486,33 @@ def generate_segcheck_pipeline(
     identify_secondary_object_cells.wants_discard_edge.value = False
     identify_secondary_object_cells.wants_discard_primary.value = False
     identify_secondary_object_cells.fill_holes.value = False
-    identify_secondary_object_cells.new_primary_objects_name.value = "FilteredNuclei"
+    identify_secondary_object_cells.new_primary_objects_name.value = (
+        "FilteredNuclei"
+    )
     identify_secondary_object_cells.threshold_setting_version.value = 12
     identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
     identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 2.0
     identify_secondary_object_cells.threshold.threshold_correction_factor.value = 0.7
-    identify_secondary_object_cells.threshold.threshold_range.value = (0.000001, 1.0)
-    identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
-    identify_secondary_object_cells.threshold.thresholding_measurement.value = None
-    identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
-    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = (
-        O_BACKGROUND
+    identify_secondary_object_cells.threshold.threshold_range.value = (
+        0.000001,
+        1.0,
     )
-    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = 0.05
-    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = 0.05
+    identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
+    identify_secondary_object_cells.threshold.thresholding_measurement.value = (
+        None
+    )
+    identify_secondary_object_cells.threshold.two_class_otsu.value = (
+        O_THREE_CLASS
+    )
+    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = O_BACKGROUND
+    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_secondary_object_cells.threshold.averaging_method.value = RB_MEAN
     identify_secondary_object_cells.threshold.variance_method.value = RB_SD
     identify_secondary_object_cells.threshold.number_of_deviations.value = 2.0
@@ -564,9 +604,7 @@ def generate_segcheck_pipeline(
             "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
         )
     else:
-        save_image.single_file_name.value = (
-            "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
-        )
+        save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
     pipeline.add_module(save_image)
 
     # export measurements to spreadsheet
@@ -634,7 +672,9 @@ def gen_segcheck_cppipe_by_batch_plate(
         files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
     else:
         type_suffix = "sbs"
-        files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+        files_by_hierarchy = get_files_by(
+            ["batch", "plate"], load_data_path, "*.csv"
+        )
 
     # get one of the load data file for generating cppipe
     _, files = flatten_dict(files_by_hierarchy)[0]

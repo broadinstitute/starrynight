@@ -1,17 +1,23 @@
 """Execute PCP generic pipeline."""
 
 # %%
-from pathlib import Path  # noqa: I001
+from pathlib import Path
 
 from pipecraft.backend.snakemake import SnakeMakeBackend, SnakeMakeConfig
 
+from starrynight.experiments.common import AcquisitionOrderType, ImageFrameType
 from starrynight.experiments.pcp_generic import PCPGeneric, PCPGenericInitConfig
-
-# from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
-# from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
-# from starrynight.modules.analysis.analysis_load_data import AnalysisGenLoadDataModule
-from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
-from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
+from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
+from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
+from starrynight.modules.analysis.analysis_load_data import (
+    AnalysisGenLoadDataModule,
+)
+from starrynight.modules.cp_illum_apply.apply_cp import (
+    CPApplyIllumInvokeCPModule,
+)
+from starrynight.modules.cp_illum_apply.apply_cppipe import (
+    CPApplyIllumGenCPPipeModule,
+)
 from starrynight.modules.cp_illum_apply.apply_load_data import (
     CPApplyIllumGenLoadDataModule,
 )
@@ -37,30 +43,33 @@ from starrynight.modules.cp_segcheck.segcheck_load_data import (
 # inventory and index
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
-
-# from starrynight.modules.sbs_align.algin_cp import SBSAlignInvokeCPModule
-# from starrynight.modules.sbs_align.algin_cppipe import SBSAlignGenCPPipeModule
-# from starrynight.modules.sbs_align.algin_load_data import SBSAlignGenLoadDataModule
-from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
+from starrynight.modules.sbs_illum_apply.apply_cp import (
+    SBSApplyIllumInvokeCPModule,
+)
 from starrynight.modules.sbs_illum_apply.apply_cppipe import (
     SBSApplyIllumGenCPPipeModule,
 )
 from starrynight.modules.sbs_illum_apply.apply_load_data import (
     SBSApplyIllumGenLoadDataModule,
 )
-from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
-from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
+from starrynight.modules.sbs_illum_calc.calc_cp import (
+    SBSCalcIllumInvokeCPModule,
+)
+from starrynight.modules.sbs_illum_calc.calc_cppipe import (
+    SBSCalcIllumGenCPPipeModule,
+)
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
     SBSCalcIllumGenLoadDataModule,
 )
-
-# from starrynight.modules.sbs_preprocess.preprocess_cp import SBSPreprocessInvokeCPModule  # noqa: E501
-# from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
-#     SBSPreprocessGenCPPipeModule,
-# )
-# from starrynight.modules.sbs_preprocess.preprocess_load_data import (
-#     SBSPreprocessGenLoadDataModule,
-# )
+from starrynight.modules.sbs_preprocess.preprocess_cp import (
+    SBSPreprocessInvokeCPModule,
+)  # noqa: E501
+from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
+    SBSPreprocessGenCPPipeModule,
+)
+from starrynight.modules.sbs_preprocess.preprocess_load_data import (
+    SBSPreprocessGenLoadDataModule,
+)
 from starrynight.schema import DataConfig
 
 # %% [markdown]
@@ -87,7 +96,9 @@ data_config = DataConfig(
 # Create execution engine config config
 
 # %%
-backend_config = SnakeMakeConfig(use_fluent_bit=False, print_exec=True)
+backend_config = SnakeMakeConfig(
+    use_fluent_bit=False, print_exec=True, background=False
+)
 
 
 # %% [markdown]
@@ -100,6 +111,7 @@ exec_backend = SnakeMakeBackend(
     gen_inv_mod.pipe, backend_config, exec_runs / "run001", exec_mounts
 )
 run = exec_backend.run()
+run.wait()
 
 # %% [markdown]
 # Configure the generate index module
@@ -118,13 +130,13 @@ run = exec_backend.run()
 # %%
 index_path = workspace_path / "index/index.parquet"
 pcp_exp_init = PCPGenericInitConfig(
-    barcode_csv_path="",
-    cp_acquisition_order="snake",
-    cp_img_frame_type="round",
+    barcode_csv_path=Path(),
+    cp_acquisition_order=AcquisitionOrderType.SNAKE,
+    cp_img_frame_type=ImageFrameType.ROUND,
     cp_img_overlap_pct=10,
-    sbs_acquisition_order="snake",
-    sbs_img_frame_type="round",
-    sbs_img_overlap_pct="10",
+    sbs_acquisition_order=AcquisitionOrderType.SNAKE,
+    sbs_img_frame_type=ImageFrameType.ROUND,
+    sbs_img_overlap_pct=10,
     cp_nuclei_channel="DAPI",
     cp_cell_channel="PhalloAF750",
     cp_mito_channel="ZO1AF488",
@@ -132,7 +144,7 @@ pcp_exp_init = PCPGenericInitConfig(
     sbs_cell_channel="PhalloAF750",
     sbs_mito_channel="ZO1AF488",
 )
-pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init)
+pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
 
 # %% [markdown]
@@ -156,6 +168,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Gen cppipe file
 cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
@@ -169,6 +183,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Invoke cppipe file
 cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule.from_config(
@@ -182,6 +198,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # ------------------------------------------------------------------
 
@@ -201,6 +219,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Gen cppipe file
 cp_apply_illum_cppipe_mod = CPApplyIllumGenCPPipeModule.from_config(
@@ -214,6 +234,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Invoke cppipe file
 cp_apply_illum_invoke_mod = CPApplyIllumInvokeCPModule.from_config(
@@ -227,6 +249,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # ------------------------------------------------------------------
 
@@ -246,6 +270,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Gen cppipe file
 cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule.from_config(
@@ -259,6 +285,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Invoke cppipe file
 cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule.from_config(
@@ -272,6 +300,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # ------------------------------------------------------------------
 
@@ -285,9 +315,14 @@ sbs_calc_illum_load_data_mod = SBSCalcIllumGenLoadDataModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    sbs_calc_illum_load_data_mod.pipe, backend_config, exec_runs / "run012", exec_mounts
+    sbs_calc_illum_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run012",
+    exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Gen cppipe file
 sbs_calc_illum_cppipe_mod = SBSCalcIllumGenCPPipeModule.from_config(
@@ -295,9 +330,14 @@ sbs_calc_illum_cppipe_mod = SBSCalcIllumGenCPPipeModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    sbs_calc_illum_cppipe_mod.pipe, backend_config, exec_runs / "run013", exec_mounts
+    sbs_calc_illum_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run013",
+    exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Invoke cppipe file
 sbs_calc_illum_invoke_mod = SBSCalcIllumInvokeCPModule.from_config(
@@ -305,9 +345,14 @@ sbs_calc_illum_invoke_mod = SBSCalcIllumInvokeCPModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    sbs_calc_illum_invoke_mod.pipe, backend_config, exec_runs / "run014", exec_mounts
+    sbs_calc_illum_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run014",
+    exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # ------------------------------------------------------------------
 
@@ -327,6 +372,8 @@ exec_backend = SnakeMakeBackend(
     exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Gen cppipe file
 sbs_apply_illum_cppipe_mod = SBSApplyIllumGenCPPipeModule.from_config(
@@ -334,9 +381,14 @@ sbs_apply_illum_cppipe_mod = SBSApplyIllumGenCPPipeModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    sbs_apply_illum_cppipe_mod.pipe, backend_config, exec_runs / "run016", exec_mounts
+    sbs_apply_illum_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run016",
+    exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
 
 # Invoke cppipe file
 sbs_apply_illum_invoke_mod = SBSApplyIllumInvokeCPModule.from_config(
@@ -344,6 +396,112 @@ sbs_apply_illum_invoke_mod = SBSApplyIllumInvokeCPModule.from_config(
 )
 
 exec_backend = SnakeMakeBackend(
-    sbs_apply_illum_invoke_mod.pipe, backend_config, exec_runs / "run017", exec_mounts
+    sbs_apply_illum_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run017",
+    exec_mounts,
 )
 run = exec_backend.run()
+run.wait()
+run.print_log()
+
+# ------------------------------------------------------------------
+
+# %% [markdown]
+# Step 7: SBS preprocess
+
+# %%
+# Gen load data
+sbs_preprocess_load_data_mod = SBSPreprocessGenLoadDataModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_preprocess_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run018",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()
+
+# Gen cppipe file
+sbs_preprocess_cppipe_mod = SBSPreprocessGenCPPipeModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_preprocess_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run019",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()
+
+# Invoke cppipe file
+sbs_preprocess_invoke_mod = SBSPreprocessInvokeCPModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_preprocess_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run020",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()
+# ------------------------------------------------------------------
+
+# %% [markdown]
+# Step 9: Analysis
+
+# %%
+# Gen load data
+analysis_load_data_mod = AnalysisGenLoadDataModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    analysis_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run021",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()
+
+# Gen cppipe file
+analysis_cppipe_mod = AnalysisGenCPPipeModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    analysis_cppipe_mod.pipe,
+    backend_config,
+    exec_runs / "run022",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()
+
+# Invoke cppipe file
+analysis_invoke_mod = AnalysisInvokeCPModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    analysis_invoke_mod.pipe,
+    backend_config,
+    exec_runs / "run023",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+run.print_log()

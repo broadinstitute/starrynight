@@ -53,3 +53,7 @@ typeCheckingMode = "basic"
 
 [tool.marimo.runtime]
 watcher_on_save = "autorun"
+
+[tool.jupytext.formats]
+"notebooks/ipynb/" = "ipynb"
+"notebooks/pypct/" = "py:percent"

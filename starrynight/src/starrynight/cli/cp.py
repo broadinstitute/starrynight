@@ -1,7 +1,9 @@
 """Cellprofiler cli wrapper."""
 
+from pathlib import Path
+
 import click
-from cloudpathlib import AnyPath
+from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.cp import run_cp_parallel
 
@@ -14,7 +16,12 @@ from starrynight.algorithms.cp import run_cp_parallel
 @click.option("-j", "--jobs", default=50)
 @click.option("--sbs", is_flag=True, default=False)
 def invoke_cp(
-    cppipe: str, loaddata: str, out: str, plugin_dir: str | None, jobs: int, sbs: bool
+    cppipe: str | Path | CloudPath,
+    loaddata: str,
+    out: str,
+    plugin_dir: str | Path | None,
+    jobs: int,
+    sbs: bool,
 ) -> None:
     """Invoke cellprofiler.
 
@@ -41,7 +48,7 @@ def invoke_cp(
 
     # Check if plugin_dir is passed
     if plugin_dir is not None:
-        plugin_dir = AnyPath(plugin_dir)
+        plugin_dir = Path(plugin_dir)
 
     load_data_files = [file for file in AnyPath(loaddata).glob("**/*.csv")]
     uow = []

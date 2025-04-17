@@ -1,15 +1,19 @@
 """CP Segmentation check invoke cellprofiler module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
-from cloudpathlib import CloudPath
+from cloudpathlib import AnyPath, CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
+from starrynight.modules.cp_illum_apply.constants import (
+    CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.cp_segcheck.constants import (
+    CP_SEGCHECK_CP_CPPIPE_OUT_NAME,
     CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX,
     CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX,
     CP_SEGCHECK_OUT_PATH_SUFFIX,
@@ -45,16 +49,22 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
     return uow_list
 
 
-def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
+def create_pipe_gen_cpinvoke(
+    uid: str, spec: SpecContainer, data_config: DataConfig
+) -> Pipeline:
     """Create pipeline for invoking cellprofiler.
 
     Parameters
@@ -63,6 +73,8 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
         Module unique id.
     spec: SpecContainer
         CPSegcheckInvokeCPModule specification.
+    data_config: DataConfig
+        Starrynight dataconfig.
 
     Returns
     -------
@@ -86,10 +98,21 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
             Container(
                 name=uid,
                 input_paths={
-                    "cppipe_path": [spec.inputs[0].path],
-                    "load_data_path": [spec.inputs[1].path],
+                    "cppipe_path": [
+                        AnyPath(spec.inputs[0].path).parent.__str__()
+                    ],
+                    "load_data_path": [spec.inputs[1].path.__str__()],
+                    "corr_images_dir": [
+                        data_config.workspace_path.joinpath(
+                            CP_ILLUM_APPLY_OUT_PATH_SUFFIX
+                        )
+                        .resolve()
+                        .__str__()
+                    ],
                 },
-                output_paths={"corr_images_dir": [spec.outputs[0].path]},
+                output_paths={
+                    "seg_images_dir": [spec.outputs[0].path.__str__()]
+                },
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -110,7 +133,7 @@ class CPSegcheckInvokeCPModule(StarrynightModule):
         return "cp_segcheck_invoke_cp"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -171,22 +194,23 @@ class CPSegcheckInvokeCPModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "CPSegcheckInvokeCPModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = CPSegcheckInvokeCPModule._spec()
             spec.inputs[0].path = (
-                list(
-                    data.workspace_path.joinpath(
-                        CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX
-                    ).glob("*.cppipe")
-                )[0]
+                data.workspace_path.joinpath(
+                    CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX,
+                    CP_SEGCHECK_CP_CPPIPE_OUT_NAME,
+                )
                 .resolve()
                 .__str__()
             )
 
             spec.inputs[1].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -197,9 +221,10 @@ class CPSegcheckInvokeCPModule(StarrynightModule):
                 .__str__()
             )
         pipe = create_pipe_gen_cpinvoke(
-            uid=CPSegcheckInvokeCPModule.uid(),
-            spec=spec,
+            uid=CPSegcheckInvokeCPModule.uid(), spec=spec, data_config=data
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return CPSegcheckInvokeCPModule(spec=spec, pipe=pipe, uow=uow)

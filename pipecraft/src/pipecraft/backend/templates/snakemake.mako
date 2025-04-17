@@ -19,8 +19,8 @@
           return f'touch("{Path(path).joinpath("completed.txt").resolve().__str__()}")'
 %>
 rule all:
-    % for container in containers:
   input:
+    % for container in containers:
       % for k, v in container.output_paths.items():
     ${k}_${container.name.replace(" ", "_").lower()}=[
             % for path in v:

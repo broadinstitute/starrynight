@@ -3,7 +3,6 @@
 import os
 import signal
 from pathlib import Path
-from pprint import pprint
 from subprocess import Popen, run
 from types import NotImplementedType
 
@@ -46,16 +45,6 @@ class SnakeMakeBackendRun(BaseBackendRun):
         print(f"sending kill signal to PID: {self.pid}")
         os.kill(self.pid, signal.SIGKILL)
         os.kill(self.pid, signal.SIGKILL)
-
-    def get_log(self) -> None:
-        """Get run log."""
-        with self.log_path.open() as f:
-            return f.readlines()
-
-    def print_log(self) -> None:
-        """Print run log."""
-        with self.log_path.open() as f:
-            pprint(f.readlines())
 
 
 class SnakeMakeBackend(Backend):
@@ -153,7 +142,7 @@ class SnakeMakeBackend(Backend):
                 self.fluent_bit = fluent_bit.decode("utf-8")
                 f.writelines(self.fluent_bit)
 
-    def run(self) -> Path | CloudPath:
+    def run(self) -> SnakeMakeBackendRun:
         """Run SankeMake.
 
         Returns
@@ -189,6 +178,8 @@ class SnakeMakeBackend(Backend):
         cmd = " ".join(cmd)
         process = Popen(cmd, cwd=cwd, shell=True)
         run_obj = SnakeMakeBackendRun(
-            pid=process.pid, log_path=self.output_dir.joinpath("nohup.out")
+            pid=process.pid,
+            log_path=self.output_dir.joinpath("nohup.out"),
+            process=process,
         )
         return run_obj

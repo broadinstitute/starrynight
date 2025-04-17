@@ -58,12 +58,15 @@ from cellprofiler.modules.identifysecondaryobjects import (
 from cellprofiler.modules.imagemath import (
     IM_IMAGE,
     O_AVERAGE,
-    O_NONE,
     O_STDEV,
     ImageMath,
 )
 from cellprofiler.modules.measureobjectintensity import MeasureObjectIntensity
-from cellprofiler.modules.overlayoutlines import MAX_IMAGE, WANTS_COLOR, OverlayOutlines
+from cellprofiler.modules.overlayoutlines import (
+    MAX_IMAGE,
+    WANTS_COLOR,
+    OverlayOutlines,
+)
 from cellprofiler.modules.relateobjects import D_NONE, RelateObjects
 from cellprofiler.modules.rescaleintensity import (
     CUSTOM_VALUE,
@@ -133,7 +136,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+    ]
 
     filename_heads = [
         f"FileName_Cycle{int(cycle)}_{col}"
@@ -161,6 +166,8 @@ def write_loaddata(
         index.well_id = well_sites["well_id"]
         for site_id in well_sites["site_id"]:
             index.site_id = site_id
+            assert index.cycle_id is not None
+            assert index.site_id is not None
             filenames = [
                 f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Aligned{col}.tiff"
                 for col in plate_channel_list
@@ -222,19 +229,25 @@ def gen_preprocess_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath(
+            "illum/sbs/illum_apply"
+        )
     if align_images_path is None:
         align_images_path = index_path.parents[1].joinpath("align/sbs")
 
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
+    images_df = df.filter(
+        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+    )
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -244,10 +257,14 @@ def gen_preprocess_load_data_by_batch_plate(
     for batch in images_hierarchy_dict.keys():
         for plate in images_hierarchy_dict[batch].keys():
             # Setup channel list for that plate
-            plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
+            plate_channel_list = get_channels_by_batch_plate(
+                images_df, batch, plate
+            )
 
             # Get plate cycle list
-            plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+            plate_cycles_list = get_cycles_by_batch_plate(
+                images_df, batch, plate
+            )
 
             # filter batch and plate images
             df_plate = images_df.filter(
@@ -256,9 +273,9 @@ def gen_preprocess_load_data_by_batch_plate(
 
             batch_plate_out_path = out_path.joinpath(batch, plate)
             batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-            with batch_plate_out_path.joinpath(f"preprocess_{batch}_{plate}.csv").open(
-                "w"
-            ) as f:
+            with batch_plate_out_path.joinpath(
+                f"preprocess_{batch}_{plate}.csv"
+            ).open("w") as f:
                 write_loaddata(
                     df_plate,
                     plate_channel_list,
@@ -420,12 +437,16 @@ def generate_preprocess_pipeline(
         correct_illum_apply.module_num = module_counter
 
         # add image slots
-        for _ in range(len(cycle_list) - 1):  # One image is already added by default
+        for _ in range(
+            len(cycle_list) - 1
+        ):  # One image is already added by default
             correct_illum_apply.add_image()
 
         for i, cycle in enumerate(cycle_list):
             # image_name
-            correct_illum_apply.images[i].image_name.value = f"Cycle{cycle}_{ch}"
+            correct_illum_apply.images[
+                i
+            ].image_name.value = f"Cycle{cycle}_{ch}"
             # corrected_image_name
             correct_illum_apply.images[
                 i
@@ -437,7 +458,9 @@ def generate_preprocess_pipeline(
             ].illum_correct_function_image_name.value = f"IllumMean{ch}"
 
             # how illum function is applied
-            correct_illum_apply.images[i].divide_or_subtract.value = DOS_SUBTRACT
+            correct_illum_apply.images[
+                i
+            ].divide_or_subtract.value = DOS_SUBTRACT
         pipeline.add_module(correct_illum_apply)
 
     # Calculate StdDev
@@ -462,7 +485,9 @@ def generate_preprocess_pipeline(
             # Image or measurement?
             std_dev_cycles.images[i].settings[0].value = IM_IMAGE
             # Image name
-            std_dev_cycles.images[i].settings[1].value = f"Cycle{int(cycle)}_{ch}"
+            std_dev_cycles.images[i].settings[
+                1
+            ].value = f"Cycle{int(cycle)}_{ch}"
             # Measurement
             std_dev_cycles.images[i].settings[2].value = ""
             # Factor
@@ -526,15 +551,17 @@ def generate_preprocess_pipeline(
     identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
     identify_primary_object_nuclei.threshold.global_operation.value = TM_LI
     identify_primary_object_nuclei.threshold.local_operation.value = TM_LI
-    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = 1.3488
+    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
     identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.0
     identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
     identify_primary_object_nuclei.threshold.manual_threshold.value = 0.0
-    identify_primary_object_nuclei.threshold.thresholding_measurement.value = None
-    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_nuclei.threshold.thresholding_measurement.value = (
+        None
     )
+    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
+    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = O_FOREGROUND
     identify_primary_object_nuclei.threshold.lower_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.upper_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.averaging_method.value = RB_MEAN
@@ -551,28 +578,43 @@ def generate_preprocess_pipeline(
     identify_secondary_object_cells.x_name.value = "Nuclei"
     identify_secondary_object_cells.y_name.value = "Cells"
     identify_secondary_object_cells.method.value = M_PROPAGATION
-    identify_secondary_object_cells.image_name.value = f"Cycle{1}_{sbs_channel_list[0]}"
+    identify_secondary_object_cells.image_name.value = (
+        f"Cycle{1}_{sbs_channel_list[0]}"
+    )
     identify_secondary_object_cells.distance_to_dilate.value = 20
     identify_secondary_object_cells.regularization_factor.value = 0.05
     identify_secondary_object_cells.wants_discard_edge.value = False
     identify_secondary_object_cells.wants_discard_primary.value = False
     identify_secondary_object_cells.fill_holes.value = True
-    identify_secondary_object_cells.new_primary_objects_name.value = "FilteredNuclei"
+    identify_secondary_object_cells.new_primary_objects_name.value = (
+        "FilteredNuclei"
+    )
     identify_secondary_object_cells.threshold_setting_version.value = 12
     identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
     identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.local_operation.value = TM_OTSU
     identify_secondary_object_cells.threshold.threshold_smoothing_scale.value = 0.0
     identify_secondary_object_cells.threshold.threshold_correction_factor.value = 0.9
-    identify_secondary_object_cells.threshold.threshold_range.value = (0.002, 0.02)
-    identify_secondary_object_cells.threshold.manual_threshold.value = 0.000000000001
-    identify_secondary_object_cells.threshold.thresholding_measurement.value = None
-    identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
-    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_secondary_object_cells.threshold.threshold_range.value = (
+        0.002,
+        0.02,
     )
-    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = 0.05
-    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = 0.05
+    identify_secondary_object_cells.threshold.manual_threshold.value = (
+        0.000000000001
+    )
+    identify_secondary_object_cells.threshold.thresholding_measurement.value = (
+        None
+    )
+    identify_secondary_object_cells.threshold.two_class_otsu.value = (
+        O_THREE_CLASS
+    )
+    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_secondary_object_cells.threshold.averaging_method.value = RB_MEAN
     identify_secondary_object_cells.threshold.variance_method.value = RB_SD
     identify_secondary_object_cells.threshold.number_of_deviations.value = 2.0
@@ -622,10 +664,18 @@ def generate_preprocess_pipeline(
     identify_primary_object_foci.use_advanced.value = True
     identify_primary_object_foci.threshold_setting_version.value = 12
     identify_primary_object_foci.threshold.threshold_scope.value = TS_GLOBAL
-    identify_primary_object_foci.threshold.global_operation.value = TM_ROBUST_BACKGROUND
-    identify_primary_object_foci.threshold.local_operation.value = TM_ROBUST_BACKGROUND
-    identify_primary_object_foci.threshold.threshold_smoothing_scale.value = 1.3488
-    identify_primary_object_foci.threshold.threshold_correction_factor.value = 1.0
+    identify_primary_object_foci.threshold.global_operation.value = (
+        TM_ROBUST_BACKGROUND
+    )
+    identify_primary_object_foci.threshold.local_operation.value = (
+        TM_ROBUST_BACKGROUND
+    )
+    identify_primary_object_foci.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
+    identify_primary_object_foci.threshold.threshold_correction_factor.value = (
+        1.0
+    )
     identify_primary_object_foci.threshold.threshold_range.value = (0.0008, 1.0)
     identify_primary_object_foci.threshold.manual_threshold.value = 0.0
     identify_primary_object_foci.threshold.thresholding_measurement.value = None
@@ -775,7 +825,9 @@ def generate_preprocess_pipeline(
             "Barcodes_Barcodes",
         ]
     )
-    measure_object_intensity_barcodes.objects_list.value = ", ".join(["BarcodeFoci"])
+    measure_object_intensity_barcodes.objects_list.value = ", ".join(
+        ["BarcodeFoci"]
+    )
     pipeline.add_module(measure_object_intensity_barcodes)
 
     # RelateObjects
@@ -860,9 +912,13 @@ def generate_preprocess_pipeline(
         calc_math_div20.operands[0].operand_objects.value = None
 
         if op != O_SUBTRACT:
-            calc_math_div20.operands[0].operand_measurement.value = "Metadata_Site"
+            calc_math_div20.operands[
+                0
+            ].operand_measurement.value = "Metadata_Site"
         else:
-            calc_math_div20.operands[0].operand_measurement.value = "Math_Divide20"
+            calc_math_div20.operands[
+                0
+            ].operand_measurement.value = "Math_Divide20"
 
         calc_math_div20.operands[0].multiplicand.value = 0.05
         calc_math_div20.operands[0].exponent.value = 1.0
@@ -874,7 +930,9 @@ def generate_preprocess_pipeline(
         if op != O_SUBTRACT:
             calc_math_div20.operands[1].operand_measurement.value = None
         else:
-            calc_math_div20.operands[1].operand_measurement.value = "Math_Divide20floor"
+            calc_math_div20.operands[
+                1
+            ].operand_measurement.value = "Math_Divide20floor"
 
         calc_math_div20.operands[1].multiplicand.value = 1.0
         calc_math_div20.operands[1].exponent.value = 1.0
@@ -907,11 +965,15 @@ def generate_preprocess_pipeline(
     # Measurement settings, One measurement is added by default for each flag
     flag_images.flags[0].measurement_settings[0].source_choice.value = S_IMAGE
     flag_images.flags[0].measurement_settings[0].object_name.value = None
-    flag_images.flags[0].measurement_settings[0].measurement.value = "Math_Divide20diff"
+    flag_images.flags[0].measurement_settings[
+        0
+    ].measurement.value = "Math_Divide20diff"
     flag_images.flags[0].measurement_settings[0].wants_minimum.value = False
     flag_images.flags[0].measurement_settings[0].minimum_value.value = 0.0
     flag_images.flags[0].measurement_settings[0].wants_maximum.value = True
-    flag_images.flags[0].measurement_settings[0].maximum_value.value = 0.0000000001
+    flag_images.flags[0].measurement_settings[
+        0
+    ].maximum_value.value = 0.0000000001
     pipeline.add_module(flag_images)
 
     # ImageMath
@@ -1000,9 +1062,7 @@ def generate_preprocess_pipeline(
         # save_image.root_dir.value = ""
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = (
-            "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_StdSqrt_Overlay"
-        )
+        save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_StdSqrt_Overlay"
         pipeline.add_module(save_image)
 
     return pipeline
@@ -1035,7 +1095,9 @@ def gen_preprocess_cppipe_by_batch_plate(
     out_dir.mkdir(exist_ok=True, parents=True)
 
     # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+    files_by_hierarchy = get_files_by(
+        ["batch", "plate"], load_data_path, "*.csv"
+    )
 
     # get one of the load data file for generating cppipe
     _, files = flatten_dict(files_by_hierarchy)[0]

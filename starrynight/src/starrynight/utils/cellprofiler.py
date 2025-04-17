@@ -3,10 +3,11 @@
 import logging
 from inspect import Traceback
 from pathlib import Path
+from typing import Self
 
 import cellprofiler_core.preferences
 import cellprofiler_core.utilities.java
-from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline import Event, Pipeline, RunException
 from cellprofiler_core.preferences import LOGGER
 from cloudpathlib import CloudPath
 
@@ -33,7 +34,7 @@ class CellProfilerContext:
     """
 
     def __init__(
-        self,
+        self: Self,
         out_dir: Path | CloudPath,
         loaddata_path: Path | CloudPath | None = None,
         plugin_dir: Path | CloudPath | None = None,
@@ -51,7 +52,12 @@ class CellProfilerContext:
 
         LOGGER.setLevel(logging.CRITICAL)
 
-    def __enter__(self) -> Pipeline:
+    @staticmethod
+    def handle_error_event(_, event: Event) -> None:
+        if isinstance(event, RunException):
+            raise event.error
+
+    def __enter__(self: Self) -> Pipeline:
         """Enter the context.
 
         Sets up CellProfiler preferences and starts a JVM if required.
@@ -59,8 +65,9 @@ class CellProfilerContext:
         """
         cellprofiler_core.preferences.set_headless()
         cellprofiler_core.preferences.set_default_output_directory(self.out_dir)
-        cellprofiler_core.reader.fill_readers(check_config=False)
-        cellprofiler_core.reader.filter_active_readers(["bioformats_reader"])
+        cellprofiler_core.reader.fill_readers(check_config=False)  # pyright: ignore[reportAttributeAccessIssue]
+        cellprofiler_core.reader.filter_active_readers(["bioformats_reader"])  # pyright: ignore[reportAttributeAccessIssue]
+
         if self.loaddata_path:
             cellprofiler_core.preferences.set_data_file(
                 self.loaddata_path.resolve().__str__()
@@ -72,9 +79,12 @@ class CellProfilerContext:
                 self.plugin_dir.resolve().__str__()
             )
         self.pipeline = Pipeline()
+        self.pipeline.add_listener(self.handle_error_event)
         return self.pipeline
 
-    def __exit__(self, exc_type: type, exc_val: Exception, exc_tb: Traceback) -> None:
+    def __exit__(
+        self: Self, _exc_type: type, _exc_val: Exception, _exc_tb: Traceback
+    ) -> None:
         """Exit the context and clean up resources.
 
         Parameters

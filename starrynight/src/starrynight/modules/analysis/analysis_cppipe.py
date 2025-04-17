@@ -1,13 +1,14 @@
 """Analysis gen cpipe module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
+from starrynight.experiments.pcp_generic import PCPGeneric
 from starrynight.modules.analysis.constants import (
     ANALYSIS_CP_CPPIPE_OUT_PATH_SUFFIX,
     ANALYSIS_CP_LOADDATA_OUT_PATH_SUFFIX,
@@ -45,9 +46,13 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
@@ -80,18 +85,22 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         spec.outputs[0].path,
         "-w",
         spec.inputs[1].path,
-        "-n",
+        "-b",
         spec.inputs[2].path,
-        "-c",
+        "-n",
         spec.inputs[3].path,
+        "-e",
+        spec.inputs[4].path,
+        "-m",
+        spec.inputs[5].path,
     ]
 
     gen_load_data_pipe = Seq(
         [
             Container(
                 name=uid,
-                input_paths={"load_data_path": [spec.inputs[0].path]},
-                output_paths={"cppipe_path": [spec.outputs[0].path]},
+                input_paths={"load_data_path": [spec.inputs[0].path.__str__()]},
+                output_paths={"cppipe_path": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -112,7 +121,7 @@ class AnalysisGenCPPipeModule(StarrynightModule):
         return "analysis_gen_cppipe"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -131,6 +140,13 @@ class AnalysisGenCPPipeModule(StarrynightModule):
                     path=None,
                 ),
                 TypeInput(
+                    name="barcode_csv_path",
+                    type=TypeEnum.file,
+                    description="Path to barcode csv.",
+                    optional=True,
+                    path=None,
+                ),
+                TypeInput(
                     name="nuclei_channel",
                     type=TypeEnum.textbox,
                     description="Channel to use for nuclei segmentation.",
@@ -140,6 +156,12 @@ class AnalysisGenCPPipeModule(StarrynightModule):
                     name="cell_channel",
                     type=TypeEnum.textbox,
                     description="Channel to use for cell segmentation.",
+                    optional=False,
+                ),
+                TypeInput(
+                    name="mito_channel",
+                    type=TypeEnum.textbox,
+                    description="Channel to use for mito segmentation.",
                     optional=False,
                 ),
             ],
@@ -185,12 +207,14 @@ class AnalysisGenCPPipeModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "AnalysisGenCPPipeModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = AnalysisGenCPPipeModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath(ANALYSIS_CP_LOADDATA_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    ANALYSIS_CP_LOADDATA_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -201,8 +225,13 @@ class AnalysisGenCPPipeModule(StarrynightModule):
                 .__str__()
             )
 
-            spec.inputs[2].path = "changeme"
-            spec.inputs[3].path = "changeme"
+            assert isinstance(experiment, PCPGeneric)
+            spec.inputs[
+                2
+            ].path = experiment.sbs_config.barcode_csv_path.resolve().__str__()
+            spec.inputs[3].path = experiment.cp_config.nuclei_channel
+            spec.inputs[4].path = experiment.cp_config.cell_channel
+            spec.inputs[5].path = experiment.cp_config.mito_channel
 
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(ANALYSIS_CP_CPPIPE_OUT_PATH_SUFFIX)
@@ -213,6 +242,8 @@ class AnalysisGenCPPipeModule(StarrynightModule):
             uid=AnalysisGenCPPipeModule.uid(),
             spec=spec,
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return AnalysisGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)

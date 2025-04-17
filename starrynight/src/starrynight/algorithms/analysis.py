@@ -31,7 +31,12 @@ from cellprofiler.modules.filterobjects import (
     PO_BOTH,
     FilterObjects,
 )
-from cellprofiler.modules.flagimage import C_ANY, S_AVERAGE_OBJECT, S_IMAGE, FlagImage
+from cellprofiler.modules.flagimage import (
+    C_ANY,
+    S_AVERAGE_OBJECT,
+    S_IMAGE,
+    FlagImage,
+)
 from cellprofiler.modules.graytocolor import SCHEME_RGB, GrayToColor
 from cellprofiler.modules.identifyprimaryobjects import (
     DEFAULT_MAXIMA_COLOR,
@@ -78,7 +83,10 @@ from cellprofiler.modules.measureimageareaoccupied import (
     MeasureImageAreaOccupied,
 )
 from cellprofiler.modules.measureimageintensity import MeasureImageIntensity
-from cellprofiler.modules.measureimagequality import O_ALL_LOADED, MeasureImageQuality
+from cellprofiler.modules.measureimagequality import (
+    O_ALL_LOADED,
+    MeasureImageQuality,
+)
 from cellprofiler.modules.measureobjectintensity import MeasureObjectIntensity
 from cellprofiler.modules.measureobjectintensitydistribution import (
     A_FRAC_AT_D,
@@ -176,7 +184,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+    ]
 
     cp_filename_heads = [f"FileName_Corr{col}" for col in cp_plate_channel_list]
     cp_pathname_heads = [f"PathName_Corr{col}" for col in cp_plate_channel_list]
@@ -202,7 +212,9 @@ def write_loaddata(
     index = cp_images_df[0].to_dicts()[0]
     index = PCPIndex(**index)
     wells_sites = (
-        cp_images_df.group_by("well_id").agg(pl.col("site_id").unique()).to_dicts()
+        cp_images_df.group_by("well_id")
+        .agg(pl.col("site_id").unique())
+        .to_dicts()
     )
     for well_sites in wells_sites:
         index.well_id = well_sites["well_id"]
@@ -270,7 +282,9 @@ def gen_analysis_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if cp_corr_images_path is None:
-        cp_corr_images_path = index_path.parents[1].joinpath("illum/cp/illum_apply")
+        cp_corr_images_path = index_path.parents[1].joinpath(
+            "illum/cp/illum_apply"
+        )
     if sbs_comp_images_path is None:
         sbs_comp_images_path = index_path.parents[1].joinpath("preprocess/sbs")
 
@@ -307,7 +321,9 @@ def gen_analysis_load_data_by_batch_plate(
             )
 
             # Get plate cycle list
-            plate_cycles_list = get_cycles_by_batch_plate(sbs_images_df, batch, plate)
+            plate_cycles_list = get_cycles_by_batch_plate(
+                sbs_images_df, batch, plate
+            )
 
             # filter batch and plate images
             cp_df_plate = cp_images_df.filter(
@@ -316,9 +332,9 @@ def gen_analysis_load_data_by_batch_plate(
 
             batch_plate_out_path = out_path.joinpath(batch, plate)
             batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-            with batch_plate_out_path.joinpath(f"preprocess_{batch}_{plate}.csv").open(
-                "w"
-            ) as f:
+            with batch_plate_out_path.joinpath(
+                f"preprocess_{batch}_{plate}.csv"
+            ).open("w") as f:
                 write_loaddata(
                     cp_df_plate,
                     cp_plate_channel_list,
@@ -502,16 +518,24 @@ def generate_analysis_pipeline(
         flag_empty_images.flags[i].wants_skip.value = True
 
         # Measurement settings, One measurement is added by default for each flag
-        flag_empty_images.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
-        flag_empty_images.flags[i].measurement_settings[0].object_name.value = None
+        flag_empty_images.flags[i].measurement_settings[
+            0
+        ].source_choice.value = S_IMAGE
+        flag_empty_images.flags[i].measurement_settings[
+            0
+        ].object_name.value = None
         flag_empty_images.flags[i].measurement_settings[
             0
         ].measurement.value = f"Intensity_MaxIntensity_{flag_image}"
-        flag_empty_images.flags[i].measurement_settings[0].wants_minimum.value = True
+        flag_empty_images.flags[i].measurement_settings[
+            0
+        ].wants_minimum.value = True
         flag_empty_images.flags[i].measurement_settings[
             0
         ].minimum_value.value = 0.000001
-        flag_empty_images.flags[i].measurement_settings[0].wants_maximum.value = False
+        flag_empty_images.flags[i].measurement_settings[
+            0
+        ].wants_maximum.value = False
     pipeline.add_module(flag_empty_images)
 
     # -> Align
@@ -537,7 +561,10 @@ def generate_analysis_pipeline(
     pipeline.add_module(align)
 
     # -> Threshold
-    images_to_threshold = [f"Aligned{nuclei_channel}", f"Cycle1_{nuclei_channel}"]
+    images_to_threshold = [
+        f"Aligned{nuclei_channel}",
+        f"Cycle1_{nuclei_channel}",
+    ]
     for image in images_to_threshold:
         threshold_image = Threshold()
         module_counter += 1
@@ -616,9 +643,7 @@ def generate_analysis_pipeline(
     measure_colocal = MeasureColocalization()
     module_counter += 1
     measure_colocal.module_num = module_counter
-    measure_colocal.images_list.value = (
-        f"EdgeMasked_Aligned{nuclei_channel}, EdgeMasked_Cycle1_{nuclei_channel}"
-    )
+    measure_colocal.images_list.value = f"EdgeMasked_Aligned{nuclei_channel}, EdgeMasked_Cycle1_{nuclei_channel}"
     measure_colocal.thr.value = 15.0
     measure_colocal.images_or_objects.value = M_IMAGES
     measure_colocal.do_all.value = False
@@ -641,14 +666,20 @@ def generate_analysis_pipeline(
     flag_align_images.flags[0].wants_skip.value = False
 
     # Measurement settings, One measurement is added by default for each flag
-    flag_align_images.flags[0].measurement_settings[0].source_choice.value = S_IMAGE
+    flag_align_images.flags[0].measurement_settings[
+        0
+    ].source_choice.value = S_IMAGE
     flag_align_images.flags[0].measurement_settings[0].object_name.value = None
     flag_align_images.flags[0].measurement_settings[
         0
     ].measurement.value = f"Correlation_Correlation_EdgeMasked_Aligned{nuclei_channel}_EdgeMasked_Cycle1_{nuclei_channel}"
-    flag_align_images.flags[0].measurement_settings[0].wants_minimum.value = True
+    flag_align_images.flags[0].measurement_settings[
+        0
+    ].wants_minimum.value = True
     flag_align_images.flags[0].measurement_settings[0].minimum_value.value = 0.7
-    flag_align_images.flags[0].measurement_settings[0].wants_maximum.value = False
+    flag_align_images.flags[0].measurement_settings[
+        0
+    ].wants_maximum.value = False
     pipeline.add_module(flag_align_images)
 
     # -> ImageMath invert edge mask
@@ -725,7 +756,9 @@ def generate_analysis_pipeline(
     # Image name
     edgepadding.images[1].image_name.value = None
     # Measurement
-    edgepadding.images[1].measurement.value = "Intensity_MaxIntensity_PaddedAreas_SBS"
+    edgepadding.images[
+        1
+    ].measurement.value = "Intensity_MaxIntensity_PaddedAreas_SBS"
     # Factor
     edgepadding.images[1].factor.value = 1
     pipeline.add_module(edgepadding)
@@ -755,20 +788,29 @@ def generate_analysis_pipeline(
     identify_primary_object_cfregions.maxima_color.value = DEFAULT_MAXIMA_COLOR
     identify_primary_object_cfregions.use_advanced.value = True
     identify_primary_object_cfregions.threshold_setting_version.value = 12
-    identify_primary_object_cfregions.threshold.threshold_scope.value = TS_GLOBAL
+    identify_primary_object_cfregions.threshold.threshold_scope.value = (
+        TS_GLOBAL
+    )
     identify_primary_object_cfregions.threshold.global_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.local_operation.value = TM_OTSU
     identify_primary_object_cfregions.threshold.threshold_smoothing_scale.value = 2.0
     identify_primary_object_cfregions.threshold.threshold_correction_factor.value = 0.5
-    identify_primary_object_cfregions.threshold.threshold_range.value = (0.0, 1.0)
+    identify_primary_object_cfregions.threshold.threshold_range.value = (
+        0.0,
+        1.0,
+    )
     identify_primary_object_cfregions.threshold.manual_threshold.value = 0.0
     identify_primary_object_cfregions.threshold.thresholding_measurement.value = None
-    identify_primary_object_cfregions.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_cfregions.threshold.two_class_otsu.value = (
+        O_TWO_CLASS
     )
-    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = 0.05
-    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = 0.05
+    identify_primary_object_cfregions.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+    identify_primary_object_cfregions.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_primary_object_cfregions.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_primary_object_cfregions.threshold.averaging_method.value = RB_MEAN
     identify_primary_object_cfregions.threshold.variance_method.value = RB_SD
     identify_primary_object_cfregions.threshold.number_of_deviations.value = 2.0
@@ -836,7 +878,9 @@ def generate_analysis_pipeline(
     identify_primary_object_nuclei = IdentifyPrimaryObjects()
     module_counter += 1
     identify_primary_object_nuclei.module_num = module_counter
-    identify_primary_object_nuclei.x_name.value = f"EdgeMasked_Aligned{nuclei_channel}"
+    identify_primary_object_nuclei.x_name.value = (
+        f"EdgeMasked_Aligned{nuclei_channel}"
+    )
     identify_primary_object_nuclei.y_name.value = "Nuclei"
     identify_primary_object_nuclei.size_range.value = (10, 80)
     identify_primary_object_nuclei.exclude_size.value = True
@@ -858,15 +902,17 @@ def generate_analysis_pipeline(
     identify_primary_object_nuclei.threshold.threshold_scope.value = TS_GLOBAL
     identify_primary_object_nuclei.threshold.global_operation.value = TM_LI
     identify_primary_object_nuclei.threshold.local_operation.value = TM_LI
-    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = 1.3488
+    identify_primary_object_nuclei.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
     identify_primary_object_nuclei.threshold.threshold_correction_factor.value = 1.4
     identify_primary_object_nuclei.threshold.threshold_range.value = (0.0, 1.0)
     identify_primary_object_nuclei.threshold.manual_threshold.value = 0.0
-    identify_primary_object_nuclei.threshold.thresholding_measurement.value = None
-    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
-    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_primary_object_nuclei.threshold.thresholding_measurement.value = (
+        None
     )
+    identify_primary_object_nuclei.threshold.two_class_otsu.value = O_TWO_CLASS
+    identify_primary_object_nuclei.threshold.assign_middle_to_foreground.value = O_FOREGROUND
     identify_primary_object_nuclei.threshold.lower_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.upper_outlier_fraction.value = 0.05
     identify_primary_object_nuclei.threshold.averaging_method.value = RB_MEAN
@@ -891,7 +937,9 @@ def generate_analysis_pipeline(
     identify_secondary_object_cells.wants_discard_edge.value = False
     identify_secondary_object_cells.wants_discard_primary.value = False
     identify_secondary_object_cells.fill_holes.value = True
-    identify_secondary_object_cells.new_primary_objects_name.value = "FilteredNuclei"
+    identify_secondary_object_cells.new_primary_objects_name.value = (
+        "FilteredNuclei"
+    )
     identify_secondary_object_cells.threshold_setting_version.value = 12
     identify_secondary_object_cells.threshold.threshold_scope.value = TS_GLOBAL
     identify_secondary_object_cells.threshold.global_operation.value = TM_OTSU
@@ -903,13 +951,19 @@ def generate_analysis_pipeline(
         0.021547333,
     )
     identify_secondary_object_cells.threshold.manual_threshold.value = 0.0
-    identify_secondary_object_cells.threshold.thresholding_measurement.value = None
-    identify_secondary_object_cells.threshold.two_class_otsu.value = O_THREE_CLASS
-    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = (
-        O_FOREGROUND
+    identify_secondary_object_cells.threshold.thresholding_measurement.value = (
+        None
     )
-    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = 0.05
-    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = 0.05
+    identify_secondary_object_cells.threshold.two_class_otsu.value = (
+        O_THREE_CLASS
+    )
+    identify_secondary_object_cells.threshold.assign_middle_to_foreground.value = O_FOREGROUND
+    identify_secondary_object_cells.threshold.lower_outlier_fraction.value = (
+        0.05
+    )
+    identify_secondary_object_cells.threshold.upper_outlier_fraction.value = (
+        0.05
+    )
     identify_secondary_object_cells.threshold.averaging_method.value = RB_MEAN
     identify_secondary_object_cells.threshold.variance_method.value = RB_SD
     identify_secondary_object_cells.threshold.number_of_deviations.value = 2.0
@@ -992,7 +1046,9 @@ def generate_analysis_pipeline(
     mask_image_maxofcy01.masked_image_name.value = "EdgeMasked_MaxOfCycle01"
     mask_image_maxofcy01.source_choice.value = IO_IMAGE
     mask_image_maxofcy01.object_name.value = "WellEdgeObjects"
-    mask_image_maxofcy01.masking_image_name.value = f"NonPaddedAreas_{O_MINIMUM}"
+    mask_image_maxofcy01.masking_image_name.value = (
+        f"NonPaddedAreas_{O_MINIMUM}"
+    )
     mask_image_maxofcy01.invert_mask.value = False
     pipeline.add_module(mask_image_maxofcy01)
 
@@ -1020,10 +1076,18 @@ def generate_analysis_pipeline(
     identify_primary_object_foci.use_advanced.value = True
     identify_primary_object_foci.threshold_setting_version.value = 12
     identify_primary_object_foci.threshold.threshold_scope.value = TS_GLOBAL
-    identify_primary_object_foci.threshold.global_operation.value = TM_ROBUST_BACKGROUND
-    identify_primary_object_foci.threshold.local_operation.value = TM_ROBUST_BACKGROUND
-    identify_primary_object_foci.threshold.threshold_smoothing_scale.value = 1.3488
-    identify_primary_object_foci.threshold.threshold_correction_factor.value = 4.0
+    identify_primary_object_foci.threshold.global_operation.value = (
+        TM_ROBUST_BACKGROUND
+    )
+    identify_primary_object_foci.threshold.local_operation.value = (
+        TM_ROBUST_BACKGROUND
+    )
+    identify_primary_object_foci.threshold.threshold_smoothing_scale.value = (
+        1.3488
+    )
+    identify_primary_object_foci.threshold.threshold_correction_factor.value = (
+        4.0
+    )
     identify_primary_object_foci.threshold.threshold_range.value = (0.0002, 1.0)
     identify_primary_object_foci.threshold.manual_threshold.value = 0.0
     identify_primary_object_foci.threshold.thresholding_measurement.value = None
@@ -1094,7 +1158,11 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_object_intensity.module_num = module_counter
     measure_object_intensity.images_list.value = ", ".join(
-        [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
+        [
+            f"Cycle{cycle}_{ch}"
+            for ch in sbs_channel_list
+            for cycle in cycle_list
+        ]
     )
     measure_object_intensity.objects_list.value = ", ".join(["Foci"])
     pipeline.add_module(measure_object_intensity)
@@ -1156,7 +1224,9 @@ def generate_analysis_pipeline(
     measure_object_intensity_barcodes.images_list.value = ", ".join(
         ["Barcodes_Scores", "Barcodes_Barcodes", "CellOutlineImage"]
     )
-    measure_object_intensity_barcodes.objects_list.value = ", ".join(["BarcodeFoci"])
+    measure_object_intensity_barcodes.objects_list.value = ", ".join(
+        ["BarcodeFoci"]
+    )
     pipeline.add_module(measure_object_intensity_barcodes)
 
     # -> MaskImage barcode intvals
@@ -1176,7 +1246,9 @@ def generate_analysis_pipeline(
     module_counter += 1
     mask_image_bscore.module_num = module_counter
     mask_image_bscore.image_name.value = "Barcodes_Scores"
-    mask_image_bscore.masked_image_name.value = "Masked_Barcodes_Scores_IntValues"
+    mask_image_bscore.masked_image_name.value = (
+        "Masked_Barcodes_Scores_IntValues"
+    )
     mask_image_bscore.source_choice.value = IO_OBJECTS
     mask_image_bscore.object_name.value = "BarcodeFoci"
     mask_image_bscore.masking_image_name.value = "Barcode_Thresh"
@@ -1272,7 +1344,8 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_cp_sbs.module_num = module_counter
     measure_colocal_cp_sbs.images_list.value = ", ".join(
-        [f"Aligned{ch}" for ch in cp_channel_list] + [f"Cycle1_{nuclei_channel}"]
+        [f"Aligned{ch}" for ch in cp_channel_list]
+        + [f"Cycle1_{nuclei_channel}"]
     )
     measure_colocal_cp_sbs.thr.value = 15.0
     measure_colocal_cp_sbs.images_or_objects.value = M_BOTH
@@ -1300,15 +1373,21 @@ def generate_analysis_pipeline(
     flag_align_all_images.flags[0].measurement_settings[
         0
     ].source_choice.value = S_AVERAGE_OBJECT
-    flag_align_all_images.flags[0].measurement_settings[0].object_name.value = "Nuclei"
     flag_align_all_images.flags[0].measurement_settings[
         0
-    ].measurement.value = (
-        f"Correlation_Correlation_Aligned{nuclei_channel}_Cycle1_{nuclei_channel}"
-    )
-    flag_align_all_images.flags[0].measurement_settings[0].wants_minimum.value = True
-    flag_align_all_images.flags[0].measurement_settings[0].minimum_value.value = 0.9
-    flag_align_all_images.flags[0].measurement_settings[0].wants_maximum.value = False
+    ].object_name.value = "Nuclei"
+    flag_align_all_images.flags[0].measurement_settings[
+        0
+    ].measurement.value = f"Correlation_Correlation_Aligned{nuclei_channel}_Cycle1_{nuclei_channel}"
+    flag_align_all_images.flags[0].measurement_settings[
+        0
+    ].wants_minimum.value = True
+    flag_align_all_images.flags[0].measurement_settings[
+        0
+    ].minimum_value.value = 0.9
+    flag_align_all_images.flags[0].measurement_settings[
+        0
+    ].wants_maximum.value = False
     pipeline.add_module(flag_align_all_images)
 
     # -> MeasureObjectIntensity(Barcode related)
@@ -1357,7 +1436,9 @@ def generate_analysis_pipeline(
     )
     measure_obj_int_dist_paint.wants_zernikes.value = False
     obj_int_dist_paint_painting = ["Cells", "Cytoplasm", "Nuclei"]
-    for _ in range(len(obj_int_dist_paint_painting) - 1):  # one object is already added
+    for _ in range(
+        len(obj_int_dist_paint_painting) - 1
+    ):  # one object is already added
         measure_obj_int_dist_paint.add_object(False)
     for i, obj in enumerate(obj_int_dist_paint_painting):
         measure_obj_int_dist_paint.objects[i].object_name.value = obj
@@ -1374,7 +1455,10 @@ def generate_analysis_pipeline(
     measure_obj_int_dist_mito.module_num = module_counter
     measure_obj_int_dist_mito.images_list.value = ", ".join(["mito_tubeness"])
     measure_obj_int_dist_mito.wants_zernikes.value = False
-    obj_int_dist_mito = [("Cells", True, 16, 100), ("Cytoplasm", False, 20, 200)]
+    obj_int_dist_mito = [
+        ("Cells", True, 16, 100),
+        ("Cytoplasm", False, 20, 200),
+    ]
     for _ in range(len(obj_int_dist_mito) - 1):  # one object is already added
         measure_obj_int_dist_mito.add_object(False)
         measure_obj_int_dist_mito.add_bin_count(False)
@@ -1391,7 +1475,9 @@ def generate_analysis_pipeline(
     measure_obj_int_dist_mito.heatmaps[0].bin_count.value = 16
     measure_obj_int_dist_mito.heatmaps[0].measurement.value = A_FRAC_AT_D
     measure_obj_int_dist_mito.heatmaps[0].wants_to_save_display.value = True
-    measure_obj_int_dist_mito.heatmaps[0].display_name.value = "mito_radial_heatmap"
+    measure_obj_int_dist_mito.heatmaps[
+        0
+    ].display_name.value = "mito_radial_heatmap"
     pipeline.add_module(measure_obj_int_dist_mito)
 
     # -> MeasureGranularity
@@ -1402,7 +1488,9 @@ def generate_analysis_pipeline(
         [f"Aligned{ch}" for ch in cp_channel_list]
     )
     measure_granularity.wants_objects.value = True
-    measure_granularity.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
+    measure_granularity.objects_list.value = ", ".join(
+        ["Cells", "Cytoplasm", "Nuclei"]
+    )
     measure_granularity.subsample_size.value = 0.25
     measure_granularity.image_sample_size.value = 0.25
     measure_granularity.element_size.value = 10
@@ -1416,7 +1504,9 @@ def generate_analysis_pipeline(
     measure_texture.images_list.value = ", ".join(
         [f"Aligned{ch}" for ch in cp_channel_list]
     )
-    measure_texture.objects_list.value = ", ".join(["Cells", "Cytoplasm", "Nuclei"])
+    measure_texture.objects_list.value = ", ".join(
+        ["Cells", "Cytoplasm", "Nuclei"]
+    )
     measure_texture.gray_levels.value = 256
     for _ in range(2):  # we need 3, one is added by default
         measure_texture.add_scale()
@@ -1445,9 +1535,7 @@ def generate_analysis_pipeline(
     # save_mito_radial.root_dir.value = ""
     save_mito_radial.stack_axis.value = AXIS_T
     # save_mito_radial.tiff_compress.value = ""
-    save_mito_radial.single_file_name.value = (
-        f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
-    )
+    save_mito_radial.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
     pipeline.add_module(save_mito_radial)
 
     # MeasureImageQuality
@@ -1469,7 +1557,11 @@ def generate_analysis_pipeline(
     module_counter += 1
     measure_colocal_sbs.module_num = module_counter
     measure_colocal_sbs.images_list.value = ", ".join(
-        [f"Cycle{cycle}_{ch}" for ch in sbs_channel_list for cycle in cycle_list]
+        [
+            f"Cycle{cycle}_{ch}"
+            for ch in sbs_channel_list
+            for cycle in cycle_list
+        ]
     )
     measure_colocal_sbs.thr.value = 15.0
     measure_colocal_sbs.images_or_objects.value = M_IMAGES
@@ -1569,7 +1661,9 @@ def generate_analysis_pipeline(
         overlay_outlines.add_outline()
 
     colors = ["yellow", "white", "#FF8000"]
-    for i, obj in enumerate(["ResizeNuclei", "ResizeCells", "ResizeConfluentRegions"]):
+    for i, obj in enumerate(
+        ["ResizeNuclei", "ResizeCells", "ResizeConfluentRegions"]
+    ):
         overlay_outlines.outlines[i].objects_name.value = obj
         overlay_outlines.outlines[i].color.value = colors[i]
     pipeline.add_module(overlay_outlines)
@@ -1761,7 +1855,9 @@ def gen_analysis_cppipe_by_batch_plate(
     out_dir.mkdir(exist_ok=True, parents=True)
 
     # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+    files_by_hierarchy = get_files_by(
+        ["batch", "plate"], load_data_path, "*.csv"
+    )
 
     # get one of the load data file for generating cppipe
     _, files = flatten_dict(files_by_hierarchy)[0]

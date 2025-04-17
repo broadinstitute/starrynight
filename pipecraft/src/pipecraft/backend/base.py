@@ -2,9 +2,12 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
+from pprint import pprint
+from subprocess import Popen
+from typing import Annotated
 
 from cloudpathlib import CloudPath
-from pydantic import BaseModel
+from pydantic import BaseModel, SkipValidation
 
 from pipecraft.pipeline import Pipeline
 
@@ -27,6 +30,12 @@ class BaseBackendRun(ABC, BaseModel):
 
     pid: int
     log_path: Path | CloudPath
+    process: SkipValidation[Popen]
+
+    class Config:
+        """Pydantic model config."""
+
+        arbitrary_types_allowed = True
 
     @abstractmethod
     def terminate(self) -> None:
@@ -37,6 +46,20 @@ class BaseBackendRun(ABC, BaseModel):
     def kill(self) -> None:
         """Kill the run."""
         pass
+
+    def get_log(self) -> list[str]:
+        """Get run log."""
+        with self.log_path.open() as f:
+            return f.readlines()
+
+    def print_log(self) -> None:
+        """Print run log."""
+        with self.log_path.open() as f:
+            pprint(f.readlines())
+
+    def wait(self, log: bool = False) -> None:
+        """Wait for execution to complete."""
+        self.process.wait()
 
 
 class Backend(ABC):

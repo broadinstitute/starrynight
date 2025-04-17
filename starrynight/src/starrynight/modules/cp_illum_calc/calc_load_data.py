@@ -1,7 +1,7 @@
 """CPCalculate illumination correction calculate gen loaddata module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
@@ -43,9 +43,13 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
@@ -76,7 +80,7 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
     ]
     # Use user provided parser if available
     if spec.inputs[1].path is not None:
@@ -85,8 +89,10 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         [
             Container(
                 name=uid,
-                input_paths={"index": [spec.inputs[0].path]},
-                output_paths={"load_data_path": [spec.outputs[0].path]},
+                input_paths={"index": [spec.inputs[0].path.__str__()]},
+                output_paths={
+                    "load_data_path": [spec.outputs[0].path.__str__()]
+                },
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -107,7 +113,7 @@ class CPCalcIllumGenLoadDataModule(StarrynightModule):
         return "cp_calc_illum_gen_loaddata"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -168,15 +174,19 @@ class CPCalcIllumGenLoadDataModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "CPCalcIllumGenLoadDataModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = CPCalcIllumGenLoadDataModule._spec()
             spec.inputs[0].path = (
-                data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
+                data.workspace_path.joinpath("index/index.parquet")
+                .resolve()
+                .__str__()
             )
             spec.outputs[0].path = (
-                data.workspace_path.joinpath(CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -184,6 +194,8 @@ class CPCalcIllumGenLoadDataModule(StarrynightModule):
             uid=CPCalcIllumGenLoadDataModule.uid(),
             spec=spec,
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return CPCalcIllumGenLoadDataModule(spec=spec, pipe=pipe, uow=uow)
