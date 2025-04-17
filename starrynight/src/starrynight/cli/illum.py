@@ -1,7 +1,9 @@
 """Illum Calculate module cli wrapper."""
 
+from pathlib import Path
+
 import click
-from cloudpathlib import AnyPath
+from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.illum_apply import (
     gen_illum_apply_cppipe_by_batch_plate,
@@ -80,7 +82,7 @@ def gen_illum_calc_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) ->
 def gen_illum_apply_load_data(
     index: str,
     out: str,
-    illum: str,
+    illum: str | Path | CloudPath | None,
     path_mask: str | None,
     nuclei: str | None,
     sbs: bool,
@@ -110,6 +112,7 @@ def gen_illum_apply_load_data(
             AnyPath(index), AnyPath(out), path_mask, illum
         )
     else:
+        assert nuclei is not None
         gen_illum_apply_sbs_load_data_by_batch_plate(
             AnyPath(index), AnyPath(out), path_mask, nuclei, illum
         )
