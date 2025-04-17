@@ -182,7 +182,9 @@ def gen_illum_calc_load_data_by_batch_plate(
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix: str = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
