@@ -30,7 +30,7 @@ def flatten(container: list | tuple) -> Generator:
 class Pipeline(ABC):
     """Class representing a pipeline."""
 
-    def __init__(self, node_list: "list[Pipeline | Node]") -> None:
+    def __init__(self: Self, node_list: list[Self | Node]) -> None:
         """Class representing a pipeline.
 
         Attributes
@@ -94,7 +94,7 @@ class Pipeline(ABC):
 class Seq(Pipeline):
     """Sequential execution of nodes in the pipeline."""
 
-    def compile(self: "Seq") -> Pipeline:
+    def compile(self: Self) -> Self:
         """Compile this pipeline.
 
         Returns
@@ -133,7 +133,7 @@ class Seq(Pipeline):
 class Parallel(Pipeline):
     """Parallel execution of nodes in the pipeline."""
 
-    def __init__(self, node_list: "list[Pipeline | Node]") -> None:
+    def __init__(self, node_list: list[Pipeline | Node]) -> None:
         """Parallel pipeline.
 
         Attributes
@@ -152,7 +152,7 @@ class Parallel(Pipeline):
         self.node_list = [Scatter()] + self.node_list + [Gather()]
         self.resolve()
 
-    def compile(self: "Parallel") -> Pipeline:
+    def compile(self: Self) -> Self:
         """Compile this pipeline.
 
         Returns
