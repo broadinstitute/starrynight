@@ -1,7 +1,7 @@
 """Calculate illumination correction calculate gen loaddata module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
@@ -76,7 +76,7 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
         "--sbs",
     ]
     # Use user provided parser if available
@@ -86,8 +86,8 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         [
             Container(
                 name=uid,
-                input_paths={"index": [spec.inputs[0].path]},
-                output_paths={"load_data_path": [spec.outputs[0].path]},
+                input_paths={"index": [spec.inputs[0].path.__str__()]},
+                output_paths={"load_data_path": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -108,7 +108,7 @@ class SBSCalcIllumGenLoadDataModule(StarrynightModule):
         return "sbs_calc_illum_gen_loaddata"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -169,7 +169,7 @@ class SBSCalcIllumGenLoadDataModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "SBSCalcIllumGenLoadDataModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = SBSCalcIllumGenLoadDataModule._spec()

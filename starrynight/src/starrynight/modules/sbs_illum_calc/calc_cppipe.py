@@ -1,7 +1,7 @@
 """Calculate illumination correction calculate gen cpipe module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
@@ -88,8 +88,8 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         [
             Container(
                 name=uid,
-                input_paths={"load_data_path": [spec.inputs[0].path]},
-                output_paths={"cppipe_path": [spec.outputs[0].path]},
+                input_paths={"load_data_path": [spec.inputs[0].path.__str__()]},
+                output_paths={"cppipe_path": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -110,7 +110,7 @@ class SBSCalcIllumGenCPPipeModule(StarrynightModule):
         return "sbs_calc_illum_gen_cppipe"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -171,7 +171,7 @@ class SBSCalcIllumGenCPPipeModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "SBSCalcIllumGenCPPipeModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = SBSCalcIllumGenCPPipeModule._spec()

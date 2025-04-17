@@ -1,8 +1,9 @@
 """File globbing utils."""
 
-from collections.abc import Iterable
 from enum import Enum
 from pathlib import Path
+
+from cloudpathlib import CloudPath
 
 
 class HierarchyType(Enum):
@@ -11,12 +12,12 @@ class HierarchyType(Enum):
     BATCH = "batch"
     PLATE = "plate"
     WELL = "well"
-    SITE = "SITE"
-    CYCLE = "CYCLE"
+    SITE = "site"
+    CYCLE = "cycle"
 
 
 def get_files_by(
-    hierarchy_list: list[HierarchyType], root_dir: Path, file_glob: str
+    hierarchy_list: list[str], root_dir: Path | CloudPath, file_glob: str
 ) -> dict:
     """Recursively retrieves files from directories in a hierarchical structure.
 
@@ -33,7 +34,7 @@ def get_files_by(
         a directory in the structure that will be explored. If there is more than
         one level, the function will recurse into subdirectories.
 
-    root_dir : Path
+    root_dir : Path | CloudPath
         The root directory in which to start searching for files. It is expected
         to be a `Path` object that points to the base folder.
 

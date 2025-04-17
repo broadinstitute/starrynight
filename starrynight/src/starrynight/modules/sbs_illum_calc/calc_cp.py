@@ -1,7 +1,7 @@
 """Calculate illumination correction calculate invoke cellprofiler module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
@@ -87,10 +87,10 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
             Container(
                 name=uid,
                 input_paths={
-                    "cppipe_path": [spec.inputs[0].path],
-                    "load_data_path": [spec.inputs[1].path],
+                    "cppipe_path": [spec.inputs[0].path.__str__()],
+                    "load_data_path": [spec.inputs[1].path.__str__()],
                 },
-                output_paths={"illum_dir": [spec.outputs[0].path]},
+                output_paths={"illum_dir": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -111,7 +111,7 @@ class SBSCalcIllumInvokeCPModule(StarrynightModule):
         return "sbs_calc_illum_invoke_cp"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -172,7 +172,7 @@ class SBSCalcIllumInvokeCPModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "SBSCalcIllumInvokeCPModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = SBSCalcIllumInvokeCPModule._spec()

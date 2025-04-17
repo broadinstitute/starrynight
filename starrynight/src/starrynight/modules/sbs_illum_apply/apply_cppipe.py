@@ -1,4 +1,5 @@
-"""SBSApplyulate illumination correction calculate gen cpipe module."""
+"""SBS Apply illumination correction calculate gen cpipe module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
 from typing import Self
@@ -8,6 +9,7 @@ from pipecraft.node import Container, ContainerConfig, UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
+from starrynight.experiments.pcp_generic import PCPGeneric
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.sbs_illum_apply.constants import (
     SBS_ILLUM_APPLY_CP_CPPIPE_OUT_PATH_SUFFIX,
@@ -81,6 +83,8 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         spec.outputs[0].path,
         "-w",
         spec.inputs[1].path,
+        "--nuclei",
+        spec.inputs[2].path,
         "--sbs",
     ]
 
@@ -88,8 +92,8 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
         [
             Container(
                 name=uid,
-                input_paths={"load_data_path": [spec.inputs[0].path]},
-                output_paths={"cppipe_path": [spec.outputs[0].path]},
+                input_paths={"load_data_path": [spec.inputs[0].path.__str__()]},
+                output_paths={"cppipe_path": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -110,7 +114,7 @@ class SBSApplyIllumGenCPPipeModule(StarrynightModule):
         return "sbs_apply_illum_gen_cppipe"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -126,6 +130,13 @@ class SBSApplyIllumGenCPPipeModule(StarrynightModule):
                     type=TypeEnum.file,
                     description="Workspace path.",
                     optional=True,
+                    path=None,
+                ),
+                TypeInput(
+                    name="nuclei_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for nuclei segmentation.",
+                    optional=False,
                     path=None,
                 ),
             ],
@@ -171,7 +182,7 @@ class SBSApplyIllumGenCPPipeModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "SBSApplyIllumGenCPPipeModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = SBSApplyIllumGenCPPipeModule._spec()
@@ -188,6 +199,8 @@ class SBSApplyIllumGenCPPipeModule(StarrynightModule):
                 .resolve()
                 .__str__()
             )
+            assert isinstance(experiment, PCPGeneric)
+            spec.inputs[2].path = experiment.sbs_config.nuclei_channel
 
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(SBS_ILLUM_APPLY_CP_CPPIPE_OUT_PATH_SUFFIX)

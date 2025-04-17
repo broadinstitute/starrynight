@@ -44,7 +44,6 @@ from cellprofiler_core.modules.align import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cloudpathlib import AnyPath, CloudPath
-from numpy import exp
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.modules.sbs_illum_calc.constants import SBS_ILLUM_CALC_OUT_PATH_SUFFIX
@@ -135,7 +134,9 @@ def write_loaddata(
                 for cycle in plate_cycles_list
             ]
             pathnames = [
-                resolve_path_loaddata(AnyPath(path_mask), AnyPath(sample_index.key))
+                AnyPath(
+                    resolve_path_loaddata(AnyPath(path_mask), AnyPath(sample_index.key))
+                ).parent
                 for _ in range(len(pathname_heads))
             ]
 
@@ -192,7 +193,6 @@ def write_loaddata_csv_by_batch_plate_cycle(
     plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
     # Setup channel list for that plate
     plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
     # setup df by filtering for batch id and plate id
     df_batch_plate = images_df.filter(
         pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
@@ -202,15 +202,15 @@ def write_loaddata_csv_by_batch_plate_cycle(
     illum_by_cycle_channel_dict = {
         cycle: {
             ch: illum_path.joinpath(f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy")
+            for ch in plate_channel_list
         }
-        for ch in plate_channel_list
         for cycle in plate_cycles_list
     }
 
     # gen metadata to index key dict
     metadata_to_index_dict = {}
-    for image in df_batch_plate:
-        image = PCPIndex(**image.to_dicts()[0])
+    for image in df_batch_plate.iter_rows(named=True):
+        image = PCPIndex(**image)
         metadata_to_index_dict[
             f"{int(image.cycle_id)}_{image.well_id}_{int(image.site_id)}"
         ] = image
@@ -257,7 +257,7 @@ def gen_illum_apply_sbs_load_data_by_batch_plate(
 
     """
     # Construct illum path if not given
-    if illum_path:
+    if not illum_path:
         illum_path = index_path.parents[1].joinpath(SBS_ILLUM_CALC_OUT_PATH_SUFFIX)
 
     df = pl.read_parquet(index_path.resolve().__str__())
@@ -268,7 +268,9 @@ def gen_illum_apply_sbs_load_data_by_batch_plate(
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix: str = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -335,7 +337,7 @@ def generate_illum_apply_sbs_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    load_data.metadata_fields.value = "Batch,Plate,Cycle"
+    load_data.metadata_fields.value = "Batch,Plate"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
@@ -346,32 +348,26 @@ def generate_illum_apply_sbs_pipeline(
         module_counter += 1
         correct_illum_apply.module_num = module_counter
 
-        for col in range(
-            len(channel_list) - 1
-        ):  # One image is already added by default
+        for ch in range(len(channel_list) - 1):  # One image is already added by default
             correct_illum_apply.add_image()
 
-        for i, col in enumerate(channel_list):
+        for i, ch in enumerate(channel_list):
             # image_name
-            correct_illum_apply.images[i].settings[0].value = col
+            correct_illum_apply.images[i].settings[0].value = f"Orig_Cycle_{cycle}_{ch}"
             # corrected_image_name
-            correct_illum_apply.images[i].settings[1].value = col.replace(
-                "Orig", "Corr"
-            )
+            correct_illum_apply.images[i].settings[1].value = f"Corr_Cycle_{cycle}_{ch}"
             # illum correct function image name
-            correct_illum_apply.images[i].settings[2].value = col.replace(
-                "Orig", "Illum"
-            )
+            correct_illum_apply.images[i].settings[2].value = f"Illum_{cycle}_{ch}"
             # how illum function is applied
             correct_illum_apply.images[i].settings[3] = DOS_DIVIDE
         pipeline.add_module(correct_illum_apply)
 
-        for col in channel_list:
+        for ch in channel_list:
             save_image = SaveImages()
             module_counter += 1
             save_image.module_num = module_counter
             save_image.save_image_or_figure.value = IF_IMAGE
-            save_image.image_name.value = col.replace("Orig", "Corr")
+            save_image.image_name.value = f"Corr_Cycle_{cycle}_{ch}"
             save_image.file_name_method.value = FN_SINGLE_NAME
             save_image.number_of_digits.value = 4
             save_image.wants_file_name_suffix.value = False
@@ -387,7 +383,9 @@ def generate_illum_apply_sbs_pipeline(
             save_image.stack_axis.value = AXIS_T
             # save_image.tiff_compress.value = ""
 
-            save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
+            save_image.single_file_name.value = (
+                f"\\g<Batch>_\\g<Plate>_{cycle}_Well_\\g<Well>_Site_\\g<Site>_Corr{ch}"
+            )
             pipeline.add_module(save_image)
 
     # INFO: Create and configure required modules

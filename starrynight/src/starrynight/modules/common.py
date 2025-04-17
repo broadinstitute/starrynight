@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Self, Unpack
+from typing import Self
 
 import requests
 from linkml.generators import PydanticGenerator
@@ -41,8 +41,7 @@ class StarrynightModule(BaseModel, ABC):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: Container | None = None,
-        **kwargs: Unpack,
-    ) -> Self:
+    ) -> "StarrynightModule":
         """Create module from experiment and data config."""
         raise NotImplementedError
 

@@ -7,13 +7,11 @@ from pipecraft.backend.snakemake import SnakeMakeBackend, SnakeMakeConfig
 
 from starrynight.experiments.pcp_generic import PCPGeneric, PCPGenericInitConfig
 
-# cp_illum_apply
-from starrynight.modules.cp_illum_apply.apply_cp import (
-    CPApplyIllumInvokeCPModule,
-)
-from starrynight.modules.cp_illum_apply.apply_cppipe import (
-    CPApplyIllumGenCPPipeModule,
-)
+# from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
+# from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
+# from starrynight.modules.analysis.analysis_load_data import AnalysisGenLoadDataModule
+from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
+from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
 from starrynight.modules.cp_illum_apply.apply_load_data import (
     CPApplyIllumGenLoadDataModule,
 )
@@ -40,7 +38,29 @@ from starrynight.modules.cp_segcheck.segcheck_load_data import (
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
 
-# schema
+# from starrynight.modules.sbs_align.algin_cp import SBSAlignInvokeCPModule
+# from starrynight.modules.sbs_align.algin_cppipe import SBSAlignGenCPPipeModule
+# from starrynight.modules.sbs_align.algin_load_data import SBSAlignGenLoadDataModule
+from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
+from starrynight.modules.sbs_illum_apply.apply_cppipe import (
+    SBSApplyIllumGenCPPipeModule,
+)
+from starrynight.modules.sbs_illum_apply.apply_load_data import (
+    SBSApplyIllumGenLoadDataModule,
+)
+from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
+from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
+from starrynight.modules.sbs_illum_calc.calc_load_data import (
+    SBSCalcIllumGenLoadDataModule,
+)
+
+# from starrynight.modules.sbs_preprocess.preprocess_cp import SBSPreprocessInvokeCPModule  # noqa: E501
+# from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
+#     SBSPreprocessGenCPPipeModule,
+# )
+# from starrynight.modules.sbs_preprocess.preprocess_load_data import (
+#     SBSPreprocessGenLoadDataModule,
+# )
 from starrynight.schema import DataConfig
 
 # %% [markdown]
@@ -101,7 +121,7 @@ pcp_exp_init = PCPGenericInitConfig(
     barcode_csv_path="",
     cp_acquisition_order="snake",
     cp_img_frame_type="round",
-    cp_img_overlap_pct="10",
+    cp_img_overlap_pct=10,
     sbs_acquisition_order="snake",
     sbs_img_frame_type="round",
     sbs_img_overlap_pct="10",
@@ -250,5 +270,80 @@ exec_backend = SnakeMakeBackend(
     backend_config,
     exec_runs / "run011",
     exec_mounts,
+)
+run = exec_backend.run()
+
+# ------------------------------------------------------------------
+
+# %% [markdown]
+# Step 5: SBS calculate illum correction
+
+# %%
+# Gen load data
+sbs_calc_illum_load_data_mod = SBSCalcIllumGenLoadDataModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_calc_illum_load_data_mod.pipe, backend_config, exec_runs / "run012", exec_mounts
+)
+run = exec_backend.run()
+
+# Gen cppipe file
+sbs_calc_illum_cppipe_mod = SBSCalcIllumGenCPPipeModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_calc_illum_cppipe_mod.pipe, backend_config, exec_runs / "run013", exec_mounts
+)
+run = exec_backend.run()
+
+# Invoke cppipe file
+sbs_calc_illum_invoke_mod = SBSCalcIllumInvokeCPModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_calc_illum_invoke_mod.pipe, backend_config, exec_runs / "run014", exec_mounts
+)
+run = exec_backend.run()
+
+# ------------------------------------------------------------------
+
+# %% [markdown]
+# Step 6: SBS apply illum correction
+
+# %%
+# Gen load data
+sbs_apply_illum_load_data_mod = SBSApplyIllumGenLoadDataModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_apply_illum_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run015",
+    exec_mounts,
+)
+run = exec_backend.run()
+
+# Gen cppipe file
+sbs_apply_illum_cppipe_mod = SBSApplyIllumGenCPPipeModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_apply_illum_cppipe_mod.pipe, backend_config, exec_runs / "run016", exec_mounts
+)
+run = exec_backend.run()
+
+# Invoke cppipe file
+sbs_apply_illum_invoke_mod = SBSApplyIllumInvokeCPModule.from_config(
+    data_config, pcp_experiment
+)
+
+exec_backend = SnakeMakeBackend(
+    sbs_apply_illum_invoke_mod.pipe, backend_config, exec_runs / "run017", exec_mounts
 )
 run = exec_backend.run()

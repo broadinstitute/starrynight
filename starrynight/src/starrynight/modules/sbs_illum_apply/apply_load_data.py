@@ -1,13 +1,14 @@
-"""SBSApplyulate illumination correction calculate gen loaddata module."""
+"""SBS Apply illumination correction calculate gen loaddata module."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 from cloudpathlib import CloudPath
 from pipecraft.node import Container, ContainerConfig, UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
+from starrynight.experiments.pcp_generic import PCPGeneric
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.sbs_illum_apply.constants import (
     SBS_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX,
@@ -76,18 +77,20 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "-i",
         spec.inputs[0].path,
         "-o",
-        Path(spec.outputs[0].path).resolve().__str__(),
+        spec.outputs[0].path,
+        "--nuclei",
+        spec.inputs[1].path,
         "--sbs",
     ]
     # Use user provided parser if available
-    if spec.inputs[1].path is not None:
+    if spec.inputs[2].path is not None:
         cmd += ["--path_mask", spec.inputs[1].path]
     gen_load_data_pipe = Seq(
         [
             Container(
                 name=uid,
-                input_paths={"index": [spec.inputs[0].path]},
-                output_paths={"load_data_path": [spec.outputs[0].path]},
+                input_paths={"index": [spec.inputs[0].path.__str__()]},
+                output_paths={"load_data_path": [spec.outputs[0].path.__str__()]},
                 config=ContainerConfig(
                     image="ghrc.io/leoank/starrynight:dev",
                     cmd=cmd,
@@ -108,7 +111,7 @@ class SBSApplyIllumGenLoadDataModule(StarrynightModule):
         return "sbs_apply_illum_gen_loaddata"
 
     @staticmethod
-    def _spec() -> str:
+    def _spec() -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -118,6 +121,13 @@ class SBSApplyIllumGenLoadDataModule(StarrynightModule):
                     description="Path to the index.",
                     optional=False,
                     path="path/to/the/index",
+                ),
+                TypeInput(
+                    name="nuclei_channel",
+                    type=TypeEnum.file,
+                    description="Which channel to use for nuclei segmentation.",
+                    optional=False,
+                    path=None,
                 ),
                 TypeInput(
                     name="path_mask",
@@ -169,13 +179,15 @@ class SBSApplyIllumGenLoadDataModule(StarrynightModule):
         data: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> Self:
+    ) -> "SBSApplyIllumGenLoadDataModule":
         """Create module from experiment and data config."""
         if spec is None:
             spec = SBSApplyIllumGenLoadDataModule._spec()
             spec.inputs[0].path = (
                 data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
             )
+            assert isinstance(experiment, PCPGeneric)
+            spec.inputs[1].path = experiment.sbs_config.nuclei_channel
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(
                     SBS_ILLUM_APPLY_CP_LOADDATA_OUT_PATH_SUFFIX

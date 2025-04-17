@@ -36,7 +36,7 @@ def resolve_path_loaddata(
 
     """
     try:
-        filepath.resolve().relative_to(path_mask.resolve())
+        filepath.relative_to(path_mask.resolve())
         return filepath.resolve().__str__()
     except ValueError:
         return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
