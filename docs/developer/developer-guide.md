@@ -53,32 +53,6 @@ nix develop --extra-experimental-features nix-command --extra-experimental-featu
 uv sync
 ```
 
-
-### Technical Implementations
-
-From a developer perspective, each component has the following technical characteristics:
-
-- **StarryNight Core**:
-    - Python-based library with CellProfiler integration
-    - Module system for algorithm registration and discovery
-    - CLI interfaces for direct command-line usage
-    - Standardized I/O interfaces for data flow between modules
-- **PipeCraft**:
-    - Python pipeline compiler and execution framework
-    - Node-based directed acyclic graph (DAG) for workflow definition
-    - Backend abstraction for executing on different compute environments
-    - Containerization support for reproducible execution
-- **Conductor**:
-    - FastAPI-based REST service
-    - SQLAlchemy ORM for database interactions
-    - Async WebSocket implementation for real-time notifications
-    - JWT-based authentication and role-based access control
-- **Canvas**:
-    - React-based frontend with Next.js framework
-    - Zustand for state management
-    - SWR for data fetching and caching
-    - WebSocket integration for real-time updates
-
 ## Core Components and Design Patterns
 
 ### StarryNight Core
