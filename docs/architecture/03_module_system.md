@@ -2,7 +2,9 @@
 
 ## Overview
 
-The module system in StarryNight provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends. This module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and documentation, enabling automatic UI generation, validation, and interoperability.
+The module system in StarryNight provides a standardized abstraction layer that sits above the algorithm and CLI layers. Modules define both specifications (what should be done) and compute graphs (how it should be structured) without actually performing the computation. This separation enables backend-agnostic execution and forms the foundation for pipeline composition.
+
+The module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and parameters, while using Pipecraft to define computation structures. This combination enables automatic UI generation, validation, and interoperability with different execution backends.
 
 ## Purpose
 
@@ -15,85 +17,92 @@ The module system serves several critical purposes in the StarryNight architectu
 5. **Composability** - Enables modules to be connected into complex pipelines
 6. **Documentation** - Captures descriptions, citations, and usage information
 7. **Validation** - Enables automated validation of inputs and outputs
-8. **UI Generation** - Supports automatic creation of user interfaces
+8. **Container Integration** - Specifies containerized execution environments
 
-As explained in the architecture discussions:
+The module system is the core architectural layer that bridges the gap between the pure Python functions in the algorithm layer and the composable pipelines that enable complex workflows. By providing consistent abstractions, it allows the same operations to be defined once but executed in various contexts (local, cloud, etc.).
 
-> "Module abstractions in StarryNight are a way to describe the compute graph in, you know, using the Piper library so that it's kind of not making an assumption how it's going to get executed."
+## The Dual Nature of Modules
 
-> "This spec is directly from bilayers, and this is how bilayers define its modules. So because bilayers is a separate project that's happening in similab, the goal of bilayers is to create these algorithm wrappers... the idea is, like you have different algorithms, you want to wrap it in a way that then you can generate certain interfaces automatically."
+The module system's central architectural feature is its dual focus, which defines both what a module does and how it should be structured:
 
-This abstraction layer adds significant flexibility compared to directly calling algorithms.
+1. **Specification (Spec)** - Defines what the module does:
+    - Input ports with types, descriptions, and validation rules
+    - Output ports with types and descriptions
+    - Documentation and metadata
+    - Parameter constraints and defaults
+2. **Compute Graph** - Defines how the operation should be structured:
+    - Container configurations
+    - Command construction
+    - Input/output relationships
+    - Execution sequence
 
-## Module Abstraction
-
-### The Dual Focus of Modules
-
-**Critical Point:** The module system has two key components that form its core purpose:
-
-> "A module gives you, first of all, it gives you a spec. So what are the inputs and outputs of this module? It gives you a very keen way depending that, right? So that's the first thing module does. The second thing, it also gives you a compute graph for that particular module, right? For example, what completion needs to be done. You can describe that with the pipe draft library."
-
-This dual focus - spec + compute graph - is the essence of the module abstraction and is the key to backend-agnostic execution.
+This dual focus enables modules to describe both their interface requirements and execution structure without implementing the actual computation.
 
 ### Modules Don't Compute
 
-An essential characteristic of modules is that they don't perform the actual computation:
+A critical characteristic of modules is that they don't perform the actual computation:
 
-> "It doesn't perform any compute it just gives you the compute graph. So basically, these two things are there in the module, like encapsulated in the module. So first the spec and that there is the compute graph."
+1. **Definition Only** - Modules define what should be done and how it should be structured
+2. **Execution Delegation** - Actual execution is handled by separate backend systems
+3. **Inspection Capability** - Modules can be examined and modified before execution
 
-This separation of definition from execution is fundamental to the architecture.
+This separation of definition from execution is fundamental to the StarryNight architecture and enables backend-agnostic processing. It allows the same module to potentially run on multiple execution platforms without changing its definition.
 
-### Module Sets Structure
+### Module Sets Organization
 
-Similar to the algorithm layer's organization into algorithm sets, the module layer is organized into module sets. Each module set typically contains:
+Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction layer.
 
-1. **Load Data Module** - For generating data loading configurations
-2. **Pipeline Generation Module** - For creating processing pipeline definitions
-3. **Execution Module** - For running the processing on the data
+Each module set typically follows a consistent pattern with three types of modules:
 
-These modules correspond to the functions in the associated algorithm set but add the layer of abstraction that enables the rest of the StarryNight architecture.
+1. **Load Data Modules** - Generate data loading configurations
+    - Define which images to process
+    - Create CSV files for CellProfiler to locate images
+    - Organize data by batch, plate, well, and site
+2. **Pipeline Generation Modules** - Create processing pipeline definitions
+    - Generate CellProfiler pipeline files
+    - Configure pipeline parameters based on experiment settings
+    - Define processing operations
+3. **Execution Modules** - Execute the pipeline on prepared data
+    - Run pipelines with appropriate parallelism
+    - Manage resource allocation
+    - Organize outputs according to experimental structure
 
-Common module sets in StarryNight include:
+This pattern directly mirrors the algorithm set structure covered in the [Algorithm Layer](01_algorithm_layer.md), but adds the standardized module abstraction layer.
+
+Common module sets include:
 
 1. **CP Modules** - For Cell Painting workflows:
-   - `cp_illum_calc` - Illumination calculation
-   - `cp_illum_apply` - Illumination correction
-   - `cp_pre_segcheck` - Pre-segmentation check
-   - `cp_segcheck` - Segmentation check
-   - `analysis` - Analysis operations
-
+    - `cp_illum_calc` - Illumination calculation modules
+    - `cp_illum_apply` - Illumination correction modules
+    - `cp_segcheck` - Segmentation check modules
+    - `analysis` - Analysis modules
 2. **SBS Modules** - For Sequencing By Synthesis workflows:
-   - `sbs_illum_calc` - SBS illumination calculation
-   - `sbs_illum_apply` - SBS illumination correction
-   - `sbs_align` - SBS alignment
-   - `sbs_preprocess` - SBS preprocessing
-
+    - `sbs_illum_calc` - SBS illumination calculation modules
+    - `sbs_illum_apply` - SBS illumination correction modules
+    - `sbs_align` - SBS alignment modules
+    - `sbs_preprocess` - SBS preprocessing modules
 3. **Common Modules** - For general operations:
-   - `gen_index` - Index generation
-   - `gen_inv` - Inventory management
+    - `gen_index` - Index generation modules
+    - `gen_inv` - Inventory management modules
 
-## Module Implementation Structure
+## Module Implementation
 
-A module is implemented as a Python class that inherits from `StarryNightModule`. Each module class typically includes:
+A module is implemented as a Python class that inherits from `StarryNightModule`. Each module implementation follows a consistent structure with several key components:
 
-1. **Unique Identifier** - A string that uniquely identifies the module
-2. **Spec Definition** - Using Bilayers to define inputs and outputs
-3. **from_config Method** - For configuration from experiment and data config
-4. **Compute Graph Generation** - Methods that create the Pipecraft pipeline
+1. **Unique Identifier** - A string property that uniquely identifies the module
+2. **Spec Definition** - A property method that defines the module's specification using Bilayers
+3. **from_config Method** - A class method for configuration from experiment and data configurations
+4. **Compute Graph Generation** - A method that creates the Pipecraft pipeline defining the computation structure
 
-From the architecture discussions:
-
-> "Here we see we have certain things, but the important part is we have, we are creating a class that inherits the StarryNight module. Okay, right. So this is saying that this is a StarryNight module."
+This structure ensures that all modules provide the same capabilities, making them consistent and interchangeable at the architectural level.
 
 ### Example: Segmentation Check Module
 
-The `modules/cp_segcheck/segcheck_cppipe.py` file demonstrates a module implementation:
+Below is an example of a module that generates a CellProfiler pipeline for segmentation check. This example illustrates all the key components of a module implementation:
 
 ```python
 class CpSegcheckGenCPipeModule(StarryNightModule):
-    """
-    Module for generating CellProfiler pipeline for segmentation check.
-    """
+    """Module for generating CellProfiler pipeline for segmentation check."""
 
     @property
     def module_id(self) -> str:
@@ -160,17 +169,25 @@ class CpSegcheckGenCPipeModule(StarryNightModule):
         if spec is None:
             spec = cls().spec
 
-            # Set up paths based on data config
-            # Set up parameters based on experiment
-            # ...
+            # Configure default paths based on data_config
+            load_data_path = data_config.workspace_path / "load_data" / "segcheck_load_data.csv"
+            spec.inputs["load_data"].value = load_data_path
+            spec.inputs["workspace_path"].value = data_config.workspace_path
+
+            # Configure experiment-specific parameters
+            if experiment is not None:
+                spec.inputs["nuclear_channel"].value = experiment.nuclear_channel
+                spec.inputs["cell_channel"].value = experiment.cell_channel
+
+            # Configure output paths
+            pipeline_path = data_config.workspace_path / "pipelines" / "segcheck_pipeline.cppipe"
+            spec.outputs["pipeline"].value = pipeline_path
 
         # Create and return the module with populated spec
         return cls(spec=spec)
 
     def create_pipeline(self) -> pc.Pipeline:
-        """
-        Create the compute graph (Pipecraft pipeline) for this module.
-        """
+        """Create the compute graph (Pipecraft pipeline) for this module."""
         # Construct the CLI command
         command = [
             "starrynight", "segcheck", "generate-pipeline",
@@ -201,346 +218,275 @@ class CpSegcheckGenCPipeModule(StarryNightModule):
         return pipeline
 ```
 
+This example illustrates several important aspects of module implementation:
+
+1. **Module Identity** - The `module_id` property provides a unique identifier
+2. **Module Specification** - The `spec` property defines inputs, outputs, and metadata
+3. **Automatic Configuration** - The `from_config` method populates the specification based on standard configurations
+4. **Compute Graph Creation** - The `create_pipeline` method generates a Pipecraft pipeline that defines the computation structure
+5. **CLI Command Construction** - The module constructs a CLI command that will be executed in a container
+6. **Container Specification** - The module defines the container image and execution environment
+
 ### Module Configuration
 
-One key feature of modules is the ability to be configured from standard configurations:
+A powerful feature of the module system is automatic configuration through the `from_config` method. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:
 
-> "So here I'm saying, okay, the input path, like, you know, we need the load data path that's already generated, you know, somewhere. So I'm automatically, because I know the workspace path from the data config, and I'm using the default location of the load data output from the, you know, from a previous module something, and I'm doing this for like, different inputs and also output, like, where to write the output and stuff like that."
+1. **Data Configuration** - Provides workspace paths, image paths, and scratch directories
+2. **Experiment Configuration** - Provides experiment-specific parameters like channel names, algorithms, and thresholds
+3. **Default Path Inference** - Creates conventional file paths based on workspace structure
 
-This automatic configuration simplifies the use of modules by inferring paths and parameters from standard configurations.
+This automatic configuration approach has several advantages:
 
-### Compute Graph Generation
+- **Consistency** - Ensures consistent file organization across projects
+- **Reduced Configuration** - Minimizes parameters that users need to specify
+- **Standardization** - Enforces standard naming and path conventions
+- **Modularity** - Allows modules to be swapped without changing their configuration
 
-Modules generate compute graphs using the Pipecraft library:
+The `from_config` method bridges the gap between user-provided parameters and the detailed configuration required for execution.
 
-> "So here we are saying, you know, we first constructed the CLI command that we would run inside the container, and then we define, okay, you know, there is [a container]..."
+### Compute Graph Generation with Pipecraft
 
-The compute graph defines what operations will be performed but does not execute them. This allows different backends to handle the actual execution.
+The `create_pipeline` method is where modules generate their compute graphs using the Pipecraft library. This method defines the structure of the computation without actually executing it:
 
-### Module Structure Components
+1. **CLI Command Construction** - The module builds a command-line invocation of the underlying algorithm
+2. **Container Configuration** - Specifies the container image, environment, and resource requirements
+3. **Input/Output Mapping** - Defines how inputs and outputs are mapped to the container filesystem
+4. **Execution Structure** - Specifies the execution sequence (sequential, parallel, etc.)
 
-#### Specification (Spec)
+The compute graph provides a complete definition of how the operation should be executed, but remains independent of any specific execution technology. This separation allows the same module to be executed on different backends (local, cluster, cloud) without modification.
 
-The spec defines:
-- Input ports with types, descriptions, and validation rules
-- Output ports with types and descriptions
-- Documentation, citations, and other metadata
+## Bilayers Integration for Specifications
 
-#### Configuration Method
+The module system uses the Bilayers schema system to define specifications. Bilayers is an external library that provides a structured way to define module interfaces, enabling automatic UI generation, validation, and standardization.
 
-The `from_config` method:
-- Creates default specifications based on standard configurations
-- Allows custom specifications to override defaults
-- Configures paths and parameters based on context
+### Bilayers Schema Components
 
-#### Pipeline Creation
+1. **ModuleSpec** - The top-level specification container:
+    - Module name and description
+    - Input ports dictionary
+    - Output ports dictionary
+    - Documentation and citations
+    - Version information
+2. **PortSpec** - Specification for individual input or output ports:
+    - Type information (file, directory, string, number, etc.)
+    - Description for documentation
+    - Validation rules
+    - Default values
+    - UI hints and constraints
 
-The pipeline creation method:
-- Constructs the CLI command to execute
-- Defines container configuration
-- Specifies inputs and outputs for the container
-- Creates the compute graph using Pipecraft primitives
+### Benefits of Bilayers Integration
 
-## Bilayer Integration
+The Bilayers integration provides several key benefits:
 
-StarryNight modules use the Bilayers schema system to define specifications for inputs, outputs, and documentation. This integration is a critical part of the module system's standardization.
+1. **Standardization** - Common specification format across all modules
+2. **Interface Generation** - Enables automatic UI creation from specifications
+3. **Validation** - Built-in validation of inputs and outputs
+4. **Documentation** - Structured approach to documenting module interfaces
+5. **Extensibility** - Can be extended with new types and validation rules
 
-### Bilayers Schema
+## Pipecraft Integration
 
-The Bilayers schema system defines how module specifications should be structured:
+Pipecraft is a library that enables modules to define compute graphs - the structured representation of what operations should be performed and how they should be executed. This integration is where StarryNight interfaces with the pipeline construction system.
 
-#### ModuleSpec
+### Pipecraft Components
 
-A `ModuleSpec` represents a complete module specification including:
+1. **Pipeline** - The root object representing the complete compute graph
+2. **Sequential Blocks** - Define operations that must run in sequence
+3. **Parallel Blocks** - Define operations that can run simultaneously
+4. **Container Nodes** - Represent containerized operations
+5. **ContainerConfig** - Define container execution environments
 
-- Name and identifier
-- Input ports
-- Output ports
-- Documentation and citations
-- Version information
+### Pipecraft's Role
 
-#### PortSpec
+Pipecraft plays a dual role in the StarryNight architecture:
 
-Each input or output is defined with a `PortSpec` that includes:
+1. **Compute Graph Definition** - Enables modules to define their computation structure
+2. **Backend Preparation** - Provides the foundation for converting compute graphs to executable form
 
-- Type (file, directory, string, number, etc.)
-- Description
-- Default value (if applicable)
-- Validation rules
-- UI hints
+This dual capability is what enables the separation between definition and execution, which is fundamental to the entire system.
 
-### Example Specification
+### Creating Compute Graphs
 
-Here's an example of a Bilayers specification from `modules/cp_segcheck/segcheck_cppipe.py`:
-
-```python
-@property
-def spec(self) -> bl.ModuleSpec:
-    """Default specification for this module."""
-    spec = bl.ModuleSpec(
-        name="CP Segcheck Pipeline Generator",
-        inputs={
-            "load_data": bl.PortSpec(
-                type="file",
-                description="Load data CSV file"
-            ),
-            "workspace_path": bl.PortSpec(
-                type="directory",
-                description="Workspace directory"
-            ),
-            "nuclear_channel": bl.PortSpec(
-                type="string",
-                description="Nuclear stain channel name"
-            ),
-            "cell_channel": bl.PortSpec(
-                type="string",
-                description="Cell membrane channel name"
-            )
-        },
-        outputs={
-            "pipeline": bl.PortSpec(
-                type="file",
-                description="Generated CellProfiler pipeline"
-            ),
-            "notebook": bl.PortSpec(
-                type="file",
-                description="Jupyter notebook for visualization"
-            )
-        }
-    )
-    return spec
-```
-
-### Documentation in Bilayers
-
-Bilayers supports rich documentation:
-
-> "There are other things as well that we can define. For example, you know, citations and stuff. We can add documentation and all those things for each input. We can add documentation that can be then shown in the front end, part of it."
-
-This documentation can be used by user interfaces to provide help and guidance.
-
-### Bilayers as an Interface Contract
-
-The Bilayers specification serves as a contract for how modules interact:
-
-1. **For Module Developers** - Defines what the module must provide and expect
-2. **For Pipeline Developers** - Defines how modules can be connected
-3. **For UI Developers** - Defines what to display and how to collect input
-4. **For Execution Engines** - Defines what to validate and how to provide data
-
-### Validation with Bilayers
-
-Bilayers provides validation capabilities:
-
-1. **Type Checking** - Ensuring inputs match expected types
-2. **Required Inputs** - Verifying all required inputs are provided
-3. **Format Validation** - Checking that inputs meet format requirements
-
-### Example: Configuring from Spec
-
-The relationship between specification and configuration is demonstrated in the `from_config` method:
+A module's `create_pipeline` method uses Pipecraft to create a compute graph:
 
 ```python
-@classmethod
-def from_config(
-    cls,
-    data_config: DataConfig,
-    experiment: Optional[ExperimentConfig] = None,
-    spec: Optional[bl.ModuleSpec] = None
-) -> "CpSegcheckGenCPipeModule":
-    """Create a module instance from configuration."""
-    # Create default spec if none provided
-    if spec is None:
-        spec = cls().spec
+def create_pipeline(self) -> pc.Pipeline:
+    """Create compute graph for this module."""
+    # Build CLI command
+    command = [
+        "starrynight", "segcheck", "generate-pipeline",
+        "--output-path", str(self.spec.outputs["pipeline"].value),
+        "--load-data", str(self.spec.inputs["load_data"].value),
+        "--nuclear-channel", str(self.spec.inputs["nuclear_channel"].value),
+        "--cell-channel", str(self.spec.inputs["cell_channel"].value)
+    ]
 
-        # Configure inputs based on data_config
-        spec.inputs["workspace_path"].value = data_config.workspace_path
-
-        # Default load_data path based on workspace
-        load_data_path = data_config.workspace_path / "load_data" / "segcheck_load_data.csv"
-        spec.inputs["load_data"].value = load_data_path
-
-        # Configure based on experiment if provided
-        if experiment is not None:
-            spec.inputs["nuclear_channel"].value = experiment.nuclear_channel
-            spec.inputs["cell_channel"].value = experiment.cell_channel
-
-        # Configure outputs
-        pipeline_path = data_config.workspace_path / "pipelines" / "segcheck_pipeline.cppipe"
-        spec.outputs["pipeline"].value = pipeline_path
-
-    # Create and return module with the spec
-    return cls(spec=spec)
-```
-
-## User Interface Integration
-
-The Bilayers specification is particularly valuable for UI integration:
-
-> "For example, here in the in the interface, you know, for anything, you have this inputs, right? And then we also show what the outputs are. So this is coming from the spec."
-
-This allows user interfaces to be generated automatically from the module specifications.
-
-An important capability is the bidirectional relationship between specifications and implementations:
-
-1. **Spec → Implementation** - The specification configures how the module operates
-2. **Implementation → Spec** - The implementation can update the specification with results
-
-This bidirectional flow enables adaptability and feedback.
-
-## Example: Complete Module with Bilayers Integration
-
-Here's an extended example showing how Bilayers is integrated throughout a module implementation:
-
-```python
-import bilayers as bl
-from starrynight.modules.base import StarryNightModule
-from starrynight.config import DataConfig, ExperimentConfig
-import pipecraft as pc
-from typing import Optional
-
-class IllumCalcLoadDataModule(StarryNightModule):
-    """Module for generating illumination calculation load data."""
-
-    @property
-    def module_id(self) -> str:
-        """Unique identifier for this module."""
-        return "cp_illum_calc_load_data"
-
-    @property
-    def spec(self) -> bl.ModuleSpec:
-        """Default specification for this module."""
-        spec = bl.ModuleSpec(
-            name="CP Illumination Calculation Load Data Generator",
-            description="Generates load data for illumination calculation",
-            version="1.0.0",
+    # Create pipeline with container
+    pipeline = pc.Pipeline()
+    with pipeline.sequential() as seq:
+        seq.container(
+            name="segcheck_pipeline_gen",
             inputs={
-                "images_path": bl.PortSpec(
-                    type="directory",
-                    description="Path to raw images",
-                    required=True
-                ),
-                "batch_id": bl.PortSpec(
-                    type="string",
-                    description="Batch identifier",
-                    required=True
-                ),
-                "plate_id": bl.PortSpec(
-                    type="string",
-                    description="Plate identifier",
-                    required=True
-                ),
-                "channels": bl.PortSpec(
-                    type="array",
-                    items={"type": "string"},
-                    description="Channel names to process",
-                    required=True
-                )
+                "load_data": str(self.spec.inputs["load_data"].value),
+                "workspace": str(self.spec.inputs["workspace_path"].value)
             },
             outputs={
-                "load_data": bl.PortSpec(
-                    type="file",
-                    description="Generated load data CSV file"
-                )
+                "pipeline": str(self.spec.outputs["pipeline"].value)
             },
-            citations=[
-                {
-                    "title": "CellProfiler: image analysis software for identifying and quantifying cell phenotypes",
-                    "authors": "Carpenter AE, et al.",
-                    "journal": "Genome Biology",
-                    "year": 2006,
-                    "url": "https://doi.org/10.1186/gb-2006-7-10-r100"
-                }
-            ]
-        )
-        return spec
-
-    @classmethod
-    def from_config(
-        cls,
-        data_config: DataConfig,
-        experiment: Optional[ExperimentConfig] = None,
-        spec: Optional[bl.ModuleSpec] = None
-    ) -> "IllumCalcLoadDataModule":
-        """Create module from configuration."""
-        if spec is None:
-            spec = cls().spec
-
-            # Set input paths
-            spec.inputs["images_path"].value = data_config.images_path
-
-            # Set experiment-specific parameters
-            if experiment is not None:
-                spec.inputs["batch_id"].value = experiment.batch_id
-                spec.inputs["plate_id"].value = experiment.plate_id
-                spec.inputs["channels"].value = experiment.channels
-
-            # Set output paths
-            output_path = data_config.workspace_path / "load_data" / "illum_calc_load_data.csv"
-            spec.outputs["load_data"].value = output_path
-
-        return cls(spec=spec)
-
-    def create_pipeline(self) -> pc.Pipeline:
-        """Create compute graph for this module."""
-        # Build CLI command from spec
-        command = [
-            "starrynight", "illum", "generate-load-data",
-            "--images-path", str(self.spec.inputs["images_path"].value),
-            "--output-path", str(self.spec.outputs["load_data"].value),
-            "--batch-id", str(self.spec.inputs["batch_id"].value),
-            "--plate-id", str(self.spec.inputs["plate_id"].value)
-        ]
-
-        # Add channels
-        for channel in self.spec.inputs["channels"].value:
-            command.extend(["--channel", channel])
-
-        # Create pipeline with container
-        pipeline = pc.Pipeline()
-        with pipeline.sequential() as seq:
-            seq.container(
-                name="illum_calc_load_data_gen",
-                inputs={
-                    "images": str(self.spec.inputs["images_path"].value)
-                },
-                outputs={
-                    "load_data": str(self.spec.outputs["load_data"].value)
-                },
-                container_config=pc.ContainerConfig(
-                    image="cellprofiler/starrynight:latest",
-                    command=command
-                )
+            container_config=pc.ContainerConfig(
+                image="cellprofiler/starrynight:latest",
+                command=command
             )
+        )
 
-        return pipeline
+    return pipeline
 ```
+
+### Key Aspects of Pipecraft Integration
+
+1. **CLI Command Construction** - Most modules construct CLI commands that invoke the underlying algorithm functions
+2. **Container Specification** - Modules define the container image and environment for execution
+3. **Input/Output Mapping** - Modules map specification ports to container filesystem paths
+4. **Execution Structure** - Modules define sequential or parallel execution contexts
+
+The integration with Pipecraft enables modules to be both composable (they can be connected into larger pipelines) and backend-agnostic (they can run on different execution systems).
+
+## Module Usage
+
+Modules are typically used in two different contexts: direct usage for individual operations and pipeline composition for complete workflows.
+
+### Direct Module Usage
+
+For individual module operations, modules can be created and executed directly:
+
+```python
+# Import necessary components
+from starrynight.config import DataConfig
+from starrynight.experiments.pcp_generic import PCPGenericExperiment
+from starrynight.modules.cp_segcheck import CpSegcheckGenCPipeModule
+import pipecraft as pc
+
+# Create configurations
+data_config = DataConfig(
+    workspace_path="/path/to/workspace",
+    images_path="/path/to/images",
+    scratch_path="/path/to/scratch"
+)
+
+experiment = PCPGenericExperiment.from_index(
+    index_path=data_config.workspace_path / "index.yaml",
+    init_config={
+        "nuclear_channel": "DAPI",
+        "cell_channel": "CellMask"
+    }
+)
+
+# Create module
+segcheck_module = CpSegcheckGenCPipeModule.from_config(data_config, experiment)
+
+# Configure backend
+backend = pc.SnakemakeBackend()
+
+# Execute module
+backend.run(
+    pipeline=segcheck_module.create_pipeline(),
+    working_dir=data_config.scratch_path / "segcheck_run"
+)
+```
+
+### Pipeline Composition
+
+For complex workflows, modules are typically composed into pipelines:
+
+```python
+# Create modules
+modules = []
+modules.append(GenIndexModule.from_config(data_config))
+modules.append(GenInvModule.from_config(data_config))
+modules.append(CPIllumCalcGenLoadDataModule.from_config(data_config, experiment))
+modules.append(CPIllumCalcGenCPipeModule.from_config(data_config, experiment))
+modules.append(CPIllumCalcRunModule.from_config(data_config, experiment))
+
+# Create pipeline
+pipeline = pc.Pipeline()
+with pipeline.sequential() as seq:
+    for module in modules:
+        seq.add_pipeline(module.create_pipeline())
+
+# Execute pipeline
+backend.run(
+    pipeline=pipeline,
+    working_dir=data_config.scratch_path / "complete_run"
+)
+```
+
+In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in [Pipeline Construction](04_pipeline_construction.md).
 
 ## Creating New Modules
 
-To create a new module:
+Creating a new module set involves implementing classes for each stage of processing:
 
-1. Create a new directory in the modules folder
-2. Implement module classes for load data, pipeline generation, and execution
-3. Define specifications using Bilayers
-4. Implement from_config methods for automatic configuration
-5. Create pipeline generation methods using Pipecraft
-6. Register modules in the module registry
+1. **Plan the Module Set**:
+   - Identify the algorithm set to wrap
+   - Determine inputs, outputs, and parameters
+   - Design the module structure (typically load data, pipeline generation, and execution)
+
+2. **Create Module Classes**:
+   - Implement subclasses of `StarryNightModule` for each stage
+   - Define unique identifiers and specifications
+   - Implement `from_config` methods
+   - Create pipeline generation methods
+
+3. **Define Specifications**:
+   - Use Bilayers to define inputs, outputs, and parameters
+   - Document parameters with clear descriptions
+   - Define validation rules
+
+4. **Implement Pipeline Creation**:
+   - Use Pipecraft to define compute graphs
+   - Specify container configurations
+   - Map inputs and outputs properly
+
+5. **Test the Modules**:
+   - Test individual modules
+   - Test automatic configuration
+   - Test pipeline integration
+
+## Advantages of the Module System
+
+The module system offers significant advantages over directly calling algorithms:
+
+1. **Standardization** - Common interface across different operations
+2. **Abstraction** - Hide implementation details behind consistent interfaces
+3. **Composability** - Connect modules into larger workflows
+4. **Backend Independence** - Run the same module on different execution systems
+5. **Configuration** - Automatic configuration from experiment settings
+6. **Inspection** - Examine inputs, outputs, and operations before execution
+7. **Containerization** - Built-in container specification for reproducibility
+
+These advantages enable StarryNight to handle complex scientific image processing workflows with clarity and flexibility.
+
+## The Architectural Achievement
+
+The module system sits at the center of the StarryNight architecture, providing the critical bridge between low-level algorithms and high-level pipeline composition. Its key architectural achievement is the clear separation between:
+
+1. **What should be done** - Defined by specifications
+2. **How it should be structured** - Defined by compute graphs
+3. **How it should be executed** - Delegated to execution backends
+
+This separation enables the automatic generation of complex execution plans from simple abstractions. By defining operations once at the module level, StarryNight can execute them in various contexts (notebooks, CLI, UI) and on different infrastructures (local, cloud) without changing their definition.
+
+## Relationship to Adjacent Layers
+
+The module system connects directly with two adjacent architectural layers:
+
+1. **Algorithm/CLI Layer (below)** - Modules wrap algorithm functions and typically invoke them via CLI commands in containers
+2. **Pipeline Construction Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
+
+This position in the architecture makes the module system the critical translation layer between pure functions and executable workflows.
 
 ## Conclusion
 
-The module system is a central architectural component of StarryNight, providing the critical bridge between low-level algorithms and high-level pipeline composition. By combining the module abstraction with Bilayers schema integration, StarryNight achieves:
+The module system provides a powerful abstraction that enables backend-agnostic execution through its dual focus on specifications and compute graphs. By standardizing the interfaces between components and providing a structured approach to configuration, StarryNight achieves a clear separation of concerns that makes complex image processing workflows both manageable and extensible.
 
-1. **Standardized Interfaces** - Consistent patterns across all components
-2. **Clear Separation of Concerns** - Specs are separate from implementation, and definition is separate from execution
-3. **Flexible Configuration** - Modules can be automatically configured from experiment settings
-4. **UI Integration** - Specifications support automatic interface generation
-5. **Backend Independence** - The same module can be executed on different backends
-
-As emphasized in the architecture discussions:
-
-> "That's the power of the module system, because it's a track surveyed execution, right?"
-
-This separation of specification from execution, combined with the rich schema capabilities of Bilayers, is what makes possible the sophisticated workflow capabilities of StarryNight while maintaining flexibility and clarity.
-
-**Next: [Pipeline Construction](04_pipeline_construction.md)**
+The next section, [Pipeline Construction](04_pipeline_construction.md), builds upon the module system to create complete workflows by composing multiple modules into executable pipelines.
