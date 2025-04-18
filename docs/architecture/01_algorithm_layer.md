@@ -20,17 +20,17 @@ Algorithms in StarryNight serve several essential purposes:
 
 By focusing solely on the core computational logic without higher-level concerns, the algorithm layer maintains simplicity and testability.
 
-## Complete Independence
+## Design Principles
 
 **Critical Point:** The most important characteristic of the algorithm layer is its complete independence from the rest of the system.
 
-This independence means:
+Algorithms in StarryNight follow these key design principles:
 
-- Algorithms can be tested in isolation
-- They have no dependencies on other StarryNight components
-- They perform clear, focused tasks with well-defined boundaries
-- They can be used in any context without modification
-- They evolve independently of other components
+- **Independence**: No dependencies on other StarryNight components
+- **Clear Boundaries**: Well-defined inputs, outputs, and side effects
+- **Focused Responsibility**: Each algorithm performs a specific task
+- **Portability**: Can be used in any context without modification
+- **Explicit State**: Avoid global state or implicit dependencies
 
 ## Algorithm Sets Structure
 
@@ -259,17 +259,6 @@ def run_cp_parallel(
     # on each item in the list with the given parameters
     parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
 ```
-
-## Usage Context
-
-Algorithms are designed to:
-
-- Take well-defined inputs
-- Produce well-defined outputs
-- Have explicitly defined side effects (like writing files)
-- Avoid global state
-
-These characteristics allow algorithms to be used in various contexts throughout the StarryNight system.
 
 ## Algorithm Development
 
