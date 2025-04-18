@@ -193,7 +193,7 @@ Think of it this way:
 
 - The **Execution Layer** is the factory floor where the plan becomes reality - the machines, robots and processes that actually manufacture according to the plans.
 
-This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car. Similarly, you can design microscopy analysis workflows without coding, while the system handles all the complex execution details.
+This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car.
 
 This separation in StarryNight creates powerful abstractions that enable:
 
