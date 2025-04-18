@@ -209,6 +209,8 @@ class CPSegcheckGenCPPipeModule(StarrynightModule):
 
         return CPSegcheckGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)
 
+
+
 ```
 
 This example illustrates several important aspects of module implementation:
@@ -248,101 +250,63 @@ The `create_pipeline` method is where modules generate their compute graphs usin
 
 The compute graph provides a complete definition of how the operation should be executed, but remains independent of any specific execution technology. This separation allows the same module to be executed on different backends (local, cluster, cloud) without modification.
 
-## Bilayers Integration for Specifications
+## Bilayers Integration
 
-The module system uses the Bilayers schema system to define specifications. Bilayers is an external library that provides a structured way to define module interfaces, enabling automatic UI generation, validation, and standardization.
+Bilayers is an external schema system used to define module specifications. It provides a structured way to define inputs, outputs, and metadata that enables automatic UI generation and validation.
 
-### Bilayers Schema Components
+The module system uses Bilayers to create standardized definitions of:
+- Input ports with types and validation rules
+- Output ports with types and descriptions
+- Documentation and metadata
 
-1. **ModuleSpec** - The top-level specification container:
-    - Module name and description
-    - Input ports dictionary
-    - Output ports dictionary
-    - Documentation and citations
-    - Version information
-2. **PortSpec** - Specification for individual input or output ports:
-    - Type information (file, directory, string, number, etc.)
-    - Description for documentation
-    - Validation rules
-    - Default values
-    - UI hints and constraints
-
-### Benefits of Bilayers Integration
-
-The Bilayers integration provides several key benefits:
-
-1. **Standardization** - Common specification format across all modules
-2. **Interface Generation** - Enables automatic UI creation from specifications
-3. **Validation** - Built-in validation of inputs and outputs
-4. **Documentation** - Structured approach to documenting module interfaces
-5. **Extensibility** - Can be extended with new types and validation rules
+This standardized approach ensures consistent interface definitions across modules and enables automatic UI generation from specifications.
 
 ## Pipecraft Integration
 
-Pipecraft is a library that enables modules to define compute graphs - the structured representation of what operations should be performed and how they should be executed. This integration is where StarryNight interfaces with the pipeline construction system.
+Pipecraft is the library that enables modules to define compute graphs - structured representations of operations and their execution flow. This integration is where StarryNight interfaces with the pipeline construction system.
 
-### Pipecraft Components
+### Core Pipecraft Components
 
-1. **Pipeline** - The root object representing the complete compute graph
-2. **Sequential Blocks** - Define operations that must run in sequence
-3. **Parallel Blocks** - Define operations that can run simultaneously
-4. **Container Nodes** - Represent containerized operations
-5. **ContainerConfig** - Define container execution environments
+Based on the actual codebase in `/pipecraft/src/pipecraft/`:
 
-### Pipecraft's Role
+1. **Pipeline** - Abstract base class for pipelines with subclasses:
+   - **Seq** - For sequential execution of operations
+   - **Parallel** - For parallel execution with scatter-gather patterns
 
-Pipecraft plays a dual role in the StarryNight architecture:
+2. **Node** - Base class for operations with specialized types:
+   - **Container** - For containerized operations
+   - **PyFunction** - For Python function execution
+   - **Scatter/Gather** - For parallel execution control
 
-1. **Compute Graph Definition** - Enables modules to define their computation structure
-2. **Backend Preparation** - Provides the foundation for converting compute graphs to executable form
-
-This dual capability is what enables the separation between definition and execution, which is fundamental to the entire system.
+3. **Backend** - System for executing the pipeline:
+   - **SnakemakeBackend** - Converts pipelines to Snakefiles
+   - **AWSBatchBackend** - For cloud execution
 
 ### Creating Compute Graphs
 
-A module's `create_pipeline` method uses Pipecraft to create a compute graph:
+Modules use Pipecraft's API to create compute graphs by:
+
+1. Creating a `Pipeline` object
+2. Defining execution contexts (sequential, parallel)
+3. Adding container nodes with input/output mappings
+4. Configuring container execution environments
 
 ```python
-def create_pipeline(self) -> pc.Pipeline:
-    """Create compute graph for this module."""
-    # Build CLI command
-    command = [
-        "starrynight", "segcheck", "generate-pipeline",
-        "--output-path", str(self.spec.outputs["pipeline"].value),
-        "--load-data", str(self.spec.inputs["load_data"].value),
-        "--nuclear-channel", str(self.spec.inputs["nuclear_channel"].value),
-        "--cell-channel", str(self.spec.inputs["cell_channel"].value)
-    ]
-
-    # Create pipeline with container
-    pipeline = pc.Pipeline()
-    with pipeline.sequential() as seq:
-        seq.container(
-            name="segcheck_pipeline_gen",
-            inputs={
-                "load_data": str(self.spec.inputs["load_data"].value),
-                "workspace": str(self.spec.inputs["workspace_path"].value)
-            },
-            outputs={
-                "pipeline": str(self.spec.outputs["pipeline"].value)
-            },
-            container_config=pc.ContainerConfig(
-                image="cellprofiler/starrynight:latest",
-                command=command
-            )
+# Example of a simple compute graph definition
+pipeline = pc.Pipeline()
+with pipeline.sequential() as seq:
+    seq.container(
+        name="operation_name",
+        inputs={"input1": "input/path"},
+        outputs={"output1": "output/path"},
+        container_config=pc.ContainerConfig(
+            image="container/image:tag",
+            cmd=["command", "arg1", "arg2"]
         )
-
-    return pipeline
+    )
 ```
 
-### Key Aspects of Pipecraft Integration
-
-1. **CLI Command Construction** - Most modules construct CLI commands that invoke the underlying algorithm functions
-2. **Container Specification** - Modules define the container image and environment for execution
-3. **Input/Output Mapping** - Modules map specification ports to container filesystem paths
-4. **Execution Structure** - Modules define sequential or parallel execution contexts
-
-The integration with Pipecraft enables modules to be both composable (they can be connected into larger pipelines) and backend-agnostic (they can run on different execution systems).
+This separation between graph definition and execution is fundamental to StarryNight's architecture, enabling the same module to run on different execution backends.
 
 ## Module Usage
 
@@ -420,30 +384,26 @@ In pipeline composition, modules are created and configured individually, but th
 Creating a new module set involves implementing classes for each stage of processing:
 
 1. **Plan the Module Set**:
-   - Identify the algorithm set to wrap
-   - Determine inputs, outputs, and parameters
-   - Design the module structure (typically load data, pipeline generation, and execution)
-
+    - Identify the algorithm set to wrap
+    - Determine inputs, outputs, and parameters
+    - Design the module structure (typically load data, pipeline generation, and execution)
 2. **Create Module Classes**:
-   - Implement subclasses of `StarryNightModule` for each stage
-   - Define unique identifiers and specifications
-   - Implement `from_config` methods
-   - Create pipeline generation methods
-
+    - Implement subclasses of `StarryNightModule` for each stage
+    - Define unique identifiers and specifications
+    - Implement `from_config` methods
+    - Create pipeline generation methods
 3. **Define Specifications**:
-   - Use Bilayers to define inputs, outputs, and parameters
-   - Document parameters with clear descriptions
-   - Define validation rules
-
+    - Use Bilayers to define inputs, outputs, and parameters
+    - Document parameters with clear descriptions
+    - Define validation rules
 4. **Implement Pipeline Creation**:
-   - Use Pipecraft to define compute graphs
-   - Specify container configurations
-   - Map inputs and outputs properly
-
+    - Use Pipecraft to define compute graphs
+    - Specify container configurations
+    - Map inputs and outputs properly
 5. **Test the Modules**:
-   - Test individual modules
-   - Test automatic configuration
-   - Test pipeline integration
+    - Test individual modules
+    - Test automatic configuration
+    - Test pipeline integration
 
 ## Advantages of the Module System
 
