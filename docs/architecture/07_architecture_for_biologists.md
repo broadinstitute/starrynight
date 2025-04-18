@@ -195,8 +195,6 @@ Think of it this way:
 
 This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car.
 
-Similarly, you can design microscopy analysis workflows without coding, while the system handles all the complex execution details.
-
 This separation in StarryNight creates powerful abstractions that enable:
 
 1. **Scalability** - The same high-level workflow definition can process one image or thousands
