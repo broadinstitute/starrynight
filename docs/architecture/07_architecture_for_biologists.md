@@ -139,19 +139,6 @@ A key feature of StarryNight is its use of containerized execution:
 
 You can think of containers as standardized reaction vessels that ensure consistent conditions for every experimental step, regardless of where they're run.
 
-## Extending and Customizing StarryNight
-
-StarryNight is designed to grow with your research needs:
-
-### Adding New Capabilities
-
-1. **New Image Processing Techniques** - Incorporate additional algorithms
-2. **New Experimental Designs** - Configure for different microscopy approaches
-3. **Custom Workflows** - Create specialized processing pipelines for your research
-4. **Integration with Other Systems** - Connect to your lab's existing data infrastructure
-
-This extensibility means the system can evolve as your research methods change, without requiring a complete redesign.
-
 ## Technical Terms Reference
 
 For reference, here are explanations of key technical terms used in StarryNight that may be unfamiliar:
