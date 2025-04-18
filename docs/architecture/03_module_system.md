@@ -2,45 +2,43 @@
 
 ## Overview
 
-The module system in StarryNight provides a standardized abstraction layer that sits above the algorithm and CLI layers. Modules define both specifications (what should be done) and compute graphs (how it should be structured) without actually performing the computation. This separation enables backend-agnostic execution and forms the foundation for pipeline composition.
+The module system provides a standardized abstraction layer that bridges the algorithm layer (pure functions) and the pipeline construction layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
 
-The module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and parameters, while using Pipecraft to define computation structures. This combination enables automatic UI generation, validation, and interoperability with different execution backends.
+Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module system integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.
 
-## Purpose
+## Purpose and Advantages
 
-The module system serves several critical purposes in the StarryNight architecture:
+The module system offers significant advantages over directly calling algorithms:
 
-1. **Standardization** - Provides a consistent interface across different algorithm types
-2. **Compute Graph Definition** - Captures the operations to be performed without executing them
-3. **Specification Management** - Defines inputs, outputs, and parameters in a structured way
-4. **Backend Independence** - Allows execution by different runtime systems
-5. **Composability** - Enables modules to be connected into complex pipelines
-6. **Documentation** - Captures descriptions, citations, and usage information
-7. **Validation** - Enables automated validation of inputs and outputs
-8. **Container Integration** - Specifies containerized execution environments
+### Practical Benefits
+- **Standardization** - Consistent interfaces across different algorithm types
+- **Composability** - Modules can be connected into larger workflows
+- **Containerization** - Built-in container specification for reproducibility
+- **Documentation** - Structured approach to capturing metadata and citations
 
-The module system is the core architectural layer that bridges the gap between the pure Python functions in the algorithm layer and the composable pipelines that enable complex workflows. By providing consistent abstractions, it allows the same operations to be defined once but executed in various contexts (local, cloud, etc.).
+### Architectural Significance
+- **Backend Independence** - Run the same module on different execution systems
+- **Inspection** - Examine inputs, outputs, and operations before execution
+- **Automated UI Generation** - Specifications support interface generation
+- **Complex Workflow Creation** - Enables automatic generation of sophisticated execution plans
 
 ## The Dual Nature of Modules
 
-The module system's central architectural feature is its dual focus, which defines both what a module does and how it should be structured:
+The module system's defining characteristic is its dual focus on specifications and compute graphs:
 
-1. **Specification (Spec)** - Defines what the module does:
+1. **Specification (Spec)** - Defines what a module does:
     - Input ports with types, descriptions, and validation rules
     - Output ports with types and descriptions
     - Documentation and metadata
     - Parameter constraints and defaults
-2. **Compute Graph** - Defines how the operation should be structured:
+
+2. **Compute Graph** - Defines how operations should be structured:
     - Container configurations
     - Command construction
     - Input/output relationships
     - Execution sequence
 
-This dual focus enables modules to describe both their interface requirements and execution structure without implementing the actual computation.
-
-!!! note "Modules Don't Compute"
-
-    Modules define computation but don't perform it. This separation of definition from execution enables backend-agnostic processing, allowing the same module to run on different platforms without changing its definition.
+Crucially, modules define computation but don't perform it. This separation enables inspection and modification before execution, and allows the same module to run on different platforms without changing its definition.
 
 ### Module Sets Organization
 
@@ -250,63 +248,47 @@ The `create_pipeline` method is where modules generate their compute graphs usin
 
 The compute graph provides a complete definition of how the operation should be executed, but remains independent of any specific execution technology. This separation allows the same module to be executed on different backends (local, cluster, cloud) without modification.
 
-## Bilayers Integration
+## Specifications with Bilayers
 
-Bilayers is an external schema system used to define module specifications. It provides a structured way to define inputs, outputs, and metadata that enables automatic UI generation and validation.
+For the "specification" part of a module's dual nature, StarryNight uses Bilayers - an external schema system that standardizes how inputs, outputs, and metadata are defined.
 
 The module system uses Bilayers to create standardized definitions of:
+
 - Input ports with types and validation rules
 - Output ports with types and descriptions
 - Documentation and metadata
 
 This standardized approach ensures consistent interface definitions across modules and enables automatic UI generation from specifications.
 
-## Pipecraft Integration
+## Compute Graphs with Pipecraft
 
-Pipecraft is the library that enables modules to define compute graphs - structured representations of operations and their execution flow. This integration is where StarryNight interfaces with the pipeline construction system.
+For the "compute graph" part of a module's dual nature, StarryNight uses Pipecraft - a library that defines operations and their execution flow.
 
-### Core Pipecraft Components
+Modules use Pipecraft to:
 
-Based on the actual codebase in `/pipecraft/src/pipecraft/`:
+- Define operations that should be executed (typically in containers)
+- Specify input and output paths
+- Structure execution (sequential or parallel)
+- Configure container environments
 
-1. **Pipeline** - Abstract base class for pipelines with subclasses:
-   - **Seq** - For sequential execution of operations
-   - **Parallel** - For parallel execution with scatter-gather patterns
-
-2. **Node** - Base class for operations with specialized types:
-   - **Container** - For containerized operations
-   - **PyFunction** - For Python function execution
-   - **Scatter/Gather** - For parallel execution control
-
-3. **Backend** - System for executing the pipeline:
-   - **SnakemakeBackend** - Converts pipelines to Snakefiles
-   - **AWSBatchBackend** - For cloud execution
-
-### Creating Compute Graphs
-
-Modules use Pipecraft's API to create compute graphs by:
-
-1. Creating a `Pipeline` object
-2. Defining execution contexts (sequential, parallel)
-3. Adding container nodes with input/output mappings
-4. Configuring container execution environments
+A simple example of how a module creates a compute graph:
 
 ```python
-# Example of a simple compute graph definition
+# Create a pipeline with sequential execution
 pipeline = pc.Pipeline()
 with pipeline.sequential() as seq:
     seq.container(
         name="operation_name",
-        inputs={"input1": "input/path"},
-        outputs={"output1": "output/path"},
+        inputs={"input_path": input_file_path},
+        outputs={"output_path": output_file_path},
         container_config=pc.ContainerConfig(
             image="container/image:tag",
-            cmd=["command", "arg1", "arg2"]
+            cmd=command_to_execute
         )
     )
 ```
 
-This separation between graph definition and execution is fundamental to StarryNight's architecture, enabling the same module to run on different execution backends.
+More detailed coverage of Pipecraft's capabilities and architecture is provided in the [Pipeline Construction](04_pipeline_construction.md) section.
 
 ## Module Usage
 
@@ -405,30 +387,6 @@ Creating a new module set involves implementing classes for each stage of proces
     - Test automatic configuration
     - Test pipeline integration
 
-## Advantages of the Module System
-
-The module system offers significant advantages over directly calling algorithms:
-
-1. **Standardization** - Common interface across different operations
-2. **Abstraction** - Hide implementation details behind consistent interfaces
-3. **Composability** - Connect modules into larger workflows
-4. **Backend Independence** - Run the same module on different execution systems
-5. **Configuration** - Automatic configuration from experiment settings
-6. **Inspection** - Examine inputs, outputs, and operations before execution
-7. **Containerization** - Built-in container specification for reproducibility
-
-These advantages enable StarryNight to handle complex scientific image processing workflows with clarity and flexibility.
-
-## The Architectural Achievement
-
-The module system sits at the center of the StarryNight architecture, providing the critical bridge between low-level algorithms and high-level pipeline composition. Its key architectural achievement is the clear separation between:
-
-1. **What should be done** - Defined by specifications
-2. **How it should be structured** - Defined by compute graphs
-3. **How it should be executed** - Delegated to execution backends
-
-This separation enables the automatic generation of complex execution plans from simple abstractions. By defining operations once at the module level, StarryNight can execute them in various contexts (notebooks, CLI, UI) and on different infrastructures (local, cloud) without changing their definition.
-
 ## Relationship to Adjacent Layers
 
 The module system connects directly with two adjacent architectural layers:
@@ -436,10 +394,8 @@ The module system connects directly with two adjacent architectural layers:
 1. **Algorithm/CLI Layer (below)** - Modules wrap algorithm functions and typically invoke them via CLI commands in containers
 2. **Pipeline Construction Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
 
-This position in the architecture makes the module system the critical translation layer between pure functions and executable workflows.
+The module system translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.
 
 ## Conclusion
 
-The module system provides a powerful abstraction that enables backend-agnostic execution through its dual focus on specifications and compute graphs. By standardizing the interfaces between components and providing a structured approach to configuration, StarryNight achieves a clear separation of concerns that makes complex image processing workflows both manageable and extensible.
-
-The next section, [Pipeline Construction](04_pipeline_construction.md), builds upon the module system to create complete workflows by composing multiple modules into executable pipelines.
+The module system's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, [Pipeline Construction](04_pipeline_construction.md), builds upon these abstractions to compose complete workflows from individual modules.
