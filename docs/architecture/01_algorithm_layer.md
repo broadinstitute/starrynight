@@ -97,14 +97,14 @@ This abstraction enables algorithms to work with data regardless of its location
 
 ### Processing Organization
 
-This pattern applies primarily to **LoadData generation and execution algorithms**. These algorithms organize processing by:
+This pattern applies primarily to **LoadData generation and execution algorithms**. These algorithms organize processing by experimental hierarchy:
 
-- Batch - A collection of related plates
-- Plate - A physical container with multiple wells
-- Well - A single experimental unit
-- Site - A specific imaging location within a well
+- Plate - A multi-well plate containing experimental samples
+- Well - A compartment within a plate with one experimental condition
+- Site - A microscope field of view capturing a region of a well
+- Batch - A group of plates (less commonly used for grouping)
 
-This hierarchical organization matches the physical structure of biological experiments and allows algorithms to process data in logical groups.
+Algorithms typically group by plate, plate-well, or plate-well-site depending on processing needs.
 
 ## Beyond CellProfiler
 
