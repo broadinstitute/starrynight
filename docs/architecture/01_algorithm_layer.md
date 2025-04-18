@@ -1,14 +1,6 @@
 # StarryNight Algorithm Layer
 
-!!! Note
-
-    1. **Clarify LoadData concept**: Add an early explanation of CellProfiler's LoadData CSV files and their purpose. Replace all instances of "data load configuration" with "LoadData creation" throughout the document.
-    2. **Reduce redundancy**: Remove repetitive mentions of algorithm independence, keeping only the essential statements at the beginning and conclusion.
-    3. **Add early CellProfiler context**: Insert a note near the beginning clarifying that while most examples are CellProfiler-centric, the algorithm layer extends beyond it (as detailed later).
-    4. **Replace quoted sections**: Examine the algorithm code patterns and replace all verbatim quotes with clearer technical explanations based on actual implementation patterns.
-    5. **Expand code examples**: Add representative code examples for all three common algorithm functions: LoadData generation, pipeline generation (gen_CP_pipe), and pipeline execution.
-    6. **Update terminology consistency**: Ensure consistent terminology throughout, particularly around pipeline generation and execution concepts.
-    7. **Review section flow**: Verify the logical progression of sections, ensuring concepts are introduced before they're referenced in later explanations.
+!!! bug
 
 
 ## Overview
@@ -17,16 +9,30 @@ The algorithm layer forms the foundation of the StarryNight framework. Algorithm
 
 This document explains the structure and organization of the algorithm layer.
 
+!!! note "CellProfiler Context"
+    While many examples in this document reference CellProfiler-specific functions, the algorithm layer design extends beyond CellProfiler. The architecture supports various algorithm types including indexing, inventory management, and other non-CellProfiler operations as detailed in the "Beyond CellProfiler" section.
+
 ## Purpose
 
 Algorithms in StarryNight serve several essential purposes:
 
 1. **Image Processing Logic** - Implementing the core computational steps
 2. **Pipeline Generation** - Creating CellProfiler pipeline files programmatically
-3. **Data Load Configuration** - Specifying how data should be loaded for processing
+3. **LoadData Creation** - Generating CSV files that tell CellProfiler how to load images
 4. **Pipeline Execution** - Running processing steps on prepared data
 
 By separating these functions from higher-level concerns like UI, execution environment, and workflow composition, the algorithm layer maintains simplicity and testability.
+
+## CellProfiler LoadData Files
+
+CellProfiler's LoadData module uses CSV files to specify which images to process and how to organize them. These CSV files (referred to as "LoadData files" throughout this document) typically contain:
+
+1. **Metadata columns** - Information about the images (batch, plate, well, site, cycle)
+2. **FileName columns** - Names of image files for each channel
+3. **PathName columns** - Directories containing the image files
+4. **Frame columns** - Which frame in a multi-frame file to use for each channel
+
+LoadData files are a critical input to CellProfiler pipelines, as they define which images will be processed. Many algorithm functions in StarryNight are dedicated to generating these LoadData files for different processing stages.
 
 ## Complete Independence
 
@@ -47,7 +53,7 @@ Algorithms are organized into "algorithm sets" -- groups of related functions th
 
 Most algorithm sets follow a consistent pattern with three key function types:
 
-1. **Load Data Generation** - Functions that create configurations for loading data
+1. **LoadData Generation** - Functions that create CellProfiler LoadData CSV files
     - Typically named `gen_<algorithm>_load_data_by_batch_plate()`
     - Specifies paths, file patterns, and data organization
 2. **Pipeline Generation** - Functions that create processing pipeline definitions
@@ -74,19 +80,23 @@ Algorithms employ several recurring implementation patterns:
 
 ### Sample Data Inference
 
-As noted in the architecture discussions:
+A common implementation pattern is inferring parameters from sample data. For example, when generating CellProfiler pipelines, functions often:
 
-> "In all of the cell profiler pipeline when I'm generating... the first thing that we do in the function is try to read one of the sample load data for that module, and then extract out the channel names, the number of cycles and things like that... from the load data itself."
+1. Read a sample LoadData file
+2. Extract channel names, cycle counts, and other metadata
+3. Use this information to configure the pipeline appropriately
 
-This pattern allows algorithms to adapt to different experimental contexts by inferring parameters from data.
+This approach allows algorithms to adapt to different experimental contexts without requiring all parameters to be specified explicitly.
 
 ### Path Handling
 
-Algorithms must handle various path types:
+Algorithms handle various path types using the `cloudpathlib` library's `AnyPath` class, which provides a consistent interface for:
 
-> "People are going to use the CLI to give you paths. And these paths can be a relative path, an absolute path, a path that's in the local file system, or it can be a file path that's in some S3 bucket..."
+- Local file paths
+- Cloud storage paths (S3, etc.)
+- Relative and absolute paths
 
-This is addressed at the CLI layer but influences algorithm design.
+This abstraction enables algorithms to work with data regardless of its location.
 
 ### Processing Organization
 
@@ -96,73 +106,174 @@ Algorithms typically organize processing by Batch, Plate, Well, and Site. This h
 
 While many algorithm sets focus on CellProfiler integration, others serve different purposes:
 
-> "We also have indexing and inventory. Okay, so those are not cell profiler centric."
-
-These algorithm sets handle data organization, metadata extraction, and inventory management rather than image processing directly.
-
-Other non-CellProfiler algorithm sets might include:
-
 - **Indexing** - Creating indexes of available data
 - **Inventory** - Managing metadata about available data
 - **Quality Control** - Analyzing results for quality issues
 - **Feature Selection** - Identifying informative features
 - **Data Visualization** - Creating visualizations of results
 
+These non-CellProfiler algorithm sets use the same architectural principles but may not follow the three-part pattern of LoadData generation, pipeline generation, and execution.
+
 ## Algorithm Complexity and Decision Points
 
-Algorithms can incorporate conditional logic based on user requirements:
+Algorithms can incorporate conditional logic based on user requirements. For example, pipeline generation algorithms might add or remove specific modules based on flags that indicate:
 
-> "If you want to go that route, these algorithms will become complex. This can try to account for like, 'Okay, if a user wants to create a pipeline that will take care of blurry images or take care of debris in their images'... based on those flags, we can make certain decisions, what modules to add in which stage, right?"
+- Whether to handle blurry images
+- Whether to remove debris
+- Which quality control steps to include
 
 This flexibility allows algorithms to adapt to different experimental needs while maintaining their functional structure.
 
-## Core Architecture Benefit
+## Code Examples
 
-The complete independence of the algorithm layer is what enables the higher-level abstractions without sacrificing flexibility. The architecture discussions emphasize:
+### Example 1: LoadData Generation
 
-> "The first thing, which is the algorithm model, like, completely separate the core part. It's not dependent, dependent on anything else. And then, you know, you can use it independently, you know, the CLI and everything, right?"
-
-This separation is the foundation that allows the more sophisticated abstractions to be built on top without creating tight coupling or circular dependencies.
-
-## Code Example
-
-A simplified example of what an algorithm function might look like:
+A simplified example of a LoadData generation function:
 
 ```python
-def gen_analysis_load_data_by_batch_plate(
-    images_path: AnyPath,
-    output_path: AnyPath,
-    batch_id: str,
-    plate_id: str,
-    channels: List[str],
-    **kwargs
-) -> AnyPath:
-    """
-    Generate a CellProfiler LoadData CSV file for the analysis pipeline.
+def gen_illum_calc_load_data_by_batch_plate(
+    index_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    path_mask: str | None,
+    for_sbs: bool = False,
+) -> None:
+    """Generate load data for illum calc pipeline.
 
     Parameters
     ----------
-    images_path : AnyPath
-        Path to the processed images
-    output_path : AnyPath
-        Path where the load data file will be written
-    batch_id : str
-        Batch identifier
-    plate_id : str
-        Plate identifier
-    channels : List[str]
-        List of channel names to include
-
-    Returns
-    -------
-    AnyPath
-        Path to the generated load data file
+    index_path : Path | CloudPath
+        Path to index file.
+    out_path : Path | CloudPath
+        Path to save output csv file.
+    path_mask : str | None
+        Path prefix mask to use.
+    for_sbs : str | None
+        Generate illums for SBS images.
     """
-    # Implementation details...
-    # 1. Find all relevant images
-    # 2. Organize them by well and site
-    # 3. Generate the LoadData CSV
-    # 4. Return the path to the file
+    # Read the index file containing image metadata
+    df = pl.read_parquet(index_path.resolve().__str__())
+
+    # Filter for relevant images
+    if not for_sbs:
+        images_df = df.filter(
+            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
+        )
+    else:
+        images_df = df.filter(
+            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+        )
+
+    # Generate hierarchy of images
+    images_hierarchy_dict = gen_image_hierarchy(images_df)
+
+    # Set up path handling
+    default_path_prefix: str = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
+    if path_mask is None:
+        path_mask = default_path_prefix
+
+    # Create LoadData CSV files for each batch/plate
+    for batch in images_hierarchy_dict.keys():
+        for plate in images_hierarchy_dict[batch].keys():
+            if not for_sbs:
+                # Write loaddata assuming no image nesting with cycles
+                write_loaddata_csv_by_batch_plate(
+                    images_df, out_path, path_mask, batch, plate
+                )
+            else:
+                # Write loaddata assuming image nesting with cycles
+                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+                for cycle in plate_cycles_list:
+                    write_loaddata_csv_by_batch_plate_cycle(
+                        images_df, out_path, path_mask, batch, plate, cycle
+                    )
+```
+
+### Example 2: Pipeline Generation
+
+A simplified example of a pipeline generation function:
+
+```python
+def gen_illum_calculate_cppipe_by_batch_plate(
+    load_data_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
+    workspace_path: Path | CloudPath,
+    for_sbs: bool = False,
+) -> None:
+    """Write out illumination calculate pipeline to file.
+
+    Parameters
+    ----------
+    load_data_path : Path | CloudPath
+        Path to load data csv dir.
+    out_dir : Path | CloudPath
+        Path to output directory.
+    workspace_path : Path | CloudPath
+        Path to workspace directory.
+    for_sbs : str | None
+        Generate illums for SBS images.
+    """
+    # Create output directory
+    out_dir.mkdir(exist_ok=True, parents=True)
+
+    # Get all the generated load data files
+    if not for_sbs:
+        type_suffix = "painting"
+        files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
+    else:
+        type_suffix = "sbs"
+        files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+
+    # Get a sample load data file to determine pipeline parameters
+    _, files = flatten_dict(files_by_hierarchy)[0]
+
+    # Create the pipeline using CellProfiler's Python API
+    with CellProfilerContext(out_dir=workspace_path) as cpipe:
+        cpipe = generate_illum_calculate_pipeline(cpipe, files[0], for_sbs)
+
+        # Save pipeline in both .cppipe and .json formats
+        filename = f"illum_calc_{type_suffix}.cppipe"
+        with out_dir.joinpath(filename).open("w") as f:
+            cpipe.dump(f)
+
+        filename = f"illum_calc_{type_suffix}.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)
+```
+
+### Example 3: Pipeline Execution
+
+A simplified example of a pipeline execution function:
+
+```python
+def run_cp_parallel(
+    uow_list: list[tuple[Path, Path]],
+    out_dir: Path,
+    plugin_dir: Path | None = None,
+    jobs: int = 20,
+) -> None:
+    """Run cellprofiler on multiple unit-of-work (UOW) items in parallel.
+
+    Parameters
+    ----------
+    uow_list : list of tuple of Path
+        List of tuples containing the paths to the pipeline and load data files.
+    out_dir : Path
+        Output directory path.
+    plugin_dir : Path
+        Path to cellprofiler plugin directory.
+    jobs : int, optional
+        Number of parallel jobs to use (default is 20).
+    """
+    # Start Java Virtual Machine for CellProfiler
+    cellprofiler_core.utilities.java.start_java()
+
+    # Run pipelines in parallel
+    parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
+
+    # Shut down Java Virtual Machine
+    cellprofiler_core.utilities.java.stop_java()
 ```
 
 ## Integration with Higher Layers
@@ -189,7 +300,7 @@ This functional purity makes them easy to wrap and integrate at higher levels.
 To create a new algorithm set, developers need to:
 
 1. Create the appropriate functions following established patterns
-2. Implement load data generation
+2. Implement LoadData generation
 3. Implement pipeline generation
 4. Implement execution logic
 5. Create corresponding CLI wrappers
