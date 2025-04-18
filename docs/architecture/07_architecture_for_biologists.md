@@ -105,17 +105,6 @@ The **Configuration Layer** provides a systematic way to handle experimental par
 
 This approach allows complex processing pipelines to be configured with minimal manual parameter specification, reducing the potential for errors and inconsistencies in experimental setup.
 
-## From Simple Configuration to Complex Workflow
-
-StarryNight transforms simple experiment configurations into sophisticated processing workflows:
-
-1. **User Configuration** - Specify basic parameters (channels, experimental design)
-2. **Automated Setup** - The system generates and configures all necessary processing components
-3. **Workflow Assembly** - Components are connected into a complete processing pipeline
-4. **Execution** - The workflow is executed in a parallelized, containerized environment
-
-This transformation - from a simple configuration to a complex, optimized workflow - is the key to making high-throughput analysis accessible while maintaining the necessary sophistication to handle large-scale data.
-
 ## Ways of Using StarryNight
 
 StarryNight offers multiple ways to interact with the system, depending on your technical comfort level:
