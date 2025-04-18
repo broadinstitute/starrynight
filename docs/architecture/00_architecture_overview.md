@@ -6,6 +6,32 @@ StarryNight is a scientific image processing framework designed for processing h
 
 This document provides a high-level overview of the StarryNight architecture, explaining how the different components interact to form a complete pipeline system.
 
+## Project Structure
+
+The StarryNight framework is organized as a monorepo with four main packages:
+
+1. **StarryNight** - Core package containing:
+    - Algorithm Layer: Pure Python functions for image processing
+    - CLI Layer: Command-line interfaces for algorithms
+    - Module System: Standardized module abstractions
+
+2. **PipeCraft** - Pipeline definition framework that powers:
+    - Pipeline Layer: Composition of modules into workflows
+    - Part of the Execution Layer: Backend abstractions
+
+3. **Conductor** - Job orchestration service handling:
+    - Execution management and monitoring
+    - Configuration storage
+    - REST API for job control
+
+4. **Canvas** - Frontend UI providing:
+    - Web interface for pipeline configuration
+    - Visualization of results
+    - Integration with Conductor
+
+!!!note
+     This documentation primarily focuses on the architectural layers rather than the package boundaries, as layers can span multiple packages.
+
 ## Core Architectural Layers
 
 StarryNight follows a layered architecture with increasing levels of abstraction:
@@ -97,11 +123,11 @@ A typical data flow through the StarryNight system:
 
 StarryNight can be used in multiple contexts:
 
-1. **Direct CLI usage** - Running algorithms directly via command line
-2. **Notebook integration** - Creating and running pipelines in Jupyter notebooks
-3. **UI integration** - Canvas and Conductor components provide web UI
+1. **Direct CLI usage** - Running algorithms directly via the CLI layer in the StarryNight core package
+2. **Notebook integration** - Creating and running pipelines in Jupyter notebooks using StarryNight and PipeCraft
+3. **UI integration** - Using the Canvas (frontend package) and Conductor (orchestration package) which provide a web-based interface that ultimately utilizes the same core functionality
 
-Each context has different state management requirements, with the CLI being stateless and the UI maintaining session state.
+Each context has different state management requirements, with the CLI being stateless and the UI components (Canvas and Conductor) maintaining session state.
 
 ### Container Usage
 

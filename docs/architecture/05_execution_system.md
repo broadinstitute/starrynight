@@ -162,6 +162,16 @@ The Snakemake backend is StarryNight's primary execution engine, responsible for
 - Provides container integration (Docker, Singularity/Apptainer)
 - Handles resource management and scheduling
 
+### Backend Implementation in PipeCraft
+
+The Snakemake backend is implemented in the PipeCraft package rather than in the StarryNight core package. This architectural decision:
+
+- Keeps backend implementation details separate from the scientific image processing logic
+- Allows for multiple backends to be developed without modifying the core package
+- Maintains a clean separation between pipeline definition and execution
+
+When StarryNight modules and pipelines are executed, they use the backend implementations from PipeCraft through a well-defined API.
+
 ### The "Aha Moment" of Automatic Generation
 
 **Critical Point:** The Snakemake backend delivers one of the most impressive capabilities of the StarryNight system - the automatic generation of complex workflow files:

@@ -6,6 +6,17 @@ StarryNight is a scientific image processing framework designed for high-through
 
 This document provides a high-level overview of the StarryNight architecture, explaining how the different components interact to form a complete pipeline system.
 
+## Framework Components
+
+The StarryNight framework consists of four main components:
+
+1. **StarryNight Core** - Image processing algorithms and pipeline definitions
+2. **PipeCraft** - Pipeline composition and execution system
+3. **Conductor** - Job management and monitoring service
+4. **Canvas** - User interface for configuring and running experiments
+
+As a biologist, you'll primarily interact with the Canvas user interface, which provides an accessible way to configure and run image processing workflows. Behind the scenes, these components work together to process your experimental data efficiently and reproducibly.
+
 ## Core Architectural Layers
 
 StarryNight follows a layered architecture with increasing levels of abstraction:

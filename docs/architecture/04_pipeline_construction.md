@@ -27,6 +27,17 @@ As explained in the architecture discussions:
 
 > "Here we are saying, you know, we first constructed the CLI command that we would run inside the container, and then we define, okay, you know, there is and [...] we are constructing the commands, and then we are describing our container to use and giving it the command to invoke and which image to use to run that container."
 
+### Pipecraft as a Separate Package
+
+Pipecraft is a separate package within the StarryNight monorepo that provides the foundational pipeline construction capabilities. While most modules and algorithms live in the StarryNight core package, the pipeline construction functionality is implemented in Pipecraft, which:
+
+- Provides a generic pipeline definition framework
+- Is developed independently but within the same repository
+- Implements a backend-agnostic approach to pipeline execution
+- Could potentially be used by other systems beyond StarryNight
+
+This separation allows for focused development of pipeline construction capabilities while maintaining integration with the broader StarryNight framework.
+
 ### Pipecraft's Dual Role
 
 **Critical Point:** Pipecraft serves two essential functions in the StarryNight architecture:
