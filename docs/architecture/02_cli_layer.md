@@ -2,7 +2,7 @@
 
 ## Overview
 
-The CLI (Command Line Interface) layer in StarryNight provides command-line access to the underlying algorithms. It wraps algorithm functions with user-friendly interfaces, handles parameter parsing, and manages execution. This document explores how the CLI layer is structured and how it integrates with the algorithm layer.
+The CLI (Command Line Interface) layer in StarryNight provides command-line access to the underlying algorithms. It wraps pure algorithm functions with user-friendly interfaces, handles parameter parsing, and manages execution. Building upon the algorithm layer, the CLI layer serves as the primary direct interface for users to interact with StarryNight's capabilities through terminal commands.
 
 ## Purpose
 
@@ -14,9 +14,7 @@ The CLI layer serves several key purposes:
 4. **Command Organization** - Structures commands into logical groups
 5. **Documentation** - Provides help text and usage examples
 
-As noted in the architecture discussions:
-
-> "This is just algorithms, okay... This is one of the CLI files. This is analysis.py inside the CLI folder, it just imports the load data generation function and the cell profiler pipeline generation function, and then it exposes those functions as a CLI module."
+The CLI layer directly imports algorithm functions and exposes them through command-line interfaces. For example, `analysis.py` in the CLI directory imports functions like `gen_analysis_load_data` and `gen_analysis_pipeline` from the algorithms layer and makes them accessible as CLI commands.
 
 ## Structure
 
@@ -33,6 +31,7 @@ Commands are organized into groups based on algorithm sets. For example:
 ### Command Implementation
 
 Each command typically:
+
 1. Imports algorithm functions
 2. Defines command parameters using Click decorators
 3. Implements a function that calls the underlying algorithm
@@ -40,9 +39,7 @@ Each command typically:
 
 ## Click Library Integration
 
-StarryNight uses the [Click](https://click.palletsprojects.com/) library for CLI implementation:
-
-> "So we are using click as our kind of CLI library. And with click, you just, you know, we can decorate a function with all the options you need, and then name the function, or like, name that command."
+StarryNight uses the [Click](https://click.palletsprojects.com/) library for CLI implementation. Click provides a decorator-based approach to define commands, options, and arguments with clear help text. This allows for a clean separation between interface definition and implementation logic.
 
 ### Command Group Pattern
 
@@ -74,45 +71,58 @@ def generate_load_data(input_path, output_path, **options):
 
 ## Path Handling
 
-One of the key responsibilities of the CLI layer is handling different types of file paths:
+A key responsibility of the CLI layer is converting user-provided path strings to standardized path objects. Users may provide paths in various formats:
 
-> "The only thing to pay attention to here is, is how to handle paths. You know, because people are going to the who are going to use this, they're going to use a CLI to give you path. And these paths can be a relative path, an absolute path, a path that's in the local file system, or it can be a file path that's in some S3 bucket things like that."
+- Local absolute paths (e.g., `/home/user/data`)
+- Local relative paths (e.g., `./data`)
+- Cloud storage paths (e.g., `s3://bucket/data`)
 
-### Cloud Path Library
+The CLI converts these diverse string formats to standardized `AnyPath` objects before passing them to the underlying algorithms, which are designed to work with this consistent path interface.
 
-The CLI uses the [cloudpathlib](https://cloudpathlib.drivendata.org/) library to handle various path types:
+### CloudPathLib Integration
 
-> "So trying to handle those things, the way I'm handling is by something called Cloud path library, and it gives you this, this class called any path. So based on which path you give it, it will try to create either a path lib object... or it can return a cloud path lib object that you can use to transparently kind of access files from S3 bucket."
+The CLI uses the [cloudpathlib](https://cloudpathlib.drivendata.org/) library to handle various path types through the `AnyPath` class:
 
-This abstraction allows the CLI to work with both local and cloud storage using a consistent interface.
+```python
+from cloudpathlib import AnyPath
+
+def cli_function(input_path, output_path):
+    # Convert string paths to AnyPath objects
+    input_path = AnyPath(input_path)   # Handles local/S3 paths
+    output_path = AnyPath(output_path) # Same interface for all storage types
+
+    # Use the path objects with consistent methods
+    if input_path.exists():
+        # Process files using consistent interface
+        algorithm_function(input_path, output_path)
+```
+
+This abstraction allows the CLI to work with both local and cloud storage using a consistent interface, enabling StarryNight to process data regardless of its location without changes to the algorithm code.
 
 ## Flag Handling
 
-The CLI layer also handles flags that control algorithm behavior:
-
-> "Previously, because we are using single functions to generate both SBS and CP pipelines. So we also exposed those parameters here, and based on like which flag is given. For example, if SBS flag is given or not, we are based on that we're calling different functions."
-
-This simplifies the user experience by providing a consistent interface across different algorithm types.
+The CLI layer also handles flags that control algorithm behavior. For example, some commands support different assay types (SBS or CP) through flags rather than separate commands. This approach simplifies the user experience by providing a consistent interface while allowing the CLI to invoke different underlying algorithm functions based on the flags provided.
 
 ## Integration with main.py
 
-The CLI layer integrates all command groups into a single entry point:
-
-> "You first create a group that is based on your algorithm set name, for example, for analysis, you create a group called analysis. You add all the sub-commands to the analysis... and then you import this group into the main.py CLI file, and then add that group to your main command."
+The CLI layer integrates all command groups into a single entry point in `main.py`. Each algorithm set defines its own command group, which is then imported and registered with the main CLI application. This approach creates a modular structure where new algorithm sets can be easily added without modifying existing code.
 
 This creates a consistent, hierarchical command structure:
 
 ```
 starrynight
 ├── analysis
-│   ├── generate-load-data
-│   ├── generate-pipeline
-│   └── run-pipeline
+│   ├── loaddata
+│   └── cppipe
 ├── illum
-│   ├── calculate
+│   ├── calc
+│   │   ├── loaddata
+│   │   └── cppipe
 │   └── apply
-└── segcheck
-    ├── ...
+│       ├── loaddata
+│       └── cppipe
+├── segcheck
+└── [other commands...]
 ```
 
 ## Creating New CLI Commands
@@ -126,9 +136,7 @@ To create a new CLI command, developers follow this pattern:
 5. Implement the command functions to call algorithms
 6. Add the command group to main.py
 
-As the architecture discussions explain:
-
-> "So basically, you know you you first create a group that is based on your algorithm, set name, for example, for analysis, you create a group called analysis. You add all the sub commands to the analysis for example, load data generation and generate C pipe. So you add those commands to your analysis group, and then you import this group into the main.pi CLI file, and then add that group to your main command."
+This pattern helps maintain a clean separation between different algorithm sets (groups of related functions that collectively handle a specific pipeline stage) while providing a unified command structure to users. Each algorithm set can evolve independently without affecting others, which simplifies maintenance and development.
 
 ## CLI Limitations
 
@@ -149,70 +157,75 @@ The `cli/analysis.py` file demonstrates the CLI pattern:
 import click
 from cloudpathlib import AnyPath
 
-from starrynight.algorithms import analysis
+from starrynight.algorithms.analysis import (
+    gen_analysis_cppipe_by_batch_plate,
+    gen_analysis_load_data_by_batch_plate,
+)
+
+@click.command(name="loaddata")
+@click.option("-i", "--index", required=True)
+@click.option("-o", "--out", required=True)
+@click.option("-c", "--corr_images", required=True)
+@click.option("-p", "--comp_images", required=True)
+@click.option("-m", "--path_mask", default=None)
+def gen_analysis_load_data(
+    index: str,
+    out: str,
+    corr_images: str,
+    comp_images: str,
+    path_mask: str | None,
+) -> None:
+    """Generate analysis loaddata file."""
+    gen_analysis_load_data_by_batch_plate(
+        AnyPath(index),
+        AnyPath(out),
+        path_mask,
+        AnyPath(corr_images),
+        AnyPath(comp_images),
+    )
 
 @click.group()
-def analysis_commands():
-    """Analysis pipeline commands."""
+def analysis() -> None:
+    """Analysis commands."""
     pass
 
-@analysis_commands.command()
-@click.option(
-    "--images-path",
-    required=True,
-    help="Path to the images to analyze"
-)
-@click.option(
-    "--output-path",
-    required=True,
-    help="Path where load data will be written"
-)
-@click.option(
-    "--batch-id",
-    required=True,
-    help="Batch identifier"
-)
-@click.option(
-    "--plate-id",
-    required=True,
-    help="Plate identifier"
-)
-def generate_load_data(images_path, output_path, batch_id, plate_id):
-    """Generate a load data file for the analysis pipeline."""
-    images_path = AnyPath(images_path)
-    output_path = AnyPath(output_path)
-
-    analysis.gen_analysis_load_data_by_batch_plate(
-        images_path=images_path,
-        output_path=output_path,
-        batch_id=batch_id,
-        plate_id=plate_id
-    )
+analysis.add_command(gen_analysis_load_data)
 ```
 
 ## CLI Usage Examples
 
-Example 1: Generate load data for analysis
+Example 1: Generate load data for analysis (local storage)
 ```bash
-starrynight analysis generate-load-data \
-  --images-path /path/to/images \
-  --output-path /path/to/output \
-  --batch-id Batch1 \
-  --plate-id Plate1
+starrynight analysis loaddata \
+  -i /path/to/index \
+  -o /path/to/output \
+  -c /path/to/corrected_images \
+  -p /path/to/compensated_images
 ```
 
 Example 2: Generate a CellProfiler pipeline
 ```bash
-starrynight analysis generate-pipeline \
-  --output-path /path/to/output \
-  --nuclear-channel DAPI \
-  --cell-channel CellMask
+starrynight analysis cppipe \
+  -l /path/to/loaddata \
+  -o /path/to/output \
+  -w /path/to/workspace \
+  -b /path/to/barcode.csv \
+  -n DAPI \
+  -e CellMask \
+  -m MitoTracker
+```
+
+Example 3: Working with cloud storage data
+```bash
+starrynight illum calc loaddata \
+  -i s3://bucket-name/path/to/index \
+  -o s3://bucket-name/path/to/output
 ```
 
 ## Conclusion
 
-The CLI layer provides a straightforward interface to StarryNight algorithms, making them accessible without programming. By following consistent patterns with the Click library and using cloudpathlib for path handling, the CLI offers a user-friendly experience while maintaining flexibility.
+The CLI layer sits directly above the algorithm layer in the StarryNight architecture, providing a straightforward interface to the underlying algorithms while remaining below the more sophisticated module layer. By following consistent patterns with the Click library and using cloudpathlib for path handling, the CLI offers a user-friendly experience while maintaining flexibility across different storage environments.
 
-While the CLI is only one way to access StarryNight functionality (alongside notebooks and the UI), it provides an important direct interface for testing, scripting, and integration with other tools.
+While the CLI is only one way to access StarryNight functionality (alongside notebooks and the UI), it serves as an important bridge between pure algorithm functions and higher-level abstractions. It provides direct access for testing and scripting while establishing patterns that inform the module system discussed next.
 
 **Next: [Module System](03_module_system.md)**
