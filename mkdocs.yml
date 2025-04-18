@@ -69,6 +69,7 @@ nav:
       - Pipeline Construction: architecture/04_pipeline_construction.md
       - Execution System: architecture/05_execution_system.md
       - Experiment Configuration: architecture/06_experiment_configuration.md
+      - Architecture for Biologists: architecture/07_architecture_for_biologists.md
   - Testing: tester/README.md
   - FAQ: misc/faq.md
 
