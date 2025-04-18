@@ -1,34 +1,5 @@
 # Starry Night Pipeline Construction and Execution
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Pipecraft Integration](#pipecraft-integration)
-  - [Pipecraft's Dual Role](#pipecrafts-dual-role)
-  - [Core Pipecraft Concepts](#core-pipecraft-concepts)
-  - [Container Nodes and Configuration](#container-nodes-and-configuration)
-  - [Simple vs. Complex Pipelines](#simple-vs-complex-pipelines)
-- [Pipeline Composition](#pipeline-composition)
-  - [Pipeline Composition Function](#pipeline-composition-function)
-  - [Module Creation and Configuration](#module-creation-and-configuration)
-  - [Building the Pipeline Structure](#building-the-pipeline-structure)
-  - [Parallel and Sequential Blocks](#parallel-and-sequential-blocks)
-- [Expressing Parallelism](#expressing-parallelism)
-  - [Between Steps Parallelism](#between-steps-parallelism)
-  - [Within Steps Parallelism](#within-steps-parallelism)
-  - [Experimental Parallelism API](#experimental-parallelism-api)
-- [Pipeline Execution](#pipeline-execution)
-  - [Using the Composed Pipeline](#using-the-composed-pipeline)
-  - [Container Execution](#container-execution)
-  - [Pipeline Visualization](#pipeline-visualization)
-  - [Execution with Telemetry](#execution-with-telemetry)
-- [Complete Examples](#complete-examples)
-  - [Example: Complete Pipeline Composition](#example-complete-pipeline-composition)
-  - [Notebook Example for Pipeline Execution](#notebook-example-for-pipeline-execution)
-  - [Modifying Modules After Composition](#modifying-modules-after-composition)
-- [The Power of Automatic Generation](#the-power-of-automatic-generation)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 Pipeline construction in Starry Night combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This document explores how individual modules are integrated with Pipecraft to define their compute graphs, and how these modules are then composed into complete executable pipelines. This represents the highest level of abstraction in the Starry Night architecture.

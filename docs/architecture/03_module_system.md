@@ -1,29 +1,5 @@
 # Starry Night Module System
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Module Abstraction](#module-abstraction)
-  - [The Dual Focus of Modules](#the-dual-focus-of-modules)
-  - [Modules Don't Compute](#modules-dont-compute)
-  - [Module Sets Structure](#module-sets-structure)
-- [Module Implementation Structure](#module-implementation-structure)
-  - [Example: Segmentation Check Module](#example-segmentation-check-module)
-  - [Module Configuration](#module-configuration)
-  - [Compute Graph Generation](#compute-graph-generation)
-  - [Module Structure Components](#module-structure-components)
-- [Bilayer Integration](#bilayer-integration)
-  - [Bilayers Schema](#bilayers-schema)
-  - [Example Specification](#example-specification)
-  - [Documentation in Bilayers](#documentation-in-bilayers)
-  - [Bilayers as an Interface Contract](#bilayers-as-an-interface-contract)
-  - [Validation with Bilayers](#validation-with-bilayers)
-  - [Example: Configuring from Spec](#example-configuring-from-spec)
-- [User Interface Integration](#user-interface-integration)
-- [Example: Complete Module with Bilayers Integration](#example-complete-module-with-bilayers-integration)
-- [Creating New Modules](#creating-new-modules)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 The module system in Starry Night provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends. This module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and documentation, enabling automatic UI generation, validation, and interoperability.

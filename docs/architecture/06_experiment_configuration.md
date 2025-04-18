@@ -1,42 +1,5 @@
 # Starry Night Experiment and Module Configuration
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Experiment Configuration](#experiment-configuration)
-  - [Experiment Classes](#experiment-classes)
-  - [From Index Method](#from-index-method)
-  - [Initial Configuration](#initial-configuration)
-  - [Parameter Inference](#parameter-inference)
-  - [Using Experiment Configurations](#using-experiment-configurations)
-  - [Different Experiment Types](#different-experiment-types)
-  - [Creating New Experiment Types](#creating-new-experiment-types)
-  - [Experiment Registry](#experiment-registry)
-- [Module Configuration](#module-configuration)
-  - [from_config Method](#from_config-method)
-  - [Data Configuration](#data-configuration)
-  - [Experiment Integration](#experiment-integration)
-  - [Spec Parameter](#spec-parameter)
-  - [Implementation Pattern](#implementation-pattern)
-- [Configuration Flow Examples](#configuration-flow-examples)
-  - [Example: Segmentation Check Module](#example-segmentation-check-module)
-  - [Example: Illumination Calculation Module](#example-illumination-calculation-module)
-  - [Detailed Configuration Flow](#detailed-configuration-flow)
-- [Path Handling Patterns](#path-handling-patterns)
-- [Common Module Sets and Their Configuration](#common-module-sets-and-their-configuration)
-  - [CP Modules (Cell Painting)](#cp-modules-cell-painting)
-  - [SBS Modules (Sequencing By Synthesis)](#sbs-modules-sequencing-by-synthesis)
-  - [Common Modules (Index, Inventory)](#common-modules-index-inventory)
-- [Advanced Configuration Topics](#advanced-configuration-topics)
-  - [Updating Module Configuration](#updating-module-configuration)
-  - [Serialization and Deserialization](#serialization-and-deserialization)
-  - [Creating Custom Module Configurations](#creating-custom-module-configurations)
-- [Complete Examples](#complete-examples)
-  - [Example: Complete Experiment Class](#example-complete-experiment-class)
-  - [Example: Notebook Workflow](#example-notebook-workflow)
-- [Comparison with Direct CLI Usage](#comparison-with-direct-cli-usage)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 Configuration in Starry Night consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.

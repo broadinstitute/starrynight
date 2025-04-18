@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Starry Night is a scientific image processing framework designed for high-throughput experimental data. It provides a flexible, composable pipeline system that handles complex image processing workflows while maintaining separation of concerns between algorithms, execution, and configuration.
+Starry Night is a scientific image processing framework designed for processing high-throughput imaging data. It provides a flexible, composable pipeline system that handles complex image processing workflows while maintaining separation of concerns between algorithms, execution, and configuration.
 
 This document provides a high-level overview of the Starry Night architecture, explaining how the different components interact to form a complete pipeline system.
 

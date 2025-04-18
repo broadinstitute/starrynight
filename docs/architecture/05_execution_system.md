@@ -1,34 +1,5 @@
 # Starry Night Execution System
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Execution Model](#execution-model)
-  - [Notebook Workflow](#notebook-workflow)
-  - [Module Configuration and Execution](#module-configuration-and-execution)
-  - [Backend Selection](#backend-selection)
-  - [Execution Artifacts](#execution-artifacts)
-  - [Module State Management](#module-state-management)
-- [Snakemake Backend](#snakemake-backend)
-  - [The "Aha Moment" of Automatic Generation](#the-aha-moment-of-automatic-generation)
-  - [Generated Snakefile Structure](#generated-snakefile-structure)
-  - [Rule Structure](#rule-structure)
-  - [Complex Workflow Example](#complex-workflow-example)
-- [Container Execution](#container-execution)
-- [Parallelism in Execution](#parallelism-in-execution)
-  - [Rule-level Parallelism](#rule-level-parallelism)
-  - [Task-level Parallelism](#task-level-parallelism)
-- [Advanced Features](#advanced-features)
-  - [Compiling Without Executing](#compiling-without-executing)
-  - [Logs and Monitoring](#logs-and-monitoring)
-  - [Execution with Telemetry](#execution-with-telemetry)
-- [Complete Examples](#complete-examples)
-  - [Example Notebook](#example-notebook)
-  - [Example: Generated Snakefile](#example-generated-snakefile)
-- [Future Backends](#future-backends)
-- [Comparison with Other Approaches](#comparison-with-other-approaches)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 The execution system in Starry Night defines how modules and pipelines are executed in computing environments. This system consists of two key components: the execution model, which handles how modules and pipelines are configured and executed in different contexts, and the Snakemake backend, which translates Pipecraft pipelines into concrete, reproducible workflows. Together, these components form the final layer in Starry Night's architecture, turning abstract pipeline definitions into actual running processes.

@@ -1,23 +1,5 @@
 # Starry Night CLI Layer
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Structure](#structure)
-  - [Command Groups](#command-groups)
-  - [Command Implementation](#command-implementation)
-- [Click Library Integration](#click-library-integration)
-  - [Command Group Pattern](#command-group-pattern)
-- [Path Handling](#path-handling)
-  - [Cloud Path Library](#cloud-path-library)
-- [Flag Handling](#flag-handling)
-- [Integration with main.py](#integration-with-mainpy)
-- [Creating New CLI Commands](#creating-new-cli-commands)
-- [CLI Limitations](#cli-limitations)
-- [Example: analysis.py](#example-analysispy)
-- [CLI Usage Examples](#cli-usage-examples)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 The CLI (Command Line Interface) layer in Starry Night provides command-line access to the underlying algorithms. It wraps algorithm functions with user-friendly interfaces, handles parameter parsing, and manages execution. This document explores how the CLI layer is structured and how it integrates with the algorithm layer.

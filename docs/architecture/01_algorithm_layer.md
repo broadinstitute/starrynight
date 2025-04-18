@@ -1,26 +1,5 @@
 # Starry Night Algorithm Layer
 
-## Table of Contents
-- [Overview](#overview)
-- [Purpose](#purpose)
-- [Complete Independence](#complete-independence)
-- [Algorithm Sets Structure](#algorithm-sets-structure)
-  - [Common Pattern](#common-pattern)
-  - [Common Across Algorithm Sets](#common-across-algorithm-sets)
-  - [Differences Between Algorithm Sets](#differences-between-algorithm-sets)
-- [Implementation Patterns](#implementation-patterns)
-  - [Sample Data Inference](#sample-data-inference)
-  - [Path Handling](#path-handling)
-  - [Processing Organization](#processing-organization)
-- [Example: analysis.py](#example-analysispy)
-- [Beyond CellProfiler](#beyond-cellprofiler)
-- [Algorithm Complexity and Decision Points](#algorithm-complexity-and-decision-points)
-- [Core Architecture Benefit](#core-architecture-benefit)
-- [Code Example](#code-example)
-- [Integration with Higher Layers](#integration-with-higher-layers)
-- [Algorithm Development](#algorithm-development)
-- [Conclusion](#conclusion)
-
 ## Overview
 
 The algorithm layer forms the foundation of the Starry Night framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level Starry Night components.
