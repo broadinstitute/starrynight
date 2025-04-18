@@ -1,5 +1,8 @@
 # StarryNight Experiment and Module Configuration
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 ## Overview
 
 Configuration in StarryNight consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.

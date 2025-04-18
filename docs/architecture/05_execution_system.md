@@ -1,5 +1,8 @@
 # StarryNight Execution System
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 ## Overview
 
 The execution system in StarryNight defines how modules and pipelines are executed in computing environments. This system consists of two key components: the execution model, which handles how modules and pipelines are configured and executed in different contexts, and the Snakemake backend, which translates Pipecraft pipelines into concrete, reproducible workflows. Together, these components form the final layer in StarryNight's architecture, turning abstract pipeline definitions into actual running processes.

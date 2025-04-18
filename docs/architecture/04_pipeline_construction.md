@@ -1,5 +1,8 @@
 # StarryNight Pipeline Construction and Execution
 
+!!! Warning
+    - This document contains bot-generated text and has not yet been reviewed by developers!
+
 ## Overview
 
 Pipeline construction in StarryNight combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This document explores how individual modules are integrated with Pipecraft to define their compute graphs, and how these modules are then composed into complete executable pipelines. This represents the highest level of abstraction in the StarryNight architecture.
