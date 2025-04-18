@@ -1,154 +1,210 @@
-# StarryNight Architecture Overview
+# StarryNight Architecture for Biologists
 
 ## Introduction
 
-StarryNight is a scientific image processing framework designed for high-throughput experimental data. It provides a flexible, composable pipeline system that handles complex image processing workflows while maintaining separation of concerns between algorithms, execution, and configuration.
+StarryNight is a scientific image processing framework designed specifically for high-throughput microscopy data. It tackles the complexity of processing thousands of images while maintaining reproducibility, flexibility, and scalability.
 
-This document provides a high-level overview of the StarryNight architecture, explaining how the different components interact to form a complete pipeline system.
+This document explains the StarryNight framework in terms accessible to biologists who may not have a software engineering background, focusing on why this complex architecture is necessary for modern microscopy workflows.
+
+## Why Architecture Matters for Scientific Analysis
+
+High-throughput microscopy requires a system that can handle:
+
+1. **Scale** - Processing thousands of images across multiple experiments
+2. **Complexity** - Managing multi-step analysis workflows with complex dependencies
+3. **Flexibility** - Adapting to different experimental designs and imaging modalities
+4. **Reproducibility** - Ensuring consistent results across computing environments
+
+Rather than building a single large application, StarryNight takes an architectural approach that emphasizes modularity and separation of concerns. This design philosophy focuses on breaking down the system into well-defined components with clear boundaries and responsibilities.
 
 ## Framework Components
 
-The StarryNight framework consists of four main components:
+StarryNight is organized as a framework with four main components:
 
-1. **StarryNight Core** - Image processing algorithms and pipeline definitions
-2. **PipeCraft** - Pipeline composition and execution system
-3. **Conductor** - Job management and monitoring service
-4. **Canvas** - User interface for configuring and running experiments
+1. **StarryNight Core** - The foundation containing algorithms and abstractions for image processing
+2. **PipeCraft** - System for composing and executing computational workflows
+3. **Conductor** - Service for managing and monitoring processing jobs
+4. **Canvas** - User-friendly interface for configuring and running experiments
 
-As a biologist, you'll primarily interact with the Canvas user interface, which provides an accessible way to configure and run image processing workflows. Behind the scenes, these components work together to process your experimental data efficiently and reproducibly.
+As a biologist, you'll typically interact with the Canvas web interface, which provides an accessible way to configure experiments and visualize results. Behind the scenes, these components work together to process your data efficiently and reproducibly.
 
-## Core Architectural Layers
+## Architectural Layers
 
-StarryNight follows a layered architecture with increasing levels of abstraction:
+StarryNight organizes functionality into layers that build upon each other:
 
-1. **Algorithm Layer** - Core image processing functionality, completely independent of other layers
-2. **CLI Layer** - Command-line interface wrappers
-3. **Module Layer** - Standardized abstractions with specs and compute graphs
-4. **Pipeline Layer** - Compositions of modules into executable workflows
-5. **Execution Layer** - Backend systems that run the pipelines
+**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
 
-Each layer builds upon the previous, adding capabilities while maintaining clear separation of concerns.
+Each layer builds upon the previous one, adding structure and capabilities while maintaining separation of concerns:
 
-## Key Components
+1. **Algorithm Layer** - Pure Python functions implementing image processing operations
+2. **CLI Layer** - Command-line interfaces that make algorithms accessible without programming
+3. **Module Layer** - Standardized components with formal specifications and compute graphs
+4. **Pipeline Layer** - Composed workflows that connect modules into complete processing pipelines
+5. **Execution Layer** - Backend systems that compile and execute the defined workflows
+
+This layered approach allows each component to focus on a specific responsibility, making the overall system more maintainable and adaptable.
+
+## Key Components Explained
 
 ### Algorithm Sets
 
-The foundation of StarryNight is the algorithm sets - collections of related functions that implement specific image processing steps. Each algorithm set typically includes:
+At the foundation are **algorithm sets** - collections of Python functions that perform specific image processing tasks. Each algorithm set typically contains specialized functions for:
 
-- Functions to generate data loading configurations
-- Functions to create CellProfiler pipelines
-- Functions to execute pipelines on the data
+- Identifying and organizing images for processing (load data generation)
+- Creating appropriate CellProfiler pipelines with the correct parameters
+- Executing these pipelines on batches of images
 
-**Critical Point:** Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent.
-
-### CLI Wrappers
-
-CLI wrappers expose algorithms as command-line tools. The CLI layer makes algorithms directly accessible to users without requiring Python programming.
+A key characteristic is that these functions are pure Python with no dependencies on other StarryNight components. This independence makes them individually testable and allows them to be used directly when needed.
 
 ### Modules
 
-Modules are a key abstraction that standardize how pipeline components are defined and composed. A module:
+**Modules** are standardized components that provide an abstraction layer above the algorithms. Each module:
 
-- Encapsulates a spec that defines inputs and outputs (using [Bilayers](https://github.com/bilayer-containers/bilayers) schema)
-- Contains a compute graph that defines what operations will be performed
-- Provides `from_config` methods for automatic configuration
-- Does not perform actual computation (delegated to execution backends)
+- Defines a formal specification of inputs, outputs, and parameters
+- Contains a compute graph that defines processing steps and their organization
+- Provides automatic configuration methods to set up processing for experiments
+- Separates definition from execution (modules define what should be done but don't perform computation)
 
-**Critical Point:** Modules focus on just two essential things - specs and compute graphs; it doesn't perform any compute.
-
-Each algorithm set typically corresponds to a module set containing specific module implementations for load data, pipeline generation, and execution.
+This abstraction is powerful because it separates the specification of operations (inputs/outputs/parameters) from the structure of computation (the processing graph). This separation allows the same module to be configured differently for various experiments and executed on different computing systems.
 
 ### Pipelines
 
-Pipelines compose multiple modules into executable workflows. The pipeline layer:
+**Pipelines** combine multiple modules into complete workflows. They define:
 
-- Uses the Pipecraft library to define compute graphs with nodes and connections
-- Configures containers for execution
-- Manages parallel and sequential execution paths
-- Handles input/output relationships between modules
+- Sequential relationships (which steps must run before others)
+- Parallel operations (which steps can run simultaneously)
+- Data flow between processing stages
+- Dependencies between operations
 
-Pipelines represent the complete computation to be performed but are backend-agnostic.
+Pipelines represent the complete processing workflow in an abstract form that is not tied to any specific execution environment. They are built using Pipecraft, a library specifically designed for creating composable pipeline graphs.
 
-### Execution
+### Execution Layer
 
-The execution layer takes pipelines and runs them on specific backends:
+The **execution layer** is responsible for actually running the pipelines:
 
-- Currently implemented with Snakemake
-- Translates Pipecraft pipelines into Snakemake rules
-- Manages container execution (Docker/Singularity)
-- Handles parallelism, logging, and monitoring
+- Converting abstract pipelines into concrete execution steps (currently using Snakemake)
+- Managing containerized execution (Docker/Singularity)
+- Coordinating parallel processing across available computing resources
+- Handling dependencies between processing steps
+- Managing file transfers and storage
 
-**Critical Point:** The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.).
+The current implementation uses Snakemake as a workflow engine, generating Snakemake files from the pipeline definitions. This approach allows the same pipeline to be executed on different computing infrastructures without changes to the pipeline definition.
 
 ### Experiment Configuration
 
-Experiment configuration classes handle parameter inference and standardization:
+**Experiment configuration** classes provide a systematic way to handle experimental parameters:
 
-- Infer parameters from data where possible
-- Combine user-provided parameters with defaults
-- Create consistent configurations for modules
-- Support extension for different experimental types
+- Inferring parameters automatically from input data where possible
+- Combining user-specified parameters with appropriate defaults
+- Maintaining parameter consistency across different processing steps
+- Supporting different experimental designs through specific configuration classes
 
-## Data Flow
+This approach allows complex processing pipelines to be configured with minimal manual parameter specification, reducing the potential for errors and inconsistencies in experimental setup.
 
-A typical data flow through the StarryNight system:
+## From Simple Configuration to Complex Workflow
 
-1. User configures an experiment with minimal required parameters
-2. Experiment configuration infers additional parameters
-3. Modules are instantiated with the configuration
-4. Modules generate their compute graphs (Pipecraft pipelines)
-5. Pipelines are composed for complete workflow
-6. Backend translates the pipeline to executable form (e.g., Snakefile)
-7. Backend executes the workflow in containers
-8. Results are stored in configured locations
+StarryNight transforms simple experiment configurations into sophisticated processing workflows:
 
-## System Integration
+1. **User Configuration** - Specify basic parameters (channels, experimental design)
+2. **Automated Setup** - The system generates and configures all necessary processing components
+3. **Workflow Assembly** - Components are connected into a complete processing pipeline
+4. **Execution** - The workflow is executed in a parallelized, containerized environment
 
-### Execution Contexts
+This transformation - from a simple configuration to a complex, optimized workflow - is the key to making high-throughput analysis accessible while maintaining the necessary sophistication to handle large-scale data.
 
-StarryNight can be used in multiple contexts:
+## Ways of Using StarryNight
 
-1. **Direct CLI usage** - Running algorithms directly via command line
-2. **Notebook integration** - Creating and running pipelines in Jupyter notebooks
-3. **UI integration** - Canvas and Conductor components provide web UI
+StarryNight offers multiple ways to interact with the system, depending on your technical comfort level:
 
-Each context has different state management requirements, with the CLI being stateless and the UI maintaining session state.
+### Different User Interfaces
 
-### Container Usage
+1. **Web Interface (Canvas)** - User-friendly graphical interface for configuring and monitoring experiments
+2. **Jupyter Notebooks** - Interactive Python environment for more custom workflows
+3. **Command Line** - Direct access to algorithms for advanced users or scripting
 
-StarryNight uses containers for consistent execution:
+Most biologists will prefer the Canvas web interface, while computational biologists might use notebooks for more flexibility.
 
-- Each module defines its container requirements
-- Containers include necessary dependencies (CellProfiler, Python libraries, etc.)
-- Execution is delegated to container runtimes (Docker, Singularity)
-- Container-based execution ensures reproducibility
+### Reproducibility Through Containers
 
-## Extension Points
+A key feature of StarryNight is its use of containerized execution:
 
-StarryNight is designed for extensibility:
+- Each processing step runs in an isolated container environment
+- Containers package all required software (CellProfiler, analysis libraries)
+- The same container runs identically on any compatible system
+- This approach ensures your results are reproducible across different computers
 
-1. **New algorithms** - Add functions to implement new image processing techniques
-2. **New CLI commands** - Expose new algorithms through command-line interfaces
-3. **New modules** - Create modules with specs and compute graphs for new functionality
-4. **New experiment types** - Define new experiment classes for different workflows
-5. **New backends** - Implement new execution backends beyond Snakemake
+You can think of containers as standardized reaction vessels that ensure consistent conditions for every experimental step, regardless of where they're run.
 
-## Key Concepts Reference
+## Extending and Customizing StarryNight
 
-- **Algorithm Set**: Group of functions that implement a specific pipeline step
-- **Module**: Standardized wrapper with spec and compute graph
-- **Bilayers**: Schema system for defining module inputs/outputs
-- **Pipecraft**: Library for creating composable pipeline graphs
-- **Compute Graph**: Definition of operations and their relationships
-- **Container**: Isolated execution environment with dependencies
-- **Snakemake**: Workflow engine that executes the compiled pipeline
+StarryNight is designed to grow with your research needs:
 
-## The Central Architectural Achievement
+### Adding New Capabilities
 
-The most important architectural achievement of StarryNight is the clear separation between what should be done (algorithms), how it should be configured (specs), how it should be structured (compute graphs), and how it should be executed (backends). This separation enables the automatic generation of complex execution plans (like 500+ line Snakemake files) while maintaining the simplicity and clarity of the higher-level abstractions.
+1. **New Image Processing Techniques** - Incorporate additional algorithms
+2. **New Experimental Designs** - Configure for different microscopy approaches
+3. **Custom Workflows** - Create specialized processing pipelines for your research
+4. **Integration with Other Systems** - Connect to your lab's existing data infrastructure
+
+This extensibility means the system can evolve as your research methods change, without requiring a complete redesign.
+
+## Glossary of Terms
+
+For reference, here are explanations of key terms used in StarryNight:
+
+- **Algorithm Set**: Collection of related functions that perform a specific imaging task
+- **Module**: Standardized component that packages an algorithm with a clear interface
+- **Pipeline**: Connected sequence of modules that forms a complete workflow
+- **Compute Graph**: Structured representation of processing steps and their connections
+- **Container**: Isolated environment that ensures consistent software execution
+- **CellProfiler**: Open-source cell image analysis software used by StarryNight
+- **Snakemake**: Workflow management system that coordinates execution
+
+## The Power of Separation
+
+The core architectural principle of StarryNight is separation of concerns - breaking the system into distinct parts that each handle a specific aspect of the problem. At a high level, StarryNight separates:
+
+1. **What is computed** (Algorithms) - The actual image processing operations
+2. **How it's defined** (Specifications) - The formal description of inputs, outputs, and parameters
+3. **How it's structured** (Compute Graphs) - The organization of processing steps and their dependencies
+4. **How it's executed** (Runtime) - The actual execution in containerized environments
+
+### A Manufacturing Analogy
+
+This architecture mirrors how products go from concept to manufacturing:
+
+```mermaid
+flowchart TD
+    A[Engineering Techniques\nAlgorithm Layer] -->|implements| B[Standard Tools\nCLI Layer]
+    B -->|defines how to use| C[Component Blueprints\nModule Layer]
+    C -->|combine into| D[Assembly Plan\nPipeline Layer]
+    D -->|executed on| E[Factory Floor\nExecution Layer]
+```
+
+In this analogy:
+
+1. **Algorithm Layer** - Basic engineering techniques (metal cutting, welding, molding)
+2. **CLI Layer** - Standard tools that implement those techniques (lathes, welders, molds)
+3. **Module Layer** - Standardized components with blueprints that specify *which* techniques to use and *how* to apply them. Just as a transmission blueprint calls for specific cutting operations without doing the cutting itself, a StarryNight module specifies "use this algorithm with these parameters" without actually running the algorithm.
+4. **Pipeline Layer** - Complete assembly sequence showing how components connect (the vehicle's assembly plan)
+5. **Execution Layer** - The factory floor where the assembly plan becomes reality
+
+This separation in StarryNight creates powerful abstractions that enable:
+
+1. **Scalability** - The same high-level workflow definition can process one image or thousands
+2. **Simplified Configuration** - Complex workflows can be defined with minimal parameters
+3. **Consistent Execution** - The same workflow runs identically across different environments
+4. **Automatic Workflow Generation** - Complex execution plans are generated automatically from simple definitions
+
+Instead of writing thousands of lines of custom code for each experiment, scientists can define what they want at a high level, and the system handles the complexity of implementation.
 
 ## Conclusion
 
-The StarryNight architecture provides a flexible system for scientific image processing that separates concerns between algorithms, specifications, and execution. This separation allows for reuse, composition, and extension while maintaining reproducibility through containerized execution.
+The architectural approach of StarryNight - with its clear separation of concerns and layered design - provides practical benefits for scientific image analysis:
 
-The following documents provide detailed explanations of each component, their implementation, and how they work together in the complete system.
+1. **Automation** - Complex execution plans are generated automatically from simple definitions
+2. **Adaptability** - Workflows can be reconfigured for different experiments without rewriting code
+3. **Reproducibility** - Containerized execution ensures consistent results across systems
+4. **Scalability** - The same workflows can process single images or high-throughput experiments
+
+This architecture allows scientists to define what they want to accomplish at a high level, while the system handles the complexity of implementing and scaling the analysis. The result is a framework that can grow with the increasing demands of modern microscopy while keeping the user interface straightforward.
