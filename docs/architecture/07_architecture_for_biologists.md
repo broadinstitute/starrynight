@@ -107,9 +107,18 @@ This approach allows complex processing pipelines to be configured with minimal 
 
 ## Ways of Using StarryNight
 
-StarryNight offers multiple ways to interact with the system, depending on your technical comfort level:
+StarryNight offers multiple ways to interact with the system, depending on your technical comfort level. Regardless of the interface you choose, the workflow follows the same basic pattern:
+
+1. **User Configuration** - You specify basic parameters (channels, experimental design)
+2. **Automated Setup** - The system generates and configures necessary processing components
+3. **Workflow Assembly** - Components are connected into a complete processing pipeline
+4. **Execution** - The workflow runs in a parallelized, containerized environment
+
+This transformation - from simple configuration to complex, optimized workflow - makes high-throughput analysis accessible while maintaining the sophistication needed for large-scale data.
 
 ### Different User Interfaces
+
+You can access this workflow through several interfaces:
 
 1. **Web Interface (Canvas)** - User-friendly graphical interface for configuring and monitoring experiments
 2. **Jupyter Notebooks** - Interactive Python environment for more custom workflows
