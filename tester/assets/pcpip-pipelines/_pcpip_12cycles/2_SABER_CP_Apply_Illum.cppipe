@@ -1,0 +1,647 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:413
+GitHash:
+ModuleCount:29
+HasImagePlaneDetails:False
+
+LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Input data file location:Default Input Folder|Downloads
+    Name of the file:load_data_pipeline2.csv
+    Load images based on this data?:Yes
+    Base image location:None|
+    Process just a range of rows?:No
+    Rows to process:1,100000
+    Group images by metadata?:Yes
+    Select metadata tags for grouping:Plate,Well
+    Rescale intensities?:Yes
+
+CorrectIlluminationApply:[module_num:2|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:OrigCOX-IV
+    Name the output image:CorrCOXIV
+    Select the illumination function:IllumCOX-IV
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigCalnexin
+    Name the output image:CorrCalnexin
+    Select the illumination function:IllumCalnexin
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigCatalase
+    Name the output image:CorrCatalase
+    Select the illumination function:IllumCatalase
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigDNA_round0
+    Name the output image:CorrDNA_round0
+    Select the illumination function:IllumDNA_round0
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigDNA_round1
+    Name the output image:CorrDNA_round1
+    Select the illumination function:IllumDNA_round1
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigDNA_round2
+    Name the output image:CorrDNA_round2
+    Select the illumination function:IllumDNA_round2
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigDNA_round3
+    Name the output image:CorrDNA_round3
+    Select the illumination function:IllumDNA_round3
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigDNA_round4
+    Name the output image:CorrDNA_round4
+    Select the illumination function:IllumDNA_round4
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigG3BP1
+    Name the output image:CorrG3BP1
+    Select the illumination function:IllumG3BP1
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigGM130
+    Name the output image:CorrGM130
+    Select the illumination function:IllumGM130
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigGolgin-97
+    Name the output image:CorrGolgin97
+    Select the illumination function:IllumGolgin-97
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigLAMP1
+    Name the output image:CorrLAMP1
+    Select the illumination function:IllumLAMP1
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigPhalloidin
+    Name the output image:CorrPhalloidin
+    Select the illumination function:IllumPhalloidin
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigSyto9
+    Name the output image:CorrSyto9
+    Select the illumination function:IllumSyto9
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigTDP-43
+    Name the output image:CorrTDP43
+    Select the illumination function:IllumTDP-43
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigTubulin
+    Name the output image:CorrTubulin
+    Select the illumination function:IllumTubulin
+    Select how the illumination function is applied:Divide
+    Select the input image:Origp65
+    Name the output image:Corrp65
+    Select the illumination function:Illump65
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigpRPS6
+    Name the output image:CorrpRPS6
+    Select the illumination function:IllumpRPS6
+    Select how the illumination function is applied:Divide
+    Set output image values less than 0 equal to 0?:Yes
+    Set output image values greater than 1 equal to 1?:Yes
+
+Align:[module_num:3|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the alignment method:Mutual Information
+    Crop mode:Keep size
+    Select the first input image:CorrDNA_round0
+    Name the first output image:AlignedRed
+    Select the second input image:CorrDNA_round1
+    Name the second output image:AlignedDNA_round1
+    Select the additional image:CorrGM130
+    Name the output image:AlignedGM130
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrTubulin
+    Name the output image:AlignedTubulin
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrCalnexin
+    Name the output image:AlignedCalnexin
+    Select how the alignment is to be applied:Similarly
+
+Align:[module_num:4|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the alignment method:Mutual Information
+    Crop mode:Keep size
+    Select the first input image:CorrDNA_round0
+    Name the first output image:AlignedRed
+    Select the second input image:CorrDNA_round2
+    Name the second output image:AlignedDNA_round2
+    Select the additional image:CorrCOXIV
+    Name the output image:AlignedCOXIV
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrTDP43
+    Name the output image:AlignedTDP43
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrG3BP1
+    Name the output image:AlignedG3BP1
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrLAMP1
+    Name the output image:AlignedLAMP1
+    Select how the alignment is to be applied:Similarly
+
+Align:[module_num:5|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the alignment method:Mutual Information
+    Crop mode:Keep size
+    Select the first input image:CorrDNA_round0
+    Name the first output image:AlignedRed
+    Select the second input image:CorrDNA_round3
+    Name the second output image:AlignedDNA_round3
+    Select the additional image:CorrCatalase
+    Name the output image:AlignedCatalase
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrGolgin97
+    Name the output image:AlignedGolgin97
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:Corrp65
+    Name the output image:Alignedp65
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrpRPS6
+    Name the output image:AlignedpRPS6
+    Select how the alignment is to be applied:Similarly
+
+Align:[module_num:6|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the alignment method:Mutual Information
+    Crop mode:Keep size
+    Select the first input image:CorrDNA_round0
+    Name the first output image:AlignedRed
+    Select the second input image:CorrDNA_round4
+    Name the second output image:AlignedDNA_round4
+    Select the additional image:CorrSyto9
+    Name the output image:AlignedSyto9
+    Select how the alignment is to be applied:Similarly
+
+MeasureColocalization:[module_num:7|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:AlignedDNA_round1, AlignedDNA_round2, AlignedDNA_round3, AlignedDNA_round4, CorrDNA_round0
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Across entire image
+    Select objects to measure:
+    Run all metrics?:No
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:No
+    Calculate the Rank Weighted Colocalization coefficients?:No
+    Calculate the Overlap coefficients?:No
+    Calculate the Manders coefficients using Costes auto threshold?:No
+    Method for Costes thresholding:Faster
+
+FlagImage:[module_num:8|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Hidden:1
+    Hidden:4
+    Name the flag's category:Metadata
+    Name the flag:AlignmentFlag
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Correlation_Correlation_AlignedDNA_round1_CorrDNA_round0
+    Flag images based on low values?:Yes
+    Minimum value:0.9
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Correlation_Correlation_AlignedDNA_round2_CorrDNA_round0
+    Flag images based on low values?:Yes
+    Minimum value:0.9
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Correlation_Correlation_AlignedDNA_round3_CorrDNA_round0
+    Flag images based on low values?:Yes
+    Minimum value:0.9
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Correlation_Correlation_AlignedDNA_round4_CorrDNA_round0
+    Flag images based on low values?:Yes
+    Minimum value:0.9
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Ignore flag skips on last cycle?:No
+
+SaveImages:[module_num:9|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:CorrDNA_round0
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrDNA
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:10|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:CorrPhalloidin
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrPhalloidin
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:11|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedCOXIV
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrCOX-IV
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:12|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedCalnexin
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrCalnexin
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:13|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedCatalase
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrCatalase
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:14|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedG3BP1
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrG3BP1
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:15|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedGM130
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrGM130
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:16|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedGolgin97
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrGolgin-97
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedLAMP1
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrLAMP1
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedSyto9
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrSyto9
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedTDP43
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrTDP-43
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedTubulin
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrTubulin
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:21|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:Alignedp65
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Corrp65
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+SaveImages:[module_num:22|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlignedpRPS6
+    Select method for constructing file names:Single name
+    Select image name for file prefix:DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrpRPS6
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Site_\g<Site>_CorrDNA
+    Saved file format:tiff
+    Output file location:Default Output Folder|\g<CycleFolder>
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Default Output Folder sub-folder|20X_CP_\g<Plate>
+    How to save the series:T (Time)
+
+IdentifyPrimaryObjects:[module_num:23|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CorrDNA_round0
+    Name the primary objects to be identified:ConfluentRegions
+    Typical diameter of objects, in pixel units (Min,Max):500,5000
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:No
+    Method to distinguish clumped objects:Intensity
+    Method to draw dividing lines between clumped objects:None
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Display accepted local maxima?:No
+    Select maxima color:Blue
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:2
+    Threshold correction factor:.5
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+MaskImage:[module_num:24|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CorrDNA_round0
+    Name the output image:MaskedDAPI
+    Use objects or an image as a mask?:Objects
+    Select object for mask:ConfluentRegions
+    Select image for mask:None
+    Invert the mask?:Yes
+
+MaskImage:[module_num:25|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CorrTubulin
+    Name the output image:MaskedTubulin
+    Use objects or an image as a mask?:Objects
+    Select object for mask:ConfluentRegions
+    Select image for mask:None
+    Invert the mask?:Yes
+
+IdentifyPrimaryObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:14|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:MaskedDAPI
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:8
+    Suppress local maxima that are closer than this minimum allowed distance:8
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Display accepted local maxima?:No
+    Select maxima color:Blue
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifySecondaryObjects:[module_num:27|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:Cells
+    Select the method to identify the secondary objects:Watershed - Image
+    Select the input image:MaskedTubulin
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0.05
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:No
+    Threshold setting version:12
+    Threshold strategy:Adaptive
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.34
+    Threshold correction factor:0.8
+    Lower and upper bounds on threshold:0.0005,1
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Background
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+ExportToSpreadsheet:[module_num:28|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:No
+    Select the measurements to export:No
+    Calculate the per-image mean values for object measurements?:No
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:No
+    Output file location:Default Output Folder|
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Metadata
+    Select the image to use as the identifier:None
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:Yes
+    Press button to select measurements:
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:Yes
+    Filename prefix:PaintingIllumApplication_
+    Overwrite existing files without warning?:No
+    Data to export:Do not use
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+
+CreateBatchFiles:[module_num:29|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Store batch files in default output folder?:Yes
+    Output folder path:c:\users\administrator\desktop\batchfiles\20190930_6w_cp075\illum
+    Are the cluster computers running Windows?:No
+    Hidden- in batch mode:No
+    Hidden- in distributed mode:No
+    Hidden- default input folder at time of save:c:\users\administrator
+    Hidden- revision number:0
+    Hidden- from old matlab:No
+    Local root path:F:\
+    Cluster root path:/home/ubuntu/bucket/projects/2018_11_20_Periscope_Calico/

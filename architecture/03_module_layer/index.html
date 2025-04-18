@@ -1,0 +1,2263 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="StarryNight - toolkit for optical pooled screening">
+      
+      
+      
+      
+        <link rel="prev" href="../02_cli_layer/">
+      
+      
+        <link rel="next" href="../04_pipeline_layer/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Module Layer - StarryNight</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#starrynight-module-layer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="StarryNight" class="md-header__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StarryNight
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module Layer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user/getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user/algorithms/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Algorithms
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/developer-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00_architecture_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tester/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../misc/faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="StarryNight" class="md-nav__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    StarryNight
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/core-concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/parser-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Processing Modules
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/example-pipeline-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example CLI Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../user/algorithms/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Algorithms
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Algorithms
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/DOCUMENTATION_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documentation Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/illum_calc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Illumination Calculation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/illum_apply/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Illumination Apply
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/presegcheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pre-segmentation Check
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/segcheck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Segmentation Check
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/align/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Alignment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/preprocess/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Preprocessing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/stitchcrop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stitch and Crop
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/algorithms/analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Analysis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/developer-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/pcpip-specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Specs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/pipeline-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requirements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_architecture_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_algorithm_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_cli_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose-and-advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose and Advantages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Purpose and Advantages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Benefits
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectural-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architectural Significance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-dual-nature-of-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dual Nature of Modules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dual Nature of Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-sets-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Sets Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-segmentation-check-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Segmentation Check Module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute-graph-generation-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graph Generation with Pipecraft
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specifications-with-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifications with Bilayers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-graphs-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graphs with Pipecraft
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Module Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-to-adjacent-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Adjacent Layers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_pipeline_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_execution_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_configuration_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_architecture_for_biologists/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tester/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose-and-advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose and Advantages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Purpose and Advantages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Benefits
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectural-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architectural Significance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-dual-nature-of-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dual Nature of Modules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dual Nature of Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-sets-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Sets Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-segmentation-check-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Segmentation Check Module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute-graph-generation-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graph Generation with Pipecraft
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specifications-with-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifications with Bilayers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-graphs-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graphs with Pipecraft
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Module Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-to-adjacent-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Adjacent Layers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="starrynight-module-layer">StarryNight Module Layer</h1>
+<h2 id="overview">Overview</h2>
+<p>The module layer provides a standardized abstraction that bridges the algorithm layer (pure functions) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).</p>
+<p>Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.</p>
+<h2 id="purpose-and-advantages">Purpose and Advantages</h2>
+<p>The module layer offers significant advantages over directly calling algorithms:</p>
+<h3 id="practical-benefits">Practical Benefits</h3>
+<ul>
+<li><strong>Standardization</strong> - Consistent interfaces across different algorithm types</li>
+<li><strong>Composability</strong> - Modules can be connected into larger workflows</li>
+<li><strong>Containerization</strong> - Built-in container specification for reproducibility</li>
+<li><strong>Documentation</strong> - Structured approach to capturing metadata and citations</li>
+</ul>
+<h3 id="architectural-significance">Architectural Significance</h3>
+<ul>
+<li><strong>Backend Independence</strong> - Run the same module on different execution systems</li>
+<li><strong>Inspection</strong> - Examine inputs, outputs, and operations before execution</li>
+<li><strong>Automated UI Generation</strong> - Specifications support interface generation</li>
+<li><strong>Complex Workflow Creation</strong> - Enables automatic generation of sophisticated execution plans</li>
+</ul>
+<h2 id="the-dual-nature-of-modules">The Dual Nature of Modules</h2>
+<p>The module layer's defining characteristic is its dual focus on specifications and compute graphs:</p>
+<ol>
+<li>
+<p><strong>Specification (Spec)</strong> - Defines what a module does:</p>
+<ul>
+<li>Input ports with types, descriptions, and validation rules</li>
+<li>Output ports with types and descriptions</li>
+<li>Documentation and metadata</li>
+<li>Parameter constraints and defaults</li>
+</ul>
+</li>
+<li>
+<p><strong>Compute Graph</strong> - Defines how operations should be structured:</p>
+<ul>
+<li>Container configurations</li>
+<li>Command construction</li>
+<li>Input/output relationships</li>
+<li>Execution sequence</li>
+</ul>
+</li>
+</ol>
+<p>Crucially, modules define computation but don't perform it. This separation enables inspection and modification before execution, and allows the same module to run on different platforms without changing its definition.</p>
+<h3 id="module-sets-organization">Module Sets Organization</h3>
+<p>Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.</p>
+<p>Each module set typically follows a consistent pattern with three types of modules:</p>
+<ol>
+<li><strong>Load Data Modules</strong> - Generate data loading configurations<ul>
+<li>Define which images to process</li>
+<li>Create CSV files for CellProfiler to locate images</li>
+<li>Organize data by batch, plate, well, and site</li>
+</ul>
+</li>
+<li><strong>Pipeline Generation Modules</strong> - Create processing pipeline definitions<ul>
+<li>Generate CellProfiler pipeline files</li>
+<li>Configure pipeline parameters based on experiment settings</li>
+<li>Define processing operations</li>
+</ul>
+</li>
+<li><strong>Execution Modules</strong> - Execute the pipeline on prepared data<ul>
+<li>Run pipelines with appropriate parallelism</li>
+<li>Manage resource allocation</li>
+<li>Organize outputs according to experimental structure</li>
+</ul>
+</li>
+</ol>
+<p>This pattern directly mirrors the algorithm set structure covered in the <a href="../01_algorithm_layer/">Algorithm Layer</a>, but adds the standardized abstraction of the module layer.</p>
+<p>Common module sets include:</p>
+<ol>
+<li><strong>CP Modules</strong> - For Cell Painting workflows:<ul>
+<li><code>cp_illum_calc</code> - Illumination calculation modules</li>
+<li><code>cp_illum_apply</code> - Illumination correction modules</li>
+<li><code>cp_segcheck</code> - Segmentation check modules</li>
+</ul>
+</li>
+<li><strong>SBS Modules</strong> - For Sequencing By Synthesis workflows:<ul>
+<li><code>sbs_illum_calc</code> - SBS illumination calculation modules</li>
+<li><code>sbs_illum_apply</code> - SBS illumination correction modules</li>
+<li><code>sbs_align</code> - SBS alignment modules</li>
+<li><code>sbs_preprocess</code> - SBS preprocessing modules</li>
+</ul>
+</li>
+<li><strong>Common Modules</strong> - For general operations:<ul>
+<li><code>gen_index</code> - Index generation modules</li>
+<li><code>gen_inv</code> - Inventory management modules</li>
+<li><code>analysis</code> - Analysis modules</li>
+</ul>
+</li>
+</ol>
+<h2 id="module-implementation">Module Implementation</h2>
+<p>A module is implemented as a Python class that inherits from <code>StarryNightModule</code>. Each module implementation follows a consistent structure with several key components:</p>
+<ol>
+<li><strong>Unique Identifier</strong> - A string property that uniquely identifies the module</li>
+<li><strong>Spec Definition</strong> - A property method that defines the module's specification using Bilayers</li>
+<li><strong><code>from_config</code> Method</strong> - A class method for configuration from experiment and data configurations</li>
+<li><strong>Compute Graph Generation</strong> - A method that creates the Pipecraft pipeline defining the computation structure</li>
+</ol>
+<p>This structure ensures that all modules provide the same capabilities, making them consistent and interchangeable at the architectural level.</p>
+<h3 id="example-segmentation-check-module">Example: Segmentation Check Module</h3>
+<p>Below is an example of a module that generates a CellProfiler pipeline for segmentation check. This example illustrates all the key components of a module implementation:</p>
+<pre><code class="language-python">class CPSegcheckGenCPPipeModule(StarrynightModule):
+    &quot;&quot;&quot;CP segmentation check generate cppipe module.&quot;&quot;&quot;
+
+    @staticmethod
+    def uid() -&gt; str:
+        &quot;&quot;&quot;Return module unique id.&quot;&quot;&quot;
+        return &quot;cp_segcheck_gen_cppipe&quot;
+
+    @staticmethod
+    def _spec() -&gt; str:
+        &quot;&quot;&quot;Return module default spec.&quot;&quot;&quot;
+        return SpecContainer(
+            inputs=[
+                TypeInput(
+                    name=&quot;load_data_path&quot;,
+                    type=TypeEnum.files,
+                    description=&quot;Path to the LoadData csv.&quot;,
+                    optional=False,
+                    path=&quot;path/to/the/loaddata&quot;,
+                ),
+                TypeInput(
+                    name=&quot;workspace_path&quot;,
+                    type=TypeEnum.file,
+                    description=&quot;Workspace path.&quot;,
+                    optional=True,
+                    path=None,
+                ),
+                TypeInput(
+                    name=&quot;nuclei_channel&quot;,
+                    type=TypeEnum.textbox,
+                    description=&quot;Channel to use for nuclei segmentation.&quot;,
+                    optional=False,
+                ),
+                TypeInput(
+                    name=&quot;cell_channel&quot;,
+                    type=TypeEnum.textbox,
+                    description=&quot;Channel to use for cell segmentation.&quot;,
+                    optional=False,
+                ),
+            ],
+            outputs=[
+                TypeOutput(
+                    name=&quot;cp_segcheck_cpipe&quot;,
+                    type=TypeEnum.files,
+                    description=&quot;Generated pre segcheck cppipe files&quot;,
+                    optional=False,
+                    path=&quot;random/path/to/cppipe_dir&quot;,
+                ),
+                TypeOutput(
+                    name=&quot;cppipe_notebook&quot;,
+                    type=TypeEnum.notebook,
+                    description=&quot;Notebook for inspecting cellprofiler pipeline files&quot;,
+                    optional=False,
+                    path=&quot;http://karkinos:2720/?file=.%2FillumCPApplyOutput.py&quot;,
+                ),
+            ],
+            parameters=[],
+            display_only=[],
+            results=[],
+            exec_function=ExecFunction(
+                name=&quot;&quot;,
+                script=&quot;&quot;,
+                module=&quot;&quot;,
+                cli_command=&quot;&quot;,
+            ),
+            docker_image=None,
+            algorithm_folder_name=None,
+            citations=TypeCitations(
+                algorithm=[
+                    TypeAlgorithmFromCitation(
+                        name=&quot;Starrynight CP segmentation check generate cppipe module&quot;,
+                        description=&quot;This module generates cppipe files for cp segmentation check module.&quot;,
+                    )
+                ]
+            ),
+        )
+
+    @staticmethod
+    def from_config(
+        data: DataConfig,
+        experiment: Experiment | None = None,
+        spec: SpecContainer | None = None,
+    ) -&gt; Self:
+        &quot;&quot;&quot;Create module from experiment and data config.&quot;&quot;&quot;
+        if spec is None:
+            spec = CPSegcheckGenCPPipeModule._spec()
+            spec.inputs[0].path = (
+                data.workspace_path.joinpath(CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
+            )
+
+            spec.inputs[1].path = (
+                data.workspace_path.joinpath(CP_SEGCHECK_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
+            )
+
+            spec.inputs[2].path = experiment.cp_config.nuclei_channel
+            spec.inputs[3].path = experiment.cp_config.cell_channel
+
+            spec.outputs[0].path = (
+                data.workspace_path.joinpath(CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
+                .resolve()
+                .__str__()
+            )
+        pipe = create_pipe_gen_cppipe(
+            uid=CPSegcheckGenCPPipeModule.uid(),
+            spec=spec,
+        )
+        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath(&quot;index&quot;))
+
+        return CPSegcheckGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)
+
+
+
+</code></pre>
+<p>This example illustrates several important aspects of module implementation:</p>
+<ol>
+<li><strong>Module Identity</strong> - The <code>uid()</code> method provides a unique identifier</li>
+<li><strong>Module Specification</strong> - The <code>_spec()</code> method defines inputs, outputs, and metadata</li>
+<li><strong>Automatic Configuration</strong> - The <code>from_config</code> method populates the specification based on standard configurations</li>
+<li><strong>Compute Graph Creation</strong> - The module uses the <code>create_pipe_gen_cppipe</code> function to generate a Pipecraft pipeline</li>
+<li><strong>CLI Command Construction</strong> - The module constructs a CLI command that will be executed in a container</li>
+<li><strong>Container Specification</strong> - The module defines the container image and execution environment</li>
+</ol>
+<h3 id="module-configuration">Module Configuration</h3>
+<p>A powerful feature of the module layer is automatic configuration through the <code>from_config</code> method. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:</p>
+<ol>
+<li><strong>Data Configuration</strong> - Provides workspace paths, image paths, and scratch directories</li>
+<li><strong>Experiment Configuration</strong> - Provides experiment-specific parameters like channel names, algorithms, and thresholds</li>
+<li><strong>Default Path Inference</strong> - Creates conventional file paths based on workspace structure</li>
+</ol>
+<p>This automatic configuration approach has several advantages:</p>
+<ul>
+<li><strong>Consistency</strong> - Ensures consistent file organization across projects</li>
+<li><strong>Reduced Configuration</strong> - Minimizes parameters that users need to specify</li>
+<li><strong>Standardization</strong> - Enforces standard naming and path conventions</li>
+<li><strong>Modularity</strong> - Allows modules to be swapped without changing their configuration</li>
+</ul>
+<p>The <code>from_config</code> method bridges the gap between user-provided parameters and the detailed configuration required for execution.</p>
+<h3 id="compute-graph-generation-with-pipecraft">Compute Graph Generation with Pipecraft</h3>
+<p>The <code>create_pipeline</code> method is where modules generate their compute graphs using the Pipecraft library. This method defines the structure of the computation without actually executing it:</p>
+<ol>
+<li><strong>CLI Command Construction</strong> - The module builds a command-line invocation of the underlying algorithm</li>
+<li><strong>Container Configuration</strong> - Specifies the container image, environment, and resource requirements</li>
+<li><strong>Input/Output Mapping</strong> - Defines how inputs and outputs are mapped to the container filesystem</li>
+<li><strong>Execution Structure</strong> - Specifies the execution sequence (sequential, parallel, etc.)</li>
+</ol>
+<p>The compute graph provides a complete definition of how the operation should be executed, but remains independent of any specific execution technology. This separation allows the same module to be executed on different backends (local, cluster, cloud) without modification.</p>
+<h2 id="specifications-with-bilayers">Specifications with Bilayers</h2>
+<p>For the "specification" part of a module's dual nature, StarryNight uses Bilayers - an external schema system that standardizes how inputs, outputs, and metadata are defined.</p>
+<p>The module layer uses Bilayers to create standardized definitions of:</p>
+<ul>
+<li>Input ports with types and validation rules</li>
+<li>Output ports with types and descriptions</li>
+<li>Documentation and metadata</li>
+</ul>
+<p>This standardized approach ensures consistent interface definitions across modules and enables automatic UI generation from specifications.</p>
+<h2 id="compute-graphs-with-pipecraft">Compute Graphs with Pipecraft</h2>
+<p>For the "compute graph" part of a module's dual nature, StarryNight uses Pipecraft - a library that defines operations and their execution flow.</p>
+<p>Modules use Pipecraft to:</p>
+<ul>
+<li>Define operations that should be executed (typically in containers)</li>
+<li>Specify input and output paths</li>
+<li>Structure execution (sequential or parallel)</li>
+<li>Configure container environments</li>
+</ul>
+<p>A simple example of how a module creates a compute graph:</p>
+<pre><code class="language-python"># Create a pipeline with sequential execution
+pipeline = pc.Pipeline()
+with pipeline.sequential() as seq:
+    seq.container(
+        name=&quot;operation_name&quot;,
+        inputs={&quot;input_path&quot;: input_file_path},
+        outputs={&quot;output_path&quot;: output_file_path},
+        container_config=pc.ContainerConfig(
+            image=&quot;container/image:tag&quot;,
+            cmd=command_to_execute
+        )
+    )
+</code></pre>
+<p>More detailed coverage of Pipecraft's capabilities and architecture is provided in the <a href="../04_pipeline_layer/">Pipeline Layer</a> section.</p>
+<h2 id="module-usage">Module Usage</h2>
+<p>Modules are typically used in two different contexts: direct usage for individual operations and pipeline composition for complete workflows.</p>
+<h3 id="direct-module-usage">Direct Module Usage</h3>
+<p>For individual module operations, modules can be created and executed directly:</p>
+<pre><code class="language-python"># Import necessary components
+from starrynight.config import DataConfig
+from starrynight.experiments.pcp_generic import PCPGenericExperiment
+from starrynight.modules.cp_segcheck import CPSegcheckGenCPPipeModule
+import pipecraft as pc
+
+# Create configurations
+data_config = DataConfig(
+    workspace_path=&quot;/path/to/workspace&quot;,
+    images_path=&quot;/path/to/images&quot;,
+    scratch_path=&quot;/path/to/scratch&quot;
+)
+
+experiment = PCPGenericExperiment.from_index(
+    index_path=data_config.workspace_path / &quot;index.yaml&quot;,
+    init_config={
+        &quot;nuclear_channel&quot;: &quot;DAPI&quot;,
+        &quot;cell_channel&quot;: &quot;CellMask&quot;
+    }
+)
+
+# Create module
+segcheck_module = CPSegcheckGenCPPipeModule.from_config(data_config, experiment)
+
+# Configure backend
+backend = pc.SnakemakeBackend()
+
+# Execute module
+backend.run(
+    pipeline=segcheck_module.create_pipeline(),
+    working_dir=data_config.scratch_path / &quot;segcheck_run&quot;
+)
+</code></pre>
+<h3 id="pipeline-composition">Pipeline Composition</h3>
+<p>For complex workflows, modules are typically composed into pipelines:</p>
+<pre><code class="language-python"># Create modules
+modules = []
+modules.append(GenIndexModule.from_config(data_config))
+modules.append(GenInvModule.from_config(data_config))
+modules.append(CPIllumCalcGenLoadDataModule.from_config(data_config, experiment))
+modules.append(CPIllumCalcGenCPipeModule.from_config(data_config, experiment))
+modules.append(CPIllumCalcRunModule.from_config(data_config, experiment))
+
+# Create pipeline
+pipeline = pc.Pipeline()
+with pipeline.sequential() as seq:
+    for module in modules:
+        seq.add_pipeline(module.create_pipeline())
+
+# Execute pipeline
+backend.run(
+    pipeline=pipeline,
+    working_dir=data_config.scratch_path / &quot;complete_run&quot;
+)
+</code></pre>
+<p>In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in <a href="../04_pipeline_layer/">Pipeline Layer</a>.</p>
+<h2 id="creating-new-modules">Creating New Modules</h2>
+<p>Creating a new module set involves implementing classes for each stage of processing:</p>
+<ol>
+<li><strong>Plan the Module Set</strong>:<ul>
+<li>Identify the algorithm set to wrap</li>
+<li>Determine inputs, outputs, and parameters</li>
+<li>Design the module structure (typically load data, pipeline generation, and execution)</li>
+</ul>
+</li>
+<li><strong>Create Module Classes</strong>:<ul>
+<li>Implement subclasses of <code>StarryNightModule</code> for each stage</li>
+<li>Define unique identifiers and specifications</li>
+<li>Implement <code>from_config</code> methods</li>
+<li>Create pipeline generation methods</li>
+</ul>
+</li>
+<li><strong>Define Specifications</strong>:<ul>
+<li>Use Bilayers to define inputs, outputs, and parameters</li>
+<li>Document parameters with clear descriptions</li>
+<li>Define validation rules</li>
+</ul>
+</li>
+<li><strong>Implement Pipeline Creation</strong>:<ul>
+<li>Use Pipecraft to define compute graphs</li>
+<li>Specify container configurations</li>
+<li>Map inputs and outputs properly</li>
+</ul>
+</li>
+<li><strong>Test the Modules</strong>:<ul>
+<li>Test individual modules</li>
+<li>Test automatic configuration</li>
+<li>Test pipeline integration</li>
+</ul>
+</li>
+</ol>
+<h2 id="relationship-to-adjacent-layers">Relationship to Adjacent Layers</h2>
+<p>The module layer connects directly with two adjacent architectural layers:</p>
+<ol>
+<li><strong>Algorithm/CLI Layer (below)</strong> - Modules wrap algorithm functions and typically invoke them via CLI commands in containers</li>
+<li><strong>Pipeline Layer (above)</strong> - Modules provide compute graphs that are composed into complete pipelines</li>
+</ol>
+<p>The module layer translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, <a href="../04_pipeline_layer/">Pipeline Layer</a>, builds upon these abstractions to compose complete workflows from individual modules.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
