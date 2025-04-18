@@ -30,11 +30,14 @@ As a biologist, you'll typically interact with the Canvas web interface, which p
 
 ## Architectural Layers
 
-StarryNight organizes functionality into layers that build upon each other:
+StarryNight organizes functionality into layers with distinct responsibilities:
 
-**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer** → **Configuration Layer**
+**Processing Sequence**:
+**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
 
-Each layer builds upon the previous one, adding structure and capabilities while maintaining separation of concerns:
+**Configuration Layer** ↓ (interacts across layers)
+
+The processing layers form a sequence where each builds upon the previous, while the Configuration Layer works across the system:
 
 1. **Algorithm Layer** - Pure Python functions implementing image processing operations
 2. **CLI Layer** - Command-line interfaces that make algorithms accessible without programming

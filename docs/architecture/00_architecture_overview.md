@@ -37,7 +37,7 @@ The StarryNight framework is organized as a monorepo with four main packages:
 !!!note "Focus"
      This documentation primarily focuses on the architectural layers rather than the package boundaries, as layers can span multiple packages.
 
-StarryNight follows a layered architecture with increasing levels of abstraction:
+StarryNight follows a layered architecture with distinct responsibilities:
 
 1. **Algorithm Layer** - Core image processing functionality, completely independent of other layers
 2. **CLI Layer** - Command-line interface wrappers
@@ -46,7 +46,7 @@ StarryNight follows a layered architecture with increasing levels of abstraction
 5. **Execution Layer** - Backend systems that run the pipelines
 6. **Configuration Layer** - Parameter inference and experiment configuration
 
-Each layer builds upon the previous, adding capabilities while maintaining clear separation of concerns.
+The processing layers (1-5) build sequentially upon each other, while the Configuration Layer interacts across multiple layers, primarily influencing how modules are configured. This separation of concerns creates a flexible and maintainable architecture.
 
 ## Key Components
 
