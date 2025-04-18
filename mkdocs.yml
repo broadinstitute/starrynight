@@ -62,19 +62,13 @@ nav:
     - Pipeline Automation: developer/pipeline-automation.md
     - Requirements: developer/requirements.md
   - Architecture:
-    - Overview: architecture/00_architecture_overview.md
-    - Algorithm Foundation: architecture/01_algorithms_foundation.md
-    - CLI Integration: architecture/03_cli_integration.md
-    - Module Abstraction: architecture/04_module_abstraction.md
-    - Bilayer Integration: architecture/05_bilayer_integration.md
-    - Pipecraft Integration: architecture/06_pipecraft_integration.md
-    - Execution Model: architecture/07_execution_model.md
-    - Snakemake Backend: architecture/08_snakemake_backend.md
-    - Experiment Configuration: architecture/09_experiment_configuration.md
-    - Module Configuration: architecture/10_11_module_configuration.md
-    - Pipeline Composition: architecture/12_pipeline_composition_execution.md
-    - Architecture for Biologists: architecture/13_architecture_for_biologists.md
-    - Documentation Guide: architecture/_documentation_guide.md
+      - Overview: architecture/00_architecture_overview.md
+      - Algorithm Layer: architecture/01_algorithm_layer.md
+      - CLI Layer: architecture/02_cli_layer.md
+      - Module System: architecture/03_module_system.md
+      - Pipeline Construction: architecture/04_pipeline_construction.md
+      - Execution System: architecture/05_execution_system.md
+      - Experiment Configuration: architecture/06_experiment_configuration.md
   - Testing: tester/README.md
   - FAQ: misc/faq.md
 

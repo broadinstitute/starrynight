@@ -708,4 +708,4 @@ The experiment and module configuration systems in Starry Night provide a powerf
 
 Together, these configuration systems form a critical bridge between user input and pipeline execution, reducing manual configuration burden while maintaining flexibility for different experiment types and module implementations. They exemplify the architecture's focus on separation of concerns, allowing each component to focus on its specific role while working together to create a cohesive system.
 
-**Next: [Algorithms Foundation](01_algorithm_layer.md)**
+**Next: [Architecture Overview](00_architecture_overview.md)**
