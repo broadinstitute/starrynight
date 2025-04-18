@@ -195,6 +195,8 @@ Think of it this way:
 
 This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car.
 
+Similarly, you can design microscopy analysis workflows without coding, while the system handles all the complex execution details.
+
 This separation in StarryNight creates powerful abstractions that enable:
 
 1. **Scalability** - The same high-level workflow definition can process one image or thousands
@@ -202,15 +204,4 @@ This separation in StarryNight creates powerful abstractions that enable:
 3. **Consistent Execution** - The same workflow runs identically across different environments
 4. **Automatic Workflow Generation** - Complex execution plans are generated automatically from simple definitions
 
-Instead of writing thousands of lines of custom code for each experiment, scientists can define what they want at a high level, and the system handles the complexity of implementation.
-
-## Conclusion
-
-The architectural approach of StarryNight - with its clear separation of concerns and layered design - provides practical benefits for scientific image analysis:
-
-1. **Automation** - Complex execution plans are generated automatically from simple definitions
-2. **Adaptability** - Workflows can be reconfigured for different experiments without rewriting code
-3. **Reproducibility** - Containerized execution ensures consistent results across systems
-4. **Scalability** - The same workflows can process single images or high-throughput experiments
-
-This architecture allows scientists to define what they want to accomplish at a high level, while the system handles the complexity of implementing and scaling the analysis. The result is a framework that can grow with the increasing demands of modern microscopy while keeping the user interface straightforward.
+Instead of writing thousands of lines of custom code for each experiment, scientists can define what they want at a high level, and the system handles the complexity of implementing and scaling the analysis. The result is a framework that can grow with the increasing demands of modern microscopy while keeping the user interface straightforward.
