@@ -18,7 +18,7 @@ Algorithms in StarryNight serve several essential purposes:
 3. **LoadData Creation** - Generating CSV files that tell CellProfiler how to load images
 4. **Pipeline Execution** - Running processing steps on prepared data
 
-By separating these functions from higher-level concerns like UI, execution environment, and workflow composition, the algorithm layer maintains simplicity and testability.
+By focusing solely on the core computational logic without higher-level concerns, the algorithm layer maintains simplicity and testability.
 
 ## Complete Independence
 
@@ -27,9 +27,10 @@ By separating these functions from higher-level concerns like UI, execution envi
 This independence means:
 
 - Algorithms can be tested in isolation
-- They have no dependencies on StarryNight modules, pipelines, or execution engines
-- They can be used directly or through any of the higher-level abstractions
-- Changes to higher layers don't affect the algorithm implementations
+- They have no dependencies on other StarryNight components
+- They perform clear, focused tasks with well-defined boundaries
+- They can be used in any context without modification
+- They evolve independently of other components
 
 ## Algorithm Sets Structure
 
@@ -102,9 +103,9 @@ This pattern applies primarily to **LoadData generation and execution algorithms
 - Plate - A multi-well plate containing experimental samples
 - Well - A compartment within a plate with one experimental condition
 - Site - A microscope field of view capturing a region of a well
-- Batch - A group of plates (less commonly used for grouping)
+- Batch - A group of plates
 
-Algorithms typically group by plate, plate-well, or plate-well-site depending on processing needs.
+Algorithms typically group by batch-plate, batch-plate-well, or batch-plate-well-site depending on processing needs.
 
 ## Beyond CellProfiler
 
@@ -130,148 +131,161 @@ This flexibility allows pipeline generation algorithms to adapt to different exp
 
 ## Code Examples
 
+The following examples are simplified pseudocode based on actual StarryNight implementations but edited for clarity. They demonstrate the typical patterns found in algorithm sets.
+
+!!! warning
+    These may be oversimplifications so be sure to read the real code!
+
 ### Example 1: LoadData Generation
 
 ```python
-def generate_load_data(index_path, output_path, path_mask=None, for_special_type=False):
+def gen_algorithm_load_data_by_batch_plate(
+    index_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    path_mask: str | None,
+    for_special_type: bool = False,
+) -> None:
     """Generate LoadData CSV files for a specific algorithm.
 
     Reads image metadata from an index, organizes by batch/plate structure,
     and writes LoadData CSV files for CellProfiler.
     """
-    # Read and filter image metadata
-    image_data = read_metadata_from_index(index_path)
-    image_data = filter_images_by_type(image_data, for_special_type)
+    # Read from index file (typically parquet format)
+    df = pl.read_parquet(index_path.resolve().__str__())
 
-    # Organize images hierarchically
-    image_hierarchy = organize_by_batch_plate(image_data)
+    # Filter for relevant images based on criteria
+    if not for_special_type:
+        images_df = df.filter(pl.col("type_flag").ne(True), pl.col("is_image").eq(True))
+    else:
+        images_df = df.filter(pl.col("type_flag").eq(True), pl.col("is_image").eq(True))
 
-    # Set up path handling
-    path_prefix = determine_path_prefix(image_data, path_mask)
+    # Organize images hierarchically (by batch, plate, etc.)
+    images_hierarchy_dict = gen_image_hierarchy(images_df)
 
-    # For each batch and plate, create a LoadData file
-    for batch in image_hierarchy:
-        for plate in image_hierarchy[batch]:
+    # Handle path prefix for correct file resolution
+    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    if path_mask is None:
+        path_mask = default_path_prefix
+
+    # Generate LoadData files for each batch/plate combination
+    for batch in images_hierarchy_dict.keys():
+        for plate in images_hierarchy_dict[batch].keys():
             if not for_special_type:
-                write_standard_load_data(
-                    image_data, output_path, path_prefix, batch, plate
+                # Standard case
+                write_loaddata_csv_by_batch_plate(
+                    images_df, out_path, path_mask, batch, plate
                 )
             else:
-                # Handle special case with cycle information
-                cycles = get_cycles_for_batch_plate(image_data, batch, plate)
-                for cycle in cycles:
-                    write_cycled_load_data(
-                        image_data, output_path, path_prefix, batch, plate, cycle
+                # Special case with cycle information
+                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+                for cycle in plate_cycles_list:
+                    write_loaddata_csv_by_batch_plate_cycle(
+                        images_df, out_path, path_mask, batch, plate, cycle
                     )
 ```
 
 ### Example 2: Pipeline Generation
 
 ```python
-def generate_pipeline(load_data_path, output_dir, workspace_path, pipeline_type=None):
+def gen_algorithm_cppipe_by_batch_plate(
+    load_data_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
+    workspace_path: Path | CloudPath,
+    special_option: bool = False,
+) -> None:
     """Create a CellProfiler pipeline programmatically.
 
     Reads a sample LoadData file to determine parameters,
     then constructs a pipeline with appropriate modules.
     """
     # Ensure output directory exists
-    create_directory(output_dir)
+    out_dir.mkdir(exist_ok=True, parents=True)
 
-    # Find LoadData files to use as samples
-    load_data_files = find_load_data_files(load_data_path, pipeline_type)
-    sample_file = select_sample_file(load_data_files)
+    # Find appropriate LoadData files to use as samples
+    if not special_option:
+        type_suffix = "standard"
+        files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
+    else:
+        type_suffix = "special"
+        files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
 
-    # Read the sample file to determine parameters
-    channels, metadata = extract_parameters_from_load_data(sample_file)
+    # Get sample file for inferring parameters
+    _, files = flatten_dict(files_by_hierarchy)[0]
 
-    # Create pipeline with appropriate modules
-    pipeline = create_empty_pipeline()
+    # Create pipeline with CellProfiler API
+    with CellProfilerContext(out_dir=workspace_path) as cpipe:
+        # Generate pipeline with appropriate modules based on options
+        cpipe = generate_specific_pipeline(cpipe, files[0], special_option)
 
-    # Add LoadData module configured for the input files
-    add_load_data_module(pipeline, sample_file)
-
-    # Add processing modules based on pipeline type
-    if pipeline_type == "illumination":
-        for channel in channels:
-            add_illumination_modules(pipeline, channel)
-    elif pipeline_type == "segmentation":
-        add_segmentation_modules(pipeline, channels, metadata)
-
-    # Add output modules
-    add_output_modules(pipeline, output_dir)
-
-    # Save the pipeline to disk
-    save_pipeline(pipeline, output_dir, pipeline_type)
+        # Save pipeline in multiple formats
+        filename = f"algorithm_{type_suffix}.cppipe"
+        with out_dir.joinpath(filename).open("w") as f:
+            cpipe.dump(f)
+        filename = f"algorithm_{type_suffix}.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            json.dump(cpipe.json(), f)
 ```
 
 ### Example 3: Pipeline Execution
 
 ```python
-def execute_pipeline(pipeline_paths, load_data_paths, output_dir, jobs=20):
+def run_cp_parallel(
+    uow_list: list[tuple[Path, Path]],
+    out_dir: Path,
+    plugin_dir: Path | None = None,
+    jobs: int = 20,
+) -> None:
     """Run CellProfiler pipelines in parallel.
 
-    Takes a list of pipeline and LoadData files,
+    Takes a list of pipeline and LoadData file pairs (units of work),
     then executes them with appropriate parallelism.
+
+    Parameters
+    ----------
+    uow_list : list of tuple of Path
+        List of tuples containing the paths to the pipeline and load data files.
+    out_dir : Path
+        Output directory path.
+    plugin_dir : Path
+        Path to cellprofiler plugin directory.
+    jobs : int, optional
+        Number of parallel jobs to use (default is 20).
     """
-    # Prepare execution environment
-    initialize_execution_environment()
+    # Initialize execution environment (e.g., start Java VM for CellProfiler)
+    cellprofiler_core.utilities.java.start_java()
 
-    # Create unit-of-work pairs (pipeline + load data)
-    work_units = list(zip(pipeline_paths, load_data_paths))
-
-    # Configure parallel execution
-    parallel_executor = create_parallel_executor(jobs)
-
-    # Execute all units of work
-    for pipeline_path, load_data_path in work_units:
-        parallel_executor.submit(
-            run_single_pipeline,
-            pipeline_path,
-            load_data_path,
-            output_dir
-        )
-
-    # Wait for completion and clean up
-    parallel_executor.wait_for_completion()
-    cleanup_execution_environment()
+    # Execute all units of work in parallel
+    # The 'parallel' function is a utility that runs the specified function
+    # on each item in the list with the given parameters
+    parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
 ```
 
-## Integration with Higher Layers
+## Usage Context
 
-While algorithms are independent of higher-level components, they are integrated through:
-
-1. **CLI Layer** - Wraps algorithms in command-line interfaces
-2. **Module Layer** - Uses algorithms within standardized module interfaces
-3. **Container Execution** - Runs algorithms in containerized environments
-
-This integration happens without algorithms needing to be aware of these higher layers.
-
-The key to this integration is that algorithms are pure functions that:
+Algorithms are designed to:
 
 - Take well-defined inputs
 - Produce well-defined outputs
-- Have no side effects other than those explicitly defined (like writing files)
-- Don't depend on global state
+- Have explicitly defined side effects (like writing files)
+- Avoid global state
 
-This functional purity makes them easy to wrap and integrate at higher levels.
+These characteristics allow algorithms to be used in various contexts throughout the StarryNight system.
 
 ## Algorithm Development
 
-To create a new algorithm set, developers need to:
+For CellProfiler-related algorithm sets, developers typically need to:
 
 1. Create the appropriate functions following established patterns
 2. Implement LoadData generation
 3. Implement pipeline generation
 4. Implement execution logic
-5. Create corresponding CLI wrappers
-6. Create corresponding modules
 
-When implementing new algorithms, developers should maintain the same independence and functional style that characterizes the existing algorithm layer. This ensures that new algorithms can be integrated into the higher-level abstractions without requiring changes to the architecture.
+For other algorithm types (indexing, inventory, quality control, etc.), the specific functions will vary based on purpose, but the underlying principles remain the same.
+
+Regardless of algorithm type, implementations should follow the established patterns and independence principles of the algorithm layer.
 
 ## Conclusion
 
-The algorithm layer provides the foundational capabilities of StarryNight through pure functions that implement core image processing logic. By maintaining complete independence from higher-level components, it creates a solid foundation that enables the rest of the architecture to be flexible, modular, and extensible.
-
-This separation is not just a design choice but a core architectural principle that makes possible the higher-level abstractions that give StarryNight its power.
+The algorithm layer provides the foundational capabilities of StarryNight through pure Python functions that implement core image processing logic. This organization enables flexible and extensible scientific image processing.
 
 **Next: [CLI Layer](02_cli_layer.md)**
