@@ -66,7 +66,7 @@
    - **04_pipeline_layer.md**: PipeCraft integration, module connections
    - **05_execution_layer.md**: Snakemake backend implementation details
    - **06_configuration_layer.md**: Parameter inference system
-   - **07_architecture_for_biologists.md**: Biologist-friendly terminology
+   - **07_architecture_for_biologists.md**: Research benefits, laboratory analogies, neutral scientific tone
 
 ## Verification Checklist
 - [ ] Confirmed terminology with Terminology Registry
@@ -77,6 +77,16 @@
 - [ ] Ensured consistent structure (Overview → Purpose → Implementation → Examples)
 
 ## Audience-Specific Guidance
-- **Biologist-Focused Content**: Minimize jargon, use biological analogies, focus on workflows
-- **Developer-Focused Content**: Include implementation details, explain architectural decisions
+- **Biologist-Focused Content**:
+  - Use laboratory research analogies for architectural concepts
+  - Connect architecture to research benefits rather than technical details
+  - Maintain neutral, academic tone without commercial language
+  - Avoid specific technique references that may become outdated
+  - Focus on flexibility and adaptability to different research applications
+
+- **Developer-Focused Content**:
+  - Include implementation details, explain architectural decisions
+  - Provide code examples and concrete implementation patterns
+  - Reference specific technologies and their integration points
+
 - **Technical Depth Scale**: Basic (concepts) → Intermediate (patterns) → Advanced (details)
