@@ -1,18 +1,15 @@
 # Developer Guide
 
-This guide provides information for developers who want to contribute to StarryNight.
-
 !!! warning
 
-    **This is a first draft of the document.**
+    **This is a first, very minimal draft of the document.**
 
     Several updates are pending
 
     - Ensure that instructions for extending StarryNight (e.g., creating algorithms, CLI commands, and module definitions) are accurate and reflect current capabilities.
     - For extending the Conductor and Canvas, clearly indicate if these features are fully implemented or are planned for future updates.
 
-
-## System Architecture
+This guide provides information for developers who want to contribute to StarryNight.
 
 StarryNight is a modular platform for high-throughput microscopy image processing with four main components. For an overview of each component and its purpose, please refer to the [overview](../index.md#platform-overview).
 
