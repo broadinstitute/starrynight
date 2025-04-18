@@ -105,37 +105,34 @@ The **Configuration Layer** provides a systematic way to handle experimental par
 
 This approach allows complex processing pipelines to be configured with minimal manual parameter specification, reducing the potential for errors and inconsistencies in experimental setup.
 
-## Ways of Using StarryNight
+## Using StarryNight in Practice
 
-StarryNight offers multiple ways to interact with the system, depending on your technical comfort level. Regardless of the interface you choose, the workflow follows the same basic pattern:
+### From Configuration to Execution
 
-1. **User Configuration** - You specify basic parameters (channels, experimental design)
-2. **Automated Setup** - The system generates and configures necessary processing components
-3. **Workflow Assembly** - Components are connected into a complete processing pipeline
-4. **Execution** - The workflow runs in a parallelized, containerized environment
+When you use StarryNight, your work follows a consistent workflow pattern:
 
-This transformation - from simple configuration to complex, optimized workflow - makes high-throughput analysis accessible while maintaining the sophistication needed for large-scale data.
+1. **Configure** your experiment by specifying basic parameters like channel names and experimental design
+2. **Generate** the necessary processing components (the system handles this automatically)
+3. **Assemble** these components into a complete processing pipeline (also automatic)
+4. **Execute** the workflow, which runs efficiently in a reproducible environment
 
-### Different User Interfaces
+This approach transforms simple user inputs into sophisticated, optimized workflows without requiring you to handle complex technical details.
 
-You can access this workflow through several interfaces:
+### User Interfaces
 
-1. **Web Interface (Canvas)** - User-friendly graphical interface for configuring and monitoring experiments
-2. **Jupyter Notebooks** - Interactive Python environment for more custom workflows
-3. **Command Line** - Direct access to algorithms for advanced users or scripting
+StarryNight provides multiple interfaces to accommodate different user preferences:
 
-Most biologists will prefer the Canvas web interface, while computational biologists might use notebooks for more flexibility.
+- **Canvas (Web Interface)** - Most biologists will prefer this user-friendly graphical interface for configuring and monitoring experiments
+- **Jupyter Notebooks** - Computational biologists may use this interactive Python environment for more customization
+- **Command Line** - Advanced users can access algorithms directly for scripting and automation
 
-### Reproducibility Through Containers
+### Reproducibility Built-In
 
-A key feature of StarryNight is its use of containerized execution:
+StarryNight ensures your results are reproducible through containerization:
 
-- Each processing step runs in an isolated container environment
-- Containers package all required software (CellProfiler, analysis libraries)
-- The same container runs identically on any compatible system
-- This approach ensures your results are reproducible across different computers
-
-You can think of containers as standardized reaction vessels that ensure consistent conditions for every experimental step, regardless of where they're run.
+- All processing steps execute in standardized, isolated environments that package required software
+- These containers function like standardized reaction vessels, ensuring consistent conditions regardless of where they run
+- The same analysis will produce identical results across different computing systems
 
 ## Technical Terms Reference
 
