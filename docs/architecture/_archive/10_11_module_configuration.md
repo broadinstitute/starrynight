@@ -1,8 +1,8 @@
-# Starry Night Module Configuration
+# StarryNight Module Configuration
 
 ## Overview
 
-Module configuration in Starry Night connects experiment parameters with module specifications, allowing modules to be automatically configured based on experiment settings and data configurations. This document explores how modules use configurations from experiments and data to set up their inputs, outputs, and operational parameters.
+Module configuration in StarryNight connects experiment parameters with module specifications, allowing modules to be automatically configured based on experiment settings and data configurations. This document explores how modules use configurations from experiments and data to set up their inputs, outputs, and operational parameters.
 
 ## Purpose
 
@@ -393,6 +393,6 @@ module = CPSegcheckGenCPipeModule.from_config(
 
 ## Conclusion
 
-Module configuration in Starry Night provides a powerful mechanism for automatically setting up modules based on experiment and data configurations. By standardizing the configuration process through the `from_config` method, it enables consistent, flexible, and maintainable pipeline creation.
+Module configuration in StarryNight provides a powerful mechanism for automatically setting up modules based on experiment and data configurations. By standardizing the configuration process through the `from_config` method, it enables consistent, flexible, and maintainable pipeline creation.
 
 The configuration approach bridges the gap between high-level experiment parameters and the detailed settings needed for individual modules, simplifying the creation of complex image processing pipelines.

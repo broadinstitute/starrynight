@@ -1,12 +1,12 @@
-# Starry Night Bilayer Integration
+# StarryNight Bilayer Integration
 
 ## Overview
 
-Starry Night modules use the Bilayers schema system to define specifications for inputs, outputs, and documentation. This integration provides a standardized way to describe what modules do, what they require, and what they produce, enabling automatic UI generation, validation, and interoperability.
+StarryNight modules use the Bilayers schema system to define specifications for inputs, outputs, and documentation. This integration provides a standardized way to describe what modules do, what they require, and what they produce, enabling automatic UI generation, validation, and interoperability.
 
 ## Purpose
 
-The Bilayers integration serves several key purposes in Starry Night:
+The Bilayers integration serves several key purposes in StarryNight:
 
 1. **Standardized Specifications** - Define inputs and outputs consistently across modules
 2. **Documentation** - Capture descriptions, citations, and usage information
@@ -160,7 +160,7 @@ The Bilayers integration provides significant value through standardization:
 
 > "So this is the so that's why we need a kind of model abstraction. Okay, okay, so, so that's, that's what's happening in the modules. I guess if you now to go here and look back..."
 
-By standardizing how modules are defined, Starry Night gains flexibility, composability, and user interface capabilities.
+By standardizing how modules are defined, StarryNight gains flexibility, composability, and user interface capabilities.
 
 ## User Interface Integration
 
@@ -327,6 +327,6 @@ When creating new modules, developers must define appropriate specifications:
 
 ## Conclusion
 
-The Bilayers integration provides Starry Night with a powerful schema system for defining, documenting, and validating module specifications. This standardization is essential for the module abstraction layer and enables higher-level capabilities like pipeline composition and UI generation.
+The Bilayers integration provides StarryNight with a powerful schema system for defining, documenting, and validating module specifications. This standardization is essential for the module abstraction layer and enables higher-level capabilities like pipeline composition and UI generation.
 
-As the Bilayers system continues to evolve, the specification capabilities of Starry Night will expand, enabling more sophisticated validation, documentation, and interface generation.
+As the Bilayers system continues to evolve, the specification capabilities of StarryNight will expand, enabling more sophisticated validation, documentation, and interface generation.

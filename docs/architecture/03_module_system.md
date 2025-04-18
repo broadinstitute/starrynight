@@ -1,12 +1,12 @@
-# Starry Night Module System
+# StarryNight Module System
 
 ## Overview
 
-The module system in Starry Night provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends. This module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and documentation, enabling automatic UI generation, validation, and interoperability.
+The module system in StarryNight provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends. This module system integrates with the Bilayers schema system to define specifications for inputs, outputs, and documentation, enabling automatic UI generation, validation, and interoperability.
 
 ## Purpose
 
-The module system serves several critical purposes in the Starry Night architecture:
+The module system serves several critical purposes in the StarryNight architecture:
 
 1. **Standardization** - Provides a consistent interface across different algorithm types
 2. **Compute Graph Definition** - Captures the operations to be performed without executing them
@@ -19,7 +19,7 @@ The module system serves several critical purposes in the Starry Night architect
 
 As explained in the architecture discussions:
 
-> "Module abstractions in Starry Night are a way to describe the compute graph in, you know, using the Piper library so that it's kind of not making an assumption how it's going to get executed."
+> "Module abstractions in StarryNight are a way to describe the compute graph in, you know, using the Piper library so that it's kind of not making an assumption how it's going to get executed."
 
 > "This spec is directly from bilayers, and this is how bilayers define its modules. So because bilayers is a separate project that's happening in similab, the goal of bilayers is to create these algorithm wrappers... the idea is, like you have different algorithms, you want to wrap it in a way that then you can generate certain interfaces automatically."
 
@@ -51,9 +51,9 @@ Similar to the algorithm layer's organization into algorithm sets, the module la
 2. **Pipeline Generation Module** - For creating processing pipeline definitions
 3. **Execution Module** - For running the processing on the data
 
-These modules correspond to the functions in the associated algorithm set but add the layer of abstraction that enables the rest of the Starry Night architecture.
+These modules correspond to the functions in the associated algorithm set but add the layer of abstraction that enables the rest of the StarryNight architecture.
 
-Common module sets in Starry Night include:
+Common module sets in StarryNight include:
 
 1. **CP Modules** - For Cell Painting workflows:
    - `cp_illum_calc` - Illumination calculation
@@ -83,7 +83,7 @@ A module is implemented as a Python class that inherits from `StarryNightModule`
 
 From the architecture discussions:
 
-> "Here we see we have certain things, but the important part is we have, we are creating a class that inherits the Starry Night module. Okay, right. So this is saying that this is a Starry Night module."
+> "Here we see we have certain things, but the important part is we have, we are creating a class that inherits the StarryNight module. Okay, right. So this is saying that this is a StarryNight module."
 
 ### Example: Segmentation Check Module
 
@@ -243,7 +243,7 @@ The pipeline creation method:
 
 ## Bilayer Integration
 
-Starry Night modules use the Bilayers schema system to define specifications for inputs, outputs, and documentation. This integration is a critical part of the module system's standardization.
+StarryNight modules use the Bilayers schema system to define specifications for inputs, outputs, and documentation. This integration is a critical part of the module system's standardization.
 
 ### Bilayers Schema
 
@@ -529,7 +529,7 @@ To create a new module:
 
 ## Conclusion
 
-The module system is a central architectural component of Starry Night, providing the critical bridge between low-level algorithms and high-level pipeline composition. By combining the module abstraction with Bilayers schema integration, Starry Night achieves:
+The module system is a central architectural component of StarryNight, providing the critical bridge between low-level algorithms and high-level pipeline composition. By combining the module abstraction with Bilayers schema integration, StarryNight achieves:
 
 1. **Standardized Interfaces** - Consistent patterns across all components
 2. **Clear Separation of Concerns** - Specs are separate from implementation, and definition is separate from execution
@@ -541,6 +541,6 @@ As emphasized in the architecture discussions:
 
 > "That's the power of the module system, because it's a track surveyed execution, right?"
 
-This separation of specification from execution, combined with the rich schema capabilities of Bilayers, is what makes possible the sophisticated workflow capabilities of Starry Night while maintaining flexibility and clarity.
+This separation of specification from execution, combined with the rich schema capabilities of Bilayers, is what makes possible the sophisticated workflow capabilities of StarryNight while maintaining flexibility and clarity.
 
-**Next: [Pipeline Construction](06-12_pipeline_construction.md)**
+**Next: [Pipeline Construction](04_pipeline_construction.md)**

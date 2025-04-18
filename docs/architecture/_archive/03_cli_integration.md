@@ -1,14 +1,14 @@
-# Starry Night CLI Integration
+# StarryNight CLI Integration
 
 ## Overview
 
-The CLI (Command Line Interface) layer in Starry Night provides command-line access to the underlying algorithms. It wraps algorithm functions with user-friendly interfaces, handles parameter parsing, and manages execution. This document explores how the CLI layer is structured and how it integrates with the algorithm layer.
+The CLI (Command Line Interface) layer in StarryNight provides command-line access to the underlying algorithms. It wraps algorithm functions with user-friendly interfaces, handles parameter parsing, and manages execution. This document explores how the CLI layer is structured and how it integrates with the algorithm layer.
 
 ## Purpose
 
 The CLI layer serves several key purposes:
 
-1. **User Access** - Provides direct command-line access to Starry Night algorithms
+1. **User Access** - Provides direct command-line access to StarryNight algorithms
 2. **Parameter Handling** - Converts command-line arguments to appropriate parameter types
 3. **Path Management** - Handles different path formats (local, cloud storage, relative, absolute)
 4. **Command Organization** - Structures commands into logical groups
@@ -40,7 +40,7 @@ Each command typically:
 
 ## Click Library Integration
 
-Starry Night uses the [Click](https://click.palletsprojects.com/) library for CLI implementation:
+StarryNight uses the [Click](https://click.palletsprojects.com/) library for CLI implementation:
 
 > "So we are using click as our kind of CLI library. And with click, you just, you know, we can decorate a function with all the options you need, and then name the function, or like, name that command."
 
@@ -132,7 +132,7 @@ As the transcript explains:
 
 ## CLI Limitations
 
-While the CLI is powerful for direct algorithm access, it has limitations compared to higher-level Starry Night components:
+While the CLI is powerful for direct algorithm access, it has limitations compared to higher-level StarryNight components:
 
 1. No containerization - Runs in the current environment without isolation
 2. Manual parameter specification - All parameters must be specified directly
@@ -211,6 +211,6 @@ starrynight analysis generate-pipeline \
 
 ## Conclusion
 
-The CLI layer provides a straightforward interface to Starry Night algorithms, making them accessible without programming. By following consistent patterns with the Click library and using cloudpathlib for path handling, the CLI offers a user-friendly experience while maintaining flexibility.
+The CLI layer provides a straightforward interface to StarryNight algorithms, making them accessible without programming. By following consistent patterns with the Click library and using cloudpathlib for path handling, the CLI offers a user-friendly experience while maintaining flexibility.
 
-While the CLI is only one way to access Starry Night functionality (alongside notebooks and the UI), it provides an important direct interface for testing, scripting, and integration with other tools.
+While the CLI is only one way to access StarryNight functionality (alongside notebooks and the UI), it provides an important direct interface for testing, scripting, and integration with other tools.

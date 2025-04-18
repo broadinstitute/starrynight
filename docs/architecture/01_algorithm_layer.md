@@ -1,14 +1,14 @@
-# Starry Night Algorithm Layer
+# StarryNight Algorithm Layer
 
 ## Overview
 
-The algorithm layer forms the foundation of the Starry Night framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level Starry Night components.
+The algorithm layer forms the foundation of the StarryNight framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level StarryNight components.
 
 This document explains the structure and organization of the algorithm layer, using the `algorithms/analysis.py` file as a primary example to illustrate key concepts.
 
 ## Purpose
 
-Algorithms in Starry Night serve several essential purposes:
+Algorithms in StarryNight serve several essential purposes:
 
 1. **Image Processing Logic** - Implementing the core computational steps
 2. **Pipeline Generation** - Creating CellProfiler pipeline files programmatically
@@ -21,19 +21,15 @@ By separating these functions from higher-level concerns like UI, execution envi
 
 **Critical Point:** The most important characteristic of the algorithm layer is its complete independence from the rest of the system. As emphasized in the architecture discussions:
 
-> "The key things are, you know, the first thing, which is the algorithm model, like, completely separate the core part. It's not dependent, dependent on anything else."
-
 This independence means:
 - Algorithms can be tested in isolation
-- They have no dependencies on Starry Night modules, pipelines, or execution engines
+- They have no dependencies on StarryNight modules, pipelines, or execution engines
 - They can be used directly or through any of the higher-level abstractions
 - Changes to higher layers don't affect the algorithm implementations
 
 ## Algorithm Sets Structure
 
 Algorithms are organized into "algorithm sets" - groups of related functions that collectively handle a specific pipeline stage. From the architecture discussions:
-
-> "For each step in the image processing pipeline, because we are generating load data and cell profiler pipelines... there's certain heuristics or even certain assumptions that you have to make to generate those things."
 
 ### Common Pattern
 
@@ -61,10 +57,6 @@ While each algorithm set handles different processing stages, they share common 
 2. **Parameter Handling** - Consistent parameter passing and validation
 3. **Path Handling** - Using standard approaches for file paths
 4. **Error Handling** - Consistent approaches to error conditions
-
-As noted in the architecture discussions:
-
-> "Common to them is they all need to generate load data, cell profiler pipeline, and they need a way to invoke cell profiler pipeline with the load data, right? So those things are similar across all the cell profiler modules."
 
 ### Differences Between Algorithm Sets
 
@@ -233,8 +225,8 @@ When implementing new algorithms, developers should maintain the same independen
 
 ## Conclusion
 
-The algorithm layer provides the foundational capabilities of Starry Night through pure functions that implement core image processing logic. By maintaining complete independence from higher-level components, it creates a solid foundation that enables the rest of the architecture to be flexible, modular, and extensible.
+The algorithm layer provides the foundational capabilities of StarryNight through pure functions that implement core image processing logic. By maintaining complete independence from higher-level components, it creates a solid foundation that enables the rest of the architecture to be flexible, modular, and extensible.
 
-As emphasized in the architecture discussions, this separation is not just a design choice but a core architectural principle that makes possible the higher-level abstractions that give Starry Night its power.
+As emphasized in the architecture discussions, this separation is not just a design choice but a core architectural principle that makes possible the higher-level abstractions that give StarryNight its power.
 
-**Next: [CLI Layer](03_cli_layer.md)**
+**Next: [CLI Layer](02_cli_layer.md)**

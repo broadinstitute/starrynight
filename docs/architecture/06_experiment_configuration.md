@@ -1,12 +1,12 @@
-# Starry Night Experiment and Module Configuration
+# StarryNight Experiment and Module Configuration
 
 ## Overview
 
-Configuration in Starry Night consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.
+Configuration in StarryNight consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.
 
 ## Purpose
 
-The configuration systems in Starry Night serve several critical purposes:
+The configuration systems in StarryNight serve several critical purposes:
 
 1. **Parameter Management** - Collecting and organizing essential parameters
 2. **Parameter Inference** - Determining settings automatically from data
@@ -667,7 +667,7 @@ The configuration system provides a richer, more automated approach with several
 
 ## Conclusion
 
-The experiment and module configuration systems in Starry Night provide a powerful approach to managing parameters, inferring settings from data, and automatically configuring modules. By separating experiment-specific logic from module implementation and providing standardized configuration patterns, they enable flexibility, extensibility, and consistency across the pipeline system.
+The experiment and module configuration systems in StarryNight provide a powerful approach to managing parameters, inferring settings from data, and automatically configuring modules. By separating experiment-specific logic from module implementation and providing standardized configuration patterns, they enable flexibility, extensibility, and consistency across the pipeline system.
 
 Together, these configuration systems form a critical bridge between user input and pipeline execution, reducing manual configuration burden while maintaining flexibility for different experiment types and module implementations. They exemplify the architecture's focus on separation of concerns, allowing each component to focus on its specific role while working together to create a cohesive system.
 

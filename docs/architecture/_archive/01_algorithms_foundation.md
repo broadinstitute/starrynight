@@ -1,14 +1,14 @@
-# Starry Night Algorithms Foundation
+# StarryNight Algorithms Foundation
 
 ## Overview
 
-The algorithm layer forms the foundation of the Starry Night framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level Starry Night components.
+The algorithm layer forms the foundation of the StarryNight framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level StarryNight components.
 
 This document explains the structure and organization of the algorithm layer, using the `algorithms/analysis.py` file as a primary example to illustrate key concepts.
 
 ## Purpose
 
-Algorithms in Starry Night serve several essential purposes:
+Algorithms in StarryNight serve several essential purposes:
 
 1. **Image Processing Logic** - Implementing the core computational steps
 2. **Pipeline Generation** - Creating CellProfiler pipeline files programmatically
@@ -25,7 +25,7 @@ By separating these functions from higher-level concerns like UI, execution envi
 
 This independence means:
 - Algorithms can be tested in isolation
-- They have no dependencies on Starry Night modules, pipelines, or execution engines
+- They have no dependencies on StarryNight modules, pipelines, or execution engines
 - They can be used directly or through any of the higher-level abstractions
 - Changes to higher layers don't affect the algorithm implementations
 
@@ -203,6 +203,6 @@ To create a new algorithm set, developers need to:
 
 ## Conclusion
 
-The algorithm layer provides the foundational capabilities of Starry Night through pure functions that implement core image processing logic. By maintaining complete independence from higher-level components, it creates a solid foundation that enables the rest of the architecture to be flexible, modular, and extensible.
+The algorithm layer provides the foundational capabilities of StarryNight through pure functions that implement core image processing logic. By maintaining complete independence from higher-level components, it creates a solid foundation that enables the rest of the architecture to be flexible, modular, and extensible.
 
-As emphasized in the architecture discussions, this separation is not just a design choice but a core architectural principle that makes possible the higher-level abstractions that give Starry Night its power.
+As emphasized in the architecture discussions, this separation is not just a design choice but a core architectural principle that makes possible the higher-level abstractions that give StarryNight its power.

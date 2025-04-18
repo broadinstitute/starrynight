@@ -1,14 +1,14 @@
-# Starry Night Documentation Review Plan
+# StarryNight Documentation Review Plan
 
 ## Overview
-This plan outlines a focused approach for reviewing the restructured Starry Night architecture documentation, concentrating on critical aspects without over-engineering the process.
+This plan outlines a focused approach for reviewing the restructured StarryNight architecture documentation, concentrating on critical aspects without over-engineering the process.
 
 ## Key Review Areas
 
 ### 1. Terminology Consistency
 - Focus on core architectural terms across documents
 - Ensure consistent usage of:
-  - Framework components (Starry Night, Pipecraft, Bilayers)
+  - Framework components (StarryNight, Pipecraft, Bilayers)
   - Key architectural concepts (modules, pipelines, execution)
 - Note any significant inconsistencies for correction
 
@@ -37,4 +37,4 @@ The review will:
 3. Prioritize critical architectural concepts over minor details
 4. Check for major gaps rather than exhaustive completeness
 
-This approach recognizes that the documentation is already well-structured, focusing only on the elements that most impact user understanding of the Starry Night architecture.
+This approach recognizes that the documentation is already well-structured, focusing only on the elements that most impact user understanding of the StarryNight architecture.

@@ -1,8 +1,8 @@
-# Starry Night Pipeline Composition and Execution
+# StarryNight Pipeline Composition and Execution
 
 ## Overview
 
-Pipeline composition is the final layer of abstraction in Starry Night, allowing multiple modules to be combined into complete workflows. This document explores how pipelines are composed, how modules are connected, and how complete pipelines are executed to process image data.
+Pipeline composition is the final layer of abstraction in StarryNight, allowing multiple modules to be combined into complete workflows. This document explores how pipelines are composed, how modules are connected, and how complete pipelines are executed to process image data.
 
 ## Purpose
 
@@ -415,6 +415,6 @@ In production, telemetry would typically be enabled for centralized monitoring.
 
 ## Conclusion
 
-Pipeline composition is the top layer of abstraction in Starry Night, allowing complex image processing workflows to be defined, configured, and executed. By combining modules into structured pipelines with both sequential and parallel execution paths, it enables sophisticated processing while maintaining flexibility and clarity.
+Pipeline composition is the top layer of abstraction in StarryNight, allowing complex image processing workflows to be defined, configured, and executed. By combining modules into structured pipelines with both sequential and parallel execution paths, it enables sophisticated processing while maintaining flexibility and clarity.
 
 The composition approach bridges the gap between individual module execution and complete workflow automation, providing a powerful yet comprehensible system for scientific image processing.

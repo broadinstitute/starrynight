@@ -1,8 +1,8 @@
-# Starry Night Experiment Configuration
+# StarryNight Experiment Configuration
 
 ## Overview
 
-Experiment configuration in Starry Night provides a systematic way to manage experiment-specific parameters, infer settings from data, and configure modules. It bridges the gap between user-provided parameters and the detailed configuration needed for pipeline execution.
+Experiment configuration in StarryNight provides a systematic way to manage experiment-specific parameters, infer settings from data, and configure modules. It bridges the gap between user-provided parameters and the detailed configuration needed for pipeline execution.
 
 ## Purpose
 
@@ -288,6 +288,6 @@ This allows experiment configurations to be saved and restored.
 
 ## Conclusion
 
-Experiment configuration in Starry Night provides a powerful mechanism for managing experiment-specific parameters, inferring settings from data, and configuring modules. By separating experiment-specific logic from module implementation, it enables flexibility, extensibility, and consistency across the pipeline system.
+Experiment configuration in StarryNight provides a powerful mechanism for managing experiment-specific parameters, inferring settings from data, and configuring modules. By separating experiment-specific logic from module implementation, it enables flexibility, extensibility, and consistency across the pipeline system.
 
 The experiment layer forms a critical bridge between user input and module configuration, reducing manual configuration burden while maintaining flexibility for different experiment types.

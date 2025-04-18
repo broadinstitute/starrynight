@@ -1,8 +1,8 @@
-# Starry Night Execution Model
+# StarryNight Execution Model
 
 ## Overview
 
-The execution model in Starry Night defines how modules and pipelines are run in different contexts. This document focuses on the notebook workflow for configuring and executing Starry Night pipelines, examining how modules are instantiated, configured, and executed using backend systems.
+The execution model in StarryNight defines how modules and pipelines are run in different contexts. This document focuses on the notebook workflow for configuring and executing StarryNight pipelines, examining how modules are instantiated, configured, and executed using backend systems.
 
 ## Purpose
 
@@ -14,7 +14,7 @@ The execution model serves several key purposes:
 4. **Execution Control** - Initiating and monitoring pipeline execution
 5. **Result Management** - Handling outputs and logs
 
-As shown in the notebook examples, this provides a flexible way to work with Starry Night components.
+As shown in the notebook examples, this provides a flexible way to work with StarryNight components.
 
 ## Notebook Workflow
 
@@ -122,7 +122,7 @@ The execution is handled by backend implementations:
 
 > "We also import the back end, execution back end from the pipecraft library. So here we are using sneak make back end. So we are configuring the snake make back end here..."
 
-Currently, Starry Night primarily uses the Snakemake backend.
+Currently, StarryNight primarily uses the Snakemake backend.
 
 ### Backend Configuration
 
@@ -334,6 +334,6 @@ The notebook provides a middle ground between direct CLI usage and full UI integ
 
 ## Conclusion
 
-The execution model in Starry Night provides a flexible approach to configuring and running pipelines, particularly in notebook contexts. By separating the concerns of configuration, pipeline definition, and execution, it enables powerful workflows while maintaining flexibility across different execution environments.
+The execution model in StarryNight provides a flexible approach to configuring and running pipelines, particularly in notebook contexts. By separating the concerns of configuration, pipeline definition, and execution, it enables powerful workflows while maintaining flexibility across different execution environments.
 
 This model bridges the gap between low-level algorithms and high-level UI integration, providing a powerful programmatic interface for working with complex image processing pipelines.

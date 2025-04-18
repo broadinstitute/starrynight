@@ -1,8 +1,8 @@
-# Starry Night Documentation Guide
+# StarryNight Documentation Guide
 
 ## Overview
 
-This document explains how the Starry Night architecture documentation was created, structured, and how to maintain it moving forward. It provides guidelines for documentation standards, organization, and suggestions for future improvements.
+This document explains how the StarryNight architecture documentation was created, structured, and how to maintain it moving forward. It provides guidelines for documentation standards, organization, and suggestions for future improvements.
 
 ## Documentation Creation Process
 
@@ -11,12 +11,12 @@ This document explains how the Starry Night architecture documentation was creat
 The documentation was created based on several key source materials:
 
 1. **Transcript Files**:
-   - `Starry Night Pipeline Overview.txt` - Primary transcript with detailed architectural walkthrough
+   - `StarryNight Pipeline Overview.txt` - Primary transcript with detailed architectural walkthrough
    - `Algorithm System Overview.txt` - Supplementary transcript on algorithm design
    - `Module System Overview.txt` - Supplementary transcript on module system
 
 2. **Source Code**:
-   - Starry Night source code at `../../starrynight/src/`
+   - StarryNight source code at `../../starrynight/src/`
    - Pipecraft source code at `../../pipecraft/src/`
    - Developer guide at `../../docs/developer-guide.md`
 
@@ -111,7 +111,7 @@ The document `13_architecture_for_biologists.md` is designed specifically for bi
 Throughout the documentation, these terminology standards are maintained:
 
 - **Framework Components**:
-  - Starry Night: Overall framework
+  - StarryNight: Overall framework
   - Pipecraft: Library for pipeline creation
   - Bilayers: Schema system for specifications
   - Canvas: UI component
@@ -165,7 +165,7 @@ Diagrams should follow these guidelines:
 The documentation is integrated with MkDocs using the configuration in `mkdocs.yml`:
 
 ```yaml
-site_name: Starry Night Documentation
+site_name: StarryNight Documentation
 # ... other configuration ...
 
 nav:
@@ -277,8 +277,8 @@ Documentation changes should follow these practices:
 
 ## Conclusion
 
-This documentation guide provides a comprehensive overview of how the Starry Night architecture documentation was created and how to maintain it. By following these guidelines, the documentation can remain accurate, consistent, and useful as the software evolves.
+This documentation guide provides a comprehensive overview of how the StarryNight architecture documentation was created and how to maintain it. By following these guidelines, the documentation can remain accurate, consistent, and useful as the software evolves.
 
-The documentation was designed to emphasize the key architectural principles that make Starry Night powerful: algorithm independence, module abstraction with specs and compute graphs, and backend-agnostic execution. These principles should continue to be highlighted in future documentation updates.
+The documentation was designed to emphasize the key architectural principles that make StarryNight powerful: algorithm independence, module abstraction with specs and compute graphs, and backend-agnostic execution. These principles should continue to be highlighted in future documentation updates.
 
 Creating specialized versions for different audiences, like the biologist-focused overview, helps ensure that all stakeholders can understand the architecture at an appropriate level of detail for their needs.

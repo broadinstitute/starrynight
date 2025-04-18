@@ -1,23 +1,23 @@
-# Starry Night Documentation Plan (Phase 2)
+# StarryNight Documentation Plan (Phase 2)
 
 ## Executive Summary
-This document outlines the comprehensive plan for Phase 2 of the Starry Night documentation project. The goal is to create detailed technical explanations of the Starry Night architecture based on the transcript discussions, organized into logical components that follow the system's design.
+This document outlines the comprehensive plan for Phase 2 of the StarryNight documentation project. The goal is to create detailed technical explanations of the StarryNight architecture based on the transcript discussions, organized into logical components that follow the system's design.
 
 ## Documentation Objectives
-- Provide clear, accurate explanations of each Starry Night component
+- Provide clear, accurate explanations of each StarryNight component
 - Make complex architectural concepts accessible to developers
 - Document component relationships and dependencies
 - Create a foundation for future technical documentation
 
 ## Target Audience
-- Software engineers working on the Starry Night project
+- Software engineers working on the StarryNight project
 - Computational biologists integrating with the system
 - Technical stakeholders evaluating the architecture
 
 ## Documentation Structure
 
 ### 1. Architecture Overview (00_architecture_overview.md)
-- System-level explanation of Starry Night
+- System-level explanation of StarryNight
 - Layer structure and key abstractions
 - Core design principles and patterns
 - Visual representation of component relationships
@@ -108,7 +108,7 @@ This document outlines the comprehensive plan for Phase 2 of the Starry Night do
 
 ### Terminology Standards
 - **Framework Components**
-  - Starry Night: Overall framework
+  - StarryNight: Overall framework
   - Pipecraft: Library for pipeline creation
   - Bilayers: Schema system for specifications
   - Canvas: UI component

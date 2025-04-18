@@ -1,8 +1,8 @@
-# Starry Night Documentation Restructuring
+# StarryNight Documentation Restructuring
 
 ## Overview
 
-This document summarizes the restructuring of the Starry Night architecture documentation. The documentation has been reorganized to follow the logical layer structure of the architecture, combining related files into comprehensive layer-specific documents.
+This document summarizes the restructuring of the StarryNight architecture documentation. The documentation has been reorganized to follow the logical layer structure of the architecture, combining related files into comprehensive layer-specific documents.
 
 ## Restructuring Process
 
@@ -16,25 +16,25 @@ The new documentation structure organizes files by architectural layer:
 2. **Algorithm Layer** (`01_algorithm_layer.md`) - Expanded from algorithms_foundation
 3. **CLI Layer** (`03_cli_layer.md`) - Derived from cli_integration
 4. **Module System** (`04-05_module_system.md`) - Combined module_abstraction and bilayer_integration
-5. **Pipeline Construction** (`06-12_pipeline_construction.md`) - Combined pipecraft_integration and pipeline_composition_execution
+5. **Pipeline Construction** (`05_pipeline_construction.md`) - Combined pipecraft_integration and pipeline_composition_execution
 6. **Execution System** (`07-08_execution_system.md`) - Combined execution_model and snakemake_backend
 7. **Experiment Configuration** (`09-11_experiment_configuration.md`) - Combined experiment_configuration and module_configuration
 
 ## Original Files and Their Mapping
 
-| Original File | New Location |
-|---------------|--------------|
-| 00_architecture_overview.md | Unchanged |
-| 01_algorithms_foundation.md | Incorporated into 01_algorithm_layer.md |
-| 03_cli_integration.md | Incorporated into 03_cli_layer.md |
-| 04_module_abstraction.md | Incorporated into 04-05_module_system.md |
-| 05_bilayer_integration.md | Incorporated into 04-05_module_system.md |
-| 06_pipecraft_integration.md | Incorporated into 06-12_pipeline_construction.md |
-| 07_execution_model.md | Incorporated into 07-08_execution_system.md |
-| 08_snakemake_backend.md | Incorporated into 07-08_execution_system.md |
-| 09_experiment_configuration.md | Incorporated into 09-11_experiment_configuration.md |
-| 10_11_module_configuration.md | Incorporated into 09-11_experiment_configuration.md |
-| 12_pipeline_composition_execution.md | Incorporated into 06-12_pipeline_construction.md |
+| Original File                        | New Location                                        |
+| ------------------------------------ | --------------------------------------------------- |
+| 00_architecture_overview.md          | Unchanged                                           |
+| 01_algorithms_foundation.md          | Incorporated into 01_algorithm_layer.md             |
+| 03_cli_integration.md                | Incorporated into 03_cli_layer.md                   |
+| 04_module_abstraction.md             | Incorporated into 04-05_module_system.md            |
+| 05_bilayer_integration.md            | Incorporated into 04-05_module_system.md            |
+| 06_pipecraft_integration.md          | Incorporated into 05_pipeline_construction.md       |
+| 07_execution_model.md                | Incorporated into 07-08_execution_system.md         |
+| 08_snakemake_backend.md              | Incorporated into 07-08_execution_system.md         |
+| 09_experiment_configuration.md       | Incorporated into 09-11_experiment_configuration.md |
+| 10_11_module_configuration.md        | Incorporated into 09-11_experiment_configuration.md |
+| 12_pipeline_composition_execution.md | Incorporated into 05_pipeline_construction.md       |
 
 ## Document Characteristics
 
@@ -61,7 +61,7 @@ The documents are designed to be read in sequence, following the architectural l
 6. Execution System
 7. Experiment Configuration
 
-This follows the natural progression from low-level implementation to high-level abstraction in the Starry Night architecture.
+This follows the natural progression from low-level implementation to high-level abstraction in the StarryNight architecture.
 
 ## Benefits of the New Structure
 
@@ -96,6 +96,6 @@ These archived files contain the original component-specific documentation that 
 
 ## Conclusion
 
-The restructured documentation provides a more integrated view of the Starry Night architecture, focusing on logical layers rather than individual components. This approach better reflects the architectural design principles and should make the documentation more accessible and useful to developers working with the framework.
+The restructured documentation provides a more integrated view of the StarryNight architecture, focusing on logical layers rather than individual components. This approach better reflects the architectural design principles and should make the documentation more accessible and useful to developers working with the framework.
 
 The layer-based documents should be considered the primary documentation source going forward, with the archived files available for historical reference if needed.

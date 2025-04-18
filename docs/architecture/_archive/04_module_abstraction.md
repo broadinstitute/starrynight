@@ -1,8 +1,8 @@
-# Starry Night Module Abstraction
+# StarryNight Module Abstraction
 
 ## Overview
 
-The module system in Starry Night provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends.
+The module system in StarryNight provides a standardized abstraction layer that sits above the algorithm layer. Modules capture compute graphs (operations to be performed) and specifications (inputs and outputs) in a consistent way, allowing for composition, configuration, and execution by different backends.
 
 ## Purpose
 
@@ -16,7 +16,7 @@ The module abstraction serves several critical purposes:
 
 As explained in the transcript:
 
-> "Module abstractions in Starry Night are a way to describe the compute graph in, you know, using the Piper library so that it's kind of not making an assumption how it's going to get executed."
+> "Module abstractions in StarryNight are a way to describe the compute graph in, you know, using the Piper library so that it's kind of not making an assumption how it's going to get executed."
 
 This abstraction layer adds significant flexibility compared to directly calling algorithms.
 
@@ -44,7 +44,7 @@ Similar to the algorithm layer's organization into algorithm sets, the module la
 2. **Pipeline Generation Module** - For creating processing pipeline definitions
 3. **Execution Module** - For running the processing on the data
 
-These modules correspond to the functions in the associated algorithm set but add the layer of abstraction that enables the rest of the Starry Night architecture.
+These modules correspond to the functions in the associated algorithm set but add the layer of abstraction that enables the rest of the StarryNight architecture.
 
 ## Module Implementation Structure
 
@@ -57,7 +57,7 @@ A module is implemented as a Python class that inherits from `StarryNightModule`
 
 From the transcript:
 
-> "Here we see we have certain things, but the important part is we have, we are creating a class that inherits the Starry Night module. Okay, right. So this is saying that this is a Starry Night module."
+> "Here we see we have certain things, but the important part is we have, we are creating a class that inherits the StarryNight module. Okay, right. So this is saying that this is a StarryNight module."
 
 ## Example: Segmentation Check Module
 
@@ -217,7 +217,7 @@ The pipeline creation method:
 
 ## Module Sets
 
-Common module sets in Starry Night include:
+Common module sets in StarryNight include:
 
 1. **CP Modules** - For Cell Painting workflows:
    - `cp_illum_calc` - Illumination calculation
@@ -242,7 +242,7 @@ Modules generate Pipecraft pipelines to define their compute graphs:
 
 > "Here we are using the our pipecraft primitives, right? So given all the inputs and outputs, we construct the CLI, you know, CLI commands that we need. And then we are defining a container inside a sequential run."
 
-This is the point where Starry Night interfaces with Pipecraft to define executable operations.
+This is the point where StarryNight interfaces with Pipecraft to define executable operations.
 
 ## The Power of the Module System
 
@@ -258,7 +258,7 @@ Pipecraft serves two critical functions in this architecture:
 
 > "Pipe craft is used for two things. One is, you can just create the compute graph with an additional view. It also provides the back end to execute the computer."
 
-This dual capability - creating compute graphs and executing them - is fundamental to how modules work in Starry Night.
+This dual capability - creating compute graphs and executing them - is fundamental to how modules work in StarryNight.
 
 ## Why Use Modules?
 
@@ -288,6 +288,6 @@ To create a new module:
 
 ## Conclusion
 
-The module abstraction layer is a critical part of the Starry Night architecture, providing the bridge between low-level algorithms and high-level pipeline composition. By standardizing interfaces, capturing compute graphs, and enabling configuration, modules enable the flexibility and power of the complete system.
+The module abstraction layer is a critical part of the StarryNight architecture, providing the bridge between low-level algorithms and high-level pipeline composition. By standardizing interfaces, capturing compute graphs, and enabling configuration, modules enable the flexibility and power of the complete system.
 
-As emphasized in the architecture discussions, the module system's focus on specs and compute graphs, with its clean separation from execution, is what makes possible the sophisticated workflow capabilities of Starry Night while maintaining flexibility and clarity.
+As emphasized in the architecture discussions, the module system's focus on specs and compute graphs, with its clean separation from execution, is what makes possible the sophisticated workflow capabilities of StarryNight while maintaining flexibility and clarity.

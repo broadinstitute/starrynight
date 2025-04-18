@@ -1,12 +1,12 @@
-# Starry Night Pipecraft Integration
+# StarryNight Pipecraft Integration
 
 ## Overview
 
-Pipecraft is a library that enables the creation of composable pipeline graphs in Starry Night. It provides primitives for defining computational operations, containers, and their connections, allowing modules to generate executable compute graphs without being tied to specific execution backends.
+Pipecraft is a library that enables the creation of composable pipeline graphs in StarryNight. It provides primitives for defining computational operations, containers, and their connections, allowing modules to generate executable compute graphs without being tied to specific execution backends.
 
 ## Purpose
 
-The Pipecraft integration serves several key purposes in Starry Night:
+The Pipecraft integration serves several key purposes in StarryNight:
 
 1. **Compute Graph Definition** - Creating structured representations of computational tasks
 2. **Container Configuration** - Specifying container settings for isolated execution
@@ -20,7 +20,7 @@ As explained in the transcript:
 
 ## Pipecraft's Dual Role
 
-**Critical Point:** Pipecraft serves two essential functions in the Starry Night architecture:
+**Critical Point:** Pipecraft serves two essential functions in the StarryNight architecture:
 
 > "Pipe craft is used for two things. One is, you can just create the compute graph with an additional view. It also provides the back end to execute the computer."
 
@@ -28,7 +28,7 @@ This dual capability - both defining compute graphs AND providing execution back
 
 ## Integration Point
 
-In the Starry Night architecture, Pipecraft integration happens inside modules:
+In the StarryNight architecture, Pipecraft integration happens inside modules:
 
 > "We were able to, we were able to use bilayers to create the spec. Yeah. We were able to, by default, populate it in some way. Now we have specked it out, but now we need to define, start defining a pipeline. And here's where starting at is now interfacing with pipecraft."
 
@@ -175,7 +175,7 @@ This abstraction allows the same pipeline to run with different container techno
 
 ## Pipecraft and CLI Commands
 
-A common pattern in Starry Night is constructing CLI commands to run inside containers:
+A common pattern in StarryNight is constructing CLI commands to run inside containers:
 
 ```python
 # Construct CLI command from spec
@@ -192,7 +192,7 @@ for channel in self.spec.inputs["channels"].value:
     command.extend(["--channel", channel])
 ```
 
-These commands invoke the Starry Night CLI inside containers, leveraging the algorithm implementations.
+These commands invoke the StarryNight CLI inside containers, leveraging the algorithm implementations.
 
 ## Pipeline Composition
 
@@ -220,7 +220,7 @@ This "unit of work" API aims to express finer-grained parallelism within operati
 
 ## Two Levels of Parallelism
 
-Starry Night/Pipecraft supports two levels of parallelism:
+StarryNight/Pipecraft supports two levels of parallelism:
 
 1. **Between Steps** - Different pipeline steps running in parallel:
    > "There's parallelism between different steps. So certain steps can be run, you know, independently of each other."
@@ -300,10 +300,10 @@ Pipecraft integration is not just an academic exercise but a crucial architectur
 
 > "This is not just, you know, some weird attraction or something that we want. Just we built it because we wanted to build it. It's there because it's, it's a very key piece. It's a central piece of like the entire system."
 
-The ability to define compute graphs independently of execution engines is what enables the entire Starry Night architecture to function.
+The ability to define compute graphs independently of execution engines is what enables the entire StarryNight architecture to function.
 
 ## Conclusion
 
-Pipecraft integration is a critical part of the Starry Night architecture, providing the bridge between specification (Bilayers) and execution (backends). It enables the creation of composable, containerized compute graphs that can express complex workflows with parallelism at multiple levels.
+Pipecraft integration is a critical part of the StarryNight architecture, providing the bridge between specification (Bilayers) and execution (backends). It enables the creation of composable, containerized compute graphs that can express complex workflows with parallelism at multiple levels.
 
-By separating pipeline definition from execution, Pipecraft allows Starry Night to potentially support multiple execution environments while maintaining a consistent pipeline definition approach. This separation is not just a nice feature but the core architectural element that makes the entire system work.
+By separating pipeline definition from execution, Pipecraft allows StarryNight to potentially support multiple execution environments while maintaining a consistent pipeline definition approach. This separation is not just a nice feature but the core architectural element that makes the entire system work.
