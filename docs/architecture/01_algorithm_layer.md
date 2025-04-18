@@ -1,8 +1,5 @@
 # StarryNight Algorithm Layer
 
-!!! bug
-
-
 ## Overview
 
 The algorithm layer forms the foundation of the StarryNight framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level StarryNight components.
@@ -23,17 +20,6 @@ Algorithms in StarryNight serve several essential purposes:
 
 By separating these functions from higher-level concerns like UI, execution environment, and workflow composition, the algorithm layer maintains simplicity and testability.
 
-## CellProfiler LoadData Files
-
-CellProfiler's LoadData module uses CSV files to specify which images to process and how to organize them. These CSV files (referred to as "LoadData files" throughout this document) typically contain:
-
-1. **Metadata columns** - Information about the images (batch, plate, well, site, cycle)
-2. **FileName columns** - Names of image files for each channel
-3. **PathName columns** - Directories containing the image files
-4. **Frame columns** - Which frame in a multi-frame file to use for each channel
-
-LoadData files are a critical input to CellProfiler pipelines, as they define which images will be processed. Many algorithm functions in StarryNight are dedicated to generating these LoadData files for different processing stages.
-
 ## Complete Independence
 
 **Critical Point:** The most important characteristic of the algorithm layer is its complete independence from the rest of the system.
@@ -53,15 +39,26 @@ Algorithms are organized into "algorithm sets" -- groups of related functions th
 
 Most algorithm sets follow a consistent pattern with three key function types:
 
-1. **LoadData Generation** - Functions that create CellProfiler LoadData CSV files
+1. **LoadData Generation** - Functions that create CSV files defining which images to process
     - Typically named `gen_<algorithm>_load_data_by_batch_plate()`
-    - Specifies paths, file patterns, and data organization
+    - These functions identify relevant images from indexes or metadata
+    - They organize images by batch, plate, well, and site
+    - They output CSV files with paths and metadata CellProfiler needs to load images
+    - LoadData files contain metadata, filenames, paths, and frame information
+
 2. **Pipeline Generation** - Functions that create processing pipeline definitions
     - Typically named `gen_<algorithm>_cppipe_by_batch_plate()`
-    - Programmatically builds CellProfiler pipelines with appropriate modules
+    - These functions programmatically create processing pipelines
+    - They configure pipeline modules with appropriate parameters
+    - They often infer parameters from sample LoadData files
+    - They output pipeline files in formats like .cppipe or .json
+
 3. **Execution** - Functions that run the pipeline on the loaded data
     - Often using `run_cp_parallel()` or similar functions
-    - Handles execution, monitoring, and result collection
+    - These functions handle running the generated pipelines against the data
+    - They manage parallel execution for performance
+    - They handle resource allocation and cleanup
+    - They organize outputs according to the experimental structure
 
 This pattern provides a clear separation of concerns even within the algorithm layer itself.
 
@@ -80,27 +77,34 @@ Algorithms employ several recurring implementation patterns:
 
 ### Sample Data Inference
 
-A common implementation pattern is inferring parameters from sample data. For example, when generating CellProfiler pipelines, functions often:
+This pattern primarily applies to **pipeline generation algorithms**. When creating pipeline definitions, these algorithms:
 
 1. Read a sample LoadData file
 2. Extract channel names, cycle counts, and other metadata
 3. Use this information to configure the pipeline appropriately
 
-This approach allows algorithms to adapt to different experimental contexts without requiring all parameters to be specified explicitly.
+This approach allows pipeline generation algorithms to adapt to different experimental contexts without requiring all parameters to be specified explicitly.
 
 ### Path Handling
 
-Algorithms handle various path types using the `cloudpathlib` library's `AnyPath` class, which provides a consistent interface for:
+This pattern applies to **all algorithm types**. All algorithms use the `cloudpathlib` library's `AnyPath` class, which provides a consistent interface for:
 
 - Local file paths
 - Cloud storage paths (S3, etc.)
 - Relative and absolute paths
 
-This abstraction enables algorithms to work with data regardless of its location.
+This abstraction enables algorithms to work with data regardless of its location, which is essential for all algorithm types from LoadData generation to execution.
 
 ### Processing Organization
 
-Algorithms typically organize processing by Batch, Plate, Well, and Site. This hierarchical organization matches the physical structure of biological experiments.
+This pattern applies primarily to **LoadData generation and execution algorithms**. These algorithms organize processing by:
+
+- Batch - A collection of related plates
+- Plate - A physical container with multiple wells
+- Well - A single experimental unit
+- Site - A specific imaging location within a well
+
+This hierarchical organization matches the physical structure of biological experiments and allows algorithms to process data in logical groups.
 
 ## Beyond CellProfiler
 
@@ -116,164 +120,120 @@ These non-CellProfiler algorithm sets use the same architectural principles but 
 
 ## Algorithm Complexity and Decision Points
 
-Algorithms can incorporate conditional logic based on user requirements. For example, pipeline generation algorithms might add or remove specific modules based on flags that indicate:
+Pipeline generation algorithms can incorporate conditional logic based on user requirements. For example, these algorithms might add or remove specific modules based on flags that indicate:
 
 - Whether to handle blurry images
 - Whether to remove debris
 - Which quality control steps to include
 
-This flexibility allows algorithms to adapt to different experimental needs while maintaining their functional structure.
+This flexibility allows pipeline generation algorithms to adapt to different experimental needs while maintaining their functional structure.
 
 ## Code Examples
 
 ### Example 1: LoadData Generation
 
-A simplified example of a LoadData generation function:
-
 ```python
-def gen_illum_calc_load_data_by_batch_plate(
-    index_path: Path | CloudPath,
-    out_path: Path | CloudPath,
-    path_mask: str | None,
-    for_sbs: bool = False,
-) -> None:
-    """Generate load data for illum calc pipeline.
+def generate_load_data(index_path, output_path, path_mask=None, for_special_type=False):
+    """Generate LoadData CSV files for a specific algorithm.
 
-    Parameters
-    ----------
-    index_path : Path | CloudPath
-        Path to index file.
-    out_path : Path | CloudPath
-        Path to save output csv file.
-    path_mask : str | None
-        Path prefix mask to use.
-    for_sbs : str | None
-        Generate illums for SBS images.
+    Reads image metadata from an index, organizes by batch/plate structure,
+    and writes LoadData CSV files for CellProfiler.
     """
-    # Read the index file containing image metadata
-    df = pl.read_parquet(index_path.resolve().__str__())
+    # Read and filter image metadata
+    image_data = read_metadata_from_index(index_path)
+    image_data = filter_images_by_type(image_data, for_special_type)
 
-    # Filter for relevant images
-    if not for_sbs:
-        images_df = df.filter(
-            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        )
-    else:
-        images_df = df.filter(
-            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        )
-
-    # Generate hierarchy of images
-    images_hierarchy_dict = gen_image_hierarchy(images_df)
+    # Organize images hierarchically
+    image_hierarchy = organize_by_batch_plate(image_data)
 
     # Set up path handling
-    default_path_prefix: str = (
-        images_df.select("prefix").unique().to_series().to_list()[0]
-    )
-    if path_mask is None:
-        path_mask = default_path_prefix
+    path_prefix = determine_path_prefix(image_data, path_mask)
 
-    # Create LoadData CSV files for each batch/plate
-    for batch in images_hierarchy_dict.keys():
-        for plate in images_hierarchy_dict[batch].keys():
-            if not for_sbs:
-                # Write loaddata assuming no image nesting with cycles
-                write_loaddata_csv_by_batch_plate(
-                    images_df, out_path, path_mask, batch, plate
+    # For each batch and plate, create a LoadData file
+    for batch in image_hierarchy:
+        for plate in image_hierarchy[batch]:
+            if not for_special_type:
+                write_standard_load_data(
+                    image_data, output_path, path_prefix, batch, plate
                 )
             else:
-                # Write loaddata assuming image nesting with cycles
-                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
-                for cycle in plate_cycles_list:
-                    write_loaddata_csv_by_batch_plate_cycle(
-                        images_df, out_path, path_mask, batch, plate, cycle
+                # Handle special case with cycle information
+                cycles = get_cycles_for_batch_plate(image_data, batch, plate)
+                for cycle in cycles:
+                    write_cycled_load_data(
+                        image_data, output_path, path_prefix, batch, plate, cycle
                     )
 ```
 
 ### Example 2: Pipeline Generation
 
-A simplified example of a pipeline generation function:
-
 ```python
-def gen_illum_calculate_cppipe_by_batch_plate(
-    load_data_path: Path | CloudPath,
-    out_dir: Path | CloudPath,
-    workspace_path: Path | CloudPath,
-    for_sbs: bool = False,
-) -> None:
-    """Write out illumination calculate pipeline to file.
+def generate_pipeline(load_data_path, output_dir, workspace_path, pipeline_type=None):
+    """Create a CellProfiler pipeline programmatically.
 
-    Parameters
-    ----------
-    load_data_path : Path | CloudPath
-        Path to load data csv dir.
-    out_dir : Path | CloudPath
-        Path to output directory.
-    workspace_path : Path | CloudPath
-        Path to workspace directory.
-    for_sbs : str | None
-        Generate illums for SBS images.
+    Reads a sample LoadData file to determine parameters,
+    then constructs a pipeline with appropriate modules.
     """
-    # Create output directory
-    out_dir.mkdir(exist_ok=True, parents=True)
+    # Ensure output directory exists
+    create_directory(output_dir)
 
-    # Get all the generated load data files
-    if not for_sbs:
-        type_suffix = "painting"
-        files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
-    else:
-        type_suffix = "sbs"
-        files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+    # Find LoadData files to use as samples
+    load_data_files = find_load_data_files(load_data_path, pipeline_type)
+    sample_file = select_sample_file(load_data_files)
 
-    # Get a sample load data file to determine pipeline parameters
-    _, files = flatten_dict(files_by_hierarchy)[0]
+    # Read the sample file to determine parameters
+    channels, metadata = extract_parameters_from_load_data(sample_file)
 
-    # Create the pipeline using CellProfiler's Python API
-    with CellProfilerContext(out_dir=workspace_path) as cpipe:
-        cpipe = generate_illum_calculate_pipeline(cpipe, files[0], for_sbs)
+    # Create pipeline with appropriate modules
+    pipeline = create_empty_pipeline()
 
-        # Save pipeline in both .cppipe and .json formats
-        filename = f"illum_calc_{type_suffix}.cppipe"
-        with out_dir.joinpath(filename).open("w") as f:
-            cpipe.dump(f)
+    # Add LoadData module configured for the input files
+    add_load_data_module(pipeline, sample_file)
 
-        filename = f"illum_calc_{type_suffix}.json"
-        with out_dir.joinpath(filename).open("w") as f:
-            dumpit(cpipe, f, version=6)
+    # Add processing modules based on pipeline type
+    if pipeline_type == "illumination":
+        for channel in channels:
+            add_illumination_modules(pipeline, channel)
+    elif pipeline_type == "segmentation":
+        add_segmentation_modules(pipeline, channels, metadata)
+
+    # Add output modules
+    add_output_modules(pipeline, output_dir)
+
+    # Save the pipeline to disk
+    save_pipeline(pipeline, output_dir, pipeline_type)
 ```
 
 ### Example 3: Pipeline Execution
 
-A simplified example of a pipeline execution function:
-
 ```python
-def run_cp_parallel(
-    uow_list: list[tuple[Path, Path]],
-    out_dir: Path,
-    plugin_dir: Path | None = None,
-    jobs: int = 20,
-) -> None:
-    """Run cellprofiler on multiple unit-of-work (UOW) items in parallel.
+def execute_pipeline(pipeline_paths, load_data_paths, output_dir, jobs=20):
+    """Run CellProfiler pipelines in parallel.
 
-    Parameters
-    ----------
-    uow_list : list of tuple of Path
-        List of tuples containing the paths to the pipeline and load data files.
-    out_dir : Path
-        Output directory path.
-    plugin_dir : Path
-        Path to cellprofiler plugin directory.
-    jobs : int, optional
-        Number of parallel jobs to use (default is 20).
+    Takes a list of pipeline and LoadData files,
+    then executes them with appropriate parallelism.
     """
-    # Start Java Virtual Machine for CellProfiler
-    cellprofiler_core.utilities.java.start_java()
+    # Prepare execution environment
+    initialize_execution_environment()
 
-    # Run pipelines in parallel
-    parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
+    # Create unit-of-work pairs (pipeline + load data)
+    work_units = list(zip(pipeline_paths, load_data_paths))
 
-    # Shut down Java Virtual Machine
-    cellprofiler_core.utilities.java.stop_java()
+    # Configure parallel execution
+    parallel_executor = create_parallel_executor(jobs)
+
+    # Execute all units of work
+    for pipeline_path, load_data_path in work_units:
+        parallel_executor.submit(
+            run_single_pipeline,
+            pipeline_path,
+            load_data_path,
+            output_dir
+        )
+
+    # Wait for completion and clean up
+    parallel_executor.wait_for_completion()
+    cleanup_execution_environment()
 ```
 
 ## Integration with Higher Layers
