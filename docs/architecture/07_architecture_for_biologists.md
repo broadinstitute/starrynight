@@ -32,7 +32,7 @@ As a biologist, you'll typically interact with the Canvas web interface, which p
 
 StarryNight organizes functionality into layers that build upon each other:
 
-**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
+**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer** → **Configuration Layer**
 
 Each layer builds upon the previous one, adding structure and capabilities while maintaining separation of concerns:
 
@@ -41,6 +41,7 @@ Each layer builds upon the previous one, adding structure and capabilities while
 3. **Module Layer** - Standardized components with formal specifications and compute graphs
 4. **Pipeline Layer** - Composed workflows that connect modules into complete processing pipelines
 5. **Execution Layer** - Backend layer that compiles and executes the defined workflows
+6. **Configuration Layer** - Parameter inference and experiment configuration system
 
 This layered approach allows each component to focus on a specific responsibility, making the overall system more maintainable and adaptable.
 

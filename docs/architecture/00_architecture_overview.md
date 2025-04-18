@@ -44,6 +44,7 @@ StarryNight follows a layered architecture with increasing levels of abstraction
 3. **Module Layer** - Standardized abstractions with specs and compute graphs
 4. **Pipeline Layer** - Compositions of modules into executable workflows
 5. **Execution Layer** - Backend systems that run the pipelines
+6. **Configuration Layer** - Parameter inference and experiment configuration
 
 Each layer builds upon the previous, adding capabilities while maintaining clear separation of concerns.
 
@@ -99,9 +100,9 @@ The execution layer takes pipelines and runs them on specific backends(1):
 - Manages container execution (Docker/Singularity)
 - Handles parallelism, logging, and monitoring
 
-### Experiment Configuration
+### Configuration Layer
 
-Experiment configuration classes handle parameter inference and standardization:
+The configuration layer handles parameter inference and standardization:
 
 - Infer parameters from data where possible
 - Combine user-provided parameters with defaults
@@ -113,7 +114,7 @@ Experiment configuration classes handle parameter inference and standardization:
 A typical data flow through the StarryNight system:
 
 1. User configures an experiment with minimal required parameters
-2. Experiment configuration infers additional parameters
+2. The configuration layer infers additional parameters
 3. Modules are instantiated with the configuration
 4. Modules generate their compute graphs (Pipecraft pipelines)
 5. Pipelines are composed for complete workflow
