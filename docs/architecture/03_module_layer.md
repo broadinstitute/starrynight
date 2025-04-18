@@ -288,7 +288,7 @@ with pipeline.sequential() as seq:
     )
 ```
 
-More detailed coverage of Pipecraft's capabilities and architecture is provided in the [Pipeline Construction](04_pipeline_construction.md) section.
+More detailed coverage of Pipecraft's capabilities and architecture is provided in the [Pipeline Layer](04_pipeline_layer.md) section.
 
 ## Module Usage
 
@@ -359,7 +359,7 @@ backend.run(
 )
 ```
 
-In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in [Pipeline Construction](04_pipeline_construction.md).
+In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in [Pipeline Layer](04_pipeline_layer.md).
 
 ## Creating New Modules
 

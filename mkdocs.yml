@@ -65,10 +65,10 @@ nav:
       - Overview: architecture/00_architecture_overview.md
       - Algorithm Layer: architecture/01_algorithm_layer.md
       - CLI Layer: architecture/02_cli_layer.md
-      - Module System: architecture/03_module_system.md
-      - Pipeline Construction: architecture/04_pipeline_construction.md
-      - Execution System: architecture/05_execution_system.md
-      - Experiment Configuration: architecture/06_experiment_configuration.md
+      - Module Layer: architecture/03_module_layer.md
+      - Pipeline Layer: architecture/04_pipeline_layer.md
+      - Execution Layer: architecture/05_execution_layer.md
+      - Configuration Layer: architecture/06_configuration_layer.md
       - Architecture for Biologists: architecture/07_architecture_for_biologists.md
   - Testing: tester/README.md
   - FAQ: misc/faq.md
