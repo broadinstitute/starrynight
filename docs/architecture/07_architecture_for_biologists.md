@@ -50,9 +50,9 @@ This layered approach allows each component to focus on a specific responsibilit
 
 ## Key Components Explained
 
-### Algorithm Sets
+### Algorithm Layer
 
-At the foundation are **algorithm sets** - collections of Python functions that perform specific image processing tasks. Each algorithm set typically contains specialized functions for:
+At the foundation is the **Algorithm Layer** - collections of Python functions organized into algorithm sets that perform specific image processing tasks. Each algorithm set typically contains specialized functions for:
 
 - Identifying and organizing images for processing (load data generation)
 - Creating appropriate CellProfiler pipelines with the correct parameters
@@ -60,9 +60,9 @@ At the foundation are **algorithm sets** - collections of Python functions that 
 
 A key characteristic is that these functions are pure Python with no dependencies on other StarryNight components. This independence makes them individually testable and allows them to be used directly when needed.
 
-### Modules
+### Module Layer
 
-**Modules** are standardized components that provide an abstraction layer above the algorithms. Each module:
+The **Module Layer** provides standardized components that create an abstraction above the algorithms. Each module:
 
 - Defines a formal specification of inputs, outputs, and parameters
 - Contains a compute graph that defines processing steps and their organization
@@ -71,23 +71,23 @@ A key characteristic is that these functions are pure Python with no dependencie
 
 This abstraction is powerful because it separates the specification of operations (inputs/outputs/parameters) from the structure of computation (the processing graph). This separation allows the same module to be configured differently for various experiments and executed on different computing systems.
 
-### Pipelines
+### Pipeline Layer
 
-**Pipelines** combine multiple modules into complete workflows. They define:
+The **Pipeline Layer** combines multiple modules into complete workflows. It defines:
 
 - Sequential relationships (which steps must run before others)
 - Parallel operations (which steps can run simultaneously)
 - Data flow between processing stages
 - Dependencies between operations
 
-Pipelines represent the complete processing workflow in an abstract form that is not tied to any specific execution environment. They are built using Pipecraft, a library specifically designed for creating composable pipeline graphs.
+The Pipeline Layer represents the complete processing workflow in an abstract form that is not tied to any specific execution environment. It is built using Pipecraft, a library specifically designed for creating composable pipeline graphs.
 
 ### Execution Layer
 
-The **execution layer** is responsible for actually running the pipelines:
+The **Execution Layer** is responsible for actually running the pipelines:
 
 - Converting abstract pipelines into concrete execution steps (currently using Snakemake)
-- Managing containerized execution (Docker/Singularity)
+- Managing containerized execution (using technologies like Docker or Singularity to ensure reproducible environments)
 - Coordinating parallel processing across available computing resources
 - Handling dependencies between processing steps
 - Managing file transfers and storage
@@ -96,7 +96,7 @@ The current implementation uses Snakemake as a workflow engine, generating Snake
 
 ### Configuration Layer
 
-**The configuration layer** provides a systematic way to handle experimental parameters:
+The **Configuration Layer** provides a systematic way to handle experimental parameters:
 
 - Inferring parameters automatically from input data where possible
 - Combining user-specified parameters with appropriate defaults
@@ -156,11 +156,14 @@ This extensibility means the system can evolve as your research methods change, 
 
 For reference, here are explanations of key terms used in StarryNight:
 
-- **Algorithm Set**: Collection of related functions that perform a specific imaging task
-- **Module**: Standardized component that packages an algorithm with a clear interface
-- **Pipeline**: Connected sequence of modules that forms a complete workflow
-- **Compute Graph**: Structured representation of processing steps and their connections
-- **Container**: Isolated environment that ensures consistent software execution
+- **Algorithm Layer**: Core foundation of pure Python functions organized into algorithm sets
+- **CLI Layer**: Command-line interfaces that make algorithms directly accessible
+- **Module Layer**: Standardized components that package algorithms with consistent interfaces
+- **Pipeline Layer**: Connected sequence of modules that forms a complete workflow
+- **Execution Layer**: Backend system that runs pipelines on computing infrastructure
+- **Configuration Layer**: Parameter management and inference system that simplifies setup
+- **Compute Graph**: Structured representation of processing steps and their relationships
+- **Container**: Isolated computing environment that packages all necessary software and dependencies, ensuring consistent and reproducible execution regardless of the computing system (similar to how a tissue culture hood provides a controlled environment for biological experiments)
 - **CellProfiler**: Open-source cell image analysis software used by StarryNight
 - **Snakemake**: Workflow management system that coordinates execution
 
