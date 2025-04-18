@@ -16,7 +16,7 @@ The StarryNight framework is organized as a monorepo with four main packages:
 1. **StarryNight** - Core package containing:
     - Algorithm Layer: Pure Python functions for image processing
     - CLI Layer: Command-line interfaces for algorithms
-    - Module System: Standardized module abstractions
+    - Module Layer: Standardized module abstractions
 
 2. **PipeCraft** - Pipeline definition framework that powers:
     - Pipeline Layer: Composition of modules into workflows

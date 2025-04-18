@@ -8,7 +8,7 @@ This document explains the StarryNight framework in terms accessible to biologis
 
 ## Why Architecture Matters for Scientific Analysis
 
-High-throughput microscopy requires a system that can handle:
+High-throughput microscopy requires a framework that can handle:
 
 1. **Scale** - Processing thousands of images across multiple experiments
 2. **Complexity** - Managing multi-step analysis workflows with complex dependencies
@@ -22,7 +22,7 @@ Rather than building a single large application, StarryNight takes an architectu
 StarryNight is organized as a framework with four main components:
 
 1. **StarryNight Core** - The foundation containing algorithms and abstractions for image processing
-2. **PipeCraft** - System for composing and executing computational workflows
+2. **PipeCraft** - Framework for composing and executing computational workflows
 3. **Conductor** - Service for managing and monitoring processing jobs
 4. **Canvas** - User-friendly interface for configuring and running experiments
 
@@ -40,7 +40,7 @@ Each layer builds upon the previous one, adding structure and capabilities while
 2. **CLI Layer** - Command-line interfaces that make algorithms accessible without programming
 3. **Module Layer** - Standardized components with formal specifications and compute graphs
 4. **Pipeline Layer** - Composed workflows that connect modules into complete processing pipelines
-5. **Execution Layer** - Backend systems that compile and execute the defined workflows
+5. **Execution Layer** - Backend layer that compiles and executes the defined workflows
 
 This layered approach allows each component to focus on a specific responsibility, making the overall system more maintainable and adaptable.
 
@@ -90,9 +90,9 @@ The **execution layer** is responsible for actually running the pipelines:
 
 The current implementation uses Snakemake as a workflow engine, generating Snakemake files from the pipeline definitions. This approach allows the same pipeline to be executed on different computing infrastructures without changes to the pipeline definition.
 
-### Experiment Configuration
+### Configuration Layer
 
-**Experiment configuration** classes provide a systematic way to handle experimental parameters:
+**The configuration layer** provides a systematic way to handle experimental parameters:
 
 - Inferring parameters automatically from input data where possible
 - Combining user-specified parameters with appropriate defaults
@@ -164,10 +164,11 @@ For reference, here are explanations of key terms used in StarryNight:
 
 The core architectural principle of StarryNight is separation of concerns - breaking the system into distinct parts that each handle a specific aspect of the problem. At a high level, StarryNight separates:
 
-1. **What is computed** (Algorithms) - The actual image processing operations
-2. **How it's defined** (Specifications) - The formal description of inputs, outputs, and parameters
-3. **How it's structured** (Compute Graphs) - The organization of processing steps and their dependencies
-4. **How it's executed** (Runtime) - The actual execution in containerized environments
+1. **What is computed** (Algorithm Layer) - The actual image processing operations
+2. **How it's configured** (Configuration Layer) - The parameters and settings for experiments
+3. **How it's defined** (Module Layer) - The formal description of inputs, outputs, and specifications
+4. **How it's structured** (Pipeline Layer) - The organization of processing steps and their dependencies
+5. **How it's executed** (Execution Layer) - The actual execution in containerized environments
 
 ### A Manufacturing Analogy
 
@@ -177,6 +178,7 @@ To understand why this architecture matters, think of StarryNight like a modern 
 flowchart TD
     A[ALGORITHM: Engineering Techniques] -->|implements| B[CLI: Standard Tools]
     B -->|defines how to use| C[MODULE: Component Blueprints]
+    F[CONFIGURATION: Design Specifications] -->|configures| C
     C -->|combine into| D[PIPELINE: Assembly Plan]
     D -->|executed on| E[EXECUTION: Factory Floor]
 ```
@@ -191,9 +193,11 @@ Think of it this way:
 
 - The **Pipeline Layer** combines these blueprints into a complete assembly plan that shows how all components connect together - like the master plan for building an entire vehicle.
 
+- The **Configuration Layer** provides the design specifications and parameters - like the detailed engineering requirements that specify materials, tolerances, and settings. These specifications don't themselves perform any manufacturing but guide how components are designed and built.
+
 - The **Execution Layer** is the factory floor where the plan becomes reality - the machines, robots and processes that actually manufacture according to the plans.
 
-This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car.
+This separation is powerful because automotive engineers can design vehicles without operating cutting machines, production engineers can optimize manufacturing without redesigning the car, and design engineers can change specifications without rebuilding the entire factory process.
 
 This separation in StarryNight creates powerful abstractions that enable:
 

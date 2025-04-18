@@ -1,14 +1,14 @@
-# StarryNight Module System
+# StarryNight Module Layer
 
 ## Overview
 
-The module system provides a standardized abstraction layer that bridges the algorithm layer (pure functions) and the pipeline construction layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
+The module layer provides a standardized abstraction that bridges the algorithm layer (pure functions) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
 
-Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module system integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.
+Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.
 
 ## Purpose and Advantages
 
-The module system offers significant advantages over directly calling algorithms:
+The module layer offers significant advantages over directly calling algorithms:
 
 ### Practical Benefits
 - **Standardization** - Consistent interfaces across different algorithm types
@@ -24,7 +24,7 @@ The module system offers significant advantages over directly calling algorithms
 
 ## The Dual Nature of Modules
 
-The module system's defining characteristic is its dual focus on specifications and compute graphs:
+The module layer's defining characteristic is its dual focus on specifications and compute graphs:
 
 1. **Specification (Spec)** - Defines what a module does:
     - Input ports with types, descriptions, and validation rules
@@ -42,7 +42,7 @@ Crucially, modules define computation but don't perform it. This separation enab
 
 ### Module Sets Organization
 
-Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction layer.
+Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.
 
 Each module set typically follows a consistent pattern with three types of modules:
 
@@ -59,7 +59,7 @@ Each module set typically follows a consistent pattern with three types of modul
     - Manage resource allocation
     - Organize outputs according to experimental structure
 
-This pattern directly mirrors the algorithm set structure covered in the [Algorithm Layer](01_algorithm_layer.md), but adds the standardized module abstraction layer.
+This pattern directly mirrors the algorithm set structure covered in the [Algorithm Layer](01_algorithm_layer.md), but adds the standardized abstraction of the module layer.
 
 Common module sets include:
 
@@ -222,7 +222,7 @@ This example illustrates several important aspects of module implementation:
 
 ### Module Configuration
 
-A powerful feature of the module system is automatic configuration through the `from_config` method. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:
+A powerful feature of the module layer is automatic configuration through the `from_config` method. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:
 
 1. **Data Configuration** - Provides workspace paths, image paths, and scratch directories
 2. **Experiment Configuration** - Provides experiment-specific parameters like channel names, algorithms, and thresholds
@@ -252,7 +252,7 @@ The compute graph provides a complete definition of how the operation should be 
 
 For the "specification" part of a module's dual nature, StarryNight uses Bilayers - an external schema system that standardizes how inputs, outputs, and metadata are defined.
 
-The module system uses Bilayers to create standardized definitions of:
+The module layer uses Bilayers to create standardized definitions of:
 
 - Input ports with types and validation rules
 - Output ports with types and descriptions
@@ -389,13 +389,13 @@ Creating a new module set involves implementing classes for each stage of proces
 
 ## Relationship to Adjacent Layers
 
-The module system connects directly with two adjacent architectural layers:
+The module layer connects directly with two adjacent architectural layers:
 
 1. **Algorithm/CLI Layer (below)** - Modules wrap algorithm functions and typically invoke them via CLI commands in containers
-2. **Pipeline Construction Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
+2. **Pipeline Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
 
-The module system translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.
+The module layer translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.
 
 ## Conclusion
 
-The module system's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, [Pipeline Construction](04_pipeline_construction.md), builds upon these abstractions to compose complete workflows from individual modules.
+The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, [Pipeline Layer](04_pipeline_layer.md), builds upon these abstractions to compose complete workflows from individual modules.

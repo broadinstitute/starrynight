@@ -226,6 +226,6 @@ starrynight illum calc loaddata \
 
 The CLI layer sits directly above the algorithm layer in the StarryNight architecture, providing a straightforward interface to the underlying algorithms while remaining below the more sophisticated module layer. By following consistent patterns with the Click library and using cloudpathlib for path handling, the CLI offers a user-friendly experience while maintaining flexibility across different storage environments.
 
-While the CLI is only one way to access StarryNight functionality (alongside notebooks and the UI), it serves as an important bridge between pure algorithm functions and higher-level abstractions. It provides direct access for testing and scripting while establishing patterns that inform the module system discussed next.
+While the CLI is only one way to access StarryNight functionality (alongside notebooks and the UI), it serves as an important bridge between pure algorithm functions and higher-level abstractions. It provides direct access for testing and scripting while establishing patterns that inform the module layer discussed next.
 
-**Next: [Module System](03_module_system.md)**
+**Next: [Module Layer](03_module_layer.md)**

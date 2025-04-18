@@ -1,15 +1,15 @@
-# StarryNight Experiment and Module Configuration
+# StarryNight Configuration Layer
 
 !!! Warning
     - This document contains bot-generated text and has not yet been reviewed by developers!
 
 ## Overview
 
-Configuration in StarryNight consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.
+The configuration layer in StarryNight consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.
 
 ## Purpose
 
-The configuration systems in StarryNight serve several critical purposes:
+The configuration layer in StarryNight serves several critical purposes:
 
 1. **Parameter Management** - Collecting and organizing essential parameters
 2. **Parameter Inference** - Determining settings automatically from data
@@ -674,4 +674,4 @@ The experiment and module configuration systems in StarryNight provide a powerfu
 
 Together, these configuration systems form a critical bridge between user input and pipeline execution, reducing manual configuration burden while maintaining flexibility for different experiment types and module implementations. They exemplify the architecture's focus on separation of concerns, allowing each component to focus on its specific role while working together to create a cohesive system.
 
-**Next: [Architecture Overview](00_architecture_overview.md)**
+**Next: [Architecture for Biologists](07_architecture_for_biologists.md)**

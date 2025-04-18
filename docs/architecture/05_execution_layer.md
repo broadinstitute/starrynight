@@ -1,15 +1,15 @@
-# StarryNight Execution System
+# StarryNight Execution Layer
 
 !!! Warning
     - This document contains bot-generated text and has not yet been reviewed by developers!
 
 ## Overview
 
-The execution system in StarryNight defines how modules and pipelines are executed in computing environments. This system consists of two key components: the execution model, which handles how modules and pipelines are configured and executed in different contexts, and the Snakemake backend, which translates Pipecraft pipelines into concrete, reproducible workflows. Together, these components form the final layer in StarryNight's architecture, turning abstract pipeline definitions into actual running processes.
+The execution layer in StarryNight defines how modules and pipelines are executed in computing environments. This layer consists of two key components: the execution model, which handles how modules and pipelines are configured and executed in different contexts, and the Snakemake backend, which translates Pipecraft pipelines into concrete, reproducible workflows. Together, these components form the final layer in StarryNight's architecture, turning abstract pipeline definitions into actual running processes.
 
 ## Purpose
 
-The execution system serves several critical purposes in the StarryNight architecture:
+The execution layer serves several critical purposes in the StarryNight architecture:
 
 1. **Configuration** - Setting up modules with appropriate parameters
 2. **Instantiation** - Creating configured module instances
@@ -25,7 +25,7 @@ This system provides the connection between abstract pipeline definitions and co
 
 ## Execution Model
 
-The execution model in StarryNight defines how modules and pipelines are run in different contexts, with a particular focus on the notebook workflow.
+The execution model in the StarryNight execution layer defines how modules and pipelines are run in different contexts, with a particular focus on the notebook workflow.
 
 ### Notebook Workflow
 
@@ -528,4 +528,4 @@ This capability demonstrates the power of the separation between definition and 
 
 The execution system bridges the gap between abstract pipeline definitions and concrete execution, providing the final layer in StarryNight's architecture that turns conceptual workflows into running processes.
 
-**Next: [Experiment Configuration](06_experiment_configuration.md)**
+**Next: [Configuration Layer](06_configuration_layer.md)**

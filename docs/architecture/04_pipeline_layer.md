@@ -1,15 +1,15 @@
-# StarryNight Pipeline Construction and Execution
+# StarryNight Pipeline Layer
 
 !!! Warning
     - This document contains bot-generated text and has not yet been reviewed by developers!
 
 ## Overview
 
-Pipeline construction in StarryNight combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This document explores how individual modules are integrated with Pipecraft to define their compute graphs, and how these modules are then composed into complete executable pipelines. This represents the highest level of abstraction in the StarryNight architecture.
+The pipeline layer in StarryNight combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This document explores how individual modules are integrated with Pipecraft to define their compute graphs, and how these modules are then composed into complete executable pipelines. This represents the highest level of abstraction in the StarryNight architecture.
 
 ## Purpose
 
-Pipeline construction and composition serve several key purposes in the StarryNight architecture:
+The pipeline layer serves several key purposes in the StarryNight architecture:
 
 1. **Compute Graph Definition** - Creating structured representations of computational tasks
 2. **Container Configuration** - Specifying container settings for isolated execution
@@ -621,4 +621,4 @@ The key architectural achievement is the separation between pipeline definition 
 
 The pipeline construction capabilities bridge the gap between individual module execution and complete workflow automation, providing a powerful yet comprehensible system for scientific image processing.
 
-**Next: [Execution System](05_execution_system.md)**
+**Next: [Execution Layer](05_execution_layer.md)**
