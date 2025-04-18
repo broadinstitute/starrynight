@@ -171,23 +171,29 @@ The core architectural principle of StarryNight is separation of concerns - brea
 
 ### A Manufacturing Analogy
 
-This architecture mirrors how products go from concept to manufacturing:
+To understand why this architecture matters, think of StarryNight like a modern manufacturing system:
 
 ```mermaid
 flowchart TD
-    A[Engineering Techniques\nAlgorithm Layer] -->|implements| B[Standard Tools\nCLI Layer]
-    B -->|defines how to use| C[Component Blueprints\nModule Layer]
-    C -->|combine into| D[Assembly Plan\nPipeline Layer]
-    D -->|executed on| E[Factory Floor\nExecution Layer]
+    A[ALGORITHM: Engineering Techniques] -->|implements| B[CLI: Standard Tools]
+    B -->|defines how to use| C[MODULE: Component Blueprints]
+    C -->|combine into| D[PIPELINE: Assembly Plan]
+    D -->|executed on| E[EXECUTION: Factory Floor]
 ```
 
-In this analogy:
+Think of it this way:
 
-1. **Algorithm Layer** - Basic engineering techniques (metal cutting, welding, molding)
-2. **CLI Layer** - Standard tools that implement those techniques (lathes, welders, molds)
-3. **Module Layer** - Standardized components with blueprints that specify *which* techniques to use and *how* to apply them. Just as a transmission blueprint calls for specific cutting operations without doing the cutting itself, a StarryNight module specifies "use this algorithm with these parameters" without actually running the algorithm.
-4. **Pipeline Layer** - Complete assembly sequence showing how components connect (the vehicle's assembly plan)
-5. **Execution Layer** - The factory floor where the assembly plan becomes reality
+- The **Algorithm Layer** provides the fundamental operations - like basic engineering techniques such as metal cutting, welding, or molding. These are the essential capabilities that everything else builds upon.
+
+- The **CLI Layer** creates standard tools that implement those techniques - like the specific machines in a factory. They make the techniques accessible but don't determine how they're used together.
+
+- The **Module Layer** creates standardized component blueprints. Here's the key insight: Just as a car's transmission blueprint specifies exactly which cutting techniques to use on which materials - without actually cutting anything itself - a StarryNight module specifies which algorithms to use with which parameters, without actually running them.
+
+- The **Pipeline Layer** combines these blueprints into a complete assembly plan that shows how all components connect together - like the master plan for building an entire vehicle.
+
+- The **Execution Layer** is the factory floor where the plan becomes reality - the machines, robots and processes that actually manufacture according to the plans.
+
+This separation is powerful because automotive engineers can design vehicles without operating cutting machines, while production engineers can optimize manufacturing without redesigning the car. Similarly, you can design microscopy analysis workflows without coding, while the system handles all the complex execution details.
 
 This separation in StarryNight creates powerful abstractions that enable:
 
