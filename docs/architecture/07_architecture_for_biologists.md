@@ -2,11 +2,11 @@
 
 ## Why This Architecture Was Developed
 
-StarryNight's architecture was designed to address the challenges faced by biologists working with high-throughput microscopy data. This document explains how the system's design supports microscopy research workflow requirements.
+StarryNight's architecture was designed to address the challenges faced by biologists working with high-throughput microscopy data, and optical pooled screening in specific. This document explains how the system's design supports image analysis workflow requirements.
 
 ## Core Challenges in High-Throughput Microscopy
 
-High-throughput microscopy experiments present several key challenges:
+Analyzing images from optical pooled screening experiments present several key challenges:
 
 * **Complex Multistage Processing** - Requiring multiple image processing steps that must be executed in specific sequences
 * **Parallel Image Tracks** - Processing different types of images with varied requirements
@@ -15,24 +15,20 @@ High-throughput microscopy experiments present several key challenges:
 
 ## Workflow in StarryNight
 
-StarryNight's architecture enables a research workflow that addresses the requirements of advanced microscopy research:
+StarryNight's architecture enables a research workflow that addresses the requirements of analyzing optical pooled screening data:
 
 1. **Experiment Configuration** - Specifying the parameters relevant to the research:
-   - Experimental design settings
-   - Image acquisition parameters
-   - Processing configuration options
-
+    - Experimental design settings
+    - Image acquisition parameters
+    - Processing configuration options
 2. **Parameter Transformation** - Converting high-level parameters into complete processing pipelines with appropriate settings for each stage
-
 3. **Critical Checkpoints** - Allowing review and intervention:
-   - Inspection of intermediate results between processing stages
-   - Quality validation through integrated visualization tools
-   - Parameter adjustments based on observed results
-
+    - Inspection of intermediate results between processing stages
+    - Quality validation through integrated visualization tools
+    - Parameter adjustments based on observed results
 4. **Parallel Processing** - Handling multiple analysis paths efficiently:
-   - Running independent processing tracks in parallel when possible
-   - Integrating results where workflows converge
-
+    - Running independent processing tracks in parallel when possible
+    - Integrating results where workflows converge
 5. **Scaling** - Processing across different computing environments with consistent results whether running locally or in the cloud
 
 This workflow combines automation for efficiency with critical intervention points where biological expertise is essential, supporting various microscopy research applications.
@@ -57,6 +53,7 @@ flowchart TD
 Just as biological laboratories separate fundamental techniques, protocols, workflows, and execution, StarryNight organizes processing into layers:
 
 * **Algorithms** are like **fundamental laboratory methods** - basic image processing techniques
+* **CLI Layer** is like **laboratory tools** - instruments that implement the fundamental methods
 * **Modules** are like **standard protocols** - organized procedures for specific tasks
 * **Pipelines** are like **complete experimental workflows** - sequences of protocols that work together
 * **Execution** is like **automated lab equipment** - running the workflows reliably
@@ -116,7 +113,6 @@ The layered architecture translates to practical benefits for microscopy researc
 
 * **Standardized Structure**: Consistent organization patterns for input and output data
 * **Metadata Extraction**: Flexible path parsing for experimental information
-* **Compatibility**: Consistency with existing tools and pipelines
 
 ## Key Technical Terms
 
@@ -128,14 +124,13 @@ Important concepts when discussing StarryNight's architecture:
 * **CellProfiler**: Open-source cell image analysis software integrated with StarryNight
 * **Module**: Standardized component that defines a specific image processing task
 
-## Conclusion: Architecture for Advanced Microscopy
+## Conclusion: Architecture for Optical Pooled Screening
 
-StarryNight's architecture addresses the requirements of advanced microscopy research through:
+StarryNight's architecture addresses the requirements of optical pooled screening through:
 
 1. **Flexible, multistage workflows** adaptable to various imaging approaches
 2. **Critical quality control points** where biological expertise can be applied
 3. **Parameter configuration interfaces** matched to different technical expertise levels
 4. **Scalable processing** across computing environments without workflow changes
-5. **Consistent data organization** compatible with existing tools and pipelines
 
 This architectural approach addresses fundamental challenges in high-throughput microscopy research. By separating the system into well-defined layers, StarryNight provides both automation for efficiency and control points for quality assessment, creating a flexible framework that can adapt to evolving research methodologies.
