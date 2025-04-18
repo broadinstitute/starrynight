@@ -152,20 +152,16 @@ StarryNight is designed to grow with your research needs:
 
 This extensibility means the system can evolve as your research methods change, without requiring a complete redesign.
 
-## Glossary of Terms
+## Technical Terms Reference
 
-For reference, here are explanations of key terms used in StarryNight:
+For reference, here are explanations of key technical terms used in StarryNight that may be unfamiliar:
 
-- **Algorithm Layer**: Core foundation of pure Python functions organized into algorithm sets
-- **CLI Layer**: Command-line interfaces that make algorithms directly accessible
-- **Module Layer**: Standardized components that package algorithms with consistent interfaces
-- **Pipeline Layer**: Connected sequence of modules that forms a complete workflow
-- **Execution Layer**: Backend system that runs pipelines on computing infrastructure
-- **Configuration Layer**: Parameter management and inference system that simplifies setup
-- **Compute Graph**: Structured representation of processing steps and their relationships
+- **Algorithm Set**: Group of related functions that perform a specific imaging task (e.g., illumination correction functions)
+- **Compute Graph**: Structured representation of processing steps and their relationships that defines execution logic
 - **Container**: Isolated computing environment that packages all necessary software and dependencies, ensuring consistent and reproducible execution regardless of the computing system (similar to how a tissue culture hood provides a controlled environment for biological experiments)
-- **CellProfiler**: Open-source cell image analysis software used by StarryNight
-- **Snakemake**: Workflow management system that coordinates execution
+- **CellProfiler**: Open-source cell image analysis software that StarryNight uses for many imaging operations
+- **Snakemake**: Workflow management system that coordinates execution of complex pipelines
+- **Pipecraft**: Library used by StarryNight to define processing workflows in a structured, composable way
 
 ## The Power of Separation
 
