@@ -32,12 +32,14 @@ As a biologist, you'll typically interact with the Canvas web interface, which p
 
 StarryNight organizes functionality into layers with distinct responsibilities:
 
-**Processing Sequence**:
-**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
+**Core Processing Flow**:
+**Algorithm Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
 
-**Configuration Layer** ↓ (interacts across layers)
+**Configuration Layer** (cross-cutting concern providing parameters to all layers)
 
-The processing layers form a sequence where each builds upon the previous, while the Configuration Layer works across the system:
+**CLI Layer** (alternative direct entry point to algorithms)
+
+The core processing layers form a sequence where each builds upon the previous, while the Configuration Layer acts as a bridge between user inputs and the detailed settings needed throughout the system:
 
 1. **Algorithm Layer** - Pure Python functions implementing image processing operations
 2. **CLI Layer** - Command-line interfaces that make algorithms accessible without programming
@@ -180,11 +182,14 @@ To understand why this architecture matters, think of StarryNight like a modern 
 
 ```mermaid
 flowchart TD
-    A[ALGORITHM: Engineering Techniques] -->|implements| B[CLI: Standard Tools]
-    B -->|defines how to use| C[MODULE: Component Blueprints]
-    F[CONFIGURATION: Design Specifications] -->|configures| C
-    C -->|combine into| D[PIPELINE: Assembly Plan]
+    A[ALGORITHM: Engineering Techniques] -->|wrapped by| C[MODULE: Component Blueprints]
+    B[CLI: Standard Tools] -->|alternative access to| A
+    C -->|combined into| D[PIPELINE: Assembly Plan]
     D -->|executed on| E[EXECUTION: Factory Floor]
+    F[CONFIGURATION: Design Specifications] -->|configures| A
+    F -->|configures| C
+    F -->|configures| D
+    F -->|configures| E
 ```
 
 Think of it this way:

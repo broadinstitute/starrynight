@@ -44,9 +44,10 @@ StarryNight follows a layered architecture with distinct responsibilities:
 3. **Module Layer** - Standardized abstractions with specs and compute graphs
 4. **Pipeline Layer** - Compositions of modules into executable workflows
 5. **Execution Layer** - Backend systems that run the pipelines
-6. **Configuration Layer** - Parameter inference and experiment configuration
 
-The processing layers (1-5) build sequentially upon each other, while the Configuration Layer interacts across multiple layers, primarily influencing how modules are configured. This separation of concerns creates a flexible and maintainable architecture.
+Additionally, the **Configuration Layer** acts as a cross-cutting concern that interacts with the other layers by providing parameter management, inference, and standardization across the system.
+
+In a typical workflow, the Module Layer consumes configuration to instantiate modules, then the Pipeline Layer composes these modules, and finally the Execution Layer runs the pipeline. The Configuration Layer acts as a bridge between user inputs and the detailed settings needed by each layer. This separation of concerns creates a flexible and maintainable architecture.
 
 ## Key Components
 
