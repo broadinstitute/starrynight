@@ -1,28 +1,41 @@
 # StarryNight Architecture for Biologists
 
-## Why This Matters to You
+## Why This Architecture Was Built for Your Research Needs
 
-As a biologist working with microscopy data, your focus is on the science - not the computational details. StarryNight handles the complexities of image processing so you can concentrate on your research questions. This document explains the system architecture in biological terms, highlighting why it matters for your work.
+StarryNight's architecture was specifically designed to address the challenges faced by biologists working with high-throughput microscopy data in optical pooled screens. This document explains how the system's design directly supports your research workflow requirements.
 
-## The Core Challenge: From Images to Insights
+## Core Challenges in Optical Pooled Screens
 
-High-throughput microscopy generates thousands of images that need consistent processing while maintaining:
+High-throughput pooled optical screening experiments present several key challenges:
 
-* **Reproducibility** - Ensuring someone else can get the same results from your data
-* **Scalability** - Processing one image or thousands with the same approach
-* **Adaptability** - Modifying analysis parameters without rebuilding everything
+* **Complex Multistage Processing** - Requiring illumination correction, segmentation, alignment, and barcode identification
+* **Parallel Image Tracks** - Processing both Cell Painting (CP) and Barcoding (BC) images with different needs
+* **Critical Quality Assessment** - Needing inspection points between processing stages
+* **Diverse User Expertise Levels** - Supporting both computational experts and biologists with varying technical backgrounds
 
 ## Your Research Workflow in StarryNight
 
-When you use StarryNight, your typical workflow looks like this:
+StarryNight's architecture enables a research workflow that addresses specific requirements identified for optical pooled screening:
 
-1. **Plan your experiment** - Decide on channels, markers, and analysis goals
-2. **Configure basic parameters** - Tell StarryNight what you're looking for
-3. **StarryNight transforms these parameters** into complete processing instructions
-4. **StarryNight executes the analysis** consistently and reproducibly
-5. **You analyze results** rather than debugging processing steps
+1. **Configure your experiment** - Specify critical parameters like:
+   - Channel mappings between microscope channels and biological stains
+   - Image grid configuration (rows, columns, or images per well)
+   - Stitching parameters (overlap percentages, tile arrangement)
 
-The system handles the complexity between your simple instructions and the sophisticated processing required - similar to how automated lab equipment executes complex protocols from simple inputs.
+2. **StarryNight transforms these parameters** into complete processing pipelines with appropriate settings for each stage
+
+3. **Review and intervene at critical checkpoints**:
+   - Inspect illumination correction results before proceeding
+   - Validate segmentation quality through integrated visualization
+   - Assess barcode alignment and calling with interactive tools
+
+4. **Process Cell Painting and Barcoding tracks in parallel**:
+   - Run independent processing paths simultaneously
+   - Integrate results at appropriate convergence points
+
+5. **Scale processing across computing environments** with consistent results whether running locally or in the cloud
+
+This workflow combines automation for efficiency with critical intervention points where biological expertise is essential - exactly as required for current optical pooled screening experiments.
 
 ## A Laboratory Research Analogy
 
@@ -49,42 +62,61 @@ Just as your laboratory separates fundamental techniques, protocols, workflows, 
 * **Execution** is your **automated lab equipment** - running the workflows reliably
 * **Configuration** is your **experimental parameters** - customizing everything for your specific research
 
-## Why This Layered Approach Benefits Your Research
+## How StarryNight's Architecture Meets Your Requirements
 
-This architecture directly addresses key challenges in microscopy research:
+The layered architecture directly addresses your high-priority research requirements:
 
-### 1. Reproducibility
+### 1. Complex Image Processing Workflows
 
-**The Challenge**: Ensuring consistent analysis across different labs and systems
+**Requirement**: Support for multiple processing stages including illumination correction, segmentation, alignment, and feature extraction
 
-**StarryNight's Solution**: Containerized execution provides standardized environments (like tissue culture hoods ensure consistent conditions) so analysis runs identically everywhere.
+**Architectural Solution**: The Pipeline Layer combines specialized modules into complete workflows, while the Execution Layer handles the complex interdependencies between steps. This allows you to define complete end-to-end processing pipelines while maintaining checkpoints for quality control.
 
-### 2. Parameter Management
+### 2. Parallel Processing Capabilities
 
-**The Challenge**: Keeping track of all settings for complex image processing
+**Requirement**: Process Cell Painting and Barcoding image tracks simultaneously with different parameters
 
-**StarryNight's Solution**: The configuration system infers many parameters automatically and maintains consistency across all processing steps.
+**Architectural Solution**: The Pipeline Layer can define parallel execution paths with different configurations, while the Execution Layer optimizes resource allocation for efficient processing. This lets you run independent tracks simultaneously and integrate results at convergence points.
 
-### 3. Scaling Up
+### 3. Manual Intervention Points
 
-**The Challenge**: Moving from test images to full experiments with thousands of images
+**Requirement**: Ability to inspect results and modify parameters between processing stages
 
-**StarryNight's Solution**: The same workflow definitions automatically scale to handle varying dataset sizes.
+**Architectural Solution**: The modular approach with clearly defined layer boundaries creates natural inspection points where you can evaluate results before proceeding. The Configuration Layer can be updated at these checkpoints to adjust parameters for subsequent stages.
 
-### 4. Adapting to Different Experiments
+### 4. Consistent Data Organization
 
-**The Challenge**: Modifying analysis for different experimental designs
+**Requirement**: Standardized data structures that maintain compatibility with existing pipelines
 
-**StarryNight's Solution**: Change high-level parameters without rebuilding entire workflows - the system regenerates the technical details.
+**Architectural Solution**: The Module Layer defines consistent input/output specifications that enforce standardized data organization, while the Configuration Layer manages path structures and naming conventions for both inputs and outputs.
+
+### 5. Multiple User Interfaces
+
+**Requirement**: Support for both computational experts and biologists with varying technical backgrounds
+
+**Architectural Solution**: The layered design enables multiple interaction points - from direct Algorithm Layer access for computational experts to simplified Canvas interfaces that abstract technical details for biologists while maintaining full functionality.
 
 ## Using StarryNight in Practice
 
-The layered architecture translates to practical benefits in your daily work:
+The layered architecture translates to practical benefits for optical pooled screening experiments:
 
-* **Canvas Web Interface**: Configure experiments through a user-friendly interface
-* **Automated Setup**: The system generates all necessary processing steps
-* **Consistent Analysis**: Your data is processed with exactly the same steps every time
-* **Focus on Results**: Spend time interpreting data, not debugging processing
+### Multiple Interface Options
+
+* **Canvas Web Interface**: A graphical interface with both simplified views for non-experts and advanced options for experienced users
+* **Jupyter Notebooks**: Interactive inspection environments for result visualization and quality control
+* **Command-Line Interface**: Direct access to algorithms for computational experts and automation scripts
+
+### Flexible Processing Control
+
+* **End-to-End Automation**: Run complete workflows from raw images to results
+* **Checkpoint Intervention**: Pause at critical points to assess quality and adjust parameters
+* **Restart Capability**: Resume processing from checkpoints after parameter adjustments
+
+### Consistent Data Organization
+
+* **Standardized Structure**: Input and output data follow consistent organization patterns
+* **Metadata Extraction**: Flexible path parsing to extract experimental information
+* **Compatibility**: Maintains consistency with existing data structures and pipelines
 
 ## Key Terms for Understanding Discussions
 
@@ -96,13 +128,14 @@ When discussing StarryNight with computational colleagues, these terms may arise
 * **CellProfiler**: Open-source cell image analysis software integrated with StarryNight
 * **Module**: Standardized component that defines a specific image processing task
 
-## The Bottom Line
+## The Bottom Line: Architecture That Serves Your Research
 
-StarryNight's architecture enables you to:
+StarryNight's architecture was specifically designed to address the requirements of optical pooled screening:
 
-1. **Configure** your experiment with minimal parameters
-2. **Let the system** generate the complex processing pipelines
-3. **Run analysis** consistently across any computing environment
-4. **Focus on interpreting results** rather than managing processing
+1. **Process complex, multistage workflows** with both Cell Painting and Barcoding tracks
+2. **Intervene at critical quality control points** where biological expertise is essential
+3. **Configure complex experimental parameters** through interfaces matched to your technical comfort level
+4. **Scale processing** from local workstations to cloud environments without changing your workflow
+5. **Maintain data organization** that's compatible with existing tools and pipelines
 
-This approach bridges the gap between sophisticated image processing and the practical needs of biological research, allowing you to concentrate on science rather than computation.
+This architectural approach directly addresses the specific challenges you face in high-throughput microscopy experiments. By separating the system into well-defined layers, StarryNight gives you both the automation needed for efficiency and the control points required for quality assessment - exactly as specified in the system requirements.
