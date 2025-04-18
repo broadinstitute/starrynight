@@ -21,7 +21,7 @@ The documentation was created based on several key source materials:
    - Developer guide at `../../docs/developer-guide.md`
 
 3. **PCPIP Documentation**:
-   - Documentation on the predecessor system (PCPIP) for reference and comparison
+   - Documentation on the predecessor system (PCPIP) at `../../docs/pcpip-specs.md`
 
 ### Creation Methodology
 
@@ -169,7 +169,7 @@ site_name: Starry Night Documentation
 # ... other configuration ...
 
 nav:
-  - Home: index.md
+  # ... other sections ...
   - Architecture:
     - Overview: architecture/00_architecture_overview.md
     - Algorithm Foundation: architecture/01_algorithms_foundation.md
@@ -177,16 +177,6 @@ nav:
     - Architecture for Biologists: architecture/13_architecture_for_biologists.md
   # ... other sections ...
 ```
-
-### Theme
-
-The documentation uses the Material for MkDocs theme, which provides:
-
-- Clean, modern appearance
-- Good code highlighting
-- Mobile responsiveness
-- Search functionality
-- Navigation features
 
 ## Maintenance Guidelines
 
