@@ -33,11 +33,9 @@ As a biologist, you'll typically interact with the Canvas web interface, which p
 StarryNight organizes functionality into layers with distinct responsibilities:
 
 **Core Processing Flow**:
-**Algorithm Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
+**Algorithm Layer** → **CLI Layer** → **Module Layer** → **Pipeline Layer** → **Execution Layer**
 
 **Configuration Layer** (cross-cutting concern providing parameters to all layers)
-
-**CLI Layer** (alternative direct entry point to algorithms)
 
 The core processing layers form a sequence where each builds upon the previous, while the Configuration Layer acts as a bridge between user inputs and the detailed settings needed throughout the system:
 
@@ -182,29 +180,30 @@ To understand why this architecture matters, think of StarryNight like a modern 
 
 ```mermaid
 flowchart TD
-    A[ALGORITHM LAYER: Core Methods] -->|packaged into| B[MODULE LAYER: Experimental Protocols]
+    A[ALGORITHM LAYER: Core Methods] -->|used by| F[CLI LAYER: Lab Bench Tools]
+    F -->|incorporated into| B[MODULE LAYER: Experimental Protocols]
     B -->|combined into| C[PIPELINE LAYER: Experimental Workflow]
     C -->|run on| D[EXECUTION LAYER: Lab Equipment]
     E[CONFIGURATION LAYER: Experimental Parameters] -->|guides| A
+    E -->|guides| F
     E -->|guides| B
     E -->|guides| C
     E -->|guides| D
-    F[CLI LAYER: Direct Lab Access] -.->|alternative access to| A
 ```
 
 This laboratory analogy directly maps to how StarryNight works:
 
 - The **Algorithm Layer** is like your **fundamental laboratory methods** - the basic techniques a researcher knows (cell culture, PCR, microscopy techniques). These methods are well-defined, tested, and reusable across many experiments.
 
-- The **Module Layer** is like your **standard protocols** - complete experimental procedures (e.g., "Immunofluorescence Staining Protocol") that specify which methods to use, in what order, with what parameters. Protocols don't perform the actual work but define how it should be done.
+- The **CLI Layer** is like your **lab bench tools** - specialized instruments and reagent kits that implement the fundamental methods in a directly usable form. These tools provide immediate access to perform individual techniques but don't organize them into complete experimental plans.
+
+- The **Module Layer** is like your **standard protocols** - complete experimental procedures (e.g., "Immunofluorescence Staining Protocol") that incorporate specific lab bench tools and organize them into structured procedures. Protocols specify which tools to use, in what order, with what parameters, but don't perform the actual work.
 
 - The **Pipeline Layer** is your **complete experimental workflow** - the full sequence of protocols needed for a research project, showing how the outputs of one protocol feed into another (tissue preparation → staining → imaging → analysis).
 
-- The **Execution Layer** is your **lab equipment and personnel** that actually perform the experiments according to the protocols and workflow plan.
+- The **Execution Layer** is your **automated lab equipment and personnel** that actually perform the experiments according to the protocols and workflow plan.
 
-- The **Configuration Layer** is your **experimental parameters and conditions** - cell types, antibody dilutions, incubation times, and other variables that customize experiments for specific research questions. These parameters influence all aspects of the experiment.
-
-- The **CLI Layer** is like **direct lab access** for hands-on researchers who want to perform individual methods directly rather than following complete protocols.
+- The **Configuration Layer** is your **experimental parameters and conditions** - cell types, antibody dilutions, incubation times, and other variables that customize experiments for specific research questions. These parameters influence everything from the basic methods to the tools, protocols, workflows, and execution.
 
 This separation is powerful because it allows specialization: protocol designers can create standardized procedures without running the actual experiments, workflow planners can organize complete research projects without detailing each technical step, and lab managers can optimize execution without changing the scientific approach.
 
