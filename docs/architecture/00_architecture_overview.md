@@ -1,5 +1,8 @@
 # StarryNight Architecture Overview
 
+!!!warning "Documentation Scope"
+     This architecture documentation primarily focuses on the StarryNight core and PipeCraft packages. The Conductor (job orchestration) and Canvas (user interface) packages are mentioned for completeness but not covered in detail in the current documentation.
+
 ## Introduction
 
 StarryNight is a scientific image processing framework designed for processing high-throughput imaging data. It provides a flexible, composable pipeline system that handles complex image processing workflows while maintaining separation of concerns between algorithms, execution, and configuration.
@@ -29,13 +32,10 @@ The StarryNight framework is organized as a monorepo with four main packages:
     - Visualization of results
     - Integration with Conductor
 
-!!!warning "Documentation Scope"
-     This architecture documentation primarily focuses on the StarryNight core and PipeCraft packages. The Conductor (job orchestration) and Canvas (user interface) packages are mentioned for completeness but not covered in detail in the current documentation.
+## Core Architectural Layers
 
 !!!note "Focus"
      This documentation primarily focuses on the architectural layers rather than the package boundaries, as layers can span multiple packages.
-
-## Core Architectural Layers
 
 StarryNight follows a layered architecture with increasing levels of abstraction:
 
