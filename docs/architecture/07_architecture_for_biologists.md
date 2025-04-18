@@ -176,43 +176,43 @@ The core architectural principle of StarryNight is separation of concerns - brea
 4. **How it's structured** (Pipeline Layer) - The organization of processing steps and their dependencies
 5. **How it's executed** (Execution Layer) - The actual execution in containerized environments
 
-### A Manufacturing Analogy
+### A Laboratory Research Analogy
 
-To understand why this architecture matters, think of StarryNight like a modern manufacturing system:
+To understand why this architecture matters, think of StarryNight like a modern biological research laboratory:
 
 ```mermaid
 flowchart TD
-    A[ALGORITHM: Engineering Techniques] -->|wrapped by| C[MODULE: Component Blueprints]
-    B[CLI: Standard Tools] -->|alternative access to| A
-    C -->|combined into| D[PIPELINE: Assembly Plan]
-    D -->|executed on| E[EXECUTION: Factory Floor]
-    F[CONFIGURATION: Design Specifications] -->|configures| A
-    F -->|configures| C
-    F -->|configures| D
-    F -->|configures| E
+    A[ALGORITHM LAYER: Core Methods] -->|packaged into| B[MODULE LAYER: Experimental Protocols]
+    B -->|combined into| C[PIPELINE LAYER: Experimental Workflow]
+    C -->|run on| D[EXECUTION LAYER: Lab Equipment]
+    E[CONFIGURATION LAYER: Experimental Parameters] -->|guides| A
+    E -->|guides| B
+    E -->|guides| C
+    E -->|guides| D
+    F[CLI LAYER: Direct Lab Access] -.->|alternative access to| A
 ```
 
-Think of it this way:
+This laboratory analogy directly maps to how StarryNight works:
 
-- The **Algorithm Layer** provides the fundamental operations - like basic engineering techniques such as metal cutting, welding, or molding. These are the essential capabilities that everything else builds upon.
+- The **Algorithm Layer** is like your **fundamental laboratory methods** - the basic techniques a researcher knows (cell culture, PCR, microscopy techniques). These methods are well-defined, tested, and reusable across many experiments.
 
-- The **CLI Layer** creates standard tools that implement those techniques - like the specific machines in a factory. They make the techniques accessible but don't determine how they're used together.
+- The **Module Layer** is like your **standard protocols** - complete experimental procedures (e.g., "Immunofluorescence Staining Protocol") that specify which methods to use, in what order, with what parameters. Protocols don't perform the actual work but define how it should be done.
 
-- The **Module Layer** creates standardized component blueprints. Here's the key insight: Just as a car's transmission blueprint specifies exactly which cutting techniques to use on which materials - without actually cutting anything itself - a StarryNight module specifies which algorithms to use with which parameters, without actually running them.
+- The **Pipeline Layer** is your **complete experimental workflow** - the full sequence of protocols needed for a research project, showing how the outputs of one protocol feed into another (tissue preparation → staining → imaging → analysis).
 
-- The **Pipeline Layer** combines these blueprints into a complete assembly plan that shows how all components connect together - like the master plan for building an entire vehicle.
+- The **Execution Layer** is your **lab equipment and personnel** that actually perform the experiments according to the protocols and workflow plan.
 
-- The **Configuration Layer** provides the design specifications and parameters - like the detailed engineering requirements that specify materials, tolerances, and settings. These specifications don't themselves perform any manufacturing but guide how components are designed and built.
+- The **Configuration Layer** is your **experimental parameters and conditions** - cell types, antibody dilutions, incubation times, and other variables that customize experiments for specific research questions. These parameters influence all aspects of the experiment.
 
-- The **Execution Layer** is the factory floor where the plan becomes reality - the machines, robots and processes that actually manufacture according to the plans.
+- The **CLI Layer** is like **direct lab access** for hands-on researchers who want to perform individual methods directly rather than following complete protocols.
 
-This separation is powerful because automotive engineers can design vehicles without operating cutting machines, production engineers can optimize manufacturing without redesigning the car, and design engineers can change specifications without rebuilding the entire factory process.
+This separation is powerful because it allows specialization: protocol designers can create standardized procedures without running the actual experiments, workflow planners can organize complete research projects without detailing each technical step, and lab managers can optimize execution without changing the scientific approach.
 
-This separation in StarryNight creates powerful abstractions that enable:
+This laboratory-like architecture in StarryNight creates powerful advantages:
 
-1. **Scalability** - The same high-level workflow definition can process one image or thousands
-2. **Simplified Configuration** - Complex workflows can be defined with minimal parameters
-3. **Consistent Execution** - The same workflow runs identically across different environments
-4. **Automatic Workflow Generation** - Complex execution plans are generated automatically from simple definitions
+1. **Scalability** - Just as a laboratory protocol can be run once or thousands of times, StarryNight workflows can process one image or thousands
+2. **Reproducibility** - Like standardized lab protocols ensure consistent results, StarryNight ensures identical processing across different computing environments
+3. **Simplified Setup** - Rather than specifying every technical detail, researchers can define high-level parameters (like experimental conditions) and let the system handle implementation details
+4. **Automation** - Complex experimental workflows are automatically translated into detailed execution steps, similar to how automated lab equipment follows protocols without manual intervention
 
-Instead of writing thousands of lines of custom code for each experiment, scientists can define what they want at a high level, and the system handles the complexity of implementing and scaling the analysis. The result is a framework that can grow with the increasing demands of modern microscopy while keeping the user interface straightforward.
+Instead of writing thousands of lines of custom code for each experiment, scientists can define what they want at a high level (just as they would specify experimental conditions), and the system handles the complexity of implementing and scaling the analysis. The result is a framework that can grow with the increasing demands of modern microscopy while keeping the user experience intuitive for biologists.
