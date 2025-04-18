@@ -82,7 +82,10 @@ plugins:
     #     ^(JSON.parse(__md_get("__palette").index == 1)) ? 'dark' : 'light'
 
 markdown_extensions:
+  - attr_list
   - admonition
+  - footnotes
+  - md_in_html
   - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.highlight:

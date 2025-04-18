@@ -29,7 +29,10 @@ The StarryNight framework is organized as a monorepo with four main packages:
     - Visualization of results
     - Integration with Conductor
 
-!!!note
+!!!warning "Documentation Scope"
+     This architecture documentation primarily focuses on the StarryNight core and PipeCraft packages. The Conductor (job orchestration) and Canvas (user interface) packages are mentioned for completeness but not covered in detail in the current documentation.
+
+!!!note "Focus"
      This documentation primarily focuses on the architectural layers rather than the package boundaries, as layers can span multiple packages.
 
 ## Core Architectural Layers
@@ -48,30 +51,30 @@ Each layer builds upon the previous, adding capabilities while maintaining clear
 
 ### Algorithm Sets
 
-The foundation of StarryNight is the algorithm sets - collections of related functions that implement specific image processing steps. Each algorithm set typically includes:
+The foundation of StarryNight is the algorithm sets -- collections of related functions that implement specific image processing steps (1). While many examples use CellProfiler-focused algorithm sets (with data loading, pipeline generation, and execution functions), the architecture supports various other types like indexing, inventory management, quality control, and data visualization.
+{ .annotate }
 
-- Functions to generate data loading configurations
-- Functions to create CellProfiler pipelines
-- Functions to execute pipelines on the data
-
-**Critical Point:** Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent.
+1. Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent.
 
 ### CLI Wrappers
 
-CLI wrappers expose algorithms as command-line tools. The CLI layer makes algorithms directly accessible to users without requiring Python programming.
+CLI wrappers expose algorithms as command-line tools. This layer handles parameter parsing, path management, and command organization, making algorithms directly accessible to users without requiring Python programming.
 
 ### Modules
 
-Modules are a key abstraction that standardize how pipeline components are defined and composed. A module:
+Modules are a key abstraction that standardize how pipeline components are defined and composed (1).
+{ .annotate }
+
+1. Modules have a dual focus - specs and compute graphs. They describe what should be done (through specifications) and how it should be structured (through compute graphs), but don't actually perform the computation.
+
+A module:
 
 - Encapsulates a spec that defines inputs and outputs (using [Bilayers](https://github.com/bilayer-containers/bilayers) schema)
 - Contains a compute graph that defines what operations will be performed
-- Provides `from_config` methods for automatic configuration
+- Provides `from_config` methods for automatic configuration from experiment settings
 - Does not perform actual computation (delegated to execution backends)
 
-**Critical Point:** Modules focus on just two essential things - specs and compute graphs; it doesn't perform any compute.
-
-Each algorithm set typically corresponds to a module set containing specific module implementations for load data, pipeline generation, and execution.
+Each algorithm set typically corresponds to a module set containing specific module implementations for load data generation, pipeline generation, and execution.
 
 ### Pipelines
 
@@ -86,14 +89,15 @@ Pipelines represent the complete computation to be performed but are backend-agn
 
 ### Execution
 
-The execution layer takes pipelines and runs them on specific backends:
+The execution layer takes pipelines and runs them on specific backends(1):
+{ .annotate }
+
+1. The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.).
 
 - Currently implemented with Snakemake
 - Translates Pipecraft pipelines into Snakemake rules
 - Manages container execution (Docker/Singularity)
 - Handles parallelism, logging, and monitoring
-
-**Critical Point:** The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.).
 
 ### Experiment Configuration
 
