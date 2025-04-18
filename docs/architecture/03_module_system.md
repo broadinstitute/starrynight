@@ -95,8 +95,8 @@ This structure ensures that all modules provide the same capabilities, making th
 Below is an example of a module that generates a CellProfiler pipeline for segmentation check. This example illustrates all the key components of a module implementation:
 
 ```python
-class CPSegcheckGenCPPipeModule(StarryNightModule):
-    """Module for generating CellProfiler pipeline for segmentation check."""
+class CPSegcheckGenCPPipeModule(StarrynightModule):
+    """CP segmentation check generate cppipe module."""
 
     @staticmethod
     def uid() -> str:
@@ -104,7 +104,7 @@ class CPSegcheckGenCPPipeModule(StarryNightModule):
         return "cp_segcheck_gen_cppipe"
 
     @staticmethod
-    def _spec() -> SpecContainer:
+    def _spec() -> str:
         """Return module default spec."""
         return SpecContainer(
             inputs=[
@@ -151,7 +151,25 @@ class CPSegcheckGenCPPipeModule(StarryNightModule):
                     path="http://karkinos:2720/?file=.%2FillumCPApplyOutput.py",
                 ),
             ],
-            # Additional spec configurations...
+            parameters=[],
+            display_only=[],
+            results=[],
+            exec_function=ExecFunction(
+                name="",
+                script="",
+                module="",
+                cli_command="",
+            ),
+            docker_image=None,
+            algorithm_folder_name=None,
+            citations=TypeCitations(
+                algorithm=[
+                    TypeAlgorithmFromCitation(
+                        name="Starrynight CP segmentation check generate cppipe module",
+                        description="This module generates cppipe files for cp segmentation check module.",
+                    )
+                ]
+            ),
         )
 
     @staticmethod
@@ -163,8 +181,6 @@ class CPSegcheckGenCPPipeModule(StarryNightModule):
         """Create module from experiment and data config."""
         if spec is None:
             spec = CPSegcheckGenCPPipeModule._spec()
-
-            # Configure paths based on data_config
             spec.inputs[0].path = (
                 data.workspace_path.joinpath(CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX)
                 .resolve()
@@ -177,28 +193,22 @@ class CPSegcheckGenCPPipeModule(StarryNightModule):
                 .__str__()
             )
 
-            # Configure experiment-specific parameters
             spec.inputs[2].path = experiment.cp_config.nuclei_channel
             spec.inputs[3].path = experiment.cp_config.cell_channel
 
-            # Configure output paths
             spec.outputs[0].path = (
                 data.workspace_path.joinpath(CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
                 .resolve()
                 .__str__()
             )
-
-        # Create compute graph
         pipe = create_pipe_gen_cppipe(
             uid=CPSegcheckGenCPPipeModule.uid(),
             spec=spec,
         )
-
-        # Create unit of work definition
         uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
 
-        # Return configured module
         return CPSegcheckGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)
+
 ```
 
 This example illustrates several important aspects of module implementation:
