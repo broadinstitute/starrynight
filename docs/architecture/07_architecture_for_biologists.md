@@ -8,7 +8,7 @@ StarryNight's architecture was specifically designed to address the challenges f
 
 High-throughput pooled optical screening experiments present several key challenges:
 
-* **Complex Multistage Processing** - Requiring illumination correction, segmentation, alignment, and barcode identification
+* **Complex Multistage Processing** - Requiring multiple image processing steps that must be executed in specific sequences
 * **Parallel Image Tracks** - Processing both Cell Painting (CP) and Barcoding (BC) images with different needs
 * **Critical Quality Assessment** - Needing inspection points between processing stages
 * **Diverse User Expertise Levels** - Supporting both computational experts and biologists with varying technical backgrounds
@@ -25,9 +25,9 @@ StarryNight's architecture enables a research workflow that addresses specific r
 2. **StarryNight transforms these parameters** into complete processing pipelines with appropriate settings for each stage
 
 3. **Review and intervene at critical checkpoints**:
-   - Inspect illumination correction results before proceeding
-   - Validate segmentation quality through integrated visualization
-   - Assess barcode alignment and calling with interactive tools
+   - Inspect intermediate results between processing stages
+   - Validate quality through integrated visualization tools
+   - Make informed decisions about parameter adjustments as needed
 
 4. **Process Cell Painting and Barcoding tracks in parallel**:
    - Run independent processing paths simultaneously
@@ -68,9 +68,9 @@ The layered architecture directly addresses your high-priority research requirem
 
 ### 1. Complex Image Processing Workflows
 
-**Requirement**: Support for multiple processing stages including illumination correction, segmentation, alignment, and feature extraction
+**Requirement**: Support for flexible, multistage image processing workflows with various analytical methods
 
-**Architectural Solution**: The Pipeline Layer combines specialized modules into complete workflows, while the Execution Layer handles the complex interdependencies between steps. This allows you to define complete end-to-end processing pipelines while maintaining checkpoints for quality control.
+**Architectural Solution**: The Pipeline Layer combines specialized modules into complete workflows, while the Execution Layer handles the complex interdependencies between steps. This allows you to define complete end-to-end processing pipelines while maintaining checkpoints for quality control, regardless of which specific image processing techniques you need to use.
 
 ### 2. Parallel Processing Capabilities
 
@@ -132,7 +132,7 @@ When discussing StarryNight with computational colleagues, these terms may arise
 
 StarryNight's architecture was specifically designed to address the requirements of optical pooled screening:
 
-1. **Process complex, multistage workflows** with both Cell Painting and Barcoding tracks
+1. **Process flexible, multistage workflows** adaptable to various imaging approaches
 2. **Intervene at critical quality control points** where biological expertise is essential
 3. **Configure complex experimental parameters** through interfaces matched to your technical comfort level
 4. **Scale processing** from local workstations to cloud environments without changing your workflow
