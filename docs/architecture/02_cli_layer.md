@@ -71,33 +71,21 @@ def generate_load_data(input_path, output_path, **options):
 
 ## Path Handling
 
-A key responsibility of the CLI layer is converting user-provided path strings to standardized path objects. Users may provide paths in various formats:
-
-- Local absolute paths (e.g., `/home/user/data`)
-- Local relative paths (e.g., `./data`)
-- Cloud storage paths (e.g., `s3://bucket/data`)
-
-The CLI converts these diverse string formats to standardized `AnyPath` objects before passing them to the underlying algorithms, which are designed to work with this consistent path interface.
-
-### CloudPathLib Integration
-
-The CLI uses the [cloudpathlib](https://cloudpathlib.drivendata.org/) library to handle various path types through the `AnyPath` class:
+The CLI converts user-provided path strings into standardized path objects that work with both local and cloud storage. Users may provide paths in various formats (local, relative, cloud) which the CLI normalizes using the [cloudpathlib](https://cloudpathlib.drivendata.org/) library:
 
 ```python
 from cloudpathlib import AnyPath
 
 def cli_function(input_path, output_path):
-    # Convert string paths to AnyPath objects
-    input_path = AnyPath(input_path)   # Handles local/S3 paths
-    output_path = AnyPath(output_path) # Same interface for all storage types
+    # Convert string paths to path objects
+    input_path = AnyPath(input_path)
+    output_path = AnyPath(output_path)
 
-    # Use the path objects with consistent methods
-    if input_path.exists():
-        # Process files using consistent interface
-        algorithm_function(input_path, output_path)
+    # Call algorithm with consistent path interface
+    algorithm_function(input_path, output_path)
 ```
 
-This abstraction allows the CLI to work with both local and cloud storage using a consistent interface, enabling StarryNight to process data regardless of its location without changes to the algorithm code.
+This approach provides a consistent interface regardless of where data is stored, allowing algorithms to work with both local files and cloud storage seamlessly.
 
 ## Flag Handling
 
@@ -151,7 +139,7 @@ These limitations are addressed by the module and pipeline layers.
 
 ## Example: analysis.py
 
-The `cli/analysis.py` file demonstrates the CLI pattern:
+The `cli/analysis.py` file demonstrates the CLI pattern (simplified excerpt):
 
 ```python
 import click
@@ -190,6 +178,7 @@ def analysis() -> None:
     pass
 
 analysis.add_command(gen_analysis_load_data)
+# The actual file includes additional commands like 'cppipe'
 ```
 
 ## CLI Usage Examples
