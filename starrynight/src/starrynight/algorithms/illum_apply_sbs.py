@@ -92,7 +92,7 @@ def write_loaddata(
 
     # We need frame heads because image channels are combined in a single image
     frame_heads = [
-        f"Frame_Orig_{int(cycle)}_{ch}"
+        f"Frame_Orig_Cycle_{int(cycle)}_{ch}"
         for ch in plate_channel_list
         for cycle in plate_cycles_list
     ]

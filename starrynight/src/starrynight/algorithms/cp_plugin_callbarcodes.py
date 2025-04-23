@@ -112,7 +112,9 @@ Select the folder containing the CSV file to be loaded. {IO_FOLDER_CHOICE_HELP_T
             return self.csv_directory.get_absolute_path()
 
         def set_directory_fn(path):
-            dir_choice, custom_path = self.csv_directory.get_parts_from_path(path)
+            dir_choice, custom_path = self.csv_directory.get_parts_from_path(
+                path
+            )
             self.csv_directory.join_parts(dir_choice, custom_path)
 
         self.csv_file_name = cellprofiler_core.setting.text.Filename(
@@ -125,9 +127,11 @@ Select the folder containing the CSV file to be loaded. {IO_FOLDER_CHOICE_HELP_T
             exts=[("Data file (*.csv)", "*.csv"), ("All files (*.*)", "*.*")],
         )
 
-        self.input_object_name = cellprofiler_core.setting.subscriber.LabelSubscriber(
-            text="Input object name",
-            doc="These are the objects that the module operates on.",
+        self.input_object_name = (
+            cellprofiler_core.setting.subscriber.LabelSubscriber(
+                text="Input object name",
+                doc="These are the objects that the module operates on.",
+            )
         )
 
         self.ncycles = cellprofiler_core.setting.text.Integer(
@@ -205,14 +209,18 @@ Enter the name to be given to the barcode score image.""",
             doc="""\
 Select "*{YES}*" to manually enter a sequence that should be added to the uploaded barcode
 list with the gene name of "EmptyVector". This can be helpful when there is a consistent
-backbone sequence to look out for in every barcoding set).""".format(**{"YES": "Yes"}),
+backbone sequence to look out for in every barcoding set).""".format(
+                **{"YES": "Yes"}
+            ),
         )
 
-        self.empty_vector_barcode_sequence = cellprofiler_core.setting.text.Text(
-            "What is the empty vector sequence?",
-            "AAAAAAAAAAAAAAA",
-            doc="""\
+        self.empty_vector_barcode_sequence = (
+            cellprofiler_core.setting.text.Text(
+                "What is the empty vector sequence?",
+                "AAAAAAAAAAAAAAA",
+                doc="""\
 Enter the sequence that represents barcoding reads of an empty vector""",
+            )
         )
 
     def settings(self):
@@ -277,7 +285,8 @@ Enter the sequence that represents barcoding reads of an empty vector""",
                 )
             else:
                 raise cellprofiler_core.setting.ValidationError(
-                    "Could not open CSV file %s (error: %s)" % (self.csv_path, e),
+                    "Could not open CSV file %s (error: %s)"
+                    % (self.csv_path, e),
                     self.csv_file_name,
                 )
 
@@ -413,13 +422,17 @@ Enter the sequence that represents barcoding reads of an empty vector""",
         matchedbarcodecode = []
         matchedbarcodeid = []
         if self.wants_call_image or self.wants_score_image:
-            objects = workspace.object_set.get_objects(self.input_object_name.value)
+            objects = workspace.object_set.get_objects(
+                self.input_object_name.value
+            )
             labels = objects.segmented
             pixel_data_call = objects.segmented
             pixel_data_score = objects.segmented
         count = 1
         for eachbarcode in calledbarcodes:
-            eachscore, eachmatch = self.queryall(cropped_barcode_dict, eachbarcode)
+            eachscore, eachmatch = self.queryall(
+                cropped_barcode_dict, eachbarcode
+            )
             scorelist.append(eachscore)
             matchedbarcode.append(eachmatch)
             m_id, m_code = barcodes[eachmatch]
@@ -438,13 +451,17 @@ Enter the sequence that represents barcoding reads of an empty vector""",
         imagemeanscore = numpy.mean(scorelist)
 
         workspace.measurements.add_measurement(
-            "Image", "_".join([C_CALL_BARCODES, "MeanBarcodeScore"]), imagemeanscore
+            "Image",
+            "_".join([C_CALL_BARCODES, "MeanBarcodeScore"]),
+            imagemeanscore,
         )
 
         imagemeanquality = numpy.mean(quality_scores)
 
         workspace.measurements.add_measurement(
-            "Image", "_".join([C_CALL_BARCODES, "MeanQualityScore"]), imagemeanquality
+            "Image",
+            "_".join([C_CALL_BARCODES, "MeanQualityScore"]),
+            imagemeanquality,
         )
 
         workspace.measurements.add_measurement(
@@ -487,7 +504,10 @@ Enter the sequence that represents barcoding reads of an empty vector""",
                 "Image Mean Score",
                 "Image Mean Quality Score",
             )
-            workspace.display_data.statistics = [imagemeanscore, imagemeanquality]
+            workspace.display_data.statistics = [
+                imagemeanscore,
+                imagemeanquality,
+            ]
 
     def display(self, workspace, figure):
         statistics = workspace.display_data.statistics
@@ -510,7 +530,9 @@ Enter the sequence that represents barcoding reads of an empty vector""",
                     if parsed_cycle not in list(measurementdict.keys()):
                         measurementdict[parsed_cycle] = {eachmeas: parsed_base}
                     else:
-                        measurementdict[parsed_cycle].update({eachmeas: parsed_base})
+                        measurementdict[parsed_cycle].update(
+                            {eachmeas: parsed_base}
+                        )
         return measurementdict
 
     def callonebarcode(
@@ -526,10 +548,14 @@ Enter the sequence that represents barcoding reads of an empty vector""",
             cyclemeasures = list(cycledict.keys())
             for eachmeasure in cyclemeasures:
                 cycles_measures_perobj.append(
-                    measurements.get_current_measurement(object_name, eachmeasure)
+                    measurements.get_current_measurement(
+                        object_name, eachmeasure
+                    )
                 )
                 cyclecode.append(measurementdict[eachcycle][eachmeasure])
-            cycle_measures_perobj = numpy.transpose(numpy.array(cycles_measures_perobj))
+            cycle_measures_perobj = numpy.transpose(
+                numpy.array(cycles_measures_perobj)
+            )
             argmax_per_obj = numpy.argmax(cycle_measures_perobj, 1)
             max_per_obj = numpy.max(cycle_measures_perobj, 1)
             sum_per_obj = numpy.sum(cycle_measures_perobj, 1)
@@ -636,7 +662,10 @@ Enter the sequence that represents barcoding reads of an empty vector""",
         return []
 
     def get_measurements(self, pipeline, object_name, category):
-        if object_name == self.input_object_name and category == C_CALL_BARCODES:
+        if (
+            object_name == self.input_object_name
+            and category == C_CALL_BARCODES
+        ):
             return [
                 "BarcodeCalled",
                 "MatchedTo_Barcode",

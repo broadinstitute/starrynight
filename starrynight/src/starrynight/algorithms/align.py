@@ -40,7 +40,6 @@ from cellprofiler_core.modules.align import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cloudpathlib import AnyPath, CloudPath
-from numpy import exp
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.utils.cellprofiler import CellProfilerContext
@@ -68,7 +67,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+    ]
 
     filename_heads = [
         f"FileName_Corr_Cycle_{int(cycle)}_{col}"
@@ -148,7 +149,9 @@ def write_loaddata_csv_by_batch_plate_cycle(
     # Write load data csv for the plate
     batch_plate_out_path = out_path.joinpath(batch, plate)
     batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_plate_out_path.joinpath(f"align_{batch}_{plate}.csv").open("w") as f:
+    with batch_plate_out_path.joinpath(f"align_{batch}_{plate}.csv").open(
+        "w"
+    ) as f:
         write_loaddata(
             df_batch_plate_cycle,
             plate_cycles_list,
@@ -185,17 +188,23 @@ def gen_align_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath(
+            "illum/sbs/illum_apply"
+        )
 
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
+    images_df = df.filter(
+        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+    )
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -281,14 +290,20 @@ def generate_align_pipeline(
         align_channel_list = channel_list.copy()
         align_channel_list.remove(nuclei_channel)
         align.first_input_image.value = f"Corr_Cycle_1_{nuclei_channel}"
-        align.first_output_image.value = f"Aligned_Corr_Cycle_1_{nuclei_channel}"
+        align.first_output_image.value = (
+            f"Aligned_Corr_Cycle_1_{nuclei_channel}"
+        )
         align.second_input_image.value = f"Corr_Cycle_{cycle}_{nuclei_channel}"
-        align.second_output_image.value = f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}"
+        align.second_output_image.value = (
+            f"Aligned_Corr_Cycle_{cycle}_{nuclei_channel}"
+        )
 
         for i, ch in enumerate(align_channel_list):
             align.add_image()
             # input_image_name
-            align.additional_images[i].settings[1].value = f"Corr_Cycle_{cycle}_{ch}"
+            align.additional_images[i].settings[
+                1
+            ].value = f"Corr_Cycle_{cycle}_{ch}"
             # output_image_name
             align.additional_images[i].settings[
                 2
@@ -345,14 +360,22 @@ def generate_align_pipeline(
         flag_unaligned.flags[i].wants_skip.value = False
 
         # Measurement settings, One measurement is added by default for each flag
-        flag_unaligned.flags[i].measurement_settings[0].source_choice.value = S_IMAGE
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].source_choice.value = S_IMAGE
         flag_unaligned.flags[i].measurement_settings[0].object_name.value = None
         flag_unaligned.flags[i].measurement_settings[
             0
         ].measurement.value = f"Correlation_Correlation_Aligned_Corr_Cycle_1_{nuclei_channel}_{flag_image}"
-        flag_unaligned.flags[i].measurement_settings[0].wants_minimum.value = True
-        flag_unaligned.flags[i].measurement_settings[0].minimum_value.value = 0.9
-        flag_unaligned.flags[i].measurement_settings[0].wants_maximum.value = False
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].wants_minimum.value = True
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].minimum_value.value = 0.9
+        flag_unaligned.flags[i].measurement_settings[
+            0
+        ].wants_maximum.value = False
     pipeline.add_module(flag_unaligned)
 
     # Save image (combined overlay)
@@ -431,7 +454,9 @@ def gen_align_cppipe_by_batch_plate(
     out_dir.mkdir(exist_ok=True, parents=True)
 
     # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(["batch", "plate"], load_data_path, "*.csv")
+    files_by_hierarchy = get_files_by(
+        ["batch", "plate"], load_data_path, "*.csv"
+    )
 
     # get one of the load data file for generating cppipe
     _, files = flatten_dict(files_by_hierarchy)[0]

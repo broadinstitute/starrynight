@@ -89,7 +89,7 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
         "--corr_images",
         spec.inputs[2].path,
         "--comp_images",
-        spec.inputs[2].path,
+        spec.inputs[3].path,
     ]
     # Use user provided parser if available
     if spec.inputs[1].path is not None:

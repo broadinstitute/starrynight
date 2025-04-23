@@ -76,7 +76,7 @@ class CellProfilerContext:
             cellprofiler_core.utilities.java.start_java()
         if self.plugin_dir is not None:
             cellprofiler_core.preferences.set_plugin_directory(
-                self.plugin_dir.resolve().__str__()
+                self.plugin_dir.resolve().__str__(), False
             )
         self.pipeline = Pipeline()
         self.pipeline.add_listener(self.handle_error_event)

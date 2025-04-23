@@ -103,7 +103,7 @@ def submit_job(
         exec_run = executor.run()
 
         # prepare the dict, PosixPath are not JSON serializable
-        exec_run_dict = exec_run.dict()
+        exec_run_dict = exec_run.model_dump(exclude={"process"})
         exec_run_dict["log_path"] = str(exec_run.log_path)
 
         # Add a run record to DB
