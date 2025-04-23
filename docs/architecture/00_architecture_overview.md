@@ -82,7 +82,7 @@ StarryNight consists of six interconnected layers:
 
 ## Data and Control Flow
 
-The StarryNight architecture transforms data through two primary phases: pipeline composition and runtime execution.
+The StarryNight architecture transforms data through two primary phases: pipeline composition and runtime execution. While shown as linear flows for clarity, the architecture supports iterative scientific workflows where researchers can adjust parameters and re-run specific steps based on results.
 
 ### Pipeline Composition Phase
 
@@ -102,16 +102,6 @@ sequenceDiagram
     Pipeline->>Execution: Submit workflow
     Execution->>Execution: Translate to Snakemake rules
 ```
-
-!!!note "Iterative Research Workflow"
-    While these diagrams show linear flows for clarity, real-world scientific research is inherently iterative. StarryNight explicitly supports this workflow:
-    
-    - **Parameter Adjustments**: Researchers can modify configurations and re-execute steps to explore parameter spaces
-    - **Intermediate Analysis**: Users can inspect outputs between steps and make decisions about subsequent processing
-    - **Workflow Branching**: Alternative processing paths can be explored based on preliminary results
-    - **Partial Re-execution**: Only affected steps need to be rerun when upstream parameters change
-    
-    The architecture enables this through clear layer boundaries, well-defined data dependencies, and modularity. The step-by-step execution model shown in the [Practical Integration](08_practical_integration.md) document demonstrates how this iterative approach works in practice.
 
 ### Runtime Execution Phase
 
