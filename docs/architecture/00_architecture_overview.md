@@ -9,6 +9,34 @@ StarryNight is a scientific image processing framework designed for processing h
 
 This document provides a high-level overview of the StarryNight architecture, explaining how the different components interact to form a complete pipeline system.
 
+## Developer Quick Start
+
+This section helps new developers quickly navigate the codebase and understand where to focus based on specific tasks.
+
+### Code Location Map
+
+| Architecture Layer | Main Code Location |
+|-------------------|-------------------|
+| Algorithm Layer | `/starrynight/src/starrynight/algorithms/` |
+| CLI Layer | `/starrynight/src/starrynight/cli/` |
+| Module Layer | `/starrynight/src/starrynight/modules/` |
+| Pipeline Layer | `/starrynight/src/starrynight/pipelines/` and `/pipecraft/src/pipecraft/` |
+| Execution Layer | `/pipecraft/src/pipecraft/backend/` |
+| Configuration Layer | `/starrynight/src/starrynight/experiments/` |
+
+### Where to Start
+
+Depending on your task, focus on these areas:
+
+- **Adding a new algorithm set?** → Start with the Algorithm Layer, then add corresponding CLI and Module implementations
+- **Extending an existing algorithm set?** → Examine the existing algorithm set pattern to understand the inputs/outputs/file structure
+- **Building a reusable processing component?** → Explore the Module Layer, particularly the module registry and schema implementation
+- **Composing a complete workflow?** → Look at the Pipeline Layer, especially the pipeline composition functions
+- **Changing execution behavior?** → Check the Execution Layer, focusing on the Snakemake backend implementation
+- **Modifying configuration options?** → Begin with the Configuration Layer and the Pydantic models
+
+For a more accessible explanation of the architecture using biological analogies, see [Architecture for Biologists](07_architecture_for_biologists.md).
+
 ## Project Structure
 
 The StarryNight framework is organized as a monorepo with four main packages:
@@ -169,6 +197,226 @@ StarryNight is designed for extensibility:
 The most important architectural achievement of StarryNight is the clear separation between what should be done (algorithms), how it should be configured (specs), how it should be structured (compute graphs), and how it should be executed (backends).
 
 This separation enables the automatic generation of complex execution plans (like 500+ line Snakemake files) while maintaining the simplicity and clarity of the higher-level abstractions.
+
+## Architecture Visual Guide
+
+```mermaid
+flowchart TD
+    A[Algorithm Layer<br>Algorithm Sets with Data/Pipeline/Execution Functions] -->|exposed as| B[CLI Layer<br>Command Groups & Commands]
+    A -->|encapsulated by| C[Module Layer<br>Bilayer Specs + Pipecraft Compute Graphs]
+    C -->|composed into| D[Pipeline Layer<br>Sequential/Parallel Workflows]
+    D -->|translated to| E[Execution Layer<br>Snakemake Rules & Container Execution]
+    F[Configuration Layer<br>Experiment Classes & Parameter Inference] -.->|configures| A
+    F -.->|configures| B
+    F -->|configures| C
+    F -->|configures| D
+    F -.->|configures| E
+
+    classDef code fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class A,B,C,D,E,F code
+
+    subgraph "Implementation"
+        I1["/starrynight/algorithms/"]
+        I2["/starrynight/cli/"]
+        I3["/starrynight/modules/"]
+        I4["/starrynight/pipelines/ & /pipecraft/"]
+        I5["/pipecraft/backend/"]
+        I6["/starrynight/experiments/"]
+    end
+
+    A -.-> I1
+    B -.-> I2
+    C -.-> I3
+    D -.-> I4
+    E -.-> I5
+    F -.-> I6
+```
+
+## Common Development Tasks
+
+Here are examples of common development tasks with specific implementation guidance:
+
+### Implementing a New Algorithm Set
+
+Algorithm sets typically consist of three components that work together:
+
+1. **Data preparation functions** that generate load data files
+2. **Pipeline generation functions** that create processing definitions
+3. **Execution functions** that run the generated pipelines
+
+To implement a new algorithm set:
+
+```python
+# In /starrynight/src/starrynight/algorithms/new_algorithm_set.py
+
+def gen_new_algorithm_load_data_by_batch_plate(
+    index_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    path_mask: str | None,
+    for_special_type: bool = False,
+) -> None:
+    """Generate LoadData CSV files for the new algorithm.
+
+    This function reads image metadata from an index, organizes it by
+    batch/plate structure, and writes LoadData CSV files.
+    """
+    # Read from index file
+    df = pl.read_parquet(index_path.resolve().__str__())
+
+    # Filter for relevant images
+    images_df = df.filter(pl.col("is_image").eq(True))
+
+    # Generate hierarchical organization
+    images_hierarchy_dict = gen_image_hierarchy(images_df)
+
+    # Write output files for each batch/plate combination
+    for batch in images_hierarchy_dict.keys():
+        for plate in images_hierarchy_dict[batch].keys():
+            write_loaddata_csv_by_batch_plate(
+                images_df, out_path, path_mask, batch, plate
+            )
+
+def gen_new_algorithm_pipeline_by_batch_plate(
+    load_data_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
+    workspace_path: Path | CloudPath,
+    option_flag: bool = False,
+) -> None:
+    """Create a processing pipeline programmatically.
+
+    This function reads a sample LoadData file and constructs a pipeline
+    with appropriate modules and parameters.
+    """
+    # Implementation details
+
+def run_new_algorithm_pipeline(
+    pipeline_path: Path | CloudPath,
+    load_data_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
+) -> None:
+    """Execute the generated pipeline on the prepared data.
+
+    This function runs the pipeline with appropriate parallelism and
+    resource allocation.
+    """
+    # Implementation details
+```
+
+Next, create the corresponding CLI wrapper:
+
+```python
+# In /starrynight/src/starrynight/cli/new_algorithm.py
+
+import click
+from cloudpathlib import AnyPath
+
+from starrynight.algorithms.new_algorithm_set import (
+    gen_new_algorithm_load_data_by_batch_plate,
+    gen_new_algorithm_pipeline_by_batch_plate,
+    run_new_algorithm_pipeline,
+)
+
+@click.group()
+def new_algorithm():
+    """Commands for the new algorithm set."""
+    pass
+
+@new_algorithm.command(name="loaddata")
+@click.option("-i", "--index", required=True, help="Path to index file")
+@click.option("-o", "--out", required=True, help="Output directory")
+@click.option("-m", "--path-mask", default=None, help="Path mask for file resolution")
+def gen_load_data(index, out, path_mask):
+    """Generate load data files for the new algorithm."""
+    gen_new_algorithm_load_data_by_batch_plate(
+        AnyPath(index), AnyPath(out), path_mask
+    )
+
+# Add additional CLI commands here
+```
+
+Finally, create the module implementations:
+
+```python
+# In /starrynight/src/starrynight/modules/new_algorithm_set/loaddata.py
+
+from starrynight.modules.common import StarrynightModule
+from starrynight.modules.schema import SpecContainer, TypeInput, TypeOutput, TypeEnum
+from starrynight.schema import DataConfig
+
+class NewAlgorithmGenLoadDataModule(StarrynightModule):
+    """New algorithm load data generation module."""
+
+    @staticmethod
+    def uid() -> str:
+        """Return module unique id."""
+        return "new_algorithm_gen_loaddata"
+
+    @staticmethod
+    def _spec() -> SpecContainer:
+        """Return module default spec."""
+        # Define inputs and outputs with appropriate specifications
+
+    @staticmethod
+    def from_config(
+        data: DataConfig,
+        experiment: Experiment | None = None,
+        spec: SpecContainer | None = None,
+    ) -> Self:
+        """Create module from configuration."""
+        # Generate appropriate paths and configurations
+```
+
+### Building a Pipeline with Your Algorithm Set
+
+To incorporate your new algorithm set into a pipeline:
+
+```python
+def create_pipeline_with_new_algorithm(
+    data: DataConfig,
+    experiment: Experiment,
+) -> tuple[list[StarrynightModule], Pipeline]:
+    """Create a pipeline that includes the new algorithm set."""
+
+    # Create modules for all required operations
+    module_list = [
+        # Existing modules
+        index_module := IndexModule.from_config(data),
+        inventory_module := InventoryModule.from_config(data),
+
+        # Your new algorithm modules
+        new_algo_loaddata := NewAlgorithmGenLoadDataModule.from_config(data, experiment),
+        new_algo_pipeline := NewAlgorithmGenPipelineModule.from_config(data, experiment),
+        new_algo_exec := NewAlgorithmExecModule.from_config(data, experiment),
+    ]
+
+    # Define the pipeline structure
+    pipeline = pc.Pipeline()
+    with pipeline.sequential() as seq:
+        # Setup steps
+        with seq.sequential() as setup:
+            setup.add_pipeline(index_module.pipeline)
+            setup.add_pipeline(inventory_module.pipeline)
+
+        # Your algorithm steps
+        with seq.sequential() as new_algo:
+            new_algo.add_pipeline(new_algo_loaddata.pipeline)
+            new_algo.add_pipeline(new_algo_pipeline.pipeline)
+            new_algo.add_pipeline(new_algo_exec.pipeline)
+
+    return module_list, pipeline
+```
+
+## Recommended Reading Path
+
+Depending on your development focus:
+
+1. **For algorithm developers**: First read the [Algorithm Layer](01_algorithm_layer.md) and [CLI Layer](02_cli_layer.md) documents, then explore the [Module Layer](03_module_layer.md) to understand how algorithms are integrated into the module system.
+
+2. **For module developers**: Start with the [Module Layer](03_module_layer.md) document to understand the dual nature of modules (specs and compute graphs), then examine the [Pipeline Layer](04_pipeline_layer.md) to see how modules are composed.
+
+3. **For pipeline developers**: Focus on the [Pipeline Layer](04_pipeline_layer.md) and [Execution Layer](05_execution_layer.md) documents to understand how pipelines are defined and executed.
+
+4. **For configuration developers**: Concentrate on the [Configuration Layer](06_configuration_layer.md) document, which explains parameter inference and management.
 
 ## Conclusion
 
