@@ -1,11 +1,10 @@
 # StarryNight Pipeline Layer
 
-!!! Warning
-    - This document contains bot-generated text and has not yet been reviewed by developers!
-
 ## Overview
 
-The pipeline layer in StarryNight combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This document explores how individual modules are integrated with Pipecraft to define their compute graphs, and how these modules are then composed into complete executable pipelines. This represents the highest level of abstraction in the StarryNight architecture.
+The pipeline layer in StarryNight combines two critical aspects: Pipecraft integration for defining compute graphs and pipeline composition for building complete workflows. This layer represents the highest level of abstraction in the StarryNight architecture, sitting above the module layer and below the execution layer.
+
+The pipeline layer enables the creation, composition, and preparation of complex image processing workflows by connecting modules into complete pipelines with well-defined execution patterns. It establishes a clear separation between pipeline definition (what should be done and how it's structured) and execution (how it's actually run), which is a fundamental architectural principle of StarryNight.
 
 ## Purpose
 
@@ -20,15 +19,20 @@ The pipeline layer serves several key purposes in the StarryNight architecture:
 7. **Module Coordination** - Connecting modules in the correct sequence
 8. **Execution Preparation** - Preparing the complete pipeline for execution
 
-These capabilities enable the creation of complex, reproducible workflows for scientific image processing.
+These capabilities enable the creation of complex, reproducible workflows for scientific image processing while maintaining a clean separation between definition and execution.
 
 ## Pipecraft Integration
 
+### Pipecraft as a Foundation
+
 Pipecraft is a library that enables the creation of composable pipeline graphs in StarryNight. It provides primitives for defining computational operations, containers, and their connections, allowing modules to generate executable compute graphs without being tied to specific execution backends.
 
-As explained in the architecture discussions:
+Pipecraft serves as the technical foundation for pipeline construction in StarryNight, providing:
 
-> "Here we are saying, you know, we first constructed the CLI command that we would run inside the container, and then we define, okay, you know, there is and [...] we are constructing the commands, and then we are describing our container to use and giving it the command to invoke and which image to use to run that container."
+1. A standardized framework for defining computational operations
+2. Clear abstractions for organizing operations (sequential, parallel)
+3. Container definitions independent of execution technology
+4. Input/output relationship specifications for pipeline steps
 
 ### Pipecraft as a Separate Package
 
@@ -43,17 +47,14 @@ This separation allows for focused development of pipeline construction capabili
 
 ### Pipecraft's Dual Role
 
-**Critical Point:** Pipecraft serves two essential functions in the StarryNight architecture:
+Pipecraft serves two essential functions in the StarryNight architecture:
 
-> "Pipe craft is used for two things. One is, you can just create the compute graph with an additional view. It also provides the back end to execute the computer."
+1. **Pipeline Definition**: Creating compute graphs that represent operations and their relationships
+2. **Execution Backend Support**: Providing backends to execute the defined compute graphs
 
 This dual capability - both defining compute graphs AND providing execution backends - makes Pipecraft the central technical component that enables the separation between definition and execution, which is fundamental to the entire system.
 
-In the StarryNight architecture, Pipecraft integration happens inside modules:
-
-> "We were able to, we were able to use bilayers to create the spec. Yeah. We were able to, by default, populate it in some way. Now we have specked it out, but now we need to define, start defining a pipeline. And here's where starting at is now interfacing with pipecraft."
-
-This marks the transition from specification (what needs to be done) to implementation (how to do it).
+In the StarryNight architecture, Pipecraft integration happens inside modules. The module layer uses Bilayers to create specifications, and then interfaces with Pipecraft to define how those specifications should be executed as compute graphs. This marks the transition from specification (what needs to be done) to implementation (how to do it).
 
 ### Core Pipecraft Concepts
 
@@ -64,6 +65,8 @@ A `Pipeline` is the root object that represents the complete compute graph:
 ```python
 pipeline = pc.Pipeline()
 ```
+
+This object serves as the container for all operations and their relationships.
 
 #### Sequential and Parallel Blocks
 
@@ -79,7 +82,7 @@ with pipeline.parallel() as par:
     # Operations defined here can run in parallel
 ```
 
-These blocks can be nested to create complex execution patterns.
+These blocks can be nested to create complex execution patterns with multiple layers of sequential and parallel operations.
 
 ### Container Nodes and Configuration
 
@@ -113,23 +116,13 @@ pc.ContainerConfig(
 )
 ```
 
-A critical aspect of Pipecraft integration is container specification:
+A critical aspect of Pipecraft integration is container specification. This standardizes how containers should be executed, with specific images, commands, and environment variables. This containerization provides isolation and reproducibility.
 
-> "We're saying, run this container with this name, with this input and output paths, and with this container config, which says, Use this image and then run with this command line, command line that we constructed before."
-
-This containerization provides isolation and reproducibility.
-
-The container specification is runtime-agnostic:
-
-> "So, so we are only defending the container here. It's up to the execution engine how the execution engine wants to run it. For example, Snake make tries to run this as a singularity container or apptainer or something."
-
-This abstraction allows the same pipeline to run with different container technologies.
+The container specification is runtime-agnostic. It defines what should be run in a container but leaves the specifics of how to execute that container to the execution backend. This abstraction allows the same pipeline to run with different container technologies (Docker, Singularity/Apptainer) depending on the execution environment.
 
 ### Simple vs. Complex Pipelines
 
-For single-module operations, pipelines are simple:
-
-> "This might sound redundant, but here we only have one node. So you might be asking, like, why you need a computer off here? But this is because these, this, this compute graph that we generate is composable, right?"
+For single-module operations, pipelines are simple and may contain just one node. This might seem redundant, but since compute graphs are composable, even simple operations follow the same pattern to enable later integration into more complex pipelines.
 
 More complex pipelines can connect multiple operations:
 
@@ -154,10 +147,6 @@ with pipeline.sequential() as seq:
 ## Pipeline Composition
 
 Pipeline composition is the final layer of abstraction in StarryNight, allowing multiple modules to be combined into complete workflows.
-
-As explained in the transcript:
-
-> "So instead of now running individual modules, what we are doing here is really composing all the models together, right? So you know, we are saying that run all these steps in sequentially, so all the CP steps sequentially, and then all the SBS steps sequentially, but run these two sets in parallel, and then after this, run the analysis steps sequentially, right?"
 
 ### Pipeline Composition Function
 
@@ -211,9 +200,11 @@ modules.append(cp_illum_calc_pipeline)
 # More module creation...
 ```
 
+Each module is created and configured based on data and experiment configurations. This approach ensures that all modules have the necessary information to function correctly within the pipeline.
+
 ### Building the Pipeline Structure
 
-After creating modules, the function constructs the pipeline structure:
+After creating modules, the function constructs the pipeline structure using Pipecraft's sequential and parallel blocks:
 
 ```python
 # Create main pipeline
@@ -245,7 +236,7 @@ with pipeline.sequential() as main_seq:
         analysis_seq.add_pipeline(analysis_pipeline.pipeline)
 ```
 
-This structure defines both sequencing and parallelism in the pipeline.
+This structure defines both sequencing and parallelism in the pipeline. Note how modules are not directly added to the pipeline; instead, their pipeline properties are added using `add_pipeline()`. This ensures that each module's compute graph is properly integrated into the overall pipeline.
 
 The composition function returns both the configured modules and the composed pipeline:
 
@@ -255,7 +246,7 @@ return modules, pipeline
 
 This allows users to access both the individual modules (for inspection or modification) and the complete pipeline (for execution).
 
-> "This is your, this is your pipecraft pipeline. Pipecraft pipeline... Now you might be asking, like, why, why you wanted? Because the module itself has a pipe craft pipeline inside it, yeah... this is, this is because you can individually inspect how these individual models are configured. You can then change it and then invoke this function again with the updated, updated spec."
+Returning both the modules and the pipeline enables advanced usage patterns where modules can be individually inspected or modified, and then the pipeline can be recreated with the updated modules. This is particularly valuable for interactive development in notebook environments.
 
 ### Parallel and Sequential Blocks
 
@@ -286,15 +277,15 @@ with pipeline.sequential() as main_seq:
         final_step.add_pipeline(module7.pipeline)
 ```
 
-This structure allows for expressing complex workflows with appropriate dependencies.
+This structure allows for expressing complex workflows with appropriate dependencies and execution patterns.
 
 ## Expressing Parallelism
 
+The pipeline layer handles parallelism at multiple levels, allowing for efficient execution of complex workflows.
+
 ### Between Steps Parallelism
 
-The pipeline composition can express parallelism between different steps:
-
-> "There's parallelism between different steps. So certain steps can be run, you know, independently of each other. We have eight steps or nine steps, right? Some of them can be run independently. For example, like SBS part can be run independently of the self painting part, right, up until some point."
+The pipeline composition can express parallelism between different steps. For example, Cell Painting and Sequencing By Synthesis processing can run independently until they reach a point where they need to be combined for analysis.
 
 This is expressed using parallel blocks in the pipeline composition:
 
@@ -310,9 +301,7 @@ with pipeline.parallel() as par:
 
 ### Within Steps Parallelism
 
-There's also parallelism within specific steps:
-
-> "But there's also parallelism in in the in single nodes as well, right? For example, you can run ILLUM apply parallely, right? You can use you can, you know you have multiple images. You can apply ILLUM on multiple images simultaneously, right?"
+There's also parallelism within specific steps. For instance, illumination correction can be applied to multiple images simultaneously.
 
 This can be expressed using parallel operations within a module:
 
@@ -337,23 +326,26 @@ def create_pipeline(self) -> pc.Pipeline:
     return pipeline
 ```
 
-### Experimental Parallelism API
+This approach maximizes efficiency by processing independent items concurrently.
 
-The architecture discussions mention an experimental API for finer-grained parallelism:
+### Unit of Work API
 
-> "So this thing, this is an experimental API. I'm not so you can, like, ignore it for now, but the whole idea here is somehow try to express the parallelism inherent in that step, right?"
-
-This "unit of work" API aims to express more detailed parallelism within operations.
+An experimental API for expressing finer-grained parallelism within operations is being developed. This "unit of work" API aims to express more detailed parallelism within operations, allowing for better resource utilization in complex workflows. However, this API is still under development and not yet widely used in production workflows.
 
 ## Pipeline Execution
-
-### Using the Composed Pipeline
 
 Once a pipeline is composed, it can be executed using a backend:
 
 ```python
 # Create pipeline
 modules, pipeline = create_pcp_generic_pipeline(data_config, pcp_experiment)
+
+# Configure backend
+backend_config = pc.SnakemakeBackendConfig(
+    use_opentelemetry=False,
+    print_exec=True
+)
+exec_backend = pc.SnakemakeBackend(backend_config)
 
 # Execute pipeline
 exec_backend.run(
@@ -363,33 +355,9 @@ exec_backend.run(
 )
 ```
 
-This executes the entire workflow in a single operation.
+This executes the entire workflow in a single operation. The Snakemake backend, which is the primary execution backend in StarryNight, translates the Pipecraft pipeline into a Snakemake workflow and executes it. This process is covered in detail in the [Execution Layer](05_execution_layer.md) section.
 
-The Snakemake backend handles the execution of composed pipelines:
-
-> "So in theory, anything like any, anything that can run, sneak, make files across multiple cores, whatever multiple units can now make use of this."
-
-This allows pipelines to run on various infrastructures that support Snakemake.
-
-### Container Execution
-
-All pipeline steps run in containers:
-
-> "We're saying, run this container with this name, with this input and output paths, and with this container config, which says, Use this image and then run with this command line, command line that we constructed before."
-
-This ensures reproducibility and isolation.
-
-### Pipeline Visualization
-
-While not shown explicitly in the architecture discussions, composed pipelines can typically be visualized to show the complete workflow structure. This can be valuable for understanding complex pipelines.
-
-### Execution with Telemetry
-
-For production environments, telemetry can be enabled:
-
-> "For example, because we are running it in notebook, we are not using the open telemetry set up to export logs to a central server... because we are not using the centralized server to collect all the logs."
-
-In production, telemetry would typically be enabled for centralized monitoring.
+All pipeline steps run in containers, ensuring reproducibility and isolation. The Snakemake backend handles the execution of composed pipelines across various infrastructures that support Snakemake.
 
 ## Complete Examples
 
@@ -589,29 +557,35 @@ exec_backend.run(
 )
 ```
 
-Composed pipelines offer several advantages over individual module execution:
+This capability to modify modules and then recreate the pipeline highlights the flexibility and power of the StarryNight architecture.
+
+## The Power of Automatic Generation
+
+One of the most significant benefits of the pipeline construction approach is its ability to generate complex execution plans automatically. The pipeline layer can generate sophisticated Snakemake workflows with hundreds of rules from a high-level pipeline definition.
+
+This automatic generation of complex execution plans is a key value of the entire architecture. It transforms abstract pipeline definitions into concrete, executable workflows without requiring manual creation of complex execution plans.
+
+Using a composed pipeline offers significant advantages over CLI usage:
 
 1. **Dependency Management** - Automatic handling of module dependencies
 2. **Parallelism** - Automatic parallel execution where possible
 3. **Single Command** - Execute the entire workflow with one command
 4. **Resource Optimization** - Better resource utilization across steps
 5. **Unified Logging** - Consolidated logging and monitoring
-
-## The Power of Automatic Generation
-
-One of the most important aspects of the pipeline construction is its ability to generate complex execution plans automatically:
-
-> "If anyone have written snake make files by hand, and if they see that, I can generate this 500 lines long, sneak make file automatically. I guess that's an aha moment at that point. Like, why this computer exists, because you can use this to, like, compile your thing into sneak me back."
-
-This automatic generation of complex execution plans is a key value of the entire architecture:
-
-> "This is not just, you know, some weird attraction or something that we want. Just we built it because we wanted to build it. It's there because it's, it's a very key piece. It's a central piece of like the entire system."
-
-Using a composed pipeline offers significant advantages over CLI usage:
-
-> "If I knocked out Canvas and conductor entirely deleted those files, I would still be able to do a lot with your current functionality in terms of being able to run high throughput screen level experiments through your pipeline, because I will, I mean, I can still do that just using cell profiler, but what I can now do on CLI is that using a using a notebook and using a JSON file where I can configure my experiment, right? I can read that experiment from this JSON file in my notebook. I can configure every module that I need to run, and then I can run them, and I can get my jobs."
+6. **Reproducibility** - Containerized execution ensures consistency
+7. **Scalability** - Works from laptops to high-performance computing environments
 
 The pipeline approach provides automation, structure, and reproducibility beyond what's possible with direct CLI usage.
+
+## Relationship to Adjacent Layers
+
+The pipeline layer builds directly on the module layer below it and connects to the execution layer above it:
+
+1. **Module Layer (Below)** - The pipeline layer composes modules defined in the module layer, using their compute graphs as building blocks for larger workflows.
+
+2. **Execution Layer (Above)** - The pipeline layer creates pipeline definitions that are executed by the execution layer, which translates them into specific execution technologies (like Snakemake).
+
+This positioning makes the pipeline layer a critical bridge between individual module abstractions and concrete execution plans.
 
 ## Conclusion
 

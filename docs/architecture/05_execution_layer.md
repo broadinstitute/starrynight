@@ -1,8 +1,5 @@
 # StarryNight Execution Layer
 
-!!! Warning
-    - This document contains bot-generated text and has not yet been reviewed by developers!
-
 ## Overview
 
 The execution layer in StarryNight defines how modules and pipelines are executed in computing environments. This layer consists of two key components: the execution model, which handles how modules and pipelines are configured and executed in different contexts, and the Snakemake backend, which translates Pipecraft pipelines into concrete, reproducible workflows. Together, these components form the final layer in StarryNight's architecture, turning abstract pipeline definitions into actual running processes.
@@ -115,11 +112,7 @@ exec_backend.run(
 
 ### Backend Selection
 
-The execution is handled by backend implementations:
-
-> "We also import the back end, execution back end from the pipecraft library. So here we are using sneak make back end. So we are configuring the snake make back end here..."
-
-Currently, StarryNight primarily uses the Snakemake backend. The backend is configured with options such as:
+The execution system uses backend implementations in Pipecraft. Currently, StarryNight primarily uses the Snakemake backend, configured with options such as:
 
 1. **Telemetry Settings** - Whether to use OpenTelemetry for logging
 2. **Output Settings** - How to display execution information
@@ -131,15 +124,11 @@ When a pipeline is executed, several artifacts are generated:
 
 #### Compiled Workflow
 
-> "First of all, it generates the snake file, and it you can see, you know, what is generating..."
-
-The compiled workflow (e.g., Snakefile) contains the full definition of the operations to be performed.
+The compiled workflow (e.g., Snakefile) contains the full definition of the operations to be performed. This file includes rules for each operation, input/output specifications, container configuration, and command-line instructions.
 
 #### Execution Logs
 
-> "The second is, we also have all the logs here that you can go back and see, you know what happened during the execution, and this will keep all the logs Right, right?"
-
-These logs capture the execution process, errors, and outputs.
+The execution logs capture the entire execution process, including command outputs, errors, and runtime information. These logs provide a complete record of execution for troubleshooting and auditing.
 
 #### Results
 
@@ -147,11 +136,7 @@ The results of the execution are stored in configured output locations, as defin
 
 ### Module State Management
 
-An important aspect of the notebook workflow is module state management:
-
-> "Here in the notebook, as long as you have the kernel running, you have the state of all the modules, right, okay, not just storing any user sessions. I mean, it's up to the user, how your user wants to manage the session right?"
-
-The notebook maintains module state during its execution, allowing for iterative development and inspection.
+An important aspect of the notebook workflow is module state management. The notebook environment maintains module state during its execution, allowing for iterative development and inspection. This enables users to inspect module configurations, modify parameters, and re-run operations without restarting the entire workflow.
 
 ## Snakemake Backend
 
@@ -165,23 +150,21 @@ The Snakemake backend is StarryNight's primary execution engine, responsible for
 - Provides container integration (Docker, Singularity/Apptainer)
 - Handles resource management and scheduling
 
-### Backend Implementation in PipeCraft
+### Backend Implementation in Pipecraft
 
-The Snakemake backend is implemented in the PipeCraft package rather than in the StarryNight core package. This architectural decision:
+The Snakemake backend is implemented in the Pipecraft package rather than in the StarryNight core package. This architectural decision:
 
 - Keeps backend implementation details separate from the scientific image processing logic
 - Allows for multiple backends to be developed without modifying the core package
 - Maintains a clean separation between pipeline definition and execution
 
-When StarryNight modules and pipelines are executed, they use the backend implementations from PipeCraft through a well-defined API.
+When StarryNight modules and pipelines are executed, they use the backend implementations from Pipecraft through a well-defined API.
 
 ### The "Aha Moment" of Automatic Generation
 
-**Critical Point:** The Snakemake backend delivers one of the most impressive capabilities of the StarryNight system - the automatic generation of complex workflow files:
+**Critical Point:** The Snakemake backend delivers one of the most impressive capabilities of the StarryNight system - the automatic generation of complex workflow files. This automatic generation of complex Snakefiles from high-level abstractions is a central architectural achievement that demonstrates the value of the entire system.
 
-> "If anyone have written snake make files by hand, and if they see that, I can generate this 500 lines long, sneak make file automatically. I guess that's an aha moment at that point. Like, why this computer exists, because you can use this to, like, compile your thing into sneak me back."
-
-This automatic generation of complex Snakefiles from high-level abstractions is a central architectural achievement that demonstrates the value of the entire system.
+For developers who have written Snakemake files manually, seeing a complex 500-line Snakefile generated automatically from high-level module definitions provides an immediate understanding of the system's value. It exemplifies how the StarryNight architecture transforms simple, user-friendly abstractions into complex, reproducible workflows.
 
 ### Generated Snakefile Structure
 
@@ -206,9 +189,7 @@ rule operation_name:
         "starrynight segcheck generate-pipeline --output-path {output.pipeline} --load-data {input.input_name} --nuclear-channel DAPI --cell-channel CellMask"
 ```
 
-As shown in the architecture discussions:
-
-> "I guess, if you are just running a single module, you will basically see one of, you know, rule all that's gonna depend on one of the rules that you have to invoke. This is all, again, very specific to how snake make works, but it says, like, what inputs it expects, what outputs it's gonna create, what container it's gonna use, and then what's the actual commands gonna invoke inside that container."
+The compiled Snakefile defines what inputs each rule expects, what outputs it will create, which container to use, and the actual command to invoke inside that container.
 
 ### Rule Structure
 
@@ -269,17 +250,11 @@ Snakemake automatically determines the execution order based on the input/output
 
 ## Container Execution
 
-The execution system handles container execution through the backend:
-
-> "So, so we are only defending the container here. It's up to the execution engine how the execution engine wants to run it. For example, Snake make tries to run this as a singularity container or apptainer or something. They have their own thing. You can force it to run or use Docker, maybe."
+The execution system handles container execution through the backend. The Snakemake backend can run operations in containers using different technologies such as Singularity/Apptainer or Docker, depending on what's available in the execution environment.
 
 This abstraction allows the same pipeline to run with different container technologies based on the environment.
 
-All pipeline steps run in containers:
-
-> "We're saying, run this container with this name, with this input and output paths, and with this container config, which says, Use this image and then run with this command line, command line that we constructed before."
-
-This ensures reproducibility and isolation.
+All pipeline steps run in containers, ensuring reproducibility and isolation.
 
 The container specification includes:
 - The container image to use
@@ -290,8 +265,6 @@ The container specification includes:
 ## Parallelism in Execution
 
 The execution system handles two levels of parallelism:
-
-> "There's two level parallelism, right? There's parallelism between different steps. So certain steps can be run, you know, independently of each other... But there's also parallelism in in the in single nodes as well, right?"
 
 ### Rule-level Parallelism
 
@@ -329,25 +302,11 @@ exec_backend.compile(
 )
 ```
 
-This generates the Snakefile without running it, allowing for inspection and manual execution.
-
-> "Okay, so if I just run this compile step, so exec back end, dot compile, it'll generate a sneak make file."
-
-This allows inspection and manual execution if desired.
-
-Once a Snakefile is generated, it can be run directly:
-
-> "Got it, and this is something I can actually just run using sneak, Nick, yeah, directly on my command line, and it will run the command inside the container that is specified in the snake make file."
-
-This provides flexibility for users who want to work directly with Snakemake.
+This generates the Snakefile without running it, allowing for inspection and manual execution. Once generated, this Snakefile can be run directly using the Snakemake command-line tool, giving users flexibility in how they execute workflows.
 
 ### Logs and Monitoring
 
-The Snakemake backend captures detailed logs:
-
-> "We also have all the logs here that you can go back and see, you know what happened during the execution, and this will keep all the logs Right, right? And again, it's aware, so you can configure it the way you want. But if you're running it locally, you still have all the things right."
-
-These logs are essential for troubleshooting and monitoring.
+The Snakemake backend captures detailed logs of execution. These logs include command outputs, error messages, and execution status for each step in the pipeline. They are stored in the working directory and can be accessed for troubleshooting or monitoring.
 
 When execution fails, several troubleshooting approaches are available:
 
@@ -358,11 +317,7 @@ When execution fails, several troubleshooting approaches are available:
 
 ### Execution with Telemetry
 
-For production environments, telemetry can be enabled:
-
-> "For example, because we are running it in notebook, we are not using the open telemetry set up to export logs to a central server... because we are not using the centralized server to collect all the logs."
-
-In production, telemetry would typically be enabled for centralized monitoring.
+For production environments, telemetry can be enabled to send execution information to a monitoring system. This is typically disabled for notebook environments but can be enabled for centralized monitoring in production deployments.
 
 ## Complete Examples
 
@@ -484,16 +439,14 @@ rule cp_illum_calc_pipeline:
 
 ## Future Backends
 
-The Snakemake backend demonstrates the power of the architecture:
-
-> "Now, now this is the point where you can say that, okay, now if you buy into this idea, or, like, if you're comfortable with this idea, where, first of all, we have demonstrated proof that, you know, we can now take this computer graph and then convert it to snake wave file that we can run. So it's not a far festival idea from here on, that we can take this computer off and then write a back end that can execute it on AWS with whatever needs you want."
-
-This shows how the architecture can be extended to support different execution environments in the future, such as:
+The Snakemake backend demonstrates the power of the architecture by showing that compute graphs can be converted to executable Snakemake workflows. This separation of pipeline definition from execution enables the possibility of developing additional backends for different environments, such as:
 
 1. Cloud-based execution (AWS, GCP, Azure)
 2. HPC cluster execution
 3. Kubernetes-based execution
 4. Custom execution environments
+
+This extensibility is a direct result of the architecture's separation of concerns, where pipelines are defined independently of how they are executed.
 
 ## Comparison with Other Approaches
 
@@ -503,10 +456,6 @@ The notebook workflow provides several advantages over direct CLI usage:
 2. **Parameter Inference** - Automatic configuration from experiments
 3. **Containerization** - Automatic execution in containers
 4. **Workflow Composition** - Easy combination of multiple steps
-
-As noted in the architecture discussions:
-
-> "Contrast that with how I would have done it using a CLI. In the CLI, I would have basically not used many things that you have here, and lost a whole bunch of things but along the way."
 
 The execution through Snakemake also offers benefits compared to direct execution:
 
@@ -520,11 +469,7 @@ The execution through Snakemake also offers benefits compared to direct executio
 
 The execution system in StarryNight provides a powerful approach to running pipelines in a reproducible, containerized manner. By combining a flexible execution model with the Snakemake backend, it enables complex workflows to be executed consistently across different environments.
 
-The automatic generation of detailed, executable Snakefiles from high-level abstractions is one of the most impressive achievements of the StarryNight architecture. As emphasized in the architecture discussions:
-
-> "If anyone have written snake make files by hand, and if they see that, I can generate this 500 lines long, sneak make file automatically. I guess that's an aha moment at that point."
-
-This capability demonstrates the power of the separation between definition and execution in the system design, allowing complex workflows to be defined at a high level and automatically translated into executable form.
+The automatic generation of detailed, executable Snakefiles from high-level abstractions is one of the most impressive achievements of the StarryNight architecture. This capability demonstrates the power of the separation between definition and execution in the system design, allowing complex workflows to be defined at a high level and automatically translated into executable form.
 
 The execution system bridges the gap between abstract pipeline definitions and concrete execution, providing the final layer in StarryNight's architecture that turns conceptual workflows into running processes.
 
