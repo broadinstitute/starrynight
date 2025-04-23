@@ -37,6 +37,8 @@ Depending on your task, focus on these areas:
 
 For a more accessible explanation of the architecture using biological analogies, see [Architecture for Biologists](07_architecture_for_biologists.md).
 
+If you prefer to see a concrete example that shows how all these layers work together in practice, check out [Practical Integration](08_practical_integration.md), which walks through a complete pipeline implementation.
+
 ## Project Structure
 
 The StarryNight framework is organized as a monorepo with four main packages:
@@ -408,6 +410,8 @@ Depending on your development focus:
 3. **For pipeline developers**: Focus on the [Pipeline Layer](04_pipeline_layer.md) and [Execution Layer](05_execution_layer.md) documents to understand how pipelines are defined and executed.
 
 4. **For configuration developers**: Concentrate on the [Configuration Layer](06_configuration_layer.md) document, which explains parameter inference and management.
+
+5. **For understanding practical integration**: Read the [Practical Integration](08_practical_integration.md) document, which shows how all layers work together in a concrete example.
 
 ## Conclusion
 
