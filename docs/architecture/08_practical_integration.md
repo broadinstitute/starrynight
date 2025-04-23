@@ -89,6 +89,38 @@ run.wait()
 - Each module produces a "pipe" that's executed by the backend
 - The experiment is initialized from the index using type-validated configuration
 
+## Experiment Configuration (Lines 128-147)
+
+After building the index, the notebook configures the experiment using `PCPGenericInitConfig`:
+
+```python
+index_path = workspace_path / "index/index.parquet"
+pcp_exp_init = PCPGenericInitConfig(
+    barcode_csv_path=Path(),
+    cp_acquisition_order=AcquisitionOrderType.SNAKE,
+    cp_img_frame_type=ImageFrameType.ROUND,
+    cp_img_overlap_pct=10,
+    sbs_acquisition_order=AcquisitionOrderType.SNAKE,
+    sbs_img_frame_type=ImageFrameType.ROUND,
+    sbs_img_overlap_pct=10,
+    cp_nuclei_channel="DAPI",
+    cp_cell_channel="PhalloAF750",
+    cp_mito_channel="ZO1AF488",
+    sbs_nuclei_channel="DAPI",
+    sbs_cell_channel="PhalloAF750",
+    sbs_mito_channel="ZO1AF488",
+)
+pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
+```
+
+**What developers should note:**
+
+- `PCPGenericInitConfig` is a Pydantic model that validates experiment parameters
+- Channel names (DAPI, PhalloAF750, etc.) configure which image channels to use for specific purposes
+- Acquisition settings (SNAKE, ROUND) define how the microscope captured the images
+- The `from_index` method loads data from the index and configures the experiment
+- This configuration will drive all subsequent module behavior without requiring repetitive parameter specification
+
 ## Anatomy of a Pipeline Step (Lines 177-228)
 
 Let's examine one complete step (CP calculate illumination):
