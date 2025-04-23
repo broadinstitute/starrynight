@@ -103,6 +103,9 @@ sequenceDiagram
     Execution->>Execution: Translate to Snakemake rules
 ```
 
+!!!note "Iterative Development"
+    While this diagram shows a linear flow, real-world development is often iterative. Researchers frequently adjust configurations, refine module parameters, or modify pipeline composition based on results. The architecture supports this workflow by maintaining clear boundaries between layers, allowing changes at any level to flow through the system without requiring complete rewrites.
+
 ### Runtime Execution Phase
 
 This phase shows how workflows execute and process data:
