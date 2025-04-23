@@ -49,7 +49,8 @@ backend_config = SnakeMakeConfig(
 )
 ```
 
-**What developers should note:**
+**What developers should note:** 
+
 - `DataConfig` defines input/output paths for the entire pipeline
 - `SnakeMakeBackend` provides the execution environment
 - These configurations will be reused across all modules
@@ -79,7 +80,8 @@ run = exec_backend.run()
 run.wait()
 ```
 
-**What developers should note:**
+**What developers should note:** 
+
 - The `from_config()` pattern is consistent across modules
 - Each module produces a "pipe" that's executed by the backend
 - The experiment is initialized from the index using type-validated configuration
@@ -129,7 +131,8 @@ run = exec_backend.run()
 run.wait()
 ```
 
-**What developers should note:**
+**What developers should note:** 
+
 - Each step follows the same three-phase pattern
 - Module names follow a consistent naming convention
 - The same configuration is used across phases
