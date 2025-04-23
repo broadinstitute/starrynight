@@ -139,9 +139,6 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 !!!note "CellProfiler Integration Pattern"
     The three-phase pattern described below (Generate Load Data → Generate Pipeline File → Execute Pipeline) is specific to how StarryNight integrates with CellProfiler. This pattern isn't a requirement of the StarryNight architecture, but rather a practical approach for this particular integration. Other tools may use different patterns while still adhering to the module abstraction.
 
-!!!tip "Iterative Research Workflow"
-    While we present steps sequentially, StarryNight is designed for the iterative nature of scientific research. Users can modify configurations, re-execute specific steps, or branch the workflow based on results. The step-by-step approach shown here makes it easy to inspect intermediate outputs and adjust parameters between stages—a crucial capability in exploratory research.
-
 With the experiment configured, we can now examine one complete pipeline step (CP calculate illumination). Each step follows a consistent three-phase pattern:
 
 ### Phase 1: Generate Load Data

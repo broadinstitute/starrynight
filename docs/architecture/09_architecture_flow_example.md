@@ -280,9 +280,6 @@ cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
 
 ## Flow Patterns in Three-Phase Execution
 
-!!!note "Iterative Process in Practice"
-    While we present these flows as linear sequences, actual research workflows are inherently iterative. Scientists often run a step, analyze results, adjust parameters, and re-run steps as needed. StarryNight's architecture explicitly supports this iterative workflow by maintaining modularity between components and clear data dependencies, making it natural to re-execute specific parts of the pipeline with modified configurations.
-
 Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the complete flow through all architecture layers. These phases map to the two architectural phases as follows:
 
 **Pipeline Composition Phase steps in each CellProfiler phase:**

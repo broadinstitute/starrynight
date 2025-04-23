@@ -103,8 +103,15 @@ sequenceDiagram
     Execution->>Execution: Translate to Snakemake rules
 ```
 
-!!!note "Iterative Development"
-    While this diagram shows a linear flow, real-world development is often iterative. Researchers frequently adjust configurations, refine module parameters, or modify pipeline composition based on results. The architecture supports this workflow by maintaining clear boundaries between layers, allowing changes at any level to flow through the system without requiring complete rewrites.
+!!!note "Iterative Research Workflow"
+    While these diagrams show linear flows for clarity, real-world scientific research is inherently iterative. StarryNight explicitly supports this workflow:
+    
+    - **Parameter Adjustments**: Researchers can modify configurations and re-execute steps to explore parameter spaces
+    - **Intermediate Analysis**: Users can inspect outputs between steps and make decisions about subsequent processing
+    - **Workflow Branching**: Alternative processing paths can be explored based on preliminary results
+    - **Partial Re-execution**: Only affected steps need to be rerun when upstream parameters change
+    
+    The architecture enables this through clear layer boundaries, well-defined data dependencies, and modularity. The step-by-step execution model shown in the [Practical Integration](08_practical_integration.md) document demonstrates how this iterative approach works in practice.
 
 ### Runtime Execution Phase
 
