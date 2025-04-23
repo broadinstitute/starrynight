@@ -193,6 +193,7 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
 **Input → Output**: Container command line → CLI argument parsing → Algorithm function call → Processing results
 
 This three-layer approach (Container→CLI→Algorithm) provides several benefits:
+
 1. Algorithms remain pure functions without CLI or container dependencies
 2. CLI provides standardized interfaces and path handling
 3. Modules can compose different CLI commands into complex workflows
@@ -267,6 +268,7 @@ cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
 Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the complete flow through all architecture layers. These phases map to the two architectural phases as follows:
 
 **Pipeline Composition Phase steps in each CellProfiler phase:**
+
 1. Config→Module: Configuration flows into module
 2. Module→Module: Generate compute graphs 
 3. Module→Pipeline: Pass module specifications
@@ -274,6 +276,7 @@ Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the comple
 5. Execution→Execution: Translate to Snakemake rules
 
 **Runtime Execution Phase steps in each CellProfiler phase:**
+
 6. Execution→Runtime: Schedule container execution
 7. Runtime→CLI: Invoke CLI commands
 8. CLI→Algorithm: Call algorithm functions
@@ -326,11 +329,13 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
 ```
 
 **What happens**:
+
 1. Container executes the `starrynight cp` command with inputs/outputs
 2. CLI parses arguments and provides a standardized interface to algorithms
 3. Algorithm functions contain pure implementation without CLI/container concerns
 
 **Benefits of this approach**:
+
 - **Separation of concerns**: Algorithms focus on core functionality without UI/execution details
 - **Testability**: Pure algorithm functions can be tested independently from CLI/containers
 - **Flexibility**: Same algorithms can be accessed through different interfaces (CLI, API, notebook)
@@ -338,6 +343,7 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
 - **Containerization**: CLI provides a standard entrypoint for container execution
 
 This CLI layer pattern is consistent across all StarryNight modules, creating a clean separation between:
+
 - **Algorithm layer**: Pure implementation of image processing functionality
 - **CLI layer**: Command-line interfaces that parse arguments and call algorithms
 - **Module layer**: Compute graph specifications that invoke CLI commands in containers
