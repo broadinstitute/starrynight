@@ -58,6 +58,7 @@ nav:
     - Analysis: user/algorithms/analysis.md
   - Development:
     - Developer Guide: developer/developer-guide.md
+    - MVP Project Planning: developer/project-planning.md
     - PCPIP Specs: developer/pcpip-specs.md
     - Pipeline Automation: developer/pipeline-automation.md
     - Requirements: developer/requirements.md
@@ -70,6 +71,7 @@ nav:
       - Execution Layer: architecture/05_execution_layer.md
       - Configuration Layer: architecture/06_configuration_layer.md
       - Architecture for Biologists: architecture/07_architecture_for_biologists.md
+      - Practical Integration: architecture/08_practical_integration.md
   - Testing: tester/README.md
   - FAQ: misc/faq.md
 
@@ -94,13 +96,12 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  # - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
-  # - pymdownx.superfences:
-  #     custom_fences:
-  #       - name: mermaid
-  #         class: mermaid
-  #         format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

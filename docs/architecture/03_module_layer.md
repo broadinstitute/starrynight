@@ -2,13 +2,13 @@
 
 ## Overview
 
-The module layer provides a standardized abstraction that bridges the algorithm layer (pure functions) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
+The module layer provides a standardized abstraction that bridges the CLI layer (command-line interfaces) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
 
-Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.
+Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution. Importantly, modules don't directly call algorithm functions but instead invoke CLI commands that in turn execute the underlying algorithms.
 
 ## Purpose and Advantages
 
-The module layer offers significant advantages over directly calling algorithms:
+The module layer offers significant advantages over directly using CLI commands:
 
 ### Practical Benefits
 - **Standardization** - Consistent interfaces across different algorithm types
@@ -42,7 +42,7 @@ Crucially, modules define computation but don't perform it. This separation enab
 
 ### Module Sets Organization
 
-Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.
+Just as the CLI layer is organized into command groups that map to algorithm sets, the module layer is organized into corresponding module sets. For each CLI command group, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.
 
 Each module set typically follows a consistent pattern with three types of modules:
 
@@ -59,7 +59,7 @@ Each module set typically follows a consistent pattern with three types of modul
     - Manage resource allocation
     - Organize outputs according to experimental structure
 
-This pattern directly mirrors the algorithm set structure covered in the [Algorithm Layer](01_algorithm_layer.md), but adds the standardized abstraction of the module layer.
+This pattern mirrors the organization of algorithms and CLI commands, but adds the standardized abstraction and container orchestration capabilities of the module layer.
 
 Common module sets include:
 
@@ -391,11 +391,60 @@ Creating a new module set involves implementing classes for each stage of proces
 
 The module layer connects directly with two adjacent architectural layers:
 
-1. **Algorithm/CLI Layer (below)** - Modules wrap algorithm functions and typically invoke them via CLI commands in containers
+1. **CLI Layer (below)** - Modules invoke CLI commands in containers rather than directly calling algorithm functions
 2. **Pipeline Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
 
-The module layer translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.
+The module layer translates between CLI commands and complex workflows by providing a standardized interface and containerization approach for executing CLI commands in a pipeline context.
+
+## Module Registry Mechanism
+
+StarryNight uses registry mechanisms to organize and discover available modules throughout the system. The module registry serves as a central catalog of all available modules, making it easy to:
+
+1. Discover available modules by name or type
+2. Instantiate modules programmatically
+3. Integrate modules into pipelines
+4. Extend the system with new modules
+
+### Registry Implementation
+
+The registry is implemented in `starrynight/modules/registry.py` as a Python dictionary mapping unique module identifiers to module classes:
+
+```python
+MODULE_REGISTRY: dict[str, StarrynightModule] = {
+    # Generate inventory and index for the project
+    GenInvModule.uid(): GenInvModule,
+    GenIndexModule.uid(): GenIndexModule,
+    # CP illum calc
+    CPCalcIllumGenLoadDataModule.uid(): CPCalcIllumGenLoadDataModule,
+    CPCalcIllumGenCPPipeModule.uid(): CPCalcIllumGenCPPipeModule,
+    CPCalcIllumInvokeCPModule.uid(): CPCalcIllumInvokeCPModule,
+    # Additional modules...
+}
+```
+
+Each module defines its unique identifier through a static `uid()` method, which returns a string that serves as the module's registry key.
+
+### Registering New Modules
+
+To add a new module to the system:
+
+1. Implement the module class following the module pattern
+2. Define a unique ID through the `uid()` static method
+3. Add the module to the `MODULE_REGISTRY` dictionary
+
+The registry pattern makes it easy to extend StarryNight with new module types while maintaining a clean, discoverable architecture.
+
+### Registry Usage
+
+The module registry is used in several contexts:
+
+1. **Pipeline Composition** - Finding modules to include in a pipeline
+2. **Experiment Configuration** - Determining which modules to use for an experiment type
+3. **Module Discovery** - Listing available modules for user interfaces
+4. **Dynamic Loading** - Loading modules at runtime based on configuration
+
+Similar registry mechanisms exist for experiments (`experiments/registry.py`) and pipelines (`pipelines/registry.py`), creating a unified approach to component discovery across the system.
 
 ## Conclusion
 
-The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, [Pipeline Layer](04_pipeline_layer.md), builds upon these abstractions to compose complete workflows from individual modules.
+The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The registry mechanism provides a flexible way to organize and discover modules, facilitating extension and integration. The next section, [Pipeline Layer](04_pipeline_layer.md), builds upon these abstractions to compose complete workflows from individual modules.
