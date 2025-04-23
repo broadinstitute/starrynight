@@ -41,6 +41,7 @@ cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
 ```
 
 **What happens**: Configuration parameters flow into module creation
+
 **Input → Output**: Parameters (paths, channels) → Module instance
 
 ### Module→Module: Generate compute graphs
@@ -53,6 +54,7 @@ return cls(compute_graph)
 ```
 
 **What happens**: Module internally generates compute graph with container specification
+
 **Input → Output**: Configuration → Compute graph with inputs/outputs
 
 ### Module→Pipeline: Pass module specifications
@@ -68,6 +70,7 @@ exec_backend = SnakeMakeBackend(
 ```
 
 **What happens**: Module's compute graph becomes available to pipeline/execution
+
 **Input → Output**: Module compute graph → Pipeline component
 
 ### Pipeline→Execution: Submit workflow
@@ -91,6 +94,7 @@ run = exec_backend.run()
 ```
 
 **What happens**: Pipeline submits workflow for execution
+
 **Input → Output**: Pipeline specification → Execution plan
 
 ### Execution→Execution: Translate to Snakemake rules
@@ -101,6 +105,7 @@ run = exec_backend.run()
 ```
 
 **What happens**: Backend translates compute graph into Snakemake rules
+
 **Input → Output**: Compute graph → Snakemake rules
 
 ### Execution→Runtime: Schedule container execution
@@ -127,6 +132,7 @@ Container(
 ```
 
 **What happens**: Snakemake executes rules in container environment
+
 **Input → Output**: Snakemake rule → Container execution
 
 ## Runtime Execution Phase
@@ -190,6 +196,7 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
 ```
 
 **What happens**: Container command invokes CLI, which parses arguments and calls algorithm
+
 **Input → Output**: Container command line → CLI argument parsing → Algorithm function call → Processing results
 
 This three-layer approach (Container→CLI→Algorithm) provides several benefits:
@@ -202,6 +209,7 @@ This three-layer approach (Container→CLI→Algorithm) provides several benefit
 The CLI layer is the essential bridge that allows containerized execution to access the underlying algorithm functionality while maintaining clean separation of concerns.
 
 **What happens**: Algorithm function executes core image processing logic
+
 **Input → Output**: Function parameters → Processed data
 
 ### Algorithm→CLI: Return results to CLI
@@ -226,6 +234,7 @@ def cp_command(pipeline, loaddata, output_dir):
 ```
 
 **What happens**: Algorithm function returns results to CLI command
+
 **Input → Output**: Algorithm result → CLI output/exit code
 
 ### CLI→Runtime: CLI process completes
@@ -236,6 +245,7 @@ def cp_command(pipeline, loaddata, output_dir):
 ```
 
 **What happens**: CLI process exits, container execution completes
+
 **Input → Output**: CLI exit code → Container exit status
 
 ### Runtime→Storage: Write results
@@ -248,6 +258,7 @@ output_paths={
 ```
 
 **What happens**: Container processes execute CLI commands that write results
+
 **Input → Output**: Container processing → Files on disk
 
 ### Storage→Runtime: Read previous outputs
@@ -261,6 +272,7 @@ cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
 ```
 
 **What happens**: Next phase reads outputs from previous phase
+
 **Input → Output**: Files from previous step → Input for next step
 
 ## Flow Patterns in Three-Phase Execution
