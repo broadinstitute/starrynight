@@ -2,6 +2,9 @@
 
 This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining the `exec_pcp_generic_pipe.py` file. While the previous documents explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
 
+!!!note "Pedagogical Approach"
+    This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. For production use, the more concise pattern in `exec_pcp_generic_full.py` (which composes all modules at once using the `create_pcp_generic_pipeline` function) is typically preferred.
+
 ## Why This Example Matters
 
 The `exec_pcp_generic_pipe.py` file demonstrates:
@@ -26,7 +29,7 @@ The PCP Generic pipeline processes cell painting data through a series of steps:
 7. Preprocess (SBS)
 8. Analysis
 
-Each step follows a consistent pattern:
+Each step follows a consistent pattern that reflects the module layer's organization:
 - Generate load data (configuration data for CellProfiler)
 - Generate pipeline file (CellProfiler pipeline definition)
 - Execute the pipeline (running CellProfiler)
@@ -49,7 +52,7 @@ backend_config = SnakeMakeConfig(
 )
 ```
 
-**What developers should note:** 
+**What developers should note:**
 
 - `DataConfig` defines input/output paths for the entire pipeline
 - `SnakeMakeBackend` provides the execution environment
@@ -80,7 +83,7 @@ run = exec_backend.run()
 run.wait()
 ```
 
-**What developers should note:** 
+**What developers should note:**
 
 - The `from_config()` pattern is consistent across modules
 - Each module produces a "pipe" that's executed by the backend
@@ -131,7 +134,7 @@ run = exec_backend.run()
 run.wait()
 ```
 
-**What developers should note:** 
+**What developers should note:**
 
 - Each step follows the same three-phase pattern
 - Module names follow a consistent naming convention
@@ -143,11 +146,105 @@ run.wait()
 
 Looking at this example, we can see how all the architecture layers work together:
 
-1. **Algorithm Layer**: `CPCalcIllumInvokeCPModule` implements the illumination calculation algorithm
-2. **Module Layer**: Each module handles a specific phase (load_data, cppipe, cp)
-3. **Pipeline Layer**: `pcp_experiment` defines the pipeline configuration and sequence
-4. **Execution Layer**: `SnakeMakeBackend` executes each pipeline step
-5. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior
+1. **Algorithm Layer**: Contains pure functions that implement image processing operations, which are called by CLI commands
+2. **CLI Layer**: Provides command-line tools that modules invoke in containerized environments
+3. **Module Layer**: Defines standardized components (like `CPCalcIllumInvokeCPModule`) with specifications and compute graphs that invoke CLI commands
+4. **Pipeline Layer**: In this example, we're executing modules one by one, but they can be composed into a complete pipeline as seen in `create_pcp_generic_pipeline`
+5. **Execution Layer**: `SnakeMakeBackend` translates module compute graphs into Snakemake rules and executes them in containers
+6. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior across all layers
+
+## Module Registry and Discovery
+
+StarryNight uses a registry mechanism to organize and discover available modules. In the Module Registry (implemented in `starrynight/modules/registry.py`), each module is registered with a unique identifier:
+
+```python
+MODULE_REGISTRY: dict[str, StarrynightModule] = {
+    # Generate inventory and index for the project
+    GenInvModule.uid(): GenInvModule,
+    GenIndexModule.uid(): GenIndexModule,
+    # CP illum calc
+    CPCalcIllumGenLoadDataModule.uid(): CPCalcIllumGenLoadDataModule,
+    CPCalcIllumGenCPPipeModule.uid(): CPCalcIllumGenCPPipeModule,
+    CPCalcIllumInvokeCPModule.uid(): CPCalcIllumInvokeCPModule,
+    # Additional modules...
+}
+```
+
+This registry enables:
+- Runtime discovery of available modules
+- Dynamic instantiation based on configuration
+- Integration with experiment classes
+- Extension with new module types
+
+When creating new modules, you must register them in this registry to make them discoverable within the system.
+
+## Container Execution Model
+
+Modules define containerized operations that are executed by the backend. The container configuration is defined as part of the module's compute graph:
+
+```python
+# From starrynight/modules/cp_illum_calc/calc_cp.py
+Container(
+    name="cp_calc_illum_invoke_cp",
+    input_paths={
+        "cppipe_path": [...],
+        "load_data_path": [...],
+    },
+    output_paths={
+        "cp_illum_calc_dir": [...]
+    },
+    config=ContainerConfig(
+        image="ghrc.io/leoank/starrynight:dev",
+        cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
+        env={},
+    ),
+)
+```
+
+When executed:
+1. The `SnakeMakeBackend` translates this container definition into a Snakemake rule
+2. Snakemake executes the rule in the specified container
+3. The CLI command runs inside the container, calling the underlying algorithm functions
+4. Results are stored at the specified output paths
+
+This containerization ensures reproducibility and isolation of each pipeline step.
+
+## Pipeline Composition (Alternative Approach)
+
+While this document focuses on executing modules one by one, StarryNight provides a more elegant composition approach through the `create_pcp_generic_pipeline` function:
+
+```python
+# From starrynight/src/starrynight/pipelines/pcp_generic.py
+def create_pcp_generic_pipeline(
+    data: DataConfig,
+    experiment: Experiment | None = None,
+) -> tuple[list[StarrynightModule], Pipeline]:
+    # Create all modules in one place
+    module_list = [
+        # cp modules
+        cp_illum_calc_loaddata := init_module(CPCalcIllumGenLoadDataModule),
+        cp_illum_calc_cpipe := init_module(CPCalcIllumGenCPPipeModule),
+        cp_illum_calc_cp := init_module(CPCalcIllumInvokeCPModule),
+        # More modules...
+    ]
+
+    # Compose modules into a pipeline with parallel execution
+    return module_list, Seq(
+        [
+            Parallel(
+                [
+                    Seq([cp_illum_calc_loaddata.pipe, cp_illum_calc_cpipe.pipe, ...]),
+                    Seq([sbs_illum_calc_loaddata.pipe, sbs_illum_calc_cpipe.pipe, ...]),
+                ]
+            ),
+            analysis_loaddata.pipe,
+            analysis_cpipe.pipe,
+            analysis_cp.pipe,
+        ]
+    )
+```
+
+This approach enables complex parallel execution patterns, where CP and SBS processing can run simultaneously, with analysis running after both complete.
 
 ## Extension Patterns
 
@@ -158,9 +255,19 @@ When implementing your own algorithms or modules, follow these patterns:
    - Pipeline generation (cppipe)
    - Execution (invoke)
 
-2. **Configuration**: Extend existing configuration classes or create new ones using Pydantic models
+2. **Registry Integration**: Define a unique ID and register your module in the registry:
+   ```python
+   @staticmethod
+   def uid() -> str:
+       """Return module unique id."""
+       return "your_module_unique_id"
 
-3. **Pipeline Integration**: Register your modules with the appropriate experiment classes
+   # Then add to MODULE_REGISTRY in registry.py
+   ```
+
+3. **Configuration**: Extend existing configuration classes or create new ones using Pydantic models
+
+4. **Container Definition**: Define how your module should run in containers using the Container class
 
 ## Common Development Tasks
 
@@ -168,16 +275,19 @@ Here are examples of common tasks and how to approach them:
 
 ### Adding a New Algorithm
 
-1. Create modules (load_data, cppipe, invoke) in a new directory under `modules/`
-2. Implement the algorithm in `algorithms/`
-3. Extend experiment configuration to include your algorithm's parameters
-4. Register your modules with experiments that should use them
+1. Implement the algorithm functions in `algorithms/`
+2. Create CLI commands that expose the algorithm in `cli/`
+3. Create modules (load_data, cppipe, invoke) in a new directory under `modules/`
+4. Register your modules in the `MODULE_REGISTRY`
+5. Extend experiment configuration to include your algorithm's parameters
+6. Update pipeline composition functions to include your modules
 
 ### Modifying an Existing Pipeline
 
 1. Find the module implementations in `modules/`
 2. Update the module's `.from_config()` method to handle new configurations
-3. Modify the pipeline generation or execution as needed
+3. Modify the container configuration and CLI command construction
+4. Update the pipeline composition function if needed
 
 ## Debugging and Troubleshooting
 
@@ -185,14 +295,17 @@ When working with pipelines:
 
 1. Check run logs using `run.print_log()`
 2. Examine workspace output files after each step
-3. The modular design lets you run steps individually to isolate issues
-4. Use `.wait()` to ensure previous steps complete before continuing
+3. Inspect the generated Snakefile in the working directory
+4. The modular design lets you run steps individually to isolate issues
+5. Use `.wait()` to ensure previous steps complete before continuing
 
 ## Key Takeaways
 
 1. StarryNight follows a consistent, modular pattern for pipeline components
-2. Configuration flows from top-level settings to specific module behavior
-3. The execution layer abstracts away the details of running each pipeline step
-4. Adding new capabilities follows established patterns with clear extension points
+2. Modules invoke CLI commands in containers rather than directly implementing algorithms
+3. The module registry enables discovery and composition of standardized components
+4. Container execution ensures reproducibility and isolation
+5. Pipeline composition enables complex parallel execution patterns
+6. Configuration flows from top-level settings to specific module behavior
 
-By understanding this concrete example, you now have a practical view of how StarryNight's architecture functions as an integrated system.
+By understanding this concrete example, you now have a practical view of how StarryNight's architecture functions as an integrated system, from algorithms through CLI commands, modules, pipelines, and execution.
