@@ -1,5 +1,8 @@
 # Architecture Flow in Action: Detailed Code Examples
 
+!!!warning "Experimental Documentation"
+    This is an experimental document that offers a very detailed view of the architecture flow. Some readers may find this level of detail overwhelming. If you're new to StarryNight, we recommend starting with the [Architecture Overview](00_architecture_overview.md) and [Practical Integration](08_practical_integration.md) before diving into this detailed mapping.
+
 This document provides concrete code examples showing how data flows through StarryNight's architectural layers. It complements the [Architecture Overview](00_architecture_overview.md#data-and-control-flow) by mapping the abstract sequence diagrams to actual code implementation, and builds on the foundational concepts from the [Practical Integration](08_practical_integration.md) walkthrough.
 
 ## Purpose of This Document
