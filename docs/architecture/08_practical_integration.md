@@ -123,10 +123,13 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
 ## Anatomy of a Pipeline Step (Lines 177-228)
 
-Let's examine one complete step (CP calculate illumination):
+With the experiment configured, we can now examine one complete pipeline step (CP calculate illumination). Each step follows a consistent three-phase pattern:
+
+### Phase 1: Generate Load Data
+
+First, a module generates the LoadData CSV file that tells CellProfiler which images to process:
 
 ```python
-# 1. Generate load data
 cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
     data_config, pcp_experiment
 )
@@ -138,8 +141,15 @@ exec_backend = SnakeMakeBackend(
 )
 run = exec_backend.run()
 run.wait()
+```
 
-# 2. Generate pipeline file
+Notice how the experiment configuration (`pcp_experiment`) is passed to the module, allowing it to access parameters like channel names that were defined earlier.
+
+### Phase 2: Generate Pipeline File
+
+Next, a module creates the CellProfiler pipeline definition (.cppipe file):
+
+```python
 cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
     data_config, pcp_experiment
 )
@@ -151,8 +161,15 @@ exec_backend = SnakeMakeBackend(
 )
 run = exec_backend.run()
 run.wait()
+```
 
-# 3. Execute pipeline
+This module automatically finds the LoadData file created in the previous phase and uses it to configure the pipeline.
+
+### Phase 3: Execute Pipeline
+
+Finally, a module runs the pipeline on the data:
+
+```python
 cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule.from_config(
     data_config, pcp_experiment
 )
@@ -166,13 +183,15 @@ run = exec_backend.run()
 run.wait()
 ```
 
+This module finds both the LoadData file and the pipeline file created in the previous phases, then executes the pipeline with CellProfiler inside a container.
+
 **What developers should note:**
 
-- Each step follows the same three-phase pattern
-- Module names follow a consistent naming convention
-- The same configuration is used across phases
-- Each module is independently executable
-- Results from earlier phases are found automatically by later phases
+- Each step follows the same three-phase pattern across all pipeline steps
+- Module names follow a consistent naming convention (Load → CPipe → Invoke)
+- The same configuration (`data_config` and `pcp_experiment`) is used across all phases
+- Each module is independently executable but automatically finds outputs from previous phases
+- This pattern repeats for all eight pipeline steps, with variations in parameter specifics
 
 ## Architecture in Action
 
