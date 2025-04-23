@@ -69,41 +69,41 @@ Note: The Configuration Layer (in `/starrynight/experiments/`) provides paramete
 
 ## Layer Overview
 
-StarryNight consists of six interconnected layers, each with specific responsibilities:
+StarryNight consists of six interconnected layers:
 
-### 1. Algorithm Layer
-- Implements core image processing functions without StarryNight dependencies
-- Handles data preparation, pipeline generation, and execution
-- [Details →](01_algorithm_layer.md)
-
-### 2. CLI Layer
-- Exposes algorithms as command-line tools
-- Manages parameter parsing and validation
-- [Details →](02_cli_layer.md)
-
-### 3. Module Layer
-- Standardizes components with well-defined inputs/outputs
-- Creates compute graphs without executing them
-- [Details →](03_module_layer.md)
-
-### 4. Pipeline Layer
-- Composes modules into executable workflows
-- Manages parallel and sequential execution
-- [Details →](04_pipeline_layer.md)
-
-### 5. Execution Layer
-- Runs pipelines on specific backends (primarily Snakemake)
-- Manages containers and resource allocation
-- [Details →](05_execution_layer.md)
-
-### 6. Configuration Layer
-- Infers parameters from minimal user input
-- Adapts pipelines to different datasets
-- [Details →](06_configuration_layer.md)
+| Layer | Primary Responsibility | Key Components | Details |
+|-------|------------------------|----------------|---------|
+| Algorithm | Core image processing without dependencies | Functions for data prep, pipeline generation, execution | [Details →](01_algorithm_layer.md) |
+| CLI | Command-line interface | Command groups, parameter parsing/validation | [Details →](02_cli_layer.md) |
+| Module | Standardized components | Input/output specs, compute graph generation | [Details →](03_module_layer.md) |
+| Pipeline | Workflow composition | Sequential/parallel execution paths | [Details →](04_pipeline_layer.md) |
+| Execution | Backend runtime | Snakemake rules, container management | [Details →](05_execution_layer.md) |
+| Configuration | Parameter inference | Experiment configs, adaptive settings | [Details →](06_configuration_layer.md) |
 
 ## Data and Control Flow
 
 The system transforms data through these key steps:
+
+```mermaid
+sequenceDiagram
+    participant Config as Configuration Layer
+    participant Module as Module Layer
+    participant Pipeline as Pipeline Layer
+    participant Execution as Execution Layer
+    participant Runtime as Container Runtime
+    participant Storage as File System
+
+    Config->>Module: Supply module parameters
+    Module->>Module: Generate compute graphs
+    Module->>Pipeline: Pass module specifications
+    Pipeline->>Pipeline: Compose workflow
+    Pipeline->>Execution: Submit workflow
+    Execution->>Execution: Translate to Snakemake rules
+    Execution->>Runtime: Schedule container execution
+    Runtime->>Storage: Write intermediate results
+    Runtime->>Runtime: Process data through pipeline
+    Runtime->>Storage: Write final outputs
+```
 
 1. **Configuration** defines parameters for all layers
 2. **Modules** generate compute graphs from configuration
@@ -116,17 +116,10 @@ The system transforms data through these key steps:
 
 StarryNight is organized as a monorepo with four main packages:
 
-### StarryNight
-Core algorithms, CLI, modules and pipelines in `/starrynight/src/starrynight/`
-
-### PipeCraft
-Pipeline composition and execution in `/pipecraft/src/pipecraft/`
-
-### Conductor
-Job orchestration and API (not covered in detail in this documentation)
-
-### Canvas
-Web UI for pipeline configuration (not covered in detail in this documentation)
+- **StarryNight**: Core algorithms, CLI, modules and pipelines (`/starrynight/src/starrynight/`)
+- **PipeCraft**: Pipeline composition and execution (`/pipecraft/src/pipecraft/`)
+- **Conductor**: Job orchestration and API (not detailed in this documentation)
+- **Canvas**: Web UI for pipeline configuration (not detailed in this documentation)
 
 ## Extension Points
 
