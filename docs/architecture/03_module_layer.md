@@ -2,13 +2,13 @@
 
 ## Overview
 
-The module layer provides a standardized abstraction that bridges the algorithm layer (pure functions) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
+The module layer provides a standardized abstraction that bridges the CLI layer (command-line interfaces) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).
 
-Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution.
+Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution. Importantly, modules don't directly call algorithm functions but instead invoke CLI commands that in turn execute the underlying algorithms.
 
 ## Purpose and Advantages
 
-The module layer offers significant advantages over directly calling algorithms:
+The module layer offers significant advantages over directly using CLI commands:
 
 ### Practical Benefits
 - **Standardization** - Consistent interfaces across different algorithm types
@@ -42,7 +42,7 @@ Crucially, modules define computation but don't perform it. This separation enab
 
 ### Module Sets Organization
 
-Just as the algorithm layer is organized into algorithm sets, the module layer is organized into corresponding module sets. For each algorithm set, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.
+Just as the CLI layer is organized into command groups that map to algorithm sets, the module layer is organized into corresponding module sets. For each CLI command group, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.
 
 Each module set typically follows a consistent pattern with three types of modules:
 
@@ -59,7 +59,7 @@ Each module set typically follows a consistent pattern with three types of modul
     - Manage resource allocation
     - Organize outputs according to experimental structure
 
-This pattern directly mirrors the algorithm set structure covered in the [Algorithm Layer](01_algorithm_layer.md), but adds the standardized abstraction of the module layer.
+This pattern mirrors the organization of algorithms and CLI commands, but adds the standardized abstraction and container orchestration capabilities of the module layer.
 
 Common module sets include:
 
@@ -391,10 +391,10 @@ Creating a new module set involves implementing classes for each stage of proces
 
 The module layer connects directly with two adjacent architectural layers:
 
-1. **Algorithm/CLI Layer (below)** - Modules wrap algorithm functions and typically invoke them via CLI commands in containers
+1. **CLI Layer (below)** - Modules invoke CLI commands in containers rather than directly calling algorithm functions
 2. **Pipeline Layer (above)** - Modules provide compute graphs that are composed into complete pipelines
 
-The module layer translates between pure functions and executable workflows by providing a standardized interface that both layers can interact with.
+The module layer translates between CLI commands and complex workflows by providing a standardized interface and containerization approach for executing CLI commands in a pipeline context.
 
 ## Conclusion
 
