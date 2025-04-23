@@ -123,13 +123,14 @@ sequenceDiagram
     Runtime->>Storage: Write final outputs
 ```
 
-#### Pipeline Composition Key Steps
+### Key Architecture Steps
+
+The complete flow can be summarized in these key steps:
+
 1. **Configuration** defines parameters for all layers
 2. **Modules** generate compute graphs from configuration
 3. **Pipeline** composes modules into workflows
 4. **Execution** translates workflows to backend-specific formats
-
-#### Runtime Execution Key Steps
 5. **Container runtime** executes the workflows
 6. **CLI layer** processes commands and invokes algorithms
 7. **Algorithm layer** performs core processing functions
