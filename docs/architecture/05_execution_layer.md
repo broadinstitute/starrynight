@@ -248,19 +248,66 @@ rule run_pipeline:
 
 Snakemake automatically determines the execution order based on the input/output dependencies.
 
-## Container Execution
+## Container Execution Model
 
-The execution system handles container execution through the backend. The Snakemake backend can run operations in containers using different technologies such as Singularity/Apptainer or Docker, depending on what's available in the execution environment.
+StarryNight uses containerization for reproducible algorithm execution. This is implemented through a structured approach in the PipeCraft package.
 
-This abstraction allows the same pipeline to run with different container technologies based on the environment.
+### Container Definition
 
-All pipeline steps run in containers, ensuring reproducibility and isolation.
+The `Container` class in `pipecraft/node.py` defines execution environments with:
+- `image`: Docker/Singularity image reference
+- `cmd`: Command to run within the container
+- `env`: Environment variables
 
-The container specification includes:
-- The container image to use
-- The command to run inside the container
-- Input and output paths
-- Environment variables if needed
+Modules use this pattern to define containerized operations:
+
+```python
+# From starrynight/modules/cp_illum_calc/calc_cp.py
+Container(
+    name="cp_calc_illum_invoke_cp",
+    input_paths={
+        "cppipe_path": [...],
+        "load_data_path": [...],
+    },
+    output_paths={
+        "cp_illum_calc_dir": [...]
+    },
+    config=ContainerConfig(
+        image="ghrc.io/leoank/starrynight:dev",
+        cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
+        env={},
+    ),
+)
+```
+
+### Backend Integration
+
+The `SnakeMakeBackend` in `pipecraft/backend/snakemake.py` translates container specifications to Snakemake rules:
+- Container images become Snakemake container directives
+- Input/output paths define rule dependencies
+- Commands define the shell execution
+
+This is implemented in the Mako template at `pipecraft/backend/templates/snakemake.mako`:
+
+```
+rule ${container.name.replace(" ", "_").lower()}:
+  input:
+    # Input path definitions...
+  output:
+    # Output path definitions...
+  container: "docker://${container.config.image}"
+  shell:
+    "${' '.join(container.config.cmd)}"
+```
+
+### Execution Flow
+
+The execution process follows these steps:
+1. Modules define containers with appropriate configurations
+2. The pipeline connects containers in sequential or parallel arrangements
+3. The backend compiles the pipeline to Snakemake rules
+4. Snakemake handles container execution and dependency tracking
+5. Results are stored at specified output paths
 
 ## Parallelism in Execution
 

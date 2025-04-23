@@ -396,6 +396,55 @@ The module layer connects directly with two adjacent architectural layers:
 
 The module layer translates between CLI commands and complex workflows by providing a standardized interface and containerization approach for executing CLI commands in a pipeline context.
 
+## Module Registry Mechanism
+
+StarryNight uses registry mechanisms to organize and discover available modules throughout the system. The module registry serves as a central catalog of all available modules, making it easy to:
+
+1. Discover available modules by name or type
+2. Instantiate modules programmatically
+3. Integrate modules into pipelines
+4. Extend the system with new modules
+
+### Registry Implementation
+
+The registry is implemented in `starrynight/modules/registry.py` as a Python dictionary mapping unique module identifiers to module classes:
+
+```python
+MODULE_REGISTRY: dict[str, StarrynightModule] = {
+    # Generate inventory and index for the project
+    GenInvModule.uid(): GenInvModule,
+    GenIndexModule.uid(): GenIndexModule,
+    # CP illum calc
+    CPCalcIllumGenLoadDataModule.uid(): CPCalcIllumGenLoadDataModule,
+    CPCalcIllumGenCPPipeModule.uid(): CPCalcIllumGenCPPipeModule,
+    CPCalcIllumInvokeCPModule.uid(): CPCalcIllumInvokeCPModule,
+    # Additional modules...
+}
+```
+
+Each module defines its unique identifier through a static `uid()` method, which returns a string that serves as the module's registry key.
+
+### Registering New Modules
+
+To add a new module to the system:
+
+1. Implement the module class following the module pattern
+2. Define a unique ID through the `uid()` static method
+3. Add the module to the `MODULE_REGISTRY` dictionary
+
+The registry pattern makes it easy to extend StarryNight with new module types while maintaining a clean, discoverable architecture.
+
+### Registry Usage
+
+The module registry is used in several contexts:
+
+1. **Pipeline Composition** - Finding modules to include in a pipeline
+2. **Experiment Configuration** - Determining which modules to use for an experiment type
+3. **Module Discovery** - Listing available modules for user interfaces
+4. **Dynamic Loading** - Loading modules at runtime based on configuration
+
+Similar registry mechanisms exist for experiments (`experiments/registry.py`) and pipelines (`pipelines/registry.py`), creating a unified approach to component discovery across the system.
+
 ## Conclusion
 
-The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The next section, [Pipeline Layer](04_pipeline_layer.md), builds upon these abstractions to compose complete workflows from individual modules.
+The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The registry mechanism provides a flexible way to organize and discover modules, facilitating extension and integration. The next section, [Pipeline Layer](04_pipeline_layer.md), builds upon these abstractions to compose complete workflows from individual modules.
