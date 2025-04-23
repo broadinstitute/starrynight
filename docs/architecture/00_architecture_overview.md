@@ -3,195 +3,11 @@
 !!!warning "Documentation Scope"
      This architecture documentation primarily focuses on the StarryNight core and PipeCraft packages. The Conductor (job orchestration) and Canvas (user interface) packages are mentioned for completeness but not covered in detail in the current documentation.
 
-## Introduction
+## The Big Picture: What You Need to Know
 
-StarryNight is a scientific image processing framework designed for processing high-throughput imaging data. It provides a flexible, composable pipeline system that handles complex image processing workflows while maintaining separation of concerns between algorithms, execution, and configuration.
+StarryNight is a modular framework for processing high-throughput microscopy data. Before diving into details, here's what you need to understand:
 
-This document provides a high-level overview of the StarryNight architecture, explaining how the different components interact to form a complete pipeline system.
-
-## Developer Quick Start
-
-This section helps new developers quickly navigate the codebase and understand where to focus based on specific tasks.
-
-### Code Location Map
-
-| Architecture Layer | Main Code Location |
-|-------------------|-------------------|
-| Algorithm Layer | `/starrynight/src/starrynight/algorithms/` |
-| CLI Layer | `/starrynight/src/starrynight/cli/` |
-| Module Layer | `/starrynight/src/starrynight/modules/` |
-| Pipeline Layer | `/starrynight/src/starrynight/pipelines/` and `/pipecraft/src/pipecraft/` |
-| Execution Layer | `/pipecraft/src/pipecraft/backend/` |
-| Configuration Layer | `/starrynight/src/starrynight/experiments/` |
-
-### Where to Start
-
-Depending on your task, focus on these areas:
-
-- **Adding a new algorithm set?** → Start with the Algorithm Layer, then add corresponding CLI and Module implementations
-- **Extending an existing algorithm set?** → Examine the existing algorithm set pattern to understand the inputs/outputs/file structure
-- **Building a reusable processing component?** → Explore the Module Layer, particularly the module registry and schema implementation
-- **Composing a complete workflow?** → Look at the Pipeline Layer, especially the pipeline composition functions
-- **Changing execution behavior?** → Check the Execution Layer, focusing on the Snakemake backend implementation
-- **Modifying configuration options?** → Begin with the Configuration Layer and the Pydantic models
-
-For a more accessible explanation of the architecture using biological analogies, see [Architecture for Biologists](07_architecture_for_biologists.md).
-
-If you prefer to see a concrete example that shows how all these layers work together in practice, check out [Practical Integration](08_practical_integration.md), which walks through a complete pipeline implementation.
-
-## Project Structure
-
-The StarryNight framework is organized as a monorepo with four main packages:
-
-1. **StarryNight** - Core package containing:
-    - Algorithm Layer: Pure Python functions for image processing
-    - CLI Layer: Command-line interfaces for algorithms
-    - Module Layer: Standardized module abstractions
-
-2. **PipeCraft** - Pipeline definition framework that powers:
-    - Pipeline Layer: Composition of modules into workflows
-    - Part of the Execution Layer: Backend abstractions
-
-3. **Conductor** - Job orchestration service handling:
-    - Execution management and monitoring
-    - Configuration storage
-    - REST API for job control
-
-4. **Canvas** - Frontend UI providing:
-    - Web interface for pipeline configuration
-    - Visualization of results
-    - Integration with Conductor
-
-## Core Architectural Layers
-
-!!!note "Focus"
-     This documentation primarily focuses on the architectural layers rather than the package boundaries, as layers can span multiple packages.
-
-StarryNight follows a layered architecture with distinct responsibilities:
-
-1. **Algorithm Layer** - Core image processing functionality, completely independent of other layers
-2. **CLI Layer** - Command-line interface wrappers
-3. **Module Layer** - Standardized abstractions with specs and compute graphs
-4. **Pipeline Layer** - Compositions of modules into executable workflows
-5. **Execution Layer** - Backend systems that run the pipelines
-
-Additionally, the **Configuration Layer** acts as a cross-cutting concern that interacts with the other layers by providing parameter management, inference, and standardization across the system.
-
-In a typical workflow, the Module Layer consumes configuration to instantiate modules, then the Pipeline Layer composes these modules, and finally the Execution Layer runs the pipeline. The Configuration Layer acts as a bridge between user inputs and the detailed settings needed by each layer. This separation of concerns creates a flexible and maintainable architecture.
-
-## Key Components
-
-### Algorithm Sets
-
-The foundation of StarryNight is the algorithm sets -- collections of related functions that implement specific image processing steps. Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent. While many examples use CellProfiler-focused algorithm sets (with data loading, pipeline generation, and execution functions), the architecture supports various other types like indexing, inventory management, quality control, and data visualization.
-
-### CLI Wrappers
-
-CLI wrappers expose algorithms as command-line tools. This layer handles parameter parsing, path management, and command organization, making algorithms directly accessible to users without requiring Python programming.
-
-### Modules
-
-Modules are a key abstraction that standardize how pipeline components are defined and composed. Modules have a dual focus - specs and compute graphs. They describe what should be done (through specifications) and how it should be structured (through compute graphs), but don't actually perform the computation.
-
-A module:
-
-- Encapsulates a spec that defines inputs and outputs (using [Bilayers](https://github.com/bilayer-containers/bilayers) schema)
-- Contains a compute graph that defines what operations will be performed
-- Provides `from_config` methods for automatic configuration from experiment settings
-- Does not perform actual computation (delegated to execution backends)
-
-Each algorithm set typically corresponds to a module set containing specific module implementations for load data generation, pipeline generation, and execution.
-
-### Pipelines
-
-Pipelines compose multiple modules into executable workflows. The pipeline layer:
-
-- Uses Pipecraft to define compute graphs with nodes and connections
-- Configures containers for execution
-- Manages parallel and sequential execution paths
-- Handles input/output relationships between modules
-
-Pipelines represent the complete computation to be performed but are backend-agnostic.
-
-### Execution
-
-The execution layer takes pipelines and runs them on specific backends. The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.):
-
-- Currently implemented with Snakemake
-- Translates Pipecraft pipelines into Snakemake rules
-- Manages container execution (Docker/Singularity)
-- Handles parallelism, logging, and monitoring
-
-### Configuration Layer
-
-The configuration layer handles parameter inference and standardization:
-
-- Infer parameters from data where possible
-- Combine user-provided parameters with defaults
-- Create consistent configurations for modules
-- Support extension for different experimental types
-
-## Data Flow
-
-A typical data flow through the StarryNight system:
-
-1. User configures an experiment with minimal required parameters
-2. The configuration layer infers additional parameters
-3. Modules are instantiated with the configuration
-4. Modules generate their compute graphs (Pipecraft pipelines)
-5. Pipelines are composed for complete workflow
-6. Backend translates the pipeline to executable form (e.g., Snakefile)
-7. Backend executes the workflow in containers
-8. Results are stored in configured locations
-
-## System Integration
-
-### Execution Contexts
-
-StarryNight can be used in multiple contexts:
-
-1. **Direct CLI usage** - Running algorithms directly via the CLI layer in the StarryNight core package
-2. **Notebook integration** - Creating and running pipelines in Jupyter notebooks using StarryNight and PipeCraft
-3. **UI integration** - Using the Canvas (frontend package) and Conductor (orchestration package) which provide a web-based interface that ultimately utilizes the same core functionality
-
-Each context has different state management requirements, with the CLI being stateless and the UI components (Canvas and Conductor) maintaining session state.
-
-### Container Usage
-
-StarryNight uses containers for consistent execution:
-
-- Each module defines its container requirements
-- Containers include necessary dependencies (CellProfiler, Python libraries, etc.)
-- Execution is delegated to container runtimes (Docker, Singularity)
-- Container-based execution ensures reproducibility
-
-## Extension Points
-
-StarryNight is designed for extensibility:
-
-1. **New algorithms** - Add functions to implement new image processing techniques
-2. **New CLI commands** - Expose new algorithms through command-line interfaces
-3. **New modules** - Create modules with specs and compute graphs for new functionality
-4. **New experiment types** - Define new experiment classes for different workflows
-5. **New backends** - Implement new execution backends beyond Snakemake
-
-## Key Concepts Reference
-
-- **Algorithm Set**: Group of functions that implement a specific pipeline step
-- **Module**: Standardized wrapper with spec and compute graph
-- **Bilayers**: Schema system for defining module inputs/outputs
-- **Pipecraft**: Library for creating composable pipeline graphs
-- **Compute Graph**: Definition of operations and their relationships
-- **Container**: Isolated execution environment with dependencies
-- **Snakemake**: Workflow engine that executes the compiled pipeline
-
-## The Central Architectural Achievement
-
-The most important architectural achievement of StarryNight is the clear separation between what should be done (algorithms), how it should be configured (specs), how it should be structured (compute graphs), and how it should be executed (backends).
-
-This separation enables the automatic generation of complex execution plans (like 500+ line Snakemake files) while maintaining the simplicity and clarity of the higher-level abstractions.
-
-## Architecture Visual Guide
+### Architecture at a Glance
 
 ```mermaid
 flowchart TD
@@ -225,196 +41,259 @@ flowchart TD
     F -.-> I6
 ```
 
+### Core Design Principles
+
+StarryNight follows these key architectural principles:
+
+1. **Separation of concerns**: Each layer has a specific responsibility
+2. **Progressive composition**: Build complex pipelines from simple components
+3. **Containerized execution**: Run code in consistent, reproducible environments
+4. **Configuration inference**: Minimize manual configuration through smart defaults
+
+### Developer Quick Start
+
+Here's where to focus based on your task:
+
+| If you need to... | Start here |
+|-------------------|------------|
+| Add a new image processing algorithm | `/starrynight/src/starrynight/algorithms/` |
+| Create a command-line tool | `/starrynight/src/starrynight/cli/` |
+| Define a module with inputs/outputs | `/starrynight/src/starrynight/modules/` |
+| Compose a pipeline workflow | `/starrynight/src/starrynight/pipelines/` and `/pipecraft/src/pipecraft/` |
+| Define or modify execution behavior | `/pipecraft/src/pipecraft/backend/` |
+| Configure experiment parameters | `/starrynight/src/starrynight/experiments/` |
+
+For in-depth examples:
+- The [Practical Integration](08_practical_integration.md) document walks through a complete pipeline implementation
+- The [Architecture for Biologists](07_architecture_for_biologists.md) provides analogies for those without a strong software background
+
+## Architectural Layers Explained
+
+StarryNight consists of six interconnected layers, each with a specific responsibility:
+
+### 1. Algorithm Layer
+
+**What it does**: Implements the core image processing functionality
+- Pure Python functions with no StarryNight-specific dependencies
+- Handles data preparation, pipeline generation, and execution
+- Examples: illumination correction, segmentation, preprocessing
+
+**Developer relevance**: This is where you implement new data processing techniques.
+
+### 2. CLI Layer
+
+**What it does**: Wraps algorithms as command-line tools
+- Parameter parsing and validation
+- Command organization and help text
+- Path management for inputs/outputs
+
+**Developer relevance**: This makes algorithms directly usable without programming.
+
+### 3. Module Layer
+
+**What it does**: Standardizes components for pipeline composition
+- Defines inputs/outputs via Bilayers schemas
+- Creates compute graphs without executing them
+- Provides configuration utilities
+
+**Developer relevance**: Modules are the reusable building blocks of pipelines.
+
+### 4. Pipeline Layer
+
+**What it does**: Composes modules into executable workflows
+- Defines node relationships and data flow
+- Manages parallel and sequential execution
+- Integrates with PipeCraft for pipeline composition
+
+**Developer relevance**: This is where you define complex processing workflows.
+
+### 5. Execution Layer
+
+**What it does**: Runs pipelines on specific backends
+- Currently uses Snakemake for workflow execution
+- Manages containers and dependencies
+- Handles parallelism and resource allocation
+
+**Developer relevance**: This controls how your pipeline actually runs.
+
+### 6. Configuration Layer
+
+**What it does**: Manages pipeline parameters and settings
+- Infers parameters from minimal user input
+- Creates standardized configurations for modules
+- Handles experiment-specific workflow variations
+
+**Developer relevance**: This makes pipelines adaptable to different datasets.
+
+## Data and Control Flow
+
+Here's how information flows through the system:
+
+1. **Configuration** is used to instantiate **modules**
+2. **Modules** generate their **compute graphs**
+3. **Compute graphs** are composed into a **pipeline**
+4. The **pipeline** is translated to an executable **workflow**
+5. The **workflow** runs in **containers**
+6. **Results** are stored in configured locations
+
+## Implementation Organization
+
+StarryNight is organized as a monorepo with four main packages:
+
+### 1. StarryNight
+- **Purpose**: Core algorithms, CLI, modules, and experiments
+- **Key directories**:
+  - `/algorithms/`: Processing implementations
+  - `/cli/`: Command-line interfaces
+  - `/modules/`: Standardized pipeline components
+  - `/experiments/`: Configuration definitions
+  - `/pipelines/`: Higher-level pipeline composition
+
+### 2. PipeCraft
+- **Purpose**: Pipeline definition and execution
+- **Key directories**:
+  - `/pipeline.py`: Pipeline composition tools
+  - `/backend/`: Execution backends (Snakemake, AWS Batch)
+
+### 3. Conductor
+- **Purpose**: Job orchestration and API
+- **Not covered in detail in this documentation**
+
+### 4. Canvas
+- **Purpose**: Web UI for pipeline configuration
+- **Not covered in detail in this documentation**
+
 ## Common Development Tasks
 
-Here are examples of common development tasks with specific implementation guidance:
+Here are practical examples of common development workflows:
 
-### Implementing a New Algorithm Set
-
-Algorithm sets typically consist of three components that work together:
-
-1. **Data preparation functions** that generate load data files
-2. **Pipeline generation functions** that create processing definitions
-3. **Execution functions** that run the generated pipelines
-
-To implement a new algorithm set:
+### Adding a New Algorithm
 
 ```python
-# In /starrynight/src/starrynight/algorithms/new_algorithm_set.py
+# 1. Implement algorithm functions in /starrynight/src/starrynight/algorithms/new_algorithm.py
+def gen_new_algorithm_load_data(index_path, output_path, options):
+    """Generate load data files for input to the algorithm."""
+    # Implementation...
 
-def gen_new_algorithm_load_data_by_batch_plate(
-    index_path: Path | CloudPath,
-    out_path: Path | CloudPath,
-    path_mask: str | None,
-    for_special_type: bool = False,
-) -> None:
-    """Generate LoadData CSV files for the new algorithm.
+def gen_new_algorithm_pipeline(load_data_path, output_path, options):
+    """Generate pipeline specification for the algorithm."""
+    # Implementation...
 
-    This function reads image metadata from an index, organizes it by
-    batch/plate structure, and writes LoadData CSV files.
-    """
-    # Read from index file
-    df = pl.read_parquet(index_path.resolve().__str__())
+def run_new_algorithm(pipeline_path, load_data_path, output_path):
+    """Execute the algorithm pipeline."""
+    # Implementation...
 
-    # Filter for relevant images
-    images_df = df.filter(pl.col("is_image").eq(True))
-
-    # Generate hierarchical organization
-    images_hierarchy_dict = gen_image_hierarchy(images_df)
-
-    # Write output files for each batch/plate combination
-    for batch in images_hierarchy_dict.keys():
-        for plate in images_hierarchy_dict[batch].keys():
-            write_loaddata_csv_by_batch_plate(
-                images_df, out_path, path_mask, batch, plate
-            )
-
-def gen_new_algorithm_pipeline_by_batch_plate(
-    load_data_path: Path | CloudPath,
-    out_dir: Path | CloudPath,
-    workspace_path: Path | CloudPath,
-    option_flag: bool = False,
-) -> None:
-    """Create a processing pipeline programmatically.
-
-    This function reads a sample LoadData file and constructs a pipeline
-    with appropriate modules and parameters.
-    """
-    # Implementation details
-
-def run_new_algorithm_pipeline(
-    pipeline_path: Path | CloudPath,
-    load_data_path: Path | CloudPath,
-    out_dir: Path | CloudPath,
-) -> None:
-    """Execute the generated pipeline on the prepared data.
-
-    This function runs the pipeline with appropriate parallelism and
-    resource allocation.
-    """
-    # Implementation details
-```
-
-Next, create the corresponding CLI wrapper:
-
-```python
-# In /starrynight/src/starrynight/cli/new_algorithm.py
-
-import click
-from cloudpathlib import AnyPath
-
-from starrynight.algorithms.new_algorithm_set import (
-    gen_new_algorithm_load_data_by_batch_plate,
-    gen_new_algorithm_pipeline_by_batch_plate,
-    run_new_algorithm_pipeline,
-)
-
+# 2. Create CLI wrapper in /starrynight/src/starrynight/cli/new_algorithm.py
 @click.group()
 def new_algorithm():
-    """Commands for the new algorithm set."""
+    """Commands for the new algorithm."""
     pass
 
-@new_algorithm.command(name="loaddata")
-@click.option("-i", "--index", required=True, help="Path to index file")
-@click.option("-o", "--out", required=True, help="Output directory")
-@click.option("-m", "--path-mask", default=None, help="Path mask for file resolution")
-def gen_load_data(index, out, path_mask):
-    """Generate load data files for the new algorithm."""
-    gen_new_algorithm_load_data_by_batch_plate(
-        AnyPath(index), AnyPath(out), path_mask
-    )
+@new_algorithm.command()
+@click.option("--index", required=True)
+@click.option("--output", required=True)
+def load_data(index, output):
+    """Generate load data for the algorithm."""
+    gen_new_algorithm_load_data(index, output, {})
 
-# Add additional CLI commands here
+# 3. Create module implementations in /starrynight/src/starrynight/modules/new_algorithm/
+class NewAlgorithmLoadDataModule(StarrynightModule):
+    """Module for generating load data."""
+
+    @staticmethod
+    def from_config(data_config, experiment=None):
+        """Create the module from configuration."""
+        # Implementation...
 ```
 
-Finally, create the module implementations:
+### Extending a Pipeline
 
 ```python
-# In /starrynight/src/starrynight/modules/new_algorithm_set/loaddata.py
+# In a pipeline definition file
+def create_pipeline_with_new_component(data_config, experiment):
+    """Create a pipeline that includes the new component."""
 
-from starrynight.modules.common import StarrynightModule
-from starrynight.modules.schema import SpecContainer, TypeInput, TypeOutput, TypeEnum
-from starrynight.schema import DataConfig
-
-class NewAlgorithmGenLoadDataModule(StarrynightModule):
-    """New algorithm load data generation module."""
-
-    @staticmethod
-    def uid() -> str:
-        """Return module unique id."""
-        return "new_algorithm_gen_loaddata"
-
-    @staticmethod
-    def _spec() -> SpecContainer:
-        """Return module default spec."""
-        # Define inputs and outputs with appropriate specifications
-
-    @staticmethod
-    def from_config(
-        data: DataConfig,
-        experiment: Experiment | None = None,
-        spec: SpecContainer | None = None,
-    ) -> Self:
-        """Create module from configuration."""
-        # Generate appropriate paths and configurations
-```
-
-### Building a Pipeline with Your Algorithm Set
-
-To incorporate your new algorithm set into a pipeline:
-
-```python
-def create_pipeline_with_new_algorithm(
-    data: DataConfig,
-    experiment: Experiment,
-) -> tuple[list[StarrynightModule], Pipeline]:
-    """Create a pipeline that includes the new algorithm set."""
-
-    # Create modules for all required operations
+    # Create all required modules
     module_list = [
-        # Existing modules
-        index_module := IndexModule.from_config(data),
-        inventory_module := InventoryModule.from_config(data),
-
-        # Your new algorithm modules
-        new_algo_loaddata := NewAlgorithmGenLoadDataModule.from_config(data, experiment),
-        new_algo_pipeline := NewAlgorithmGenPipelineModule.from_config(data, experiment),
-        new_algo_exec := NewAlgorithmExecModule.from_config(data, experiment),
+        existing_module := ExistingModule.from_config(data_config, experiment),
+        new_module := NewModule.from_config(data_config, experiment),
     ]
 
-    # Define the pipeline structure
+    # Define the pipeline
     pipeline = pc.Pipeline()
     with pipeline.sequential() as seq:
-        # Setup steps
-        with seq.sequential() as setup:
-            setup.add_pipeline(index_module.pipeline)
-            setup.add_pipeline(inventory_module.pipeline)
-
-        # Your algorithm steps
-        with seq.sequential() as new_algo:
-            new_algo.add_pipeline(new_algo_loaddata.pipeline)
-            new_algo.add_pipeline(new_algo_pipeline.pipeline)
-            new_algo.add_pipeline(new_algo_exec.pipeline)
+        seq.add_pipeline(existing_module.pipe)
+        seq.add_pipeline(new_module.pipe)
 
     return module_list, pipeline
 ```
 
+### Adding Configuration Options
+
+```python
+# In an experiment configuration file
+class ExtendedExperimentConfig(BaseModel):
+    """Configuration for the extended experiment."""
+
+    # Existing options
+    existing_option: str
+
+    # New options
+    new_option: str
+    new_flag: bool = False
+
+    # Computed values
+    @property
+    def derived_value(self) -> str:
+        """Compute a value based on other settings."""
+        return f"{self.existing_option}_{self.new_option}"
+```
+
+## Extension Points
+
+StarryNight provides these key extension points:
+
+1. **New algorithms** in `/starrynight/src/starrynight/algorithms/`
+2. **New CLI commands** in `/starrynight/src/starrynight/cli/`
+3. **New modules** in `/starrynight/src/starrynight/modules/`
+4. **New experiment types** in `/starrynight/src/starrynight/experiments/`
+5. **New backends** in `/pipecraft/src/pipecraft/backend/`
+
 ## Recommended Reading Path
 
-Depending on your development focus:
+Depending on your role:
 
-1. **For algorithm developers**: First read the [Algorithm Layer](01_algorithm_layer.md) and [CLI Layer](02_cli_layer.md) documents, then explore the [Module Layer](03_module_layer.md) to understand how algorithms are integrated into the module system.
+1. **Algorithm developer**: Start with [Algorithm Layer](01_algorithm_layer.md) → [CLI Layer](02_cli_layer.md) → [Module Layer](03_module_layer.md)
 
-2. **For module developers**: Start with the [Module Layer](03_module_layer.md) document to understand the dual nature of modules (specs and compute graphs), then examine the [Pipeline Layer](04_pipeline_layer.md) to see how modules are composed.
+2. **Module developer**: First read [Module Layer](03_module_layer.md) → [Pipeline Layer](04_pipeline_layer.md)
 
-3. **For pipeline developers**: Focus on the [Pipeline Layer](04_pipeline_layer.md) and [Execution Layer](05_execution_layer.md) documents to understand how pipelines are defined and executed.
+3. **Pipeline developer**: Focus on [Pipeline Layer](04_pipeline_layer.md) → [Execution Layer](05_execution_layer.md)
 
-4. **For configuration developers**: Concentrate on the [Configuration Layer](06_configuration_layer.md) document, which explains parameter inference and management.
+4. **Configuration developer**: Concentrate on [Configuration Layer](06_configuration_layer.md)
 
-5. **For understanding practical integration**: Read the [Practical Integration](08_practical_integration.md) document, which shows how all layers work together in a concrete example.
+5. **For understanding practical integration**: Read [Practical Integration](08_practical_integration.md)
 
-## Conclusion
+## Reference
 
-The StarryNight architecture provides a flexible system for high-throughput microscopy image processing that separates concerns between algorithms, specifications, and execution. This separation allows for reuse, composition, and extension while maintaining reproducibility through containerized execution.
+### Key Terms
 
-The following documents provide detailed explanations of each component, their implementation, and how they work together in the complete system.
+- **Algorithm Set**: Group of related processing functions (load data, pipeline generation, execution)
+- **Module**: Standardized component with inputs/outputs and compute graph
+- **Pipeline**: Composed workflow of modules
+- **Execution Backend**: System that runs pipelines (e.g., Snakemake)
+- **Experiment**: Configuration for a specific workflow type
+- **Bilayers**: Schema system for defining module specifications
+- **Compute Graph**: Definition of operations and their connections
+
+### Layer-Specific Documents
+
+Each architectural layer has a dedicated document explaining it in detail:
+
+- [Algorithm Layer](01_algorithm_layer.md)
+- [CLI Layer](02_cli_layer.md)
+- [Module Layer](03_module_layer.md)
+- [Pipeline Layer](04_pipeline_layer.md)
+- [Execution Layer](05_execution_layer.md)
+- [Configuration Layer](06_configuration_layer.md)
+- [Architecture for Biologists](07_architecture_for_biologists.md)
+- [Practical Integration](08_practical_integration.md)
