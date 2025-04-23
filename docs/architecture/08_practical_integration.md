@@ -26,7 +26,7 @@ This example serves as a practical bridge between the conceptual architecture an
 - The rationale behind StarryNight's design decisions
 - Patterns for creating maintainable, containerized scientific pipelines
 
-For a detailed mapping between the [architecture overview sequence diagram](00_architecture_overview.md#data-and-control-flow) and this concrete implementation, see the [appendix](#appendix-detailed-architecture-flow-mapping) at the end of this document.
+For a detailed mapping between the [architecture overview's two-phase sequence diagrams](00_architecture_overview.md#data-and-control-flow) and this concrete implementation, see the [appendix](#appendix-detailed-architecture-flow-mapping) at the end of this document.
 
 ## Pipeline at a Glance
 
@@ -211,14 +211,19 @@ This module finds both the LoadData file and the pipeline file created in the pr
 
 ## Architecture in Action
 
-Looking at this example, we can see how all the architecture layers work together:
+Looking at this example, we can see how all the architecture layers work together across the two main phases:
 
-1. **Algorithm Layer**: Contains pure functions that implement image processing operations, which are called by CLI commands
-2. **CLI Layer**: Provides command-line tools that modules invoke in containerized environments
-3. **Module Layer**: Defines standardized components (like `CPCalcIllumInvokeCPModule`) with specifications and compute graphs that invoke CLI commands
-4. **Pipeline Layer**: In this example, we're executing modules one by one, but they can be composed into a complete pipeline as seen in `create_pcp_generic_pipeline`
-5. **Execution Layer**: `SnakeMakeBackend` translates module compute graphs into Snakemake rules and executes them in containers
-6. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior across all layers
+### Pipeline Composition Phase
+1. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior across all layers
+2. **Module Layer**: Defines standardized components (like `CPCalcIllumInvokeCPModule`) with specifications and compute graphs
+3. **Pipeline Layer**: In this example, we're executing modules one by one, but they can be composed into a complete pipeline as seen in `create_pcp_generic_pipeline`
+4. **Execution Layer (design time)**: `SnakeMakeBackend` translates module compute graphs into Snakemake rules
+
+### Runtime Execution Phase
+5. **Execution Layer (runtime)**: Schedules container execution based on Snakemake rules
+6. **Container Runtime**: Executes commands in isolated environments
+7. **CLI Layer**: Provides command-line tools that parse arguments and call algorithms
+8. **Algorithm Layer**: Contains pure functions that implement image processing operations
 
 
 ## Module Registry and Discovery
@@ -288,7 +293,7 @@ This containerization ensures reproducibility and isolation of each pipeline ste
 
 ## Pipeline Composition (Alternative Approach)
 
-While this document focuses on executing modules one by one, StarryNight provides a more elegant composition approach through the `create_pcp_generic_pipeline` function:
+While this document focuses on executing modules one by one, StarryNight provides a more elegant pipeline composition approach (focused on the Pipeline Composition Phase) through the `create_pcp_generic_pipeline` function:
 
 ```python
 # From starrynight/src/starrynight/pipelines/pcp_generic.py
@@ -436,7 +441,9 @@ By understanding this concrete example, you now have a practical view of how Sta
 
 ## Appendix: Detailed Architecture Flow Mapping
 
-The following appendix provides a detailed mapping between the [architecture overview sequence diagram](00_architecture_overview.md#data-and-control-flow) and concrete code implementation. This section traces a single pipeline step (CP illumination calculation) through the complete architecture flow, showing exactly how data transforms at each step.
+The following appendix provides a detailed mapping between the [architecture overview's two-phase sequence diagrams](00_architecture_overview.md#data-and-control-flow) and concrete code implementation. This section traces a single pipeline step (CP illumination calculation) through the complete architecture flow, showing exactly how data transforms at each step.
+
+### Pipeline Composition Phase
 
 ### Config→Module: Configuration flows into module
 
@@ -524,6 +531,8 @@ run = exec_backend.run()
 
 ### Execution→Runtime: Schedule container execution
 
+This step transitions us from the Pipeline Composition Phase to the Runtime Execution Phase.
+
 ```python
 # Container definition from modules/cp_illum_calc/calc_cp.py
 Container(
@@ -546,13 +555,15 @@ Container(
 **What happens**: Snakemake executes rules in container environment
 **Input → Output**: Snakemake rule → Container execution
 
+### Runtime Execution Phase
+
 ### Runtime→CLI→Algorithm: Command Execution Flow
 
 When the container executes, the CLI layer bridges between runtime containers and algorithm functions:
 
 ```python
 # Container definition invokes the starrynight CLI command
-cmd=["starrynight", "cp", "-p", spec.inputs[0].path, "-l", spec.inputs[1].path, 
+cmd=["starrynight", "cp", "-p", spec.inputs[0].path, "-l", spec.inputs[1].path,
      "-o", spec.outputs[0].path]
 ```
 
@@ -572,12 +583,12 @@ When this container executes:
 def cp_command(pipeline, loaddata, output_dir):
     """Run CellProfiler on a pipeline with a loaddata file."""
     from starrynight.algorithms.cellprofiler import run_cellprofiler
-    
+
     # Convert string paths to standardized path objects (simplified)
     pipeline_path = AnyPath(pipeline)
     loaddata_path = AnyPath(loaddata)
     output_path = AnyPath(output_dir)
-    
+
     # CLI command translates parameters and calls algorithm function
     run_cellprofiler(
         pipeline_path=pipeline_path,
@@ -594,13 +605,13 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
     """Run CellProfiler with specified pipeline and load data."""
     # Prepare environment and input files
     prepare_input_files(loaddata_path)
-    
+
     # Execute core CellProfiler functionality
     result = execute_cellprofiler_pipeline(pipeline_path, output_dir)
-    
+
     # Post-process results if needed
     post_process_results(result, output_dir)
-    
+
     return result
 ```
 
@@ -629,7 +640,7 @@ def cp_command(pipeline, loaddata, output_dir):
         loaddata_path=loaddata,
         output_dir=output_dir
     )
-    
+
     # CLI handles results (logging, exit code, etc.)
     if result.success:
         click.echo(f"CellProfiler execution successful. Output in {output_dir}")
@@ -679,26 +690,35 @@ cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
 
 ### Flow Patterns in Three-Phase Execution
 
-Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the complete flow through all architecture layers:
+Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the complete flow through all architecture layers. These phases map to the two architectural phases as follows:
+
+**Pipeline Composition Phase steps in each CellProfiler phase:**
+1. Config→Module: Configuration flows into module
+2. Module→Module: Generate compute graphs 
+3. Module→Pipeline: Pass module specifications
+4. Pipeline→Execution: Submit workflow
+5. Execution→Execution: Translate to Snakemake rules
+
+**Runtime Execution Phase steps in each CellProfiler phase:**
+6. Execution→Runtime: Schedule container execution
+7. Runtime→CLI: Invoke CLI commands
+8. CLI→Algorithm: Call algorithm functions
+9. Algorithm→Storage: Write results
+
+The three CellProfiler-specific phases each execute this full cycle but with different inputs/outputs:
 
 1. **LoadData Phase**:
-    - Config→Module: Configuration flows into module
-    - Module→Pipeline: Module's pipe flows to execution
-    - Pipeline→Execution: Backend runs the module
-    - Execution→Runtime: Container executes
-    - Runtime→Storage: CSV file written to disk
+    - Pipeline Composition: Configuration flows into module through to Snakemake rules
+    - Runtime Execution: Container executes, CLI generates LoadData CSV
+    - Result: CSV file written to disk
 2. **CPipe Phase**:
-    - All the same steps, but now:
-    - Storage→Runtime: Reads LoadData CSV
-    - Runtime→Storage: Pipeline file written to disk
+    - Pipeline Composition: Same flow but with new module
+    - Runtime Execution: Container executes, reads LoadData CSV, CLI generates pipeline
+    - Result: Pipeline file written to disk
 3. **Invoke Phase**:
-    - All the same steps, but now:
-    - Storage→Runtime: Reads both LoadData CSV and pipeline file
-    - Runtime→CLI: Container invokes CLI commands
-    - CLI→Algorithm: CLI parses arguments and calls algorithm functions
-    - Algorithm→CLI: Algorithm executes and returns results
-    - CLI→Runtime: CLI process completes
-    - Runtime→Storage: Results written to disk
+    - Pipeline Composition: Same flow but with new module
+    - Runtime Execution: Container executes, reads both CSV and pipeline file, CLI invokes algorithm
+    - Result: Processed data written to disk
 
 When using the pipeline composition approach shown in the "Pipeline Composition (Alternative Approach)" section, this flow becomes more explicit since modules are composed in advance rather than executed one by one.
 
@@ -708,8 +728,8 @@ The CLI layer serves as a critical bridge between the containerized execution en
 
 ```python
 # In container definition
-cmd=["starrynight", "cp", "-p", "${inputs.cppipe_path}", 
-     "-l", "${inputs.load_data_path}", 
+cmd=["starrynight", "cp", "-p", "${inputs.cppipe_path}",
+     "-l", "${inputs.load_data_path}",
      "-o", "${outputs.cp_illum_calc_dir}"]
 
 # Inside CLI implementation (starrynight/cli/main.py)
@@ -725,13 +745,13 @@ cli.add_command(cp.cp_command, name="cp")
 def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
     """
     Run CellProfiler with the specified pipeline and loaddata.
-    
+
     This function encapsulates the core image processing logic.
     """
     # Algorithm implementation
 ```
 
-**What happens**: 
+**What happens**:
 1. Container executes the `starrynight cp` command with inputs/outputs
 2. CLI parses arguments and provides a standardized interface to algorithms
 3. Algorithm functions contain pure implementation without CLI/container concerns
