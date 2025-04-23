@@ -81,10 +81,7 @@ In a typical workflow, the Module Layer consumes configuration to instantiate mo
 
 ### Algorithm Sets
 
-The foundation of StarryNight is the algorithm sets -- collections of related functions that implement specific image processing steps (1). While many examples use CellProfiler-focused algorithm sets (with data loading, pipeline generation, and execution functions), the architecture supports various other types like indexing, inventory management, quality control, and data visualization.
-{ .annotate }
-
-1. Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent.
+The foundation of StarryNight is the algorithm sets -- collections of related functions that implement specific image processing steps. Algorithm sets are pure Python functions with no external dependencies on other StarryNight components, making them easily testable and completely independent. While many examples use CellProfiler-focused algorithm sets (with data loading, pipeline generation, and execution functions), the architecture supports various other types like indexing, inventory management, quality control, and data visualization.
 
 ### CLI Wrappers
 
@@ -92,10 +89,7 @@ CLI wrappers expose algorithms as command-line tools. This layer handles paramet
 
 ### Modules
 
-Modules are a key abstraction that standardize how pipeline components are defined and composed (1).
-{ .annotate }
-
-1. Modules have a dual focus - specs and compute graphs. They describe what should be done (through specifications) and how it should be structured (through compute graphs), but don't actually perform the computation.
+Modules are a key abstraction that standardize how pipeline components are defined and composed. Modules have a dual focus - specs and compute graphs. They describe what should be done (through specifications) and how it should be structured (through compute graphs), but don't actually perform the computation.
 
 A module:
 
@@ -119,10 +113,7 @@ Pipelines represent the complete computation to be performed but are backend-agn
 
 ### Execution
 
-The execution layer takes pipelines and runs them on specific backends(1):
-{ .annotate }
-
-1. The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.).
+The execution layer takes pipelines and runs them on specific backends. The execution is separated from pipeline definition, allowing the same pipeline to potentially run on different backends (local, cloud, etc.):
 
 - Currently implemented with Snakemake
 - Translates Pipecraft pipelines into Snakemake rules
