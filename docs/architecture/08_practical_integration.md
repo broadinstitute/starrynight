@@ -15,12 +15,18 @@ This document provides a concrete example of how StarryNight's architectural lay
 
 The `exec_pcp_generic_pipe.py` file demonstrates:
 
-1. How configuration flows through the system
-2. How the execution layer runs workflows
+1. How configuration parameters flow from experiment setup to module execution
+2. How modules encapsulate different functional steps in the pipeline
+3. How the execution layer transforms abstract workflows into concrete container invocations
+4. How StarryNight's layered architecture enables reproducible scientific workflows
 
-You will also get hints about the patterns you'll encounter when extending StarryNight
+This example serves as a practical bridge between the conceptual architecture and its real-world implementation. By understanding this workflow, you'll gain insights into:
 
-By understanding this example, you'll be able to navigate the codebase more effectively and implement your own solutions.
+- How to extend the system with your own modules and algorithms
+- The rationale behind StarryNight's design decisions
+- Patterns for creating maintainable, containerized scientific pipelines
+
+For a detailed mapping between the [architecture overview sequence diagram](00_architecture_overview.md#data-and-control-flow) and this concrete implementation, see the [appendix](#appendix-detailed-architecture-flow-mapping) at the end of this document.
 
 ## Pipeline at a Glance
 
@@ -35,7 +41,8 @@ The PCP Generic pipeline processes optical pooled screening data through a serie
 7. Preprocess (SBS)
 8. Analysis
 
-Each step follows a consistent pattern that reflects the module layer's organization:
+Each step in this example follows a CellProfiler-specific three-phase pattern (see [Anatomy of a Pipeline Step](#anatomy-of-a-pipeline-step-lines-177-228) for details on this pattern):
+
 - Generate load data (configuration data for CellProfiler)
 - Generate pipeline file (CellProfiler pipeline definition)
 - Execute the pipeline (running CellProfiler)
@@ -213,6 +220,7 @@ Looking at this example, we can see how all the architecture layers work togethe
 5. **Execution Layer**: `SnakeMakeBackend` translates module compute graphs into Snakemake rules and executes them in containers
 6. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior across all layers
 
+
 ## Module Registry and Discovery
 
 StarryNight uses a registry mechanism to organize and discover available modules. In the Module Registry (implemented in `starrynight/modules/registry.py`), each module is registered with a unique identifier:
@@ -238,6 +246,7 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     - Provides extension hooks for integrating new capabilities without modifying core code
 
 This registry enables:
+
 - Runtime discovery of available modules
 - Dynamic instantiation based on configuration
 - Integration with experiment classes
@@ -269,6 +278,7 @@ Container(
 ```
 
 When executed:
+
 1. The `SnakeMakeBackend` translates this container definition into a Snakemake rule
 2. Snakemake executes the rule in the specified container
 3. The CLI command runs inside the container, calling the underlying algorithm functions
@@ -320,10 +330,10 @@ When implementing your own modules, follow these patterns:
 !!!note "Module vs. Algorithm Extension"
     This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools.
 
-1. **Module Structure**: Separate your functionality into three phases:
-      - Data preparation (load_data)
-      - Pipeline generation (cppipe)
-      - Execution (invoke)
+1. **Module Structure**: Consider your module's specific requirements:
+      - For CellProfiler integrations, use the three-phase pattern shown earlier
+      - For other tools, design appropriate module structures based on tool requirements
+      - Ensure your modules have clear inputs, outputs, and containerized execution specifications
 2. **Registry Integration**: Define a unique ID and register your module in the registry:
    ```python
    @staticmethod
@@ -423,3 +433,161 @@ When working with pipelines:
 6. Configuration flows from top-level settings to specific module behavior
 
 By understanding this concrete example, you now have a practical view of how StarryNight's architecture functions as an integrated system, from algorithms through CLI commands, modules, pipelines, and execution.
+
+## Appendix: Detailed Architecture Flow Mapping
+
+The following appendix provides a detailed mapping between the [architecture overview sequence diagram](00_architecture_overview.md#data-and-control-flow) and concrete code implementation. This section traces a single pipeline step (CP illumination calculation) through the complete architecture flow, showing exactly how data transforms at each step.
+
+### Config→Module: Configuration flows into module
+
+```python
+# Configuration setup
+data_config = DataConfig(
+    dataset_path=dataset_path,
+    storage_path=dataset_path,
+    workspace_path=workspace_path,
+)
+
+pcp_exp_init = PCPGenericInitConfig(
+    cp_nuclei_channel="DAPI",
+    # other parameters...
+)
+
+# Configuration flows into module
+cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
+    data_config, pcp_experiment
+)
+```
+
+**What happens**: Configuration parameters flow into module creation
+**Input → Output**: Parameters (paths, channels) → Module instance
+
+### Module→Module: Generate compute graphs
+
+```python
+# Inside from_config method (not visible in example)
+# This happens within the module's initialization
+compute_graph = ComputeGraph([container])
+return cls(compute_graph)
+```
+
+**What happens**: Module internally generates compute graph with container specification
+**Input → Output**: Configuration → Compute graph with inputs/outputs
+
+### Module→Pipeline: Pass module specifications
+
+```python
+# Module pipe passed to backend
+exec_backend = SnakeMakeBackend(
+    cp_calc_illum_load_data_mod.pipe,
+    backend_config,
+    exec_runs / "run003",
+    exec_mounts,
+)
+```
+
+**What happens**: Module's compute graph becomes available to pipeline/execution
+**Input → Output**: Module compute graph → Pipeline component
+
+### Pipeline→Execution: Submit workflow
+
+```python
+# Alternative approach shows this more clearly
+return module_list, Seq(
+    [
+        Parallel(
+            [
+                Seq([cp_illum_calc_loaddata.pipe, ...]),
+                # other parallel sequences
+            ]
+        ),
+        # sequential steps
+    ]
+)
+
+# In step-by-step approach:
+run = exec_backend.run()
+```
+
+**What happens**: Pipeline submits workflow for execution
+**Input → Output**: Pipeline specification → Execution plan
+
+### Execution→Execution: Translate to Snakemake rules
+
+```python
+# Inside SnakeMakeBackend.run() (not visible in example)
+# Translates compute graph to Snakemake rules
+```
+
+**What happens**: Backend translates compute graph into Snakemake rules
+**Input → Output**: Compute graph → Snakemake rules
+
+### Execution→Runtime: Schedule container execution
+
+```python
+# Container definition from modules/cp_illum_calc/calc_cp.py
+Container(
+    name="cp_calc_illum_invoke_cp",
+    input_paths={
+        "cppipe_path": [...],
+        "load_data_path": [...],
+    },
+    output_paths={
+        "cp_illum_calc_dir": [...]
+    },
+    config=ContainerConfig(
+        image="ghrc.io/leoank/starrynight:dev",
+        cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
+        env={},
+    ),
+)
+```
+
+**What happens**: Snakemake executes rules in container environment
+**Input → Output**: Snakemake rule → Container execution
+
+### Runtime→Storage: Write results
+
+```python
+# Container writes to output paths
+output_paths={
+    "cp_illum_calc_dir": [workspace_path / "cp_illum_calc"]
+}
+```
+
+**What happens**: Container processes execute CLI commands that write results
+**Input → Output**: Container processing → Files on disk
+
+### Storage→Runtime: Read previous outputs
+
+```python
+# Next module reads previous outputs
+# (Not directly visible but implied in dependencies)
+cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
+    data_config, pcp_experiment
+)
+```
+
+**What happens**: Next phase reads outputs from previous phase
+**Input → Output**: Files from previous step → Input for next step
+
+### Flow Patterns in Three-Phase Execution
+
+Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the complete flow through all architecture layers:
+
+1. **LoadData Phase**:
+    - Config→Module: Configuration flows into module
+    - Module→Pipeline: Module's pipe flows to execution
+    - Pipeline→Execution: Backend runs the module
+    - Execution→Runtime: Container executes
+    - Runtime→Storage: CSV file written to disk
+2. **CPipe Phase**:
+    - All the same steps, but now:
+    - Storage→Runtime: Reads LoadData CSV
+    - Runtime→Storage: Pipeline file written to disk
+3. **Invoke Phase**:
+    - All the same steps, but now:
+    - Storage→Runtime: Reads both LoadData CSV and pipeline file
+    - Runtime→Storage: Results written to disk
+
+When using the pipeline composition approach shown in the "Pipeline Composition (Alternative Approach)" section, this flow becomes more explicit since modules are composed in advance rather than executed one by one.
