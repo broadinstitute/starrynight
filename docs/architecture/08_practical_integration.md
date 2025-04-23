@@ -3,7 +3,13 @@
 This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining the `exec_pcp_generic_pipe.py` file. While the previous documents explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
 
 !!!note "Pedagogical Approach"
-    This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. For production use, the more concise pattern in `exec_pcp_generic_full.py` (which composes all modules at once using the `create_pcp_generic_pipeline` function) is typically preferred.
+    This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. This approach:
+
+    - Allows researchers to inspect intermediate results between pipeline stages
+    - Matches biological research workflows where verification at each stage is crucial
+    - Provides clearer visibility into how components operate independently
+
+    For production use, the more concise pattern in `exec_pcp_generic_full.py` (which composes all modules at once using the `create_pcp_generic_pipeline` function) is typically preferred.
 
 ## Why This Example Matters
 
@@ -18,14 +24,14 @@ By understanding this example, you'll be able to navigate the codebase more effe
 
 ## Pipeline at a Glance
 
-The PCP Generic pipeline processes cell painting data through a series of steps:
+The PCP Generic pipeline processes optical pooled screening data through a series of steps:
 
 1. Generate inventory and index
 2. Calculate illumination correction (CP)
-3. Apply illumination correction (CP)
+3. Apply illumination and align (CP)
 4. Segmentation check (CP)
 5. Calculate illumination correction (SBS)
-6. Apply illumination correction (SBS)
+6. Apply illumination and align (SBS)
 7. Preprocess (SBS)
 8. Analysis
 
@@ -122,6 +128,9 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 - This configuration will drive all subsequent module behavior without requiring repetitive parameter specification
 
 ## Anatomy of a Pipeline Step (Lines 177-228)
+
+!!!note "CellProfiler Integration Pattern"
+    The three-phase pattern described below (Generate Load Data → Generate Pipeline File → Execute Pipeline) is specific to how StarryNight integrates with CellProfiler. This pattern isn't a requirement of the StarryNight architecture, but rather a practical approach for this particular integration. Other tools may use different patterns while still adhering to the module abstraction.
 
 With the experiment configured, we can now examine one complete pipeline step (CP calculate illumination). Each step follows a consistent three-phase pattern:
 
@@ -221,6 +230,13 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
 }
 ```
 
+!!!note "Integration with Broader System"
+    The registry is not used in this example, but it serves as a critical integration point with other StarryNight components:
+
+    - Enables **Conductor** to discover and invoke available modules dynamically
+    - Allows **Canvas** to present available modules in its user interface
+    - Provides extension hooks for integrating new capabilities without modifying core code
+
 This registry enables:
 - Runtime discovery of available modules
 - Dynamic instantiation based on configuration
@@ -299,7 +315,10 @@ This approach enables complex parallel execution patterns, where CP and SBS proc
 
 ## Extension Patterns
 
-When implementing your own algorithms or modules, follow these patterns:
+When implementing your own modules, follow these patterns:
+
+!!!note "Module vs. Algorithm Extension"
+    This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools.
 
 1. **Module Structure**: Separate your functionality into three phases:
    - Data preparation (load_data)
@@ -319,6 +338,51 @@ When implementing your own algorithms or modules, follow these patterns:
 3. **Configuration**: Extend existing configuration classes or create new ones using Pydantic models
 
 4. **Container Definition**: Define how your module should run in containers using the Container class
+
+### External Tool Integration Without Algorithm Changes
+
+One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms. For example, to integrate Cellpose:
+
+```python
+# Define a module that uses Cellpose's existing CLI
+class CellposeSegmentationModule(StarrynightModule):
+    @staticmethod
+    def uid() -> str:
+        return "cellpose_segmentation"
+
+    @classmethod
+    def from_config(cls, data_config: DataConfig, experiment: Experiment):
+        # Create container configuration that calls Cellpose CLI directly
+        container = Container(
+            name="cellpose_segment",
+            input_paths={
+                "image_dir": [...],
+            },
+            output_paths={
+                "segmentation_dir": [...]
+            },
+            config=ContainerConfig(
+                # Use a container with Cellpose pre-installed
+                image="cellpose/cellpose:latest",
+                # Call Cellpose CLI directly
+                cmd=["python", "-m", "cellpose", "--dir", "${inputs.image_dir}", ...],
+                env={},
+            ),
+        )
+
+        # Create compute graph with just this container
+        compute_graph = ComputeGraph([container])
+
+        # Create and return module instance
+        return cls(compute_graph)
+```
+
+This approach allows StarryNight to leverage existing tools by:
+
+- Directly using their CLI interfaces rather than reimplementing algorithms
+- Wrapping them in StarryNight's module abstraction for consistent workflow integration
+- Using containerization to ensure reproducibility and isolation
+- Potentially using Bilayers specs directly, allowing integration with modules from other systems
 
 ## Common Development Tasks
 
