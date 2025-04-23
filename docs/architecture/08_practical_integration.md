@@ -378,8 +378,14 @@ class CellposeSegmentationModule(StarrynightModule):
             config=ContainerConfig(
                 # Use a container with Cellpose pre-installed
                 image="cellpose/cellpose:latest",
-                # Call Cellpose CLI directly
-                cmd=["python", "-m", "cellpose", "--dir", "${inputs.image_dir}", ...],
+                # Call Cellpose CLI directly with required parameters
+                cmd=[
+                    "python", "-m", "cellpose", 
+                    "--dir", "${inputs.image_dir}",
+                    "--pretrained_model", "cyto",  # or "nuclei" based on needs
+                    "--chan", "0",                 # primary channel
+                    "--save_png"                   # save results as PNG
+                ],
                 env={},
             ),
         )
