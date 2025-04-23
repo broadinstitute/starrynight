@@ -15,10 +15,10 @@ This document provides a concrete example of how StarryNight's architectural lay
 
 The `exec_pcp_generic_pipe.py` file demonstrates:
 
-1. How modules connect to form a complete pipeline
-2. How configuration flows through the system
-3. How the execution layer runs workflows
-4. The patterns you'll encounter when extending StarryNight
+1. How configuration flows through the system
+2. How the execution layer runs workflows
+
+You will also get hints about the patterns you'll encounter when extending StarryNight
 
 By understanding this example, you'll be able to navigate the codebase more effectively and implement your own solutions.
 
@@ -321,10 +321,9 @@ When implementing your own modules, follow these patterns:
     This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools.
 
 1. **Module Structure**: Separate your functionality into three phases:
-   - Data preparation (load_data)
-   - Pipeline generation (cppipe)
-   - Execution (invoke)
-
+      - Data preparation (load_data)
+      - Pipeline generation (cppipe)
+      - Execution (invoke)
 2. **Registry Integration**: Define a unique ID and register your module in the registry:
    ```python
    @staticmethod
