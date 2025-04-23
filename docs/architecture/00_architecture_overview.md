@@ -64,8 +64,9 @@ Here's where to focus based on your task:
 | Configure experiment parameters | `/starrynight/src/starrynight/experiments/` |
 
 For in-depth examples:
-- The [Practical Integration](08_practical_integration.md) document walks through a complete pipeline implementation
-- The [Architecture for Biologists](07_architecture_for_biologists.md) provides analogies for those without a strong software background
+
+  - The [Practical Integration](08_practical_integration.md) document walks through a complete pipeline implementation
+  - The [Architecture for Biologists](07_architecture_for_biologists.md) provides analogies for those without a strong software background
 
 ## Architectural Layers Explained
 
@@ -74,54 +75,60 @@ StarryNight consists of six interconnected layers, each with a specific responsi
 ### 1. Algorithm Layer
 
 **What it does**: Implements the core image processing functionality
-- Pure Python functions with no StarryNight-specific dependencies
-- Handles data preparation, pipeline generation, and execution
-- Examples: illumination correction, segmentation, preprocessing
+
+  - Pure Python functions with no StarryNight-specific dependencies
+  - Handles data preparation, pipeline generation, and execution
+  - Examples: illumination correction, segmentation, preprocessing
 
 **Developer relevance**: This is where you implement new data processing techniques.
 
 ### 2. CLI Layer
 
 **What it does**: Wraps algorithms as command-line tools
-- Parameter parsing and validation
-- Command organization and help text
-- Path management for inputs/outputs
+
+  - Parameter parsing and validation
+  - Command organization and help text
+  - Path management for inputs/outputs
 
 **Developer relevance**: This makes algorithms directly usable without programming.
 
 ### 3. Module Layer
 
 **What it does**: Standardizes components for pipeline composition
-- Defines inputs/outputs via Bilayers schemas
-- Creates compute graphs without executing them
-- Provides configuration utilities
+
+  - Defines inputs/outputs via Bilayers schemas
+  - Creates compute graphs without executing them
+  - Provides configuration utilities
 
 **Developer relevance**: Modules are the reusable building blocks of pipelines.
 
 ### 4. Pipeline Layer
 
 **What it does**: Composes modules into executable workflows
-- Defines node relationships and data flow
-- Manages parallel and sequential execution
-- Integrates with PipeCraft for pipeline composition
+
+  - Defines node relationships and data flow
+  - Manages parallel and sequential execution
+  - Integrates with PipeCraft for pipeline composition
 
 **Developer relevance**: This is where you define complex processing workflows.
 
 ### 5. Execution Layer
 
 **What it does**: Runs pipelines on specific backends
-- Currently uses Snakemake for workflow execution
-- Manages containers and dependencies
-- Handles parallelism and resource allocation
+
+  - Currently uses Snakemake for workflow execution
+  - Manages containers and dependencies
+  - Handles parallelism and resource allocation
 
 **Developer relevance**: This controls how your pipeline actually runs.
 
 ### 6. Configuration Layer
 
 **What it does**: Manages pipeline parameters and settings
-- Infers parameters from minimal user input
-- Creates standardized configurations for modules
-- Handles experiment-specific workflow variations
+
+  - Infers parameters from minimal user input
+  - Creates standardized configurations for modules
+  - Handles experiment-specific workflow variations
 
 **Developer relevance**: This makes pipelines adaptable to different datasets.
 
@@ -141,27 +148,31 @@ Here's how information flows through the system:
 StarryNight is organized as a monorepo with four main packages:
 
 ### 1. StarryNight
-- **Purpose**: Core algorithms, CLI, modules, and experiments
-- **Key directories**:
-  - `/algorithms/`: Processing implementations
-  - `/cli/`: Command-line interfaces
-  - `/modules/`: Standardized pipeline components
-  - `/experiments/`: Configuration definitions
-  - `/pipelines/`: Higher-level pipeline composition
+
+  - **Purpose**: Core algorithms, CLI, modules, and experiments
+  - **Key directories**:
+    - `/algorithms/`: Processing implementations
+    - `/cli/`: Command-line interfaces
+    - `/modules/`: Standardized pipeline components
+    - `/experiments/`: Configuration definitions
+    - `/pipelines/`: Higher-level pipeline composition
 
 ### 2. PipeCraft
-- **Purpose**: Pipeline definition and execution
-- **Key directories**:
-  - `/pipeline.py`: Pipeline composition tools
-  - `/backend/`: Execution backends (Snakemake, AWS Batch)
+
+  - **Purpose**: Pipeline definition and execution
+  - **Key directories**:
+    - `/pipeline.py`: Pipeline composition tools
+    - `/backend/`: Execution backends (Snakemake, AWS Batch)
 
 ### 3. Conductor
-- **Purpose**: Job orchestration and API
-- **Not covered in detail in this documentation**
+
+  - **Purpose**: Job orchestration and API
+  - **Not covered in detail in this documentation**
 
 ### 4. Canvas
-- **Purpose**: Web UI for pipeline configuration
-- **Not covered in detail in this documentation**
+
+  - **Purpose**: Web UI for pipeline configuration
+  - **Not covered in detail in this documentation**
 
 ## Common Development Tasks
 
@@ -277,23 +288,23 @@ Depending on your role:
 
 ### Key Terms
 
-- **Algorithm Set**: Group of related processing functions (load data, pipeline generation, execution)
-- **Module**: Standardized component with inputs/outputs and compute graph
-- **Pipeline**: Composed workflow of modules
-- **Execution Backend**: System that runs pipelines (e.g., Snakemake)
-- **Experiment**: Configuration for a specific workflow type
-- **Bilayers**: Schema system for defining module specifications
-- **Compute Graph**: Definition of operations and their connections
+  - **Algorithm Set**: Group of related processing functions (load data, pipeline generation, execution)
+  - **Module**: Standardized component with inputs/outputs and compute graph
+  - **Pipeline**: Composed workflow of modules
+  - **Execution Backend**: System that runs pipelines (e.g., Snakemake)
+  - **Experiment**: Configuration for a specific workflow type
+  - **Bilayers**: Schema system for defining module specifications
+  - **Compute Graph**: Definition of operations and their connections
 
 ### Layer-Specific Documents
 
 Each architectural layer has a dedicated document explaining it in detail:
 
-- [Algorithm Layer](01_algorithm_layer.md)
-- [CLI Layer](02_cli_layer.md)
-- [Module Layer](03_module_layer.md)
-- [Pipeline Layer](04_pipeline_layer.md)
-- [Execution Layer](05_execution_layer.md)
-- [Configuration Layer](06_configuration_layer.md)
-- [Architecture for Biologists](07_architecture_for_biologists.md)
-- [Practical Integration](08_practical_integration.md)
+  - [Algorithm Layer](01_algorithm_layer.md)
+  - [CLI Layer](02_cli_layer.md)
+  - [Module Layer](03_module_layer.md)
+  - [Pipeline Layer](04_pipeline_layer.md)
+  - [Execution Layer](05_execution_layer.md)
+  - [Configuration Layer](06_configuration_layer.md)
+  - [Architecture for Biologists](07_architecture_for_biologists.md)
+  - [Practical Integration](08_practical_integration.md)
