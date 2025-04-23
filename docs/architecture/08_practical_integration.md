@@ -377,7 +377,7 @@ class CellposeSegmentationModule(StarrynightModule):
             },
             config=ContainerConfig(
                 # Use a container with Cellpose pre-installed
-                image="cellpose/cellpose:latest",
+                image="biocontainers/cellpose:latest",  # or build a custom Cellpose container
                 # Call Cellpose CLI directly with required parameters
                 cmd=[
                     "python", "-m", "cellpose", 
