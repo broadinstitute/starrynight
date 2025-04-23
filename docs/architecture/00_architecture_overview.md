@@ -91,6 +91,8 @@ sequenceDiagram
     participant Pipeline as Pipeline Layer
     participant Execution as Execution Layer
     participant Runtime as Container Runtime
+    participant CLI as CLI Layer
+    participant Algorithm as Algorithm Layer
     participant Storage as File System
 
     Config->>Module: Supply module parameters
@@ -100,7 +102,9 @@ sequenceDiagram
     Pipeline->>Execution: Submit workflow
     Execution->>Execution: Translate to Snakemake rules
     Execution->>Runtime: Schedule container execution
-    Runtime->>Storage: Write intermediate results
+    Runtime->>CLI: Invoke CLI commands
+    CLI->>Algorithm: Call algorithm functions
+    Algorithm->>Storage: Write intermediate results
     Runtime->>Runtime: Process data through pipeline
     Runtime->>Storage: Write final outputs
 ```
@@ -110,7 +114,9 @@ sequenceDiagram
 3. **Pipeline** composes modules into workflows
 4. **Execution** translates workflows to backend-specific formats
 5. **Container runtime** executes the workflows
-6. **Results** are stored in configured locations
+6. **CLI layer** processes commands and invokes algorithms
+7. **Algorithm layer** performs core processing functions
+8. **Results** are stored in configured locations
 
 ## Implementation Organization
 
