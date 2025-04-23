@@ -82,7 +82,11 @@ StarryNight consists of six interconnected layers:
 
 ## Data and Control Flow
 
-The system transforms data through these key steps:
+The StarryNight architecture transforms data through two primary phases: pipeline composition and runtime execution.
+
+### Pipeline Composition Phase
+
+This phase focuses on how configurations become executable workflows:
 
 ```mermaid
 sequenceDiagram
@@ -90,10 +94,6 @@ sequenceDiagram
     participant Module as Module Layer
     participant Pipeline as Pipeline Layer
     participant Execution as Execution Layer
-    participant Runtime as Container Runtime
-    participant CLI as CLI Layer
-    participant Algorithm as Algorithm Layer
-    participant Storage as File System
 
     Config->>Module: Supply module parameters
     Module->>Module: Generate compute graphs
@@ -101,6 +101,20 @@ sequenceDiagram
     Pipeline->>Pipeline: Compose workflow
     Pipeline->>Execution: Submit workflow
     Execution->>Execution: Translate to Snakemake rules
+```
+
+### Runtime Execution Phase
+
+This phase shows how workflows execute and process data:
+
+```mermaid
+sequenceDiagram
+    participant Execution as Execution Layer
+    participant Runtime as Container Runtime
+    participant CLI as CLI Layer
+    participant Algorithm as Algorithm Layer
+    participant Storage as File System
+
     Execution->>Runtime: Schedule container execution
     Runtime->>CLI: Invoke CLI commands
     CLI->>Algorithm: Call algorithm functions
@@ -109,10 +123,13 @@ sequenceDiagram
     Runtime->>Storage: Write final outputs
 ```
 
+#### Pipeline Composition Key Steps
 1. **Configuration** defines parameters for all layers
 2. **Modules** generate compute graphs from configuration
 3. **Pipeline** composes modules into workflows
 4. **Execution** translates workflows to backend-specific formats
+
+#### Runtime Execution Key Steps
 5. **Container runtime** executes the workflows
 6. **CLI layer** processes commands and invokes algorithms
 7. **Algorithm layer** performs core processing functions
