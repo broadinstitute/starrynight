@@ -52,13 +52,17 @@ nav:
     - Example CLI Pipeline: user/example-pipeline-cli.md
   - Developer Guide:
     - Setup & Introduction: developer/guides/developer-guide.md
+    - System Maintenance: developer/guides/system-maintenance-guide.md
+    - Workflow Implementation: developer/guides/workflow-implementation-guide.md
   - Developer Reference:
     - PCPIP Specifications: developer/reference/pcpip-specs.md
-    - Design Requirements: developer/design/requirements.md
-    - Pipeline Automation: developer/notes/pipeline-automation.md
   - Developer Testing:
     - Testing Framework: developer/validation/testing-framework.md
     - Pipeline Validation: developer/validation/validation-pipeline-1-illum-calc.md
+  - Developer Roadmap:
+    - Design Requirements: developer/roadmap/requirements.md
+    - Pipeline Automation: developer/roadmap/pipeline-automation.md
+    - AWS Deployment Strategy: developer/roadmap/aws-deployment-roadmap.md
   - Developer Architecture:
     - Overview: architecture/00_architecture_overview.md
     - Algorithm Layer: architecture/01_algorithm_layer.md
