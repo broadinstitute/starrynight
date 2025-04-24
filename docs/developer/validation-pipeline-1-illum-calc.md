@@ -1,10 +1,13 @@
 # Pipeline Validation: 1_CP_Illum (illum_calc)
 
+> **IMPORTANT: Code Migration Notice**
+> All implementation code has been moved from `/docs/tester/assets/` to the `/tests/` directory as part of the documentation refactoring plan. This document has been updated to reference the new locations.
+
 ## Pipeline Overview
 
 - **Reference Pipeline**: `ref_1_CP_Illum.cppipe`
 - **StarryNight Module**: `illum_calc`
-- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across Cell Painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../../developer/pcpip-specs.md) for details on all pipelines.
+- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across Cell Painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](pcpip-specs.md) for details on all pipelines.
 
 ## Validation Status
 
@@ -52,8 +55,8 @@ mkdir -p ${EMBEDDING_DIR}
 - Reference Pipeline: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/ref_1_CP_Illum.cppipe>
 - Reference Graph: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot>
 - Reference JSON: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json>
-- Test Dataset: `${STARRYNIGHT_REPO}/starrynight_example_input/`, created using [pcpip-create-fixture](/tests/pcpip-fixtures/README.md)
-- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`, created using [pcpip-create-fixture](/tests/pcpip-fixtures/README.md)
+- Test Dataset: `${STARRYNIGHT_REPO}/starrynight_example_input/`, created using [pcpip-create-fixture](https://github.com/broadinstitute/starrynight/tree/main/tests/pcpip-fixtures)
+- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`, created using [pcpip-create-fixture](https://github.com/broadinstitute/starrynight/tree/main/tests/pcpip-fixtures)
 
 ## Stage 1: Graph Topology
 **Objective**: Verify StarryNight pipeline structure matches reference

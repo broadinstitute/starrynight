@@ -1,5 +1,8 @@
 # StarryNight Testing Framework
 
+> **IMPORTANT: Code Migration Notice**
+> All implementation code has been moved from `/docs/tester/assets/` to the `/tests/` directory as part of the documentation refactoring plan. This documentation has been updated to reference the new locations, but refers to the same underlying functionality.
+
 Welcome to the StarryNight testing framework! This is your comprehensive guide for validating, testing, and creating test fixtures for PCPIP (Pooled Cell Painting Image Processing) workflows.
 
 ## Introduction: Why Validation Matters
@@ -27,7 +30,7 @@ If you're new to the testing framework and want to understand the process:
 
 1. **Start here**: Read the introduction and [Validation Process Overview](#validation-process-overview) sections to understand the big picture
 2. Review the [Validation Documents](#validation-documents) section below to see all the pipelines that need validation
-3. Look at the [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a concrete example with detailed commands
+3. Look at the [Pipeline 1 (illum_calc) Validation](validation-pipeline-1-illum-calc.md) as a concrete example with detailed commands
 4. See the [Testing Tools Summary](#testing-tools-summary) for an overview of the available tools
 
 ### I need to validate a specific pipeline module
@@ -36,15 +39,15 @@ If you need to validate a specific StarryNight module:
 
 1. Check the [Validation Documents](#validation-documents) section below to find the corresponding pipeline
 2. Follow the 5-stage validation process outlined in the [Validation Stages](#validation-stages) section
-3. Use [Pipeline 1 (illum_calc) Validation](pipeline-validations/pipeline-1-validation-illum-calc.md) as a template
+3. Use [Pipeline 1 (illum_calc) Validation](validation-pipeline-1-illum-calc.md) as a template
 
 ## Reference Materials
 
 The testing framework includes these key resources:
 
-- [**pcpip-pipelines**](assets/pcpip-pipelines/README.md): Reference CellProfiler pipeline files
-- [**pcpip-create-fixture**](assets/pcpip-create-fixture/README.md): Tools for creating test fixtures
-- [**pcpip-test**](assets/pcpip-test/README.md): Scripts for pipeline execution and comparison
+- [**pcpip-pipelines**](https://github.com/broadinstitute/starrynight/tree/main/tests/pcpip-pipelines): Reference CellProfiler pipeline files
+- [**pcpip-create-fixture**](https://github.com/broadinstitute/starrynight/tree/main/tests/pcpip-fixtures): Tools for creating test fixtures
+- [**pcpip-test**](https://github.com/broadinstitute/starrynight/tree/main/tests/pcpip-validation): Scripts for pipeline execution and comparison
 
 ## Testing Environment Setup
 
@@ -60,7 +63,7 @@ Beyond the [standard StarryNight installation](../user/getting-started.md), vali
 - **AWS Access** (optional): For downloading reference datasets
     - AWS CLI configured with access to `s3://imaging-platform/projects/2024_03_12_starrynight/`
 -  **Test Data Alternatives** (if no AWS access):
-    - Use the minimal test fixtures in `/docs/tester/assets/pcpip-test/minimal/`
+    - Use the minimal test fixtures in `/tests/fixtures/minimal/`
 
 ### Test Dataset
 
@@ -89,7 +92,7 @@ export WKDIR="${STARRYNIGHT_REPO}/scratch/starrynight_example_output/workspace"
 export VALIDATION_DIR="${WKDIR}/validation"
 
 # Reference locations (common across validations)
-export REF_PIPELINES="${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-pipelines"
+export REF_PIPELINES="${STARRYNIGHT_REPO}/tests/pcpip-pipelines"
 ```
 
 See individual validation documents for pipeline-specific variables.
@@ -198,24 +201,24 @@ flowchart TD
 
 ## Validation Documents
 
-Currently, a validation document has been created only for [Pipeline 1: illum_calc](pipeline-validations/pipeline-1-validation-illum-calc.md). To create validation documents for other pipelines, use this as a template and adjust the pipeline-specific details accordingly.
+Currently, a validation document has been created only for [Pipeline 1: illum_calc](validation-pipeline-1-illum-calc.md). To create validation documents for other pipelines, use this as a template and adjust the pipeline-specific details accordingly.
 
 Here are the reference CellProfiler pipelines and their StarryNight module counterparts:
 
-- `ref_1_CP_Illum.cppipe` â†’ `illum_calc`
-- `ref_2_CP_Apply_Illum.cppipe` â†’ `illum_apply`
-- `ref_3_CP_SegmentationCheck.cppipe` â†’ `segcheck`
-- `ref_5_BC_Illum.cppipe` â†’ REFACTORING
-- `ref_6_BC_Apply_Illum.cppipe` â†’ REFACTORING
-- `ref_7_BC_Preprocess.cppipe` â†’ `preprocess`
-- `ref_9_Analysis.cppipe` â†’ `analysis`
+- `ref_1_CP_Illum.cppipe` ’ `illum_calc`
+- `ref_2_CP_Apply_Illum.cppipe` ’ `illum_apply`
+- `ref_3_CP_SegmentationCheck.cppipe` ’ `segcheck`
+- `ref_5_BC_Illum.cppipe` ’ REFACTORING
+- `ref_6_BC_Apply_Illum.cppipe` ’ REFACTORING
+- `ref_7_BC_Preprocess.cppipe` ’ `preprocess`
+- `ref_9_Analysis.cppipe` ’ `analysis`
 
 ## Validation Strategy and Success Criteria
 
 To ensure StarryNight can confidently replace the original PCPIP implementation, our validation approach:
 
 - **Tracks progress** through GitHub issues (one per pipeline) linked to detailed documentation, where issues serve as discussion forums while validation documents contain the actual technical details and results
-- **Uses a balanced test fixture** from `/docs/tester/assets/pcpip-create-fixture` that's small yet representative
+- **Uses a balanced test fixture** from `/tests/pcpip-fixtures` that's small yet representative
 - **Defines success** through:
     - Structural equivalence: Identical data flow between modules
     - Functional equivalence: Comparable outputs (with acceptable numerical differences)
@@ -233,6 +236,6 @@ The validation process uses these key tools:
 | Tool                         | Purpose                                            | Source                                                   | Used In    |
 | ---------------------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
 | **cp_graph.py**              | Creates graph visualizations of pipeline structure | [External repo](https://github.com/shntnu/cp_graph)      | Stage 1    |
-| **verify_file_structure.py** | Validates output file existence and structure      | [pcpip-test](assets/pcpip-test/verify_file_structure.py) | Stages 3-5 |
-| **compare_structures.py**    | Compares output structures for differences         | [pcpip-test](assets/pcpip-test/compare_structures.py)    | Stages 4-5 |
-| **run_pcpip.sh**             | Executes CellProfiler pipeline workflows           | [pcpip-test](assets/pcpip-test/run_pcpip.sh)             | Stage 3-4  |
+| **verify_file_structure.py** | Validates output file existence and structure      | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/verify_file_structure.py) | Stages 3-5 |
+| **compare_structures.py**    | Compares output structures for differences         | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/compare_structures.py)    | Stages 4-5 |
+| **run_pcpip.sh**             | Executes CellProfiler pipeline workflows           | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/run_pcpip.sh)             | Stage 3-4  |

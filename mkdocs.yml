@@ -3,6 +3,11 @@ site_description: StarryNight - toolkit for optical pooled screening
 repo_url: https://github.com/broadinstitute/starrynight
 edit_uri: blob/main/docs/
 
+# ─── Ignore entire folders ─────────────────────────────────────────────────────
+exclude_docs: |
+  # ignore the entire 'archive' directory
+  /_archive/
+
 validation:
   omitted_files: warn
   absolute_links: relative_to_docs
@@ -61,7 +66,7 @@ nav:
       - Configuration Layer: architecture/06_configuration_layer.md
       - Architecture for Biologists: architecture/07_architecture_for_biologists.md
       - Practical Integration: architecture/08_practical_integration.md
-  - Testing: tester/README.md
+  - Testing: developer/testing-framework.md
 
 plugins:
   - search
