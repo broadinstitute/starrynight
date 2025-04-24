@@ -355,42 +355,40 @@ When implementing your own modules, follow these patterns:
 
 ### External Tool Integration Without Algorithm Changes
 
-One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms. For example, to integrate an external cell segmentation tool:
+One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms:
 
 ```python
-# Example: Integration with external tool (e.g., a cell segmentation library)
-class ExternalSegmentationModule(StarrynightModule):
+# Example of integrating an external tool (placeholder)
+# This is a generalized pattern - actual implementation details will vary by tool
+
+class ExternalToolModule(StarrynightModule):
     @staticmethod
     def uid() -> str:
-        return "external_segmentation"
+        return "external_tool_module"
 
     @classmethod
     def from_config(cls, data_config: DataConfig, experiment: Experiment):
-        # Create container configuration that calls the external tool's CLI
+        # Configure container to call external tool
         container = Container(
-            name="segmentation_container",
+            name="external_tool_container",
             input_paths={
-                "image_dir": [...],
+                # Tool-specific inputs
             },
             output_paths={
-                "segmentation_dir": [...]
+                # Tool-specific outputs
             },
             config=ContainerConfig(
-                # Use appropriate container image
-                image="tool/segmentation:latest",
-                # Call the tool's CLI with appropriate parameters
+                # Container details depend on the specific tool
+                image="...",
                 cmd=[
-                    # Tool-specific command structure would go here
-                    # This is just a placeholder for demonstration
+                    # Tool-specific command structure
                 ],
                 env={},
             ),
         )
 
-        # Create compute graph with just this container
+        # Standard module creation pattern
         compute_graph = ComputeGraph([container])
-
-        # Create and return module instance
         return cls(compute_graph)
 ```
 
