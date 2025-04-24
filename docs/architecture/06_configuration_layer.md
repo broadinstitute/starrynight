@@ -4,6 +4,18 @@
 
 The configuration layer in StarryNight consists of two interconnected systems: experiment configuration, which manages experiment-specific parameters and infers settings from data, and module configuration, which connects these parameters with module specifications. Together, these systems enable automatic setup of complex pipelines with minimal manual input, creating a bridge between user-provided parameters and the detailed configuration needed for pipeline execution.
 
+## Cross-Cutting Nature
+
+Unlike the other five layers which operate in a primarily sequential flow, the Configuration Layer functions as a dimensional plane that intersects with all layers. It provides contextual intelligence and adaptive parameters throughout the system:
+
+- With **Algorithm Layer**: Provides parameters that influence algorithm behavior
+- With **CLI Layer**: Supplies default values and validation rules for command parameters
+- With **Module Layer**: Transforms high-level experiment parameters into detailed specifications
+- With **Pipeline Layer**: Influences how modules are composed and connected
+- With **Execution Layer**: Controls runtime behavior and resource allocation
+
+This cross-cutting nature allows the Configuration Layer to maintain state across layer boundaries and adapt the system to specific experimental contexts without changing the core architecture.
+
 ## Purpose
 
 The configuration layer in StarryNight serves several critical purposes:

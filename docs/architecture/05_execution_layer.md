@@ -8,7 +8,7 @@ The execution layer in StarryNight defines how modules and pipelines are execute
 
 The execution layer serves several critical purposes in the StarryNight architecture:
 
-1. **Configuration** - Setting up modules with appropriate parameters
+1. **Execution Preparation** - Preparing configured pipelines for runtime
 2. **Instantiation** - Creating configured module instances
 3. **Backend Selection** - Choosing appropriate execution backends
 4. **Execution Control** - Initiating and monitoring pipeline execution

@@ -64,7 +64,7 @@ Note: The Configuration Layer (in `/starrynight/experiments/`) provides paramete
 - **Separation of concerns**: Each layer has distinct responsibilities
 - **Progressive composition**: Build complex pipelines from simple components
 - **Containerized execution**: Run code in reproducible environments
-- **Configuration inference**: Minimize manual configuration through smart defaults
+- **Configuration inference**: The Configuration Layer provides adaptive parameters across all other layers through smart defaults and data-driven inference
 
 ## Layer Overview
 
