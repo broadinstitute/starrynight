@@ -23,8 +23,8 @@ export STARRYNIGHT_REPO="$(git rev-parse --show-toplevel)"
 export WKDIR="./scratch/starrynight_example_output/workspace"
 
 # Reference data locations
-export REF_PIPELINE="${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe"
-export REF_GRAPH="${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot"
+export REF_PIPELINE="${STARRYNIGHT_REPO}/tests/pcpip-pipelines/ref_1_CP_Illum.cppipe"
+export REF_GRAPH="${STARRYNIGHT_REPO}/tests/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot"
 export REF_LOADDATA="${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv"
 
 # StarryNight output locations
@@ -49,11 +49,11 @@ mkdir -p ${EMBEDDING_DIR}
 ```
 
 ## Reference Materials
-- Reference Pipeline: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/ref_1_CP_Illum.cppipe>
-- Reference Graph: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot>
-- Reference JSON: <https://github.com/broadinstitute/starrynight/blob/main/docs/tester/assets/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json>
-- Test Dataset: `${STARRYNIGHT_REPO}/starrynight_example_input/`, created using [pcpip-create-fixture](../assets/pcpip-create-fixture/README.md)
-- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`, created using [pcpip-create-fixture](../assets/pcpip-create-fixture/README.md)
+- Reference Pipeline: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/ref_1_CP_Illum.cppipe>
+- Reference Graph: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/dot/ref_1_CP_Illum.dot>
+- Reference JSON: <https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/json/ref_1_CP_Illum.json>
+- Test Dataset: `${STARRYNIGHT_REPO}/starrynight_example_input/`, created using [pcpip-create-fixture](/tests/pcpip-fixtures/README.md)
+- Reference LoadData CSV: `${STARRYNIGHT_REPO}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed/load_data_pipeline1.csv`, created using [pcpip-create-fixture](/tests/pcpip-fixtures/README.md)
 
 ## Stage 1: Graph Topology
 **Objective**: Verify StarryNight pipeline structure matches reference
@@ -160,14 +160,14 @@ compare_csv_structure('${REF_LOADDATA}', '${SN_LOADDATA}')
 # To modify output location, update the REPRODUCE_DIR variable in the script
 
 # Run using run_pcpip.sh script
-cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
+cd ${STARRYNIGHT_REPO}/tests/tools/
 # First modify the script to output to the reference output location
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${REF_OUTPUT}\"|" run_pcpip.sh
 # Run only pipeline 1
 ./run_pcpip.sh 1
 
 # Validate the reference output structure
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+python ${STARRYNIGHT_REPO}/tests/tools/verify_file_structure.py \
     --directory ${REF_OUTPUT} \
     --output ${VALIDATION_DIR}/reference_structure.yaml \
     --embedding-dir ${EMBEDDING_DIR}
@@ -184,18 +184,18 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 **Command**:
 ```sh
 # Modify run_pcpip.sh to use StarryNight-generated pipeline
-cd ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/
+cd ${STARRYNIGHT_REPO}/tests/tools/
 # Make a copy for StarryNight testing
 cp run_pcpip.sh run_starrynight.sh
 # Update output directory and pipeline path in the script
 sed -i.bak "s|REPRODUCE_DIR=.*|REPRODUCE_DIR=\"${SN_TEST_OUTPUT}\"|" run_starrynight.sh
 # Update pipeline path in PIPELINE_CONFIG array - line ~80
-sed -i.bak "s|1,pipeline_path=.*|1,pipeline_path=${SN_PIPELINE_CPPIPE}|" run_starrynight.sh
+sed -i.bak "s|1,file=.*|1,file=\"${SN_PIPELINE_CPPIPE}\"|" run_starrynight.sh
 # Run the modified script
 ./run_starrynight.sh 1
 
 # Validate the StarryNight output structure
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+python ${STARRYNIGHT_REPO}/tests/tools/verify_file_structure.py \
     --directory ${SN_TEST_OUTPUT} \
     --output ${VALIDATION_DIR}/starrynight_structure.yaml \
     --embedding-dir ${EMBEDDING_DIR}
@@ -205,14 +205,14 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 ```sh
 # Compare reference and StarryNight output structures using multiple formats
 # YAML format (default, machine-readable)
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+python ${STARRYNIGHT_REPO}/tests/tools/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/starrynight_structure.yaml \
     --output-file ${VALIDATION_DIR}/stage4_comparison.yaml \
     --compare-embeddings
 
 # Text format (human-readable summary)
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+python ${STARRYNIGHT_REPO}/tests/tools/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/starrynight_structure.yaml \
     --output-file ${VALIDATION_DIR}/stage4_comparison.txt \
@@ -254,7 +254,7 @@ starrynight cp \
 # the expected output path structure from run_pcpip.sh for proper comparison
 
 # Validate the StarryNight end-to-end output structure
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.py \
+python ${STARRYNIGHT_REPO}/tests/tools/verify_file_structure.py \
     --directory ${SN_OUTPUT} \
     --output ${VALIDATION_DIR}/e2e_structure.yaml \
     --embedding-dir ${EMBEDDING_DIR}
@@ -264,14 +264,14 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/verify_file_structure.p
 ```sh
 # Compare reference and StarryNight end-to-end output structures
 # YAML format (default, machine-readable)
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+python ${STARRYNIGHT_REPO}/tests/tools/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/e2e_structure.yaml \
     --output-file ${VALIDATION_DIR}/e2e_comparison.yaml \
     --compare-embeddings
 
 # Text format (human-readable summary)
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+python ${STARRYNIGHT_REPO}/tests/tools/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/e2e_structure.yaml \
     --output-file ${VALIDATION_DIR}/e2e_comparison.txt \
@@ -279,7 +279,7 @@ python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
     --compare-embeddings
 
 # Set custom tolerance for numerical differences (if needed)
-python ${STARRYNIGHT_REPO}/docs/tester/assets/pcpip-test/compare_structures.py \
+python ${STARRYNIGHT_REPO}/tests/tools/compare_structures.py \
     ${VALIDATION_DIR}/reference_structure.yaml \
     ${VALIDATION_DIR}/e2e_structure.yaml \
     --output-file ${VALIDATION_DIR}/e2e_comparison_tolerance.yaml \
