@@ -355,20 +355,20 @@ When implementing your own modules, follow these patterns:
 
 ### External Tool Integration Without Algorithm Changes
 
-One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms. For example, to integrate Cellpose:
+One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms. For example, to integrate an external cell segmentation tool:
 
 ```python
-# Define a module that uses Cellpose's existing CLI
-class CellposeSegmentationModule(StarrynightModule):
+# Example: Integration with external tool (e.g., a cell segmentation library)
+class ExternalSegmentationModule(StarrynightModule):
     @staticmethod
     def uid() -> str:
-        return "cellpose_segmentation"
+        return "external_segmentation"
 
     @classmethod
     def from_config(cls, data_config: DataConfig, experiment: Experiment):
-        # Create container configuration that calls Cellpose CLI directly
+        # Create container configuration that calls the external tool's CLI
         container = Container(
-            name="cellpose_segment",
+            name="segmentation_container",
             input_paths={
                 "image_dir": [...],
             },
@@ -376,15 +376,12 @@ class CellposeSegmentationModule(StarrynightModule):
                 "segmentation_dir": [...]
             },
             config=ContainerConfig(
-                # Use a container with Cellpose pre-installed
-                image="biocontainers/cellpose:latest",  # or build a custom Cellpose container
-                # Call Cellpose CLI directly with required parameters
+                # Use appropriate container image
+                image="tool/segmentation:latest",
+                # Call the tool's CLI with appropriate parameters
                 cmd=[
-                    "python", "-m", "cellpose", 
-                    "--dir", "${inputs.image_dir}",
-                    "--pretrained_model", "cyto",  # or "nuclei" based on needs
-                    "--chan", "0",                 # primary channel
-                    "--save_png"                   # save results as PNG
+                    # Tool-specific command structure would go here
+                    # This is just a placeholder for demonstration
                 ],
                 env={},
             ),
