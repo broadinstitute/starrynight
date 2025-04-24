@@ -205,13 +205,13 @@ Currently, a validation document has been created only for [Pipeline 1: illum_ca
 
 Here are the reference CellProfiler pipelines and their StarryNight module counterparts:
 
-- `ref_1_CP_Illum.cppipe` � `illum_calc`
-- `ref_2_CP_Apply_Illum.cppipe` � `illum_apply`
-- `ref_3_CP_SegmentationCheck.cppipe` � `segcheck`
-- `ref_5_BC_Illum.cppipe` � REFACTORING
-- `ref_6_BC_Apply_Illum.cppipe` � REFACTORING
-- `ref_7_BC_Preprocess.cppipe` � `preprocess`
-- `ref_9_Analysis.cppipe` � `analysis`
+- `ref_1_CP_Illum.cppipe`: `illum_calc`
+- `ref_2_CP_Apply_Illum.cppipe`: `illum_apply`
+- `ref_3_CP_SegmentationCheck.cppipe`: `segcheck`
+- `ref_5_BC_Illum.cppipe`:  `illum_calc`
+- `ref_6_BC_Apply_Illum.cppipe`: `illum_apply_sbs`
+- `ref_7_BC_Preprocess.cppipe`: `preprocess`
+- `ref_9_Analysis.cppipe`: `analysis`
 
 ## Validation Strategy and Success Criteria
 
