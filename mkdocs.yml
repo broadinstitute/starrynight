@@ -51,7 +51,6 @@ nav:
     - Processing Modules: user/modules.md
     - Example CLI Pipeline: user/example-pipeline-cli.md
   - Developer Guide:
-    - Setup & Introduction: developer/guides/developer-guide.md
     - System Maintenance: developer/guides/system-maintenance-guide.md
     - Workflow Implementation: developer/guides/workflow-implementation-guide.md
   - Developer Architecture:
