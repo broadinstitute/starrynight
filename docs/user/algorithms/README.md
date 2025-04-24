@@ -1,7 +1,10 @@
 # Algorithm Documentation
 
-!!! Warning
-    - This document contains bot-generated text that has not yet been reviewed by developers!
+!!! Warning "Documentation Status"
+    - This document contains comprehensive but **outdated** algorithm documentation
+    - The documentation style and structure here should be used as a template for Python docstrings
+    - Future algorithm documentation should be maintained in code docstrings rather than separate Markdown files
+    - This document is retained as a reference for the documentation style and structure
 
 This document contains concise technical documentation for algorithms in the StarryNight project, focusing on unique aspects and implementation details not obvious from the code.
 
