@@ -50,24 +50,26 @@ nav:
     - Parser Configuration: user/parser-configuration.md
     - Processing Modules: user/modules.md
     - Example CLI Pipeline: user/example-pipeline-cli.md
-  # Removed Algorithms section - documentation moved to archive
-  - Development:
-    - Developer Guide: developer/guides/developer-guide.md
+  - Developer Guide:
+    - Setup & Introduction: developer/guides/developer-guide.md
+  - Developer Reference:
     - PCPIP Specifications: developer/reference/pcpip-specs.md
-    - Requirements: developer/design/requirements.md
+    - Design Requirements: developer/design/requirements.md
     - Pipeline Automation: developer/notes/pipeline-automation.md
+  - Developer Testing:
     - Testing Framework: developer/validation/testing-framework.md
-  - Architecture:
-      - Overview: architecture/00_architecture_overview.md
-      - Algorithm Layer: architecture/01_algorithm_layer.md
-      - CLI Layer: architecture/02_cli_layer.md
-      - Module Layer: architecture/03_module_layer.md
-      - Pipeline Layer: architecture/04_pipeline_layer.md
-      - Execution Layer: architecture/05_execution_layer.md
-      - Configuration Layer: architecture/06_configuration_layer.md
-      - Architecture for Biologists: architecture/07_architecture_for_biologists.md
-      - Practical Integration: architecture/08_practical_integration.md
-      - Flow Example: architecture/09_architecture_flow_example.md
+    - Pipeline Validation: developer/validation/validation-pipeline-1-illum-calc.md
+  - Developer Architecture:
+    - Overview: architecture/00_architecture_overview.md
+    - Algorithm Layer: architecture/01_algorithm_layer.md
+    - CLI Layer: architecture/02_cli_layer.md
+    - Module Layer: architecture/03_module_layer.md
+    - Pipeline Layer: architecture/04_pipeline_layer.md
+    - Execution Layer: architecture/05_execution_layer.md
+    - Configuration Layer: architecture/06_configuration_layer.md
+    - Architecture for Biologists: architecture/07_architecture_for_biologists.md
+    - Practical Integration: architecture/08_practical_integration.md
+    - Flow Example: architecture/09_architecture_flow_example.md
 
 plugins:
   - search
