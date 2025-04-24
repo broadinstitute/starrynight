@@ -14,24 +14,28 @@ StarryNight uses the Nix package manager to provide a consistent and reproducibl
         sh <(curl -L https://nixos.org/nix/install) --daemon
 
 
-1. **Clone the Repository**:
+2. **Clone the Repository**:
 
         git clone https://github.com/broadinstitute/starrynight.git
         cd starrynight
 
-2. **Set Up the Environment**:
+3. **Set Up the Environment**:
 
         nix develop --extra-experimental-features nix-command --extra-experimental-features flakes .
 
-3. **Synchronize Dependencies**:
+4. **Synchronize Dependencies**:
 
         uv sync
 
-4. **Verify Installation**:
+5. **Verify Installation**:
 
         starrynight --help
         pipecraft --help
         conductor --help
+
+## For Developers
+
+If you're developing for StarryNight, the setup process is the same as above. For detailed information on the project architecture and how to extend components, see the [Architecture Overview](../architecture/00_architecture_overview.md).
 
 ## Quick Start Workflow
 
