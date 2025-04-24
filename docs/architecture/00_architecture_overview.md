@@ -1,24 +1,23 @@
 # StarryNight Architecture Overview
 
-!!!note "Documentation Navigation"
-    This document provides a high-level structural map of the StarryNight system. For different perspectives:
+## Navigating the Architecture Documentation
 
-    - **For biological analogies**: See [Architecture for Biologists](07_architecture_for_biologists.md)
-    - **For concrete examples**: See [Practical Integration Walkthrough](08_practical_integration.md)
-    - **For detailed layer explanations**: Follow links in the [Layer Overview](#layer-overview) section
+This document provides a high-level structural map of the StarryNight system and serves as your main guide to the architecture documentation. Below is a recommended reading path based on your role and interests:
 
-## How to Use This Documentation
+| If you are a...              | Start here                                                           | Then explore                                                      |
+| ---------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| New developer                | This overview + [Practical Integration](08_practical_integration.md) | Layer-specific docs based on your focus                           |
+| Algorithm developer          | [Algorithm Layer](01_algorithm_layer.md)                             | [CLI Layer](02_cli_layer.md) → [Module Layer](03_module_layer.md) |
+| Module developer             | [Module Layer](03_module_layer.md)                                   | [Pipeline Layer](04_pipeline_layer.md)                            |
+| Pipeline developer           | [Pipeline Layer](04_pipeline_layer.md)                               | [Execution Layer](05_execution_layer.md)                          |
+| Configuration developer      | [Configuration Layer](06_configuration_layer.md)                     | Relevant layer docs                                               |
+| Biologist/Non-technical user | [Architecture for Biologists](07_architecture_for_biologists.md)     | [Practical Integration](08_practical_integration.md)              |
 
-This overview serves as your map to the StarryNight architecture. Based on your role:
+For different perspectives on the architecture:
 
-| If you are a... | Start here | Then explore |
-|-----------------|------------|--------------|
-| New developer | This overview + [Practical Integration](08_practical_integration.md) | Layer-specific docs based on your focus |
-| Algorithm developer | [Algorithm Layer](01_algorithm_layer.md) | [CLI Layer](02_cli_layer.md) → [Module Layer](03_module_layer.md) |
-| Module developer | [Module Layer](03_module_layer.md) | [Pipeline Layer](04_pipeline_layer.md) |
-| Pipeline developer | [Pipeline Layer](04_pipeline_layer.md) | [Execution Layer](05_execution_layer.md) |
-| Configuration developer | [Configuration Layer](06_configuration_layer.md) | Relevant layer docs |
-| Biologist/Non-technical user | [Architecture for Biologists](07_architecture_for_biologists.md) | [Practical Integration](08_practical_integration.md) |
+- **Biological analogies**: See [Architecture for Biologists](07_architecture_for_biologists.md)
+- **Concrete implementation examples**: See [Practical Integration Walkthrough](08_practical_integration.md)
+- **Detailed layer explanations**: Follow links in the [Layer Overview](#layer-overview) section below
 
 ## Architecture at a Glance
 
@@ -71,14 +70,14 @@ Note: The Configuration Layer (in `/starrynight/experiments/`) provides paramete
 
 StarryNight consists of six interconnected layers:
 
-| Layer | Primary Responsibility | Key Components | Details |
-|-------|------------------------|----------------|---------|
-| Algorithm | Core image processing without dependencies | Functions for data prep, pipeline generation, execution | [Details →](01_algorithm_layer.md) |
-| CLI | Command-line interface | Command groups, parameter parsing/validation | [Details →](02_cli_layer.md) |
-| Module | Standardized components | Input/output specs, compute graph generation | [Details →](03_module_layer.md) |
-| Pipeline | Workflow composition | Sequential/parallel execution paths | [Details →](04_pipeline_layer.md) |
-| Execution | Backend runtime | Snakemake rules, container management | [Details →](05_execution_layer.md) |
-| Configuration | Parameter inference | Experiment configs, adaptive settings | [Details →](06_configuration_layer.md) |
+| Layer         | Primary Responsibility                     | Key Components                                          | Details                                |
+| ------------- | ------------------------------------------ | ------------------------------------------------------- | -------------------------------------- |
+| Algorithm     | Core image processing without dependencies | Functions for data prep, pipeline generation, execution | [Details →](01_algorithm_layer.md)     |
+| CLI           | Command-line interface                     | Command groups, parameter parsing/validation            | [Details →](02_cli_layer.md)           |
+| Module        | Standardized components                    | Input/output specs, compute graph generation            | [Details →](03_module_layer.md)        |
+| Pipeline      | Workflow composition                       | Sequential/parallel execution paths                     | [Details →](04_pipeline_layer.md)      |
+| Execution     | Backend runtime                            | Snakemake rules, container management                   | [Details →](05_execution_layer.md)     |
+| Configuration | Parameter inference                        | Experiment configs, adaptive settings                   | [Details →](06_configuration_layer.md) |
 
 ## Data and Control Flow
 
