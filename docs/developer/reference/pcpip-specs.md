@@ -2,7 +2,7 @@
 
 PCPIP (Pooled Cell Painting Image Processing) is a specialized image processing system that automates the analysis of large-scale optical pooled screening experiments. The system integrates CellProfiler's image analysis capabilities with AWS Lambda-based orchestration to process thousands of microscopy images through a series of coordinated pipelines. PCPIP handles two parallel processing tracks - one for Cell Painting images that capture cellular morphology and another for barcoding images that identify genetic perturbations - before combining them for comprehensive phenotypic analysis. This document details the complete implementation of this workflow, including pipeline specifications, cloud infrastructure configuration, and execution patterns that enable reproducible, scalable image processing for high-content screening.
 
-See [Requirements](requirements.md) for a specification of the new system we want to build, based on PCPIP.
+See [Requirements](../design/requirements.md) for a specification of the new system we want to build, based on PCPIP.
 
 
 ## Overview
@@ -15,7 +15,7 @@ The image processing workflow consists of two parallel tracks followed by a comb
 
 Each pipeline is launched by a corresponding AWS Lambda function that configures input/output paths, prepares metadata, and creates CSV files to drive the CellProfiler analysis.
 
-![Pooled Cell Painting Workflow Overview](assets/pcpip-overview.jpg)
+![Pooled Cell Painting Workflow Overview](../assets/pcpip-overview.jpg)
 
 The diagram above illustrates the complete workflow with both Cell Painting (top row) and Barcoding (middle row) image processing tracks, followed by the combined analysis step. The pipeline numbers correspond to the CellProfiler pipelines described in this document.
 
@@ -692,9 +692,9 @@ This parameterization approach enables the same pipeline code to process differe
 
 Note:
 
-- The input / outputs are also in parseable form [`pcpip-io.json`](assets/pcpip-io.json). Note that it uses `Tile` instead of `Site` when referring to the outputs of Pipelines 4 and 8.
+- The input / outputs are also in parseable form [`pcpip-io.json`](../assets/pcpip-io.json). Note that it uses `Tile` instead of `Site` when referring to the outputs of Pipelines 4 and 8.
 - In the jsons, `{1_CP_Illum|2_CP_Apply_Illum|5_BC_Illum|6_BC_Apply_Illum}.input.images.pattern` are mockups
-- Sample outputs of paths and LoadData CSVs generated using [`pcpip-io.json`](assets/pcpip-io.json) are [here](../tester/assets/pcpip-generate-dummy-structures/sample_outputs/generated_csvs.json).
+- Sample outputs of paths and LoadData CSVs generated using [`pcpip-io.json`](../assets/pcpip-io.json) are [here](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-generators/sample_outputs/generated_csvs.json).
 - FIXME: We also need to specify as input, the channels that (1) will be used for nuclear segmentation (2) cell segmentation (3) mitochondria (for some filtering that happens in Pipeline 9)
 
 ### Cell Painting
@@ -927,9 +927,9 @@ Note:
 
 Each pipeline stage includes specific quality control measures to ensure data quality and processing accuracy. The following scripts provide visualization and analysis tools for QC:
 
-Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree/main/docs/developer/assets/pcpip-notebooks)
+Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree/main/docs/developer/../assets/pcpip-notebooks)
 
-> **NOTE:** These notebooks are temporarily located in `/docs/developer/assets/pcpip-notebooks/` but should be moved to `/examples/notebooks/` in the future.
+> **NOTE:** These notebooks are temporarily located in `/docs/developer/../assets/pcpip-notebooks/` but should be moved to `/examples/notebooks/` in the future.
 
 ### QC Scripts and Their Applications
 

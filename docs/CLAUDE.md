@@ -50,10 +50,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with do
 - Filter LoadData CSVs: `python filter_loaddata_csv.py source_dir dest_dir --well WellA1,WellA2 --site 0,1 --cycle 1,2,3`
 - Validate paths: `python validate_loaddata_paths.py path/to/loaddata.csv`
 
-## References
-For comprehensive documentation guidelines, refer to:
-- [Documentation Best Practices](/developer/documentation-best-practices.md)
-
 ## Notes on Repository Restructuring
 This repository is undergoing restructuring to improve organization:
 - Implementation code (Python scripts, notebooks, test fixtures) is being moved out of `/docs/`

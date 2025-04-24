@@ -2,8 +2,6 @@
 
 This directory contains Jupyter notebooks and Python scripts used to process, analyze, and visualize data from the PCPIP (Pooled Cell Painting Image-based Profiling) pipeline.
 
-> **NOTE:** These notebooks are temporarily located in `/docs/developer/assets/pcpip-notebooks/` but should be moved to `/examples/notebooks/` in the future as part of the documentation refactoring plan.
-
 ## Available Notebooks/Scripts
 
 - `6_Barcode_Align.py` - Alignment utility for barcoding images
@@ -13,4 +11,4 @@ This directory contains Jupyter notebooks and Python scripts used to process, an
 
 ## Usage
 
-These notebooks/scripts are referenced in the [PCPIP Specifications](/docs/developer/pcpip-specs.md) document.
+These notebooks/scripts are referenced in the [PCPIP Specifications](../../reference/pcpip-specs.md) document.

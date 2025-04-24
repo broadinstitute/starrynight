@@ -28,7 +28,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Automation Value:** High for initial creation, but moderate overall since there are finite cycle counts (3-12)
 
-![Pipeline_6_SaveImages](assets/sample_modules/p6_SaveImages.png)
+![Pipeline_6_SaveImages](../assets/sample_modules/p6_SaveImages.png)
 
 ### 2. All-Cycles-In-One Barcoding Modules
 
@@ -44,9 +44,9 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Automation Value:** High for initial creation, but moderate overall since there are finite cycle counts (3-12)
 
-![Pipeline_6_CorrectIlluminationApply](assets/sample_modules/p6_CorrectIlluminationApply.png)
+![Pipeline_6_CorrectIlluminationApply](../assets/sample_modules/p6_CorrectIlluminationApply.png)
 
-![Pipeline_7_CompensateColors](assets/sample_modules/p7_CompensateColors.png)
+![Pipeline_7_CompensateColors](../assets/sample_modules/p7_CompensateColors.png)
 
 ### 3. Cycle-Count-Parameter Barcoding Modules
 
@@ -61,7 +61,7 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Automation Value:** Low - these are trivial to update manually
 
-![Pipeline_9_CallBarcodes](assets/sample_modules/p9_CallBarcodes.png)
+![Pipeline_9_CallBarcodes](../assets/sample_modules/p9_CallBarcodes.png)
 
 ### 4. Phenotype Measurement Modules
 
@@ -78,9 +78,9 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Automation Value:** Moderate - useful templates but easy to manually adjust
 
-![Pipeline_2_CorrectIlluminationApply](assets/sample_modules/p2_CorrectIlluminationApply.png)
+![Pipeline_2_CorrectIlluminationApply](../assets/sample_modules/p2_CorrectIlluminationApply.png)
 
-![Pipeline_9_MeasureObjectIntensity1](assets/sample_modules/p9_MeasureObjectIntensity1.png)
+![Pipeline_9_MeasureObjectIntensity1](../assets/sample_modules/p9_MeasureObjectIntensity1.png)
 
 
 ### 5. Phenotype Segmentation Modules
@@ -97,9 +97,9 @@ Pipeline modules can be categorized into five distinct types based on their cust
 
 **Automation Value:** Low - human expertise required regardless of automation
 
-![Pipeline_2_IdentifyPrimaryObjects](assets/sample_modules/p2_IdentifyPrimaryObjects.png)
+![Pipeline_2_IdentifyPrimaryObjects](../assets/sample_modules/p2_IdentifyPrimaryObjects.png)
 
-![Pipeline_9_IdentifySecondaryObjects](assets/sample_modules/p9_IdentifySecondaryObjects.png)
+![Pipeline_9_IdentifySecondaryObjects](../assets/sample_modules/p9_IdentifySecondaryObjects.png)
 
 ## Automation Priority
 
@@ -119,16 +119,16 @@ While automating pipeline generation would be beneficial, particularly for repet
 
 Pipeline 2 (CP_Apply_Illum)
 
-![Pipeline 2: Cell Painting Apply Illumination](../tester/assets/pcpip-pipelines/_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
+![Pipeline 2: Cell Painting Apply Illumination](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
 
 Pipeline 6 (BC_Apply_Illum)
 
-![Pipeline 6: Barcoding Apply Illumination](../tester/assets/pcpip-pipelines/_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
+![Pipeline 6: Barcoding Apply Illumination](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
 
 Pipeline 7 (BC_Preprocess)
 
-![Pipeline 7: Barcoding Preprocessing](../tester/assets/pcpip-pipelines/_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
+![Pipeline 7: Barcoding Preprocessing](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
 
 Pipeline 9 (Analysis)
 
-![Pipeline 9: Analysis](../tester/assets/pcpip-pipelines/_ref_graph_format/svg/ref_9_Analysis.svg)
+![Pipeline 9: Analysis](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_9_Analysis.svg)

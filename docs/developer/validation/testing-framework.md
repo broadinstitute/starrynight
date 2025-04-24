@@ -51,12 +51,12 @@ The testing framework includes these key resources:
 
 ## Testing Environment Setup
 
-Beyond the [standard StarryNight installation](../user/getting-started.md), validation requires additional setup:
+Beyond the [standard StarryNight installation](../../user/getting-started.md), validation requires additional setup:
 
 ### Prerequisites
 
 - **Nix**: For setting up the complete development environment
-    - Follow the [standard StarryNight installation](../user/getting-started.md)
+    - Follow the [standard StarryNight installation](../../user/getting-started.md)
 - **Additional Tools**:
     - **Graphviz**: For pipeline visualization (`apt install graphviz` or `brew install graphviz`)
     - **cp_graph.py**: For CellProfiler pipeline graph analysis (clone from `https://github.com/shntnu/cp_graph`)

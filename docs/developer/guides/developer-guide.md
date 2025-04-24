@@ -6,7 +6,7 @@
 
 This guide provides information for developers who want to contribute to StarryNight.
 
-StarryNight is a modular platform for high-throughput microscopy image processing with four main components. For an overview of each component and its purpose, please refer to the [overview](../index.md#platform-overview).
+StarryNight is a modular platform for high-throughput microscopy image processing with four main components. For an overview of each component and its purpose, please refer to the [overview](../../index.md#platform-overview).
 
 ## Repository Structure
 
