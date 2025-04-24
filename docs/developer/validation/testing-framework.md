@@ -205,13 +205,13 @@ Currently, a validation document has been created only for [Pipeline 1: illum_ca
 
 Here are the reference CellProfiler pipelines and their StarryNight module counterparts:
 
-- `ref_1_CP_Illum.cppipe` ’ `illum_calc`
-- `ref_2_CP_Apply_Illum.cppipe` ’ `illum_apply`
-- `ref_3_CP_SegmentationCheck.cppipe` ’ `segcheck`
-- `ref_5_BC_Illum.cppipe` ’ REFACTORING
-- `ref_6_BC_Apply_Illum.cppipe` ’ REFACTORING
-- `ref_7_BC_Preprocess.cppipe` ’ `preprocess`
-- `ref_9_Analysis.cppipe` ’ `analysis`
+- `ref_1_CP_Illum.cppipe` ï¿½ `illum_calc`
+- `ref_2_CP_Apply_Illum.cppipe` ï¿½ `illum_apply`
+- `ref_3_CP_SegmentationCheck.cppipe` ï¿½ `segcheck`
+- `ref_5_BC_Illum.cppipe` ï¿½ REFACTORING
+- `ref_6_BC_Apply_Illum.cppipe` ï¿½ REFACTORING
+- `ref_7_BC_Preprocess.cppipe` ï¿½ `preprocess`
+- `ref_9_Analysis.cppipe` ï¿½ `analysis`
 
 ## Validation Strategy and Success Criteria
 
@@ -233,9 +233,9 @@ The goal isn't byte-for-byte identical outputs, but functionally equivalent resu
 
 The validation process uses these key tools:
 
-| Tool                         | Purpose                                            | Source                                                   | Used In    |
-| ---------------------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
-| **cp_graph.py**              | Creates graph visualizations of pipeline structure | [External repo](https://github.com/shntnu/cp_graph)      | Stage 1    |
+| Tool                         | Purpose                                            | Source                                                                                                      | Used In    |
+| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------- |
+| **cp_graph.py**              | Creates graph visualizations of pipeline structure | [External repo](https://github.com/shntnu/cp_graph)                                                         | Stage 1    |
 | **verify_file_structure.py** | Validates output file existence and structure      | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/verify_file_structure.py) | Stages 3-5 |
 | **compare_structures.py**    | Compares output structures for differences         | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/compare_structures.py)    | Stages 4-5 |
 | **run_pcpip.sh**             | Executes CellProfiler pipeline workflows           | [tests/tools](https://github.com/broadinstitute/starrynight/tree/main/tests/tools/run_pcpip.sh)             | Stage 3-4  |

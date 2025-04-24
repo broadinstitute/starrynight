@@ -52,10 +52,11 @@ nav:
     - Example CLI Pipeline: user/example-pipeline-cli.md
   # Removed Algorithms section - documentation moved to archive
   - Development:
-    - Developer Guide: developer/developer-guide.md
-    - PCPIP Specs: developer/pcpip-specs.md
-    - Pipeline Automation: developer/pipeline-automation.md
-    - Requirements: developer/requirements.md
+    - Developer Guide: developer/guides/developer-guide.md
+    - PCPIP Specifications: developer/reference/pcpip-specs.md
+    - Requirements: developer/design/requirements.md
+    - Pipeline Automation: developer/notes/pipeline-automation.md
+    - Testing Framework: developer/validation/testing-framework.md
   - Architecture:
       - Overview: architecture/00_architecture_overview.md
       - Algorithm Layer: architecture/01_algorithm_layer.md
@@ -66,7 +67,7 @@ nav:
       - Configuration Layer: architecture/06_configuration_layer.md
       - Architecture for Biologists: architecture/07_architecture_for_biologists.md
       - Practical Integration: architecture/08_practical_integration.md
-  - Testing: developer/testing-framework.md
+      - Flow Example: architecture/09_architecture_flow_example.md
 
 plugins:
   - search
