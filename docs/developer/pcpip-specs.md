@@ -929,6 +929,8 @@ Each pipeline stage includes specific quality control measures to ensure data qu
 
 Location: [`pcpip-notebooks`](https://github.com/broadinstitute/starrynight/tree/main/docs/developer/assets/pcpip-notebooks)
 
+> **NOTE:** These notebooks are temporarily located in `/docs/developer/assets/pcpip-notebooks/` but should be moved to `/examples/notebooks/` in the future.
+
 ### QC Scripts and Their Applications
 
 1. **`illum_montage.py`** (Not currently implemented)
