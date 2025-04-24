@@ -58,7 +58,6 @@ nav:
     - Analysis: user/algorithms/analysis.md
   - Development:
     - Developer Guide: developer/developer-guide.md
-    - MVP Project Planning: developer/project-planning.md
     - PCPIP Specs: developer/pcpip-specs.md
     - Pipeline Automation: developer/pipeline-automation.md
     - Requirements: developer/requirements.md
@@ -73,7 +72,6 @@ nav:
       - Architecture for Biologists: architecture/07_architecture_for_biologists.md
       - Practical Integration: architecture/08_practical_integration.md
   - Testing: tester/README.md
-  - FAQ: misc/faq.md
 
 plugins:
   - search
