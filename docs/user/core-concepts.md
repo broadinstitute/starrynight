@@ -6,14 +6,7 @@ This guide explains the fundamental concepts behind the StarryNight platform.
 
 StarryNight is a comprehensive platform for processing, analyzing, and managing optical pooled screening (OPS) image data, with particular focus on Cell Painting and sequencing-based assays.
 
-### Core Components
-
-The platform consists of four main components:
-
-1. **StarryNight Core**: Image processing algorithms and command-line tools
-2. **PipeCraft**: Workflow definition and execution framework
-3. **Conductor**: Job scheduling, management, and API services
-4. **Canvas**: Web-based user interface for intuitive interaction
+For a detailed description of the platform's components and architecture, see the [Architecture Overview](../architecture/00_architecture_overview.md).
 
 ## Data Organization and Parsing
 

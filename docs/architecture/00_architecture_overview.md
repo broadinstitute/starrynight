@@ -139,10 +139,42 @@ The complete flow can be summarized in these key steps:
 
 StarryNight is organized as a monorepo with four main packages:
 
-- **StarryNight**: Core algorithms, CLI, modules and pipelines (`/starrynight/src/starrynight/`)
-- **PipeCraft**: Pipeline composition and execution (`/pipecraft/src/pipecraft/`)
-- **Conductor**: Job orchestration and API (not detailed in this documentation)
-- **Canvas**: Web UI for pipeline configuration (not detailed in this documentation)
+### StarryNight Core (`/starrynight/src/starrynight/`)
+
+The foundation of the platform providing specialized algorithms for microscopy image analysis:
+
+- **CLI Tools**: Command-line interfaces for each algorithm
+- **Algorithms**: Image processing algorithms for microscopy data
+- **Modules System**: Standardized module structure for algorithm implementation
+- **Parsers**: File path parsing and metadata extraction
+- **Utilities**: Common functions for file handling, data transformation, etc.
+
+### PipeCraft (`/pipecraft/src/pipecraft/`)
+
+The pipeline compiler and execution framework:
+
+- **Pipeline Definition**: Python API for defining computational workflows
+- **Node System**: Individual processing steps as configurable nodes
+- **Backend Abstraction**: Support for local, Docker, and AWS Batch execution
+- **Template System**: Pre-defined templates for common backends
+
+### Conductor (Job orchestration and API)
+
+Manages the execution environment:
+
+- **REST API**: API for job management and monitoring
+- **Database**: Storage for project configurations and job results
+- **Job Management**: Scheduling, execution, and monitoring of jobs
+- **WebSockets**: Real-time updates on job status
+
+### Canvas (Web UI for pipeline configuration)
+
+The web-based user interface:
+
+- **Job Configuration**: Interface for setting up and parameterizing workflows
+- **Run Monitoring**: Real-time status updates and logs
+- **Results Visualization**: Interactive exploration of outputs
+- **File Management**: Interface for managing input and output files
 
 ## Extension Points
 
