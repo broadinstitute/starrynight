@@ -119,16 +119,16 @@ While automating pipeline generation would be beneficial, particularly for repet
 
 Pipeline 2 (CP_Apply_Illum)
 
-![Pipeline 2: Cell Painting Apply Illumination](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
+![Pipeline 2: Cell Painting Apply Illumination](https://raw.githubusercontent.com/broadinstitute/starrynight/refs/heads/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_2_CP_Apply_Illum.svg)
 
 Pipeline 6 (BC_Apply_Illum)
 
-![Pipeline 6: Barcoding Apply Illumination](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
+![Pipeline 6: Barcoding Apply Illumination](https://raw.githubusercontent.com/broadinstitute/starrynight/refs/heads/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_6_BC_Apply_Illum.svg)
 
 Pipeline 7 (BC_Preprocess)
 
-![Pipeline 7: Barcoding Preprocessing](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
+![Pipeline 7: Barcoding Preprocessing](https://raw.githubusercontent.com/broadinstitute/starrynight/refs/heads/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_7_BC_Preprocess.svg)
 
 Pipeline 9 (Analysis)
 
-![Pipeline 9: Analysis](https://github.com/broadinstitute/starrynight/blob/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_9_Analysis.svg)
+![Pipeline 9: Analysis](https://raw.githubusercontent.com/broadinstitute/starrynight/refs/heads/main/tests/pcpip-pipelines/_ref_graph_format/svg/ref_9_Analysis.svg)
