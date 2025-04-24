@@ -358,38 +358,31 @@ When implementing your own modules, follow these patterns:
 One powerful capability of StarryNight's architecture is the ability to integrate external tools without modifying core algorithms:
 
 ```python
-# Example of integrating an external tool (placeholder)
-# This is a generalized pattern - actual implementation details will vary by tool
-
+# Simplified example based on actual codebase patterns
 class ExternalToolModule(StarrynightModule):
     @staticmethod
     def uid() -> str:
         return "external_tool_module"
-
+    
+    @staticmethod
+    def _spec():
+        # Default specification
+        return ExternalToolSpec()
+    
     @classmethod
-    def from_config(cls, data_config: DataConfig, experiment: Experiment):
-        # Configure container to call external tool
-        container = Container(
-            name="external_tool_container",
-            input_paths={
-                # Tool-specific inputs
-            },
-            output_paths={
-                # Tool-specific outputs
-            },
-            config=ContainerConfig(
-                # Container details depend on the specific tool
-                image="...",
-                cmd=[
-                    # Tool-specific command structure
-                ],
-                env={},
-            ),
-        )
-
-        # Standard module creation pattern
-        compute_graph = ComputeGraph([container])
-        return cls(compute_graph)
+    def from_config(cls, data_config: DataConfig, experiment: Experiment, spec=None):
+        # Use default spec if none provided
+        if spec is None:
+            spec = cls._spec()
+            
+        # Update paths based on data config
+        spec.update_paths(data_config)
+        
+        # Define the pipeline
+        pipe = create_external_tool_pipe(spec, data_config, experiment)
+        
+        # Create and return module instance with spec and pipeline
+        return cls(spec, pipe, [])
 ```
 
 This approach allows StarryNight to leverage existing tools by:
