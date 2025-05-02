@@ -183,9 +183,14 @@ def gen_illum_calc_load_data(
         path_mask = default_path_prefix
 
     # Setup chunking and write loaddata for parallel processing
-    images_hierarchy_dict = gen_image_hierarchy(
-        images_df, ["batch_id", "plate_id", "well_id"]
-    )
+    if not for_sbs:
+        images_hierarchy_dict = gen_image_hierarchy(
+            images_df, ["batch_id", "plate_id", "well_id"]
+        )
+    else:
+        images_hierarchy_dict = gen_image_hierarchy(
+            images_df, ["batch_id", "plate_id", "cycle_id", "well_id"]
+        )
     levels_leaf = flatten_dict(images_hierarchy_dict)
     for levels, _ in levels_leaf:
         # setup filtered df for chunked levels

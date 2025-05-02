@@ -19,12 +19,17 @@ HIERARCHY_COLUMN_MAP_SBS = {
 
 
 def gen_legacy_channel_map(
-    plate_channel_list: list[str], exp_config: dict
+    plate_channel_list: list[str],
+    exp_config: dict,
 ) -> dict:
     return {
         exp_config["cp_config"]["nuclei_channel"]: "DNA",
         exp_config["cp_config"]["cell_channel"]: "Phalloidin",
         exp_config["cp_config"]["mito_channel"]: "ZO1",
+        "A": "A",
+        "T": "T",
+        "G": "G",
+        "C": "C",
     }
 
 
