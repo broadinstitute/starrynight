@@ -16,6 +16,7 @@ dependencies = [
   "linkml>=1.8",
   "pyimagej>=1.6",
   "marimo[sql]>=0.11",
+  "numpydoc"
 ]
 
 [project.optional-dependencies]
@@ -46,7 +47,7 @@ line-length = 80
 [tool.ruff.lint]
 select = ["ANN", "C90", "D", "E", "F", "I", "N", "NPY", "PTH", "TID", "UP", "W"]
 exclude = ["vendor", "src/starrynight/modules/schema.py"]
-ignore = ["D203", "D213", "D103", "D102", "E501", "ANN001", "ANN201", "F401", "D100", "D101", "D419"]  # Avoid conflicting rules; Others: skipping for now
+ignore = ["D203", "D213", "D103", "D102", "E501", "ANN101", "ANN001", "ANN201", "F401", "D100", "D101", "D419"]  # Avoid conflicting rules; Others: skipping for now
 
 [tool.basedpyright]
 typeCheckingMode = "basic"
