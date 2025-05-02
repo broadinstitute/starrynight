@@ -14,8 +14,8 @@ from starrynight.algorithms.illum_apply_sbs import (
     gen_illum_apply_sbs_load_data_by_batch_plate,
 )
 from starrynight.algorithms.illum_calc import (
-    gen_illum_calc_load_data_by_batch_plate,
-    gen_illum_calculate_cppipe_by_batch_plate,
+    gen_illum_calc_cppipe,
+    gen_illum_calc_load_data,
 )
 
 
@@ -24,25 +24,41 @@ from starrynight.algorithms.illum_calc import (
 @click.option("-o", "--out", required=True)
 @click.option("-m", "--path_mask", default=None)
 @click.option("--sbs", is_flag=True, default=False)
-def gen_illum_calc_load_data(
-    index: str, out: str, path_mask: str | None, sbs: bool
+@click.option("--use_legacy", is_flag=True, default=False)
+@click.option("--exp_config", default=None)
+def gen_illum_calc_load_data_cli(
+    index: str,
+    out: str,
+    path_mask: str | None,
+    sbs: bool,
+    use_legacy: bool,
+    exp_config: str | None,
 ) -> None:
     """Generate illum calc loaddata file.
 
     Parameters
     ----------
-    index : str | None
+    index : str
         Index path. Can be local or a cloud path.
     out : str
         Output dir. Can be local or a cloud path.
-    path_mask : str | Mask
+    path_mask : str | None
         Path prefix mask to use. Can be local or a cloud path.
-    sbs : str | Mask
+    sbs : bool
         Flag for treating as sbs images.
+    use_legacy : bool
+        Flag for using legacy names in loaddata.
+    exp_config : str | None
+        Experiment config json path. Can be local or a cloud path.
 
     """
-    gen_illum_calc_load_data_by_batch_plate(
-        AnyPath(index), AnyPath(out), path_mask, sbs
+    # If use_legacy, then exp_config path is required
+    if use_legacy:
+        assert exp_config is not None
+        exp_config = AnyPath(exp_config)
+
+    gen_illum_calc_load_data(
+        AnyPath(index), AnyPath(out), path_mask, sbs, use_legacy, exp_config
     )
 
 
@@ -51,7 +67,10 @@ def gen_illum_calc_load_data(
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
 @click.option("--sbs", is_flag=True, default=False)
-def gen_illum_calc_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) -> None:
+@click.option("--use_legacy", is_flag=True, default=False)
+def gen_illum_calc_cppipe_cli(
+    loaddata: str, out: str, workspace: str, sbs: bool, use_legacy: bool
+) -> None:
     """Generate illum calc cppipe file.
 
     Parameters
@@ -64,10 +83,12 @@ def gen_illum_calc_cppipe(loaddata: str, out: str, workspace: str, sbs: bool) ->
         Path to workspace directory. Can be local or a cloud path.
     sbs : str | Mask
         Flag for treating as sbs images.
+    use_legacy : bool
+        Flag for using legacy cppipe.
 
     """
-    gen_illum_calculate_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), sbs
+    gen_illum_calc_cppipe(
+        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), sbs, use_legacy
     )
 
 
@@ -126,7 +147,12 @@ def gen_illum_apply_load_data(
 @click.option("-c", "--cell", default=None)
 @click.option("--sbs", is_flag=True, default=False)
 def gen_illum_apply_cppipe(
-    loaddata: str, out: str, workspace: str, nuclei: str, cell: str | None, sbs: bool
+    loaddata: str,
+    out: str,
+    workspace: str,
+    nuclei: str,
+    cell: str | None,
+    sbs: bool,
 ) -> None:
     """Generate illum apply cppipe file.
 
@@ -175,8 +201,8 @@ def illum() -> None:
     pass
 
 
-calc.add_command(gen_illum_calc_load_data)
-calc.add_command(gen_illum_calc_cppipe)
+calc.add_command(gen_illum_calc_load_data_cli)
+calc.add_command(gen_illum_calc_cppipe_cli)
 apply.add_command(gen_illum_apply_load_data)
 apply.add_command(gen_illum_apply_cppipe)
 

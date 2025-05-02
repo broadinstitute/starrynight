@@ -5,6 +5,7 @@ import click
 from starrynight.cli.align import align
 from starrynight.cli.analysis import analysis
 from starrynight.cli.cp import invoke_cp
+from starrynight.cli.exp import exp
 from starrynight.cli.illum import illum
 from starrynight.cli.index import index
 from starrynight.cli.inv import inventory
@@ -28,3 +29,4 @@ main.add_command(segcheck)
 main.add_command(align)
 main.add_command(preprocess)
 main.add_command(analysis)
+main.add_command(exp)
