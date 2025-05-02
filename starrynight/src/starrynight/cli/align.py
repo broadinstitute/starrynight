@@ -48,7 +48,9 @@ def gen_align_load_data(
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
 @click.option("-n", "--nuclei", required=True)
-def gen_align_cppipe(loaddata: str, out: str, workspace: str, nuclei: str) -> None:
+def gen_align_cppipe(
+    loaddata: str, out: str, workspace: str, nuclei: str
+) -> None:
     """Generate align cppipe file.
 
     Parameters

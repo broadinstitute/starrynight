@@ -41,7 +41,9 @@ def create_work_unit_gen_inv(out_dir: Path | CloudPath) -> list[UnitOfWork]:
         UnitOfWork(
             inputs={},
             outputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
         )
     ]

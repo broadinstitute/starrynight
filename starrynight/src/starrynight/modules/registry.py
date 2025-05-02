@@ -1,16 +1,25 @@
 """Starrynight module registry."""
+# pyright: reportAssignmentType=false
 
 from starrynight.modules.analysis.analysis_cp import AnalysisInvokeCPModule
 from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
-from starrynight.modules.analysis.analysis_load_data import AnalysisGenLoadDataModule
+from starrynight.modules.analysis.analysis_load_data import (
+    AnalysisGenLoadDataModule,
+)
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.cp_illum_apply.apply_cp import CPApplyIllumInvokeCPModule
-from starrynight.modules.cp_illum_apply.apply_cppipe import CPApplyIllumGenCPPipeModule
+from starrynight.modules.cp_illum_apply.apply_cp import (
+    CPApplyIllumInvokeCPModule,
+)
+from starrynight.modules.cp_illum_apply.apply_cppipe import (
+    CPApplyIllumGenCPPipeModule,
+)
 from starrynight.modules.cp_illum_apply.apply_load_data import (
     CPApplyIllumGenLoadDataModule,
 )
 from starrynight.modules.cp_illum_calc.calc_cp import CPCalcIllumInvokeCPModule
-from starrynight.modules.cp_illum_calc.calc_cppipe import CPCalcIllumGenCPPipeModule
+from starrynight.modules.cp_illum_calc.calc_cppipe import (
+    CPCalcIllumGenCPPipeModule,
+)
 from starrynight.modules.cp_illum_calc.calc_load_data import (
     CPCalcIllumGenLoadDataModule,
 )
@@ -36,16 +45,24 @@ from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
 from starrynight.modules.sbs_align.algin_cp import SBSAlignInvokeCPModule
 from starrynight.modules.sbs_align.algin_cppipe import SBSAlignGenCPPipeModule
-from starrynight.modules.sbs_align.algin_load_data import SBSAlignGenLoadDataModule
-from starrynight.modules.sbs_illum_apply.apply_cp import SBSApplyIllumInvokeCPModule
+from starrynight.modules.sbs_align.algin_load_data import (
+    SBSAlignGenLoadDataModule,
+)
+from starrynight.modules.sbs_illum_apply.apply_cp import (
+    SBSApplyIllumInvokeCPModule,
+)
 from starrynight.modules.sbs_illum_apply.apply_cppipe import (
     SBSApplyIllumGenCPPipeModule,
 )
 from starrynight.modules.sbs_illum_apply.apply_load_data import (
     SBSApplyIllumGenLoadDataModule,
 )
-from starrynight.modules.sbs_illum_calc.calc_cp import SBSCalcIllumInvokeCPModule
-from starrynight.modules.sbs_illum_calc.calc_cppipe import SBSCalcIllumGenCPPipeModule
+from starrynight.modules.sbs_illum_calc.calc_cp import (
+    SBSCalcIllumInvokeCPModule,
+)
+from starrynight.modules.sbs_illum_calc.calc_cppipe import (
+    SBSCalcIllumGenCPPipeModule,
+)
 from starrynight.modules.sbs_illum_calc.calc_load_data import (
     SBSCalcIllumGenLoadDataModule,
 )
@@ -58,7 +75,9 @@ from starrynight.modules.sbs_pre_segcheck.pre_segcheck_cppipe import (
 from starrynight.modules.sbs_pre_segcheck.pre_segcheck_load_data import (
     SBSPreSegcheckGenLoadDataModule,
 )
-from starrynight.modules.sbs_preprocess.preprocess_cp import SBSPreprocessInvokeCPModule
+from starrynight.modules.sbs_preprocess.preprocess_cp import (
+    SBSPreprocessInvokeCPModule,
+)
 from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
     SBSPreprocessGenCPPipeModule,
 )
