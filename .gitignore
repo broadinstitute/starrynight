@@ -167,3 +167,5 @@ result
 __marimo__/
 docs/architecture/transcripts/
 .jupyter_ystore.db
+
+**/.claude/settings.local.json
