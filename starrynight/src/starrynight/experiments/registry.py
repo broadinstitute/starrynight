@@ -1,4 +1,5 @@
 """Starrynight experiments registry."""
+# pyright: reportAssignmentType=false
 
 from starrynight.experiments.common import Experiment
 from starrynight.experiments.pcp_generic import PCPGeneric

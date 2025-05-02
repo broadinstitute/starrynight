@@ -1,7 +1,7 @@
 """PCP Experiment."""
+# pyright: reportCallIssue=false
 
 from pathlib import Path
-from typing import Self
 
 import polars as pl
 from cloudpathlib import CloudPath
@@ -11,6 +11,11 @@ from starrynight.experiments.common import (
     AcquisitionOrderType,
     Experiment,
     ImageFrameType,
+)
+from starrynight.utils.dfutils import (
+    filter_images,
+    get_channels_from_df,
+    select_column_unique_vals,
 )
 
 
@@ -46,12 +51,17 @@ class PCPGenericInitConfig(BaseModel):
     """PCP generic config for auto init from index."""
 
     barcode_csv_path: Path | CloudPath
+    use_legacy: bool = Field(False)
     cp_img_overlap_pct: int = Field(10)
     cp_img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
-    cp_acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+    cp_acquisition_order: AcquisitionOrderType = Field(
+        AcquisitionOrderType.SNAKE
+    )
     sbs_img_overlap_pct: int = Field(10)
     sbs_img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
-    sbs_acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+    sbs_acquisition_order: AcquisitionOrderType = Field(
+        AcquisitionOrderType.SNAKE
+    )
     cp_nuclei_channel: str = Field("DAPI")
     cp_cell_channel: str = Field("CELL")
     cp_mito_channel: str = Field("MITO")
@@ -65,12 +75,17 @@ class PCPGeneric(Experiment):
 
     sbs_config: SBSConfig
     cp_config: CPConfig
+    use_legacy: bool
 
     # users should not access it directly
     init_config_: PCPGenericInitConfig | None = None
 
     @staticmethod
-    def from_index(index_path: Path, init_config: dict) -> Self:
+    def get_init_config() -> PCPGenericInitConfig:
+        return PCPGenericInitConfig(barcode_csv_path=Path())
+
+    @staticmethod
+    def from_index(index_path: Path, init_config: dict) -> "PCPGeneric":
         """Configure experiment with index."""
         init_config_parsed = PCPGenericInitConfig.model_validate(init_config)
         if index_path.name.endswith(".csv"):
@@ -79,19 +94,13 @@ class PCPGeneric(Experiment):
             index_df = pl.scan_parquet(index_path)
 
         # Get dataset_id from index
-        dataset_id = (
-            index_df.select(pl.col("dataset_id")).unique().collect().rows()[0][0]
-        )
+        dataset_id = select_column_unique_vals(index_df, "dataset_id")[0]
 
         # Filter for CP images
-        cp_images_df = index_df.filter(
-            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        )
+        cp_images_df = filter_images(index_df)
 
         # Filter for sbs images
-        sbs_images_df = index_df.filter(
-            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        )
+        sbs_images_df = filter_images(index_df, True)
 
         # Construct CP config
 
@@ -106,19 +115,14 @@ class PCPGeneric(Experiment):
         )
 
         # Extract channel list
-        cp_channel_lists = (
-            cp_images_df.select(pl.col("channel_dict"))
-            .collect()
-            .to_dict()["channel_dict"]
-        )
-        # unique list of list adapted from https://stackoverflow.com/questions/3724551/uniqueness-for-list-of-lists
-        cp_channel_list = [list(x) for x in set(tuple(x) for x in cp_channel_lists)]
-
+        cp_channel_list = get_channels_from_df(cp_images_df)
         # Construct SBS config
 
         # Extract images per well
         sbs_im_per_well = (
-            sbs_images_df.group_by("batch_id", "plate_id", "cycle_id", "well_id")
+            sbs_images_df.group_by(
+                "batch_id", "plate_id", "cycle_id", "well_id"
+            )
             .agg(pl.col("key").count())
             .collect()
             .select(pl.col("key"))
@@ -133,21 +137,17 @@ class PCPGeneric(Experiment):
         )
 
         # Extract channel list
-        sbs_channel_lists = (
-            cp_images_df.select(pl.col("channel_dict"))
-            .collect()
-            .to_dict()["channel_dict"]
-        )
-        # unique list of list adapted from https://stackoverflow.com/questions/3724551/uniqueness-for-list-of-lists
-        sbs_channel_list = [list(x) for x in set(tuple(x) for x in sbs_channel_lists)]
+        sbs_channel_list = get_channels_from_df(sbs_images_df)
+
         return PCPGeneric(
             dataset_id=dataset_id,
-            index_path=index_path,
+            index_path=index_path.resolve(),
+            use_legacy=init_config_parsed.use_legacy,
             cp_config=CPConfig(
                 im_per_well=cp_im_per_well,
                 img_overlap_pct=init_config_parsed.cp_img_overlap_pct,
                 img_frame_type=init_config_parsed.cp_img_frame_type,
-                channel_list=cp_channel_list[0],
+                channel_list=cp_channel_list,
                 acquisition_order=init_config_parsed.cp_acquisition_order,
                 nuclei_channel=init_config_parsed.cp_nuclei_channel,
                 cell_channel=init_config_parsed.cp_cell_channel,
@@ -158,7 +158,7 @@ class PCPGeneric(Experiment):
                 im_per_well=sbs_im_per_well,
                 img_overlap_pct=init_config_parsed.sbs_img_overlap_pct,
                 img_frame_type=init_config_parsed.sbs_img_frame_type,
-                channel_list=sbs_channel_list[0],
+                channel_list=sbs_channel_list,
                 acquisition_order=init_config_parsed.sbs_acquisition_order,
                 barcode_csv_path=init_config_parsed.barcode_csv_path,
                 nuclei_channel=init_config_parsed.sbs_nuclei_channel,

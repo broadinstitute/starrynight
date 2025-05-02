@@ -1,15 +1,8 @@
 """Common experiment schemas."""
 
-from abc import ABC, abstractstaticmethod
+from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
-from typing import Unpack
-
-# Use a try block for backwards compatibility
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
 
 from cloudpathlib.cloudpath import CloudPath
 from pydantic import BaseModel
@@ -27,8 +20,16 @@ class Experiment(BaseModel, ABC):
     # users should not access it directly
     init_config_: BaseModel | None = None
 
-    @abstractstaticmethod
-    def from_index(index_path: Path | CloudPath, **kwargs: Unpack) -> Self:
+    @staticmethod
+    @abstractmethod
+    def get_init_config() -> BaseModel:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def from_index(
+        index_path: Path | CloudPath, init_config: dict
+    ) -> "Experiment":
         """Create experiment schema from index."""
         pass
 
@@ -37,7 +38,7 @@ class DummyExperiment(Experiment):
     """DummyExperiment to bootstrap pipeline configuration."""
 
     @staticmethod
-    def from_index(index_path: Path) -> Self:
+    def from_index(index_path: Path) -> "DummyExperiment":
         """Configure experiment with index."""
         raise NotImplementedError
 
