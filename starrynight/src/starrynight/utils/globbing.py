@@ -88,7 +88,7 @@ def get_files_by(
 
 
 def flatten_dict(
-    nested_dict: dict, path: list[str] = []
+    nested_dict: dict | list, path: list[str] = []
 ) -> list[tuple[list[str], list]]:
     """Flattens a nested dictionary into a list of tuples.
 
@@ -99,7 +99,7 @@ def flatten_dict(
 
     Parameters
     ----------
-    nested_dict : dict
+    nested_dict : dict | list
         The dictionary to flatten. It can be arbitrarily nested and contain lists
         of files as values at the deepest levels.
 
