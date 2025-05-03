@@ -6,20 +6,18 @@ A curated collection of CellProfiler pipelines that serve as references for the 
 
 This repository contains carefully selected reference implementations of CellProfiler pipelines for the PCPIP workflow. These reference pipelines document standard configurations and variations for processing pooled cell painting images, and may be used as test fixtures for the StarryNight pipeline parser and validation tools.
 
-Original location: [StarryNight pcpip-pipelines](https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines)
-
 For full context, see the [original PCPIP repository pipelines](https://github.com/broadinstitute/pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles).
 
-> **Note on Pipeline Structures**: These pipelines have been reviewed as suitable test fixtures by the PCPIP workflow experts. While some pipelines use unusual approaches to object identification and handling (particularly in pipelines 3, 7, and 9), these aspects don't affect their suitability as test fixtures and reference implementations.
+> **Note on Pipeline Structures**: These pipelines have been reviewed as suitable test fixtures by the PCPIP workflow experts. While some pipelines use [unusual](https://github.com/broadinstitute/starrynight/issues/73#issuecomment-2831353285) approaches to object identification and handling (particularly in pipelines 3, 7, and 9), these aspects don't affect their suitability as test fixtures and reference implementations.
 
 ## Directory Structure
 
-| Directory | Description |
-|-----------|-------------|
-| `/` (root) | Reference pipeline files (prefixed with `ref_`) |
-| `_pcpip_12cycles/` | Original 12-cycle pipelines from PCPIP |
-| `_refsource/` | Source pipeline variants with comparison diffs |
-| `_ref_graph_format/` | Pipeline visualizations (JSON, DOT, SVG, PNG) |
+| Directory            | Description                                     |
+| -------------------- | ----------------------------------------------- |
+| `/` (root)           | Reference pipeline files (prefixed with `ref_`) |
+| `_pcpip_12cycles/`   | Original 12-cycle pipelines from PCPIP          |
+| `_refsource/`        | Source pipeline variants with comparison diffs  |
+| `_ref_graph_format/` | Pipeline visualizations (JSON, DOT, SVG, PNG)   |
 
 ## Reference Pipelines Overview
 
@@ -71,7 +69,7 @@ These visualizations help understand pipeline structure without requiring CellPr
 <details>
 <summary>Click to expand details on pipeline selection</summary>
 
-Pipeline variants in `_refsource` are from `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`. These variants were compared to select the most appropriate reference implementations. Selection decisions for each pipeline were based on detailed comparisons documented in the diff files.
+Pipeline variants in `_refsource` are from `s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH`. These variants were compared to select the most appropriate reference implementations.
 
 ```sh
 cd _refsource
@@ -114,7 +112,12 @@ The reference pipelines were further modified by hand to:
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
 
-See the [commit history](https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-pipelines/) for details on these edits.
+You can view the commit history of specific pipeline files using GitHub, for example:
+```
+git log --follow -- tests/pcpip-pipelines/ref_1_CP_Illum.cppipe
+```
+
+Or view the history through GitHub's interface by clicking on a file and then selecting "History" or "Blame".
 </details>
 
 ## Appendix: Pipeline Comparison Details
