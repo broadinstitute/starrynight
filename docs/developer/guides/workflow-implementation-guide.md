@@ -141,27 +141,20 @@ The system is designed to flexibly adapt to different numbers of channels, and t
 To change the arrangement of modules in a workflow:
 
 1. **Adding a module**:
-
-   - Import the new module class
-   - Create an instance using its `from_config()` method
-   - Connect its inputs to outputs from preceding modules
-   - Add it to your pipeline composition
-
+      - Import the new module class
+      - Create an instance using its `from_config()` method
+      - Connect its inputs to outputs from preceding modules
+      - Add it to your pipeline composition
 2. **Removing a module**:
-
-   - Simply omit it from your pipeline composition
-   - Ensure any dependent modules are either removed or reconfigured
-
+      - Simply omit it from your pipeline composition
+      - Ensure any dependent modules are either removed or reconfigured
 3. **Reordering modules**:
-
-   - Change the order in your pipeline composition
-   - Update input/output connections to maintain data flow
-
+      - Change the order in your pipeline composition
+      - Update input/output connections to maintain data flow
 4. **Creating modules with interconnected inputs/outputs**:
-
-   - Access a module's outputs via its `outputs` dictionary
-   - Pass these as parameters when configuring dependent modules
-   - Example: `module_b = ModuleB.from_config(data_config, experiment, input_path=module_a.outputs["output_path"])`
+      - Access a module's outputs via its `outputs` dictionary
+      - Pass these as parameters when configuring dependent modules
+      - Example: `module_b = ModuleB.from_config(data_config, experiment, input_path=module_a.outputs["output_path"])`
 
 The reference implementation demonstrates these patterns throughout, with each module being configured based on the outputs of previous modules, creating a connected workflow.
 
