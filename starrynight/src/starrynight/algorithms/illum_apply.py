@@ -57,16 +57,23 @@ from cellprofiler_core.constants.modules.load_data import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.pipeline.io import dump as dumpit
-from cloudpathlib import CloudPath
+from cellprofiler_core.preferences import json
+from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.modules.cp_illum_calc.constants import (
     CP_ILLUM_CALC_OUT_PATH_SUFFIX,
 )
+from starrynight.templates import get_templates_path
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
+    filter_df_by_hierarchy,
+    filter_images,
     gen_image_hierarchy,
+    gen_legacy_channel_map,
     get_channels_by_batch_plate,
+    get_channels_from_df,
+    get_default_path_prefix,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
 
@@ -75,36 +82,61 @@ from starrynight.utils.globbing import flatten_dict, get_files_by
 ###############################
 
 
-def write_loaddata(
+def write_loaddata_illum_apply(
     images_df: pl.DataFrame,
     plate_channel_list: list[str],
     illum_by_channel_dict: dict[str, Path],
     path_mask: str,
     f: TextIOWrapper,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
-    # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+
+    # Setup metadata headers
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
     ]
-    filename_heads = [f"FileName_Orig{col}" for col in plate_channel_list]
-    frame_heads = [f"Frame_Orig{col}" for col in plate_channel_list]
-    pathname_heads = [f"PathName_Orig{col}" for col in plate_channel_list]
+
+    if use_legacy:
+        # Load experiment config
+        exp_config = json.loads(exp_config_path.read_text())
+
+        # setup legacy_channel_map
+        legacy_channel_map = gen_legacy_channel_map(
+            plate_channel_list, exp_config
+        )
+
+        # Adapt channel names in all the required lists
+        plate_channel_list = [
+            legacy_channel_map[ch] for ch in plate_channel_list
+        ]
+
+        illum_by_channel_dict = {
+            legacy_channel_map[ch]: AnyPath(
+                str(v.resolve()).replace(ch, legacy_channel_map[ch])
+            )
+            for ch, v in illum_by_channel_dict.items()
+        }
+
+    # Setup FileName, PathName and FrameName headers
+    filename_heads = [f"FileName_Orig{ch}" for ch in plate_channel_list]
+    frame_heads = [f"Frame_Orig{ch}" for ch in plate_channel_list]
+    pathname_heads = [f"PathName_Orig{ch}" for ch in plate_channel_list]
+
     # Add illum apply specific columns
-    illum_pathname_heads = [
-        f"PathName_Illum{col}" for col in plate_channel_list
-    ]
+    illum_pathname_heads = [f"PathName_Illum{ch}" for ch in plate_channel_list]
     # Assuming that paths already resolve with the path mask applied
     illum_pathname_values = [
         illum_by_channel_dict[ch].parent.resolve().__str__()
         for ch in plate_channel_list
     ]
-    illum_filename_heads = [
-        f"FileName_Illum{col}" for col in plate_channel_list
-    ]
+    illum_filename_heads = [f"FileName_Illum{ch}" for ch in plate_channel_list]
     illum_filename_values = [
         illum_by_channel_dict[ch].name.__str__() for ch in plate_channel_list
     ]
+
+    # Write the headers first
     loaddata_writer.writerow(
         [
             *metadata_heads,
@@ -115,8 +147,15 @@ def write_loaddata(
             *illum_pathname_heads,
         ]
     )
-    for index in images_df.to_dicts():
+
+    # Iterate over index and add all the files
+    for index in images_df.collect().to_dicts():
         index = PCPIndex(**index)
+        assert index.channel_dict is not None
+        if use_legacy:
+            index.channel_dict = [
+                legacy_channel_map[ch] for ch in index.channel_dict
+            ]
         # make sure frame heads are matched with their order in the filenames
         frame_index = [
             index.channel_dict.index(channel.replace("Frame_Orig", ""))
@@ -150,90 +189,13 @@ def write_loaddata(
         )
 
 
-def write_loaddata_csv_by_batch_plate(
-    images_df: pl.DataFrame,
-    out_path: Path | CloudPath,
-    illum_path: Path | CloudPath,
-    path_mask: str,
-    batch: str,
-    plate: str,
-) -> None:
-    pass
-
-    # Setup channel list for that plate
-    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
-    # setup df by filtering for plate id
-    df_plate = images_df.filter(
-        pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
-    )
-
-    # find illum files for this plate
-    illum_by_channel_dict = {
-        ch: illum_path.joinpath(f"{batch}_{plate}_IllumOrig{ch}.npy")
-        for ch in plate_channel_list
-    }
-
-    # Write load data csv for the plate
-    batch_out_path = out_path.joinpath(batch)
-    batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"illum_apply_{batch}_{plate}.csv").open(
-        "w"
-    ) as f:
-        write_loaddata(
-            df_plate, plate_channel_list, illum_by_channel_dict, path_mask, f
-        )
-
-
-def write_loaddata_csv_by_batch_plate_cycle(
-    images_df: pl.DataFrame,
-    out_path: Path | CloudPath,
-    illum_path: Path | CloudPath,
-    path_mask: str,
-    batch: str,
-    plate: str,
-    cycle: str,
-) -> None:
-    pass
-
-    # Setup channel list for that plate
-    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
-    # setup df by filtering for plate id
-    df_batch_plate_cycle = images_df.filter(
-        pl.col("batch_id").eq(batch)
-        & pl.col("plate_id").eq(plate)
-        & pl.col("cycle_id").eq(cycle)
-    )
-
-    # find illum files for this plate and cycle
-    illum_by_channel_dict = {
-        ch: illum_path.joinpath(
-            f"{batch}_{plate}_{int(cycle)}_IllumOrig{ch}.npy"
-        )
-        for ch in plate_channel_list
-    }
-
-    # Write load data csv for the plate
-    batch_plate_out_path = out_path.joinpath(batch, plate)
-    batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_plate_out_path.joinpath(
-        f"illum_calc_{batch}_{plate}_{int(cycle):02}.csv"
-    ).open("w") as f:
-        write_loaddata(
-            df_batch_plate_cycle,
-            plate_channel_list,
-            illum_by_channel_dict,
-            path_mask,
-            f,
-        )
-
-
-def gen_illum_apply_load_data_by_batch_plate(
+def gen_illum_apply_load_data(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
     illum_path: Path | CloudPath | None = None,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     """Generate load data for illum calc pipeline.
 
@@ -247,6 +209,10 @@ def gen_illum_apply_load_data_by_batch_plate(
         Path prefix mask to use.
     illum_path : Path | CloudPath
         Path | CloudPath to illum directory.
+    use_legacy : bool
+        Use legacy cppipe and loaddata.
+    exp_config_path : Path | CloudPath
+        Path to experiment config json path.
 
     """
     # Construct illum path if not given
@@ -254,35 +220,54 @@ def gen_illum_apply_load_data_by_batch_plate(
         illum_path = index_path.parents[1].joinpath(
             CP_ILLUM_CALC_OUT_PATH_SUFFIX
         )
-    df = pl.read_parquet(index_path.resolve().__str__())
+
+    # Load index
+    df = pl.scan_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(
-        pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-    )
-
-    images_hierarchy_dict = gen_image_hierarchy(images_df)
+    images_df = filter_images(df, False)
 
     # Query default path prefix
-    default_path_prefix = (
-        images_df.select("prefix").unique().to_series().to_list()[0]
-    )
+    default_path_prefix: str = get_default_path_prefix(images_df)
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
 
-    # Convert path mask to str
-    if isinstance(path_mask, Path | CloudPath):
-        path_mask = path_mask.resolve().__str__()
+    # Setup chunking and write loaddata for parallel processing
+    images_hierarchy_dict = gen_image_hierarchy(
+        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
+    )
+    levels_leaf = flatten_dict(images_hierarchy_dict)
+    for levels, _ in levels_leaf:
+        # setup filtered df for chunked levels
+        levels_df = filter_df_by_hierarchy(images_df, levels, False)
 
-    # Setup chunking and write loaddata for each batch/plate
-    for batch in images_hierarchy_dict.keys():
-        for plate in images_hierarchy_dict[batch].keys():
-            # Write loaddata assuming no image nesting with cycles
-            write_loaddata_csv_by_batch_plate(
-                images_df, out_path, illum_path, path_mask, batch, plate
+        # Setup channel list for this level
+        plate_channel_list = get_channels_from_df(levels_df)
+
+        # Find illum files for this level
+        illum_by_channel_dict = {
+            ch: illum_path.joinpath(f"{levels[1]}_Illum{ch}.npy")
+            for ch in plate_channel_list
+        }
+
+        # Construct filename for the loaddata csv
+        level_out_path = out_path.joinpath(
+            f"{'_'.join(levels)}_illum_apply.csv"
+        )
+
+        with level_out_path.open("w") as f:
+            write_loaddata_illum_apply(
+                levels_df,
+                plate_channel_list,
+                illum_by_channel_dict,
+                path_mask,
+                f,
+                use_legacy,
+                exp_config_path,
             )
+    return out_path
 
 
 ###################################
@@ -559,12 +544,13 @@ def generate_illum_apply_pipeline(
     return pipeline
 
 
-def gen_illum_apply_cppipe_by_batch_plate(
+def gen_illum_apply_cppipe(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
     nuclei_channel: str,
     cell_channel: str,
+    use_legacy: bool = False,
 ) -> None:
     """Write out illumination apply pipeline to file.
 
@@ -580,19 +566,28 @@ def gen_illum_apply_cppipe_by_batch_plate(
         Channel to use for nuclei segmentation
     cell_channel : str
         Channel to use for cell segmentation
+    use_legacy : str | None
+        Use legacy illumination apply pipeline.
 
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
 
-    # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
+    filename = "illum_apply_painting.cppipe"
+
+    # Write old cppipe and return early if use_old is true
+    if use_legacy:
+        ref_cppipe = get_templates_path() / "cppipe/ref_2_CP_Apply_Illum.cppipe"
+
+        out_dir.joinpath(filename).write_text(ref_cppipe.read_text())
+        return
 
     # get one of the load data file for generating cppipe
-    _, files = flatten_dict(files_by_hierarchy)[0]
+    sample_loaddata_file = next(load_data_path.rglob("*.csv"))
+
     with CellProfilerContext(out_dir=workspace_path) as cpipe:
         cpipe = generate_illum_apply_pipeline(
-            cpipe, files[0], nuclei_channel, cell_channel
+            cpipe, sample_loaddata_file, nuclei_channel, cell_channel
         )
         filename = "illum_apply_painting.cppipe"
         with out_dir.joinpath(filename).open("w") as f:

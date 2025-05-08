@@ -12,7 +12,6 @@ dev = [
   "twine",
   "jupytext",
   "ipython",
-  "ipyflow",
   "jupyterlab",
   "jupyterlab-quarto",
   "jupyter-collaboration",
