@@ -114,10 +114,10 @@ If you want to replace one algorithm with another (for example, switching from C
 
 In the reference implementation, you would modify the segmentation step (Step 3: CP segcheck) by:
 
-  - Running the LoadData generation (like in `exec_pcp_generic_pipe.py` line 295)
-  - Skipping the CPPipe generation step (lines 312-323)
+  - Running the LoadData generation phase for CP segcheck
+  - Skipping the CPPipe generation phase
   - Creating your own custom pipeline file
-  - Modifying the invoke step to use your custom pipeline (around line 329)
+  - Modifying the invoke phase to use your custom pipeline
 
 #### Modifying an automatically generated pipeline
 
@@ -127,7 +127,7 @@ In the reference implementation, you would modify the segmentation step (Step 3:
 
 ### Scenario 2: Add New Channel
 
-Adding a new channel requires updating the experiment configuration in the `PCPGenericInitConfig` object (as seen around line 153 in the reference implementation):
+Adding a new channel requires updating the experiment configuration in the `PCPGenericInitConfig` object in the experiment configuration section of the reference implementation:
 
 1. Update the experiment configuration with the new channel mapping
 2. The LoadData module will automatically handle the new channel when generating the LoadData CSV
