@@ -10,8 +10,8 @@ from starrynight.algorithms.illum_apply import (
     gen_illum_apply_load_data,
 )
 from starrynight.algorithms.illum_apply_sbs import (
-    gen_illum_apply_sbs_cppipe_by_batch_plate,
-    gen_illum_apply_sbs_load_data_by_batch_plate,
+    gen_illum_apply_sbs_cppipe,
+    gen_illum_apply_sbs_load_data,
 )
 from starrynight.algorithms.illum_calc import (
     gen_illum_calc_cppipe,
@@ -152,9 +152,16 @@ def gen_illum_apply_load_data_cli(
             exp_config,
         )
     else:
-        assert nuclei is not None
-        gen_illum_apply_sbs_load_data_by_batch_plate(
-            AnyPath(index), AnyPath(out), path_mask, nuclei, illum
+        if use_legacy is False:
+            assert nuclei is not None
+        gen_illum_apply_sbs_load_data(
+            AnyPath(index),
+            AnyPath(out),
+            path_mask,
+            nuclei,
+            illum,
+            use_legacy,
+            exp_config,
         )
 
 
@@ -209,8 +216,12 @@ def gen_illum_apply_cppipe_cli(
     else:
         if use_legacy is False:
             assert nuclei is not None
-        gen_illum_apply_sbs_cppipe_by_batch_plate(
-            AnyPath(loaddata), AnyPath(out), AnyPath(workspace), nuclei
+        gen_illum_apply_sbs_cppipe(
+            AnyPath(loaddata),
+            AnyPath(out),
+            AnyPath(workspace),
+            nuclei,
+            use_legacy,
         )
 
 

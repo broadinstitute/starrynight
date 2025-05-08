@@ -204,7 +204,7 @@ SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle01_DAPI
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_A
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_DAPI
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle01_DAPI
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_A
@@ -224,7 +224,7 @@ SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle02_DAPI
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_A
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle02_DAPI
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle02_DAPI
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_A
@@ -244,7 +244,7 @@ SaveImages:[module_num:21|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle03_DAPI
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_A
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle03_DAPI
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle03_DAPI
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_A
@@ -264,7 +264,7 @@ SaveImages:[module_num:29|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle01_A
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_A
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_A
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle01_A
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_A
@@ -284,7 +284,7 @@ SaveImages:[module_num:30|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle01_C
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_C
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_C
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle01_C
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_C
@@ -304,7 +304,7 @@ SaveImages:[module_num:31|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle01_G
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_G
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_G
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle01_G
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_G
@@ -324,7 +324,7 @@ SaveImages:[module_num:32|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle01_T
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle01_T
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_T
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle01_T
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle01_T
@@ -344,7 +344,7 @@ SaveImages:[module_num:33|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle02_A
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle02_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle02_A
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle02_A
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle02_A
@@ -364,7 +364,7 @@ SaveImages:[module_num:34|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle02_C
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle02_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle02_C
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle02_C
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle02_C
@@ -384,7 +384,7 @@ SaveImages:[module_num:35|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle02_G
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle02_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle02_G
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle02_G
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle02_G
@@ -404,7 +404,7 @@ SaveImages:[module_num:36|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle02_T
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle02_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle02_T
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle02_T
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle02_T
@@ -424,7 +424,7 @@ SaveImages:[module_num:37|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle03_A
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle03_A_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle03_A
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle03_A
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle03_A
@@ -444,7 +444,7 @@ SaveImages:[module_num:38|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle03_C
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle03_C_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle03_C
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle03_C
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle03_C
@@ -464,7 +464,7 @@ SaveImages:[module_num:39|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle03_G
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle03_G_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle03_G
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle03_G
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle03_G
@@ -484,7 +484,7 @@ SaveImages:[module_num:40|svn_version:'Unknown'|variable_revision_number:16|show
     Select the image to save:Cycle03_T
     Select method for constructing file names:Single name
     Select image name for file prefix:Cycle03_T_PreAligned
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle03_T
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cycle03_T
     Number of digits:4
     Append a suffix to the image file name?:Yes
     Text to append to the image name:__Cyle03_T
