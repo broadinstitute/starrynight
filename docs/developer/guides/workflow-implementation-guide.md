@@ -12,6 +12,15 @@ In the context of StarryNight, a **workflow** refers to a specific scientific im
 
 Both approaches are valid ways to implement workflows, with the pipeline composition approach being more concise and efficient for production use, while the step-by-step approach provides more visibility and control for development and debugging.
 
+## Implementation as Creation and Modification
+
+In practice, implementing a workflow in StarryNight rarely means starting from scratch. Most researchers begin with an existing workflow (like those in our reference implementations) and modify it to suit their specific needs. This guide addresses both aspects of implementation:
+
+- **Modifying existing workflows**: Making changes to established workflows, from simple parameter adjustments to significant restructuring
+- **Creating new workflows**: Building workflows by combining existing modules in new ways or developing entirely new modules
+
+The skills for both overlap significantly, and many researchers progress from making small modifications to creating entirely custom workflows as their expertise grows. Throughout this guide, we'll address both scenarios, recognizing that implementation typically involves elements of both creation and modification.
+
 ## Understanding Workflow Flexibility
 
 StarryNight is designed with flexibility in mind, allowing researchers to create and modify workflows at different levels of complexity. Depending on your needs, you can:
@@ -86,12 +95,15 @@ Rather than duplicating all the code examples here, we'll focus on explaining th
 Workflows in StarryNight are built from several key components that work together:
 
 ### Data Configuration
+
 The `DataConfig` object defines paths for input data, storage, and workspace. It configures where the pipeline will look for input data and where it will store outputs and intermediate files. This configuration is used throughout the pipeline.
 
 ### Execution Backend
+
 The execution backend (typically `SnakeMakeBackend`) handles running the pipeline. It translates module definitions into executable operations and manages their execution, including scheduling, parallelization, and resource allocation.
 
 ### Experiment Configuration
+
 The experiment configuration contains metadata about your dataset and processing settings, including:
 
 - Acquisition settings (order, frame type, overlap percentage)
@@ -101,6 +113,7 @@ The experiment configuration contains metadata about your dataset and processing
 This configuration drives all subsequent module behavior without requiring repetitive parameter specification.
 
 ### Modules
+
 Modules are the building blocks of workflows. Each module:
 
 - Is configured via its `from_config()` method
@@ -109,55 +122,49 @@ Modules are the building blocks of workflows. Each module:
 - May require outputs from previous modules
 - Is executed in a containerized environment
 
-## Example Workflow Implementations
+## Choosing an Implementation Approach
 
-Looking at the reference implementations, we can see both simple and complex workflows in action:
+Both implementation approaches can create the same workflows, but they have different strengths that make them suitable for different scenarios:
 
-### Simple Workflow Pattern
+### Step-by-Step Approach
 
-The simplest workflow pattern involves:
+**Best for development, debugging, and learning:**
 
-1. Setting up basic configurations (data, execution, experiment)
-2. Creating modules one by one using their `from_config()` methods
-3. Executing each module in sequence, waiting for completion before continuing
+- Provides maximum visibility into intermediate results
+- Allows inspection of outputs between steps
+- Simplifies debugging by isolating failures to specific modules
+- Makes the data flow more explicit
 
-Each module in the PCP Generic pipeline follows a three-phase pattern specific to CellProfiler integration:
+**Example use case:** When implementing a new workflow for the first time or troubleshooting issues with specific modules
 
-1. Generate LoadData - Creates configuration data for CellProfiler
-2. Generate Pipeline - Creates the CellProfiler pipeline definition
-3. Execute Pipeline - Runs CellProfiler with the generated files
+### Pipeline Composition Approach
 
-### Complex Workflow Pattern
+**Best for production use and complex execution patterns:**
 
-For more complex workflows, the `exec_pcp_generic_full.py` example demonstrates pipeline composition capabilities through the `create_pcp_generic_pipeline` function, which is particularly helpful when dealing with complex workflows:
+- More concise implementation with less boilerplate code
+- Enables parallel execution of independent operations
+- Provides a clearer view of the entire workflow structure
+- Better represents dependencies between modules
 
-- Creates all modules in one place
-- Composes them into a pipeline with parallel execution
-- Enables complex execution patterns (parallel processing of independent steps)
-- Provides a more concise implementation for production use
+**Example use case:** When implementing a proven workflow for production use or when optimizing performance with parallel execution
 
-## Common Workflow Modification Scenarios
+## Common Implementation Scenarios
 
-### Scenario 1: Change CellProfiler Module Settings
+The following scenarios apply to both modifying existing workflows and creating new ones. Whether you're adapting a reference implementation or building something new, these patterns will help you implement workflows effectively:
 
-If you want to replace one CellProfiler module with another (for example, switching from CellProfiler's `IdentifyPrimaryObject` to `RunCellPose` for segmentation):
+### Scenario 1: Simple Changes - CellProfiler Module Settings
 
-#### Using a custom CellProfiler pipeline
+As described in the "Simple Changes" section, you can modify CellProfiler pipelines without changing Python code. When working in this scenario:
 
-  - Create your custom CellProfiler pipeline file with the different module
-  - Skip the pipeline generation step in the workflow
-  - Pass your custom pipeline file directly to the invoke module
+1. Directly edit the CellProfiler pipeline (.cppipe) files
+2. No Python workflow code changes are needed
 
-In the reference implementation, you would modify the segmentation step (Step 3: CP segcheck) by:
+For example, you can change module parameters or replace modules (such as switching from `IdentifyPrimaryObject` to `RunCellPose`) directly in the pipeline file. These changes will automatically be used the next time the workflow executes with no additional code changes required.
 
-  - Running the LoadData generation phase for CP segcheck
-  - Skipping the CPPipe generation phase
-  - Creating your own custom CellProfiler pipeline file
-  - Modifying the invoke phase to use your custom pipeline
 
-### Scenario 2: Add New Channel
+### Scenario 2: Moderate Changes - Experiment Configuration
 
-Adding a new channel requires updating the experiment configuration in the `PCPGenericInitConfig` object in the experiment configuration section of the reference implementation:
+As covered in the "Moderate Changes" section, this requires modifying the Python workflow code. For example, adding a new channel requires updating the experiment configuration in the `PCPGenericInitConfig` object:
 
 1. Update the experiment configuration with the new channel mapping
 2. The LoadData module will automatically handle the new channel when generating the LoadData CSV
@@ -166,9 +173,9 @@ Adding a new channel requires updating the experiment configuration in the `PCPG
 
 The system is designed to flexibly adapt to different numbers of channels, and the changes are isolated to the experiment configuration.
 
-### Scenario 3: Add/Remove/Reorder Modules
+### Scenario 3: Moderate Changes - Module Arrangement
 
-To change the arrangement of modules in a workflow:
+Another moderate change involves modifying the arrangement of modules in the Python workflow code:
 
 1. **Adding a module**:
       - Import the new module class
@@ -188,7 +195,9 @@ To change the arrangement of modules in a workflow:
 
 The reference implementation demonstrates these patterns throughout, with each module being configured based on the outputs of previous modules, creating a connected workflow.
 
-## Creating New Modules
+## Advanced Implementation: Creating New Modules
+
+Moving to Advanced Level 1 changes, one of the most common needs is creating entirely new modules for your workflow:
 
 To create a new module for your workflow:
 
@@ -250,7 +259,9 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
 }
 ```
 
-## Resource Configuration
+## Advanced Implementation: Resource Configuration
+
+Another Advanced Level 1 change involves specifying compute resources for your modules:
 
 Resource configuration for modules is in development. The approach uses a "unit of work" concept:
 
