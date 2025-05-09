@@ -2,27 +2,55 @@
 
 This guide provides step-by-step instructions for implementing new workflows in StarryNight.
 
+## What is a Workflow?
+
+In the context of StarryNight, a **workflow** refers to a specific scientific image processing sequence implemented using StarryNight modules. Workflows are flexible and can be implemented in different ways:
+
+1. **Step-by-step implementation**: As seen in `exec_pcp_generic_pipe.py`, where modules are individually created and executed in sequence, allowing for inspection of intermediate results.
+
+2. **Pipeline composition**: As seen in `exec_pcp_generic_full.py`, where modules are connected into a StarryNight pipeline that can be executed as a single unit, potentially with parallel operations.
+
+Both approaches are valid ways to implement workflows, with the pipeline composition approach being more concise and efficient for production use, while the step-by-step approach provides more visibility and control for development and debugging.
+
 ## Understanding Workflow Flexibility
 
 StarryNight is designed with flexibility in mind, allowing researchers to create and modify workflows at different levels of complexity. Depending on your needs, you can:
 
 ### Simple Changes (No Code Required)
 
-- **Change Algorithms Within Modules**: Replace one algorithm with another (e.g., switching from CellProfiler's "IdentifyPrimaryObject" to "RunCellPose" for segmentation)
-- **Add Channels**: The system automatically handles additional channels through the experiment configuration
-- **Update Channel Mappings**: Built-in support for nucleus, cell, and mito channel mapping to standardized internal names
+These changes involve internal modifications to CellProfiler pipelines that are wrapped by StarryNight modules, without requiring any Python code changes:
 
-### Moderate Changes (Configuration Only)
+- **Change CellProfiler Modules**: Replace one CellProfiler module with another inside a pipeline file (e.g., switching from `IdentifyPrimaryObject` to `RunCellPose` for segmentation)
+- **Adjust Module Parameters**: Modify thresholds, filters, or measurement settings within the CellProfiler pipeline file
 
-- **Experiment Configuration Updates**: Modify channel mappings, experiment parameters, and module inputs
-- **Module Input/Output Connections**: Reconfigure how modules connect to each other
-- **Pipeline Composition**: Change the order and arrangement of modules in a pipeline
+### Moderate Changes (Python Workflow Code)
+
+These changes involve modifying the Python workflow code to adjust how modules are configured and connected:
+
+- **Experiment Configuration Updates**: Modify channel mappings, experiment parameters, and module inputs in the workflow Python script
+- **Module Input/Output Connections**: Change how modules' outputs are connected to other modules' inputs in the workflow code
+- **Pipeline Composition**: Alter the order and arrangement of modules in the pipeline definition
 
 ### Advanced Changes (Code Required)
 
+Advanced changes can be divided into two levels of complexity:
+
+#### Advanced Level 1 (Module Development)
+
+This guide covers these changes, which involve extending the system while working within the existing architecture:
+
 - **Add New Modules**: Create entirely new modules for custom processing steps
-- **Extend Channel Mappings**: Add support for mapping beyond the built-in nucleus, cell, and mito channels
-- **Resource Configuration**: Specify compute resources at the task level (work in progress)
+- **Implement Custom Resource Configurations**: Specify compute resources at the task level for performance optimization
+- **Integrate External Tools**: Connect new external processing tools while maintaining the module interface pattern
+
+#### Advanced Level 2 (Core Architecture Development)
+
+These changes are beyond the scope of this workflow implementation guide, as they involve modifying the core architecture itself:
+
+- **Modify Execution Engine**: Change how StarryNight executes workflows
+- **Implement New Backends**: Add support for new execution environments
+- **Create New Pipeline Patterns**: Develop new ways to compose and orchestrate pipelines
+- **Develop Algorithm Libraries**: Build new algorithm foundations that integrate with the core system
 
 ## Reference Implementation
 
@@ -75,7 +103,7 @@ Modules are the building blocks of workflows. Each module:
 
 ## Example Workflow Implementations
 
-Looking at the reference implementation in `exec_pcp_generic_pipe.py`, we can see both simple and complex workflows in action:
+Looking at the reference implementations, we can see both simple and complex workflows in action:
 
 ### Simple Workflow Pattern
 
@@ -93,7 +121,7 @@ Each module in the PCP Generic pipeline follows a three-phase pattern specific t
 
 ### Complex Workflow Pattern
 
-For more complex workflows, StarryNight provides pipeline composition capabilities through the `create_pcp_generic_pipeline` function, which:
+For more complex workflows, the `exec_pcp_generic_full.py` example demonstrates pipeline composition capabilities through the `create_pcp_generic_pipeline` function, which is particularly helpful when dealing with complex workflows:
 
 - Creates all modules in one place
 - Composes them into a pipeline with parallel execution
@@ -102,13 +130,13 @@ For more complex workflows, StarryNight provides pipeline composition capabiliti
 
 ## Common Workflow Modification Scenarios
 
-### Scenario 1: Change Algorithm Implementation
+### Scenario 1: Change CellProfiler Module Settings
 
-If you want to replace one algorithm with another (for example, switching from CellProfiler's `IdentifyPrimaryObject` to `RunCellPose` for segmentation):
+If you want to replace one CellProfiler module with another (for example, switching from CellProfiler's `IdentifyPrimaryObject` to `RunCellPose` for segmentation):
 
-#### Using a legacy pipeline with a different algorithm
+#### Using a custom CellProfiler pipeline
 
-  - Create your custom pipeline file with the new algorithm
+  - Create your custom CellProfiler pipeline file with the different module
   - Skip the pipeline generation step in the workflow
   - Pass your custom pipeline file directly to the invoke module
 
@@ -116,14 +144,8 @@ In the reference implementation, you would modify the segmentation step (Step 3:
 
   - Running the LoadData generation phase for CP segcheck
   - Skipping the CPPipe generation phase
-  - Creating your own custom pipeline file
+  - Creating your own custom CellProfiler pipeline file
   - Modifying the invoke phase to use your custom pipeline
-
-#### Modifying an automatically generated pipeline
-
-   - Extend the appropriate CPPipe generation module
-   - Override the pipeline template with your modified version
-   - Use your extended module in the workflow
 
 ### Scenario 2: Add New Channel
 
