@@ -308,99 +308,23 @@ The step-by-step reference implementation demonstrates these patterns throughout
 
 ## Advanced Implementation: Creating New Modules
 
-Moving to Advanced Level 1 changes, one of the most common needs is creating entirely new modules for your workflow:
+!!! note "Work in Progress"
+    The detailed documentation for creating new modules is under development and will be added in a future update. This section will cover Advanced Level 1 changes including:
 
-To create a new module for your workflow:
+    - Creating module classes that follow the StarryNight patterns
+    - Defining module specifications with proper inputs and outputs
+    - Implementing the required methods like `uid()` and `from_config()`
+    - Registering modules in the module registry
+    - Best practices for module development and testing
 
-```python
-from starrynight.modules.base import StarrynightModule
-from starrynight.modules.specs import SpecContainer, TypeInput, TypeOutput, TypeEnum
-from starrynight.config import DataConfig
-from starrynight.experiments import Experiment
-
-class YourModuleClass(StarrynightModule):
-    @staticmethod
-    def uid() -> str:
-        """Return module unique id."""
-        return "your_module_unique_id"
-
-    @staticmethod
-    def _spec() -> SpecContainer:
-        """Return module default spec."""
-        return SpecContainer(
-            inputs=[
-                TypeInput(
-                    name="input_path",
-                    type=TypeEnum.files,
-                    description="Path to input files",
-                    optional=False,
-                ),
-            ],
-            outputs=[
-                TypeOutput(
-                    name="output_path",
-                    type=TypeEnum.files,
-                    description="Path for output files",
-                    optional=False,
-                ),
-            ],
-        )
-
-    @classmethod
-    def from_config(cls, data_config: DataConfig, experiment: Experiment, spec=None):
-        """Create module from configuration."""
-        # Use default spec if none provided
-        if spec is None:
-            spec = cls._spec()
-
-        # Update paths based on data config
-        spec.update_paths(data_config)
-
-        # Define the pipeline
-        pipe = create_your_module_pipe(spec, data_config, experiment)
-
-        # Create and return module instance
-        return cls(spec, pipe, [])
-
-# Register your module in the registry
-# In starrynight/modules/registry.py:
-MODULE_REGISTRY: dict[str, StarrynightModule] = {
-    # Existing modules...
-    YourModuleClass.uid(): YourModuleClass,
-}
-```
+    In the meantime, refer to the [Practical Integration](../../architecture/08_practical_integration.md) document for some guidance on module structure, and examine existing modules in the codebase as reference implementations.
 
 ## Advanced Implementation: Resource Configuration
 
-Another Advanced Level 1 change involves specifying compute resources for your modules:
+!!! note "Work in Progress"
+    The detailed documentation for resource configuration is under development and will be added in a future update. This feature provides ways to specify compute resources (CPU cores, memory, GPU) at the module level, allowing for more efficient execution of resource-intensive tasks.
 
-Resource configuration for modules is in development. The approach uses a "unit of work" concept:
-
-```python
-# Future API for resource configuration (work in progress)
-class YourModuleWithResources(StarrynightModule):
-    # ... other methods ...
-
-    @classmethod
-    def from_config(cls, data_config: DataConfig, experiment: Experiment, spec=None):
-        # ... setup code ...
-
-        # Define the pipeline with resource requirements
-        pipe = create_your_module_pipe(
-            spec,
-            data_config,
-            experiment,
-            resources={
-                "cpu": 2,       # 2 CPU cores
-                "memory": 4096,  # 4 GB RAM
-                "gpu": 0,       # No GPU
-            }
-        )
-
-        # ... rest of the method ...
-```
-
-The executor will use these resource hints to make scheduling decisions, but the end user doesn't need to manage resources directly.
+    This section will be expanded when the resource configuration API is finalized.
 
 ## References
 
