@@ -210,25 +210,101 @@ The system is designed to flexibly adapt to channel configuration changes, and t
 
 ### Scenario 3: Moderate Changes - Module Arrangement
 
-Another moderate change involves modifying the arrangement of modules in the Python workflow code:
+Another moderate change involves modifying the arrangement of modules in the Python workflow code. Here we'll focus on the step-by-step implementation approach, while noting how these changes would translate to the pipeline composition approach.
+
+#### Step-by-Step Implementation Approach
 
 1. **Adding a module**:
       - Import the new module class
-      - Create an instance using its `from_config()` method
-      - Connect its inputs to outputs from preceding modules
-      - Add it to your pipeline composition
-2. **Removing a module**:
-      - Simply omit it from your pipeline composition
-      - Ensure any dependent modules are either removed or reconfigured
-3. **Reordering modules**:
-      - Change the order in your pipeline composition
-      - Update input/output connections to maintain data flow
-4. **Creating modules with interconnected inputs/outputs**:
-      - Access a module's outputs via its `outputs` dictionary
-      - Pass these as parameters when configuring dependent modules
-      - Example: `module_b = ModuleB.from_config(data_config, experiment, input_path=module_a.outputs["output_path"])`
+      - Create an instance using its `from_config()` method, connecting to outputs from preceding modules
+        ```python
+        from starrynight.modules.new_module import NewModule
 
-The reference implementation demonstrates these patterns throughout, with each module being configured based on the outputs of previous modules, creating a connected workflow.
+        # Connect the new module to outputs from an existing module
+        new_module = NewModule.from_config(
+            data_config,
+            experiment,
+            input_path=existing_module.outputs["output_path"]
+        )
+        ```
+      - Set up execution with `SnakeMakeBackend(module.pipe, backend_config, run_dir, mounts)`
+      - Run the module with `run = exec_backend.run()` and `run.wait()`
+
+2. **Removing a module**:
+      - Remove the module import statement (if no longer needed)
+      - Remove the module creation code (`module = ModuleClass.from_config(...)`)
+      - Remove the execution code (`exec_backend = SnakeMakeBackend(...)`, `run = exec_backend.run()`, etc.)
+      - Update any dependent modules that used this module's outputs:
+        ```python
+        # Before removal - module_b depends on module_a's output
+        module_b = ModuleB.from_config(data_config, experiment, input_path=module_a.outputs["output_path"])
+
+        # After removal - module_b needs an alternative input source
+        module_b = ModuleB.from_config(data_config, experiment, input_path=alternative_input_path)
+        ```
+
+3. **Reordering modules**:
+      - Move the entire module creation and execution block to the desired position in your code
+      - Ensure data dependencies are respected (modules must be executed after any modules they depend on)
+      - Update input/output connections if necessary:
+        ```python
+        # Original order: A → B → C
+        module_a = ModuleA.from_config(data_config, experiment)
+        # Execute module_a...
+
+        module_b = ModuleB.from_config(data_config, experiment, input=module_a.outputs["output"])
+        # Execute module_b...
+
+        module_c = ModuleC.from_config(data_config, experiment, input=module_b.outputs["output"])
+        # Execute module_c...
+
+        # Reordered to: A → C → B (assuming C doesn't depend on B)
+        module_a = ModuleA.from_config(data_config, experiment)
+        # Execute module_a...
+
+        module_c = ModuleC.from_config(data_config, experiment, input=module_a.outputs["output"])
+        # Execute module_c...
+
+        module_b = ModuleB.from_config(data_config, experiment, input=module_a.outputs["output"])
+        # Execute module_b...
+        ```
+
+
+#### How This Translates to Pipeline Composition
+
+In the pipeline composition approach, these same changes would be implemented differently. Here's a simplified example based on the pipeline composition approach used in `exec_pcp_generic_full.py`:
+
+```python
+# Pipeline composition showing module arrangement
+def create_custom_pipeline(data_config, experiment):
+    # Define all modules in one place
+    module_list = [
+        # Create modules with connections between them
+        module_a := ModuleA.from_config(data_config, experiment),
+        module_b := ModuleB.from_config(data_config, experiment),
+        module_c := ModuleC.from_config(data_config, experiment,
+                                       input_path=module_a.outputs["output_path"]),
+        # Add a new module connected to existing ones
+        module_d := NewModule.from_config(data_config, experiment,
+                                         input_path=module_b.outputs["output_path"])
+    ]
+
+    # Define execution pattern (sequential and parallel components)
+    return module_list, Seq([
+        # Sequential execution of A and B
+        Seq([module_a.pipe, module_b.pipe]),
+        # Then parallel execution of C and D (both depend on previous modules)
+        Parallel([module_c.pipe, module_d.pipe])
+    ])
+```
+
+Changes in the pipeline composition approach involve:
+
+- **Adding or removing modules**: Update both the module list and the pipeline structure that defines execution flow
+- **Reordering modules**: Change the arrangement in the `Seq` or `Parallel` composition structures
+- **Module connections**: Still configured through the `from_config()` method parameters, but execution order is defined by the pipeline structure
+
+The step-by-step reference implementation demonstrates these patterns throughout, with each module being configured based on the outputs of previous modules, creating a connected workflow.
 
 ## Advanced Implementation: Creating New Modules
 
