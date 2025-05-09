@@ -164,14 +164,49 @@ For example, you can change module parameters or replace modules (such as switch
 
 ### Scenario 2: Moderate Changes - Experiment Configuration
 
-As covered in the "Moderate Changes" section, this requires modifying the Python workflow code. For example, adding a new channel requires updating the experiment configuration in the `PCPGenericInitConfig` object:
+As covered in the "Moderate Changes" section, this requires modifying the Python workflow code. For example, configuring different channels requires updating the experiment configuration in the `PCPGenericInitConfig` object:
 
-1. Update the experiment configuration with the new channel mapping
-2. The LoadData module will automatically handle the new channel when generating the LoadData CSV
-3. When using automatically generated pipelines, they will adapt to include the new channel
-4. If using legacy pipelines, ensure they are designed to handle the additional channel
+```python
+# Original experiment configuration with default channel mappings
+pcp_exp_init = PCPGenericInitConfig(
+    barcode_csv_path=barcode_csv_path,
+    cp_acquisition_order=AcquisitionOrderType.SNAKE,
+    cp_img_frame_type=ImageFrameType.ROUND,
+    cp_img_overlap_pct=10,
+    # Default channel mappings
+    cp_nuclei_channel="DAPI",
+    cp_cell_channel="PhalloAF750",
+    cp_mito_channel="ZO1AF488",
+    # SBS settings omitted for brevity
+)
 
-The system is designed to flexibly adapt to different numbers of channels, and the changes are isolated to the experiment configuration.
+# Modified experiment configuration with different channel mappings
+pcp_exp_init = PCPGenericInitConfig(
+    barcode_csv_path=barcode_csv_path,
+    cp_acquisition_order=AcquisitionOrderType.SNAKE,
+    cp_img_frame_type=ImageFrameType.ROUND,
+    cp_img_overlap_pct=10,
+    # Updated channel mappings to match your dataset
+    cp_nuclei_channel="Hoechst",    # Changed from DAPI
+    cp_cell_channel="CellMask",     # Changed from PhalloAF750
+    cp_mito_channel="MitoTracker",  # Changed from ZO1AF488
+    # SBS settings omitted for brevity
+)
+
+# Initialize experiment with updated channel mappings
+pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
+```
+
+After making these changes:
+
+1. The LoadData module will automatically handle the new channel mappings when generating the LoadData CSV
+2. When using automatically generated pipelines, they will adapt to include the channels with the new names
+3. If using legacy pipelines, ensure they are designed to handle the differently named channels
+
+The system is designed to flexibly adapt to channel configuration changes, and these modifications are isolated to the experiment configuration while affecting the entire workflow.
+
+!!! note "Future Enhancement"
+    This section will be updated when enhanced channel mapping capabilities are implemented. Currently, only specific channel mappings (nuclei, cell, mito) are configurable, but future versions will support more flexible mapping of any channel type.
 
 ### Scenario 3: Moderate Changes - Module Arrangement
 
