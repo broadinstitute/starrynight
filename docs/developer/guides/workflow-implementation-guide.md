@@ -52,9 +52,17 @@ These changes are beyond the scope of this workflow implementation guide, as the
 - **Create New Pipeline Patterns**: Develop new ways to compose and orchestrate pipelines
 - **Develop Algorithm Libraries**: Build new algorithm foundations that integrate with the core system
 
-## Reference Implementation
+## Reference Implementations
 
-Throughout this guide, we'll reference the practical implementation found in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`, which is also explained in detail in the [Practical Integration](../../architecture/08_practical_integration.md) architecture document. This step-by-step implementation demonstrates the complete PCP Generic pipeline workflow with the following steps:
+Throughout this guide, we'll reference two complementary practical implementations that demonstrate different approaches to workflow creation:
+
+1. **Step-by-step approach**: `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py` - Implements each module individually with explicit execution of each step, providing maximum visibility and control
+
+2. **Pipeline composition approach**: `starrynight/notebooks/pypct/exec_pcp_generic_full.py` - Implements the same workflow using the pipeline composition pattern for a more concise implementation
+
+Both implementations are explained in detail in the [Practical Integration](../../architecture/08_practical_integration.md) architecture document.
+
+The step-by-step implementation demonstrates the complete PCP Generic pipeline workflow with the following steps:
 
 1. Generate inventory and index
 2. Calculate illumination correction (CP)
@@ -277,6 +285,8 @@ The executor will use these resource hints to make scheduling decisions, but the
 - **StarryNight Architecture**: For more detailed information on the layers and their interactions, see the [Architecture Overview](../../architecture/00_architecture_overview.md)
 - **Practical Integration**: The [Practical Integration](../../architecture/08_practical_integration.md) document explains the `exec_pcp_generic_pipe.py` implementation in detail
 - **Architecture Flow**: The [Architecture Flow in Action](../../architecture/09_architecture_flow_example.md) document shows how data flows through all architectural layers
-- **Reference Implementation**: The complete step-by-step implementation in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`
+- **Reference Implementations**: Two complementary implementations:
+  - `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`: Step-by-step approach with individual module execution
+  - `starrynight/notebooks/pypct/exec_pcp_generic_full.py`: Pipeline composition approach for concise implementation
 - **Module Registry**: Central registry for modules in `starrynight/modules/registry.py`
 - **Pipeline Composition**: Functions for creating complete pipelines in `starrynight/pipelines/`
