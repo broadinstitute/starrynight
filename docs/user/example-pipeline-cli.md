@@ -15,6 +15,11 @@ Before starting this workflow, you need:
     - Running illumination correction calculation
 - Sufficient disk space for intermediate and output files (at least 50GB)
 
+!!! note "Implementation Context"
+    While this document presents the workflow using CLI commands, most users will execute these steps through the Python API as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`. The CLI commands are called by Python modules internally, making this guide valuable for understanding the underlying operations.
+
+    For the Python API implementation of this workflow, see [Practical Integration](../architecture/08_practical_integration.md).
+
 ## Pipeline Overview
 
 This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks (Cell Painting and Sequencing-Based Screening) followed by a combined analysis step:
@@ -308,13 +313,6 @@ Throughout the pipeline, you'll use these common parameters:
 ## Conclusion
 
 You've now learned how to set up and execute a complete StarryNight pipeline for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.
-
----
-
-!!! note "Implementation Context"
-    While this document presents the workflow using CLI commands, most users will execute these steps through the Python API as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`. The CLI commands are called by Python modules internally, making this guide valuable for understanding the underlying operations.
-
-    For the Python API implementation of this workflow, see [Practical Integration](../architecture/08_practical_integration.md).
 
 ---
 
