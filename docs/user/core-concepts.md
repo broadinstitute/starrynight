@@ -138,4 +138,6 @@ Each module handles a specific image processing task:
 
 ## Next Steps
 
-- Learn about all [Processing Modules](../user/modules.md)
+- Try an [end-to-end pipeline example](example-pipeline-cli.md)
+- For implementation details, see the [Module Layer](../architecture/03_module_layer.md)
+- For practical integration, see [Architecture Walkthrough](../architecture/08_practical_integration.md)

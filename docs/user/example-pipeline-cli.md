@@ -1,403 +1,357 @@
 # Image Processing Pipeline Example
 
-!!! Warning
-    - The documented has not been updated to reflect recent CLI changes
-
-This guide walks through a complete example of processing microscopy images using StarryNight's key modules.
+This guide walks through a complete example of processing microscopy images using StarryNight's key modules and CLI commands. It builds on the foundation established in the [Getting Started](getting-started.md) guide, extending those concepts into a full processing pipeline.
 
 ## Prerequisites
 
 Before starting this workflow, you need:
 
-- A generated inventory and index (see [Quick Start Guide](../user/getting-started.md))
-- Sufficient disk space for intermediate and output files
+- Completed steps 1-6 from [Getting Started](getting-started.md), including:
+    - Setting up your environment
+    - Downloading sample data
+    - Creating experiment configuration
+    - Generating inventory and index
+    - Creating experiment.json
+    - Running illumination correction calculation
+- Sufficient disk space for intermediate and output files (at least 50GB)
 
 ## Pipeline Overview
 
-This example demonstrates a typical workflow:
+This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks (Cell Painting and Sequencing-Based Screening) followed by a combined analysis step:
 
-1. Illumination correction to normalize lighting across images
-2. Quality control checks before and after segmentation
-3. Cell segmentation and feature extraction
+```mermaid
+flowchart TD
+    subgraph "Cell Painting (CP) Track"
+        CP1["CP Illumination Calculation"] -->
+        CP2["CP Illumination Application"] -->
+        CP3["CP Segmentation Check"]
+    end
 
-Most StarryNight modules follow a consistent three-step pattern:
+    subgraph "Sequencing-Based Screening (SBS) Track"
+        SBS1["SBS Illumination Calculation"] -->
+        SBS2["SBS Illumination Application"] -->
+        SBS3["SBS Preprocessing"]
+    end
+
+    CP3 & SBS3 --> Analysis["Combined Analysis"]
+
+    %% Styling
+    classDef cpTrack fill:#e6f3ff,stroke:#0066cc
+    classDef sbsTrack fill:#ffe6e6,stroke:#cc0000
+    classDef analysisStep fill:#e6ffe6,stroke:#009900
+
+    class CP1,CP2,CP3 cpTrack
+    class SBS1,SBS2,SBS3 sbsTrack
+    class Analysis analysisStep
+```
+
+The workflow includes these key steps:
+
+- **Setup and Preparation**: Generate inventory/index and create experiment configuration (completed in Getting Started)
+- **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
+- **CP Illumination Application**: Apply corrections to CP images and segment cells
+- **CP Segmentation Check**: Verify cell segmentation quality in CP images
+- **SBS Illumination Calculation**: Generate correction functions for SBS images
+- **SBS Illumination Application**: Apply corrections and align SBS image cycles
+- **SBS Preprocessing**: Process SBS images, compensate channels, and call barcodes
+- **Analysis**: Integrate CP and SBS data and extract measurements
+
+All processing modules follow a consistent three-step pattern:
 
 1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
 2. **Generate pipeline files**: Create customized CellProfiler pipelines
 3. **Execute pipelines**: Run CellProfiler with the generated files
 
-Before running any commands, set up your workspace directory as an environment variable for convenience:
+## Starting Point
+
+This guide assumes you have completed the [Getting Started](getting-started.md) guide through the "Running Illumination Correction Calculation". Before continuing, make sure you have the following environment variables set:
 
 ```sh
+# Set environment variables for convenience
+export DATADIR='./scratch/starrynight_example_input'
 export WKDIR='./scratch/starrynight_example_output/workspace'
+export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
 ```
 
-## Step 1: Illumination Correction
+You should already have:
 
-Illumination correction compensates for uneven lighting across the field of view, improving segmentation accuracy and feature extraction.
+- Inventory and index generated
+- Experiment configuration `(experiment.json`) created
+- Illumination correction calculation completed
 
-### Calculate Correction Functions
+We'll now expand from there to the full pipeline.
 
-First, generate correction functions for each channel:
+## CP Illumination Application
 
-```sh
-# Generate LoadData files
-starrynight illum calc loaddata \
-    -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc
-
-# Generate CellProfiler pipelines
-starrynight illum calc cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc/ \
-    -o ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc \
-    -w ${WKDIR}
-
-# Execute pipelines
-starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc/ \
-    -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc \
-    -o ${WKDIR}/illum/cp/illum_calc
-```
+Since we've already completed the CP Illumination Calculation, we'll continue with applying those corrections:
 
 ```sh
-# Generate LoadData files
-starrynight illum calc loaddata \
-    -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
-    --sbs
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_apply/
+mkdir -p ${WKDIR}/illum/cp/illum_apply/
 
-# Generate CellProfiler pipelines
-starrynight illum calc cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc/ \
-    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc \
-    -w ${WKDIR} \
-    --sbs
-
-# Execute pipelines
-starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc/ \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
-    -o ${WKDIR}/illum/sbs/illum_calc \
-    --sbs
-```
-
-Module-specific parameters:
-
-- `--channels`: comma-separated list of channels to process (e.g., `--channels DAPI,PhalloAF750`)
-- `--sample-size`: Number of images to sample per channel for correction calculation
-
-### Apply Corrections
-
-Next, apply the correction functions to your images:
-
-```sh
 # Generate LoadData files
 starrynight illum apply loaddata \
     -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply
+    -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply \
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
 # Generate CellProfiler pipelines
 starrynight illum apply cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply \
     -o ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_apply \
-    -w ${WKDIR}
+    -w ${WKDIR} \
+    --use_legacy
 
 # Execute pipelines
 starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_apply \
+    -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_apply/illum_apply_painting.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_apply \
     -o ${WKDIR}/illum/cp/illum_apply
 ```
 
-```sh
-# Generate LoadData files
-starrynight illum apply loaddata \
-    -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
-    --sbs
+## CP Segmentation Check
 
-# Generate CellProfiler pipelines
-starrynight illum apply cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
-    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply \
-    -w ${WKDIR} \
-    --sbs
-
-# Execute pipelines
-starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
-    -o ${WKDIR}/illum/sbs/illum_apply \
-    --sbs
-```
-
-Module-specific parameters:
-
-- `--illum`: Path to illumination correction files (default: auto-detected)
-- `--sbs`: Flag for sequence-based screening images (default: False)
-
-## Step 2: Quality Control
-
-Quality control modules evaluate image and segmentation quality to ensure optimal results.
-
-### Pre-segmentation Check
-
-Pre-segmentation checking evaluates whether images are suitable for segmentation before investing computational resources:
+Evaluate cell segmentation quality in CP images:
 
 ```sh
-# Generate LoadData files
-starrynight presegcheck loaddata \
-    -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/cp/presegcheck \
-    -c ${WKDIR}/illum/cp/illum_apply
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/cp/segcheck/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/cp/segcheck/
+mkdir -p ${WKDIR}/segcheck/cp/
 
-# Generate CellProfiler pipelines
-starrynight presegcheck cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/cp/presegcheck/ \
-    -o ${WKDIR}/cellprofiler/cppipe/cp/presegcheck \
-    -w ${WKDIR} \
-    --nuclei DAPI \
-    --cell PhalloAF750
-
-# Execute pipelines
-starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/cp/presegcheck \
-    -l ${WKDIR}/cellprofiler/loaddata/cp/presegcheck \
-    -o ${WKDIR}/presegcheck/cp/
-```
-
-> **Note**: There is a known inconsistency in the CLI interface - the `-n` and `-c` parameters are required in the `presegcheck cppipe` command but not in the `presegcheck loaddata` command.
-> Further, the flag `-c` is the shorthand for two different flats.
-> These implementation quirks will be fixed in a future release.
-
-### Post-segmentation Check
-
-Segmentation checking validates the quality of completed segmentation, providing metrics and visualizations:
-
-```sh
 # Generate LoadData files
 starrynight segcheck loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/cp/segcheck \
     -c ${WKDIR}/illum/cp/illum_apply \
-    --nuclei DAPI \
-    --cell PhalloAF750
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
 # Generate CellProfiler pipelines
 starrynight segcheck cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck/ \
     -o ${WKDIR}/cellprofiler/cppipe/cp/segcheck \
     -w ${WKDIR} \
-    --nuclei DAPI \
-    --cell PhalloAF750
+    --use_legacy
 
 # Execute pipelines
 starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/cp/segcheck \
+    -p ${WKDIR}/cellprofiler/cppipe/cp/segcheck/segcheck_painting.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck \
     -o ${WKDIR}/segcheck/cp/
 ```
 
-## Step 3. Image Alignment
+## SBS Illumination Calculation
 
-Image alignment is a critical step SBS images, ensuring that images from different cycles are spatially aligned.
-
-This step registers all images from different cycles using the nuclei channel as a reference. The alignment process generates transformed images with consistent spatial coordinates across all cycles, which is crucial for accurately matching cells across multiple imaging rounds.
+Calculate illumination correction functions for SBS images:
 
 ```sh
-# Generate LoadData files for alignment
-starrynight align loaddata \
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc/
+mkdir -p ${WKDIR}/illum/sbs/illum_calc/
+
+# Generate LoadData files
+starrynight illum calc loaddata \
     -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/sbs/align \
-    -c ${WKDIR}/illum/sbs/illum_apply/ \
-    --nuclei DAPI
-
-# Generate CellProfiler pipelines for alignment
-starrynight align cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
-    -o ${WKDIR}/cellprofiler/cppipe/sbs/align \
-    -w ${WKDIR}/align/sbs \
-    --nuclei DAPI
-
-# Execute alignment pipelines
-starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/align \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/align \
-    -o ${WKDIR}/align/sbs \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
+    --exp_config ${WKDIR}/experiment.json \
     --sbs \
-    --jobs 1
+    --use_legacy
+
+# Generate CellProfiler pipelines
+starrynight illum calc cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc/ \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc \
+    -w ${WKDIR} \
+    --sbs \
+    --use_legacy
+
+# Execute pipelines
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_calc/illum_calc_sbs.cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_calc \
+    -o ${WKDIR}/illum/sbs/illum_calc \
+    --sbs
 ```
 
-## Step 4. Preprocessing and Barcode Calling
+## SBS Illumination Application
 
-Preprocessing prepares your images for final analysis by performing barcode calling on SBS images.
-
-This step performs the following operations:
-
-1. Cell segmentation based on nuclear and cytoplasmic markers
-2. Feature enhancement to identify barcode spots
-3. Color compensation across channels
-4. Barcode calling to match detected signals to known barcode sequences
-5. Association of barcodes with segmented cells
+Apply illumination correction to SBS images:
 
 ```sh
-# Set input directory with barcode information
-export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply/
+mkdir -p ${WKDIR}/illum/sbs/illum_apply/
 
-# Generate LoadData files for preprocessing
+# Generate LoadData files
+starrynight illum apply loaddata \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    --exp_config ${WKDIR}/experiment.json \
+    --sbs \
+    --use_legacy
+
+# Generate CellProfiler pipelines
+starrynight illum apply cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    -o ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply \
+    -w ${WKDIR} \
+    --sbs \
+    --use_legacy
+
+# Execute pipelines
+starrynight cp \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/illum/illum_apply/illum_apply_sbs.cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/sbs/illum/illum_apply \
+    -o ${WKDIR}/illum/sbs/illum_apply \
+    --sbs
+```
+
+## SBS Preprocessing
+
+Prepare SBS images for analysis, including barcode calling:
+
+```sh
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/
+mkdir -p ${WKDIR}/preprocess/sbs/
+
+# Generate LoadData files
 starrynight preprocess loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
     -c ${WKDIR}/illum/sbs/illum_apply/ \
-    -a ${WKDIR}/align/sbs/ \
-    -n DAPI
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
-# Generate CellProfiler pipelines for preprocessing
+# Generate CellProfiler pipelines
 starrynight preprocess cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/ \
     -w ${WKDIR}/preprocess/sbs/ \
-    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
-    -n DAPI
+    -b ${INPUT_WKDIR}/metadata/barcode.csv \
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
 # Execute preprocessing pipelines
 starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/preprocess_sbs.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess \
     -o ${WKDIR}/preprocess/sbs/ \
     --sbs
 ```
 
-Module-specific parameters:
+## Analysis
 
-- `-a, --align_images`: Path to aligned images from the previous step
-- `-b, --barcode`: Path to the barcode CSV file that defines barcode sequences
-
-## Step 5. Final Analysis
-
-The final analysis step processes the preprocessed images to extract cellular measurements and generate the dataset for downstream analysis.
-
-This step generates the final dataset with:
-
-1. Comprehensive cell morphology measurements
-2. Intensity measurements for all channels across all cells
-3. Barcode identity associations with cells
-4. Quality control metrics for all analyzed objects
+Extract cellular measurements and generate the final dataset by combining CP and SBS data:
 
 ```sh
-# Generate LoadData files for analysis
+# Create necessary directories
+mkdir -p ${WKDIR}/cellprofiler/loaddata/sbs/analysis/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis/
+mkdir -p ${WKDIR}/analysis/sbs/
+
+# Generate LoadData files
 starrynight analysis loaddata \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
     -c ${WKDIR}/illum/sbs/illum_apply/ \
-    -p ${WKDIR}/preprocess/sbs/
+    -p ${WKDIR}/preprocess/sbs/ \
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
-# Generate CellProfiler pipelines for analysis
+# Generate CellProfiler pipelines
 starrynight analysis cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/analysis/ \
     -w ${WKDIR}/analysis/sbs/ \
-    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
-    --nuclei DAPI \
-    --cell PhalloAF750 \
-    --mito ZO1-AF488
+    -b ${INPUT_WKDIR}/metadata/barcode.csv \
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy
 
 # Execute analysis pipelines
 starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis \
+    -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis/analysis_sbs.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis \
     -o ${WKDIR}/analysis/sbs/ \
     --sbs
 ```
 
-Module-specific parameters:
+## Output Files and Directory Structure
 
-- `-a, --align_images`: Path to aligned images from the previous step
-- `-b, --barcode`: Path to the barcode CSV file that defines barcode sequences
+Each processing step generates specific outputs organized in a structured directory hierarchy. The directory structure helps manage the various data types and processing stages:
 
-## How Quality Control Works
+```
+${WKDIR}/
+├── cellprofiler/                    # CellProfiler-related files
+│   ├── loaddata/                    # Generated LoadData CSV files
+│   └── cppipe/                      # Generated CellProfiler pipelines
+├── index/                           # Inventory and index files
+├── illum/                           # Illumination correction outputs
+│   ├── cp/                          # Cell Painting illumination
+│   └── sbs/                         # SBS illumination
+├── segcheck/                        # Segmentation validation outputs
+├── preprocess/                      # Preprocessing outputs
+└── analysis/                        # Final analysis results
+```
 
-The pre-segmentation check identifies confluent regions in images and creates masks to exclude regions unsuitable for segmentation. The post-segmentation check performs nuclei and cell identification using optimized parameters and generates overlay images highlighting segmentation results for visual validation.
+This organization separates input/configuration files, intermediate processing outputs, and final results in a logical hierarchy. Each step's outputs include:
 
-## FIXME Output Files
+- **Inventory & Index**
+  - `inventory.parquet`: Catalog of all image files
+  - `index.parquet`: Structured metadata extracted from file paths
 
-- Illumination Correction
-    - `.npy` files containing correction functions (e.g., `Batch1_Plate1_IllumOrigDAPI.npy`)
-    - 16-bit TIFF files with corrected images
-- Quality Control
-    - CSV files with quality metrics
-    - TIFF images with segmentation overlays (post-segmentation check)
-- Image Alignment                                                                                                                                                                         │ │
-    - Aligned TIFF images with consistent spatial coordinates across cycles                                                                                                               │ │
-    - Transformation matrices for each image registration                                                                                                                                 │ │
-- Preprocessing                                                                                                                                                                           │ │
-    - Compensated image files for each channel and cycle                                                                                                                                  │ │
-    - CSV files with barcode call information                                                                                                                                             │ │
-    - Overlay images showing cell segmentation and barcode spots                                                                                                                          │ │
-- Analysis                                                                                                                                                                                │ │
-    - CSV files with comprehensive cell measurements (shape, intensity, texture)                                                                                                          │ │
-    - Visualization images with cell outlines and identified features                                                                                                                     │ │
-    - Barcode-cell association data for downstream analysis
+- **Illumination Correction**
+  - `.npy` files containing illumination correction functions (e.g., `Plate1_IllumDAPI.npy`)
+  - Corrected 16-bit TIFF images
+
+- **Segmentation Check**
+  - CSV files with cell segmentation quality metrics
+  - TIFF images with segmentation overlays for visual verification
+
+- **Preprocessing**
+  - Compensated image files for each channel and cycle
+  - CSV files with barcode call information
+  - Overlay images showing cell segmentation and barcode spots
+
+- **Analysis**
+  - CSV files with comprehensive cell measurements
+  - Visualization images with cell outlines and identified features
+  - Barcode-cell association data for downstream analysis
 
 ## Common Parameters
 
 Throughout the pipeline, you'll use these common parameters:
 
+- `--exp_config`: Path to the experiment configuration file
+- `--use_legacy`: Use pre-fabricated pipeline templates (recommended for stability)
 - `-i, --index`: Path to the index.parquet file
 - `-o, --output`: Output directory for generated files
 - `-w, --workspace`: Path to the workspace directory
 - `-l, --loaddata`: Path to LoadData CSV files
-- `-p, --pipeline`: Path to CellProfiler pipeline directory
-- `-m, --path_mask`: Path prefix mask to use when resolving image paths
+- `-p, --pipeline`: Path to CellProfiler pipeline file or directory
 - `-c, --corr_images`: Path to illumination-corrected images
-- `-n, --nuclei`: Channel to use for nuclei segmentation (e.g., "DAPI")
-- `-c, --cell`: Channel to use for cell segmentation (e.g., "PhalloAF750")
-
-## FIXME Troubleshooting
-
-### Illumination Correction Issues
-
-- Check that channel names in the index match your expectations
-- Verify images exist for all channels
-- Ensure sufficient memory for processing
-- For CellProfiler errors, check CellProfiler log files
-
-### Quality Control Issues
-
-- Check for focus issues in original images
-- Verify illumination correction was properly applied
-- Adjust nuclei and cell channels if necessary
-- For over-confluent regions, consider adjusting threshold parameters
-- Review CellProfiler logs for pipeline errors
-
-### Alignment Issues
-
-- Verify that the nuclei channel (DAPI) has sufficient signal and contrast
-- Check that images from different cycles have similar quality
-- For poor alignment, consider increasing the number of registration points
-- For memory errors, reduce the batch size by editing the loaddata files
-
-### Barcode Calling Issues
-
-- Verify that the barcode CSV file has the correct format with sgRNA and gene_symbol columns
-- Ensure that barcode sequences match the expected pattern from your experiment
-- For low confidence barcode calls, adjust intensity thresholds in preprocessing
-- Check for spectral bleedthrough that might affect barcode signal quality
+- `-b, --barcode`: Path to barcode CSV file for sequencing data
+- `--sbs`: Flag to indicate processing of Sequencing-Based Screening images
 
 ## Next Steps
 
 - Perform statistical analysis on the extracted features
-- Visualize results using your preferred analysis tools
-- Export processed data for integration with other analysis platforms
+- Visualize results using tools like Python/Matplotlib
+- Export data for integration with other analysis platforms
 
 ## Conclusion
 
-You have now completed a full StarryNight pipeline, from ingesting raw image data to producing structured analysis results. This example demonstrates the core workflow for processing and analyzing high-content screening data:
+You have now completed a full StarryNight pipeline, from ingesting raw image data to producing structured analysis results. This workflow demonstrates how StarryNight systematically processes high-content screening data:
 
-1. Create an inventory of your raw image files
-2. Generate an index with extracted metadata
-3. Perform illumination correction to normalize image intensity
-4. Run quality control to ensure reliable segmentation
-5. Align images across cycles (for sequence-based screening)
-6. Preprocess images and perform barcode calling
-7. Run final analysis to extract comprehensive measurements
+1. Create inventory and index to organize image data
+2. Apply illumination correction to normalize image intensity in CP and SBS tracks
+3. Perform quality control through segmentation checks
+4. Process SBS images with specialized algorithms for barcode detection
+5. Extract comprehensive cellular measurements and barcode associations

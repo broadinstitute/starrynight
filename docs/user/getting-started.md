@@ -1,6 +1,6 @@
 # Getting Started with StarryNight
 
-This guide will help you install StarryNight and run your first illumination correction workflow using the CLI (Command Line Interface) approach.
+This guide will help you install StarryNight and run your first workflow using the CLI (Command Line Interface) approach.
 
 !!! note "CLI vs Module Layer Approach"
     **Direct CLI Commands** (shown in this guide): This is a simpler, more direct approach good for learning and exploration. It involves manual execution of individual commands with limited containerization and workflow automation.
@@ -47,7 +47,7 @@ If you're developing for StarryNight, the setup process is the same as above. Fo
 
 ## Quick Start Workflow
 
-This section walks you through running a basic illumination correction workflow.
+This section walks you through running a basic illumination correction workflow, focusong on the calculation of the illumination correction functions alone.
 
 ### Step 1: Download Sample Data
 
@@ -155,7 +155,7 @@ starrynight exp new \
 
 This creates an `experiment.json` file with dataset-specific parameters derived from your index.
 
-### Step 6: Run Illumination Correction
+### Step 6: Run Illumination Correction Calculation
 
 First, ensure the directories exist:
 
@@ -269,9 +269,9 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 ## Next Steps
 
 - Learn about [Core Concepts](core-concepts.md) of the StarryNight platform
-- Explore available [Processing Modules](modules.md)
 - Try an [end-to-end pipeline example](example-pipeline-cli.md)
 - Check the architecture docs to understand the [system structure](../architecture/00_architecture_overview.md)
+- For implementation details, see the [Module Layer](../architecture/03_module_layer.md) documentation
 
 
 !!! info "For Document Contributors"
