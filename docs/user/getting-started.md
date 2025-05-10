@@ -55,9 +55,12 @@ This section walks you through running a basic illumination correction workflow.
 # Create a directory for the sample data
 mkdir -p scratch
 
-# Download sample data from S3 (if you have AWS CLI and access)
+# Download sample data from S3 (requires AWS CLI and proper credentials)
 aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_input scratch/starrynight_example_input
 ```
+
+!!! note "AWS Access"
+    The sample data is stored in an AWS S3 bucket. You'll need AWS CLI installed and configured with appropriate credentials to access it. If you don't have access, contact your administrator for alternative data sources.
 
 Before running any commands, set up your data and workspace directories as environment variables:
 
@@ -220,7 +223,7 @@ import matplotlib.pyplot as plt
 
 # Load one of the illumination correction files
 import os
-wkdir = os.environ.get('WKDIR', './scratch/starrynight_example/workspace')
+wkdir = os.environ.get('WKDIR', './scratch/starrynight_example_output/workspace')
 data = np.load(f'{wkdir}/illum/cp/illum_calc/Plate1_IllumDNA.npy')
 
 # Create a visualization
@@ -232,6 +235,9 @@ plt.show()
 ```
 
 ## Advanced CLI Options
+
+!!! tip "Optional Reference"
+    The following options are for reference and not required to complete the basic workflow. You can explore these advanced features once you're comfortable with the basic commands.
 
 StarryNight commands support additional options to customize processing:
 
@@ -271,14 +277,14 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 !!! info "For Document Contributors"
     This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
 
-    ### Purpose and Audience
+    **Purpose and Audience**
 
     - **Introductory Focus** - This document is a user's first hands-on experience with StarryNight
     - **CLI Emphasis** - Prioritize the CLI approach as an accessible entry point
     - **Single Path with Options** - Present one primary workflow while noting alternatives
     - **Assumed Knowledge** - Users understand basic command line but not StarryNight architecture
 
-    ### Structure Principles
+    **Structure Principles**
 
     1. **Linear numbered steps** - Maintain a clear, sequential progression (Steps 1-7)
     2. **Notes for alternatives** - Use MkDocs admonitions to present alternatives without disrupting flow
@@ -286,7 +292,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
     4. **Progressive detail** - Start with setup, then basic workflow, then advanced options
     5. **Clear prerequisites** - Ensure directory creation and dependencies are explicitly mentioned
 
-    ### Content Style Guidelines
+    **Content Style Guidelines**
 
     1. **Command formatting** - Include descriptive comments in code blocks
     2. **Bold subheadings** - Use bold text rather than deeper heading levels for substeps
@@ -294,7 +300,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
     4. **Environment variables** - Use consistent variables (DATADIR, WKDIR)
     5. **Expected outputs** - Show example outputs and file structures where appropriate
 
-    ### Terminology Consistency
+    **Terminology Consistency**
 
     - "CLI approach" vs "Module-based approach" - Different ways to use StarryNight
     - "Pre-fabricated pipelines" vs "Dynamic pipeline generation" - Two pipeline generation methods
