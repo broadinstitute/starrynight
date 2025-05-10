@@ -2,7 +2,11 @@
 name = "workspace"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["starrynight", "pipecraft", "conductor"]
+dependencies = [
+    "starrynight",
+    "pipecraft",
+    "conductor",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -17,7 +21,10 @@ dev = [
   "jupyter-collaboration",
   "jldracula",
   "nbdotrun",
-  "nbdev"
+  "nbdev",
+  "mkdocs>=1.6.1",
+  "mkdocs-material>=9.6.13",
+  "mkdocs-mermaid2-plugin>=1.2.1"
 ]
 
 [tool.uv.sources]
