@@ -332,7 +332,43 @@ The step-by-step reference implementation demonstrates these patterns throughout
 - **Practical Integration**: The [Practical Integration](../../architecture/08_practical_integration.md) document explains the `exec_pcp_generic_pipe.py` implementation in detail
 - **Architecture Flow**: The [Architecture Flow in Action](../../architecture/09_architecture_flow_example.md) document shows how data flows through all architectural layers
 - **Reference Implementations**: Two complementary implementations:
-  - `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`: Step-by-step approach with individual module execution
-  - `starrynight/notebooks/pypct/exec_pcp_generic_full.py`: Pipeline composition approach for concise implementation
+    - `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`: Step-by-step approach with individual module execution
+    - `starrynight/notebooks/pypct/exec_pcp_generic_full.py`: Pipeline composition approach for concise implementation
 - **Module Registry**: Central registry for modules in `starrynight/modules/registry.py`
 - **Pipeline Composition**: Functions for creating complete pipelines in `starrynight/pipelines/`
+
+---
+
+!!! info "For Document Contributors"
+    This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
+
+    ### Guiding Structure Principles
+
+    1. **Define the concept first** - Begin each section by clearly defining what the concept means in the StarryNight context, as done with "What is a Workflow?"
+    2. **Dual perspective approach** - Present both "creating new workflows" and "modifying existing workflows" perspectives, recognizing most users start by modifying existing workflows
+    3. **Progressive complexity levels** - Organize content in increasing complexity levels:
+          - Simple changes (no code required)
+          - Moderate changes (Python workflow code)
+          - Advanced changes (code required)
+    4. **Explicit reference implementations** - Consistently reference the two implementation patterns:
+          - Step-by-step approach (`exec_pcp_generic_pipe.py`)
+          - Pipeline composition approach (`exec_pcp_generic_full.py`)
+    5. **Scenario-based examples** - Structure examples as concrete scenarios that users will encounter
+
+    ### Content Style Principles
+
+    6. **Code example patterns** - Include both original and modified code with explanatory comments (see channel mapping example)
+    7. **Contrast implementation approaches** - When showing how to accomplish a task, explain both approaches:
+          - Step-by-step implementation first (more explicit)
+          - Pipeline composition second (more concise)
+    8. **Context before code** - Provide contextual explanation before code examples
+    9. **Mark future work consistently** - Use `!!! note "Work in Progress"` or `!!! note "Future Enhancement"` admonitions
+    10. **Show non-obvious consequences** - Explain the downstream effects of changes (e.g., how channel mapping affects LoadData generation)
+
+    ### Terminology Consistency
+
+    - "Workflow" - A specific scientific image processing sequence implemented using StarryNight modules
+    - "Module" - Building blocks with defined inputs/outputs that are executed in a containerized environment
+    - "Pipeline" - Connected arrangement of modules that can be executed as a unit
+    - "Step-by-step implementation" - Creating and executing modules individually
+    - "Pipeline composition" - Defining the entire pipeline structure with sequential and parallel components
