@@ -357,21 +357,6 @@ This structure separates inputs, intermediate results, and final outputs, mainta
 
 StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
 
-### Key Abstractions in Practice
-
-Let's connect the key StarryNight abstractions to what you've done in this guide:
-
-- **Inventory & Index**: Created in Getting Started, used in every subsequent step
-- **CellProfiler LoadData CSVs**: Generated with `loaddata` commands
-- **CellProfiler Pipelines**: Generated with `cppipe` commands
-- **Illumination Correction Functions**: `.npy` files in the `illum` directories
-- **Corrected Images**: Outputs from the `illum apply` steps
-- **Segmentation Quality Control**: Outputs from the `segcheck` step
-- **Preprocessed Images**: Outputs from the `preprocess` step
-- **Analysis Results**: Final outputs from the `analysis` step
-
-Understanding these abstractions will help you adapt these workflows for your own experiments.
-
 ---
 
 !!! info "For Document Contributors"
