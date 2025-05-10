@@ -21,11 +21,7 @@ dev = [
   "jupyter-collaboration",
   "jldracula",
   "nbdotrun",
-  "nbdev",
-  "mkdocs>=1.6.1",
-  "mkdocs-material>=9.6.13",
-  "mkdocs-mermaid2-plugin>=1.2.1"
-]
+  "nbdev"]
 
 [tool.uv.sources]
 starrynight = { workspace = true }
