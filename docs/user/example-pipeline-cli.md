@@ -357,16 +357,6 @@ This structure separates inputs, intermediate results, and final outputs, mainta
 
 StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
 
-### Processing Approaches
-
-While this guide used the CLI approach (direct command-line execution), StarryNight supports multiple ways to run workflows:
-
-- **CLI-based**: What you've used in this guide - good for learning and exploration
-- **Python API**: Programmatic access (as shown in the Implementation Context note)
-- **Pipeline-based**: For production use with automated workflows
-
-The CLI approach provides a clear view of each processing step, while other approaches offer more automation and reproducibility for production use.
-
 ### Key Abstractions in Practice
 
 Let's connect the key StarryNight abstractions to what you've done in this guide:
