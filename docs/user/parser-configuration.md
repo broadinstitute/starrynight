@@ -1,13 +1,19 @@
 # Parser Configuration
 
-!!! Warning
-    - This document contains bot-generated text and has not yet been reviewed by developers!
-
 This guide explains how to configure and customize path parsers in StarryNight to work with your own data organization.
 
 ## Understanding Path Parsers
 
 StarryNight uses a grammar-based path parsing system to extract structured metadata from file paths. This allows it to work with a variety of file organization schemes.
+
+```mermaid
+flowchart LR
+    Files["Raw File Paths"] -->|Grammar Rules| Parser["Path Parser"]
+    Parser -->|Transformer| Metadata["Structured Metadata"]
+    Metadata --> Index["Index Generation"]
+
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
+```
 
 ### How Path Parsing Works
 
@@ -23,6 +29,11 @@ StarryNight includes a default parser ("vincent") that expects paths matching th
 [dataset]/Source[source_id]/Batch[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
 ```
 
+For example:
+```
+MyDataset/Source1/Batch1/images/Plate1/20X_CP_Plate1/WellA01_PointA01_0_ChannelDAPI,AF488,AF647_Seq0.ome.tiff
+```
+
 ### Understanding the Grammar File
 
 The default grammar file (`path_parser_vincent.lark`) defines rules for parsing file paths:
@@ -36,27 +47,30 @@ _images_root_dir: "images"i sep plate_id sep _plate_root_dir
 ...
 ```
 
-Each rule identifies specific components of the path, such as dataset ID, batch ID, plate ID, etc.
+Each rule identifies specific components of the path, such as dataset ID, batch ID, plate ID, etc. The underscore prefix (e.g., `_root_dir`) indicates internal rules that don't directly map to output metadata fields.
 
 ## Customizing the Parser
 
-### Option 1: Using CLI Parameters
+### Specifying a Custom Parser
 
-When generating an index, you can specify a custom parser path:
+When generating an index, you can specify a custom parser path using the CLI:
 
 ```sh
-starrynight index gen -i ./workspace/inventory/inventory.parquet \
-                      -o ./workspace/index/ \
-                      --parser /path/to/custom/parser.lark
+starrynight index gen \
+    -i ./workspace/inventory/inventory.parquet \
+    -o ./workspace/index/ \
+    --parser /path/to/custom/parser.lark
 ```
 
-### Option 2: Creating a Custom Grammar File
+This allows you to use a different grammar file without modifying the source code.
+
+### Creating a Custom Grammar File
 
 To create a custom parser for your own file organization:
 
 1. **Create a grammar file** based on your file organization pattern
 2. **Test your grammar** with sample file paths
-3. **Use it when generating the index**
+3. **Use it when generating the index** with the `--parser` parameter
 
 ### Example: Custom Grammar File
 
@@ -91,33 +105,15 @@ This would parse paths like:
 MyProject/Experiment-2023-05/Plate1/A1_01_DAPI_01.tiff
 ```
 
-## Advanced: Creating Custom Transformers
+!!! note "Parser Testing"
+    Test your grammar at [Lark Parser IDE](https://www.lark-parser.org/ide/) - a web tool similar to regex101.com that visualizes parse trees for your grammar and test paths.
 
-For even more customization, you can create your own transformer class:
+!!! info "Advanced Developer Topic: Custom Transformers"
+    The StarryNight codebase includes an extensible transformer system, but currently only provides the default `VincentAstToIR` transformer that works with the default grammar file.
 
-1. Extend the `BaseTransformer` class
-2. Override methods for each grammar rule
-3. Register your transformer with the system
+    Creating completely custom transformers would require modifying the source code, as there's no CLI parameter to specify alternative transformers (unlike grammar files which can be specified with `--parser`). This level of customization would primarily be relevant for developers contributing to the StarryNight codebase itself.
 
-Example:
-```python
-from starrynight.parsers.common import BaseTransformer
-
-class MyCustomTransformer(BaseTransformer):
-    """Custom transformer for my file organization."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.channel_dict: dict[str, list[str]] = {"channel_dict": []}
-
-    def project_name(self, items) -> dict:
-        return {"project_name": items[0]}
-
-    def experiment_name(self, items) -> dict:
-        return {"experiment_name": items[0]}
-
-    # Other methods for each rule in your grammar
-```
+    For most users, a custom grammar file alone provides sufficient flexibility to handle different file organization patterns without needing custom transformer logic.
 
 ## Best Practices
 
@@ -136,10 +132,52 @@ Common issues with parsers:
 - **Missing Metadata**: Ensure your grammar extracts all needed metadata fields
 - **Performance Issues**: Very complex grammars might be slower to parse
 
-## Next Steps
+!!! info "Implementation Note"
+    When working with large datasets, consider the performance implications of your parser design. Overly complex parsers may slow down the index generation process significantly.
 
-After configuring your parser:
+## Using Your Custom Parser
 
-- Generate an inventory and index with your custom parser
-- Validate the index contains the expected metadata
-- Proceed with your StarryNight workflow
+After creating your custom parser, use it in the index generation step of your workflow:
+
+```sh
+starrynight index gen \
+    -i ./workspace/inventory/inventory.parquet \
+    -o ./workspace/index/ \
+    --parser /path/to/your/custom_parser.lark
+```
+
+Validate that your index contains the expected metadata by examining the resulting `index.parquet` file.
+
+---
+
+!!! info "For Document Contributors"
+    This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
+
+    **Document Purpose and Audience**
+
+    This document serves as a reference guide for users who need to adapt StarryNight to work with their own data organization patterns. It targets users who:
+
+    - Need to process data with non-standard file organization
+    - Have completed the basic workflow and need to customize path parsing
+    - Have sufficient technical knowledge to work with grammar files
+    - May need to extend functionality for specialized use cases
+
+    **Guiding Structure Principles**
+
+    1. **Progressive disclosure approach** - Start with usage basics before advanced customization
+    2. **System component visualization** - Use diagrams to illustrate how parsers fit into the workflow
+    3. **Clear examples** - Provide concrete examples for common customization patterns
+    4. **Implementation abstraction** - Focus on what users need to know rather than implementation details
+
+    **Content Style Principles**
+
+    1. **Command formatting consistency** - Format all CLI commands with consistent indentation
+    2. **Technical term definition** - Define technical terms like "grammar" and "transformer" when first used
+    3. **Focus on application** - Prioritize how-to guidance over theoretical explanations
+    4. **Real-world examples** - Use examples based on actual file organization patterns
+
+    **Document Relationships**
+
+    - **Example Workflow complement** - This document expands on file organization concepts mentioned in the workflow examples
+    - **Architecture docs reference** - References more technical details available in architecture documentation
+    - **Getting Started prerequisite** - Assumes familiarity with basic concepts from Getting Started
