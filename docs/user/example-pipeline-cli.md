@@ -314,15 +314,6 @@ You've now learned how to set up and execute a complete StarryNight pipeline for
 !!! note "Implementation Context"
     While this document presents the workflow using CLI commands, most users will execute these steps through the Python API as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`. The CLI commands are called by Python modules internally, making this guide valuable for understanding the underlying operations.
 
-    **Future documentation enhancements could include:**
-
-    - Troubleshooting guide for common errors and failure recovery
-    - Output verification checkpoints for each processing step
-    - Resource requirements and sizing guidelines
-    - Configuration customization examples for different experimental setups
-    - Intermediate results visualization techniques
-    - Pipeline variations for specialized use cases
-
     For the Python API implementation of this workflow, see [Practical Integration](../architecture/08_practical_integration.md).
 
 ---
@@ -354,6 +345,17 @@ You've now learned how to set up and execute a complete StarryNight pipeline for
     8. **Parameter explanation** - Keep parameter explanations concise and grouped in the Common Parameters section
     9. **Lightweight diagrams** - Keep mermaid diagrams focused on structure without duplicating descriptions
     10. **CLI vs Python differentiation** - Clearly distinguish CLI-based approaches from Python API approaches
+
+    **Future Documentation Enhancements**
+
+    Consider expanding this document with:
+
+    - Troubleshooting guide for common errors and failure recovery
+    - Output verification checkpoints for each processing step
+    - Resource requirements and sizing guidelines
+    - Configuration customization examples for different experimental setups
+    - Intermediate results visualization techniques
+    - Pipeline variations for specialized use cases
 
     **Document Relationships**
 
