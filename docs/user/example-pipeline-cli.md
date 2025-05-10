@@ -314,23 +314,24 @@ You've now learned how to set up and execute a complete StarryNight pipeline for
 !!! info "For Document Contributors"
     This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
 
-    ### Document Purpose and Audience
+    **Document Purpose and Audience**
 
     This document serves as a bridge between the introductory Getting Started guide and complete workflow implementation. It targets users who:
+
     - Are familiar with basic StarryNight concepts
     - Need to implement a complete processing pipeline
     - Prefer using the CLI interface rather than Python API
     - Need to understand both CP and SBS processing tracks
 
-    ### Guiding Structure Principles
+    **Guiding Structure Principles**
 
     1. **Progressive disclosure approach** - Start with a clear overview before diving into implementation details
     2. **Parallel tracks visualization** - Keep the CP and SBS tracks visually distinct in diagrams and structure
     3. **Complete CLI commands** - Provide fully copyable command blocks with all necessary parameters
-    4. **Directory creation consistency** - Always include mkdir commands before operations that require directories
+    4. **Directory creation consistency** - Always include `mkdir` commands before operations that require directories
     5. **Three-step pattern emphasis** - Maintain the loaddata → cppipe → execute pattern for each module
 
-    ### Content Style Principles
+    **Content Style Principles**
 
     6. **Command formatting consistency** - Format all CLI commands with consistent indentation and backslash line continuations
     7. **Abbreviation usage** - Define abbreviations (CP, SBS) once, then use consistently throughout
@@ -338,16 +339,15 @@ You've now learned how to set up and execute a complete StarryNight pipeline for
     9. **Lightweight diagrams** - Keep mermaid diagrams focused on structure without duplicating descriptions
     10. **CLI vs Python differentiation** - Clearly distinguish CLI-based approaches from Python API approaches
 
-    ### Document Relationships
+    **Document Relationships**
 
-    - **Getting Started dependency** - This document builds directly on getting-started.md and should stay aligned with it
-    - **Practical Integration complement** - Serves as the CLI alternative to architecture/08_practical_integration.md's Python API approach
+    - **Getting Started dependency** - This document builds directly on `getting-started.md` and should stay aligned with it
+    - **Practical Integration complement** - Serves as the CLI alternative to `architecture/08_practical_integration.md`'s Python API approach
     - **Module reference complementarity** - Complements module-specific documentation without duplicating it
 
-    ### Terminology Consistency
+    **Terminology Consistency**
 
     - **Cell Painting (CP)** - Refers to the morphological imaging workflow track
     - **Sequencing-Based Screening (SBS)** - Refers to the barcoding/sequencing workflow track
     - **LoadData files** - CSV files that configure CellProfiler input images
-    - **Experiment configuration** - The experiment.json file that defines processing parameters
-    - **Illumination correction** - Process of normalizing image intensity variations (calculation → application)
+    - **Experiment configuration** - The `experiment.json` file that defines processing parameters
