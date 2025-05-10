@@ -314,6 +314,113 @@ Throughout the pipeline, you'll use these common parameters:
 
 You've now learned how to set up and execute a complete StarryNight pipeline for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.
 
+## Core Concepts Reference
+
+Having worked through the complete pipeline, you now have hands-on experience with StarryNight's key components. The following sections explain the foundational concepts that underpin the workflow you've just executed. Understanding these concepts will help you adapt the pipeline for your own datasets and troubleshoot any issues that arise.
+
+### System Architecture
+
+StarryNight is built on a layered architecture designed to process optical pooled screening (OPS) data efficiently:
+
+- **Algorithm Layer**: Core image processing algorithms (illumination correction, alignment, etc.)
+- **CLI Layer**: Command-line interface for direct module usage (what you've used in this guide)
+- **Module Layer**: Self-contained processing units with standardized interfaces
+- **Pipeline Layer**: Composition of modules into complete workflows
+- **Execution Layer**: Mechanisms for running processing jobs
+
+The CLI commands you've been using are actually calling modules, which in turn use algorithms to process your data. This layered approach allows for flexibility in how you execute workflows.
+
+### Inventory and Index: The Foundation
+
+The foundation of every StarryNight workflow is the inventory and index system. You've already generated these in the Getting Started guide, but here's what they actually do:
+
+**Inventory**: A catalog of all files in your dataset
+- Contains basic file information: path, name, extension
+- Created by scanning the data directory recursively
+- Stored as a Parquet file for efficient querying
+
+**Index**: Structured metadata extracted from file paths
+- Contains rich metadata: dataset, batch, plate, well, site, channel info
+- Created by parsing file paths using a grammar-based parser
+- Enables sophisticated filtering and selection of images
+- Stored as a structured Parquet file
+
+When you ran commands with `-i ${WKDIR}/index/index.parquet`, you were using this metadata to select the appropriate images for processing.
+
+### Directory Structure and Organization
+
+Throughout this guide, you've created a workspace with a specific directory structure:
+
+```
+${WKDIR}/
+├── cellprofiler/                # CellProfiler-related files
+│   ├── loaddata/                # Generated LoadData CSV files
+│   └── cppipe/                  # Pipeline files
+├── index/                       # Structured metadata
+│   └── index.parquet            # Index file with extracted metadata
+├── illum/                       # Illumination correction files
+│   ├── cp/                      # Cell Painting illumination
+│   └── sbs/                     # SBS illumination
+├── segcheck/                    # Segmentation validation outputs
+├── preprocess/                  # Preprocessing outputs
+└── analysis/                    # Analysis results
+```
+
+This structure separates inputs, intermediate results, and final outputs in a way that maintains clear data provenance. The physical directory organization mirrors the logical workflow stages.
+
+### The Module System and Three-Step Pattern
+
+Each processing step in the workflow (illumination calculation, preprocessing, etc.) is implemented as a module. You've been using these modules through their CLI interfaces. Every module follows the same three-step pattern:
+
+1. **LoadData Generation** (`loaddata` commands): Creates CSV files that tell CellProfiler which images to process and how they're organized
+2. **Pipeline Generation** (`cppipe` commands): Creates customized CellProfiler pipelines with appropriate parameters
+3. **Pipeline Execution** (`cp` commands): Runs CellProfiler with the generated files
+
+This pattern ensures a clean separation between data specification, process definition, and execution, making the workflow more maintainable and adaptable.
+
+### Path Parsing System
+
+StarryNight's flexibility comes from its path parsing system, which extracts metadata from file paths using grammar rules. The default parser expects paths like:
+
+```
+[dataset]/Source[source_id]/Batch[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
+```
+
+This explains how StarryNight knows which images are from which wells, channels, and sites, even without explicit metadata files. The system automatically extracts:
+
+- Dataset, batch, and plate identifiers
+- Well and site information
+- Channel details
+- Sequence/cycle information for SBS images
+
+If your data is organized differently, you can configure the parser to match your file naming conventions.
+
+### Processing Approaches
+
+The CLI approach you used in this guide is just one way to execute StarryNight workflows:
+
+1. **CLI-based**: Direct command-line execution of individual modules (what you did here)
+2. **Pipeline-based**: Using PipeCraft to define and automate complete workflows (more efficient for production)
+3. **Python API**: Programmatic access through Python scripts (as shown in `exec_pcp_generic_pipe.py`)
+4. **UI-based**: Using the Canvas interface for intuitive configuration and execution (easiest for non-programmers)
+
+While this guide focused on the CLI approach, the same underlying modules are used in all approaches. Most production workflows use either the Pipeline or Python API approach for reproducibility and efficiency.
+
+### Key Abstractions in Practice
+
+Let's connect the key StarryNight abstractions to what you've done in this guide:
+
+- **Inventory & Index**: Created in Getting Started, used in every subsequent step
+- **CellProfiler LoadData CSVs**: Generated with `loaddata` commands
+- **CellProfiler Pipelines**: Generated with `cppipe` commands
+- **Illumination Correction Functions**: `.npy` files in the `illum` directories
+- **Corrected Images**: Outputs from the `illum apply` steps
+- **Segmentation Quality Control**: Outputs from the `segcheck` step
+- **Preprocessed Images**: Outputs from the `preprocess` step
+- **Analysis Results**: Final outputs from the `analysis` step
+
+Understanding these abstractions and their relationships will help you navigate StarryNight's capabilities more effectively as you apply these techniques to your own data.
+
 ---
 
 !!! info "For Document Contributors"
