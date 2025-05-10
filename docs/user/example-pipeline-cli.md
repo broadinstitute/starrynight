@@ -1,28 +1,26 @@
-# Image Processing Pipeline Example
+# Complete Workflow Example (CLI Approach)
 
-This guide walks through a complete example of processing microscopy images using StarryNight's key modules and CLI commands. It builds on the foundation established in the [Getting Started](getting-started.md) guide, extending those concepts into a full processing pipeline.
+This guide walks through a complete example of processing microscopy images using StarryNight's key modules and CLI commands. It builds on the foundation established in the [Getting Started](getting-started.md) guide, extending those concepts into a full image processing workflow.
 
 ## Prerequisites
 
 Before starting this workflow, you need:
 
-- Completed steps 1-6 from [Getting Started](getting-started.md), including:
+- Completed the workflow from [Getting Started](getting-started.md), including:
     - Setting up your environment
     - Downloading sample data
     - Creating experiment configuration
     - Generating inventory and index
-    - Creating experiment.json
+    - Creating `experiment.json`
     - Running illumination correction calculation
 - Sufficient disk space for intermediate and output files (at least 50GB)
 
-!!! note "Implementation Context"
-    While this document presents the workflow using CLI commands, most users will execute these steps through the Python API as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`. The CLI commands are called by Python modules internally, making this guide valuable for understanding the underlying operations.
+!!! info "Implementation Note"
+    This guide continues to use the CLI Approach introduced in [Getting Started](getting-started.md) to demonstrate the complete workflow step by step. For details on executing this workflow via the Python/Module Approach used in production, see [Practical Integration](../architecture/08_practical_integration.md), which shows the same workflow implemented with the Python API in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`.
 
-    For the Python API implementation of this workflow, see [Practical Integration](../architecture/08_practical_integration.md).
+## Workflow Overview
 
-## Pipeline Overview
-
-This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks (Cell Painting and Sequencing-Based Screening) followed by a combined analysis step:
+This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks (Cell Painting and Barcoding) followed by a combined analysis step:
 
 ```mermaid
 flowchart TD
@@ -32,7 +30,7 @@ flowchart TD
         CP3["CP Segmentation Check"]
     end
 
-    subgraph "Sequencing-Based Screening (SBS) Track"
+    subgraph "Barcoding (SBS) Track"
         SBS1["SBS Illumination Calculation"] -->
         SBS2["SBS Illumination Application"] -->
         SBS3["SBS Preprocessing"]
@@ -64,8 +62,8 @@ The workflow includes these key steps:
 All processing modules follow a consistent three-step pattern:
 
 1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
-2. **Generate pipeline files**: Create customized CellProfiler pipelines
-3. **Execute pipelines**: Run CellProfiler with the generated files
+2. **Generate CellProfiler files**: Create customized CellProfiler pipeline files
+3. **Execute CellProfiler**: Run CellProfiler with the generated files
 
 ## Starting Point
 
@@ -75,6 +73,7 @@ This guide assumes you have completed the [Getting Started](getting-started.md) 
 # Set environment variables for convenience
 export DATADIR='./scratch/starrynight_example_input'
 export WKDIR='./scratch/starrynight_example_output/workspace'
+# Add new environment variable needed for the complete workflow
 export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
 ```
 
@@ -312,50 +311,13 @@ Throughout the pipeline, you'll use these common parameters:
 
 ## Conclusion
 
-You've now learned how to set up and execute a complete StarryNight pipeline for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.
+You've now learned how to set up and execute a complete StarryNight workflow for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.
 
-## Core Concepts Reference
+For more detailed information on the concepts used throughout this workflow:
 
-Having worked through the complete pipeline, you now have hands-on experience with StarryNight's key components. The following sections briefly explain the foundational concepts that underpin the workflow you've just executed, helping you adapt these techniques for your own datasets.
-
-### System Architecture
-
-StarryNight uses a modular architecture where the CLI commands you've been using interact with a pipeline of specialized processing modules. For detailed information on the architecture, see the [Architecture Overview](../architecture/00_architecture_overview.md).
-
-### Inventory and Index: The Foundation
-
-The foundation of every StarryNight workflow is the inventory and index system that you created in the Getting Started guide:
-
-**Inventory**: A catalog of all files in your dataset that contains basic file information (path, name, extension) and is stored as a Parquet file.
-
-**Index**: Structured metadata extracted from file paths that contains rich, queryable information about datasets, plates, wells, sites, and channels.
-
-When you provided the `-i ${WKDIR}/index/index.parquet` parameter in commands, you were using this structured metadata to locate and select the appropriate images for processing.
-
-### Directory Structure and Organization
-
-Throughout this guide, you've created a workspace with a specific directory structure:
-
-```
-${WKDIR}/
-├── cellprofiler/                # CellProfiler-related files
-│   ├── loaddata/                # Generated LoadData CSV files
-│   └── cppipe/                  # Pipeline files
-├── index/                       # Structured metadata
-│   └── index.parquet            # Index file with extracted metadata
-├── illum/                       # Illumination correction files
-│   ├── cp/                      # Cell Painting illumination
-│   └── sbs/                     # SBS illumination
-├── segcheck/                    # Segmentation validation outputs
-├── preprocess/                  # Preprocessing outputs
-└── analysis/                    # Analysis results
-```
-
-This structure separates inputs, intermediate results, and final outputs, maintaining clear data provenance throughout the workflow.
-
-### Path Parsing System
-
-StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
+- See [Getting Started](getting-started.md) for information on inventory, index, and basic concepts
+- See [Architecture Overview](../architecture/00_architecture_overview.md) for details on StarryNight's modular design
+- See [Parser Configuration](parser-configuration.md) for customizing path parsing for different data structures
 
 ---
 
@@ -406,7 +368,7 @@ StarryNight automatically extracts metadata from file paths using a grammar-base
 
     **Terminology Consistency**
 
-    - **Cell Painting (CP)** - Refers to the morphological imaging workflow track
-    - **Sequencing-Based Screening (SBS)** - Refers to the barcoding/sequencing workflow track
-    - **LoadData files** - CSV files that configure CellProfiler input images
+    - **[Cell Painting](https://www.nature.com/articles/s41592-024-02528-8) (CP)** - Refers to the morphological imaging workflow track
+    - **Barcoding / [Sequencing by Synthesis](https://data-science-sequencing.github.io/Win2018/lectures/lecture2/) (SBS)** - Refers to the barcoding workflow track
+    - **[LoadData](https://cellprofiler-manual.s3.amazonaws.com/CPmanual/LoadData.html) files** - CSV files that configure CellProfiler input images
     - **Experiment configuration** - The `experiment.json` file that defines processing parameters

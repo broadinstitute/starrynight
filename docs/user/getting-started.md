@@ -1,55 +1,77 @@
 # Getting Started with StarryNight
 
-This guide will help you install StarryNight and run your first workflow using the CLI (Command Line Interface) approach.
+This guide will help you install StarryNight and run your first workflow using the CLI (Command Line Interface) approach. You'll set up the environment and calculate illumination correction functions for Cell Painting images.
 
-!!! note "CLI vs Module Layer Approach"
-    **Direct CLI Commands** (shown in this guide): This is a simpler, more direct approach good for learning and exploration. It involves manual execution of individual commands with limited containerization and workflow automation.
+!!! info "Implementation Approaches"
+    **CLI Approach** (shown in this guide): Uses direct command-line commands for learning and exploration. It's a simpler way to understand workflow operations step-by-step.
 
-    **Module-based Approach** (used in production): This provides standardized components with consistent interfaces, containerized execution for reproducibility, advanced workflow composition, automatic parameter inference, and integration with the Canvas UI.
+    **Python/Module Approach** (used in production): Most users will execute these operations through Python code (as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`). This approach provides standardized components, containerized execution, and integration with the Canvas UI.
 
-    This guide focuses on the CLI approach. For production use cases, see the [Architecture Overview](../architecture/00_architecture_overview.md) and [Module Layer](../architecture/03_module_layer.md) documentation.
+    This guide focuses on the CLI approach as a foundation. See [Practical Integration](../architecture/08_practical_integration.md) for the Python implementation and [Architecture Overview](../architecture/00_architecture_overview.md) for system design details.
 
 ## Installation
 
 StarryNight uses the Nix package manager to provide a consistent and reproducible environment:
 
-1. **Install Nix** (if not already installed):
+**Install Nix**:
 
-        sh <(curl -L https://nixos.org/nix/install) --daemon
+```sh
+# Install Nix
+sh <(curl -L https://nixos.org/nix/install) --daemon
+```
 
+**Clone the Repository**:
 
-2. **Clone the Repository**:
+```sh
+# Clone the repository and navigate to it
+git clone https://github.com/broadinstitute/starrynight.git
+cd starrynight
+```
 
-        git clone https://github.com/broadinstitute/starrynight.git
-        cd starrynight
+**Set Up the Environment**:
 
-3. **Set Up the Environment**:
+```sh
+# Set up the Nix development environment
+nix develop --extra-experimental-features nix-command --extra-experimental-features flakes .
+```
 
-        nix develop --extra-experimental-features nix-command --extra-experimental-features flakes .
+**Install Dependencies and Project**:
 
-4. **Install Dependencies and Project**:
+```sh
+# Install basic dependencies
+uv sync
 
-        # First get basic dependencies
-        uv sync
+# Install the project in editable mode with development tools
+uv pip install -e ".[dev]"
+```
 
-        # Then install the project in editable mode with development tools
-        uv pip install -e ".[dev]"
+**Verify Installation**:
 
-5. **Verify Installation**:
+```sh
+# Verify the installation
+starrynight --help
+pipecraft --help
+conductor --help
+```
 
-        starrynight --help
-        pipecraft --help
-        conductor --help
-
-## For Developers
+**For Developers**:
 
 If you're developing for StarryNight, the setup process is the same as above. For detailed information on the project architecture and how to extend components, see the [Architecture Overview](../architecture/00_architecture_overview.md).
 
-## Quick Start Workflow
+## Workflow Steps
 
-This section walks you through running a basic illumination correction workflow, focusong on the calculation of the illumination correction functions alone.
+The following sections guide you through running a basic illumination correction calculation workflow for Cell Painting (CP) images. This process involves downloading sample data, setting up an experiment configuration, generating inventory and index files, and calculating illumination correction functions.
 
-### Step 1: Download Sample Data
+!!! info "Focus of This Guide"
+    This guide focuses only on the Cell Painting (CP) track and specifically on the illumination correction calculation step. The [Complete Workflow Example](example-pipeline-cli.md) will add the Sequencing-Based Screening (SBS) track and show the full analysis workflow.
+
+```mermaid
+flowchart LR
+    Setup["Setup & Preparation"] --> CPIllumCalc["CP Illumination Calculation"]
+    style CPIllumCalc fill:#e6f3ff,stroke:#0066cc
+```
+
+## Download Sample Data
 
 ```sh
 # Create a directory for the sample data
@@ -69,20 +91,16 @@ export DATADIR='./scratch/starrynight_example_input'
 export WKDIR='./scratch/starrynight_example_output/workspace'
 ```
 
-### Step 2: Create Experiment Configuration
+## Create Experiment Configuration
 
 The experiment configuration file defines parameters for your processing workflow:
-
-First, ensure the directories exist:
 
 ```sh
 # Create necessary directories for the workflow
 mkdir -p scratch/starrynight_example_output/workspace/
-```
 
-```sh
 # Generate a default experiment configuration template
-starrynight exp init -e  "Pooled CellPainting [Generic]" -o ${WKDIR}
+starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
 ```
 
 This creates an `experiment_init.json` file in your workspace that you can edit to match your dataset's characteristics:
@@ -110,7 +128,7 @@ FIXME: `sbs_cell_channel` and `sbs_mito_channel` should not need to be specified
 
 Adjust the values to match your experiment setup.
 
-### Step 3: Generate Inventory
+## Generate Inventory
 
 Create a catalog of all image files in your dataset:
 
@@ -121,6 +139,12 @@ starrynight inventory gen \
     -o ${WKDIR}/inventory
 ```
 
+The inventory is a comprehensive catalog of all files in your dataset that contains:
+
+- Basic file information: path, name, extension
+- Created by scanning the data directory recursively
+- Stored as a Parquet file for efficient querying
+
 This command will create an inventory file:
 
 ```
@@ -129,7 +153,7 @@ ${WKDIR}/inventory/
 └── inventory.parquet   # Main inventory file
 ```
 
-### Step 4: Generate Index
+## Generate Index
 
 Parse the inventory to create a structured index with metadata:
 
@@ -139,9 +163,19 @@ starrynight index gen \
     -o ${WKDIR}/index/
 ```
 
-The result will be an `index.parquet` file containing structured metadata for each image.
+The index is a structured database of metadata extracted from file paths that:
 
-### Step 5: Create Experiment File
+- Contains rich, queryable information: dataset, batch, plate, well, site, channel info
+- Is created by parsing file paths using a grammar-based parser
+- Enables sophisticated filtering and selection of images
+- Is stored as a structured Parquet file
+
+The result will be an `index.parquet` file containing structured metadata for each image. This index will be used in all subsequent processing steps through the `-i` parameter.
+
+!!! info "Path Parsing System"
+    StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
+
+## Create Experiment File
 
 Initialize an experiment using your index and configuration:
 
@@ -155,21 +189,49 @@ starrynight exp new \
 
 This creates an `experiment.json` file with dataset-specific parameters derived from your index.
 
-### Step 6: Run Illumination Correction Calculation
+## Run Illumination Correction Calculation
+
+All StarryNight processing modules follow a consistent three-step pattern:
+
+1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
+2. **Generate CellProfiler files**: Create customized CellProfiler pipeline files
+3. **Execute CellProfiler**: Run CellProfiler with the generated files
+
+Let's follow this pattern to calculate illumination correction functions:
 
 First, ensure the directories exist:
 
 ```sh
 mkdir -p ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/cp/illum/illum_calc/
+mkdir -p ${WKDIR}/illum/cp/illum_calc/
 ```
 
-!!! note "Pipeline Generation Approaches"
+!!! info "Pipeline Generation Approaches"
     StarryNight offers two ways to generate CellProfiler pipelines:
 
     - **Pre-fabricated Pipelines**: Uses established, tested pipeline templates (add `--use_legacy` flag)
     - **Dynamic Generation**: Automatically generates pipelines based on configuration (omit the `--use_legacy` flag)
 
     This guide uses the pre-fabricated approach for stability.
+
+!!! info "Directory Structure"
+    Throughout this guide, we're creating a workspace with this directory structure:
+
+    ```
+    ${WKDIR}/
+    ├── cellprofiler/                # CellProfiler-related files
+    │   ├── loaddata/                # Generated LoadData CSV files
+    │   └── cppipe/                  # Pipeline files
+    ├── index/                       # Structured metadata
+    │   └── index.parquet            # Index file with extracted metadata
+    ├── illum/                       # Illumination correction files
+    │   ├── cp/                      # Cell Painting illumination
+    │   └── sbs/                     # SBS illumination
+    └── experiment.json              # Experiment configuration
+    ```
+
+    This structure separates inputs, intermediate results, and final outputs, maintaining clear data provenance throughout the workflow.
 
 **Generate LoadData Files:**
 
@@ -203,8 +265,7 @@ starrynight cp \
     -o ${WKDIR}/illum/cp/illum_calc
 ```
 
-
-### Step 7: Verify Results
+## Verify Results
 
 The illumination correction files will be created in the output directory:
 
@@ -236,31 +297,22 @@ plt.show()
 
 ## Advanced CLI Options
 
-!!! tip "Optional Reference"
-    The following options are for reference and not required to complete the basic workflow. You can explore these advanced features once you're comfortable with the basic commands.
-
 StarryNight commands support additional options to customize processing:
 
-### Path Masking
-
-Filter files with path masks using the `-m/--path_mask` option:
+**Path Masking:** Filter files with path masks using the `-m/--path_mask` option:
 
 ```sh
 starrynight illum calc loaddata -m "Batch1/Plate1" ...
 ```
 
-### Parallel Processing
-
-Control the number of parallel jobs with the `-j/--jobs` option:
+**Parallel Processing:** Control the number of parallel jobs with the `-j/--jobs` option:
 
 ```sh
 # Run with 8 parallel jobs (default is 50)
 starrynight cp -j 8 -p /path/to/pipeline.cppipe ...
 ```
 
-### CellProfiler Plugins
-
-Specify a directory containing CellProfiler plugins:
+**CellProfiler Plugins:** Specify a directory containing CellProfiler plugins:
 
 ```sh
 starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
@@ -268,9 +320,9 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 
 ## Next Steps
 
-- Try an [end-to-end pipeline example](example-pipeline-cli.md) which includes explanations of core concepts
+- Continue to the [Complete Workflow Example](example-pipeline-cli.md)
 - Check the architecture docs to understand the [system structure](../architecture/00_architecture_overview.md)
-- For implementation details, see the [Module Layer](../architecture/03_module_layer.md) documentation
+- For the Python/Module approach used in production, see [Practical Integration](../architecture/08_practical_integration.md)
 
 
 !!! info "For Document Contributors"
@@ -285,7 +337,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 
     **Structure Principles**
 
-    1. **Linear numbered steps** - Maintain a clear, sequential progression (Steps 1-7)
+    1. **Clear section headings** - Use H2 headings for main workflow steps without numbers
     2. **Notes for alternatives** - Use MkDocs admonitions to present alternatives without disrupting flow
     3. **Quick start spirit** - Keep explanations brief and focused on practical execution
     4. **Progressive detail** - Start with setup, then basic workflow, then advanced options
@@ -293,11 +345,11 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 
     **Content Style Guidelines**
 
-    1. **Command formatting** - Include descriptive comments in code blocks
-    2. **Bold subheadings** - Use bold text rather than deeper heading levels for substeps
-    3. **Copy-pastable commands** - Ensure commands work as written without modification
-    4. **Environment variables** - Use consistent variables (DATADIR, WKDIR)
-    5. **Expected outputs** - Show example outputs and file structures where appropriate
+    6. **Command formatting** - Include descriptive comments in code blocks
+    7. **Bold subheadings** - Use bold text rather than deeper heading levels for substeps
+    8. **Copy-pastable commands** - Ensure commands work as written without modification
+    9. **Environment variables** - Use consistent variables (DATADIR, WKDIR)
+    10. **Expected outputs** - Show example outputs and file structures where appropriate
 
     **Terminology Consistency**
 
