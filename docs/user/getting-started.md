@@ -194,7 +194,7 @@ This creates an `experiment.json` file with dataset-specific parameters derived 
 All StarryNight processing modules follow a consistent three-step pattern:
 
 1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
-2. **Generate CellProfiler files**: Create customized CellProfiler pipeline files
+2. **Generate CellProfiler pipelines**: Create customized CellProfiler pipeline files (cppipe files)
 3. **Execute CellProfiler**: Run CellProfiler with the generated files
 
 Let's follow this pattern to calculate illumination correction functions:
