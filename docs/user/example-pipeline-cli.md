@@ -341,7 +341,7 @@ For more detailed information on the concepts used throughout this workflow:
     2. **Parallel tracks visualization** - Keep the CP and SBS tracks visually distinct in diagrams and structure
     3. **Complete CLI commands** - Provide fully copyable command blocks with all necessary parameters
     4. **Directory creation consistency** - Always include `mkdir` commands before operations that require directories
-    5. **Three-step pattern emphasis** - Maintain the loaddata → cppipe → execute pattern for each module
+    5. **Three-step pattern emphasis** - Maintain the loaddata → cppipe → execute pattern for each CellProfiler-based module
 
     **Content Style Principles**
 
