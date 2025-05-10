@@ -55,15 +55,18 @@ The workflow includes these key steps:
 - **CP Illumination Application**: Apply corrections to CP images and segment cells
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
-- **SBS Illumination Application**: Apply corrections and align SBS image cycles
+- **SBS Illumination Application**: Apply illumination corrections and align DAPI images across cycles
 - **SBS Preprocessing**: Process SBS images, compensate channels, and call barcodes
 - **Analysis**: Integrate CP and SBS data and extract measurements
 
-All processing modules follow a consistent three-step pattern:
+All CellProfiler-based modules in this workflow follow a consistent three-step pattern:
 
 1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
 2. **Generate CellProfiler pipelines**: Create customized CellProfiler pipeline files (cppipe files)
 3. **Execute CellProfiler**: Run CellProfiler with the generated files
+
+!!! note "Beyond CellProfiler"
+    While this workflow focuses on CellProfiler-based modules, StarryNight also includes other algorithm types that don't follow this three-step pattern. See [Algorithm Layer](../architecture/01_algorithm_layer.md) for details.
 
 ## Starting Point
 
@@ -301,7 +304,7 @@ Throughout the pipeline, you'll use these common parameters:
 - `-p, --pipeline`: Path to CellProfiler pipeline file or directory
 - `-c, --corr_images`: Path to illumination-corrected images
 - `-b, --barcode`: Path to barcode CSV file for sequencing data
-- `--sbs`: Flag to indicate processing of Sequencing-Based Screening images
+- `--sbs`: Flag to indicate processing of Sequencing by Synthesis (barcoding) images
 
 ## Next Steps
 
@@ -315,7 +318,6 @@ You've now learned how to set up and execute a complete StarryNight workflow for
 
 For more detailed information on the concepts used throughout this workflow:
 
-- See [Getting Started](getting-started.md) for information on inventory, index, and basic concepts
 - See [Architecture Overview](../architecture/00_architecture_overview.md) for details on StarryNight's modular design
 - See [Parser Configuration](parser-configuration.md) for customizing path parsing for different data structures
 

@@ -63,7 +63,7 @@ If you're developing for StarryNight, the setup process is the same as above. Fo
 The following sections guide you through running a basic illumination correction calculation workflow for Cell Painting (CP) images. This process involves downloading sample data, setting up an experiment configuration, generating inventory and index files, and calculating illumination correction functions.
 
 !!! info "Focus of This Guide"
-    This guide focuses only on the Cell Painting (CP) track and specifically on the illumination correction calculation step. The [Complete Workflow Example](example-pipeline-cli.md) will add the Sequencing-Based Screening (SBS) track and show the full analysis workflow.
+    This guide focuses only on the Cell Painting (CP) track and specifically on the illumination correction calculation step. The [Complete Workflow Example](example-pipeline-cli.md) will add the Sequencing by Synthesis (SBS) (commonly referred to as barcoding) track and show the full analysis workflow.
 
 ```mermaid
 flowchart LR
@@ -191,13 +191,7 @@ This creates an `experiment.json` file with dataset-specific parameters derived 
 
 ## Run Illumination Correction Calculation
 
-All StarryNight processing modules follow a consistent three-step pattern:
-
-1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
-2. **Generate CellProfiler pipelines**: Create customized CellProfiler pipeline files (cppipe files)
-3. **Execute CellProfiler**: Run CellProfiler with the generated files
-
-Let's follow this pattern to calculate illumination correction functions:
+Let's run the illumination correction calculation, which follows the standard CellProfiler module pattern of generating LoadData files, creating pipeline files, and executing CellProfiler:
 
 First, ensure the directories exist:
 
