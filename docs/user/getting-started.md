@@ -268,8 +268,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 
 ## Next Steps
 
-- Learn about [Core Concepts](core-concepts.md) of the StarryNight platform
-- Try an [end-to-end pipeline example](example-pipeline-cli.md)
+- Try an [end-to-end pipeline example](example-pipeline-cli.md) which includes explanations of core concepts
 - Check the architecture docs to understand the [system structure](../architecture/00_architecture_overview.md)
 - For implementation details, see the [Module Layer](../architecture/03_module_layer.md) documentation
 

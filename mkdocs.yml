@@ -46,9 +46,8 @@ nav:
   - Home: index.md
   - User Guide:
     - Getting Started: user/getting-started.md
-    - Core Concepts: user/core-concepts.md
-    - Parser Configuration: user/parser-configuration.md
     - Example CLI Pipeline: user/example-pipeline-cli.md
+    - Parser Configuration: user/parser-configuration.md
   - Developer Guide:
     - System Maintenance: developer/guides/system-maintenance-guide.md
     - Workflow Implementation: developer/guides/workflow-implementation-guide.md

@@ -78,7 +78,7 @@ Each section emphasizes:
 - Non-obvious implementation details and special cases
 - Integration points with other parts of the system
 
-For understanding the overall system architecture, refer to the [Core Concepts](../core-concepts.md) documentation.
+For understanding the overall system architecture, refer to the [Architecture Overview](../../architecture/00_architecture_overview.md) documentation.
 
 ---
 

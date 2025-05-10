@@ -9,4 +9,4 @@ A toolkit for processing, analyzing, and managing optical pooled screening (OPS)
 - **Run** jobs locally or scale to cloud environments
 - **Visualize** results through an intuitive interface
 
-[Installation Guide →](user/getting-started.md) | [Core Concepts →](user/core-concepts.md) | [Architecture →](architecture/00_architecture_overview.md)
+[Installation Guide →](user/getting-started.md) | [Pipeline Example →](user/example-pipeline-cli.md) | [Architecture →](architecture/00_architecture_overview.md)
