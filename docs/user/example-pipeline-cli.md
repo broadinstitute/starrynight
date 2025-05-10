@@ -283,47 +283,6 @@ starrynight cp \
     --sbs
 ```
 
-## Output Files and Directory Structure
-
-Each processing step generates specific outputs organized in a structured directory hierarchy. The directory structure helps manage the various data types and processing stages:
-
-```
-${WKDIR}/
-├── cellprofiler/                    # CellProfiler-related files
-│   ├── loaddata/                    # Generated LoadData CSV files
-│   └── cppipe/                      # Generated CellProfiler pipelines
-├── index/                           # Inventory and index files
-├── illum/                           # Illumination correction outputs
-│   ├── cp/                          # Cell Painting illumination
-│   └── sbs/                         # SBS illumination
-├── segcheck/                        # Segmentation validation outputs
-├── preprocess/                      # Preprocessing outputs
-└── analysis/                        # Final analysis results
-```
-
-This organization separates input/configuration files, intermediate processing outputs, and final results in a logical hierarchy. Each step's outputs include:
-
-- **Inventory & Index**
-  - `inventory.parquet`: Catalog of all image files
-  - `index.parquet`: Structured metadata extracted from file paths
-
-- **Illumination Correction**
-  - `.npy` files containing illumination correction functions (e.g., `Plate1_IllumDAPI.npy`)
-  - Corrected 16-bit TIFF images
-
-- **Segmentation Check**
-  - CSV files with cell segmentation quality metrics
-  - TIFF images with segmentation overlays for visual verification
-
-- **Preprocessing**
-  - Compensated image files for each channel and cycle
-  - CSV files with barcode call information
-  - Overlay images showing cell segmentation and barcode spots
-
-- **Analysis**
-  - CSV files with comprehensive cell measurements
-  - Visualization images with cell outlines and identified features
-  - Barcode-cell association data for downstream analysis
 
 ## Common Parameters
 
@@ -348,10 +307,47 @@ Throughout the pipeline, you'll use these common parameters:
 
 ## Conclusion
 
-You have now completed a full StarryNight pipeline, from ingesting raw image data to producing structured analysis results. This workflow demonstrates how StarryNight systematically processes high-content screening data:
+You've now learned how to set up and execute a complete StarryNight pipeline for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.
 
-1. Create inventory and index to organize image data
-2. Apply illumination correction to normalize image intensity in CP and SBS tracks
-3. Perform quality control through segmentation checks
-4. Process SBS images with specialized algorithms for barcode detection
-5. Extract comprehensive cellular measurements and barcode associations
+---
+
+!!! info "For Document Contributors"
+    This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
+
+    ### Document Purpose and Audience
+
+    This document serves as a bridge between the introductory Getting Started guide and complete workflow implementation. It targets users who:
+    - Are familiar with basic StarryNight concepts
+    - Need to implement a complete processing pipeline
+    - Prefer using the CLI interface rather than Python API
+    - Need to understand both CP and SBS processing tracks
+
+    ### Guiding Structure Principles
+
+    1. **Progressive disclosure approach** - Start with a clear overview before diving into implementation details
+    2. **Parallel tracks visualization** - Keep the CP and SBS tracks visually distinct in diagrams and structure
+    3. **Complete CLI commands** - Provide fully copyable command blocks with all necessary parameters
+    4. **Directory creation consistency** - Always include mkdir commands before operations that require directories
+    5. **Three-step pattern emphasis** - Maintain the loaddata → cppipe → execute pattern for each module
+
+    ### Content Style Principles
+
+    6. **Command formatting consistency** - Format all CLI commands with consistent indentation and backslash line continuations
+    7. **Abbreviation usage** - Define abbreviations (CP, SBS) once, then use consistently throughout
+    8. **Parameter explanation** - Keep parameter explanations concise and grouped in the Common Parameters section
+    9. **Lightweight diagrams** - Keep mermaid diagrams focused on structure without duplicating descriptions
+    10. **CLI vs Python differentiation** - Clearly distinguish CLI-based approaches from Python API approaches
+
+    ### Document Relationships
+
+    - **Getting Started dependency** - This document builds directly on getting-started.md and should stay aligned with it
+    - **Practical Integration complement** - Serves as the CLI alternative to architecture/08_practical_integration.md's Python API approach
+    - **Module reference complementarity** - Complements module-specific documentation without duplicating it
+
+    ### Terminology Consistency
+
+    - **Cell Painting (CP)** - Refers to the morphological imaging workflow track
+    - **Sequencing-Based Screening (SBS)** - Refers to the barcoding/sequencing workflow track
+    - **LoadData files** - CSV files that configure CellProfiler input images
+    - **Experiment configuration** - The experiment.json file that defines processing parameters
+    - **Illumination correction** - Process of normalizing image intensity variations (calculation → application)
