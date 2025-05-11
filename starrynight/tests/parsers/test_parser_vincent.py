@@ -4,24 +4,27 @@ from functools import reduce
 from typing import Any
 
 import pytest
+from lark import Lark, ParseError
 
 from starrynight.parsers.common import ParserType, get_parser
 from starrynight.parsers.transformer_vincent import VincentAstToIR
 
 
 @pytest.fixture
-def parser():
+def parser() -> Lark:
     """Create and return a Vincent parser instance."""
     return get_parser(ParserType.OPS_VINCENT)
 
 
 @pytest.fixture
-def transformer():
+def transformer() -> VincentAstToIR:
     """Create and return a Vincent transformer instance."""
     return VincentAstToIR()
 
 
-def extract_metadata(filepath: str, parser, transformer) -> dict[str, Any]:
+def extract_metadata(
+    filepath: str, parser: Lark, transformer: VincentAstToIR
+) -> dict[str, Any]:
     """Extract metadata from a file path using the Vincent parser."""
     ast = parser.parse(filepath)
     ir = transformer.transform(ast)
@@ -88,7 +91,7 @@ def test_channel_normalization(parser, transformer):
 
         # Check that hyphens in channel names are removed
         assert "channel_0" in result
-        assert "4052" in result["channel_0"], (
+        assert result["channel_0"] == "4052", (
             "Hyphen should be removed from channel name"
         )
     except Exception:
@@ -128,7 +131,7 @@ def test_invalid_paths(parser):
     ]
 
     for path in invalid_paths:
-        with pytest.raises(Exception):
+        with pytest.raises(ParseError):
             parser.parse(path)
 
 
@@ -137,8 +140,6 @@ def test_parser_structure():
 
     This test validates that the parser extracts the expected keys for both
     SBS and CP path formats, ensuring the parser structure remains stable.
-    The test output includes a detailed dump of parsed metadata to help
-    with debugging and understanding the parser.
     """
     # Test paths
     sbs_path = "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff"
@@ -149,17 +150,9 @@ def test_parser_structure():
 
     # Process SBS path
     sbs_result = extract_metadata(sbs_path, parser, transformer)
-    print("\n===== SBS PATH STRUCTURE =====")
-    print(f"Path: {sbs_path}")
-    for k, v in sorted(sbs_result.items()):
-        print(f"  {k}: {v}")
 
     # Process CP path
     cp_result = extract_metadata(cp_path, parser, transformer)
-    print("\n===== CP PATH STRUCTURE =====")
-    print(f"Path: {cp_path}")
-    for k, v in sorted(cp_result.items()):
-        print(f"  {k}: {v}")
 
     # Verify both parsers extract expected keys
     expected_keys = ["dataset_id", "batch_id", "plate_id", "extension"]
