@@ -25,8 +25,16 @@ class MockTransformer(BaseTransformer):
         super().__init__()
         self.channel_dict = {"channel_dict": ["channel1", "channel2"]}
 
-    def transform(self, ast):
-        """Return a simplified mock transformation result."""
+    def transform(self, ast) -> dict:
+        """Return a simplified mock transformation result.
+
+        Args:
+            ast: The abstract syntax tree to transform
+
+        Returns:
+            Dictionary with mock transformation data
+
+        """
         return {
             "start": [
                 {"dataset_id": "test_dataset"},
@@ -39,8 +47,13 @@ class MockTransformer(BaseTransformer):
 
 
 @pytest.fixture
-def mock_file_inventory():
-    """Create a mock file inventory for testing."""
+def mock_file_inventory() -> FileInventory:
+    """Create a mock file inventory for testing.
+
+    Returns:
+        A FileInventory object with test data.
+
+    """
     return FileInventory(
         key="path/to/test_file.tiff",
         filename="test_file",
@@ -53,18 +66,31 @@ def mock_file_inventory():
 
 
 @pytest.fixture
-def mock_parser():
-    """Create a mock Lark parser."""
+def mock_parser() -> MagicMock:
+    """Create a mock Lark parser.
+
+    Returns:
+        A MagicMock object that simulates a Lark parser.
+
+    """
     mock = MagicMock(spec=Lark)
     mock.parse.return_value = "mock_ast"
     return mock
 
 
 class TestPCPIndex:
-    """Tests for the PCPIndex model."""
+    """Tests for the PCPIndex model.
+
+    This test class verifies the behavior of the PCPIndex model, which is used
+    to represent indexed image files in the PCP (plate-cycle-position) format.
+    """
 
     def test_basic_properties(self):
-        """Test PCPIndex model creation and basic properties."""
+        """Test PCPIndex model creation and basic properties.
+
+        Verifies that a PCPIndex instance correctly initializes with provided
+        values and computes derived properties.
+        """
         # Create a minimal test instance
         index = PCPIndex(
             key="path/to/test_file.tiff",
@@ -82,30 +108,63 @@ class TestPCPIndex:
         assert index.is_sbs_image is True
         assert index.is_dir is False
 
-    def test_extension_validation(self):
-        """Test extension-based validation in PCPIndex."""
-        # Test valid image extensions
-        for ext in IMG_FORMATS:
-            index = PCPIndex(key="path/to/file", extension=ext)
-            assert index.is_image is True
+    @pytest.mark.parametrize(
+        "extension,expected",
+        [
+            ("tiff", True),
+            ("tif", True),
+            ("png", True),
+            ("txt", False),
+            ("csv", False),
+        ],
+    )
+    def test_extension_validation(self, extension: str, expected: bool):
+        """Test extension-based validation in PCPIndex.
 
-        # Test non-image extension
-        index = PCPIndex(key="path/to/file", extension="txt")
-        assert index.is_image is False
+        Args:
+            extension: File extension to test
+            expected: Whether it should be classified as an image
 
-    def test_dir_validation(self):
-        """Test directory validation in PCPIndex."""
-        # Test directory (no extension)
-        index = PCPIndex(key="path/to/dir")
-        assert index.is_dir is True
+        """
+        index = PCPIndex(key=f"path/to/file.{extension}", extension=extension)
+        assert index.is_image is expected, (
+            f"Extension '{extension}' should {'be' if expected else 'not be'} classified as an image"
+        )
 
-        # Test file (has extension)
-        index = PCPIndex(key="path/to/file", extension="tiff")
-        assert index.is_dir is False
+    @pytest.mark.parametrize(
+        "key,extension,expected",
+        [("path/to/dir", None, True), ("path/to/file", "tiff", False)],
+    )
+    def test_dir_validation(self, key: str, extension: str, expected: bool):
+        """Test directory validation in PCPIndex.
+
+        Args:
+            key: File path to test
+            extension: File extension (None for directories)
+            expected: Whether it should be classified as a directory
+
+        """
+        index = (
+            PCPIndex(key=key, extension=extension)
+            if extension
+            else PCPIndex(key=key)
+        )
+        assert index.is_dir is expected, (
+            f"Path '{key}' should {'be' if expected else 'not be'} classified as a directory"
+        )
 
 
 def test_ast_to_pcp_index(mock_file_inventory, mock_parser):
-    """Test ast_to_pcp_index function with mocks."""
+    """Test ast_to_pcp_index function with mocks.
+
+    Verifies that the function correctly converts a file inventory and AST
+    into a PCPIndex object with proper properties.
+
+    Args:
+        mock_file_inventory: Fixture providing test inventory data
+        mock_parser: Fixture providing a mock Lark parser
+
+    """
     # Call the function with mocks
     result = ast_to_pcp_index(mock_file_inventory, mock_parser, MockTransformer)
 
@@ -113,11 +172,19 @@ def test_ast_to_pcp_index(mock_file_inventory, mock_parser):
     mock_parser.parse.assert_called_once_with(mock_file_inventory.key)
 
     # Verify basic result properties
-    assert isinstance(result, PCPIndex)
-    assert result.key == mock_file_inventory.key
-    assert result.dataset_id == "test_dataset"
-    assert result.batch_id == "test_batch"
-    assert result.extension == "tiff"
+    assert isinstance(result, PCPIndex), "Result should be a PCPIndex instance"
+    assert result.key == mock_file_inventory.key, (
+        "Key should match the inventory key"
+    )
+    assert result.dataset_id == "test_dataset", (
+        "Dataset ID should be correctly transferred"
+    )
+    assert result.batch_id == "test_batch", (
+        "Batch ID should be correctly transferred"
+    )
+    assert result.extension == "tiff", (
+        "Extension should be correctly transferred"
+    )
 
 
 @patch("starrynight.algorithms.index.pl.read_parquet")
@@ -126,12 +193,24 @@ def test_ast_to_pcp_index(mock_file_inventory, mock_parser):
 def test_gen_pcp_index(
     mock_tqdm, mock_write_pq, mock_read_parquet, mock_parser
 ):
-    """Test gen_pcp_index function."""
+    """Test gen_pcp_index function.
+
+    Verifies that index generation correctly processes inventory data,
+    creates PCPIndex objects, and writes results to the output path.
+
+    Args:
+        mock_tqdm: Mock for progress bar
+        mock_write_pq: Mock for parquet writing function
+        mock_read_parquet: Mock for parquet reading function
+        mock_parser: Mock for the path parser
+
+    """
     # Create simplified mock data
     mock_df = pl.DataFrame(
         {"key": ["test.tiff"], "filename": ["test"], "extension": [".tiff"]}
     )
     mock_read_parquet.return_value = mock_df
+    # Configure tqdm to iterate through data without progress bar in tests
     mock_tqdm.return_value = mock_df.iter_slices()
 
     # Run the function
@@ -143,12 +222,15 @@ def test_gen_pcp_index(
     )
 
     # Verify core interactions
-    mock_read_parquet.assert_called_once()
-    mock_write_pq.assert_called_once()
+    # Verify core interactions occurred
+    mock_read_parquet.assert_called_once(), "Should read inventory from parquet"
+    mock_write_pq.assert_called_once(), "Should write index to parquet"
 
-    # Verify output path
+    # Verify output path is constructed correctly
     args, _ = mock_write_pq.call_args
-    assert str(args[2]).endswith("/test/output/index.parquet")
+    assert str(args[2]).endswith("/test/output/index.parquet"), (
+        "Output file should be named 'index.parquet' in specified directory"
+    )
 
 
 @patch("starrynight.algorithms.index.ast_to_pcp_index")
@@ -156,7 +238,18 @@ def test_gen_pcp_index(
 def test_gen_pcp_index_error_handling(
     mock_read_parquet, mock_ast_to_pcp_index, mock_parser
 ):
-    """Test error handling in gen_pcp_index function."""
+    """Test error handling in gen_pcp_index function.
+
+    Verifies that the function properly handles parsing errors for individual
+    files without failing the entire process. Checks that appropriate error
+    messages are logged when parsing fails.
+
+    Args:
+        mock_read_parquet: Mock for parquet reading function
+        mock_ast_to_pcp_index: Mock for index conversion function
+        mock_parser: Mock for the path parser
+
+    """
     # Create mock data with good and bad records
     mock_df = pl.DataFrame(
         {
@@ -168,7 +261,7 @@ def test_gen_pcp_index_error_handling(
     mock_read_parquet.return_value = mock_df
 
     # Setup mock to succeed for good file and fail for bad file
-    def side_effect(inv: FileInventory, *args: object) -> PCPIndex:
+    def side_effect(inv: FileInventory, *args: tuple[object, ...]) -> PCPIndex:
         if inv.filename == "good":
             return PCPIndex(key=inv.key, extension="tiff")
         else:
@@ -191,7 +284,13 @@ def test_gen_pcp_index_error_handling(
                 )
 
     # Verify error handling for bad record
-    assert mock_print.call_count > 0
+    assert mock_print.call_count > 0, (
+        "Error message should be printed for parsing failures"
+    )
     call_args = mock_print.call_args_list[0][0][0]
-    assert "Unable to parse" in call_args
-    assert "Test error" in call_args
+    assert "Unable to parse" in call_args, (
+        "Error message should indicate parsing failure"
+    )
+    assert "Test error" in call_args, (
+        "Original error message should be included"
+    )
