@@ -91,7 +91,6 @@ Integration tests can use either:
   - `fix_s1_workspace["workspace_dir"]`: Base workspace directory
   - `fix_s1_workspace["index_dir"]`: Index directory
   - `fix_s1_workspace["inventory_dir"]`: Inventory directory
-  - `fix_s1_workspace["cp_illum_calc_dir"]`: CP illumination calculation directory
   - And other paths needed for workflow testing
 
 ## Mocking Strategy
