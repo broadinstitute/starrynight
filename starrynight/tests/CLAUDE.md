@@ -50,18 +50,23 @@ This testing plan addresses both pipeline types but distinguishes them clearly w
 
 ## Test Organization
 
-Tests should be organized to mirror the structure of the source code:
+Tests should be organized to mirror the structure of the source code with both unit and integration tests following the same component-based structure:
 
 ```
 starrynight/tests/
-├── algorithms/         # Test algorithm functionality
-├── cli/                # Test CLI commands
-├── experiments/        # Test experiment configurations
-├── modules/            # Test module specifications and compute graphs
-├── parsers/            # Test path parsers
-├── pipelines/          # Test StarryNight pipeline composition with Pipecraft
-└── utils/              # Test utility functions
+├── algorithms/             # Algorithm tests (unit and integration)
+├── cli/                    # CLI tests (unit and integration)
+├── experiments/            # Experiment tests
+├── modules/                # Module tests
+├── parsers/                # Parser tests
+├── pipelines/              # Pipeline tests (unit and integration)
+├── utils/                  # Utility function tests
+└── fixtures/               # Shared test fixtures
 ```
+
+Integration tests can be either:
+- Placed in separate files with naming convention (e.g., `test_index_integration.py`)
+- Mixed with unit tests but marked with `@pytest.mark.integration`
 
 ## Test Data Strategy
 
@@ -143,39 +148,42 @@ For file system operations:
 
 ### Phase 1: Algorithm Layer Tests
 
-- [ ] Index algorithm tests (builds on existing tests)
-- [ ] Illumination calculation algorithm tests
-- [ ] Illumination application algorithm tests
-- [ ] Segmentation check algorithm tests
-- [ ] CellProfiler pipeline generation algorithm tests
+- [ ] Index algorithm unit tests (builds on existing tests)
+- [ ] Illumination calculation algorithm unit tests
+- [ ] Illumination application algorithm unit tests
+- [ ] Segmentation check algorithm unit tests
+- [ ] Algorithm integration tests (e.g., index → illumination calculation flow)
 
 ### Phase 2: CLI Layer Tests
 
-- [ ] Command registration tests
-- [ ] Parameter validation tests
-- [ ] Command execution tests
-- [ ] Error handling tests
+- [ ] Command registration unit tests
+- [ ] Parameter validation unit tests
+- [ ] Command execution unit tests
+- [ ] Error handling unit tests
+- [ ] CLI workflow integration tests for commands that work together
 
 ### Phase 3: Module Layer Tests
 
-- [ ] Module specification tests
-- [ ] Module configuration tests
-- [ ] Compute graph generation tests
-- [ ] Container configuration tests
+- [ ] Module specification unit tests
+- [ ] Module configuration unit tests
+- [ ] Compute graph generation unit tests
+- [ ] Container configuration unit tests
+- [ ] Module integration tests for interrelated modules
 
-### Phase 4: StarryNight Pipeline and Integration Tests
+### Phase 4: StarryNight Pipeline Tests
 
-- [ ] Pipecraft pipeline composition tests
-- [ ] Module integration tests
-- [ ] End-to-end workflow tests
+- [ ] Pipecraft pipeline composition unit tests
+- [ ] Pipeline structure validation tests
+- [ ] End-to-end workflow integration tests
 - [ ] Error handling and recovery tests
 
 ### Phase 5: Utilities and Parsers
 
-- [ ] Extend parser tests
-- [ ] File utility tests
-- [ ] Data transformation tests
+- [ ] Extend parser unit tests
+- [ ] File utility unit tests
+- [ ] Data transformation unit tests
 - [ ] Configuration validation tests
+- [ ] Parser integration tests
 
 ## Integration Testing Approach
 
@@ -245,38 +253,48 @@ def test_cp_illum_workflow_integration():
     validate_workflow_output(f"{test_data.workspace}/illum/cp/illum_apply")
 ```
 
-### Integration Test Folder Structure
+### Integration Test Organization
 
-Integration tests should be organized in a dedicated folder structure that separates them from unit tests:
+Integration tests should follow the same component-based structure as unit tests, maintaining consistency with the source code organization:
 
 ```
 starrynight/tests/
-├── integration/                      # All integration tests
-│   ├── conftest.py                   # Shared fixtures for integration tests
-│   ├── fixtures/                     # Test data for integration tests
-│   │   ├── minimal_dataset/          # Minimal dataset for basic workflow tests
-│   │   │   ├── images/               # Small set of test images
-│   │   │   ├── metadata/             # Simplified metadata files
-│   │   │   └── expected_outputs/     # Expected output files for validation
-│   │   └── edge_cases/               # Test data for edge cases
-│   ├── workflows/                    # Tests for complete workflows
-│   │   ├── test_cp_workflow.py       # Cell Painting workflow integration tests
-│   │   ├── test_sbs_workflow.py      # SBS workflow integration tests
-│   │   └── test_complete_workflow.py # Complete workflow integration tests
-│   ├── cli/                          # CLI integration tests
-│   │   └── test_cli_pipeline.py      # Tests for CLI pipeline commands
-│   └── utils/                        # Utilities for integration tests
-│       ├── command_runner.py         # Utilities for running CLI commands
-│       ├── output_validators.py      # Functions to validate workflow outputs
-│       └── test_data_generators.py   # Functions to generate test data
+├── fixtures/                        # Shared test fixtures for all tests
+│   ├── images/                      # Small test images
+│   ├── cppipe/                      # Sample CellProfiler pipelines
+│   └── metadata/                    # Test metadata files
+├── conftest.py                      # Shared fixtures and pytest configuration
+├── utils/                           # Utilities for testing
+│   ├── command_runner.py            # Utilities for running CLI commands
+│   ├── output_validators.py         # Functions to validate workflow outputs
+│   └── test_data_generators.py      # Functions to generate test data
+├── algorithms/                      # Algorithm tests
+│   ├── test_index.py                # Unit tests for index algorithm
+│   └── test_index_integration.py    # Integration tests for index algorithm
+├── cli/                             # CLI tests
+│   ├── test_commands.py             # Unit tests for CLI commands
+│   └── test_workflow_integration.py # Integration tests for CLI workflows
+└── pipelines/                       # Pipeline tests
+    ├── test_pipeline.py             # Unit tests for pipeline components
+    └── test_pipeline_integration.py # Integration tests for complete pipelines
 ```
 
-For workflow tests that follow the example-pipeline-cli.md pattern:
+For integration tests, you can either:
+1. Use separate files with `_integration` suffix for clarity, or
+2. Use pytest markers within the same files:
 
-1. Create a dedicated test file in `integration/workflows/`
-2. Use fixtures from `integration/fixtures/minimal_dataset/`
-3. Define validation functions in `integration/utils/output_validators.py`
-4. Create helper functions in `integration/utils/command_runner.py`
+```python
+@pytest.mark.integration
+def test_complete_workflow():
+    """Integration test for the complete workflow."""
+    # Test implementation
+```
+
+This keeps related tests together while still allowing you to run integration tests separately:
+```
+pytest -m "not integration"  # Run just unit tests
+pytest -m "integration"      # Run just integration tests
+```
 
 ### Key Integration Testing Principles
 
@@ -539,4 +557,3 @@ Remember that test code is also code that needs to be maintained. The goal is to
 - Use factory fixtures for common test data
 - Mock file operations for faster tests
 - Parameterize rather than duplicate test logic
-
