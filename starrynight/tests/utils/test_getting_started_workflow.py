@@ -1,11 +1,13 @@
 """Test for the StarryNight getting-started workflow steps.
 
 This test module verifies the core functionality of the StarryNight getting-started
-workflow, focusing on a modular testing approach that can be extended incrementally.
+workflow by executing the actual CLI commands and verifying their outputs.
+
+The workflow is outlined in ../../../docs/user/getting-started.md
 
 Current scope:
 - Experiment configuration initialization and editing
-- Inventory file generation (mock implementation)
+- Inventory file generation
 
 Future extensions:
 - Index generation from inventory (parsing file paths)
@@ -15,21 +17,21 @@ Future extensions:
 - Illumination correction execution
 
 Testing strategy:
-This module uses a fixture-based approach with controlled file operations
-instead of executing actual CLI commands. This strategy:
-1. Avoids dependency issues (e.g., CellProfiler dependencies)
-2. Increases test reliability and speed
-3. Focuses on validating the file structure and content rather than implementation details
-4. Allows tests to be extended incrementally as the workflow grows
+This module executes each StarryNight CLI command directly to test the actual
+functionality of the workflow. This strategy:
+1. Ensures the CLI commands work as expected
+2. Tests the complete end-to-end workflow as a user would experience it
+3. Validates that each workflow step produces the expected outputs
+4. Allows for incremental testing as the workflow gets extended
 
-Each workflow step is tested in isolation with appropriate assertions to
+Each workflow step is executed in sequence with appropriate assertions to
 verify the correctness of outputs. The test uses the FIX-S1 input and workspace
 fixtures for consistent and reusable test data.
 """
 
 import json
+import subprocess
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
@@ -45,12 +47,12 @@ def test_getting_started_workflow_phase1(fix_s1_input_dir, fix_s1_workspace):
     Future tests will extend this to cover index generation, experiment file creation,
     and LoadData file generation for illumination correction.
 
-    Instead of executing actual CLI commands, this test:
-    - Directly creates and validates the experiment_init.json file
-    - Simulates the inventory generation by creating the expected output structure
+    This test executes the actual CLI commands to:
+    - Initialize the experiment configuration using 'starrynight exp init'
+    - Generate the inventory using 'starrynight inventory gen'
 
-    This approach avoids dependencies on external tools like CellProfiler while still
-    verifying the correct file structure and content expected by subsequent workflow steps.
+    This approach tests the actual commands as they would be used by a real user,
+    ensuring that the CLI commands work as expected and produce the correct outputs.
 
     Args:
         fix_s1_input_dir: Fixture providing input test data with FIX-S1 structure
@@ -60,45 +62,61 @@ def test_getting_started_workflow_phase1(fix_s1_input_dir, fix_s1_workspace):
     # Set up test environment
     workspace_dir = fix_s1_workspace["workspace_dir"]
     inventory_dir = fix_s1_workspace["inventory_dir"]
+    data_dir = fix_s1_input_dir["data_dir"]
 
     # Step 1: Initialize experiment configuration
-    # This step tests the equivalent of running:
+    # Execute the actual CLI command:
     #   starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
-    #
-    # Create a mock experiment configuration matching the default values for
-    # a Pooled CellPainting experiment type as defined in getting-started.md
-    expected_config = {
-        "barcode_csv_path": ".",
-        "use_legacy": False,
-        "cp_img_overlap_pct": 10,
-        "cp_img_frame_type": "round",
-        "cp_acquisition_order": "snake",
-        "sbs_img_overlap_pct": 10,
-        "sbs_img_frame_type": "round",
-        "sbs_acquisition_order": "snake",
-    }
+    exp_init_cmd = [
+        "starrynight",
+        "exp",
+        "init",
+        "-e",
+        "Pooled CellPainting [Generic]",
+        "-o",
+        str(workspace_dir),
+    ]
 
-    # Create the experiment_init.json file directly
+    # Run the command and check it was successful
+    result = subprocess.run(
+        exp_init_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Experiment init command failed: {result.stderr}"
+    )
+
+    # Define expected config properties
+    expected_config_keys = [
+        "barcode_csv_path",
+        "use_legacy",
+        "cp_img_overlap_pct",
+        "cp_img_frame_type",
+        "cp_acquisition_order",
+        "sbs_img_overlap_pct",
+        "sbs_img_frame_type",
+        "sbs_acquisition_order",
+    ]
+
+    # Verify experiment_init.json was created
     exp_init_path = workspace_dir / "experiment_init.json"
-    with exp_init_path.open("w") as f:
-        json.dump(expected_config, f, indent=4)
-
-    # Verify experiment_init.json was created with expected content
     assert exp_init_path.exists(), "experiment_init.json was not created"
 
     # Read the file and verify its contents
     with exp_init_path.open() as f:
         actual_config = json.load(f)
 
-    # Verify the configuration matches what we expect
-    assert actual_config == expected_config, (
-        "experiment_init.json does not contain expected configuration"
-    )
+    # Verify the configuration has the expected keys
+    for key in expected_config_keys:
+        assert key in actual_config, (
+            f"Key '{key}' missing in experiment_init.json"
+        )
 
     # Step 2: Edit experiment_init.json as specified in the docs
     # In getting-started.md, the user is instructed to edit experiment_init.json
     # to add the required channel values for their experiment.
-    # This step tests that process by simulating the manual editing of the file.
+    # This step simulates the manual editing of the file by a user.
     with exp_init_path.open() as f:
         exp_init_data = json.load(f)
 
@@ -134,44 +152,52 @@ def test_getting_started_workflow_phase1(fix_s1_input_dir, fix_s1_workspace):
     )
 
     # Step 3: Generate inventory
-    # This step tests the equivalent of running:
+    # Execute the actual CLI command:
     #   starrynight inventory gen -d ${DATADIR} -o ${WKDIR}/inventory
-    #
-    # Instead of executing the actual command, we simulate its output by
-    # creating the expected directory structure and files that would be generated.
-    # The actual inventory command scans the input directory and creates:
-    # 1. A main inventory.parquet file with metadata
-    # 2. An "inv" subdirectory for temporary processing files
+    inventory_cmd = [
+        "starrynight",
+        "inventory",
+        "gen",
+        "-d",
+        str(data_dir),
+        "-o",
+        str(inventory_dir),
+    ]
 
-    inventory_file = inventory_dir / "inventory.parquet"
-    inv_dir = inventory_dir / "inv"
-    inv_dir.mkdir(parents=True, exist_ok=True)
+    # Run the command and check it was successful
+    result = subprocess.run(
+        inventory_cmd, capture_output=True, text=True, check=False
+    )
 
-    # Create a dummy inventory.parquet file
-    # In a real test, this would contain actual parquet data with file metadata
-    # For now, we're just verifying the correct file structure is created
-    with inventory_file.open("w") as f:
-        f.write("Mock inventory data")
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Inventory generation command failed: {result.stderr}"
+    )
 
     # Verify the inventory file was created
+    inventory_file = inventory_dir / "inventory.parquet"
     assert inventory_file.exists(), "Inventory file was not created"
+
+    # Verify the inventory/inv directory exists (for temporary processing files)
+    inv_dir = inventory_dir / "inv"
+    assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
 
     # === Roadmap for Future Test Extensions ===
     # The following steps would complete the getting-started.md workflow:
     #
     # Step 4: Generate index
-    # - Generate mock index.parquet in the ${WKDIR}/index/ directory
-    # - Simulate "starrynight index gen -i ${WKDIR}/inventory/inventory.parquet -o ${WKDIR}/index/"
+    # - Execute "starrynight index gen -i ${WKDIR}/inventory/inventory.parquet -o ${WKDIR}/index/"
+    # - Verify index.parquet in the ${WKDIR}/index/ directory
     #
     # Step 5: Create experiment file
-    # - Generate experiment.json using the experiment_init.json template
-    # - Simulate "starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
+    # - Execute "starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
     #   -c ${WKDIR}/experiment_init.json -o ${WKDIR}"
+    # - Verify experiment.json creation
     #
     # Step 6: Generate LoadData files for illumination correction
-    # - Generate LoadData CSV files in the appropriate directory
-    # - Simulate "starrynight illum calc loaddata -i ${WKDIR}/index/index.parquet
+    # - Execute "starrynight illum calc loaddata -i ${WKDIR}/index/index.parquet
     #   -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc --exp_config ${WKDIR}/experiment.json --use_legacy"
+    # - Verify LoadData CSV files
     #
     # Step 7: Verify the final workflow state
     # - LoadData files exist and contain expected content
