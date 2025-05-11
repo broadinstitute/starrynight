@@ -5000,6 +5000,7 @@ dependencies = [
 [package.optional-dependencies]
 dev = [
     { name = "build" },
+    { name = "duckdb" },
     { name = "ipython" },
     { name = "jldracula" },
     { name = "jupyter-collaboration" },
@@ -5020,6 +5021,7 @@ dev = [
 requires-dist = [
     { name = "build", marker = "extra == 'dev'" },
     { name = "conductor", editable = "conductor" },
+    { name = "duckdb", marker = "extra == 'dev'", specifier = ">=1.2.1" },
     { name = "ipython", marker = "extra == 'dev'" },
     { name = "jldracula", marker = "extra == 'dev'" },
     { name = "jupyter-collaboration", marker = "extra == 'dev'" },
