@@ -39,251 +39,28 @@ import pandas as pd
 import pytest
 
 
-def test_getting_started_workflow_complete(  # noqa: C901
-    fix_s1_input_dir, fix_s1_workspace, fix_s1_output_dir
+def test_loaddata_generation(
+    fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
 ):
-    """Test the complete getting-started workflow from experiment initialization to LoadData generation.
+    """Test the LoadData generation step of the getting-started workflow.
 
-    This test covers all steps of the workflow from getting-started.md:
-    1. Initialize experiment configuration and edit with required channel values
-    2. Generate inventory from input data
-    3. Generate index from inventory
-    4. Create experiment file from index and configuration
-    5. Generate LoadData files for illumination correction
-    6. Verify the final state of the workflow
+    This test focuses on step 6 of the workflow, using the fix_starrynight_basic_setup
+    fixture to provide the necessary files from steps 1-5:
+
+    6. Generate LoadData files for illumination correction
     7. Validate the generated LoadData CSV matches the reference LoadData CSV
 
-    This test executes the actual CLI commands as they would be used by a real user,
-    ensuring that each step produces the expected outputs and validating the complete
-    end-to-end workflow.
-
     Args:
-        fix_s1_input_dir: Fixture providing input test data with FIX-S1 structure
+        fix_starrynight_basic_setup: Fixture providing initial setup (through steps 1-5)
         fix_s1_workspace: Fixture providing workspace directory structure with expected paths
         fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
-    # Set up test environment
-    workspace_dir = fix_s1_workspace["workspace_dir"]
-    # These variables will be used in future test phases
-    inventory_dir = fix_s1_workspace["inventory_dir"]
-    index_dir = fix_s1_workspace["index_dir"]
-    input_dir = fix_s1_input_dir["input_dir"]
+    # Get paths from the fixture
+    index_file = fix_starrynight_basic_setup["index_file"]
+    experiment_json_path = fix_starrynight_basic_setup["experiment_json_path"]
 
-    # Step 1: Initialize experiment configuration
-    # Execute the actual CLI command:
-    #   starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
-    exp_init_cmd = [
-        "starrynight",
-        "exp",
-        "init",
-        "-e",
-        "Pooled CellPainting [Generic]",
-        "-o",
-        str(workspace_dir),
-    ]
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        exp_init_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Experiment init command failed: {result.stderr}"
-    )
-
-    # Define expected config properties
-    expected_config_keys = [
-        "barcode_csv_path",
-        "use_legacy",
-        "cp_img_overlap_pct",
-        "cp_img_frame_type",
-        "cp_acquisition_order",
-        "sbs_img_overlap_pct",
-        "sbs_img_frame_type",
-        "sbs_acquisition_order",
-    ]
-
-    # Verify experiment_init.json was created
-    exp_init_path = workspace_dir / "experiment_init.json"
-    assert exp_init_path.exists(), "experiment_init.json was not created"
-
-    # Read the file and verify its contents
-    with exp_init_path.open() as f:
-        actual_config = json.load(f)
-
-    # Verify the configuration has the expected keys
-    for key in expected_config_keys:
-        assert key in actual_config, (
-            f"Key '{key}' missing in experiment_init.json"
-        )
-
-    # Step 2: Edit experiment_init.json as specified in the docs
-    # In getting-started.md, the user is instructed to edit experiment_init.json
-    # to add the required channel values for their experiment.
-    # This step simulates the manual editing of the file by a user.
-    with exp_init_path.open() as f:
-        exp_init_data = json.load(f)
-
-    # Update with required channel values specifically mentioned in getting-started.md
-    # These values represent standard channel configurations for Cell Painting and SBS images
-    exp_init_data.update(
-        {
-            "cp_nuclei_channel": "DAPI",
-            "cp_cell_channel": "PhalloAF750",
-            "cp_mito_channel": "ZO1AF488",
-            "sbs_nuclei_channel": "DAPI",
-            "sbs_cell_channel": "PhalloAF750",
-            "sbs_mito_channel": "ZO1AF488",
-        }
-    )
-
-    with exp_init_path.open("w") as f:
-        json.dump(exp_init_data, f, indent=4)
-
-    # Verify the modified configuration
-    with exp_init_path.open() as f:
-        modified_config = json.load(f)
-
-    # Check that channel values were added
-    assert modified_config["cp_nuclei_channel"] == "DAPI", (
-        "cp_nuclei_channel not correctly set"
-    )
-    assert modified_config["cp_cell_channel"] == "PhalloAF750", (
-        "cp_cell_channel not correctly set"
-    )
-    assert modified_config["cp_mito_channel"] == "ZO1AF488", (
-        "cp_mito_channel not correctly set"
-    )
-
-    # Step 3: Generate inventory
-    # Execute the actual CLI command:
-    #   starrynight inventory gen -d ${DATADIR} -o ${WKDIR}/inventory
-    inventory_cmd = [
-        "starrynight",
-        "inventory",
-        "gen",
-        "-d",
-        str(input_dir),
-        "-o",
-        str(inventory_dir),
-    ]
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        inventory_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Inventory generation command failed: {result.stderr}"
-    )
-
-    # Verify the inventory file was created
-    inventory_file = inventory_dir / "inventory.parquet"
-    assert inventory_file.exists(), "Inventory file was not created"
-
-    # Verify the inventory/inv directory exists (for temporary processing files)
-    inv_dir = inventory_dir / "inv"
-    assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
-
-    # Step 4: Generate index
-    # Execute the actual CLI command:
-    #   starrynight index gen -i ${WKDIR}/inventory/inventory.parquet -o ${WKDIR}/index/
-    index_gen_cmd = [
-        "starrynight",
-        "index",
-        "gen",
-        "-i",
-        str(inventory_file),
-        "-o",
-        str(index_dir),
-    ]
-
-    # Create the index directory if it doesn't exist
-    index_dir.mkdir(exist_ok=True, parents=True)
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        index_gen_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Index generation command failed: {result.stderr}"
-    )
-
-    # Verify the index file was created
-    index_file = index_dir / "index.parquet"
-    assert index_file.exists(), "Index file was not created"
-
-    # Step 5: Create experiment file
-    # Execute the actual CLI command:
-    #   starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
-    #   -c ${WKDIR}/experiment_init.json -o ${WKDIR}
-    exp_create_cmd = [
-        "starrynight",
-        "exp",
-        "new",
-        "-i",
-        str(index_file),
-        "-e",
-        "Pooled CellPainting [Generic]",
-        "-c",
-        str(exp_init_path),
-        "-o",
-        str(workspace_dir),
-    ]
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        exp_create_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Experiment file creation command failed: {result.stderr}"
-    )
-
-    # Verify the experiment.json file was created
-    experiment_json_path = workspace_dir / "experiment.json"
-    assert experiment_json_path.exists(), "experiment.json was not created"
-
-    # Read the experiment file and check key configurations
-    with experiment_json_path.open() as f:
-        experiment_config = json.load(f)
-
-    # Verify the experiment file contains expected keys (list a subset of keys)
-    expected_exp_keys = [
-        "dataset_id",
-        "index_path",
-        "inventory_path",
-        "sbs_config",
-        "cp_config",
-        "use_legacy",
-    ]
-
-    for key in expected_exp_keys:
-        assert key in experiment_config, (
-            f"Key '{key}' missing in experiment.json"
-        )
-
-    # Verify channel configurations were correctly transferred from experiment_init.json
-    assert experiment_config["cp_config"]["nuclei_channel"] == "DAPI", (
-        "nuclei_channel not correctly set in cp_config"
-    )
-    assert experiment_config["cp_config"]["cell_channel"] == "PhalloAF750", (
-        "cell_channel not correctly set in cp_config"
-    )
-    assert experiment_config["cp_config"]["mito_channel"] == "ZO1AF488", (
-        "mito_channel not correctly set in cp_config"
-    )
-
-    # Step 6: Generate LoadData files for illumination correction
-    # Execute the actual CLI command:
-    #   starrynight illum calc loaddata -i ${WKDIR}/index/index.parquet
-    #   -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc --exp_config ${WKDIR}/experiment.json --use_legacy
+    # Generate LoadData files for illumination correction
     illum_calc_loaddata_cmd = [
         "starrynight",
         "illum",
@@ -338,39 +115,6 @@ def test_getting_started_workflow_complete(  # noqa: C901
     ]
     for col in required_columns:
         assert col in df.columns, f"Required column '{col}' missing in CSV"
-
-    # Step 7: Verify the final workflow state
-    # Ensure all key components of the workflow have been created
-
-    # Verify experiment configuration files
-    assert exp_init_path.exists(), "experiment_init.json missing in final state"
-    assert experiment_json_path.exists(), (
-        "experiment.json missing in final state"
-    )
-
-    # Verify inventory and index files
-    assert inventory_file.exists(), "inventory.parquet missing in final state"
-    assert index_file.exists(), "index.parquet missing in final state"
-
-    # Verify LoadData files for illumination correction
-    assert len(csv_files) > 0, "LoadData CSV files missing in final state"
-    assert len(plate_csvs) > 0, (
-        "Plate-specific LoadData CSV files missing in final state"
-    )
-
-    # Final check of directory structure to confirm all expected outputs are present
-    expected_dirs = [
-        inventory_dir,
-        index_dir,
-        fix_s1_workspace["cp_illum_calc_dir"],
-    ]
-
-    for directory in expected_dirs:
-        assert directory.exists(), (
-            f"Required directory {directory} missing in final state"
-        )
-
-    # Success! The test has verified all steps of the getting-started workflow
 
     # Step 8: Validate the generated LoadData CSV against reference LoadData CSV
     # Define paths to the generated and reference CSV files

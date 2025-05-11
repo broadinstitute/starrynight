@@ -3,8 +3,10 @@
 Place shared test fixtures here to make them available to all tests.
 """
 
+import json
 import os
 import shutil
+import subprocess
 import tarfile
 import tempfile
 from pathlib import Path
@@ -263,4 +265,231 @@ def fix_s1_workspace(tmp_path_factory):
         # JSON files
         "experiment_json": workspace_dir / "experiment.json",
         "experiment_init_json": workspace_dir / "experiment_init.json",
+    }
+
+
+@pytest.fixture(scope="function")
+def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
+    """Fixture that sets up the basic StarryNight workflow environment.
+
+    Performs steps 1-5 of the getting-started workflow:
+    1. Initialize experiment configuration
+    2. Edit configuration with required channel values
+    3. Generate inventory from input data
+    4. Generate index from inventory
+    5. Create experiment file from index and configuration
+
+    Returns:
+        dict: Dictionary containing:
+            - index_file: Path to the generated index.parquet file
+            - experiment_json_path: Path to the generated experiment.json file
+
+    """
+    # Set up test environment
+    workspace_dir = fix_s1_workspace["workspace_dir"]
+    inventory_dir = fix_s1_workspace["inventory_dir"]
+    index_dir = fix_s1_workspace["index_dir"]
+    input_dir = fix_s1_input_dir["input_dir"]
+
+    # Step 1: Initialize experiment configuration
+    exp_init_cmd = [
+        "starrynight",
+        "exp",
+        "init",
+        "-e",
+        "Pooled CellPainting [Generic]",
+        "-o",
+        str(workspace_dir),
+    ]
+
+    # Run the command and check it was successful
+    result = subprocess.run(
+        exp_init_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Experiment init command failed: {result.stderr}"
+    )
+
+    # Define expected config properties
+    expected_config_keys = [
+        "barcode_csv_path",
+        "use_legacy",
+        "cp_img_overlap_pct",
+        "cp_img_frame_type",
+        "cp_acquisition_order",
+        "sbs_img_overlap_pct",
+        "sbs_img_frame_type",
+        "sbs_acquisition_order",
+    ]
+
+    # Verify experiment_init.json was created
+    exp_init_path = workspace_dir / "experiment_init.json"
+    assert exp_init_path.exists(), "experiment_init.json was not created"
+
+    # Read the file and verify its contents
+    with exp_init_path.open() as f:
+        actual_config = json.load(f)
+
+    # Verify the configuration has the expected keys
+    for key in expected_config_keys:
+        assert key in actual_config, (
+            f"Key '{key}' missing in experiment_init.json"
+        )
+
+    # Step 2: Edit experiment_init.json as specified in the docs
+    with exp_init_path.open() as f:
+        exp_init_data = json.load(f)
+
+    # Update with required channel values specifically mentioned in getting-started.md
+    exp_init_data.update(
+        {
+            "cp_nuclei_channel": "DAPI",
+            "cp_cell_channel": "PhalloAF750",
+            "cp_mito_channel": "ZO1AF488",
+            "sbs_nuclei_channel": "DAPI",
+            "sbs_cell_channel": "PhalloAF750",
+            "sbs_mito_channel": "ZO1AF488",
+        }
+    )
+
+    with exp_init_path.open("w") as f:
+        json.dump(exp_init_data, f, indent=4)
+
+    # Verify the modified configuration
+    with exp_init_path.open() as f:
+        modified_config = json.load(f)
+
+    # Check that channel values were added
+    assert modified_config["cp_nuclei_channel"] == "DAPI", (
+        "cp_nuclei_channel not correctly set"
+    )
+    assert modified_config["cp_cell_channel"] == "PhalloAF750", (
+        "cp_cell_channel not correctly set"
+    )
+    assert modified_config["cp_mito_channel"] == "ZO1AF488", (
+        "cp_mito_channel not correctly set"
+    )
+
+    # Step 3: Generate inventory
+    inventory_cmd = [
+        "starrynight",
+        "inventory",
+        "gen",
+        "-d",
+        str(input_dir),
+        "-o",
+        str(inventory_dir),
+    ]
+
+    # Run the command and check it was successful
+    result = subprocess.run(
+        inventory_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Inventory generation command failed: {result.stderr}"
+    )
+
+    # Verify the inventory file was created
+    inventory_file = inventory_dir / "inventory.parquet"
+    assert inventory_file.exists(), "Inventory file was not created"
+
+    # Verify the inventory/inv directory exists (for temporary processing files)
+    inv_dir = inventory_dir / "inv"
+    assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
+
+    # Step 4: Generate index
+    index_gen_cmd = [
+        "starrynight",
+        "index",
+        "gen",
+        "-i",
+        str(inventory_file),
+        "-o",
+        str(index_dir),
+    ]
+
+    # Create the index directory if it doesn't exist
+    index_dir.mkdir(exist_ok=True, parents=True)
+
+    # Run the command and check it was successful
+    result = subprocess.run(
+        index_gen_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Index generation command failed: {result.stderr}"
+    )
+
+    # Verify the index file was created
+    index_file = index_dir / "index.parquet"
+    assert index_file.exists(), "Index file was not created"
+
+    # Step 5: Create experiment file
+    exp_create_cmd = [
+        "starrynight",
+        "exp",
+        "new",
+        "-i",
+        str(index_file),
+        "-e",
+        "Pooled CellPainting [Generic]",
+        "-c",
+        str(exp_init_path),
+        "-o",
+        str(workspace_dir),
+    ]
+
+    # Run the command and check it was successful
+    result = subprocess.run(
+        exp_create_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Experiment file creation command failed: {result.stderr}"
+    )
+
+    # Verify the experiment.json file was created
+    experiment_json_path = workspace_dir / "experiment.json"
+    assert experiment_json_path.exists(), "experiment.json was not created"
+
+    # Read the experiment file and check key configurations
+    with experiment_json_path.open() as f:
+        experiment_config = json.load(f)
+
+    # Verify the experiment file contains expected keys (list a subset of keys)
+    expected_exp_keys = [
+        "dataset_id",
+        "index_path",
+        "inventory_path",
+        "sbs_config",
+        "cp_config",
+        "use_legacy",
+    ]
+
+    for key in expected_exp_keys:
+        assert key in experiment_config, (
+            f"Key '{key}' missing in experiment.json"
+        )
+
+    # Verify channel configurations were correctly transferred from experiment_init.json
+    assert experiment_config["cp_config"]["nuclei_channel"] == "DAPI", (
+        "nuclei_channel not correctly set in cp_config"
+    )
+    assert experiment_config["cp_config"]["cell_channel"] == "PhalloAF750", (
+        "cell_channel not correctly set in cp_config"
+    )
+    assert experiment_config["cp_config"]["mito_channel"] == "ZO1AF488", (
+        "mito_channel not correctly set in cp_config"
+    )
+
+    # Return the paths needed for subsequent processing steps
+    return {
+        "index_file": index_file,
+        "experiment_json_path": experiment_json_path,
     }
