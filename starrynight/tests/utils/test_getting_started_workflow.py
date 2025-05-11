@@ -274,84 +274,94 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
         "mito_channel not correctly set in cp_config"
     )
 
-    # # Step 6: Generate LoadData files for illumination correction
-    # # Execute the actual CLI command:
-    # #   starrynight illum calc loaddata -i ${WKDIR}/index/index.parquet
-    # #   -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc --exp_config ${WKDIR}/experiment.json --use_legacy
-    # illum_calc_loaddata_cmd = [
-    #     "starrynight",
-    #     "illum",
-    #     "calc",
-    #     "loaddata",
-    #     "-i",
-    #     str(index_file),
-    #     "-o",
-    #     str(fix_s1_workspace["cp_illum_calc_dir"]),
-    #     "--exp_config",
-    #     str(experiment_json_path),
-    #     "--use_legacy",
-    # ]
+    # Step 6: Generate LoadData files for illumination correction
+    # Execute the actual CLI command:
+    #   starrynight illum calc loaddata -i ${WKDIR}/index/index.parquet
+    #   -o ${WKDIR}/cellprofiler/loaddata/cp/illum/illum_calc --exp_config ${WKDIR}/experiment.json --use_legacy
+    illum_calc_loaddata_cmd = [
+        "starrynight",
+        "illum",
+        "calc",
+        "loaddata",
+        "-i",
+        str(index_file),
+        "-o",
+        str(fix_s1_workspace["cp_illum_calc_dir"]),
+        "--exp_config",
+        str(experiment_json_path),
+        "--use_legacy",
+    ]
 
-    # # Run the command and check it was successful
-    # result = subprocess.run(
-    #     illum_calc_loaddata_cmd, capture_output=True, text=True, check=False
-    # )
+    # Run the command and check it was successful
+    result = subprocess.run(
+        illum_calc_loaddata_cmd, capture_output=True, text=True, check=False
+    )
 
-    # # Check if the command was successful
-    # assert result.returncode == 0, (
-    #     f"Illumination LoadData generation command failed: {result.stderr}"
-    # )
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Illumination LoadData generation command failed: {result.stderr}"
+    )
 
-    # # Verify LoadData files were created
-    # loaddata_dir = fix_s1_workspace["cp_illum_calc_dir"]
+    # Verify LoadData files were created
+    loaddata_dir = fix_s1_workspace["cp_illum_calc_dir"]
 
-    # # Check for the presence of LoadData CSV files in the directory
-    # csv_files = list(loaddata_dir.glob("*.csv"))
-    # assert len(csv_files) > 0, "No LoadData CSV files were created"
+    # Check for the presence of at least one LoadData CSV file in the directory
+    csv_files = list(loaddata_dir.glob("*.csv"))
+    assert len(csv_files) > 0, "No LoadData CSV files were created"
 
-    # # Verify at least one specific LoadData CSV file
-    # all_files_csv = loaddata_dir / "all_files.csv"
-    # assert all_files_csv.exists(), "all_files.csv was not created"
+    # Check for plate-specific CSV files (should be created for each plate)
+    plate_csvs = list(loaddata_dir.glob("*Plate*_illum_calc.csv"))
+    assert len(plate_csvs) > 0, "No plate-specific CSV files were created"
 
-    # # Verify the content of the all_files.csv file
-    # with all_files_csv.open() as f:
-    #     csv_content = f.read()
+    # Verify the content of a plate-specific CSV file
+    plate_csv = plate_csvs[0]
+    df = pd.read_csv(plate_csv)
 
-    # # The CSV file should contain paths to the input images and "Image_Metadata_" columns
-    # assert "Image_Metadata_" in csv_content, (
-    #     "all_files.csv does not contain expected metadata columns"
-    # )
+    # The CSV file should contain required metadata columns
+    required_columns = [
+        "Metadata_Batch",
+        "Metadata_Plate",
+        "Metadata_Well",
+        "Metadata_Site",
+        "FileName_OrigPhalloidin",
+        "FileName_OrigZO1",
+        "FileName_OrigDNA",
+        "PathName_OrigPhalloidin",
+        "PathName_OrigZO1",
+        "PathName_OrigDNA",
+    ]
+    for col in required_columns:
+        assert col in df.columns, f"Required column '{col}' missing in CSV"
 
-    # # Check for plate-specific CSV files (should be created for each plate)
-    # plate_csvs = list(loaddata_dir.glob("*Plate*.csv"))
-    # assert len(plate_csvs) > 0, "No plate-specific CSV files were created"
+    # Step 7: Verify the final workflow state
+    # Ensure all key components of the workflow have been created
 
-    # # Step 7: Verify the final workflow state
-    # # Ensure all key components of the workflow have been created
+    # Verify experiment configuration files
+    assert exp_init_path.exists(), "experiment_init.json missing in final state"
+    assert experiment_json_path.exists(), (
+        "experiment.json missing in final state"
+    )
 
-    # # Verify experiment configuration files
-    # assert exp_init_path.exists(), "experiment_init.json missing in final state"
-    # assert experiment_json_path.exists(), (
-    #     "experiment.json missing in final state"
-    # )
+    # Verify inventory and index files
+    assert inventory_file.exists(), "inventory.parquet missing in final state"
+    assert index_file.exists(), "index.parquet missing in final state"
 
-    # # Verify inventory and index files
-    # assert inventory_file.exists(), "inventory.parquet missing in final state"
-    # assert index_file.exists(), "index.parquet missing in final state"
+    # Verify LoadData files for illumination correction
+    assert len(csv_files) > 0, "LoadData CSV files missing in final state"
+    assert len(plate_csvs) > 0, (
+        "Plate-specific LoadData CSV files missing in final state"
+    )
 
-    # # Verify LoadData files for illumination correction
-    # assert len(csv_files) > 0, "LoadData CSV files missing in final state"
+    # Final check of directory structure to confirm all expected outputs are present
+    expected_dirs = [
+        inventory_dir,
+        index_dir,
+        fix_s1_workspace["cp_illum_calc_dir"],
+    ]
 
-    # # Final check of directory structure to confirm all expected outputs are present
-    # expected_dirs = [
-    #     inventory_dir,
-    #     index_dir,
-    #     fix_s1_workspace["cp_illum_calc_dir"],
-    # ]
+    for directory in expected_dirs:
+        assert directory.exists(), (
+            f"Required directory {directory} missing in final state"
+        )
 
-    # for directory in expected_dirs:
-    #     assert directory.exists(), (
-    #         f"Required directory {directory} missing in final state"
-    #     )
-
-    # # Success! The test has verified all steps of the getting-started workflow
+    # Success! The test has verified all steps of the getting-started workflow
