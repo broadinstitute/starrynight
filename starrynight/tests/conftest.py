@@ -1,6 +1,19 @@
 """Global pytest fixtures and configuration.
 
 Place shared test fixtures here to make them available to all tests.
+
+Notes on Test Fixtures Organization:
+------------------------------------
+This file contains fixtures for test data and workspace setup.
+
+As the project grows, consider these organizational best practices:
+1. Move fixture implementation code to specialized modules in tests/fixtures/ directory
+2. Keep registration of fixtures in conftest.py files for auto-discovery
+3. Group fixtures by feature or functional area
+4. Split into domain-specific conftest.py files in subdirectories
+
+The assertions in fixtures are appropriate for verifying setup preconditions
+and ensuring the test environment is correctly configured before tests run.
 """
 
 import json
