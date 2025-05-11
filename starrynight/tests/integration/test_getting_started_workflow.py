@@ -30,14 +30,19 @@ fixtures for consistent and reusable test data.
 """
 
 import json
+import re
 import subprocess
+from collections import defaultdict
 from pathlib import Path
 
+import duckdb
 import pandas as pd
 import pytest
 
 
-def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
+def test_getting_started_workflow_complete(  # noqa: C901
+    fix_s1_input_dir, fix_s1_workspace, fix_s1_output_dir
+):
     """Test the complete getting-started workflow from experiment initialization to LoadData generation.
 
     This test covers all steps of the workflow from getting-started.md:
@@ -47,6 +52,7 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     4. Create experiment file from index and configuration
     5. Generate LoadData files for illumination correction
     6. Verify the final state of the workflow
+    7. Validate the generated LoadData CSV matches the reference LoadData CSV
 
     This test executes the actual CLI commands as they would be used by a real user,
     ensuring that each step produces the expected outputs and validating the complete
@@ -55,6 +61,7 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     Args:
         fix_s1_input_dir: Fixture providing input test data with FIX-S1 structure
         fix_s1_workspace: Fixture providing workspace directory structure with expected paths
+        fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
     # Set up test environment
@@ -365,3 +372,110 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
         )
 
     # Success! The test has verified all steps of the getting-started workflow
+
+    # Step 8: Validate the generated LoadData CSV against reference LoadData CSV
+    # Define paths to the generated and reference CSV files
+    generated_csv_path = plate_csvs[0]  # Use the first plate-specific CSV
+
+    # Find the matching reference CSV in the fix_s1_output_dir
+    ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
+    ref_csv_path = list(
+        ref_load_data_dir.glob("**/Plate1_trimmed/load_data_pipeline1.csv")
+    )[0]
+
+    # Load both CSV files with DuckDB using context manager for simplified validation
+    # Collect all validation errors instead of stopping at first failure
+    validation_errors = []
+
+    try:
+        # Use context manager for proper resource handling
+        with duckdb.connect(":memory:") as conn:
+            # Register CSV files as views using read_csv_auto for automatic type inference
+            conn.execute(
+                f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
+            )
+            conn.execute(
+                f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
+            )
+
+            # 1. Verify channel frame assignments match between the CSVs
+            ref_channels = conn.execute("""
+                SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+                FROM reference
+                ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+            """).fetchall()
+
+            gen_channels = conn.execute("""
+                SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+                FROM generated
+                ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+            """).fetchall()
+
+            if ref_channels != gen_channels:
+                validation_errors.append(
+                    f"Channel frame assignments don't match: Reference={ref_channels}, Generated={gen_channels}"
+                )
+
+            # 2. Verify all wells from reference exist in generated file
+            ref_wells = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Well FROM reference"
+                ).fetchnumpy()["Metadata_Well"]
+            )
+            gen_wells = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Well FROM generated"
+                ).fetchnumpy()["Metadata_Well"]
+            )
+
+            missing_wells = ref_wells - gen_wells
+            if missing_wells:
+                validation_errors.append(
+                    f"Reference wells {missing_wells} not found in generated CSV"
+                )
+
+            # 3. Verify plate information matches
+            ref_plates = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Plate FROM reference"
+                ).fetchnumpy()["Metadata_Plate"]
+            )
+            gen_plates = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Plate FROM generated"
+                ).fetchnumpy()["Metadata_Plate"]
+            )
+
+            missing_plates = ref_plates - gen_plates
+            if missing_plates:
+                validation_errors.append(
+                    f"Reference plates {missing_plates} not found in generated CSV"
+                )
+
+            # 4. Verify filename patterns
+            filename_pattern_check = conn.execute("""
+                SELECT COUNT(*) FROM generated
+                WHERE FileName_OrigDNA NOT LIKE '%Channel%'
+                OR FileName_OrigZO1 NOT LIKE '%Channel%'
+                OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
+            """).fetchone()[0]
+
+            if filename_pattern_check > 0:
+                validation_errors.append(
+                    f"Found {filename_pattern_check} filenames that don't match the expected pattern"
+                )
+
+            # After collecting all errors, report them if any exist
+            if validation_errors:
+                error_message = "\n".join(
+                    [
+                        f"Validation error {i + 1}: {error}"
+                        for i, error in enumerate(validation_errors)
+                    ]
+                )
+                pytest.fail(
+                    f"CSV validation failed with {len(validation_errors)} error(s):\n{error_message}"
+                )
+
+    except duckdb.Error as e:
+        pytest.fail(f"DuckDB error during CSV validation: {str(e)}")
