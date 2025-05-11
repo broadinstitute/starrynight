@@ -18,14 +18,17 @@ Future extensions:
 
 Testing strategy:
 This module contains separate test functions for each type of LoadData generation,
-all using the same fix_starrynight_basic_setup fixture which provides the necessary
-setup from steps 1-5 of the getting-started workflow. This approach:
+with both full workflow and fast pre-generated versions. The approach:
 
 1. Focuses on testing LoadData generation for different workflow steps
-2. Ensures each LoadData generation command works correctly
-3. Validates the structure and content of generated LoadData CSV files
-4. Allows testing each LoadData step independently
+2. Provides both full-workflow and fast versions of each test
+3. Uses pre-generated index and experiment files for faster iteration
+4. Validates the structure and content of generated LoadData CSV files
 5. Makes it easy to add tests for additional LoadData generation steps
+
+Each LoadData generation test has two variants:
+- test_cp_*_loaddata_generation: Uses full fix_starrynight_basic_setup (slower but tests setup steps too)
+- test_cp_*_loaddata_generation_fast: Uses pre-generated files (faster for iterative development)
 """
 
 import json
@@ -38,25 +41,24 @@ import pandas as pd
 import pytest
 
 
-def test_cp_illum_calc_loaddata_generation(
-    fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
-):
-    """Test the CP illumination calculation LoadData generation step.
+def _test_cp_illum_calc_loaddata_generation(
+    setup_fixture, fix_s1_workspace, fix_s1_output_dir
+) -> None:
+    """Test CP illumination calculation LoadData generation (base implementation).
 
-    This test focuses on generating LoadData files for the Cell Painting (CP)
-    illumination calculation step, which is step 6 of the getting-started workflow.
-    It uses the fix_starrynight_basic_setup fixture to provide the necessary files
-    from steps 1-5.
+    This function contains the core logic for testing LoadData generation for
+    illumination calculation. It's used by both the full workflow test and the
+    fast pre-generated version.
 
     Args:
-        fix_starrynight_basic_setup: Fixture providing initial setup (through steps 1-5)
-        fix_s1_workspace: Fixture providing workspace directory structure with expected paths
+        setup_fixture: Fixture providing setup files (either generated or pre-generated)
+        fix_s1_workspace: Fixture providing workspace directory structure
         fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
     # Get paths from the fixture
-    index_file = fix_starrynight_basic_setup["index_file"]
-    experiment_json_path = fix_starrynight_basic_setup["experiment_json_path"]
+    index_file = setup_fixture["index_file"]
+    experiment_json_path = setup_fixture["experiment_json_path"]
 
     # Generate LoadData files for illumination correction
     illum_calc_loaddata_cmd = [
@@ -244,3 +246,42 @@ def test_cp_illum_calc_loaddata_generation(
 
     except duckdb.Error as e:
         pytest.fail(f"DuckDB error during CSV validation: {str(e)}")
+
+
+def test_cp_illum_calc_loaddata_generation(
+    fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
+):
+    """Test CP illumination calculation LoadData generation with the full workflow setup.
+
+    This test runs the full workflow setup (steps 1-5) before generating LoadData files.
+    It's comprehensive but slower for iterative development. For faster tests during
+    development, use test_cp_illum_calc_loaddata_generation_fast instead.
+
+    Args:
+        fix_starrynight_basic_setup: Fixture providing generated setup files (runs steps 1-5)
+        fix_s1_workspace: Fixture providing workspace directory structure
+        fix_s1_output_dir: Fixture providing reference output data for validation
+
+    """
+    _test_cp_illum_calc_loaddata_generation(
+        fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
+    )
+
+
+def test_cp_illum_calc_loaddata_generation_fast(
+    fix_starrynight_pregenerated_setup, fix_s1_workspace, fix_s1_output_dir
+):
+    """Test CP illumination calculation LoadData generation with pre-generated setup files.
+
+    This test uses pre-generated index and experiment files to test LoadData generation.
+    It's faster than the full workflow test, making it ideal for iterative development.
+
+    Args:
+        fix_starrynight_pregenerated_setup: Fixture providing pre-generated setup files
+        fix_s1_workspace: Fixture providing workspace directory structure
+        fix_s1_output_dir: Fixture providing reference output data for validation
+
+    """
+    _test_cp_illum_calc_loaddata_generation(
+        fix_starrynight_pregenerated_setup, fix_s1_workspace, fix_s1_output_dir
+    )

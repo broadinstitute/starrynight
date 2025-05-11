@@ -292,6 +292,9 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
     4. Generate index from inventory
     5. Create experiment file from index and configuration
 
+    This fixture generates all files from scratch by running the actual CLI commands.
+    For faster testing that skips these steps, use fix_starrynight_pregenerated_setup.
+
     Returns:
         dict: Dictionary containing:
             - index_file: Path to the generated index.parquet file
@@ -502,6 +505,54 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
     )
 
     # Return the paths needed for subsequent processing steps
+    return {
+        "index_file": index_file,
+        "experiment_json_path": experiment_json_path,
+    }
+
+
+@pytest.fixture(scope="function")
+def fix_starrynight_pregenerated_setup(fix_s1_workspace):
+    """Fixture that provides pre-generated files for basic StarryNight workflow setup.
+
+    Instead of running steps 1-5 of the getting-started workflow, this fixture
+    loads pre-generated files from the fixtures directory. This makes tests run faster
+    when you're only testing the LoadData generation step.
+
+    Returns:
+        dict: Dictionary containing:
+            - index_file: Path to the pre-generated index.parquet file
+            - experiment_json_path: Path to the pre-generated experiment.json file
+
+    """
+    # Get paths to workspace and fixtures
+    workspace_dir = fix_s1_workspace["workspace_dir"]
+    fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
+
+    # Define paths to pre-generated files in fixtures directory
+    pregenerated_index_file = fixtures_dir / "index.parquet"
+    pregenerated_experiment_json = fixtures_dir / "experiment.json"
+
+    # Ensure the pre-generated files exist
+    assert pregenerated_index_file.exists(), (
+        f"Pre-generated index file not found at {pregenerated_index_file}"
+    )
+    assert pregenerated_experiment_json.exists(), (
+        f"Pre-generated experiment file not found at {pregenerated_experiment_json}"
+    )
+
+    # Copy files to workspace directory to maintain expected structure
+    index_file = fix_s1_workspace["index_dir"] / "index.parquet"
+    experiment_json_path = workspace_dir / "experiment.json"
+
+    # Create parent directories if they don't exist
+    index_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Copy the files
+    shutil.copy2(pregenerated_index_file, index_file)
+    shutil.copy2(pregenerated_experiment_json, experiment_json_path)
+
+    # Return the same structure as fix_starrynight_basic_setup
     return {
         "index_file": index_file,
         "experiment_json_path": experiment_json_path,
