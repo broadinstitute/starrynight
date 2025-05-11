@@ -329,3 +329,4 @@ AI assistants should:
 2. Focus on the goals specified by the user at the beginning of each session
 3. Create meaningful commit messages that document what was tested and implemented
 4. Run all tests and pre-commit checks before committing changes
+5. Run all tests with UV: `uv run pytest`
