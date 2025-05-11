@@ -1,32 +1,31 @@
-"""Test for the StarryNight getting-started workflow steps.
+"""Test for the StarryNight getting-started workflow LoadData generation steps.
 
-This test module verifies the core functionality of the StarryNight getting-started
-workflow by executing the actual CLI commands and verifying their outputs.
+This test module focuses specifically on testing the LoadData generation functionality
+of the StarryNight workflow by executing the CLI commands and validating the outputs.
 
 The workflow is outlined in ../../../docs/user/getting-started.md
 
 Current scope:
-- Experiment configuration initialization and editing
-- Inventory file generation
+- CP illum calc LoadData generation
 
 Future extensions:
-- Index generation from inventory (parsing file paths)
-- Experiment file creation from index and configuration
-- LoadData CSV generation for illumination correction
-- CellProfiler pipeline generation
-- Illumination correction execution
+- CP illum apply LoadData generation
+- CP segmentation check LoadData generation
+- SBS illum calc LoadData generation
+- SBS illum apply LoadData generation
+- SBS preprocessing LoadData generation
+- Analysis LoadData generation
 
 Testing strategy:
-This module executes each StarryNight CLI command directly to test the actual
-functionality of the workflow. This strategy:
-1. Ensures the CLI commands work as expected
-2. Tests the complete end-to-end workflow as a user would experience it
-3. Validates that each workflow step produces the expected outputs
-4. Allows for incremental testing as the workflow gets extended
+This module contains separate test functions for each type of LoadData generation,
+all using the same fix_starrynight_basic_setup fixture which provides the necessary
+setup from steps 1-5 of the getting-started workflow. This approach:
 
-Each workflow step is executed in sequence with appropriate assertions to
-verify the correctness of outputs. The test uses the FIX-S1 input and workspace
-fixtures for consistent and reusable test data.
+1. Focuses on testing LoadData generation for different workflow steps
+2. Ensures each LoadData generation command works correctly
+3. Validates the structure and content of generated LoadData CSV files
+4. Allows testing each LoadData step independently
+5. Makes it easy to add tests for additional LoadData generation steps
 """
 
 import json
@@ -39,16 +38,15 @@ import pandas as pd
 import pytest
 
 
-def test_loaddata_generation(
+def test_cp_illum_calc_loaddata_generation(
     fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
 ):
-    """Test the LoadData generation step of the getting-started workflow.
+    """Test the CP illumination calculation LoadData generation step.
 
-    This test focuses on step 6 of the workflow, using the fix_starrynight_basic_setup
-    fixture to provide the necessary files from steps 1-5:
-
-    6. Generate LoadData files for illumination correction
-    7. Validate the generated LoadData CSV matches the reference LoadData CSV
+    This test focuses on generating LoadData files for the Cell Painting (CP)
+    illumination calculation step, which is step 6 of the getting-started workflow.
+    It uses the fix_starrynight_basic_setup fixture to provide the necessary files
+    from steps 1-5.
 
     Args:
         fix_starrynight_basic_setup: Fixture providing initial setup (through steps 1-5)
