@@ -211,7 +211,31 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     index_file = index_dir / "index.parquet"
     assert index_file.exists(), "Index file was not created"
 
-    # # Step 5: Create experiment file
+    # Diagnostic: Examine the index file structure to understand what's missing
+    import pandas as pd
+
+    # Load the index file
+    index_df = pd.read_parquet(index_file)
+
+    # Print the columns in the index file
+    print("\nDIAGNOSTIC INFO - Index file columns:")
+    print(index_df.columns.tolist())
+
+    # Check if dataset_id exists in the columns
+    if "dataset_id" in index_df.columns:
+        # Check if it has any non-null values
+        print("\nValues in dataset_id column:")
+        print(f"  - Non-null values: {index_df['dataset_id'].count()}")
+        print(f"  - Unique values: {index_df['dataset_id'].unique().tolist()}")
+    else:
+        print("\nThe 'dataset_id' column is missing from the index file")
+
+    # Print a sample row to help understand the structure
+    if not index_df.empty:
+        print("\nSample row from index file:")
+        print(index_df.iloc[0].to_dict())
+
+    # Step 5: Create experiment file
     # # Execute the actual CLI command:
     # #   starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
     # #   -c ${WKDIR}/experiment_init.json -o ${WKDIR}
@@ -235,9 +259,9 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     # )
 
     # # Check if the command was successful
-    # assert result.returncode == 0, (
-    #     f"Experiment file creation command failed: {result.stderr}"
-    # )
+    # assert (
+    #     result.returncode == 0
+    # ), f"Experiment file creation command failed: {result.stderr}"
 
     # # Verify the experiment.json file was created
     # experiment_json_path = workspace_dir / "experiment.json"
