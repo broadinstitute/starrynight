@@ -25,7 +25,7 @@ dependencies = [
 #   "cellprofiler-library",
 #   "Cellprofiler",
 # ]
-dev = ["pytest", "ruff", "build", "twine", "jupytext", "ipython", "pooch>=1.8.2"]
+dev = ["pytest", "ruff==0.9.10", "build", "twine", "jupytext", "ipython", "pooch>=1.8.2"]
 
 [tools.uv.sources]
 pipecraft = { workspace = true }

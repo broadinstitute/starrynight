@@ -12,7 +12,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest",
-  "ruff",
+  "ruff==0.9.10",
   "build",
   "twine",
   "jupytext",
