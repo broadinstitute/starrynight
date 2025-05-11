@@ -13,8 +13,8 @@ import pytest
 
 
 @pytest.fixture(scope="session")
-def fix_s1_archive():
-    """Fixture that downloads and caches the FIX-S1 test data archive.
+def fix_s1_input_archive():
+    """Fixture that downloads and caches the FIX-S1 input test data archive.
 
     This fixture handles the input component of the standard FIX-S1 test fixture
     (small test fixture without stitchcrop and QC).
@@ -28,12 +28,12 @@ def fix_s1_archive():
         path=pooch.os_cache("starrynight"),
         base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
         registry={
-            "starrynight_test_data.tar.gz": "md5:d8e34bacf43453dfb9c65d9bf1162634"
+            "fix_s1_input.tar.gz": "md5:01de912bdff0379b671c39b400dda915"
         },
     )
 
     # Download and cache the test data
-    archive_path = test_data.fetch("starrynight_test_data.tar.gz")
+    archive_path = test_data.fetch("fix_s1_input.tar.gz")
 
     # Verify the archive
     archive_path_obj = Path(archive_path)
@@ -47,8 +47,43 @@ def fix_s1_archive():
     return archive_path
 
 
+@pytest.fixture(scope="session")
+def fix_s1_output_archive():
+    """Fixture that downloads and caches the FIX-S1 output test data archive.
+
+    This fixture handles the output component of the standard FIX-S1 test fixture
+    (small test fixture without stitchcrop and QC).
+
+    Returns:
+        str: Path to the downloaded archive file.
+
+    """
+    # Configure Pooch for test data management
+    test_data = pooch.create(
+        path=pooch.os_cache("starrynight"),
+        base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
+        registry={
+            "fix_s1_output.tar.gz": "md5:1bcc54c61cbe2c4b96c6b09ffc8d4f0f"
+        },
+    )
+
+    # Download and cache the test data
+    archive_path = test_data.fetch("fix_s1_output.tar.gz")
+
+    # Verify the archive
+    archive_path_obj = Path(archive_path)
+    assert archive_path_obj.exists(), (
+        "Output test data archive not downloaded correctly"
+    )
+    assert tarfile.is_tarfile(archive_path_obj), (
+        "Output file is not a valid tar archive"
+    )
+
+    return archive_path
+
+
 @pytest.fixture(scope="module")
-def fix_s1_input_dir(tmp_path_factory, fix_s1_archive):
+def fix_s1_input_dir(tmp_path_factory, fix_s1_input_archive):
     """Fixture that provides a temporary directory with extracted FIX-S1 input data.
 
     This fixture handles the input component of the standard FIX-S1 test fixture
@@ -62,31 +97,84 @@ def fix_s1_input_dir(tmp_path_factory, fix_s1_archive):
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        fix_s1_archive: fixture providing the path to the FIX-S1 archive
+        fix_s1_input_archive: fixture providing the path to the FIX-S1 input archive
 
     Returns:
         dict: Dictionary containing paths to key directories:
             - base_dir: The base temporary directory
-            - input_dir: Path to the extracted starrynight_example_input directory
+            - input_dir: Path to the extracted fix_s1_input directory
             - data_dir: Path to Source1/Batch1/images where the test images are located
 
     """
     # Create a temporary directory
-    base_dir = tmp_path_factory.mktemp("starrynight_test")
+    base_dir = tmp_path_factory.mktemp("fix_s1_input_test")
 
     # Extract the archive
-    with tarfile.open(fix_s1_archive, "r:gz") as tar:
+    with tarfile.open(fix_s1_input_archive, "r:gz") as tar:
         tar.extractall(path=base_dir)
 
     # Create paths to important directories
-    input_dir = base_dir / "starrynight_example_input"
+    input_dir = base_dir / "fix_s1_input"
     data_dir = input_dir / "Source1" / "Batch1" / "images"
 
     # Verify the extraction worked correctly
-    assert input_dir.exists(), "Test data not extracted correctly"
-    assert data_dir.exists(), "Test data structure not as expected"
+    assert input_dir.exists(), "Input test data not extracted correctly"
+    assert data_dir.exists(), "Input data structure not as expected"
 
     yield {"base_dir": base_dir, "input_dir": input_dir, "data_dir": data_dir}
+
+    # Cleanup is handled automatically by pytest's tmp_path_factory
+
+
+@pytest.fixture(scope="module")
+def fix_s1_output_dir(tmp_path_factory, fix_s1_output_archive):
+    """Fixture that provides a temporary directory with extracted FIX-S1 output data.
+
+    This fixture handles the output component of the standard FIX-S1 test fixture
+    (small test fixture without stitchcrop and QC).
+
+    This fixture:
+    1. Creates a temporary directory
+    2. Extracts the FIX-S1 output data archive into it
+    3. Yields a dictionary with paths to key directories
+    4. Cleans up the temporary directory after the test is done
+
+    Args:
+        tmp_path_factory: pytest fixture for creating temporary directories
+        fix_s1_output_archive: fixture providing the path to the FIX-S1 output archive
+
+    Returns:
+        dict: Dictionary containing paths to key directories:
+            - base_dir: The base temporary directory
+            - output_dir: Path to the extracted fix_s1_output directory
+            - workspace_dir: Path to Source1/workspace directory with outputs
+
+    """
+    # Create a temporary directory
+    base_dir = tmp_path_factory.mktemp("fix_s1_output_test")
+
+    # Extract the archive
+    with tarfile.open(fix_s1_output_archive, "r:gz") as tar:
+        tar.extractall(path=base_dir)
+
+    # Create paths to important directories
+    output_dir = base_dir / "fix_s1_output"
+    workspace_dir = output_dir / "Source1" / "workspace"
+    load_data_csv_dir = workspace_dir / "load_data_csv"
+
+    # Verify the extraction worked correctly
+    assert output_dir.exists(), "Output test data not extracted correctly"
+    assert workspace_dir.exists(), "Output workspace directory not found"
+    assert load_data_csv_dir.exists(), (
+        "LoadData CSV directory not found in output"
+    )
+
+    yield {
+        "base_dir": base_dir,
+        "output_dir": output_dir,
+        "workspace_dir": workspace_dir,
+        "load_data_csv_dir": load_data_csv_dir,
+    }
 
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
@@ -96,7 +184,8 @@ def fix_s1_workspace(tmp_path_factory):
     """Fixture that creates a workspace directory structure for FIX-S1 tests.
 
     This fixture creates a temporary directory with the structure needed for
-    processing the FIX-S1 test fixture (small test fixture without stitchcrop and QC):
+    processing the FIX-S1 test fixture (small test fixture without stitchcrop and QC).
+    The structure matches the expected output directory structure.
 
     - workspace/
       - index/
@@ -128,6 +217,7 @@ def fix_s1_workspace(tmp_path_factory):
         "cellprofiler/loaddata/cp/illum/illum_calc",
         "cellprofiler/cppipe/cp/illum/illum_calc",
         "illum/cp/illum_calc",
+        "load_data_csv/Batch1/Plate1_trimmed",
     ]
 
     # Create each directory
@@ -152,4 +242,5 @@ def fix_s1_workspace(tmp_path_factory):
         / "illum"
         / "illum_calc",
         "illum_dir": workspace_dir / "illum" / "cp" / "illum_calc",
+        "load_data_csv_dir": workspace_dir / "load_data_csv",
     }
