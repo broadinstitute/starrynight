@@ -21,10 +21,13 @@ def test_fix_s1_input_fixtures(fix_s1_input_dir, fix_s1_workspace):
     assert fix_s1_workspace["workspace_dir"].exists()
     assert fix_s1_workspace["index_dir"].exists()
     assert fix_s1_workspace["inventory_dir"].exists()
-    assert fix_s1_workspace["loaddata_dir"].exists()
-    assert fix_s1_workspace["cppipe_dir"].exists()
-    assert fix_s1_workspace["illum_dir"].exists()
-    assert fix_s1_workspace["load_data_csv_dir"].exists()
+    assert fix_s1_workspace["inventory_inv_dir"].exists()
+    assert fix_s1_workspace["cp_illum_calc_dir"].exists()
+    assert fix_s1_workspace["cp_illum_apply_dir"].exists()
+    assert fix_s1_workspace["sbs_illum_calc_dir"].exists()
+    assert fix_s1_workspace["sbs_illum_apply_dir"].exists()
+    assert fix_s1_workspace["experiment_json"].exists()
+    assert fix_s1_workspace["experiment_init_json"].exists()
 
     # Verify we can write to these directories
     test_file = fix_s1_workspace["workspace_dir"] / "test_file.txt"

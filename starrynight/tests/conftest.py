@@ -185,23 +185,22 @@ def fix_s1_workspace(tmp_path_factory):
 
     This fixture creates a temporary directory with the structure needed for
     processing the FIX-S1 test fixture (small test fixture without stitchcrop and QC).
-    The structure matches the expected output directory structure.
+    The structure matches the expected output directory structure:
 
     - workspace/
-      - index/
-      - inventory/
       - cellprofiler/
         - loaddata/
           - cp/
             - illum/
+              - illum_apply/
               - illum_calc/
-        - cppipe/
-          - cp/
+          - sbs/
             - illum/
+              - illum_apply/
               - illum_calc/
-      - illum/
-        - cp/
-          - illum_calc/
+      - index/
+      - inventory/
+        - inv/
 
     Returns:
         dict: Dictionary with paths to key directories in the workspace
@@ -210,37 +209,61 @@ def fix_s1_workspace(tmp_path_factory):
     # Create base workspace directory
     workspace_dir = tmp_path_factory.mktemp("workspace")
 
-    # Create subdirectories
+    # Create subdirectories that match the expected output structure
     dir_structure = [
-        "index",
-        "inventory",
+        # CP illumination directories
         "cellprofiler/loaddata/cp/illum/illum_calc",
-        "cellprofiler/cppipe/cp/illum/illum_calc",
-        "illum/cp/illum_calc",
-        "load_data_csv/Batch1/Plate1_trimmed",
+        "cellprofiler/loaddata/cp/illum/illum_apply",
+        # SBS illumination directories
+        "cellprofiler/loaddata/sbs/illum/illum_calc",
+        "cellprofiler/loaddata/sbs/illum/illum_apply",
+        # Index and inventory
+        "index",
+        "inventory/inv",
     ]
 
     # Create each directory
     for dir_path in dir_structure:
         (workspace_dir / dir_path).mkdir(parents=True, exist_ok=True)
 
-    # Return dictionary with paths
+    # Create empty placeholder files for experiment JSONs
+    (workspace_dir / "experiment.json").touch()
+    (workspace_dir / "experiment_init.json").touch()
+
+    # Return dictionary with paths to all important directories
     return {
         "workspace_dir": workspace_dir,
+        # Main workspace directories
         "index_dir": workspace_dir / "index",
         "inventory_dir": workspace_dir / "inventory",
-        "loaddata_dir": workspace_dir
+        "inventory_inv_dir": workspace_dir / "inventory" / "inv",
+        # CP illumination directories
+        "cp_illum_calc_dir": workspace_dir
         / "cellprofiler"
         / "loaddata"
         / "cp"
         / "illum"
         / "illum_calc",
-        "cppipe_dir": workspace_dir
+        "cp_illum_apply_dir": workspace_dir
         / "cellprofiler"
-        / "cppipe"
+        / "loaddata"
         / "cp"
         / "illum"
+        / "illum_apply",
+        # SBS illumination directories
+        "sbs_illum_calc_dir": workspace_dir
+        / "cellprofiler"
+        / "loaddata"
+        / "sbs"
+        / "illum"
         / "illum_calc",
-        "illum_dir": workspace_dir / "illum" / "cp" / "illum_calc",
-        "load_data_csv_dir": workspace_dir / "load_data_csv",
+        "sbs_illum_apply_dir": workspace_dir
+        / "cellprofiler"
+        / "loaddata"
+        / "sbs"
+        / "illum"
+        / "illum_apply",
+        # JSON files
+        "experiment_json": workspace_dir / "experiment.json",
+        "experiment_init_json": workspace_dir / "experiment_init.json",
     }
