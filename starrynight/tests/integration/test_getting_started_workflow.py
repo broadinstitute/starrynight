@@ -434,6 +434,24 @@ def test_getting_started_workflow_complete(  # noqa: C901
                     f"Reference wells {missing_wells} not found in generated CSV"
                 )
 
+            # 2b. Verify all sites from reference exist in generated file
+            ref_sites = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Site FROM reference"
+                ).fetchnumpy()["Metadata_Site"]
+            )
+            gen_sites = set(
+                conn.execute(
+                    "SELECT DISTINCT Metadata_Site FROM generated"
+                ).fetchnumpy()["Metadata_Site"]
+            )
+
+            missing_sites = ref_sites - gen_sites
+            if missing_sites:
+                validation_errors.append(
+                    f"Reference sites {missing_sites} not found in generated CSV"
+                )
+
             # 3. Verify plate information matches
             ref_plates = set(
                 conn.execute(
