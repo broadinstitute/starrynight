@@ -41,14 +41,35 @@ def get_row_config(im_per_well: int) -> list[int]:
         + [20, 20, 20, 20, 18, 18, 16, 16, 14, 10, 6],
         "293": [7, 11, 13, 15, 17, 17, 19, 19, 19, 19]
         + [19, 19, 19, 17, 17, 15, 13, 11, 7],
-        "256": [6, 10, 12, 14, 16, 16, 18, 18, 18, 18, 18, 18, 16, 16, 14, 12, 10, 6],
+        "256": [
+            6,
+            10,
+            12,
+            14,
+            16,
+            16,
+            18,
+            18,
+            18,
+            18,
+            18,
+            18,
+            16,
+            16,
+            14,
+            12,
+            10,
+            6,
+        ],
         "88": [6, 8, 10, 10, 10, 10, 10, 10, 8, 6],
         "52": [4, 6, 8, 8, 8, 8, 6, 4],
     }
     return im_per_well_dict[str(im_per_well)]
 
 
-def save_image_fiji(ij, image: Any, out_path: Path, compress: bool = False) -> None:
+def save_image_fiji(
+    ij, image: object, out_path: Path, compress: bool = False
+) -> None:
     plugin = "Bio-Formats Exporter"
     params = {
         # "imageid": image.getID(),
@@ -116,15 +137,17 @@ def stitch_images_fiji(
 
 if __name__ == "__main__":
     with ImagejContext() as ij:
-        image_files = [Path(f"./stitch_images/{i}.tif") for i in range(1, 11)]
+        image_files = [
+            Path(f"../fixtures/stitch_images/{i}.tif") for i in range(1, 11)
+        ]
         stitch_images_fiji(
             ij,
             image_files,
-            Path("./stitch_images/").joinpath("tile_config.txt"),
-            Path("."),
+            Path("../fixtures/stitch_images/").joinpath("tile_config.txt"),
+            Path(),
             tile_overlap_pct=50,
         )
         output = ij.py.active_imageplus()
         print("Image id")
         print(output.getID())
-        save_image_fiji(ij, output, Path(".").joinpath("custom.tif"))
+        save_image_fiji(ij, output, Path().joinpath("custom.tif"))
