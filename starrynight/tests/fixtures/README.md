@@ -9,17 +9,12 @@ This directory contains files used by test fixtures for the StarryNight project.
 - `stitch_images/`: Image files for testing the stitching functionality
   - Various `.tif` files for testing image stitching operations
   - `tile_config.*.txt`: Configuration files for stitching
-- `test.cppipe`: Sample CellProfiler pipeline for testing
 
 ## Purpose & Usage
 
 ### stitch_images/
 
 The images in `stitch_images/` are used for testing image stitching functionality. These are small sample images that can be used to verify that the stitching algorithms work correctly.
-
-### test.cppipe
-
-A sample CellProfiler pipeline file used for testing pipeline parsing and processing.
 
 ## Adding New Fixtures
 
