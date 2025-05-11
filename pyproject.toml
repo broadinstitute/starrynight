@@ -6,6 +6,7 @@ dependencies = [
     "starrynight",
     "pipecraft",
     "conductor",
+    "pooch>=1.8.2",
 ]
 
 [project.optional-dependencies]
