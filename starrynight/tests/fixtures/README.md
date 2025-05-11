@@ -7,14 +7,7 @@ This directory contains files used by test fixtures for the StarryNight project.
 - `basic_setup/`: Pre-generated files for quickly running LoadData tests
   - See [basic_setup/README.md](basic_setup/README.md) for details
 - `stitch_images/`: Image files for testing the stitching functionality
-  - Various `.tif` files for testing image stitching operations
-  - `tile_config.*.txt`: Configuration files for stitching
-
-## Purpose & Usage
-
-### stitch_images/
-
-The images in `stitch_images/` are used for testing image stitching functionality. These are small sample images that can be used to verify that the stitching algorithms work correctly.
+  - See [stitch_images/README.md](stitch_images/README.md) for details
 
 ## Adding New Fixtures
 
