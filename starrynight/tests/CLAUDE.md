@@ -15,12 +15,18 @@ This document provides guidance for systematic testing of the StarryNight codeba
 ## Quick Reference
 
 - **Test Commands**:
-  - Run all tests: `pytest`
+  - Run all tests with UV: `uv run pytest`
+  - Run all tests with Python: `pytest`
   - Run specific test file: `pytest path/to/test_file.py`
   - Run specific test: `pytest path/to/test_file.py::test_function_name`
   - Run tests with coverage: `pytest --cov=starrynight`
+  - Run tests with verbose output: `pytest -v`
   - Run only unit tests: `pytest -m "not integration"`
   - Run only integration tests: `pytest -m "integration"`
+
+- **Code Quality**:
+  - Run pre-commit checks: `pre-commit run --files <path>`
+  - Run specific pre-commit hook: `pre-commit run <hook-id> --files <path>`
 
 - **Test Organization**: Mirror source code structure (algorithms/, cli/, etc.)
 - **Key Principles**: Test independence, mock dependencies, focus on high-value tests
@@ -183,6 +189,32 @@ def test_function_with_different_inputs(input_value, expected):
         assert result == expected
 ```
 
+### Exception Testing Pattern
+
+```python
+def test_specific_exceptions():
+    """Test that appropriate exceptions are raised for invalid inputs."""
+    # Import specific exception types from the module
+    from mymodule import ValidationError, ParseError
+
+    # Test with different invalid inputs that should raise specific exceptions
+    with pytest.raises(ValidationError):
+        process_data({"invalid": "data"})
+
+    with pytest.raises(ParseError):
+        parse_content("invalid content")
+
+    # Test with parameters that would cause specific error conditions
+    invalid_paths = [
+        "invalid/path/format",
+        "missing/fields/images/plate1",
+    ]
+
+    for path in invalid_paths:
+        with pytest.raises(ParseError):
+            parser.parse(path)
+```
+
 ## Implementation Plan
 
 ### Phase 1: Algorithm Layer Tests
@@ -224,9 +256,13 @@ def test_function_with_different_inputs(input_value, expected):
 ### Writing Effective Tests
 - Use descriptive test names: `test_<function_name>_<scenario_description>`
 - Follow Arrange-Act-Assert pattern
-- Add docstrings to test functions
+- Add docstrings to test functions that explain the purpose of the test
 - Focus on testing complex logic and critical paths
 - Test boundary conditions and edge cases
+- Include proper type annotations for fixtures and functions
+- Use specific exception types instead of generic `Exception` when testing error cases
+- Make assertions as specific and precise as possible
+- Avoid print statements in tests
 
 ### Anti-patterns to Avoid
 
@@ -255,9 +291,43 @@ def test_function_with_different_inputs(input_value, expected):
 - **Path Handling**: Cloud paths may need special mocking
 - **Pipeline Generation**: Focus on key modules rather than exhaustive validation
 
+## Code Quality and Pre-commit Workflow
+
+StarryNight uses pre-commit hooks to ensure code quality and consistency:
+
+1. **Linting with Ruff**:
+   - Checks for Python best practices and code style
+   - Enforces modern type annotations (use `dict` instead of `typing.Dict`)
+   - Catches common errors and anti-patterns
+
+2. **Formatting with Ruff Format**:
+   - Automatically formats code according to project standards
+   - Ensures consistent whitespace and line formatting
+
+3. **Pre-commit Workflow**:
+   - Always run pre-commit checks before committing: `pre-commit run --files <path>`
+   - Fix any issues identified by the hooks
+   - Rerun pre-commit checks to verify all issues are resolved
+
+## Commit Workflow
+
+When making commits to the repository:
+
+1. Ensure all tests pass: `uv run pytest <path_to_test>`
+2. Run pre-commit checks: `pre-commit run --files <path>`
+3. Use semantic commit messages with type prefixes:
+   - `test:` for test-related changes
+   - `fix:` for bug fixes
+   - `feat:` for new features
+   - `docs:` for documentation
+   - `refactor:` for code refactoring
+4. Include a brief description of the change
+5. Add bullet points for significant changes
+
 ## Session Workflow
 
 AI assistants should:
 1. Review git commit history at the start of each session to understand what has been implemented
 2. Focus on the goals specified by the user at the beginning of each session
 3. Create meaningful commit messages that document what was tested and implemented
+4. Run all tests and pre-commit checks before committing changes
