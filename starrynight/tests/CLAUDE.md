@@ -21,8 +21,6 @@ This document provides guidance for systematic testing of the StarryNight codeba
   - Run specific test: `pytest path/to/test_file.py::test_function_name`
   - Run tests with coverage: `pytest --cov=starrynight`
   - Run tests with verbose output: `pytest -v`
-  - Run only unit tests: `pytest -m "not integration"`
-  - Run only integration tests: `pytest -m "integration"`
 
 - **Code Quality**:
   - Run pre-commit checks: `pre-commit run --files <path>`
