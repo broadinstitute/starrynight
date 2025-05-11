@@ -430,7 +430,9 @@ def test_getting_started_workflow_complete(  # noqa: C901
             missing_wells = ref_wells - gen_wells
             if missing_wells:
                 validation_errors.append(
-                    f"Reference wells {missing_wells} not found in generated CSV"
+                    f"Reference wells {missing_wells} not found in generated CSV. "
+                    f"Reference values: {sorted(ref_wells)}, "
+                    f"Generated values: {sorted(gen_wells)}"
                 )
 
             # 2b. Verify all sites from reference exist in generated file
@@ -448,7 +450,9 @@ def test_getting_started_workflow_complete(  # noqa: C901
             missing_sites = ref_sites - gen_sites
             if missing_sites:
                 validation_errors.append(
-                    f"Reference sites {missing_sites} not found in generated CSV"
+                    f"Reference sites {missing_sites} not found in generated CSV. "
+                    f"Reference values: {sorted(list(ref_sites))}, "
+                    f"Generated values: {sorted(list(gen_sites))}"
                 )
 
             # 3. Verify plate information matches
@@ -466,7 +470,9 @@ def test_getting_started_workflow_complete(  # noqa: C901
             missing_plates = ref_plates - gen_plates
             if missing_plates:
                 validation_errors.append(
-                    f"Reference plates {missing_plates} not found in generated CSV"
+                    f"Reference plates {missing_plates} not found in generated CSV. "
+                    f"Reference values: {sorted(list(ref_plates))}, "
+                    f"Generated values: {sorted(list(gen_plates))}"
                 )
 
             # 4. Verify filename patterns
