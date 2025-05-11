@@ -13,8 +13,11 @@ import pytest
 
 
 @pytest.fixture(scope="session")
-def test_data_archive():
-    """Fixture that downloads and caches the test data archive.
+def fix_s1_archive():
+    """Fixture that downloads and caches the FIX-S1 test data archive.
+
+    This fixture handles the input component of the standard FIX-S1 test fixture
+    (small test fixture without stitchcrop and QC).
 
     Returns:
         str: Path to the downloaded archive file.
@@ -45,18 +48,21 @@ def test_data_archive():
 
 
 @pytest.fixture(scope="module")
-def test_data_dir(tmp_path_factory, test_data_archive):
-    """Fixture that provides a temporary directory with extracted test data.
+def fix_s1_input_dir(tmp_path_factory, fix_s1_archive):
+    """Fixture that provides a temporary directory with extracted FIX-S1 input data.
+
+    This fixture handles the input component of the standard FIX-S1 test fixture
+    (small test fixture without stitchcrop and QC).
 
     This fixture:
     1. Creates a temporary directory
-    2. Extracts the test data archive into it
+    2. Extracts the FIX-S1 input data archive into it
     3. Yields a dictionary with paths to key directories
     4. Cleans up the temporary directory after the test is done
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        test_data_archive: fixture providing the path to the test data archive
+        fix_s1_archive: fixture providing the path to the FIX-S1 archive
 
     Returns:
         dict: Dictionary containing paths to key directories:
@@ -69,7 +75,7 @@ def test_data_dir(tmp_path_factory, test_data_archive):
     base_dir = tmp_path_factory.mktemp("starrynight_test")
 
     # Extract the archive
-    with tarfile.open(test_data_archive, "r:gz") as tar:
+    with tarfile.open(fix_s1_archive, "r:gz") as tar:
         tar.extractall(path=base_dir)
 
     # Create paths to important directories
@@ -86,10 +92,12 @@ def test_data_dir(tmp_path_factory, test_data_archive):
 
 
 @pytest.fixture(scope="function")
-def test_workspace(tmp_path_factory):
-    """Fixture that creates a workspace directory structure for tests.
+def fix_s1_workspace(tmp_path_factory):
+    """Fixture that creates a workspace directory structure for FIX-S1 tests.
 
-    This fixture creates a temporary directory with the structure:
+    This fixture creates a temporary directory with the structure needed for
+    processing the FIX-S1 test fixture (small test fixture without stitchcrop and QC):
+
     - workspace/
       - index/
       - inventory/
