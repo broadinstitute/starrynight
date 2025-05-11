@@ -67,18 +67,18 @@ def test_gen_illum_calc_load_data(mock_write_csv, mock_read_parquet, mock_index_
     """Test illumination calculation load data generation."""
     # Setup mock return values
     mock_read_parquet.return_value = mock_index_data
-    
+
     # Call function under test
     gen_illum_calc_load_data_by_batch_plate(
         index_path=Path("/test/index.parquet"),
         out_path=mock_workspace,
         path_mask=None
     )
-    
+
     # Verify correct calls were made
     mock_read_parquet.assert_called_once()
     assert mock_write_csv.call_count > 0
-    
+
     # Verify output structure or content if needed
     # ...
 
@@ -89,14 +89,14 @@ def test_gen_illum_calc_cppipe(mock_cp_context, mock_workspace):
     # Setup mock CellProfiler context
     context_instance = MagicMock()
     mock_cp_context.return_value.__enter__.return_value = context_instance
-    
+
     # Call function under test
     gen_illum_calc_cppipe_by_batch_plate(
         load_data_path=mock_workspace / "loaddata",
         out_dir=mock_workspace / "cppipe",
         workspace_path=mock_workspace
     )
-    
+
     # Verify pipeline creation
     # Verify pipeline was properly configured
     # ...
@@ -162,10 +162,10 @@ def test_illum_calc_loaddata_command(mock_gen_loaddata, cli_runner):
         "-i", "/test/index.parquet",
         "-o", "/test/output"
     ])
-    
+
     # Verify command succeeded
     assert result.exit_code == 0
-    
+
     # Verify underlying algorithm was called with correct parameters
     mock_gen_loaddata.assert_called_once()
     args, _ = mock_gen_loaddata.call_args
@@ -238,10 +238,10 @@ def test_function_using_cp(mock_cp_context):
     # Setup context mock
     context_instance = MagicMock()
     mock_cp_context.return_value.__enter__.return_value = context_instance
-    
+
     # Test code using CellProfiler
     # ...
-    
+
     # Verify CellProfiler operations
     assert context_instance.add_module.called
     # etc.
@@ -266,7 +266,7 @@ def mock_cp_pipeline():
 def test_cp_without_java(mock_start_java):
     # Test code that would normally initialize Java VM
     # ...
-    
+
     # Verify Java VM wasn't actually started
     assert mock_start_java.called
 ```
@@ -282,10 +282,10 @@ File operations should be mocked to avoid real filesystem dependencies:
 def test_with_file_mocks(mock_read_parquet, mock_write_pq):
     # Configure mock return values
     mock_read_parquet.return_value = mock_df
-    
+
     # Test code that reads/writes files
     # ...
-    
+
     # Verify file operations
     mock_read_parquet.assert_called_once()
     mock_write_pq.assert_called_once()
@@ -299,7 +299,7 @@ def test_with_temp_dir(tmp_path):
     test_dir.mkdir()
     test_file = test_dir / "test_file.txt"
     test_file.write_text("Test content")
-    
+
     # Test code using these files
     # ...
 ```
