@@ -4,7 +4,7 @@ This guide explains how to configure and customize path parsers in StarryNight t
 
 ## Understanding Path Parsers
 
-StarryNight uses a grammar-based path parsing system to extract structured metadata from file paths. This allows it to work with a variety of file organization schemes.
+StarryNight uses a grammar-based path parsing system to extract structured metadata from file paths.
 
 ```mermaid
 flowchart LR
@@ -17,28 +17,28 @@ flowchart LR
 
 ### How Path Parsing Works
 
-The StarryNight parser consists of three main components:
+The StarryNight parser consists of three components:
 
-1. **Lexer (Tokenizer)** - Breaks the file path into tokens using regular expressions
-2. **Grammar Rules** - Defines how tokens can be combined and organized (in `.lark` file)
-3. **Transformer** - Converts the parsed structure into a Python dictionary with metadata fields
+1. **Lexer** - Breaks the file path into tokens using regular expressions
+2. **Grammar Rules** - Defines token combinations and organization (in `.lark` file)
+3. **Transformer** - Converts the parsed structure into a Python dictionary
 
-This architecture allows for flexible, yet robust, parsing of complex file paths without relying on brittle string splitting.
+This architecture enables flexible, robust parsing without relying on brittle string splitting.
 
 ## The Default "Vincent" Parser
 
-StarryNight includes a default parser (named "vincent") that handles file paths with the following structure:
+StarryNight's default parser handles file paths with this structure:
 
 ```
 [dataset]/[source_id]/[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
 ```
 
-For example:
+Example:
 ```
 MyDataset/Source1/Batch1/images/Plate1/20X_CP_Plate1/WellA01_PointA01_0_ChannelDAPI,AF488,AF647_Seq0.ome.tiff
 ```
 
-The parser can also handle variations like:
+The parser handles variations like:
 
 - SBS folders vs CP folders
 - Aligned images vs raw images
@@ -47,7 +47,7 @@ The parser can also handle variations like:
 
 ### Understanding the Grammar File
 
-The default grammar file (`path_parser_vincent.lark`) defines the rules for parsing file paths:
+The default grammar file (`path_parser_vincent.lark`) defines rules for parsing:
 
 ```
 // Top-level rule - starting point for parsing
@@ -60,7 +60,7 @@ _images_root_dir: "images"i sep plate_id sep _plate_root_dir
 ...
 ```
 
-Rules prefixed with an underscore (e.g., `_root_dir`) are internal structural rules that don't directly map to output metadata fields. Rules without underscores (e.g., `dataset_id`, `plate_id`) become fields in the output metadata.
+Rules prefixed with underscore (e.g., `_root_dir`) are internal structural rules that don't map to output metadata fields. Rules without underscores become fields in the output.
 
 ## Customizing the Parser
 
@@ -68,13 +68,13 @@ Rules prefixed with an underscore (e.g., `_root_dir`) are internal structural ru
 
 You'll need a custom parser when:
 
-- Your file organization differs from the default "vincent" pattern
+- Your file organization differs from the default pattern
 - You need to extract different metadata fields
 - You have a unique naming convention
 
 ### Specifying a Custom Parser
 
-When generating an index, you can specify a custom parser path using the CLI:
+Specify a custom parser with the CLI:
 
 ```sh
 starrynight index gen \
@@ -87,14 +87,14 @@ starrynight index gen \
 
 To create a custom parser:
 
-1. **Understand Your File Organization**: Document your file path patterns and identify the metadata components you need to extract
-2. **Create a Grammar File**: Write a `.lark` file that defines the structure of your file paths
-3. **Test Your Grammar**: Validate it against sample paths before using it in production
-4. **Use It in Your Workflow**: Specify your custom grammar with the `--parser` parameter
+1. **Document your file patterns** and identify metadata components to extract
+2. **Write a `.lark` file** that defines the path structure
+3. **Test your grammar** against sample paths
+4. **Use it in your workflow** with the `--parser` parameter
 
 ### Example: Custom Grammar File
 
-Here's an example grammar file for a different file organization pattern:
+Example grammar for a different file organization:
 
 ```
 // Custom grammar for example_lab file organization
@@ -120,131 +120,96 @@ DIGIT: "0".."9"
 %import common.LETTER
 ```
 
-This would parse paths like:
+Parses paths like:
 ```
 MyProject/Experiment-2023-05/Plate1/A1_01_DAPI_01.tiff
 ```
 
-## Testing Your Custom Parser
+## Testing Custom Parsers
 
-To ensure your parser works correctly:
+1. **Use Lark Parser IDE**: Test at [Lark Parser IDE](https://www.lark-parser.org/ide/) to visualize parse trees.
 
-1. **Use the Lark Parser IDE**: Test your grammar at [Lark Parser IDE](https://www.lark-parser.org/ide/) - a web tool that visualizes parse trees for your grammar and test paths.
-
-2. **Test with Sample Paths**: Create a small test script that uses your grammar to parse representative file paths:
+2. **Test with sample paths**:
 
 ```python
 from lark import Lark
-from pathlib import Path
 
-# Load your custom grammar
-parser = Lark.open('/path/to/your/custom_parser.lark', parser='lalr')
+# Load grammar and test paths
+parser = Lark.open('/path/to/grammar.lark', parser='lalr')
+paths = ['MyProject/Experiment-2023-05/Plate1/A1_01_DAPI_01.tiff']
 
-# Test with sample paths
-test_paths = [
-    'MyProject/Experiment-2023-05/Plate1/A1_01_DAPI_01.tiff',
-    # Add more test paths here
-]
-
-for path in test_paths:
+for path in paths:
     try:
         tree = parser.parse(path)
-        print(f"✓ Successfully parsed: {path}")
-        print(tree.pretty())
+        print(f"✓ Parsed: {path}")
     except Exception as e:
-        print(f"✗ Failed to parse: {path}")
-        print(f"  Error: {e}")
+        print(f"✗ Failed: {path} - {e}")
 ```
 
-## Understanding the Parser Architecture
+## Parser Architecture
 
-If you're interested in how the parser works internally:
+The parser works through three layers:
 
-1. **Lexer (Tokenizer)**: Breaks the path into tokens using regular expressions
-      - Implements uppercase rules (like `DIGIT`, `LETTER`)
-      - Matches context-free patterns
-2. **Parser (Grammar)**: Builds a parse tree using grammar rules
-      - Implements lowercase rules (like `well_id`, `plate_id`)
-      - Defines hierarchy and relationships between tokens
-3. **Transformer**: Converts the parse tree into a structured dictionary
-      - Maps rule names to metadata fields
-      - Handles special cases (e.g., normalizing channel names)
+1. **Lexer**: Tokenizes paths using regexes (uppercase rules like `DIGIT`)
+2. **Parser**: Builds a tree using grammar rules (lowercase rules like `well_id`)
+3. **Transformer**: Maps parse tree to metadata dictionary (handles special cases)
 
 ## Best Practices
 
-When creating custom parsers:
+When creating parsers:
 
-1. **Start Simple**: Begin with the most basic version of your grammar and add complexity as needed
-2. **Test Thoroughly**: Validate your parser with a diverse set of file paths
-3. **Consider Performance**: For large datasets, overly complex parsers may slow down index generation
-4. **Document Your Schema**: Document your file organization pattern for future reference
-5. **Separate Concerns**:
-      - Use the lexer (uppercase rules) for basic pattern matching
-      - Use the grammar (lowercase rules) for structural relationships
-      - Keep transformation logic in the transformer, not the grammar
+1. **Start simple** - Begin with basic grammar and add complexity as needed
+2. **Test thoroughly** - Validate with diverse file paths
+3. **Consider performance** - Complex parsers can slow index generation
+4. **Document your schema** - Document your file organization pattern
+5. **Separate concerns**:
+      - Lexer for basic pattern matching
+      - Grammar for structural relationships
+      - Transformer for conversion logic
 
 ## Troubleshooting
 
-Common issues with parsers:
+Common issues:
 
-- **Parsing Errors**: If your parser fails to parse certain paths:
-    - Check if your paths match your grammar rules
-    - Test the problematic paths in the Lark Parser IDE
-    - Add more permissive rules to handle variations
-- **Missing Metadata**: If your generated index is missing expected fields:
-    - Ensure your grammar extracts all needed metadata
-    - Check that the field names in your grammar match what you expect
-- **Performance Issues**: If parsing is slow:
-    - Simplify complex grammar rules
-    - Avoid deep nesting of rules
-    - Put as much pattern matching as possible in the lexer (uppercase rules)
+- **Parsing errors**: Check grammar rules, test in Lark IDE, add permissive rules
+- **Missing metadata**: Ensure grammar extracts all needed fields with matching names
+- **Performance issues**: Simplify complex rules, reduce nesting, move pattern matching to lexer
 
 ## Using Your Custom Parser
 
-After creating your custom parser, use it in the index generation step of your workflow:
+Use your parser in the index generation step:
 
 ```sh
 starrynight index gen \
     -i ./workspace/inventory/inventory.parquet \
     -o ./workspace/index/ \
-    --parser /path/to/your/custom_parser.lark
+    --parser /path/to/custom/parser.lark
 ```
 
-Validate that your index contains the expected metadata by examining the resulting `index.parquet` file.
+Validate results by examining the `index.parquet` file.
 
-!!! note "Advanced Topic: Custom Transformers"
-    The current StarryNight implementation only provides the default `VincentAstToIR` transformer. Creating custom transformers would require modifying the source code. For most users, a custom grammar file provides sufficient flexibility.
+!!! note "Custom Transformers"
+    Creating custom transformers requires modifying source code. For most users, a custom grammar file provides sufficient flexibility.
 
 ---
 
 !!! info "For Document Contributors"
-    This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers of the StarryNight documentation.
+    Guidelines for maintaining this document:
 
-    **Document Purpose and Audience**
+    **Audience**: Users adapting StarryNight to non-standard file organization with sufficient technical knowledge of grammar files, and developers extending functionality.
 
-    This document serves as a reference guide for users who need to adapt StarryNight to work with their own data organization patterns. The target audience includes:
+    **Organization Principles**:
 
-    - Users processing data with non-standard file organization
-    - Users who have completed basic workflows and need customized path parsing
-    - Users with sufficient technical knowledge to work with grammar files
-    - Developers who may need to extend parsing functionality
+    1. Progressive disclosure (basics → advanced)
+    2. Visual explanations with diagrams
+    3. Practical, functional examples
+    4. Implementation details for extensibility
 
-    **Document Organization Principles**
+    **Style Guidelines**:
 
-    1. **Progressive disclosure** - Start with usage basics before advanced customization
-    2. **Visual explanation** - Use diagrams to illustrate architectural components
-    3. **Practical examples** - Provide concrete, functional examples for common scenarios
-    4. **Implementation details** - Explain internal workings for those who need to extend functionality
+    1. Consistent command formatting
+    2. Define technical terms at first use
+    3. Prioritize practical guidance over theory
+    4. Use real-world examples
 
-    **Writing Style Guidelines**
-
-    1. **Command formatting** - Format all CLI commands consistently with proper indentation
-    2. **Technical terminology** - Define parser-specific terms like "grammar," "lexer," and "transformer" when first used
-    3. **Application focus** - Prioritize practical guidance over theoretical explanations
-    4. **Real-world examples** - Base examples on actual file organization patterns users might encounter
-
-    **Related Documentation**
-
-    - This document builds on concepts introduced in the "Getting Started" guide
-    - It complements the workflow examples with file organization details
-    - Advanced implementation details can be found in the architecture documentation
+    **Related Docs**: Builds on "Getting Started," complements workflow examples, references architecture docs for advanced details.
