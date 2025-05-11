@@ -214,3 +214,37 @@ Validate that your index contains the expected metadata by examining the resulti
 
 !!! note "Advanced Topic: Custom Transformers"
     The current StarryNight implementation only provides the default `VincentAstToIR` transformer. Creating custom transformers would require modifying the source code. For most users, a custom grammar file provides sufficient flexibility.
+
+---
+
+!!! info "For Document Contributors"
+    This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers of the StarryNight documentation.
+
+    **Document Purpose and Audience**
+
+    This document serves as a reference guide for users who need to adapt StarryNight to work with their own data organization patterns. The target audience includes:
+
+    - Users processing data with non-standard file organization
+    - Users who have completed basic workflows and need customized path parsing
+    - Users with sufficient technical knowledge to work with grammar files
+    - Developers who may need to extend parsing functionality
+
+    **Document Organization Principles**
+
+    1. **Progressive disclosure** - Start with usage basics before advanced customization
+    2. **Visual explanation** - Use diagrams to illustrate architectural components
+    3. **Practical examples** - Provide concrete, functional examples for common scenarios
+    4. **Implementation details** - Explain internal workings for those who need to extend functionality
+
+    **Writing Style Guidelines**
+
+    1. **Command formatting** - Format all CLI commands consistently with proper indentation
+    2. **Technical terminology** - Define parser-specific terms like "grammar," "lexer," and "transformer" when first used
+    3. **Application focus** - Prioritize practical guidance over theoretical explanations
+    4. **Real-world examples** - Base examples on actual file organization patterns users might encounter
+
+    **Related Documentation**
+
+    - This document builds on concepts introduced in the "Getting Started" guide
+    - It complements the workflow examples with file organization details
+    - Advanced implementation details can be found in the architecture documentation
