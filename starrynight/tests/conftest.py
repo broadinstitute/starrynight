@@ -102,7 +102,6 @@ def fix_s1_input_dir(tmp_path_factory):
         dict: Dictionary containing paths to key directories:
             - base_dir: The base temporary directory
             - input_dir: Path to the extracted fix_s1_input directory
-            - data_dir: Path to Source1/Batch1/images where the test images are located
 
     """
     # Create a temporary directory
@@ -115,13 +114,11 @@ def fix_s1_input_dir(tmp_path_factory):
 
     # Create paths to important directories
     input_dir = base_dir / "fix_s1_input"
-    data_dir = input_dir / "Source1" / "Batch1" / "images"
 
     # Verify the extraction worked correctly
     assert input_dir.exists(), "Input test data not extracted correctly"
-    assert data_dir.exists(), "Input data structure not as expected"
 
-    yield {"base_dir": base_dir, "input_dir": input_dir, "data_dir": data_dir}
+    yield {"base_dir": base_dir, "input_dir": input_dir}
 
     # Cleanup is handled automatically by pytest's tmp_path_factory
 

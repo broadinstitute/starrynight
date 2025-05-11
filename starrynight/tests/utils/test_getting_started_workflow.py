@@ -33,6 +33,7 @@ import json
 import subprocess
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 
@@ -61,7 +62,7 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     # These variables will be used in future test phases
     inventory_dir = fix_s1_workspace["inventory_dir"]
     index_dir = fix_s1_workspace["index_dir"]
-    data_dir = fix_s1_input_dir["data_dir"]
+    input_dir = fix_s1_input_dir["input_dir"]
 
     # Step 1: Initialize experiment configuration
     # Execute the actual CLI command:
@@ -158,7 +159,7 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
         "inventory",
         "gen",
         "-d",
-        str(data_dir),
+        str(input_dir),
         "-o",
         str(inventory_dir),
     ]
@@ -210,30 +211,6 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     # Verify the index file was created
     index_file = index_dir / "index.parquet"
     assert index_file.exists(), "Index file was not created"
-
-    # Diagnostic: Examine the index file structure to understand what's missing
-    import pandas as pd
-
-    # Load the index file
-    index_df = pd.read_parquet(index_file)
-
-    # Print the columns in the index file
-    print("\nDIAGNOSTIC INFO - Index file columns:")
-    print(index_df.columns.tolist())
-
-    # Check if dataset_id exists in the columns
-    if "dataset_id" in index_df.columns:
-        # Check if it has any non-null values
-        print("\nValues in dataset_id column:")
-        print(f"  - Non-null values: {index_df['dataset_id'].count()}")
-        print(f"  - Unique values: {index_df['dataset_id'].unique().tolist()}")
-    else:
-        print("\nThe 'dataset_id' column is missing from the index file")
-
-    # Print a sample row to help understand the structure
-    if not index_df.empty:
-        print("\nSample row from index file:")
-        print(index_df.iloc[0].to_dict())
 
     # Step 5: Create experiment file
     # # Execute the actual CLI command:
