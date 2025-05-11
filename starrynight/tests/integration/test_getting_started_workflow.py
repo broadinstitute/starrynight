@@ -32,7 +32,6 @@ fixtures for consistent and reusable test data.
 import json
 import re
 import subprocess
-from collections import defaultdict
 from pathlib import Path
 
 import duckdb
@@ -417,16 +416,16 @@ def test_getting_started_workflow_complete(  # noqa: C901
                 )
 
             # 2. Verify all wells from reference exist in generated file
-            ref_wells = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Well FROM reference"
-                ).fetchnumpy()["Metadata_Well"]
-            )
-            gen_wells = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Well FROM generated"
-                ).fetchnumpy()["Metadata_Well"]
-            )
+            ref_wells_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Well FROM reference"
+            ).fetchall()
+            gen_wells_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Well FROM generated"
+            ).fetchall()
+
+            # Convert to sets of values (extracting first column from each row)
+            ref_wells = {row[0] for row in ref_wells_rows}
+            gen_wells = {row[0] for row in gen_wells_rows}
 
             missing_wells = ref_wells - gen_wells
             if missing_wells:
@@ -435,16 +434,16 @@ def test_getting_started_workflow_complete(  # noqa: C901
                 )
 
             # 2b. Verify all sites from reference exist in generated file
-            ref_sites = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Site FROM reference"
-                ).fetchnumpy()["Metadata_Site"]
-            )
-            gen_sites = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Site FROM generated"
-                ).fetchnumpy()["Metadata_Site"]
-            )
+            ref_sites_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Site FROM reference"
+            ).fetchall()
+            gen_sites_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Site FROM generated"
+            ).fetchall()
+
+            # Convert to sets of values (extracting first column from each row)
+            ref_sites = {row[0] for row in ref_sites_rows}
+            gen_sites = {row[0] for row in gen_sites_rows}
 
             missing_sites = ref_sites - gen_sites
             if missing_sites:
@@ -453,16 +452,16 @@ def test_getting_started_workflow_complete(  # noqa: C901
                 )
 
             # 3. Verify plate information matches
-            ref_plates = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Plate FROM reference"
-                ).fetchnumpy()["Metadata_Plate"]
-            )
-            gen_plates = set(
-                conn.execute(
-                    "SELECT DISTINCT Metadata_Plate FROM generated"
-                ).fetchnumpy()["Metadata_Plate"]
-            )
+            ref_plates_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Plate FROM reference"
+            ).fetchall()
+            gen_plates_rows = conn.execute(
+                "SELECT DISTINCT Metadata_Plate FROM generated"
+            ).fetchall()
+
+            # Convert to sets of values
+            ref_plates = {row[0] for row in ref_plates_rows}
+            gen_plates = {row[0] for row in gen_plates_rows}
 
             missing_plates = ref_plates - gen_plates
             if missing_plates:
