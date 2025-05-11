@@ -63,6 +63,7 @@ Tests should mirror the structure of the source code:
 starrynight/tests/
 ├── algorithms/             # Algorithm tests
 ├── cli/                    # CLI tests
+├── integration/            # End-to-end workflow tests
 ├── modules/                # Module tests
 ├── parsers/                # Parser tests
 ├── pipelines/              # Pipeline tests
@@ -80,6 +81,18 @@ Integration tests can use either:
 - Store test images in `tests/fixtures/` directory
 - Use parameterization for testing variations
 - Create focused fixtures for specific test requirements
+
+### Key Test Fixtures
+
+- **fix_s1_input_dir**: Provides input test data with FIX-S1 structure
+  - `fix_s1_input_dir["input_dir"]`: Path to the extracted fix_s1_input directory
+
+- **fix_s1_workspace**: Provides workspace directory structure with expected paths
+  - `fix_s1_workspace["workspace_dir"]`: Base workspace directory
+  - `fix_s1_workspace["index_dir"]`: Index directory
+  - `fix_s1_workspace["inventory_dir"]`: Inventory directory
+  - `fix_s1_workspace["cp_illum_calc_dir"]`: CP illumination calculation directory
+  - And other paths needed for workflow testing
 
 ## Mocking Strategy
 
@@ -152,20 +165,38 @@ def test_module_spec_configuration():
 ### Integration Test Pattern
 
 ```python
-def test_cp_illum_workflow_integration():
-    """Test the Cell Painting illumination calculation and application workflow."""
-    # Setup test fixture with minimal test data
-    test_data = setup_test_data("cp_illum_test")
+def test_workflow_integration(fix_s1_input_dir, fix_s1_workspace):
+    """Test an end-to-end workflow using CLI commands."""
+    # Set up test environment
+    workspace_dir = fix_s1_workspace["workspace_dir"]
+    input_dir = fix_s1_input_dir["input_dir"]
 
-    # Stage 1: Generate inventory and index
-    run_command(["starrynight", "inv", "gen", "-i", test_data.input_dir, "-o", test_data.workspace])
+    # Execute CLI command via subprocess
+    cmd = [
+        "starrynight",
+        "command",
+        "subcommand",
+        "-i", str(input_dir),
+        "-o", str(workspace_dir),
+        "--param", "value"
+    ]
 
-    # Verify index output
-    assert os.path.exists(f"{test_data.workspace}/index/index.parquet")
-    validate_index_content(f"{test_data.workspace}/index/index.parquet")
+    # Run the command and check it was successful
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, check=False
+    )
 
-    # Stage 2: Continue workflow and verify outputs
-    # ...
+    # Verify command succeeded
+    assert result.returncode == 0, f"Command failed: {result.stderr}"
+
+    # Verify output files were created
+    output_file = workspace_dir / "expected_output.file"
+    assert output_file.exists(), "Output file was not created"
+
+    # Verify the content of the output file
+    with output_file.open() as f:
+        content = json.load(f)
+    assert "expected_key" in content, "Output file missing expected data"
 ```
 
 ### Parameter Testing Pattern
@@ -239,7 +270,7 @@ def test_specific_exceptions():
 ### Phase 4: StarryNight Pipeline Tests
 - [ ] Pipecraft pipeline composition unit tests
 - [ ] Pipeline structure validation tests
-- [ ] End-to-end workflow integration tests
+- [x] End-to-end workflow integration tests
 - [ ] Error handling and recovery tests
 
 ### Phase 5: Utilities and Parsers
