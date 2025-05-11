@@ -59,9 +59,9 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     # Set up test environment
     workspace_dir = fix_s1_workspace["workspace_dir"]
     # These variables will be used in future test phases
-    # inventory_dir = fix_s1_workspace["inventory_dir"]
-    # index_dir = fix_s1_workspace["index_dir"]
-    # data_dir = fix_s1_input_dir["data_dir"]
+    inventory_dir = fix_s1_workspace["inventory_dir"]
+    index_dir = fix_s1_workspace["index_dir"]
+    data_dir = fix_s1_input_dir["data_dir"]
 
     # Step 1: Initialize experiment configuration
     # Execute the actual CLI command:
@@ -150,66 +150,66 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
         "cp_mito_channel not correctly set"
     )
 
-    # # Step 3: Generate inventory
-    # # Execute the actual CLI command:
-    # #   starrynight inventory gen -d ${DATADIR} -o ${WKDIR}/inventory
-    # inventory_cmd = [
-    #     "starrynight",
-    #     "inventory",
-    #     "gen",
-    #     "-d",
-    #     str(data_dir),
-    #     "-o",
-    #     str(inventory_dir),
-    # ]
+    # Step 3: Generate inventory
+    # Execute the actual CLI command:
+    #   starrynight inventory gen -d ${DATADIR} -o ${WKDIR}/inventory
+    inventory_cmd = [
+        "starrynight",
+        "inventory",
+        "gen",
+        "-d",
+        str(data_dir),
+        "-o",
+        str(inventory_dir),
+    ]
 
-    # # Run the command and check it was successful
-    # result = subprocess.run(
-    #     inventory_cmd, capture_output=True, text=True, check=False
-    # )
+    # Run the command and check it was successful
+    result = subprocess.run(
+        inventory_cmd, capture_output=True, text=True, check=False
+    )
 
-    # # Check if the command was successful
-    # assert result.returncode == 0, (
-    #     f"Inventory generation command failed: {result.stderr}"
-    # )
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Inventory generation command failed: {result.stderr}"
+    )
 
-    # # Verify the inventory file was created
-    # inventory_file = inventory_dir / "inventory.parquet"
-    # assert inventory_file.exists(), "Inventory file was not created"
+    # Verify the inventory file was created
+    inventory_file = inventory_dir / "inventory.parquet"
+    assert inventory_file.exists(), "Inventory file was not created"
 
-    # # Verify the inventory/inv directory exists (for temporary processing files)
-    # inv_dir = inventory_dir / "inv"
-    # assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
+    # Verify the inventory/inv directory exists (for temporary processing files)
+    inv_dir = inventory_dir / "inv"
+    assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
 
-    # # Step 4: Generate index
-    # # Execute the actual CLI command:
-    # #   starrynight index gen -i ${WKDIR}/inventory/inventory.parquet -o ${WKDIR}/index/
-    # index_gen_cmd = [
-    #     "starrynight",
-    #     "index",
-    #     "gen",
-    #     "-i",
-    #     str(inventory_file),
-    #     "-o",
-    #     str(index_dir),
-    # ]
+    # Step 4: Generate index
+    # Execute the actual CLI command:
+    #   starrynight index gen -i ${WKDIR}/inventory/inventory.parquet -o ${WKDIR}/index/
+    index_gen_cmd = [
+        "starrynight",
+        "index",
+        "gen",
+        "-i",
+        str(inventory_file),
+        "-o",
+        str(index_dir),
+    ]
 
-    # # Create the index directory if it doesn't exist
-    # index_dir.mkdir(exist_ok=True, parents=True)
+    # Create the index directory if it doesn't exist
+    index_dir.mkdir(exist_ok=True, parents=True)
 
-    # # Run the command and check it was successful
-    # result = subprocess.run(
-    #     index_gen_cmd, capture_output=True, text=True, check=False
-    # )
+    # Run the command and check it was successful
+    result = subprocess.run(
+        index_gen_cmd, capture_output=True, text=True, check=False
+    )
 
-    # # Check if the command was successful
-    # assert result.returncode == 0, (
-    #     f"Index generation command failed: {result.stderr}"
-    # )
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Index generation command failed: {result.stderr}"
+    )
 
-    # # Verify the index file was created
-    # index_file = index_dir / "index.parquet"
-    # assert index_file.exists(), "Index file was not created"
+    # Verify the index file was created
+    index_file = index_dir / "index.parquet"
+    assert index_file.exists(), "Index file was not created"
 
     # # Step 5: Create experiment file
     # # Execute the actual CLI command:
