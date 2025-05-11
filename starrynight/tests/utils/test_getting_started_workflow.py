@@ -34,8 +34,8 @@ from unittest.mock import patch
 import pytest
 
 
-def test_experiment_init_and_inventory(fix_s1_input_dir, fix_s1_workspace):
-    """Test the experiment initialization and inventory generation steps.
+def test_getting_started_workflow_phase1(fix_s1_input_dir, fix_s1_workspace):
+    """Phase 1 of testing the getting-started workflow: experiment init and inventory generation.
 
     This test focuses on the first two steps of the workflow from getting-started.md:
     1. Initialize experiment configuration and edit with required channel values
