@@ -17,18 +17,20 @@ Future extensions:
 - Analysis LoadData generation
 
 Testing strategy:
-This module contains separate test functions for each type of LoadData generation,
-with both full workflow and fast pre-generated versions. The approach:
+This module contains parameterized test functions for each type of LoadData generation,
+that can run with either full workflow or fast pre-generated versions. The approach:
 
 1. Focuses on testing LoadData generation for different workflow steps
-2. Provides both full-workflow and fast versions of each test
-3. Uses pre-generated index and experiment files for faster iteration
-4. Validates the structure and content of generated LoadData CSV files
-5. Makes it easy to add tests for additional LoadData generation steps
+2. Uses parameterization to run each test with both setup approaches:
+   - Full workflow setup (runs steps 1-5 first)
+   - Pre-generated files (faster for iterative development)
+3. Validates the structure and content of generated LoadData CSV files
+4. Makes it easy to add tests for additional LoadData generation steps
 
-Each LoadData generation test has two variants:
-- test_cp_*_loaddata_generation: Uses full fix_starrynight_basic_setup (slower but tests setup steps too)
-- test_cp_*_loaddata_generation_fast: Uses pre-generated files (faster for iterative development)
+Running the tests:
+- Run all tests: pytest test_getting_started_workflow.py
+- Run only fast tests: pytest test_getting_started_workflow.py -v -k fast
+- Run only full workflow tests: pytest test_getting_started_workflow.py -v -k full
 """
 
 import json
@@ -41,21 +43,38 @@ import pandas as pd
 import pytest
 
 
-def _test_cp_illum_calc_loaddata_generation(
-    setup_fixture, fix_s1_workspace, fix_s1_output_dir
+@pytest.mark.parametrize(
+    "setup_fixture_name, description",
+    [
+        ("fix_starrynight_basic_setup", "full workflow"),
+        ("fix_starrynight_pregenerated_setup", "pre-generated files"),
+    ],
+    ids=["full", "fast"],
+)
+def test_cp_illum_calc_loaddata_generation(
+    setup_fixture_name,
+    description,
+    request,
+    fix_s1_workspace,
+    fix_s1_output_dir,
 ) -> None:
-    """Test CP illumination calculation LoadData generation (base implementation).
+    """Test CP illumination calculation LoadData generation with different setup approaches.
 
-    This function contains the core logic for testing LoadData generation for
-    illumination calculation. It's used by both the full workflow test and the
-    fast pre-generated version.
+    This test is parameterized to run with both the full workflow setup (which runs
+    steps 1-5 before generating LoadData files) and with pre-generated files (which
+    is faster for iterative development).
 
     Args:
-        setup_fixture: Fixture providing setup files (either generated or pre-generated)
+        setup_fixture_name: Name of the fixture to use for setup
+        description: Description of the setup approach (for test logs)
+        request: pytest request object to get the fixture by name
         fix_s1_workspace: Fixture providing workspace directory structure
         fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
+    # Get the appropriate fixture (basic or pre-generated) using the request object
+    setup_fixture = request.getfixturevalue(setup_fixture_name)
+
     # Get paths from the fixture
     index_file = setup_fixture["index_file"]
     experiment_json_path = setup_fixture["experiment_json_path"]
@@ -246,42 +265,3 @@ def _test_cp_illum_calc_loaddata_generation(
 
     except duckdb.Error as e:
         pytest.fail(f"DuckDB error during CSV validation: {str(e)}")
-
-
-def test_cp_illum_calc_loaddata_generation(
-    fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
-):
-    """Test CP illumination calculation LoadData generation with the full workflow setup.
-
-    This test runs the full workflow setup (steps 1-5) before generating LoadData files.
-    It's comprehensive but slower for iterative development. For faster tests during
-    development, use test_cp_illum_calc_loaddata_generation_fast instead.
-
-    Args:
-        fix_starrynight_basic_setup: Fixture providing generated setup files (runs steps 1-5)
-        fix_s1_workspace: Fixture providing workspace directory structure
-        fix_s1_output_dir: Fixture providing reference output data for validation
-
-    """
-    _test_cp_illum_calc_loaddata_generation(
-        fix_starrynight_basic_setup, fix_s1_workspace, fix_s1_output_dir
-    )
-
-
-def test_cp_illum_calc_loaddata_generation_fast(
-    fix_starrynight_pregenerated_setup, fix_s1_workspace, fix_s1_output_dir
-):
-    """Test CP illumination calculation LoadData generation with pre-generated setup files.
-
-    This test uses pre-generated index and experiment files to test LoadData generation.
-    It's faster than the full workflow test, making it ideal for iterative development.
-
-    Args:
-        fix_starrynight_pregenerated_setup: Fixture providing pre-generated setup files
-        fix_s1_workspace: Fixture providing workspace directory structure
-        fix_s1_output_dir: Fixture providing reference output data for validation
-
-    """
-    _test_cp_illum_calc_loaddata_generation(
-        fix_starrynight_pregenerated_setup, fix_s1_workspace, fix_s1_output_dir
-    )
