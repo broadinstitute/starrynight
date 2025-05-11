@@ -3,6 +3,7 @@
 Place shared test fixtures here to make them available to all tests.
 """
 
+import os
 import shutil
 import tarfile
 import tempfile
@@ -10,6 +11,19 @@ from pathlib import Path
 
 import pooch
 import pytest
+from pooch import Untar
+
+# Configure a single Pooch registry for all test data
+STARRYNIGHT_CACHE = pooch.create(
+    path=pooch.os_cache("starrynight"),
+    base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
+    registry={
+        # Input component of FIX-S1 (small test fixture without stitchcrop and QC)
+        "fix_s1_input.tar.gz": "md5:01de912bdff0379b671c39b400dda915",
+        # Output component of FIX-S1
+        "fix_s1_output.tar.gz": "md5:1bcc54c61cbe2c4b96c6b09ffc8d4f0f",
+    },
+)
 
 
 @pytest.fixture(scope="session")
@@ -23,17 +37,10 @@ def fix_s1_input_archive():
         str: Path to the downloaded archive file.
 
     """
-    # Configure Pooch for test data management
-    test_data = pooch.create(
-        path=pooch.os_cache("starrynight"),
-        base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
-        registry={
-            "fix_s1_input.tar.gz": "md5:01de912bdff0379b671c39b400dda915"
-        },
+    # Download and cache the test data using the global registry
+    archive_path = STARRYNIGHT_CACHE.fetch(
+        "fix_s1_input.tar.gz", processor=None
     )
-
-    # Download and cache the test data
-    archive_path = test_data.fetch("fix_s1_input.tar.gz")
 
     # Verify the archive
     archive_path_obj = Path(archive_path)
@@ -58,17 +65,10 @@ def fix_s1_output_archive():
         str: Path to the downloaded archive file.
 
     """
-    # Configure Pooch for test data management
-    test_data = pooch.create(
-        path=pooch.os_cache("starrynight"),
-        base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
-        registry={
-            "fix_s1_output.tar.gz": "md5:1bcc54c61cbe2c4b96c6b09ffc8d4f0f"
-        },
+    # Download and cache the test data using the global registry
+    archive_path = STARRYNIGHT_CACHE.fetch(
+        "fix_s1_output.tar.gz", processor=None
     )
-
-    # Download and cache the test data
-    archive_path = test_data.fetch("fix_s1_output.tar.gz")
 
     # Verify the archive
     archive_path_obj = Path(archive_path)
@@ -83,7 +83,7 @@ def fix_s1_output_archive():
 
 
 @pytest.fixture(scope="module")
-def fix_s1_input_dir(tmp_path_factory, fix_s1_input_archive):
+def fix_s1_input_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S1 input data.
 
     This fixture handles the input component of the standard FIX-S1 test fixture
@@ -91,13 +91,12 @@ def fix_s1_input_dir(tmp_path_factory, fix_s1_input_archive):
 
     This fixture:
     1. Creates a temporary directory
-    2. Extracts the FIX-S1 input data archive into it
+    2. Uses pooch processor to extract the FIX-S1 input data archive into it
     3. Yields a dictionary with paths to key directories
     4. Cleans up the temporary directory after the test is done
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        fix_s1_input_archive: fixture providing the path to the FIX-S1 input archive
 
     Returns:
         dict: Dictionary containing paths to key directories:
@@ -109,9 +108,10 @@ def fix_s1_input_dir(tmp_path_factory, fix_s1_input_archive):
     # Create a temporary directory
     base_dir = tmp_path_factory.mktemp("fix_s1_input_test")
 
-    # Extract the archive
-    with tarfile.open(fix_s1_input_archive, "r:gz") as tar:
-        tar.extractall(path=base_dir)
+    # Use pooch to download and extract in one step
+    STARRYNIGHT_CACHE.fetch(
+        "fix_s1_input.tar.gz", processor=Untar(extract_dir=str(base_dir))
+    )
 
     # Create paths to important directories
     input_dir = base_dir / "fix_s1_input"
@@ -127,7 +127,7 @@ def fix_s1_input_dir(tmp_path_factory, fix_s1_input_archive):
 
 
 @pytest.fixture(scope="module")
-def fix_s1_output_dir(tmp_path_factory, fix_s1_output_archive):
+def fix_s1_output_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S1 output data.
 
     This fixture handles the output component of the standard FIX-S1 test fixture
@@ -135,13 +135,12 @@ def fix_s1_output_dir(tmp_path_factory, fix_s1_output_archive):
 
     This fixture:
     1. Creates a temporary directory
-    2. Extracts the FIX-S1 output data archive into it
+    2. Uses pooch processor to extract the FIX-S1 output data archive into it
     3. Yields a dictionary with paths to key directories
     4. Cleans up the temporary directory after the test is done
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        fix_s1_output_archive: fixture providing the path to the FIX-S1 output archive
 
     Returns:
         dict: Dictionary containing paths to key directories:
@@ -153,9 +152,10 @@ def fix_s1_output_dir(tmp_path_factory, fix_s1_output_archive):
     # Create a temporary directory
     base_dir = tmp_path_factory.mktemp("fix_s1_output_test")
 
-    # Extract the archive
-    with tarfile.open(fix_s1_output_archive, "r:gz") as tar:
-        tar.extractall(path=base_dir)
+    # Use pooch to download and extract in one step
+    STARRYNIGHT_CACHE.fetch(
+        "fix_s1_output.tar.gz", processor=Untar(extract_dir=str(base_dir))
+    )
 
     # Create paths to important directories
     output_dir = base_dir / "fix_s1_output"
