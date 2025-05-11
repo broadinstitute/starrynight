@@ -255,12 +255,9 @@ def test_function_with_different_inputs(input_value, expected):
 - **Path Handling**: Cloud paths may need special mocking
 - **Pipeline Generation**: Focus on key modules rather than exhaustive validation
 
-## Current Session Goals
-- [ ] _Add specific goals for this session here_
-- [ ] _Example: Implement tests for index generation algorithms_
+## Session Workflow
 
-## Progress Tracking
 AI assistants should:
 1. Review git commit history at the start of each session to understand what has been implemented
-2. Focus on the goals specified for the current session
+2. Focus on the goals specified by the user at the beginning of each session
 3. Create meaningful commit messages that document what was tested and implemented
