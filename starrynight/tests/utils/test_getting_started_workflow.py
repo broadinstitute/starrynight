@@ -213,71 +213,66 @@ def test_getting_started_workflow_complete(fix_s1_input_dir, fix_s1_workspace):
     assert index_file.exists(), "Index file was not created"
 
     # Step 5: Create experiment file
-    # # Execute the actual CLI command:
-    # #   starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
-    # #   -c ${WKDIR}/experiment_init.json -o ${WKDIR}
-    # exp_create_cmd = [
-    #     "starrynight",
-    #     "exp",
-    #     "new",
-    #     "-i",
-    #     str(index_file),
-    #     "-e",
-    #     "Pooled CellPainting [Generic]",
-    #     "-c",
-    #     str(exp_init_path),
-    #     "-o",
-    #     str(workspace_dir),
-    # ]
+    # Execute the actual CLI command:
+    #   starrynight exp new -i ${WKDIR}/index/index.parquet -e "Pooled CellPainting [Generic]"
+    #   -c ${WKDIR}/experiment_init.json -o ${WKDIR}
+    exp_create_cmd = [
+        "starrynight",
+        "exp",
+        "new",
+        "-i",
+        str(index_file),
+        "-e",
+        "Pooled CellPainting [Generic]",
+        "-c",
+        str(exp_init_path),
+        "-o",
+        str(workspace_dir),
+    ]
 
-    # # Run the command and check it was successful
-    # result = subprocess.run(
-    #     exp_create_cmd, capture_output=True, text=True, check=False
-    # )
+    # Run the command and check it was successful
+    result = subprocess.run(
+        exp_create_cmd, capture_output=True, text=True, check=False
+    )
 
-    # # Check if the command was successful
-    # assert (
-    #     result.returncode == 0
-    # ), f"Experiment file creation command failed: {result.stderr}"
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"Experiment file creation command failed: {result.stderr}"
+    )
 
-    # # Verify the experiment.json file was created
-    # experiment_json_path = workspace_dir / "experiment.json"
-    # assert experiment_json_path.exists(), "experiment.json was not created"
+    # Verify the experiment.json file was created
+    experiment_json_path = workspace_dir / "experiment.json"
+    assert experiment_json_path.exists(), "experiment.json was not created"
 
-    # # Read the experiment file and check key configurations
-    # with experiment_json_path.open() as f:
-    #     experiment_config = json.load(f)
+    # Read the experiment file and check key configurations
+    with experiment_json_path.open() as f:
+        experiment_config = json.load(f)
 
-    # # Verify the experiment file contains expected keys
-    # expected_exp_keys = [
-    #     "experiment_name",
-    #     "experiment_type",
-    #     "barcode_csv_path",
-    #     "cp_nuclei_channel",
-    #     "cp_cell_channel",
-    #     "cp_mito_channel",
-    # ]
+    # Verify the experiment file contains expected keys (list a subset of keys)
+    expected_exp_keys = [
+        "dataset_id",
+        "index_path",
+        "inventory_path",
+        "sbs_config",
+        "cp_config",
+        "use_legacy",
+    ]
 
-    # for key in expected_exp_keys:
-    #     assert key in experiment_config, (
-    #         f"Key '{key}' missing in experiment.json"
-    #     )
+    for key in expected_exp_keys:
+        assert key in experiment_config, (
+            f"Key '{key}' missing in experiment.json"
+        )
 
-    # # Verify the experiment name matches what we specified
-    # assert (
-    #     experiment_config["experiment_name"] == "Pooled CellPainting [Generic]"
-    # ), "Experiment name not correctly set in experiment.json"
-
-    # # Verify channel configurations were correctly transferred from experiment_init.json
-    # assert experiment_config["cp_nuclei_channel"] == "DAPI", (
-    #     "cp_nuclei_channel not correctly transferred to experiment.json"
-    # )
-    # assert experiment_config["cp_cell_channel"] == "PhalloAF750", (
-    #     "cp_cell_channel not correctly transferred to experiment.json"
-    # )
-    # assert experiment_config["cp_mito_channel"] == "ZO1AF488", (
-    #     "cp_mito_channel not correctly transferred to experiment.json"
-    # )
+    # Verify channel configurations were correctly transferred from experiment_init.json
+    assert experiment_config["cp_config"]["nuclei_channel"] == "DAPI", (
+        "nuclei_channel not correctly set in cp_config"
+    )
+    assert experiment_config["cp_config"]["cell_channel"] == "PhalloAF750", (
+        "cell_channel not correctly set in cp_config"
+    )
+    assert experiment_config["cp_config"]["mito_channel"] == "ZO1AF488", (
+        "mito_channel not correctly set in cp_config"
+    )
 
     # # Step 6: Generate LoadData files for illumination correction
     # # Execute the actual CLI command:
