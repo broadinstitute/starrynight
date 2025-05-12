@@ -548,7 +548,7 @@ PIPELINE_CONFIGS = {
             "Metadata_Plate",
             "Metadata_Site",
             "Metadata_Well",
-            "Metadata_Well_Value",
+            # "Metadata_Well_Value",
         ],
         "required_columns": [],  # Too many to list individually, handled dynamically
         "column_groups": [
