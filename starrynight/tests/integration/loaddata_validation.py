@@ -36,14 +36,12 @@ class LoadDataValidator:
         self,
         generated_csv_path: Path,
         ref_csv_path: Path,
-        additional_checks: list[dict[str, Any]] | None = None,
     ) -> list[str]:
         """Validate generated LoadData CSV against reference file.
 
         Args:
             generated_csv_path: Path to generated CSV
             ref_csv_path: Path to reference CSV
-            additional_checks: Additional SQL checks to run
 
         Returns:
             Error messages (empty list if validation passed)
@@ -68,10 +66,6 @@ class LoadDataValidator:
 
                 # Run pipeline-specific checks
                 self._run_pipeline_specific_checks(conn)
-
-                # Run additional checks if provided
-                if additional_checks:
-                    self._run_additional_checks(conn, additional_checks)
 
         except duckdb.Error as e:
             self.errors.append(
@@ -237,18 +231,6 @@ class LoadDataValidator:
         """
         specific_checks = self.config.get("pipeline_specific_checks", [])
         self._run_sql_checks(conn, specific_checks)
-
-    def _run_additional_checks(
-        self, conn: duckdb.DuckDBPyConnection, checks: list[dict[str, Any]]
-    ) -> None:
-        """Run additional SQL checks.
-
-        Args:
-            conn: Database connection with views
-            checks: List of SQL check configurations
-
-        """
-        self._run_sql_checks(conn, checks)
 
     def _run_sql_checks(
         self, conn: duckdb.DuckDBPyConnection, checks: list[dict[str, Any]]
@@ -652,7 +634,6 @@ def validate_loaddata_csv(
     generated_csv_path: Path,
     ref_csv_path: Path,
     pipeline_type: str,
-    additional_checks: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Validate generated LoadData CSV against reference file.
 
@@ -660,7 +641,6 @@ def validate_loaddata_csv(
         generated_csv_path: Path to generated CSV
         ref_csv_path: Path to reference CSV
         pipeline_type: Type of pipeline to validate (cp_illum_calc, etc.)
-        additional_checks: Additional SQL checks with "query" and "error_msg" keys
 
     Returns:
         Error messages (empty list if validation passed)
@@ -674,6 +654,4 @@ def validate_loaddata_csv(
 
     # Create validator and run validation
     validator = LoadDataValidator(pipeline_config)
-    return validator.validate(
-        generated_csv_path, ref_csv_path, additional_checks
-    )
+    return validator.validate(generated_csv_path, ref_csv_path)
