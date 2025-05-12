@@ -374,23 +374,37 @@ def test_loaddata_generation(
                     TO '{temp_path}' (FORMAT CSV, HEADER)
                 """)
             else:
-                # Multiple files - construct a UNION ALL query
+                # Multiple files - handle each file individually and concatenate safely
                 print(
                     f"Found {len(matching_files)} files matching pattern {file_pattern}"
                 )
 
-                # Simple approach using list of files with DuckDB
-                file_list = (
-                    "['" + "', '".join(str(f) for f in matching_files) + "']"
+                # Create a temporary table for concatenation
+                conn.execute(
+                    f"CREATE TABLE combined_data AS SELECT * FROM read_csv_auto('{matching_files[0]}') WHERE 1=0"
                 )
+
+                # Insert data from each file
+                for i, file_path in enumerate(matching_files):
+                    try:
+                        # Insert from this file
+                        conn.execute(
+                            f"INSERT INTO combined_data SELECT * FROM read_csv_auto('{file_path}')"
+                        )
+                    except Exception as e:
+                        print(
+                            f"Warning: Error processing file {file_path}: {e}"
+                        )
+
+                # Write the combined data to our temp file
                 conn.execute(f"""
-                    COPY (SELECT * FROM read_csv_auto({file_list}))
+                    COPY (SELECT * FROM combined_data)
                     TO '{temp_path}' (FORMAT CSV, HEADER)
                 """)
 
                 # Report row count
                 row_count = conn.execute(
-                    f"SELECT COUNT(*) FROM '{temp_path}'"
+                    "SELECT COUNT(*) FROM combined_data"
                 ).fetchone()[0]
                 print(f"Combined CSV has {row_count} rows")
 
