@@ -55,7 +55,7 @@ LOADDATA_CONFIGS = [
         "name": "cp_illum_calc",
         "command_parts": ["illum", "calc", "loaddata"],
         "output_dir_key": "cp_illum_calc_dir",
-        "file_pattern": "Batch1_Plate1_*_illum_calc.csv",
+        "file_pattern": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "required_columns": [
             "Metadata_Batch",
@@ -344,7 +344,8 @@ def test_loaddata_generation(
     # Check for matching files using pattern
     matching_files = list(loaddata_dir.glob(file_pattern))
     assert len(matching_files) > 0, (
-        f"No files matching pattern {file_pattern} were created"
+        f"No files matching pattern {file_pattern} were created. "
+        f"Found files: {[f.name for f in csv_files]}"
     )
 
     # Load and potentially concatenate CSV files
