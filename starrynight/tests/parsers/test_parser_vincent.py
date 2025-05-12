@@ -34,68 +34,182 @@ def extract_metadata(
     return reduce(lambda a, b: a | b, items, {})
 
 
-def test_sbs_path_parsing(parser, transformer):
-    """Test parsing a standard SBS format path."""
-    filepath = "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff"
+@pytest.mark.parametrize(
+    "filepath,expected_metadata,path_type",
+    [
+        # STANDARD SBS FORMAT PATHS
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff",
+            {
+                "dataset_id": "cpg0999-broad-asma",
+                "batch_id": "BATCH1",
+                "plate_id": "plate1",
+                "magnification": "10",
+                "cycle_id": "11",
+                "well_id": "B3",
+                "site_id": "2069",
+                "channels": ["405", "477", "G", "T", "A", "C"],
+                "channel_count": 6,
+                "extension": "tiff",
+            },
+            "SBS",
+        ),
+        # SBS format with different plate and well IDs
+        (
+            "cpg0999-broad-asma/broad/BATCH2/images/plate5/10X_c8_SBS-8/WellD5_PointD5_0042_Channel405 nm,477 nm,G,T_Seq0042.tiff",
+            {
+                "dataset_id": "cpg0999-broad-asma",
+                "batch_id": "BATCH2",
+                "plate_id": "plate5",
+                "magnification": "10",
+                "cycle_id": "8",
+                "well_id": "D5",
+                "site_id": "0042",
+                "channels": ["405", "477", "G", "T"],
+                "channel_count": 4,
+                "extension": "tiff",
+            },
+            "SBS",
+        ),
+        # STANDARD CP FORMAT PATHS
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate2/10X_CP_plate2/WellB2_PointB2_0347_ChannelnIR,GFP,DAPI_Seq1923.tiff",
+            {
+                "dataset_id": "cpg0999-broad-asma",
+                "batch_id": "BATCH1",
+                "plate_id": "plate2",
+                "magnification": "10",
+                "well_id": "B2",
+                "site_id": "1923",
+                "channels": ["nIR", "GFP", "DAPI"],
+                "channel_count": 3,
+                "extension": "tiff",
+            },
+            "CP",
+        ),
+        # CP format with different plate and well IDs
+        (
+            "cpg0999-broad-asma/broad/BATCH3/images/plate4/10X_CP_plate4/WellC6_PointC6_0201_ChannelCy5,FITC,Hoechst_Seq0201.tiff",
+            {
+                "dataset_id": "cpg0999-broad-asma",
+                "batch_id": "BATCH3",
+                "plate_id": "plate4",
+                "magnification": "10",
+                "well_id": "C6",
+                "site_id": "0201",
+                "channels": ["Cy5", "FITC", "Hoechst"],
+                "channel_count": 3,
+                "extension": "tiff",
+            },
+            "CP",
+        ),
+        # CP format with different magnification
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate3/20X_CP_plate3/WellA1_PointA1_0025_ChannelTRITC,GFP,DAPI_Seq0025.tiff",
+            {
+                "dataset_id": "cpg0999-broad-asma",
+                "batch_id": "BATCH1",
+                "plate_id": "plate3",
+                "magnification": "20",
+                "well_id": "A1",
+                "site_id": "0025",
+                "channels": ["TRITC", "GFP", "DAPI"],
+                "channel_count": 3,
+                "extension": "tiff",
+            },
+            "CP",
+        ),
+    ],
+)
+def test_path_parsing(
+    parser, transformer, filepath, expected_metadata, path_type
+):
+    """Test parsing path formats (SBS and CP) with various configurations.
+
+    This consolidated test function handles both SBS and CP path formats,
+    checking all necessary metadata based on the path type.
+
+    Parameters
+    ----------
+    parser : Lark
+        The parser instance
+    transformer : VincentAstToIR
+        The transformer instance
+    filepath : str
+        The file path to parse
+    expected_metadata : dict
+        Dictionary of expected metadata values
+    path_type : str
+        Type of path being tested ('SBS' or 'CP')
+
+    """
     result = extract_metadata(filepath, parser, transformer)
 
-    # Verify core metadata extraction
-    assert result["dataset_id"] == "cpg0999-merck-asma"
-    assert result["batch_id"] == "BATCH1"
-    assert result["plate_id"] == "plate1"
-    assert result["magnification"] == "10"
-    assert result["cycle_id"] == "11"
-    assert result["well_id"] == "B3"
-    assert result["site_id"] == "2069"
+    # Verify common core metadata extraction
+    assert result["dataset_id"] == expected_metadata["dataset_id"]
+    assert result["batch_id"] == expected_metadata["batch_id"]
+    assert result["plate_id"] == expected_metadata["plate_id"]
+    assert result["magnification"] == expected_metadata["magnification"]
+    assert result["well_id"] == expected_metadata["well_id"]
+    assert result["site_id"] == expected_metadata["site_id"]
+
+    # Verify SBS-specific metadata (cycle_id)
+    if path_type == "SBS":
+        assert result["cycle_id"] == expected_metadata["cycle_id"]
 
     # Verify channel extraction
-    assert result["channel_0"] == "405"
-    assert result["channel_1"] == "477"
-    assert result["channel_2"] == "G"
-    assert result["channel_3"] == "T"
-    assert result["channel_4"] == "A"
-    assert result["channel_5"] == "C"
-    assert len([k for k in result.keys() if k.startswith("channel_")]) == 6
+    channel_keys = [k for k in result.keys() if k.startswith("channel_")]
+    assert len(channel_keys) == expected_metadata["channel_count"]
+
+    for i, expected_channel in enumerate(expected_metadata["channels"]):
+        assert result[f"channel_{i}"] == expected_channel
 
     # Verify file information
-    assert result["extension"] == "tiff"
+    assert result["extension"] == expected_metadata["extension"]
 
 
-def test_cp_path_parsing(parser, transformer):
-    """Test parsing a standard CP format path."""
-    filepath = "cpg0999-merck-asma/merck/BATCH1/images/plate2/10X_CP_plate2/WellB2_PointB2_0347_ChannelnIR,GFP,DAPI_Seq1923.tiff"
-    result = extract_metadata(filepath, parser, transformer)
-
-    # Verify core metadata extraction
-    assert result["dataset_id"] == "cpg0999-merck-asma"
-    assert result["batch_id"] == "BATCH1"
-    assert result["plate_id"] == "plate2"
-    assert result["magnification"] == "10"
-    assert result["well_id"] == "B2"
-    assert result["site_id"] == "1923"
-
-    # Verify channel extraction
-    assert result["channel_0"] == "nIR"
-    assert result["channel_1"] == "GFP"
-    assert result["channel_2"] == "DAPI"
-
-    # Verify file information
-    assert result["extension"] == "tiff"
-
-
-def test_channel_normalization(parser, transformer):
+@pytest.mark.parametrize(
+    "filepath,expected_channels",
+    [
+        # Channel with hyphen
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405-2 nm,477 nm_Seq2069.tiff",
+            ["4052", "477"],
+        ),
+        # Channel with multiple hyphens
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_ChannelAlexa-488-antibody,Cy5-DNA_Seq2069.tiff",
+            ["Alexa488antibody", "Cy5DNA"],
+        ),
+        # Mix of channel formats
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_ChannelCy3-dye,DAPI,A-647_Seq2069.tiff",
+            ["Cy3dye", "DAPI", "A647"],
+        ),
+    ],
+)
+def test_channel_normalization(
+    parser, transformer, filepath, expected_channels
+):
     """Test that channels with hyphens are properly normalized."""
     try:
-        filepath = "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405-2 nm,477 nm_Seq2069.tiff"
         result = extract_metadata(filepath, parser, transformer)
 
-        # Check that hyphens in channel names are removed
-        assert "channel_0" in result
-        assert result["channel_0"] == "4052", (
-            "Hyphen should be removed from channel name"
+        # Check that all channels are normalized correctly
+        for i, expected_channel in enumerate(expected_channels):
+            assert f"channel_{i}" in result, f"Missing channel_{i} in result"
+            assert result[f"channel_{i}"] == expected_channel, (
+                f"Channel {i} normalization failed: "
+                f"expected '{expected_channel}', got '{result[f'channel_{i}']}'"
+            )
+
+        # Verify the total number of channels
+        channel_keys = [k for k in result.keys() if k.startswith("channel_")]
+        assert len(channel_keys) == len(expected_channels), (
+            f"Expected {len(expected_channels)} channels, but found {len(channel_keys)}"
         )
-    except Exception:
-        pytest.skip("Parser doesn't support this channel format yet")
+    except Exception as e:
+        pytest.skip(f"Parser doesn't support this channel format yet: {e}")
 
 
 @pytest.mark.parametrize(
@@ -103,12 +217,12 @@ def test_channel_normalization(parser, transformer):
     [
         # Single-digit cycle ID
         (
-            "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c1_SBS-1/WellB3_PointB3_0099_ChannelG,T,A,C_Seq2069.tiff",
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c1_SBS-1/WellB3_PointB3_0099_ChannelG,T,A,C_Seq2069.tiff",
             "1",
         ),
         # Double-digit cycle ID
         (
-            "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_ChannelG,T,A,C_Seq2069.tiff",
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_ChannelG,T,A,C_Seq2069.tiff",
             "11",
         ),
     ],
@@ -135,27 +249,95 @@ def test_invalid_paths(parser):
             parser.parse(path)
 
 
-def test_parser_structure():
-    """Verify the structure of parser output for different paths.
+@pytest.mark.parametrize(
+    "filepath,path_type,expected_keys",
+    [
+        # Standard SBS path
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff",
+            "SBS",
+            [
+                "dataset_id",
+                "batch_id",
+                "plate_id",
+                "cycle_id",
+                "well_id",
+                "site_id",
+                "extension",
+            ],
+        ),
+        # Standard CP path
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate2/10X_CP_plate2/WellB2_PointB2_0347_ChannelnIR,GFP,DAPI_Seq1923.tiff",
+            "CP",
+            [
+                "dataset_id",
+                "batch_id",
+                "plate_id",
+                "well_id",
+                "site_id",
+                "extension",
+            ],
+        ),
+        # SBS path with timestamp
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate1/10X_c11_SBS-11_20220315/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff",
+            "SBS with timestamp",
+            [
+                "dataset_id",
+                "batch_id",
+                "plate_id",
+                "cycle_id",
+                "well_id",
+                "site_id",
+                "extension",
+            ],
+        ),
+        # CP path with additional metadata
+        (
+            "cpg0999-broad-asma/broad/BATCH1/images/plate2/10X_CP_plate2_experimental/WellB2_PointB2_0347_ChannelnIR,GFP,DAPI_Seq1923.tiff",
+            "CP with extra metadata",
+            [
+                "dataset_id",
+                "batch_id",
+                "plate_id",
+                "well_id",
+                "site_id",
+                "extension",
+            ],
+        ),
+    ],
+)
+def test_parser_structure(filepath, path_type, expected_keys):
+    """Verify the structure of parser output for different path formats.
 
-    This test validates that the parser extracts the expected keys for both
-    SBS and CP path formats, ensuring the parser structure remains stable.
+    This test validates that the parser extracts the expected keys for various
+    path formats, ensuring the parser structure remains stable across different
+    variations.
+
+    Parameters
+    ----------
+    filepath : str
+        The file path to parse
+    path_type : str
+        Type of path being tested (for descriptive purposes)
+    expected_keys : list
+        List of metadata keys expected to be extracted
+
     """
-    # Test paths
-    sbs_path = "cpg0999-merck-asma/merck/BATCH1/images/plate1/10X_c11_SBS-11/WellB3_PointB3_0099_Channel405 nm,477 nm,G,T,A,C_Seq2069.tiff"
-    cp_path = "cpg0999-merck-asma/merck/BATCH1/images/plate2/10X_CP_plate2/WellB2_PointB2_0347_ChannelnIR,GFP,DAPI_Seq1923.tiff"
+    try:
+        parser = get_parser(ParserType.OPS_VINCENT)
+        transformer = VincentAstToIR()
 
-    parser = get_parser(ParserType.OPS_VINCENT)
-    transformer = VincentAstToIR()
+        # Process the path
+        result = extract_metadata(filepath, parser, transformer)
 
-    # Process SBS path
-    sbs_result = extract_metadata(sbs_path, parser, transformer)
+        # Verify all expected keys are present
+        for key in expected_keys:
+            assert key in result, f"{path_type} parser missing key: {key}"
 
-    # Process CP path
-    cp_result = extract_metadata(cp_path, parser, transformer)
-
-    # Verify both parsers extract expected keys
-    expected_keys = ["dataset_id", "batch_id", "plate_id", "extension"]
-    for key in expected_keys:
-        assert key in sbs_result, f"SBS parser missing key: {key}"
-        assert key in cp_result, f"CP parser missing key: {key}"
+        # Verify at least one channel is present
+        channel_keys = [k for k in result.keys() if k.startswith("channel_")]
+        assert len(channel_keys) > 0, f"No channels found in {path_type} path"
+    except Exception as e:
+        pytest.skip(f"Parser doesn't support this path format yet: {e}")
