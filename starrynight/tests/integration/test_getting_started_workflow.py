@@ -35,6 +35,7 @@ Running the tests:
 - Run only fast tests: pytest test_getting_started_workflow.py -v -k fast
 - Run only full workflow tests: pytest test_getting_started_workflow.py -v -k full
 - Run specific LoadData type: pytest test_getting_started_workflow.py -v -k cp_illum_calc
+- Run specific LoadData type and setup approach: pytest test_getting_started_workflow.py -v -k "cp_illum_calc and full"
 """
 
 import json
@@ -54,7 +55,7 @@ LOADDATA_CONFIGS = [
         "name": "cp_illum_calc",
         "command_parts": ["illum", "calc", "loaddata"],
         "output_dir_key": "cp_illum_calc_dir",
-        "file_pattern": "*Plate*_illum_calc.csv",
+        "output_filename": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "required_columns": [
             "Metadata_Batch",
@@ -75,7 +76,7 @@ LOADDATA_CONFIGS = [
         "name": "cp_illum_apply",
         "command_parts": ["illum", "apply", "loaddata"],
         "output_dir_key": "cp_illum_apply_dir",
-        "file_pattern": "*Plate*_illum_apply.csv",
+        "output_filename": "Batch1_Plate1_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "required_columns": [
             "Metadata_Batch",
@@ -304,7 +305,7 @@ def test_loaddata_generation(
     # Get LoadData type-specific configuration
     loaddata_name = config["name"]
     output_dir_key = config["output_dir_key"]
-    file_pattern = config["file_pattern"]
+    output_filename = config["output_filename"]
     ref_csv_pattern = config["ref_csv_pattern"]
     required_columns = config["required_columns"]
     command_parts = config["command_parts"]
@@ -340,13 +341,14 @@ def test_loaddata_generation(
     csv_files = list(loaddata_dir.glob("*.csv"))
     assert len(csv_files) > 0, "No LoadData CSV files were created"
 
-    # Check for plate-specific CSV files (should be created for each plate)
-    plate_csvs = list(loaddata_dir.glob(file_pattern))
-    assert len(plate_csvs) > 0, f"No {loaddata_name} CSV files were created"
+    # Check for specific output file
+    output_file_path = loaddata_dir / output_filename
+    assert output_file_path.exists(), (
+        f"Expected output file {output_filename} was not created"
+    )
 
-    # Verify the content of a plate-specific CSV file
-    plate_csv = plate_csvs[0]
-    df = pd.read_csv(plate_csv)
+    # Verify the content of the output file
+    df = pd.read_csv(output_file_path)
 
     # The CSV file should contain required metadata columns
     for col in required_columns:
@@ -354,7 +356,7 @@ def test_loaddata_generation(
 
     # Validate the generated LoadData CSV against reference LoadData CSV
     # Define paths to the generated and reference CSV files
-    generated_csv_path = plate_csvs[0]  # Use the first plate-specific CSV
+    generated_csv_path = output_file_path
 
     # Find the matching reference CSV in the fix_s1_output_dir
     ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
