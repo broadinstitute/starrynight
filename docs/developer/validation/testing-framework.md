@@ -175,6 +175,20 @@ flowchart TD
     - Validate CSV structure, headers, and key metadata fields
 - **Success Criteria**: Functionally equivalent CSV files (allowing for formatting differences)
 
+#### CSV Validation Philosophy
+The validation of LoadData CSVs is intentionally nuanced rather than a simple binary comparison. While a direct dataframe diff would be simplest, it would flag many acceptable differences that don't impact scientific validity. Our validation approach:
+
+1. **Beyond Binary Comparison**: Rather than just determining whether files are identical, the validation identifies and classifies the types of differences
+2. **Forensic Analysis**: The validation acts as a forensic tool to explain differences, answering "what kind of difference is this?" rather than just "is there a difference?"
+3. **Acceptable Variations**: Certain differences (ordering, floating point precision, etc.) are expected and acceptable
+4. **Critical vs. Non-Critical**: The validation distinguishes between differences that impact scientific results and those that don't
+
+This approach is essential for scientific pipelines where small variations in output might be acceptable due to factors such as:
+- Different ordering of otherwise identical data
+- Minor floating point precision differences
+- Alternative but equivalent path representations
+- Metadata differences that don't affect processing
+
 ### Stage 3: Reference Pipeline Execution
 - **Objective**: Run reference pipelines with reference LoadData and capture outputs
 - **Approach**:
