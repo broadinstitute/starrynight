@@ -14,11 +14,8 @@ def test_fix_s1_input_fixtures(fix_s1_input_dir, fix_s1_workspace):
     # Verify that the fix_s1_input_dir fixture provides the expected paths
     assert fix_s1_input_dir["input_dir"].exists()
 
-    # Use the input_dir as the data directory for searching images
-    data_dir = fix_s1_input_dir["input_dir"]
-
-    # Verify that we can find image files in the data directory
-    images = list(data_dir.glob("**/*.tiff"))
+    # Verify that we can find image files in the input directory
+    images = list(fix_s1_input_dir["input_dir"].glob("**/*.tiff"))
     assert len(images) > 0, "No test images found in the FIX-S1 input data"
 
     # Verify the fix_s1_workspace fixture creates the expected structure
