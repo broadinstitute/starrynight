@@ -217,7 +217,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
         "pipeline_type": "cp_segmentation_check",
         "skip": True,
-        "skip_reason": "Missing runstardist dependency",
+        "skip_reason": "Not implemented",
     },
     # SBS illum calc LoadData configuration
     {
@@ -228,7 +228,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
         "pipeline_type": "sbs_illum_calc",
         "skip": True,
-        "skip_reason": "CSV validation error",
+        "skip_reason": "Failing",
     },
     # SBS illum apply LoadData configuration
     {
@@ -250,7 +250,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
         "pipeline_type": "sbs_preprocessing",
         "skip": True,
-        "skip_reason": "Missing runstardist dependency",
+        "skip_reason": "Not implemented",
     },
     # Analysis LoadData configuration
     {
@@ -261,7 +261,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
         "pipeline_type": "analysis",
         "skip": True,
-        "skip_reason": "Missing runstardist dependency",
+        "skip_reason": "Not implemented",
     },
 ]
 
