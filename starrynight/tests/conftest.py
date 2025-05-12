@@ -324,245 +324,219 @@ def fix_s1_workspace(tmp_path_factory):
 
 
 @pytest.fixture(scope="function")
-def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
-    """Fixture that sets up the basic StarryNight workflow environment.
+def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
+    """Fixture that sets up the StarryNight workflow environment.
 
-    Performs steps 1-5 of the getting-started workflow:
+    This fixture can operate in two modes, specified through indirect parameterization:
+    - "generated": Executes actual CLI commands to generate all files (slow but thorough)
+    - "pregenerated": Uses pre-generated files from fixtures (fast)
+
+    Use indirect parameterization to specify the mode:
+    @pytest.mark.parametrize("fix_starrynight_setup", ["generated"], indirect=True)
+    @pytest.mark.parametrize("fix_starrynight_setup", ["pregenerated"], indirect=True)
+
+    The default mode is "generated" if no parameter is specified.
+
+    Performs steps 1-5 of the getting-started workflow when using "generated" mode:
     1. Initialize experiment configuration
     2. Edit configuration with required channel values
     3. Generate inventory from input data
     4. Generate index from inventory
     5. Create experiment file from index and configuration
 
-    This fixture generates all files from scratch by running the actual CLI commands.
-    For faster testing that skips these steps, use fix_starrynight_pregenerated_setup.
-
-    IMPORTANT: This fixture and fix_starrynight_pregenerated_setup share the same
-    output contract and return identical structure. The only difference is:
-    - This fixture validates that the CLI workflow executes correctly (slow but thorough)
-    - fix_starrynight_pregenerated_setup provides the same files without running the CLI (fast)
-
-    When to use this fixture:
-    - When testing that the CLI workflow steps work correctly
-    - When you need to validate the entire data generation pipeline
-
-    When to use fix_starrynight_pregenerated_setup instead:
-    - When you only need the output files and don't care how they were generated
-    - For downstream tests that depend on these files but aren't validating the workflow
+    "pregenerated" mode copies pre-made files without running CLI commands.
 
     Returns:
         dict: Dictionary containing:
-            - index_file: Path to the generated index.parquet file
-            - experiment_json_path: Path to the generated experiment.json file
+            - index_file: Path to the generated/pre-generated index.parquet file
+            - experiment_json_path: Path to the generated/pre-generated experiment.json file
 
     """
-    # Set up test environment
-    workspace_dir = fix_s1_workspace["workspace_dir"]
-    inventory_dir = fix_s1_workspace["inventory_dir"]
-    index_dir = fix_s1_workspace["index_dir"]
-    input_dir = fix_s1_input_dir["input_dir"]
+    # Default to "generated" mode if no parameter is specified
+    param = getattr(request, "param", "generated")
 
-    # Step 1: Initialize experiment configuration
-    exp_init_cmd = [
-        "starrynight",
-        "exp",
-        "init",
-        "-e",
-        "Pooled CellPainting [Generic]",
-        "-o",
-        str(workspace_dir),
-    ]
+    if param == "generated":
+        # Set up test environment
+        workspace_dir = fix_s1_workspace["workspace_dir"]
+        inventory_dir = fix_s1_workspace["inventory_dir"]
+        index_dir = fix_s1_workspace["index_dir"]
+        input_dir = fix_s1_input_dir["input_dir"]
 
-    # Run the command and check it was successful
-    result = subprocess.run(
-        exp_init_cmd, capture_output=True, text=True, check=False
-    )
+        # Step 1: Initialize experiment configuration
+        exp_init_cmd = [
+            "starrynight",
+            "exp",
+            "init",
+            "-e",
+            "Pooled CellPainting [Generic]",
+            "-o",
+            str(workspace_dir),
+        ]
 
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Experiment init command failed: {result.stderr}"
-    )
+        # Run the command and check it was successful
+        result = subprocess.run(
+            exp_init_cmd, capture_output=True, text=True, check=False
+        )
 
-    # Step 1 complete, proceed to next step
+        # Check if the command was successful
+        assert result.returncode == 0, (
+            f"Experiment init command failed: {result.stderr}"
+        )
 
-    # Verify experiment_init.json was created (essential for next steps)
-    exp_init_path = workspace_dir / "experiment_init.json"
-    assert exp_init_path.exists(), "experiment_init.json was not created"
+        # Step 1 complete, proceed to next step
 
-    # Step 2: Edit experiment_init.json as specified in the docs
-    with exp_init_path.open() as f:
-        exp_init_data = json.load(f)
+        # Verify experiment_init.json was created (essential for next steps)
+        exp_init_path = workspace_dir / "experiment_init.json"
+        assert exp_init_path.exists(), "experiment_init.json was not created"
 
-    # Update with required channel values specifically mentioned in getting-started.md
-    exp_init_data.update(
-        {
-            "cp_nuclei_channel": "DAPI",
-            "cp_cell_channel": "PhalloAF750",
-            "cp_mito_channel": "ZO1AF488",
-            "sbs_nuclei_channel": "DAPI",
-            "sbs_cell_channel": "PhalloAF750",
-            "sbs_mito_channel": "ZO1AF488",
+        # Step 2: Edit experiment_init.json as specified in the docs
+        with exp_init_path.open() as f:
+            exp_init_data = json.load(f)
+
+        # Update with required channel values specifically mentioned in getting-started.md
+        exp_init_data.update(
+            {
+                "cp_nuclei_channel": "DAPI",
+                "cp_cell_channel": "PhalloAF750",
+                "cp_mito_channel": "ZO1AF488",
+                "sbs_nuclei_channel": "DAPI",
+                "sbs_cell_channel": "PhalloAF750",
+                "sbs_mito_channel": "ZO1AF488",
+            }
+        )
+
+        with exp_init_path.open("w") as f:
+            json.dump(exp_init_data, f, indent=4)
+
+        # Basic check that file still exists after modification
+        assert exp_init_path.exists(), "Modified experiment_init.json not found"
+
+        # Step 3: Generate inventory
+        inventory_cmd = [
+            "starrynight",
+            "inventory",
+            "gen",
+            "-d",
+            str(input_dir),
+            "-o",
+            str(inventory_dir),
+        ]
+
+        # Run the command and check it was successful
+        result = subprocess.run(
+            inventory_cmd, capture_output=True, text=True, check=False
+        )
+
+        # Check if the command was successful
+        assert result.returncode == 0, (
+            f"Inventory generation command failed: {result.stderr}"
+        )
+
+        # Essential check: inventory file must exist for next steps
+        inventory_file = inventory_dir / "inventory.parquet"
+        assert inventory_file.exists(), "Inventory file was not created"
+
+        # Step 4: Generate index
+        index_gen_cmd = [
+            "starrynight",
+            "index",
+            "gen",
+            "-i",
+            str(inventory_file),
+            "-o",
+            str(index_dir),
+        ]
+
+        # Create the index directory if it doesn't exist
+        index_dir.mkdir(exist_ok=True, parents=True)
+
+        # Run the command and check it was successful
+        result = subprocess.run(
+            index_gen_cmd, capture_output=True, text=True, check=False
+        )
+
+        # Check if the command was successful
+        assert result.returncode == 0, (
+            f"Index generation command failed: {result.stderr}"
+        )
+
+        # Essential check: index file must exist for next steps
+        index_file = index_dir / "index.parquet"
+        assert index_file.exists(), "Index file was not created"
+
+        # Step 5: Create experiment file
+        exp_create_cmd = [
+            "starrynight",
+            "exp",
+            "new",
+            "-i",
+            str(index_file),
+            "-e",
+            "Pooled CellPainting [Generic]",
+            "-c",
+            str(exp_init_path),
+            "-o",
+            str(workspace_dir),
+        ]
+
+        # Run the command and check it was successful
+        result = subprocess.run(
+            exp_create_cmd, capture_output=True, text=True, check=False
+        )
+
+        # Check if the command was successful
+        assert result.returncode == 0, (
+            f"Experiment file creation command failed: {result.stderr}"
+        )
+
+        # Essential check: experiment.json file must exist to return it
+        experiment_json_path = workspace_dir / "experiment.json"
+        assert experiment_json_path.exists(), "experiment.json was not created"
+
+        # Return the paths needed for subsequent processing steps
+        return {
+            "index_file": index_file,
+            "experiment_json_path": experiment_json_path,
         }
-    )
 
-    with exp_init_path.open("w") as f:
-        json.dump(exp_init_data, f, indent=4)
+    elif param == "pregenerated":
+        # Get paths to workspace and fixtures
+        workspace_dir = fix_s1_workspace["workspace_dir"]
+        fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
 
-    # Basic check that file still exists after modification
-    assert exp_init_path.exists(), "Modified experiment_init.json not found"
+        # Define paths to pre-generated files in fixtures directory
+        pregenerated_index_file = fixtures_dir / "index.parquet"
+        pregenerated_experiment_json = fixtures_dir / "experiment.json"
 
-    # Step 3: Generate inventory
-    inventory_cmd = [
-        "starrynight",
-        "inventory",
-        "gen",
-        "-d",
-        str(input_dir),
-        "-o",
-        str(inventory_dir),
-    ]
+        # Essential checks: source files must exist to be copied
+        assert pregenerated_index_file.exists(), (
+            "Pre-generated index file not found"
+        )
+        assert pregenerated_experiment_json.exists(), (
+            "Pre-generated experiment file not found"
+        )
 
-    # Run the command and check it was successful
-    result = subprocess.run(
-        inventory_cmd, capture_output=True, text=True, check=False
-    )
+        # Copy files to workspace directory to maintain expected structure
+        index_file = fix_s1_workspace["index_dir"] / "index.parquet"
+        experiment_json_path = workspace_dir / "experiment.json"
 
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Inventory generation command failed: {result.stderr}"
-    )
+        # Create parent directories if they don't exist
+        index_file.parent.mkdir(parents=True, exist_ok=True)
 
-    # Essential check: inventory file must exist for next steps
-    inventory_file = inventory_dir / "inventory.parquet"
-    assert inventory_file.exists(), "Inventory file was not created"
+        # Copy the files
+        shutil.copy2(pregenerated_index_file, index_file)
+        shutil.copy2(pregenerated_experiment_json, experiment_json_path)
 
-    # Step 4: Generate index
-    index_gen_cmd = [
-        "starrynight",
-        "index",
-        "gen",
-        "-i",
-        str(inventory_file),
-        "-o",
-        str(index_dir),
-    ]
+        # Essential checks: copied files must exist for fixture to function
+        assert index_file.exists(), "Failed to copy index file to workspace"
+        assert experiment_json_path.exists(), (
+            "Failed to copy experiment file to workspace"
+        )
 
-    # Create the index directory if it doesn't exist
-    index_dir.mkdir(exist_ok=True, parents=True)
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        index_gen_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Index generation command failed: {result.stderr}"
-    )
-
-    # Essential check: index file must exist for next steps
-    index_file = index_dir / "index.parquet"
-    assert index_file.exists(), "Index file was not created"
-
-    # Step 5: Create experiment file
-    exp_create_cmd = [
-        "starrynight",
-        "exp",
-        "new",
-        "-i",
-        str(index_file),
-        "-e",
-        "Pooled CellPainting [Generic]",
-        "-c",
-        str(exp_init_path),
-        "-o",
-        str(workspace_dir),
-    ]
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        exp_create_cmd, capture_output=True, text=True, check=False
-    )
-
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"Experiment file creation command failed: {result.stderr}"
-    )
-
-    # Essential check: experiment.json file must exist to return it
-    experiment_json_path = workspace_dir / "experiment.json"
-    assert experiment_json_path.exists(), "experiment.json was not created"
-
-    # Return the paths needed for subsequent processing steps
-    return {
-        "index_file": index_file,
-        "experiment_json_path": experiment_json_path,
-    }
-
-
-@pytest.fixture(scope="function")
-def fix_starrynight_pregenerated_setup(fix_s1_workspace):
-    """Fixture that provides pre-generated files for basic StarryNight workflow setup.
-
-    Instead of running steps 1-5 of the getting-started workflow, this fixture
-    loads pre-generated files from the fixtures directory. This makes tests run faster
-    when you're only testing the LoadData generation step.
-
-    IMPORTANT: This fixture and fix_starrynight_basic_setup share the same
-    output contract and return identical structure. The only difference is:
-    - This fixture is fast but doesn't validate the CLI workflow
-    - fix_starrynight_basic_setup validates that the CLI commands work correctly (slower)
-
-    When to use this fixture:
-    - When you only need the output files and don't care how they were generated
-    - For downstream tests that depend on these files but aren't validating the workflow
-    - For better test performance in scenarios where validating CLI is unnecessary
-
-    When to use fix_starrynight_basic_setup instead:
-    - When testing that the CLI workflow steps function correctly
-    - When you need to validate the entire data generation pipeline
-
-    Returns:
-        dict: Dictionary containing:
-            - index_file: Path to the pre-generated index.parquet file
-            - experiment_json_path: Path to the pre-generated experiment.json file
-
-    """
-    # Get paths to workspace and fixtures
-    workspace_dir = fix_s1_workspace["workspace_dir"]
-    fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
-
-    # Define paths to pre-generated files in fixtures directory
-    pregenerated_index_file = fixtures_dir / "index.parquet"
-    pregenerated_experiment_json = fixtures_dir / "experiment.json"
-
-    # Essential checks: source files must exist to be copied
-    assert pregenerated_index_file.exists(), (
-        "Pre-generated index file not found"
-    )
-    assert pregenerated_experiment_json.exists(), (
-        "Pre-generated experiment file not found"
-    )
-
-    # Copy files to workspace directory to maintain expected structure
-    index_file = fix_s1_workspace["index_dir"] / "index.parquet"
-    experiment_json_path = workspace_dir / "experiment.json"
-
-    # Create parent directories if they don't exist
-    index_file.parent.mkdir(parents=True, exist_ok=True)
-
-    # Copy the files
-    shutil.copy2(pregenerated_index_file, index_file)
-    shutil.copy2(pregenerated_experiment_json, experiment_json_path)
-
-    # Essential checks: copied files must exist for fixture to function
-    assert index_file.exists(), "Failed to copy index file to workspace"
-    assert experiment_json_path.exists(), (
-        "Failed to copy experiment file to workspace"
-    )
-
-    # Return the same structure as fix_starrynight_basic_setup
-    return {
-        "index_file": index_file,
-        "experiment_json_path": experiment_json_path,
-    }
+        # Return the same structure as the generated mode
+        return {
+            "index_file": index_file,
+            "experiment_json_path": experiment_json_path,
+        }
+    else:
+        raise ValueError(f"Unknown parameter: {param}")

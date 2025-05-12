@@ -113,23 +113,20 @@ def test_fix_s1_output_dir(fix_s1_output_dir):
 
 
 @pytest.mark.parametrize(
-    "fixture_name",
-    ["fix_starrynight_basic_setup", "fix_starrynight_pregenerated_setup"],
+    "fix_starrynight_setup", ["generated", "pregenerated"], indirect=True
 )
-def test_starrynight_setup_fixtures(fixture_name, request):
-    """Test both workflow setup fixtures with identical validation logic.
+def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
+    """Test both modes of the workflow setup fixture with identical validation logic.
 
-    Both fixtures provide the exact same output contract (index.parquet and experiment.json files),
-    but they generate these files differently:
+    This test uses explicit parameterization to run against both fixture modes:
+    - "generated": Runs the actual CLI commands to generate files (slow but validates CLI)
+    - "pregenerated": Copies pre-generated files for faster testing
 
-    - fix_starrynight_basic_setup: Runs the actual CLI commands to generate files (slow but validates CLI)
-    - fix_starrynight_pregenerated_setup: Copies pre-generated files for faster testing
-
-    This test uses parameterization to run identical validation on both fixtures,
-    ensuring they both provide output that meets the same requirements.
+    Both modes provide identical output structure (index.parquet and experiment.json files).
+    The parameterization ensures both approaches meet the same requirements.
     """
-    # Get the fixture from the name
-    setup_fixture = request.getfixturevalue(fixture_name)
+    # The fixture is provided directly
+    setup_fixture = fix_starrynight_setup
 
     # Validate fixture structure
     assert isinstance(setup_fixture, dict), "Fixture should return a dictionary"
@@ -284,6 +281,8 @@ def test_starrynight_setup_fixtures(fixture_name, request):
     assert id_counts[1] == 1, "Multiple batch IDs found"
 
     # Print some debug information
-    print(f"Fixture: {fixture_name}")
+    # Get current parameter value for the parameterized test
+    current_param = request.node.callspec.params.get("fix_starrynight_setup")
+    print(f"Fixture mode: {current_param}")
     print(f"Index file location: {index_file}")
     print(f"Experiment JSON location: {experiment_json_path}")
