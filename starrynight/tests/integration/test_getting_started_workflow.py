@@ -123,14 +123,19 @@ def validate_loaddata_csv(
 ) -> list[str]:
     """Validate a generated LoadData CSV file against a reference CSV file.
 
-    This helper function performs common validation checks between different LoadData
-    generation tests, including verifying channel assignments, well coverage, site coverage,
-    plate information, and filename patterns.
+    This helper function compares the generated CSV with a reference CSV,
+    checking critical elements that must match between the two files.
+
+    The validation focuses on:
+    1. Metadata coverage (wells, sites, plates)
+    2. Channel frame assignments
+    3. Filename pattern correctness
+    4. Custom checks specific to the pipeline step
 
     Args:
         generated_csv_path: Path to the generated LoadData CSV file
         ref_csv_path: Path to the reference LoadData CSV file
-        additional_checks: List of additional SQL checks to perform, each defined as a dict with:
+        additional_checks: List of additional SQL checks to perform, each with:
             - query: SQL query to execute (should return a single value)
             - error_msg: Error message template (can use {count} placeholder)
 
@@ -141,9 +146,8 @@ def validate_loaddata_csv(
     validation_errors = []
 
     try:
-        # Use context manager for proper resource handling
+        # Register both CSVs in a DuckDB in-memory database
         with duckdb.connect(":memory:") as conn:
-            # Register CSV files as views using read_csv_auto for automatic type inference
             conn.execute(
                 f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
             )
@@ -151,110 +155,80 @@ def validate_loaddata_csv(
                 f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
             )
 
-            # 1. Verify channel frame assignments match between the CSVs
-            ref_channels = conn.execute("""
+            # Check 1: Compare channel assignments
+            # This verifies the relationship between channels and frames is preserved
+            channel_frames_sql = """
                 SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-                FROM reference
-                ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-            """).fetchall()
-
-            gen_channels = conn.execute("""
-                SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-                FROM generated
-                ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-            """).fetchall()
+                FROM {table} ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+            """
+            ref_channels = conn.execute(
+                channel_frames_sql.format(table="reference")
+            ).fetchall()
+            gen_channels = conn.execute(
+                channel_frames_sql.format(table="generated")
+            ).fetchall()
 
             if ref_channels != gen_channels:
                 validation_errors.append(
                     f"Channel frame assignments don't match: Reference={ref_channels}, Generated={gen_channels}"
                 )
 
-            # 2. Verify all wells from reference exist in generated file
-            ref_wells_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Well FROM reference"
-            ).fetchall()
-            gen_wells_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Well FROM generated"
-            ).fetchall()
+            # Check 2: Compare metadata coverage
+            # For each metadata type, ensure all reference values exist in the generated file
+            for metadata_col, label in [
+                ("Metadata_Well", "wells"),
+                ("Metadata_Site", "sites"),
+                ("Metadata_Plate", "plates"),
+            ]:
+                # Get distinct values from both tables
+                ref_values = {
+                    row[0]
+                    for row in conn.execute(
+                        f"SELECT DISTINCT {metadata_col} FROM reference"
+                    ).fetchall()
+                }
 
-            # Convert to sets of values (extracting first column from each row)
-            ref_wells = {row[0] for row in ref_wells_rows}
-            gen_wells = {row[0] for row in gen_wells_rows}
+                gen_values = {
+                    row[0]
+                    for row in conn.execute(
+                        f"SELECT DISTINCT {metadata_col} FROM generated"
+                    ).fetchall()
+                }
 
-            missing_wells = ref_wells - gen_wells
-            if missing_wells:
-                validation_errors.append(
-                    f"Reference wells {missing_wells} not found in generated CSV. "
-                    f"Reference values: {sorted(ref_wells)}, "
-                    f"Generated values: {sorted(gen_wells)}"
-                )
+                # Find values in reference that are missing from generated
+                missing_values = ref_values - gen_values
+                if missing_values:
+                    validation_errors.append(
+                        f"Reference {label} {missing_values} not found in generated CSV. "
+                        f"Reference values: {sorted(ref_values)}, "
+                        f"Generated values: {sorted(gen_values)}"
+                    )
 
-            # 2b. Verify all sites from reference exist in generated file
-            ref_sites_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Site FROM reference"
-            ).fetchall()
-            gen_sites_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Site FROM generated"
-            ).fetchall()
-
-            # Convert to sets of values (extracting first column from each row)
-            ref_sites = {row[0] for row in ref_sites_rows}
-            gen_sites = {row[0] for row in gen_sites_rows}
-
-            missing_sites = ref_sites - gen_sites
-            if missing_sites:
-                validation_errors.append(
-                    f"Reference sites {missing_sites} not found in generated CSV. "
-                    f"Reference values: {sorted(list(ref_sites))}, "
-                    f"Generated values: {sorted(list(gen_sites))}"
-                )
-
-            # 3. Verify plate information matches
-            ref_plates_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Plate FROM reference"
-            ).fetchall()
-            gen_plates_rows = conn.execute(
-                "SELECT DISTINCT Metadata_Plate FROM generated"
-            ).fetchall()
-
-            # Convert to sets of values
-            ref_plates = {row[0] for row in ref_plates_rows}
-            gen_plates = {row[0] for row in gen_plates_rows}
-
-            missing_plates = ref_plates - gen_plates
-            if missing_plates:
-                validation_errors.append(
-                    f"Reference plates {missing_plates} not found in generated CSV. "
-                    f"Reference values: {sorted(list(ref_plates))}, "
-                    f"Generated values: {sorted(list(gen_plates))}"
-                )
-
-            # 4. Verify filename patterns
-            filename_pattern_check = conn.execute("""
+            # Check 3: Verify filename patterns
+            # Ensure generated filenames follow expected patterns
+            filename_pattern_sql = """
                 SELECT COUNT(*) FROM generated
                 WHERE FileName_OrigDNA NOT LIKE '%Channel%'
                 OR FileName_OrigZO1 NOT LIKE '%Channel%'
                 OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-            """).fetchone()[0]
+            """
+            incorrect_filenames = conn.execute(filename_pattern_sql).fetchone()[
+                0
+            ]
 
-            if filename_pattern_check > 0:
+            if incorrect_filenames > 0:
                 validation_errors.append(
-                    f"Found {filename_pattern_check} filenames that don't match the expected pattern"
+                    f"Found {incorrect_filenames} filenames that don't match the expected pattern"
                 )
 
-            # 5. Run additional checks if provided
+            # Check 4: Run any additional pipeline-specific checks
             if additional_checks:
-                for check_idx, check in enumerate(additional_checks):
-                    query = check["query"]
-                    error_msg_template = check["error_msg"]
-
-                    # Execute the custom query
-                    count = conn.execute(query).fetchone()[0]
-
+                for check in additional_checks:
+                    count = conn.execute(check["query"]).fetchone()[0]
                     if count > 0:
-                        # Format the error message with the count
-                        error_msg = error_msg_template.format(count=count)
-                        validation_errors.append(error_msg)
+                        validation_errors.append(
+                            check["error_msg"].format(count=count)
+                        )
 
     except duckdb.Error as e:
         validation_errors.append(
