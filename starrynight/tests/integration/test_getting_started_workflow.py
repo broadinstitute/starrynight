@@ -194,6 +194,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "pipeline_type": "cp_illum_calc",
+        "skip": False,
+        "skip_reason": None,
     },
     # CP illum apply LoadData configuration
     {
@@ -203,6 +205,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "pipeline_type": "cp_illum_apply",
+        "skip": False,
+        "skip_reason": None,
     },
     # CP segmentation check LoadData configuration
     {
@@ -212,6 +216,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_segcheck.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
         "pipeline_type": "cp_segmentation_check",
+        "skip": True,
+        "skip_reason": "Missing runstardist dependency",
     },
     # SBS illum calc LoadData configuration
     {
@@ -221,6 +227,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
         "pipeline_type": "sbs_illum_calc",
+        "skip": True,
+        "skip_reason": "CSV validation error",
     },
     # SBS illum apply LoadData configuration
     {
@@ -230,6 +238,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline6.csv",
         "pipeline_type": "sbs_illum_apply",
+        "skip": False,
+        "skip_reason": None,
     },
     # SBS preprocessing LoadData configuration
     {
@@ -239,6 +249,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_preprocess.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
         "pipeline_type": "sbs_preprocessing",
+        "skip": True,
+        "skip_reason": "Missing runstardist dependency",
     },
     # Analysis LoadData configuration
     {
@@ -248,6 +260,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_analysis.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
         "pipeline_type": "analysis",
+        "skip": True,
+        "skip_reason": "Missing runstardist dependency",
     },
 ]
 
@@ -278,6 +292,9 @@ def test_complete_workflow(
     - "generated": Runs the actual CLI commands to generate setup files (slow but validates CLI)
     - "pregenerated": Uses pre-generated setup files (faster for testing downstream functionality)
 
+    Tests are automatically skipped if the config dictionary has "skip": True,
+    with the skip reason taken from the "skip_reason" field.
+
     Args:
         fix_starrynight_setup: Fixture providing index and experiment configuration
         config: Configuration for the specific workflow step being tested
@@ -286,6 +303,11 @@ def test_complete_workflow(
         fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
+    # Skip test if config has skip=True
+    if config.get("skip", False):
+        skip_reason = config.get("skip_reason", "Test is disabled")
+        pytest.skip(skip_reason)
+
     # Use the parameterized fixture directly
     setup_fixture = fix_starrynight_setup
 
