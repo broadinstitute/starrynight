@@ -143,6 +143,7 @@ def validate_loaddata_csv(
     - Return a single COUNT of records that fail validation
     - Have access to the "generated" table (the CSV being validated)
     - Return 0 if validation passes, >0 if validation fails
+    - Use "{count}" in the error message to include the count of failing records
 
     Example additional checks:
     [
@@ -166,13 +167,11 @@ def validate_loaddata_csv(
         # Register both CSVs in a DuckDB in-memory database
         with duckdb.connect(":memory:") as conn:
             # Helper function for count-based validation checks
-            def run_count_check(query: str, error_msg_template: str) -> None:
+            def run_count_check(query: str, error_msg: str) -> None:
                 """Execute a query that returns a count and add error if count > 0."""
                 count = conn.execute(query).fetchone()[0]
                 if count > 0:
-                    validation_errors.append(
-                        error_msg_template.format(count=count)
-                    )
+                    validation_errors.append(error_msg.format(count=count))
 
             # Register CSV data as views
             conn.execute(
@@ -240,7 +239,7 @@ def validate_loaddata_csv(
                     OR FileName_OrigZO1 NOT LIKE '%Channel%'
                     OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
                 """,
-                error_msg_template="Found {count} filenames that don't match the expected pattern",
+                error_msg="Found {count} filenames that don't match the expected pattern",
             )
 
             # Check 4: Run any additional pipeline-specific checks
