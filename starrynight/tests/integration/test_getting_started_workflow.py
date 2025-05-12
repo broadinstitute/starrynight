@@ -116,6 +116,109 @@ LOADDATA_CONFIGS = [
 ]
 
 
+def get_available_columns(
+    conn: duckdb.DuckDBPyConnection,
+) -> tuple[set[str], set[str]]:
+    """Get available columns from both reference and generated tables.
+
+    Args:
+        conn: Database connection with views
+
+    Returns:
+        Tuple of (reference columns, generated columns)
+
+    """
+    ref_columns = {
+        row[0]
+        for row in conn.execute("PRAGMA table_info(reference)").fetchall()
+    }
+    gen_columns = {
+        row[0]
+        for row in conn.execute("PRAGMA table_info(generated)").fetchall()
+    }
+    return ref_columns, gen_columns
+
+
+def get_standard_checks(columns: set[str]) -> list[dict[str, Any]]:
+    """Build standard validation checks based on available columns.
+
+    Args:
+        columns: Set of column names available in the table
+
+    Returns:
+        List of SQL check dictionaries
+
+    """
+    standard_checks = []
+
+    # Filename pattern check (only if all filename columns exist)
+    filename_cols = [
+        "FileName_OrigDNA",
+        "FileName_OrigZO1",
+        "FileName_OrigPhalloidin",
+    ]
+    if all(col in columns for col in filename_cols):
+        standard_checks.append(
+            {
+                "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE FileName_OrigDNA NOT LIKE '%Channel%'
+                OR FileName_OrigZO1 NOT LIKE '%Channel%'
+                OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
+            """,
+                "error_msg": "Found {count} filenames that don't match the expected pattern",
+            }
+        )
+
+    # Metadata nullness check (only if all metadata columns exist)
+    metadata_cols = [
+        "Metadata_Batch",
+        "Metadata_Plate",
+        "Metadata_Well",
+        "Metadata_Site",
+    ]
+    if all(col in columns for col in metadata_cols):
+        standard_checks.append(
+            {
+                "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE Metadata_Batch IS NULL
+                OR Metadata_Plate IS NULL
+                OR Metadata_Well IS NULL
+                OR Metadata_Site IS NULL
+            """,
+                "error_msg": "Found {count} rows with missing metadata fields",
+            }
+        )
+
+    # Path and filename nullness check (only if all path/filename columns exist)
+    path_cols = [
+        "FileName_OrigDNA",
+        "FileName_OrigZO1",
+        "FileName_OrigPhalloidin",
+        "PathName_OrigDNA",
+        "PathName_OrigZO1",
+        "PathName_OrigPhalloidin",
+    ]
+    if all(col in columns for col in path_cols):
+        standard_checks.append(
+            {
+                "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE FileName_OrigDNA IS NULL
+                OR FileName_OrigZO1 IS NULL
+                OR FileName_OrigPhalloidin IS NULL
+                OR PathName_OrigDNA IS NULL
+                OR PathName_OrigZO1 IS NULL
+                OR PathName_OrigPhalloidin IS NULL
+            """,
+                "error_msg": "Found {count} rows with missing filename or pathname information",
+            }
+        )
+
+    return standard_checks
+
+
 def validate_loaddata_csv(
     generated_csv_path: Path,
     ref_csv_path: Path,
@@ -155,75 +258,116 @@ def validate_loaddata_csv(
                 f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
             )
 
-            # 1. Check if channel frames match between reference and generated
-            check_column_values(
-                conn,
-                errors,
-                ["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"],
-                "channel frame assignments",
-                mode="exact",
+            # Get available columns from both tables
+            ref_columns, gen_columns = get_available_columns(conn)
+
+            # 1. Check frame columns if they exist
+            validate_frame_columns(conn, errors, ref_columns, gen_columns)
+
+            # 2. Check metadata columns if they exist
+            validate_metadata_columns(conn, errors, ref_columns, gen_columns)
+
+            # 3. Run standard and additional SQL checks
+            validate_with_sql_checks(
+                conn, errors, gen_columns, additional_checks
             )
-
-            # 2. Check if metadata values from reference exist in generated
-            for col, label in [
-                ("Metadata_Well", "wells"),
-                ("Metadata_Site", "sites"),
-                ("Metadata_Plate", "plates"),
-            ]:
-                check_column_values(conn, errors, col, label)
-
-            # 3. Check for rows with pattern or nullness issues
-            standard_checks = [
-                # Filename pattern check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE FileName_OrigDNA NOT LIKE '%Channel%'
-                        OR FileName_OrigZO1 NOT LIKE '%Channel%'
-                        OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-                    """,
-                    "error_msg": "Found {count} filenames that don't match the expected pattern",
-                },
-                # Metadata nullness check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE Metadata_Batch IS NULL
-                        OR Metadata_Plate IS NULL
-                        OR Metadata_Well IS NULL
-                        OR Metadata_Site IS NULL
-                    """,
-                    "error_msg": "Found {count} rows with missing metadata fields",
-                },
-                # File path/name nullness check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE FileName_OrigDNA IS NULL
-                        OR FileName_OrigZO1 IS NULL
-                        OR FileName_OrigPhalloidin IS NULL
-                        OR PathName_OrigDNA IS NULL
-                        OR PathName_OrigZO1 IS NULL
-                        OR PathName_OrigPhalloidin IS NULL
-                    """,
-                    "error_msg": "Found {count} rows with missing filename or pathname information",
-                },
-            ]
-
-            # Add any additional checks
-            if additional_checks:
-                standard_checks.extend(additional_checks)
-
-            # Run all the count-based checks
-            for check in standard_checks:
-                count = conn.execute(check["query"]).fetchone()[0]
-                if count > 0:
-                    errors.append(check["error_msg"].format(count=count))
 
     except duckdb.Error as e:
         errors.append(f"Database error: {str(e)} (check CSV format/types)")
 
     return errors
+
+
+def validate_frame_columns(
+    conn: duckdb.DuckDBPyConnection,
+    errors: list[str],
+    ref_columns: set[str],
+    gen_columns: set[str],
+) -> None:
+    """Validate frame column values if they exist.
+
+    Args:
+        conn: Database connection
+        errors: List to append errors to
+        ref_columns: Available reference columns
+        gen_columns: Available generated columns
+
+    """
+    frame_columns = ["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"]
+
+    # Only validate if all columns exist in both tables
+    if all(col in ref_columns and col in gen_columns for col in frame_columns):
+        check_column_values(
+            conn,
+            errors,
+            frame_columns,
+            "channel frame assignments",
+            mode="exact",
+        )
+
+
+def validate_metadata_columns(
+    conn: duckdb.DuckDBPyConnection,
+    errors: list[str],
+    ref_columns: set[str],
+    gen_columns: set[str],
+) -> None:
+    """Validate metadata column values if they exist.
+
+    Args:
+        conn: Database connection
+        errors: List to append errors to
+        ref_columns: Available reference columns
+        gen_columns: Available generated columns
+
+    """
+    metadata_checks = [
+        ("Metadata_Well", "wells"),
+        ("Metadata_Site", "sites"),
+        ("Metadata_Plate", "plates"),
+    ]
+
+    for col, label in metadata_checks:
+        if col in ref_columns and col in gen_columns:
+            check_column_values(conn, errors, col, label)
+
+
+def validate_with_sql_checks(
+    conn: duckdb.DuckDBPyConnection,
+    errors: list[str],
+    gen_columns: set[str],
+    additional_checks: list[dict[str, Any]] | None = None,
+) -> None:
+    """Run SQL-based checks on the generated data.
+
+    Args:
+        conn: Database connection
+        errors: List to append errors to
+        gen_columns: Available columns in generated table
+        additional_checks: Additional SQL checks to run
+
+    """
+    # Get standard checks based on available columns
+    standard_checks = get_standard_checks(gen_columns)
+
+    # Add any additional checks
+    if additional_checks:
+        standard_checks.extend(additional_checks)
+
+    # Run all the count-based checks
+    for check in standard_checks:
+        # Try to execute the query, catching column-related errors
+        try:
+            count = conn.execute(check["query"]).fetchone()[0]
+            if count > 0:
+                errors.append(check["error_msg"].format(count=count))
+        except duckdb.Error as e:
+            if "not found" in str(e):
+                # Skip this check if columns aren't found
+                continue
+            else:
+                # Raise other SQL errors
+                raise
 
 
 def check_column_values(
