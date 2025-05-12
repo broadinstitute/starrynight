@@ -124,6 +124,10 @@ LOADDATA_CONFIGS = [
 # 1. Count-based SQL checks: Identify invalid records with SQL queries
 # 2. Value coverage checks: Compare column values between tables
 #
+# Functions follow consistent naming conventions:
+# - validate_*: Functions that check data quality and report errors
+# - get_*: Functions that retrieve data or configurations without side effects
+#
 # Main entry point: validate_loaddata_csv()
 
 
@@ -177,14 +181,14 @@ def validate_loaddata_csv(
             )
 
             # 1. Run built-in standard checks
-            run_standard_checks(conn, validation_errors)
+            validate_standard_requirements(conn, validation_errors)
 
             # 2. Run SQL count-based checks
             all_count_checks = get_standard_count_checks()
             if additional_checks:
                 all_count_checks.extend(additional_checks)
 
-            run_sql_count_checks(conn, all_count_checks, validation_errors)
+            validate_with_sql_checks(conn, all_count_checks, validation_errors)
 
             # 3. Run custom value coverage checks if provided
             if custom_value_checks:
@@ -210,10 +214,10 @@ def validate_loaddata_csv(
     return validation_errors
 
 
-def run_standard_checks(
+def validate_standard_requirements(
     conn: duckdb.DuckDBPyConnection, validation_errors: list[str]
 ) -> None:
-    """Run all standard validation checks.
+    """Validate all standard requirements for LoadData CSVs.
 
     This function runs the core validation checks that apply to all LoadData CSVs:
     1. Channel frame consistency check
@@ -297,12 +301,12 @@ def get_standard_count_checks() -> list[dict[str, Any]]:
     ]
 
 
-def run_sql_count_checks(
+def validate_with_sql_checks(
     conn: duckdb.DuckDBPyConnection,
     checks: list[dict[str, Any]],
     validation_errors: list[str],
 ) -> None:
-    """Run SQL count-based validation checks that identify invalid records.
+    """Validate data using SQL count-based checks that identify invalid records.
 
     Args:
         conn: Active DuckDB connection with 'generated' view available
