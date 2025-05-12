@@ -11,11 +11,13 @@ _workspace_root_dir: "workspace" sep workspace_root_dir
 _plate_root_dir: _sbs_folder | _cp_folder
 
 _sbs_folder: magnification "_" "c" cycle_id "_SBS-" cycle_id _timestamp? sep? (_sbs_images | _sbs_metadata)?
-_sbs_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel)  "_Seq" site_id "." extension
+_sbs_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel)  "_Seq" seq_value "." extension
 _sbs_metadata: leaf_node
 
 _cp_folder: magnification "_CP_" _folder_plate_id _timestamp? sep? (_cp_images |_cp_metadata)?
-_cp_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel) "_Seq" site_id "." extension
+_cp_images: "Well" well_id "_Point" well_id "_" site_id "_Channel" (channel " nm,")* (channel ",")* (channel " nm" | channel) "_Seq" seq_value "." extension
+
+seq_value: DIGIT~1..4
 _cp_metadata: leaf_node
 
 workspace_root_dir: string
