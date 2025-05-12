@@ -55,7 +55,7 @@ LOADDATA_CONFIGS = [
         "name": "cp_illum_calc",
         "command_parts": ["illum", "calc", "loaddata"],
         "output_dir_key": "cp_illum_calc_dir",
-        "output_filename": "Batch1_Plate1_illum_calc.csv",
+        "file_pattern": "Batch1_Plate1_*_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "required_columns": [
             "Metadata_Batch",
@@ -76,7 +76,7 @@ LOADDATA_CONFIGS = [
         "name": "cp_illum_apply",
         "command_parts": ["illum", "apply", "loaddata"],
         "output_dir_key": "cp_illum_apply_dir",
-        "output_filename": "Batch1_Plate1_illum_apply.csv",
+        "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "required_columns": [
             "Metadata_Batch",
@@ -305,7 +305,7 @@ def test_loaddata_generation(
     # Get LoadData type-specific configuration
     loaddata_name = config["name"]
     output_dir_key = config["output_dir_key"]
-    output_filename = config["output_filename"]
+    file_pattern = config["file_pattern"]
     ref_csv_pattern = config["ref_csv_pattern"]
     required_columns = config["required_columns"]
     command_parts = config["command_parts"]
@@ -341,22 +341,41 @@ def test_loaddata_generation(
     csv_files = list(loaddata_dir.glob("*.csv"))
     assert len(csv_files) > 0, "No LoadData CSV files were created"
 
-    # Check for specific output file
-    output_file_path = loaddata_dir / output_filename
-    assert output_file_path.exists(), (
-        f"Expected output file {output_filename} was not created"
+    # Check for matching files using pattern
+    matching_files = list(loaddata_dir.glob(file_pattern))
+    assert len(matching_files) > 0, (
+        f"No files matching pattern {file_pattern} were created"
     )
 
-    # Verify the content of the output file
-    df = pd.read_csv(output_file_path)
+    # Load and potentially concatenate CSV files
+    if len(matching_files) == 1:
+        # Single file case - just load it directly
+        combined_df = pd.read_csv(matching_files[0])
+    else:
+        # Multiple files case - concatenate them all
+        print(
+            f"Found {len(matching_files)} files matching pattern {file_pattern}"
+        )
+        dataframes = [pd.read_csv(f) for f in matching_files]
+        combined_df = pd.concat(dataframes, ignore_index=True)
+        print(f"Combined dataframe has {len(combined_df)} rows")
 
-    # The CSV file should contain required metadata columns
+    # The combined CSV should contain required metadata columns
     for col in required_columns:
-        assert col in df.columns, f"Required column '{col}' missing in CSV"
+        assert col in combined_df.columns, (
+            f"Required column '{col}' missing in CSV"
+        )
 
-    # Validate the generated LoadData CSV against reference LoadData CSV
-    # Define paths to the generated and reference CSV files
-    generated_csv_path = output_file_path
+    # Save the combined data to a temporary file for validation
+    import tempfile
+
+    # Create a temporary file for the combined CSV
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
+        temp_path = Path(temp_file.name)
+        combined_df.to_csv(temp_path, index=False)
+
+    # Validate the combined data against reference LoadData CSV
+    generated_csv_path = temp_path
 
     # Find the matching reference CSV in the fix_s1_output_dir
     ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
@@ -380,3 +399,9 @@ def test_loaddata_generation(
         pytest.fail(
             f"CSV validation failed with {len(validation_errors)} error(s):\n{error_message}"
         )
+
+    # Clean up the temporary file
+    try:
+        temp_path.unlink()
+    except Exception as e:
+        print(f"Warning: Failed to delete temporary file {temp_path}: {e}")
