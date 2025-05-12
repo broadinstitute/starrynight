@@ -59,17 +59,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "pipeline_type": "cp_illum_calc",
-        "required_columns": [
-            "Metadata_Plate",
-            "Metadata_Well",
-            "Metadata_Site",
-            "FileName_OrigPhalloidin",
-            "FileName_OrigZO1",
-            "FileName_OrigDNA",
-            "PathName_OrigPhalloidin",
-            "PathName_OrigZO1",
-            "PathName_OrigDNA",
-        ],
     },
     # CP illum apply LoadData configuration
     {
@@ -79,23 +68,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "pipeline_type": "cp_illum_apply",
-        "required_columns": [
-            "Metadata_Plate",
-            "Metadata_Well",
-            "Metadata_Site",
-            "FileName_OrigPhalloidin",
-            "FileName_OrigZO1",
-            "FileName_OrigDNA",
-            "PathName_OrigPhalloidin",
-            "PathName_OrigZO1",
-            "PathName_OrigDNA",
-            "FileName_IllumPhalloidin",
-            "FileName_IllumZO1",
-            "FileName_IllumDNA",
-            "PathName_IllumPhalloidin",
-            "PathName_IllumZO1",
-            "PathName_IllumDNA",
-        ],
     },
     # CP segmentation check LoadData configuration
     {
@@ -105,12 +77,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_segcheck.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
         "pipeline_type": "cp_segmentation_check",
-        "required_columns": [
-            "Metadata_Plate",
-            "Metadata_Site",
-            "Metadata_Well",
-            "Metadata_Well_Value",
-        ],
     },
     # SBS illum calc LoadData configuration
     {
@@ -120,12 +86,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_sbs_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
         "pipeline_type": "sbs_illum_calc",
-        "required_columns": [
-            "Metadata_Plate",
-            "Metadata_Site",
-            "Metadata_SBSCycle",
-            "Metadata_Well",
-        ],
     },
     # SBS illum apply LoadData configuration
     {
@@ -135,7 +95,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_sbs_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline6.csv",
         "pipeline_type": "sbs_illum_apply",
-        "required_columns": [],  # Too many to list, handled by validation framework
     },
     # SBS preprocessing LoadData configuration
     {
@@ -145,7 +104,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_preprocess.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
         "pipeline_type": "sbs_preprocessing",
-        "required_columns": [],  # Handled by validation framework
     },
     # Analysis LoadData configuration
     {
@@ -155,7 +113,6 @@ LOADDATA_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_analysis.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
         "pipeline_type": "analysis",
-        "required_columns": [],  # Handled by validation framework
     },
 ]
 
@@ -205,7 +162,6 @@ def test_loaddata_generation(
     file_pattern = config["file_pattern"]
     ref_csv_pattern = config["ref_csv_pattern"]
     pipeline_type = config["pipeline_type"]
-    required_columns = config["required_columns"]
     command_parts = config["command_parts"]
 
     # Build the command for generating LoadData files
@@ -267,9 +223,7 @@ def test_loaddata_generation(
         df = pd.concat(dataframes, ignore_index=True)
         print(f"Combined CSV has {len(df)} rows")
 
-    # Verify required columns exist (basic check before detailed validation)
-    for col in required_columns:
-        assert col in df.columns, f"Required column '{col}' missing in CSV"
+    # Skip basic column validation - comprehensive validation is done by the validation framework
 
     # Write to temporary file for validation
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
