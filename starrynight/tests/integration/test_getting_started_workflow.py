@@ -129,7 +129,7 @@ def validate_loaddata_csv(
     The validation focuses on:
     1. Metadata coverage (wells, sites, plates)
     2. Channel frame assignments
-    3. Filename pattern correctness
+    3. Standard quality checks (filename patterns, etc.)
     4. Custom checks specific to the pipeline step
 
     Args:
@@ -139,26 +139,126 @@ def validate_loaddata_csv(
             - query: SQL query executing a COUNT that identifies invalid records
             - error_msg: Error message template (can use {count} placeholder)
 
-    The additional_checks should contain SQL queries that:
+    Standard count-based checks and additional checks follow the same format:
     - Return a single COUNT of records that fail validation
     - Have access to the "generated" table (the CSV being validated)
     - Return 0 if validation passes, >0 if validation fails
     - Use "{count}" in the error message to include the count of failing records
 
+    Validation Check Categories:
+    1. Standard checks (built-in) - Applied to all LoadData validations
+       - File path/name completeness
+       - Metadata field completeness
+       - Filename pattern checks
+
+    2. Additional checks (pipeline-specific) - Applied to specific pipeline types
+       - Illumination correction file references (for illum_apply)
+       - Analysis measurement columns (for analysis LoadData)
+       - Module-specific reference columns
+
     Example additional checks:
     [
+        # Basic missing field check
         {
             "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
             "error_msg": "Found {count} rows missing ImageNumber"
         },
+
+        # Pattern validation check
         {
             "query": "SELECT COUNT(*) FROM generated WHERE Metadata_Well NOT LIKE '[A-Z]%'",
-            "error_msg": "Found {count} malformed well IDs"
-        }
+            "error_msg": "Found {count} rows with malformed well IDs"
+        },
+
     ]
 
     Returns:
         List of validation error messages. Empty list if validation passed.
+
+    """
+    # Extract standard checks and combine with additional checks
+    standard_checks, all_count_checks = _get_validation_checks(
+        additional_checks
+    )
+
+    # Perform validation and collect errors
+    return _perform_validation(
+        generated_csv_path, ref_csv_path, all_count_checks
+    )
+
+
+def _get_validation_checks(
+    additional_checks: list[dict[str, Any]] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Create standard validation checks and combine with additional checks.
+
+    Args:
+        additional_checks: Optional list of additional checks to include
+
+    Returns:
+        Tuple containing (standard_checks, all_checks_combined)
+
+    """
+    # Define standard count-based checks
+    standard_checks = [
+        # Filename pattern check
+        {
+            "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE FileName_OrigDNA NOT LIKE '%Channel%'
+                OR FileName_OrigZO1 NOT LIKE '%Channel%'
+                OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
+            """,
+            "error_msg": "Found {count} filenames that don't match the expected pattern",
+        },
+        # Metadata completeness check
+        {
+            "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE Metadata_Batch IS NULL
+                OR Metadata_Plate IS NULL
+                OR Metadata_Well IS NULL
+                OR Metadata_Site IS NULL
+            """,
+            "error_msg": "Found {count} rows with missing metadata fields",
+        },
+        # Path and filename completeness check
+        {
+            "query": """
+                SELECT COUNT(*) FROM generated
+                WHERE FileName_OrigDNA IS NULL
+                OR FileName_OrigZO1 IS NULL
+                OR FileName_OrigPhalloidin IS NULL
+                OR PathName_OrigDNA IS NULL
+                OR PathName_OrigZO1 IS NULL
+                OR PathName_OrigPhalloidin IS NULL
+            """,
+            "error_msg": "Found {count} rows with missing filename or pathname information",
+        },
+    ]
+
+    # Combine standard and additional checks
+    all_count_checks = standard_checks.copy()
+    if additional_checks:
+        all_count_checks.extend(additional_checks)
+
+    return standard_checks, all_count_checks
+
+
+def _perform_validation(
+    generated_csv_path: Path,
+    ref_csv_path: Path,
+    all_count_checks: list[dict[str, Any]],
+) -> list[str]:
+    """Execute validation checks between generated and reference CSVs.
+
+    Args:
+        generated_csv_path: Path to the generated CSV to validate
+        ref_csv_path: Path to the reference CSV for comparison
+        all_count_checks: List of validation checks to perform
+
+    Returns:
+        List of validation error messages (empty if validation passed)
 
     """
     validation_errors = []
@@ -166,13 +266,6 @@ def validate_loaddata_csv(
     try:
         # Register both CSVs in a DuckDB in-memory database
         with duckdb.connect(":memory:") as conn:
-            # Helper function for count-based validation checks
-            def run_count_check(query: str, error_msg: str) -> None:
-                """Execute a query that returns a count and add error if count > 0."""
-                count = conn.execute(query).fetchone()[0]
-                if count > 0:
-                    validation_errors.append(error_msg.format(count=count))
-
             # Register CSV data as views
             conn.execute(
                 f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
@@ -181,85 +274,125 @@ def validate_loaddata_csv(
                 f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
             )
 
-            # Check 1: Compare channel assignments
-            # This verifies the relationship between channels and frames is preserved
-            channel_frames_sql = """
-                SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-                FROM {table} ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-            """
-            ref_channels = conn.execute(
-                channel_frames_sql.format(table="reference")
-            ).fetchall()
-            gen_channels = conn.execute(
-                channel_frames_sql.format(table="generated")
-            ).fetchall()
+            # Check 1: Compare channel-frame assignments for consistency
+            _check_reference_consistency(conn, validation_errors)
 
-            if ref_channels != gen_channels:
-                validation_errors.append(
-                    f"Channel frame assignments don't match: Reference={ref_channels}, Generated={gen_channels}"
-                )
+            # Check 2: Compare metadata values for complete coverage
+            _check_metadata_coverage(conn, validation_errors)
 
-            # Check 2: Compare metadata coverage
-            # For each metadata type, ensure all reference values exist in the generated file
-            for metadata_col, label in [
-                ("Metadata_Well", "wells"),
-                ("Metadata_Site", "sites"),
-                ("Metadata_Plate", "plates"),
-            ]:
-                # Get distinct values from both tables
-                ref_values = {
-                    row[0]
-                    for row in conn.execute(
-                        f"SELECT DISTINCT {metadata_col} FROM reference"
-                    ).fetchall()
-                }
-
-                gen_values = {
-                    row[0]
-                    for row in conn.execute(
-                        f"SELECT DISTINCT {metadata_col} FROM generated"
-                    ).fetchall()
-                }
-
-                # Find values in reference that are missing from generated
-                missing_values = ref_values - gen_values
-                if missing_values:
-                    validation_errors.append(
-                        f"Reference {label} {missing_values} not found in generated CSV. "
-                        f"Reference values: {sorted(ref_values)}, "
-                        f"Generated values: {sorted(gen_values)}"
-                    )
-
-            # Check 3: Verify filename patterns
-            # Ensure generated filenames follow expected patterns
-            run_count_check(
-                query="""
-                    SELECT COUNT(*) FROM generated
-                    WHERE FileName_OrigDNA NOT LIKE '%Channel%'
-                    OR FileName_OrigZO1 NOT LIKE '%Channel%'
-                    OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-                """,
-                error_msg="Found {count} filenames that don't match the expected pattern",
-            )
-
-            # Check 4: Run any additional pipeline-specific checks
-            if additional_checks:
-                for i, check in enumerate(additional_checks):
-                    # Verify check has required keys
-                    if "query" not in check or "error_msg" not in check:
-                        validation_errors.append(
-                            f"Invalid additional check #{i + 1}: must contain 'query' and 'error_msg' keys"
-                        )
-                        continue
-
-                    run_count_check(check["query"], check["error_msg"])
+            # Check 3: Run all count-based checks (standard and additional)
+            _run_count_checks(conn, all_count_checks, validation_errors)
 
     except duckdb.Error as e:
-        validation_errors.append(
-            f"DuckDB error during CSV validation: {str(e)}"
+        # Provide context for database errors to aid in debugging
+        query_error_msg = (
+            f"DuckDB error during CSV validation: {str(e)}. "
+            f"This may indicate an issue with the CSV format, invalid column names, "
+            f"or incompatible data types between the generated and reference CSVs."
         )
+        validation_errors.append(query_error_msg)
 
     return validation_errors
+
+
+def _check_reference_consistency(
+    conn: duckdb.DuckDBPyConnection, validation_errors: list[str]
+) -> None:
+    """Compare channel frame assignments between reference and generated CSVs.
+
+    This verification ensures that the generated data maintains the same
+    relationship between channels and frames as the reference data.
+
+    Args:
+        conn: Active DuckDB connection with views registered
+        validation_errors: List to append any errors to
+
+    """
+    channel_frames_sql = """
+        SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+        FROM {table} ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
+    """
+    ref_channels = conn.execute(
+        channel_frames_sql.format(table="reference")
+    ).fetchall()
+    gen_channels = conn.execute(
+        channel_frames_sql.format(table="generated")
+    ).fetchall()
+
+    if ref_channels != gen_channels:
+        validation_errors.append(
+            f"Channel frame assignments don't match: Reference={ref_channels}, Generated={gen_channels}"
+        )
+
+
+def _check_metadata_coverage(
+    conn: duckdb.DuckDBPyConnection, validation_errors: list[str]
+) -> None:
+    """Check if all reference metadata values are present in the generated data.
+
+    This ensures that the generated file includes data for all the same
+    metadata entities (wells, sites, plates) that exist in the reference.
+
+    Args:
+        conn: Active DuckDB connection with views registered
+        validation_errors: List to append any errors to
+
+    """
+    for metadata_col, label in [
+        ("Metadata_Well", "wells"),
+        ("Metadata_Site", "sites"),
+        ("Metadata_Plate", "plates"),
+    ]:
+        # Get distinct values from both tables
+        ref_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {metadata_col} FROM reference"
+            ).fetchall()
+        }
+
+        gen_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {metadata_col} FROM generated"
+            ).fetchall()
+        }
+
+        # Find values in reference that are missing from generated
+        missing_values = ref_values - gen_values
+        if missing_values:
+            validation_errors.append(
+                f"Reference {label} {missing_values} not found in generated CSV. "
+                f"Reference values: {sorted(ref_values)}, "
+                f"Generated values: {sorted(gen_values)}"
+            )
+
+
+def _run_count_checks(
+    conn: duckdb.DuckDBPyConnection,
+    checks: list[dict[str, Any]],
+    validation_errors: list[str],
+) -> None:
+    """Run all count-based validation checks.
+
+    Args:
+        conn: Active DuckDB connection with views registered
+        checks: List of validation checks to perform
+        validation_errors: List to append any errors to
+
+    """
+    for i, check in enumerate(checks):
+        # Verify check has required keys
+        if "query" not in check or "error_msg" not in check:
+            validation_errors.append(
+                f"Invalid check #{i + 1}: must contain 'query' and 'error_msg' keys"
+            )
+            continue
+
+        # Run the check and add error if count > 0
+        count = conn.execute(check["query"]).fetchone()[0]
+        if count > 0:
+            validation_errors.append(check["error_msg"].format(count=count))
 
 
 @pytest.mark.parametrize(
