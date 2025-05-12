@@ -111,14 +111,58 @@ def test_fix_starrynight_basic_setup(fix_starrynight_basic_setup):
             "site_id",
             "path",
             "extension",
+            "is_sbs_image",
+            "is_image",
+            "channel_dict",
         ]
         for col in essential_columns:
             assert col in df.columns, (
                 f"Missing essential column '{col}' in index file"
             )
 
+        # Verify data type coverage - check both SBS and CP images exist
+        sbs_images = df[df["is_sbs_image"]]
+        cp_images = df[(~df["is_sbs_image"]) & df["is_image"]]
+        assert len(sbs_images) > 0, "No SBS images found in index"
+        assert len(cp_images) > 0, "No CP (non-SBS) images found in index"
+
+        # Verify well/site structure - check for multiple wells and sites
+        unique_wells = df["well_id"].nunique()
+        assert unique_wells >= 2, (
+            f"Expected multiple wells, found {unique_wells}"
+        )
+
+        # Get sites per well count to verify multi-site structure
+        sites_per_well = df.groupby("well_id")["site_id"].nunique()
+        assert sites_per_well.min() >= 2, "Expected multiple sites per well"
+
+        # Verify channel patterns - SBS and CP should have different channels
+        if "channel_dict" in df.columns:
+            # Get sample channel patterns from each image type
+            sbs_channels = sbs_images["channel_dict"].iloc[0]
+            cp_channels = cp_images["channel_dict"].iloc[0]
+            assert len(sbs_channels) > 0, "Empty SBS channel pattern"
+            assert len(cp_channels) > 0, "Empty CP channel pattern"
+            # SBS and CP should have different channel patterns
+            assert set(sbs_channels) != set(cp_channels), (
+                "SBS and CP should have different channel patterns"
+            )
+
+        # Verify file types - without hardcoding specific extensions
+        images = df[df["is_image"]]
+        image_extensions = set(images["extension"].unique())
+        assert len(image_extensions) > 0, "No image file extensions found"
+        assert all(
+            ext in ["tiff", "tif", "png", "jpg", "jpeg", "ome.tiff", "ome.tif"]
+            for ext in image_extensions
+        ), f"Found unexpected image extensions: {image_extensions}"
+
+        # Verify consistent batch, dataset and plate values
+        assert df["dataset_id"].nunique() == 1, "Multiple dataset IDs found"
+        assert df["batch_id"].nunique() == 1, "Multiple batch IDs found"
+
     except Exception as e:
-        pytest.fail(f"Failed to read index parquet file: {e}")
+        pytest.fail(f"Failed to validate index parquet file: {e}")
 
     # Verify the experiment JSON file exists and contains valid JSON
     experiment_json_path = fix_starrynight_basic_setup["experiment_json_path"]
