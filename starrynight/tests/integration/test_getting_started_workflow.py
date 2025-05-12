@@ -14,7 +14,7 @@ Testing strategy:
 This module uses a parameterized approach to test multiple workflow steps:
 
 1. Tests are parameterized with both:
-   - Setup approach: full workflow vs. pre-generated files
+   - Setup mode: "generated" (full workflow) vs. "pregenerated" (pre-generated files)
    - Workflow step: which stage to test (illum_calc, illum_apply, etc.)
 
 2. Each workflow step has its own configuration including:
@@ -253,17 +253,14 @@ WORKFLOW_CONFIGS = [
 
 
 @pytest.mark.parametrize(
-    "setup_fixture_name, description",
-    [
-        ("fix_starrynight_basic_setup", "full workflow"),
-        ("fix_starrynight_pregenerated_setup", "pre-generated files"),
-    ],
+    "fix_starrynight_setup",
+    ["generated", "pregenerated"],
     ids=["full", "fast"],
+    indirect=True,
 )
 @pytest.mark.parametrize("config", WORKFLOW_CONFIGS, ids=lambda c: c["name"])
 def test_complete_workflow(
-    setup_fixture_name: str,
-    description: str,
+    fix_starrynight_setup: dict[str, Path],
     config: dict[str, Any],
     request: pytest.FixtureRequest,
     fix_s1_workspace: dict[str, Path],
@@ -277,18 +274,25 @@ def test_complete_workflow(
     3. CellProfiler execution: NOT YET IMPLEMENTED
 
     This test is currently only validating the LoadData generation step.
+    The test uses both modes of the fixture setup:
+    - "generated": Runs the actual CLI commands to generate setup files (slow but validates CLI)
+    - "pregenerated": Uses pre-generated setup files (faster for testing downstream functionality)
 
     Args:
-        setup_fixture_name: Name of the fixture to use for setup
-        description: Description of the setup approach (for test logs)
+        fix_starrynight_setup: Fixture providing index and experiment configuration
         config: Configuration for the specific workflow step being tested
-        request: pytest request object to get the fixture by name
+        request: pytest request object for parameter access
         fix_s1_workspace: Fixture providing workspace directory structure
         fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
-    # Get the appropriate fixture (basic or pre-generated) using the request object
-    setup_fixture = request.getfixturevalue(setup_fixture_name)
+    # Use the parameterized fixture directly
+    setup_fixture = fix_starrynight_setup
+
+    # Get current fixture mode for debugging
+    current_mode = request.node.callspec.params.get("fix_starrynight_setup")
+    print(f"\nRunning test with setup mode: {current_mode}")
+    print(f"Testing workflow step: {config['name']}")
 
     # Step 1: Generate and validate LoadData files
     loaddata_dir, matching_files = generate_and_validate_loaddata(
