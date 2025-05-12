@@ -46,6 +46,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import duckdb
+import pandas as pd
 import pytest
 
 # LoadData type configurations
@@ -348,65 +349,36 @@ def test_loaddata_generation(
         f"Found files: {[f.name for f in csv_files]}"
     )
 
-    # Create a temporary file for the combined CSV
+    # Use pandas for CSV file handling - simpler for this test context
+    if len(matching_files) == 1:
+        # Single file - just read it directly
+        df = pd.read_csv(matching_files[0])
+    else:
+        # Multiple files - concatenate using pandas
+        print(
+            f"Found {len(matching_files)} files matching pattern {file_pattern}"
+        )
+        dataframes = []
+
+        # Read each file with error handling
+        for file_path in matching_files:
+            try:
+                dataframes.append(pd.read_csv(file_path))
+            except Exception as e:
+                print(f"Warning: Error processing file {file_path}: {e}")
+
+        # Concatenate the dataframes
+        df = pd.concat(dataframes, ignore_index=True)
+        print(f"Combined CSV has {len(df)} rows")
+
+    # Verify required columns exist
+    for col in required_columns:
+        assert col in df.columns, f"Required column '{col}' missing in CSV"
+
+    # Write to temporary file for validation
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
         temp_path = Path(temp_file.name)
-
-        # Use DuckDB to process the CSV files
-        with duckdb.connect(":memory:") as conn:
-            # For checking columns, just look at the first file
-            columns = conn.execute(
-                f"SELECT * FROM read_csv_auto('{matching_files[0]}') LIMIT 0"
-            ).description
-            column_names = [col[0] for col in columns]
-
-            # Verify required columns exist
-            for col in required_columns:
-                assert col in column_names, (
-                    f"Required column '{col}' missing in CSV"
-                )
-
-            # Process single or multiple files
-            if len(matching_files) == 1:
-                # Single file - simpler query
-                conn.execute(f"""
-                    COPY (SELECT * FROM read_csv_auto('{matching_files[0]}'))
-                    TO '{temp_path}' (FORMAT CSV, HEADER)
-                """)
-            else:
-                # Multiple files - handle each file individually and concatenate safely
-                print(
-                    f"Found {len(matching_files)} files matching pattern {file_pattern}"
-                )
-
-                # Create a temporary table for concatenation
-                conn.execute(
-                    f"CREATE TABLE combined_data AS SELECT * FROM read_csv_auto('{matching_files[0]}') WHERE 1=0"
-                )
-
-                # Insert data from each file
-                for i, file_path in enumerate(matching_files):
-                    try:
-                        # Insert from this file
-                        conn.execute(
-                            f"INSERT INTO combined_data SELECT * FROM read_csv_auto('{file_path}')"
-                        )
-                    except Exception as e:
-                        print(
-                            f"Warning: Error processing file {file_path}: {e}"
-                        )
-
-                # Write the combined data to our temp file
-                conn.execute(f"""
-                    COPY (SELECT * FROM combined_data)
-                    TO '{temp_path}' (FORMAT CSV, HEADER)
-                """)
-
-                # Report row count
-                row_count = conn.execute(
-                    "SELECT COUNT(*) FROM combined_data"
-                ).fetchone()[0]
-                print(f"Combined CSV has {row_count} rows")
+        df.to_csv(temp_path, index=False)
 
     # Validate the combined data against reference LoadData CSV
     generated_csv_path = temp_path
