@@ -47,7 +47,7 @@ def extract_metadata(
                 "magnification": "10",
                 "cycle_id": "11",
                 "well_id": "WellB3",
-                "site_id": "2069",
+                "site_id": "0099",
                 "channels": ["405", "477", "G", "T", "A", "C"],
                 "channel_count": 6,
                 "extension": "tiff",
@@ -56,7 +56,7 @@ def extract_metadata(
         ),
         # SBS format with different plate and well IDs
         (
-            "cpg0999-broad-asma/broad/BATCH2/images/plate5/10X_c8_SBS-8/WellD5_PointD5_0042_Channel405 nm,477 nm,G,T_Seq0042.tiff",
+            "cpg0999-broad-asma/broad/BATCH2/images/plate5/10X_c8_SBS-8/WellD5_PointD5_0011_Channel405 nm,477 nm,G,T_Seq0042.tiff",
             {
                 "dataset_id": "cpg0999-broad-asma",
                 "batch_id": "BATCH2",
@@ -64,7 +64,7 @@ def extract_metadata(
                 "magnification": "10",
                 "cycle_id": "8",
                 "well_id": "WellD5",
-                "site_id": "0042",
+                "site_id": "0011",
                 "channels": ["405", "477", "G", "T"],
                 "channel_count": 4,
                 "extension": "tiff",
@@ -80,7 +80,7 @@ def extract_metadata(
                 "plate_id": "plate2",
                 "magnification": "10",
                 "well_id": "WellB2",
-                "site_id": "1923",
+                "site_id": "0347",
                 "channels": ["nIR", "GFP", "DAPI"],
                 "channel_count": 3,
                 "extension": "tiff",
@@ -89,14 +89,14 @@ def extract_metadata(
         ),
         # CP format with different plate and well IDs
         (
-            "cpg0999-broad-asma/broad/BATCH3/images/plate4/10X_CP_plate4/WellC6_PointC6_0201_ChannelCy5,FITC,Hoechst_Seq0201.tiff",
+            "cpg0999-broad-asma/broad/BATCH3/images/plate4/10X_CP_plate4/WellC6_PointC6_0001_ChannelCy5,FITC,Hoechst_Seq0201.tiff",
             {
                 "dataset_id": "cpg0999-broad-asma",
                 "batch_id": "BATCH3",
                 "plate_id": "plate4",
                 "magnification": "10",
                 "well_id": "WellC6",
-                "site_id": "0201",
+                "site_id": "0001",
                 "channels": ["Cy5", "FITC", "Hoechst"],
                 "channel_count": 3,
                 "extension": "tiff",
@@ -105,7 +105,7 @@ def extract_metadata(
         ),
         # CP format with different magnification
         (
-            "cpg0999-broad-asma/broad/BATCH1/images/plate3/20X_CP_plate3/WellA1_PointA1_0025_ChannelTRITC,GFP,DAPI_Seq0025.tiff",
+            "cpg0999-broad-asma/broad/BATCH1/images/plate3/20X_CP_plate3/WellA1_PointA1_0025_ChannelTRITC,GFP,DAPI_Seq1025.tiff",
             {
                 "dataset_id": "cpg0999-broad-asma",
                 "batch_id": "BATCH1",
