@@ -53,8 +53,8 @@ def test_fix_s1_workspace(fix_s1_workspace):
     print(f"FIX-S1 workspace directory: {fix_s1_workspace['workspace_dir']}")
 
 
-def test_fix_s1_output_fixtures(fix_s1_output_dir):
-    """Test that our FIX-S1 output test fixtures are working correctly."""
+def test_fix_s1_output_dir(fix_s1_output_dir):
+    """Test that the FIX-S1 output directory fixture is working correctly."""
     # Verify that the fix_s1_output_dir fixture provides the expected paths
     assert fix_s1_output_dir["output_dir"].exists()
     assert fix_s1_output_dir["workspace_dir"].exists()
@@ -80,7 +80,7 @@ def test_fix_s1_output_fixtures(fix_s1_output_dir):
 
 @pytest.mark.skip(reason="Skipping test_fix_starrynight_basic_setup")
 def test_fix_starrynight_basic_setup(fix_starrynight_basic_setup):
-    """Test that the basic StarryNight workflow setup fixture works correctly.
+    """Test that the StarryNight basic workflow setup fixture is working correctly.
 
     This test verifies that fix_starrynight_basic_setup properly executes the
     initial workflow steps 1-5 from the getting-started guide:
