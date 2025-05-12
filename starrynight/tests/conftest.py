@@ -248,6 +248,12 @@ def fix_s1_workspace(tmp_path_factory):
         # SBS illumination directories
         "cellprofiler/loaddata/sbs/illum/illum_calc",
         "cellprofiler/loaddata/sbs/illum/illum_apply",
+        # CP segmentation check directory
+        "cellprofiler/loaddata/cp/segcheck",
+        # SBS preprocessing directory
+        "cellprofiler/loaddata/sbs/preprocess",
+        # Analysis directory
+        "cellprofiler/loaddata/analysis",
         # Index and inventory
         "index",
         "inventory/inv",
@@ -294,6 +300,23 @@ def fix_s1_workspace(tmp_path_factory):
         / "sbs"
         / "illum"
         / "illum_apply",
+        # CP segmentation check directory
+        "cp_segcheck_dir": workspace_dir
+        / "cellprofiler"
+        / "loaddata"
+        / "cp"
+        / "segcheck",
+        # SBS preprocessing directory
+        "sbs_preprocess_dir": workspace_dir
+        / "cellprofiler"
+        / "loaddata"
+        / "sbs"
+        / "preprocess",
+        # Analysis directory
+        "analysis_dir": workspace_dir
+        / "cellprofiler"
+        / "loaddata"
+        / "analysis",
         # JSON files
         "experiment_json": workspace_dir / "experiment.json",
         "experiment_init_json": workspace_dir / "experiment_init.json",

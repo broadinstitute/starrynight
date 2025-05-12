@@ -5,11 +5,11 @@ of the StarryNight workflow by executing the CLI commands and validating the out
 
 The workflow is outlined in ../../../docs/user/getting-started.md
 
-Current scope:
+Current coverage:
 - CP illum calc LoadData generation
 - CP illum apply LoadData generation
 
-Future extensions:
+Expanded coverage:
 - CP segmentation check LoadData generation
 - SBS illum calc LoadData generation
 - SBS illum apply LoadData generation
@@ -26,9 +26,8 @@ This module uses a parameterized approach to test multiple LoadData generation s
 2. Each LoadData type has its own configuration including:
    - Command parameters (specific to that step)
    - Expected file patterns and naming conventions
-   - Required columns for validation
+   - Pipeline type for validation
    - Reference CSV paths for comparison
-   - Additional validation checks specific to the step
 
 Running the tests:
 - Run all tests: pytest test_getting_started_workflow.py
@@ -45,9 +44,12 @@ import tempfile
 from pathlib import Path
 from typing import Any, Optional
 
-import duckdb
 import pandas as pd
 import pytest
+
+from starrynight.tests.integration.loaddata_validation import (
+    validate_loaddata_csv,
+)
 
 # LoadData type configurations
 LOADDATA_CONFIGS = [
@@ -58,6 +60,7 @@ LOADDATA_CONFIGS = [
         "output_dir_key": "cp_illum_calc_dir",
         "file_pattern": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
+        "pipeline_type": "cp_illum_calc",
         "required_columns": [
             "Metadata_Batch",
             "Metadata_Plate",
@@ -70,7 +73,6 @@ LOADDATA_CONFIGS = [
             "PathName_OrigZO1",
             "PathName_OrigDNA",
         ],
-        "additional_checks": [],
     },
     # CP illum apply LoadData configuration
     {
@@ -79,6 +81,7 @@ LOADDATA_CONFIGS = [
         "output_dir_key": "cp_illum_apply_dir",
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
+        "pipeline_type": "cp_illum_apply",
         "required_columns": [
             "Metadata_Batch",
             "Metadata_Plate",
@@ -90,7 +93,6 @@ LOADDATA_CONFIGS = [
             "PathName_OrigPhalloidin",
             "PathName_OrigZO1",
             "PathName_OrigDNA",
-            # Additional columns specific to illum_apply
             "FileName_IllumPhalloidin",
             "FileName_IllumZO1",
             "FileName_IllumDNA",
@@ -98,197 +100,68 @@ LOADDATA_CONFIGS = [
             "PathName_IllumZO1",
             "PathName_IllumDNA",
         ],
-        "additional_checks": [
-            {
-                "query": """
-                    SELECT COUNT(*) FROM generated
-                    WHERE FileName_IllumDNA IS NULL
-                    OR FileName_IllumZO1 IS NULL
-                    OR FileName_IllumPhalloidin IS NULL
-                    OR PathName_IllumDNA IS NULL
-                    OR PathName_IllumZO1 IS NULL
-                    OR PathName_IllumPhalloidin IS NULL
-                """,
-                "error_msg": "Found {count} rows missing illumination filename information",
-            }
+    },
+    # CP segmentation check LoadData configuration
+    {
+        "name": "cp_segmentation_check",
+        "command_parts": ["segcheck", "loaddata"],
+        "output_dir_key": "cp_segcheck_dir",
+        "file_pattern": "Batch1_Plate1_*_segcheck.csv",
+        "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
+        "pipeline_type": "cp_segmentation_check",
+        "required_columns": [
+            "Metadata_Plate",
+            "Metadata_Site",
+            "Metadata_Well",
+            "Metadata_Well_Value",
         ],
     },
+    # SBS illum calc LoadData configuration
+    {
+        "name": "sbs_illum_calc",
+        "command_parts": ["illum", "calc", "loaddata", "--sbs"],
+        "output_dir_key": "sbs_illum_calc_dir",
+        "file_pattern": "Batch1_Plate1_sbs_illum_calc.csv",
+        "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
+        "pipeline_type": "sbs_illum_calc",
+        "required_columns": [
+            "Metadata_Plate",
+            "Metadata_Site",
+            "Metadata_SBSCycle",
+            "Metadata_Well",
+        ],
+    },
+    # SBS illum apply LoadData configuration
+    {
+        "name": "sbs_illum_apply",
+        "command_parts": ["illum", "apply", "loaddata", "--sbs"],
+        "output_dir_key": "sbs_illum_apply_dir",
+        "file_pattern": "Batch1_Plate1_*_sbs_illum_apply.csv",
+        "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline6.csv",
+        "pipeline_type": "sbs_illum_apply",
+        "required_columns": [],  # Too many to list, handled by validation framework
+    },
+    # SBS preprocessing LoadData configuration
+    {
+        "name": "sbs_preprocessing",
+        "command_parts": ["preprocess", "loaddata"],
+        "output_dir_key": "sbs_preprocess_dir",
+        "file_pattern": "Batch1_Plate1_*_preprocess.csv",
+        "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
+        "pipeline_type": "sbs_preprocessing",
+        "required_columns": [],  # Handled by validation framework
+    },
+    # Analysis LoadData configuration
+    {
+        "name": "analysis",
+        "command_parts": ["analysis", "loaddata"],
+        "output_dir_key": "analysis_dir",
+        "file_pattern": "Batch1_Plate1_*_analysis.csv",
+        "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
+        "pipeline_type": "analysis",
+        "required_columns": [],  # Handled by validation framework
+    },
 ]
-
-
-def validate_loaddata_csv(
-    generated_csv_path: Path,
-    ref_csv_path: Path,
-    additional_checks: list[dict[str, Any]] | None = None,
-) -> list[str]:
-    """Validate generated LoadData CSV against reference file.
-
-    Compares CSVs for:
-    1. Matching distinct values in key columns
-    2. Non-null required fields
-    3. Pattern-matching for formatted fields
-
-    Args:
-        generated_csv_path: Path to generated CSV
-        ref_csv_path: Path to reference CSV
-        additional_checks: SQL checks with "query" and "error_msg" keys
-
-    Returns:
-        Error messages (empty list if validation passed)
-
-    Example:
-        additional_checks=[{
-            "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
-            "error_msg": "Found {count} rows missing ImageNumber"
-        }]
-
-    """
-    errors = []
-
-    try:
-        # Create in-memory database with both CSVs as views
-        with duckdb.connect(":memory:") as conn:
-            conn.execute(
-                f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
-            )
-            conn.execute(
-                f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
-            )
-
-            # 1. Check if channel frames match between reference and generated
-            check_column_values(
-                conn,
-                errors,
-                ["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"],
-                "channel frame assignments",
-                mode="exact",
-            )
-
-            # 2. Check if metadata values from reference exist in generated
-            for col, label in [
-                ("Metadata_Well", "wells"),
-                ("Metadata_Site", "sites"),
-                ("Metadata_Plate", "plates"),
-            ]:
-                check_column_values(conn, errors, col, label)
-
-            # 3. Check for rows with pattern or nullness issues
-            standard_checks = [
-                # Filename pattern check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE FileName_OrigDNA NOT LIKE '%Channel%'
-                        OR FileName_OrigZO1 NOT LIKE '%Channel%'
-                        OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-                    """,
-                    "error_msg": "Found {count} filenames that don't match the expected pattern",
-                },
-                # Metadata nullness check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE Metadata_Batch IS NULL
-                        OR Metadata_Plate IS NULL
-                        OR Metadata_Well IS NULL
-                        OR Metadata_Site IS NULL
-                    """,
-                    "error_msg": "Found {count} rows with missing metadata fields",
-                },
-                # File path/name nullness check
-                {
-                    "query": """
-                        SELECT COUNT(*) FROM generated
-                        WHERE FileName_OrigDNA IS NULL
-                        OR FileName_OrigZO1 IS NULL
-                        OR FileName_OrigPhalloidin IS NULL
-                        OR PathName_OrigDNA IS NULL
-                        OR PathName_OrigZO1 IS NULL
-                        OR PathName_OrigPhalloidin IS NULL
-                    """,
-                    "error_msg": "Found {count} rows with missing filename or pathname information",
-                },
-            ]
-
-            # Add any additional checks
-            if additional_checks:
-                standard_checks.extend(additional_checks)
-
-            # Run all the count-based checks
-            for check in standard_checks:
-                count = conn.execute(check["query"]).fetchone()[0]
-                if count > 0:
-                    errors.append(check["error_msg"].format(count=count))
-
-    except duckdb.Error as e:
-        errors.append(f"Database error: {str(e)} (check CSV format/types)")
-
-    return errors
-
-
-def check_column_values(
-    conn: duckdb.DuckDBPyConnection,
-    errors: list[str],
-    columns: list[str] | str,
-    label: str,
-    mode: str = "subset",  # "subset", "exact", "superset"
-) -> None:
-    """Compare column values between reference and generated tables.
-
-    Args:
-        conn: Database connection with views
-        errors: List to append errors to
-        columns: Column(s) to check
-        label: Name for error messages
-        mode: "subset" (default), "exact", or "superset"
-
-    """
-    # Handle single column or multiple columns
-    if isinstance(columns, str):
-        columns = [columns]
-
-    # Get distinct values from both tables
-    if len(columns) == 1:
-        col = columns[0]
-        ref_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {col} FROM reference"
-            ).fetchall()
-        }
-        gen_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {col} FROM generated"
-            ).fetchall()
-        }
-    else:
-        # For multiple columns, concatenate as a composite key
-        concat_cols = " || ',' || ".join(columns)
-        ref_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {concat_cols} FROM reference"
-            ).fetchall()
-        }
-        gen_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {concat_cols} FROM generated"
-            ).fetchall()
-        }
-
-    # Check if reference values exist in generated (subset mode)
-    if mode in ["subset", "exact"]:
-        missing = ref_values - gen_values
-        if missing:
-            errors.append(f"Missing {label} in generated CSV: {missing}")
-
-    # Check if generated has extra values (superset mode)
-    if mode in ["superset", "exact"]:
-        extra = gen_values - ref_values
-        if extra:
-            errors.append(f"Extra {label} in generated CSV: {extra}")
 
 
 @pytest.mark.parametrize(
@@ -335,9 +208,9 @@ def test_loaddata_generation(
     output_dir_key = config["output_dir_key"]
     file_pattern = config["file_pattern"]
     ref_csv_pattern = config["ref_csv_pattern"]
+    pipeline_type = config["pipeline_type"]
     required_columns = config["required_columns"]
     command_parts = config["command_parts"]
-    additional_checks = config.get("additional_checks", [])
 
     # Build the command for generating LoadData files
     loaddata_cmd = [
@@ -398,7 +271,7 @@ def test_loaddata_generation(
         df = pd.concat(dataframes, ignore_index=True)
         print(f"Combined CSV has {len(df)} rows")
 
-    # Verify required columns exist
+    # Verify required columns exist (basic check before detailed validation)
     for col in required_columns:
         assert col in df.columns, f"Required column '{col}' missing in CSV"
 
@@ -412,13 +285,17 @@ def test_loaddata_generation(
 
     # Find the matching reference CSV in the fix_s1_output_dir
     ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
-    ref_csv_path = list(ref_load_data_dir.glob(ref_csv_pattern))[0]
+    ref_csv_paths = list(ref_load_data_dir.glob(ref_csv_pattern))
+    assert len(ref_csv_paths) > 0, (
+        f"Reference CSV not found with pattern: {ref_csv_pattern}"
+    )
+    ref_csv_path = ref_csv_paths[0]
 
-    # Validate the LoadData CSV against the reference file
+    # Validate the LoadData CSV against the reference file using the new framework
     errors = validate_loaddata_csv(
         generated_csv_path=generated_csv_path,
         ref_csv_path=ref_csv_path,
-        additional_checks=additional_checks,
+        pipeline_type=pipeline_type,
     )
 
     # Report any validation errors
