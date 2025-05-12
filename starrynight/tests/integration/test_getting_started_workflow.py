@@ -116,63 +116,43 @@ LOADDATA_CONFIGS = [
 ]
 
 
-# CSV Validation Functions
-# -------------------
-# This module provides functions for validating LoadData CSV files by comparing them
-# against reference files. The validation system supports two types of checks:
-#
-# 1. Count-based SQL checks: Identify invalid records with SQL queries
-# 2. Value coverage checks: Compare column values between tables
-#
-# Functions follow consistent naming conventions:
-# - validate_*: Functions that check data quality and report errors
-# - get_*: Functions that retrieve data or configurations without side effects
-#
-# Main entry point: validate_loaddata_csv()
-
-
 def validate_loaddata_csv(
     generated_csv_path: Path,
     ref_csv_path: Path,
     additional_checks: list[dict[str, Any]] | None = None,
-    metadata_checks: list[dict[str, Any]] | None = None,
-    custom_value_checks: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Validate a generated LoadData CSV file against a reference CSV file.
 
-    This function compares the generated CSV with a reference CSV to check data consistency
-    and structure. Built-in checks verify column values, metadata coverage, and formatting
-    requirements, while custom checks can be added for different pipeline types.
+    This function compares key aspects of the generated CSV with a reference CSV:
+    1. Checks if certain columns have matching distinct values
+    2. Verifies required columns aren't null
+    3. Performs custom checks for specific validation requirements
 
     Args:
-        generated_csv_path: Path to the generated LoadData CSV file
-        ref_csv_path: Path to the reference LoadData CSV file
-        additional_checks: SQL count-based checks for invalid records
-        metadata_checks: Custom metadata column value coverage checks
-        custom_value_checks: Additional column value comparison checks
+        generated_csv_path: Path to the generated CSV file
+        ref_csv_path: Path to the reference CSV file
+        additional_checks: List of SQL queries that count invalid records,
+                          each with "query" and "error_msg" keys
 
     Returns:
         List of validation error messages (empty if validation passed)
 
     Example:
-        validation_errors = validate_loaddata_csv(
-            generated_csv_path=Path("/path/to/generated.csv"),
-            ref_csv_path=Path("/path/to/reference.csv"),
-            additional_checks=[
-                {
-                    "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
-                    "error_msg": "Found {count} rows missing ImageNumber"
-                }
-            ]
+        validate_loaddata_csv(
+            generated_csv_path=Path("generated.csv"),
+            ref_csv_path=Path("reference.csv"),
+            additional_checks=[{
+                "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
+                "error_msg": "Found {count} rows missing ImageNumber"
+            }]
         )
 
     """
-    validation_errors = []
+    errors = []
 
     try:
-        # Register both CSVs in a DuckDB in-memory database
+        # Create in-memory database with both CSVs as views
         with duckdb.connect(":memory:") as conn:
-            # Register CSV data as views
             conn.execute(
                 f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
             )
@@ -180,250 +160,143 @@ def validate_loaddata_csv(
                 f"CREATE VIEW reference AS SELECT * FROM read_csv_auto('{str(ref_csv_path)}')"
             )
 
-            # 1. Run built-in standard checks
-            validate_standard_requirements(conn, validation_errors)
+            # 1. Check if channel frames match between reference and generated
+            check_column_values(
+                conn,
+                errors,
+                ["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"],
+                "channel frame assignments",
+                mode="exact",
+            )
 
-            # 2. Run SQL count-based checks
-            all_count_checks = get_standard_count_checks()
+            # 2. Check if metadata values from reference exist in generated
+            for col, label in [
+                ("Metadata_Well", "wells"),
+                ("Metadata_Site", "sites"),
+                ("Metadata_Plate", "plates"),
+            ]:
+                check_column_values(conn, errors, col, label)
+
+            # 3. Check for rows with pattern or nullness issues
+            standard_checks = [
+                # Filename pattern check
+                {
+                    "query": """
+                        SELECT COUNT(*) FROM generated
+                        WHERE FileName_OrigDNA NOT LIKE '%Channel%'
+                        OR FileName_OrigZO1 NOT LIKE '%Channel%'
+                        OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
+                    """,
+                    "error_msg": "Found {count} filenames that don't match the expected pattern",
+                },
+                # Metadata nullness check
+                {
+                    "query": """
+                        SELECT COUNT(*) FROM generated
+                        WHERE Metadata_Batch IS NULL
+                        OR Metadata_Plate IS NULL
+                        OR Metadata_Well IS NULL
+                        OR Metadata_Site IS NULL
+                    """,
+                    "error_msg": "Found {count} rows with missing metadata fields",
+                },
+                # File path/name nullness check
+                {
+                    "query": """
+                        SELECT COUNT(*) FROM generated
+                        WHERE FileName_OrigDNA IS NULL
+                        OR FileName_OrigZO1 IS NULL
+                        OR FileName_OrigPhalloidin IS NULL
+                        OR PathName_OrigDNA IS NULL
+                        OR PathName_OrigZO1 IS NULL
+                        OR PathName_OrigPhalloidin IS NULL
+                    """,
+                    "error_msg": "Found {count} rows with missing filename or pathname information",
+                },
+            ]
+
+            # Add any additional checks
             if additional_checks:
-                all_count_checks.extend(additional_checks)
+                standard_checks.extend(additional_checks)
 
-            validate_with_sql_checks(conn, all_count_checks, validation_errors)
-
-            # 3. Run custom value coverage checks if provided
-            if custom_value_checks:
-                for check in custom_value_checks:
-                    validate_column_values(
-                        conn=conn,
-                        validation_errors=validation_errors,
-                        columns=check.get("columns") or check.get("column"),
-                        label=check["label"],
-                        mode=check.get("mode", "subset"),
-                        error_msg_template=check.get("error_msg_template"),
-                    )
+            # Run all the count-based checks
+            for check in standard_checks:
+                count = conn.execute(check["query"]).fetchone()[0]
+                if count > 0:
+                    errors.append(check["error_msg"].format(count=count))
 
     except duckdb.Error as e:
-        # Provide context for database errors to aid in debugging
-        query_error_msg = (
-            f"DuckDB error during CSV validation: {str(e)}. "
-            f"This may indicate an issue with the CSV format, invalid column names, "
-            f"or incompatible data types between the generated and reference CSVs."
-        )
-        validation_errors.append(query_error_msg)
-
-    return validation_errors
-
-
-def validate_standard_requirements(
-    conn: duckdb.DuckDBPyConnection, validation_errors: list[str]
-) -> None:
-    """Validate all standard requirements for LoadData CSVs.
-
-    This function runs the core validation checks that apply to all LoadData CSVs:
-    1. Channel frame consistency check
-    2. Metadata value coverage check
-
-    Args:
-        conn: Active DuckDB connection with registered views
-        validation_errors: List to append errors to
-
-    """
-    # Check 1: Verify channel frame assignments match between reference and generated
-    validate_column_values(
-        conn=conn,
-        validation_errors=validation_errors,
-        columns=["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"],
-        label="channel frame assignments",
-        mode="exact",
-        error_msg_template="Channel frame assignments don't match between reference and generated CSVs. "
-        "This may indicate differences in channel ordering or missing frames.",
-    )
-
-    # Check 2: Verify metadata coverage (well, site, plate)
-    metadata_columns = [
-        {"column": "Metadata_Well", "label": "wells"},
-        {"column": "Metadata_Site", "label": "sites"},
-        {"column": "Metadata_Plate", "label": "plates"},
-    ]
-
-    for check in metadata_columns:
-        validate_column_values(
-            conn=conn,
-            validation_errors=validation_errors,
-            columns=check["column"],
-            label=check["label"],
-            mode="subset",  # Ensure reference values exist in generated
+        errors.append(
+            f"DuckDB error during CSV validation: {str(e)} "
+            f"(possible issue with CSV format or column types)"
         )
 
-
-def get_standard_count_checks() -> list[dict[str, Any]]:
-    """Return the standard SQL count-based checks for LoadData validation.
-
-    Returns:
-        List of check definitions with SQL queries and error messages
-
-    """
-    return [
-        # Filename pattern check
-        {
-            "query": """
-                SELECT COUNT(*) FROM generated
-                WHERE FileName_OrigDNA NOT LIKE '%Channel%'
-                OR FileName_OrigZO1 NOT LIKE '%Channel%'
-                OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-            """,
-            "error_msg": "Found {count} filenames that don't match the expected pattern",
-        },
-        # Metadata completeness check
-        {
-            "query": """
-                SELECT COUNT(*) FROM generated
-                WHERE Metadata_Batch IS NULL
-                OR Metadata_Plate IS NULL
-                OR Metadata_Well IS NULL
-                OR Metadata_Site IS NULL
-            """,
-            "error_msg": "Found {count} rows with missing metadata fields",
-        },
-        # Path and filename completeness check
-        {
-            "query": """
-                SELECT COUNT(*) FROM generated
-                WHERE FileName_OrigDNA IS NULL
-                OR FileName_OrigZO1 IS NULL
-                OR FileName_OrigPhalloidin IS NULL
-                OR PathName_OrigDNA IS NULL
-                OR PathName_OrigZO1 IS NULL
-                OR PathName_OrigPhalloidin IS NULL
-            """,
-            "error_msg": "Found {count} rows with missing filename or pathname information",
-        },
-    ]
+    return errors
 
 
-def validate_with_sql_checks(
+def check_column_values(
     conn: duckdb.DuckDBPyConnection,
-    checks: list[dict[str, Any]],
-    validation_errors: list[str],
-) -> None:
-    """Validate data using SQL count-based checks that identify invalid records.
-
-    Args:
-        conn: Active DuckDB connection with 'generated' view available
-        checks: List of validation checks with SQL queries
-        validation_errors: List to append errors to
-
-    Each check should be a dict with:
-    - query: SQL query that counts invalid records (returns 0 if valid)
-    - error_msg: Error message template with {count} placeholder
-
-    """
-    for i, check in enumerate(checks):
-        # Verify check has required keys
-        if "query" not in check or "error_msg" not in check:
-            validation_errors.append(
-                f"Invalid check #{i + 1}: must contain 'query' and 'error_msg' keys"
-            )
-            continue
-
-        # Run the check and add error if count > 0
-        count = conn.execute(check["query"]).fetchone()[0]
-        if count > 0:
-            validation_errors.append(check["error_msg"].format(count=count))
-
-
-def validate_column_values(
-    conn: duckdb.DuckDBPyConnection,
-    validation_errors: list[str],
+    errors: list[str],
     columns: list[str] | str,
     label: str,
-    mode: str = "subset",  # "subset", "superset", "exact"
-    error_msg_template: str | None = None,
+    mode: str = "subset",  # "subset", "exact", "superset"
 ) -> None:
-    """Compare column values between reference and generated tables.
-
-    This function checks if distinct values in specified columns match between
-    reference and generated tables according to the comparison mode.
+    """Check if column values match between reference and generated CSVs.
 
     Args:
-        conn: DuckDB connection with 'reference' and 'generated' views
-        validation_errors: List to append any errors to
-        columns: Column name(s) to check (string or list of strings)
-        label: Human-readable label for the column(s) in error messages
-        mode: Comparison mode:
-              "subset" - All reference values must exist in generated (default)
-              "superset" - All generated values must exist in reference
-              "exact" - Both tables must have identical values
-        error_msg_template: Optional custom error message template
-
-    Example usages:
-        # Check single column values
-        validate_column_values(conn, errors, "Metadata_Well", "wells")
-
-        # Check composite key (multiple columns together)
-        validate_column_values(
-            conn, errors,
-            ["Metadata_Plate", "Metadata_Well"],
-            "plate-well combinations",
-            mode="exact"
-        )
+        conn: Database connection with 'reference' and 'generated' views
+        errors: List to append errors to
+        columns: Column name(s) to check (string or list)
+        label: Human-readable name for this check in error messages
+        mode: Comparison mode - subset (default), exact, or superset
 
     """
     # Handle single column or multiple columns
     if isinstance(columns, str):
         columns = [columns]
 
-    # Build SQL for single column or composite key
+    # Get distinct values from both tables
     if len(columns) == 1:
         col = columns[0]
-        ref_sql = f"SELECT DISTINCT {col} FROM reference"
-        gen_sql = f"SELECT DISTINCT {col} FROM generated"
+        ref_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {col} FROM reference"
+            ).fetchall()
+        }
+        gen_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {col} FROM generated"
+            ).fetchall()
+        }
     else:
-        # For multiple columns, create composite key using concatenation
+        # For multiple columns, concatenate as a composite key
         concat_cols = " || ',' || ".join(columns)
-        ref_sql = (
-            f"SELECT DISTINCT {concat_cols} AS composite_key FROM reference"
-        )
-        gen_sql = (
-            f"SELECT DISTINCT {concat_cols} AS composite_key FROM generated"
-        )
+        ref_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {concat_cols} FROM reference"
+            ).fetchall()
+        }
+        gen_values = {
+            row[0]
+            for row in conn.execute(
+                f"SELECT DISTINCT {concat_cols} FROM generated"
+            ).fetchall()
+        }
 
-    # Get distinct values from both tables
-    ref_values = {row[0] for row in conn.execute(ref_sql).fetchall()}
-    gen_values = {row[0] for row in conn.execute(gen_sql).fetchall()}
+    # Check if reference values exist in generated (subset mode)
+    if mode in ["subset", "exact"]:
+        missing = ref_values - gen_values
+        if missing:
+            errors.append(f"Missing {label} in generated CSV: {missing}")
 
-    # Determine values to report based on comparison mode
-    if mode == "subset" or mode == "exact":
-        # Check if all reference values exist in generated
-        missing_values = ref_values - gen_values
-        if missing_values:
-            # Use custom template if provided, otherwise use default
-            if error_msg_template:
-                error_msg = error_msg_template.format(
-                    label=label,
-                    missing_values=missing_values,
-                    ref_values=sorted(ref_values),
-                    gen_values=sorted(gen_values),
-                )
-            else:
-                error_msg = (
-                    f"Reference {label} {missing_values} not found in generated CSV. "
-                    f"Reference values: {sorted(ref_values)}, "
-                    f"Generated values: {sorted(gen_values)}"
-                )
-            validation_errors.append(error_msg)
-
-    if mode == "superset" or mode == "exact":
-        # Check if generated has extra values not in reference
-        extra_values = gen_values - ref_values
-        if extra_values:
-            # For superset or exact mode, report extra values
-            extra_error = (
-                f"Generated {label} contains extra values not in reference: {extra_values}. "
-                f"Reference values: {sorted(ref_values)}, "
-                f"Generated values: {sorted(gen_values)}"
-            )
-            validation_errors.append(extra_error)
+    # Check if generated has extra values (superset mode)
+    if mode in ["superset", "exact"]:
+        extra = gen_values - ref_values
+        if extra:
+            errors.append(f"Extra {label} in generated CSV: {extra}")
 
 
 @pytest.mark.parametrize(
@@ -549,23 +422,20 @@ def test_loaddata_generation(
     ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
     ref_csv_path = list(ref_load_data_dir.glob(ref_csv_pattern))[0]
 
-    # Use the helper function to validate the LoadData CSV
-    validation_errors = validate_loaddata_csv(
+    # Validate the LoadData CSV against the reference file
+    errors = validate_loaddata_csv(
         generated_csv_path=generated_csv_path,
         ref_csv_path=ref_csv_path,
         additional_checks=additional_checks,
     )
 
     # Report any validation errors
-    if validation_errors:
+    if errors:
         error_message = "\n".join(
-            [
-                f"Validation error {i + 1}: {error}"
-                for i, error in enumerate(validation_errors)
-            ]
+            f"Error {i + 1}: {error}" for i, error in enumerate(errors)
         )
         pytest.fail(
-            f"CSV validation failed with {len(validation_errors)} error(s):\n{error_message}"
+            f"CSV validation failed with {len(errors)} error(s):\n{error_message}"
         )
 
     # Clean up the temporary file
