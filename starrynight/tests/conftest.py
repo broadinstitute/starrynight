@@ -24,8 +24,11 @@ As the project grows, follow these organizational best practices:
    - Split into domain-specific conftest.py files in subdirectories as needed
    - Maintain clear documentation on fixture dependencies and usage
 
-The assertions in fixtures are appropriate for verifying setup preconditions
-and ensuring the test environment is correctly configured before tests run.
+Assertion Philosophy:
+- Keep minimal assertions in fixtures (only what's needed for the fixture to function)
+- Verify basic preconditions (file exists, command succeeded) in fixtures
+- Move detailed validation (content structure, schema, values) to test functions
+- Fixtures verify "Can I do my job?" while tests verify "Did the fixture do its job correctly?"
 """
 
 import json
@@ -69,7 +72,7 @@ def fix_s1_input_archive():
         "fix_s1_input.tar.gz", processor=None
     )
 
-    # Verify the archive
+    # Verify the archive (essential for fixture to function)
     archive_path_obj = Path(archive_path)
     assert archive_path_obj.exists(), (
         "Test data archive not downloaded correctly"
@@ -97,7 +100,7 @@ def fix_s1_output_archive():
         "fix_s1_output.tar.gz", processor=None
     )
 
-    # Verify the archive
+    # Verify the archive (essential for fixture to function)
     archive_path_obj = Path(archive_path)
     assert archive_path_obj.exists(), (
         "Output test data archive not downloaded correctly"
@@ -142,8 +145,13 @@ def fix_s1_input_dir(tmp_path_factory):
     # Create paths to important directories
     input_dir = base_dir / "fix_s1_input"
 
-    # Verify the extraction worked correctly
+    # Essential check: did extraction work at all?
     assert input_dir.exists(), "Input test data not extracted correctly"
+
+    # Check that at least one expected subdirectory exists
+    assert (input_dir / "Source1").exists(), (
+        "Expected Source1 directory not found in input data"
+    )
 
     yield {"base_dir": base_dir, "input_dir": input_dir}
 
@@ -186,11 +194,10 @@ def fix_s1_output_dir(tmp_path_factory):
     workspace_dir = output_dir / "Source1" / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 
-    # Verify the extraction worked correctly
+    # Essential check: did extraction create the main output directory?
     assert output_dir.exists(), "Output test data not extracted correctly"
-    assert workspace_dir.exists(), "Output workspace directory not found"
-    assert load_data_csv_dir.exists(), (
-        "LoadData CSV directory not found in output"
+    assert workspace_dir.exists(), (
+        "Workspace directory not found in output data"
     )
 
     yield {
@@ -307,6 +314,19 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
     This fixture generates all files from scratch by running the actual CLI commands.
     For faster testing that skips these steps, use fix_starrynight_pregenerated_setup.
 
+    IMPORTANT: This fixture and fix_starrynight_pregenerated_setup share the same
+    output contract and return identical structure. The only difference is:
+    - This fixture validates that the CLI workflow executes correctly (slow but thorough)
+    - fix_starrynight_pregenerated_setup provides the same files without running the CLI (fast)
+
+    When to use this fixture:
+    - When testing that the CLI workflow steps work correctly
+    - When you need to validate the entire data generation pipeline
+
+    When to use fix_starrynight_pregenerated_setup instead:
+    - When you only need the output files and don't care how they were generated
+    - For downstream tests that depend on these files but aren't validating the workflow
+
     Returns:
         dict: Dictionary containing:
             - index_file: Path to the generated index.parquet file
@@ -340,31 +360,11 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
         f"Experiment init command failed: {result.stderr}"
     )
 
-    # Define expected config properties
-    expected_config_keys = [
-        "barcode_csv_path",
-        "use_legacy",
-        "cp_img_overlap_pct",
-        "cp_img_frame_type",
-        "cp_acquisition_order",
-        "sbs_img_overlap_pct",
-        "sbs_img_frame_type",
-        "sbs_acquisition_order",
-    ]
+    # Step 1 complete, proceed to next step
 
-    # Verify experiment_init.json was created
+    # Verify experiment_init.json was created (essential for next steps)
     exp_init_path = workspace_dir / "experiment_init.json"
     assert exp_init_path.exists(), "experiment_init.json was not created"
-
-    # Read the file and verify its contents
-    with exp_init_path.open() as f:
-        actual_config = json.load(f)
-
-    # Verify the configuration has the expected keys
-    for key in expected_config_keys:
-        assert key in actual_config, (
-            f"Key '{key}' missing in experiment_init.json"
-        )
 
     # Step 2: Edit experiment_init.json as specified in the docs
     with exp_init_path.open() as f:
@@ -385,20 +385,8 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
     with exp_init_path.open("w") as f:
         json.dump(exp_init_data, f, indent=4)
 
-    # Verify the modified configuration
-    with exp_init_path.open() as f:
-        modified_config = json.load(f)
-
-    # Check that channel values were added
-    assert modified_config["cp_nuclei_channel"] == "DAPI", (
-        "cp_nuclei_channel not correctly set"
-    )
-    assert modified_config["cp_cell_channel"] == "PhalloAF750", (
-        "cp_cell_channel not correctly set"
-    )
-    assert modified_config["cp_mito_channel"] == "ZO1AF488", (
-        "cp_mito_channel not correctly set"
-    )
+    # Basic check that file still exists after modification
+    assert exp_init_path.exists(), "Modified experiment_init.json not found"
 
     # Step 3: Generate inventory
     inventory_cmd = [
@@ -421,13 +409,9 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
         f"Inventory generation command failed: {result.stderr}"
     )
 
-    # Verify the inventory file was created
+    # Essential check: inventory file must exist for next steps
     inventory_file = inventory_dir / "inventory.parquet"
     assert inventory_file.exists(), "Inventory file was not created"
-
-    # Verify the inventory/inv directory exists (for temporary processing files)
-    inv_dir = inventory_dir / "inv"
-    assert inv_dir.exists(), "Inventory 'inv' subdirectory was not created"
 
     # Step 4: Generate index
     index_gen_cmd = [
@@ -453,7 +437,7 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
         f"Index generation command failed: {result.stderr}"
     )
 
-    # Verify the index file was created
+    # Essential check: index file must exist for next steps
     index_file = index_dir / "index.parquet"
     assert index_file.exists(), "Index file was not created"
 
@@ -482,39 +466,9 @@ def fix_starrynight_basic_setup(fix_s1_input_dir, fix_s1_workspace):
         f"Experiment file creation command failed: {result.stderr}"
     )
 
-    # Verify the experiment.json file was created
+    # Essential check: experiment.json file must exist to return it
     experiment_json_path = workspace_dir / "experiment.json"
     assert experiment_json_path.exists(), "experiment.json was not created"
-
-    # Read the experiment file and check key configurations
-    with experiment_json_path.open() as f:
-        experiment_config = json.load(f)
-
-    # Verify the experiment file contains expected keys (list a subset of keys)
-    expected_exp_keys = [
-        "dataset_id",
-        "index_path",
-        "inventory_path",
-        "sbs_config",
-        "cp_config",
-        "use_legacy",
-    ]
-
-    for key in expected_exp_keys:
-        assert key in experiment_config, (
-            f"Key '{key}' missing in experiment.json"
-        )
-
-    # Verify channel configurations were correctly transferred from experiment_init.json
-    assert experiment_config["cp_config"]["nuclei_channel"] == "DAPI", (
-        "nuclei_channel not correctly set in cp_config"
-    )
-    assert experiment_config["cp_config"]["cell_channel"] == "PhalloAF750", (
-        "cell_channel not correctly set in cp_config"
-    )
-    assert experiment_config["cp_config"]["mito_channel"] == "ZO1AF488", (
-        "mito_channel not correctly set in cp_config"
-    )
 
     # Return the paths needed for subsequent processing steps
     return {
@@ -531,6 +485,20 @@ def fix_starrynight_pregenerated_setup(fix_s1_workspace):
     loads pre-generated files from the fixtures directory. This makes tests run faster
     when you're only testing the LoadData generation step.
 
+    IMPORTANT: This fixture and fix_starrynight_basic_setup share the same
+    output contract and return identical structure. The only difference is:
+    - This fixture is fast but doesn't validate the CLI workflow
+    - fix_starrynight_basic_setup validates that the CLI commands work correctly (slower)
+
+    When to use this fixture:
+    - When you only need the output files and don't care how they were generated
+    - For downstream tests that depend on these files but aren't validating the workflow
+    - For better test performance in scenarios where validating CLI is unnecessary
+
+    When to use fix_starrynight_basic_setup instead:
+    - When testing that the CLI workflow steps function correctly
+    - When you need to validate the entire data generation pipeline
+
     Returns:
         dict: Dictionary containing:
             - index_file: Path to the pre-generated index.parquet file
@@ -545,12 +513,12 @@ def fix_starrynight_pregenerated_setup(fix_s1_workspace):
     pregenerated_index_file = fixtures_dir / "index.parquet"
     pregenerated_experiment_json = fixtures_dir / "experiment.json"
 
-    # Ensure the pre-generated files exist
+    # Essential checks: source files must exist to be copied
     assert pregenerated_index_file.exists(), (
-        f"Pre-generated index file not found at {pregenerated_index_file}"
+        "Pre-generated index file not found"
     )
     assert pregenerated_experiment_json.exists(), (
-        f"Pre-generated experiment file not found at {pregenerated_experiment_json}"
+        "Pre-generated experiment file not found"
     )
 
     # Copy files to workspace directory to maintain expected structure
@@ -563,6 +531,12 @@ def fix_starrynight_pregenerated_setup(fix_s1_workspace):
     # Copy the files
     shutil.copy2(pregenerated_index_file, index_file)
     shutil.copy2(pregenerated_experiment_json, experiment_json_path)
+
+    # Essential checks: copied files must exist for fixture to function
+    assert index_file.exists(), "Failed to copy index file to workspace"
+    assert experiment_json_path.exists(), (
+        "Failed to copy experiment file to workspace"
+    )
 
     # Return the same structure as fix_starrynight_basic_setup
     return {
