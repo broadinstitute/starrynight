@@ -148,6 +148,16 @@ def validate_loaddata_csv(
     try:
         # Register both CSVs in a DuckDB in-memory database
         with duckdb.connect(":memory:") as conn:
+            # Helper function for count-based validation checks
+            def run_count_check(query: str, error_msg_template: str) -> None:
+                """Execute a query that returns a count and add error if count > 0."""
+                count = conn.execute(query).fetchone()[0]
+                if count > 0:
+                    validation_errors.append(
+                        error_msg_template.format(count=count)
+                    )
+
+            # Register CSV data as views
             conn.execute(
                 f"CREATE VIEW generated AS SELECT * FROM read_csv_auto('{str(generated_csv_path)}')"
             )
@@ -206,29 +216,20 @@ def validate_loaddata_csv(
 
             # Check 3: Verify filename patterns
             # Ensure generated filenames follow expected patterns
-            filename_pattern_sql = """
-                SELECT COUNT(*) FROM generated
-                WHERE FileName_OrigDNA NOT LIKE '%Channel%'
-                OR FileName_OrigZO1 NOT LIKE '%Channel%'
-                OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
-            """
-            incorrect_filenames = conn.execute(filename_pattern_sql).fetchone()[
-                0
-            ]
-
-            if incorrect_filenames > 0:
-                validation_errors.append(
-                    f"Found {incorrect_filenames} filenames that don't match the expected pattern"
-                )
+            run_count_check(
+                query="""
+                    SELECT COUNT(*) FROM generated
+                    WHERE FileName_OrigDNA NOT LIKE '%Channel%'
+                    OR FileName_OrigZO1 NOT LIKE '%Channel%'
+                    OR FileName_OrigPhalloidin NOT LIKE '%Channel%'
+                """,
+                error_msg_template="Found {count} filenames that don't match the expected pattern",
+            )
 
             # Check 4: Run any additional pipeline-specific checks
             if additional_checks:
                 for check in additional_checks:
-                    count = conn.execute(check["query"]).fetchone()[0]
-                    if count > 0:
-                        validation_errors.append(
-                            check["error_msg"].format(count=count)
-                        )
+                    run_count_check(check["query"], check["error_msg"])
 
     except duckdb.Error as e:
         validation_errors.append(
