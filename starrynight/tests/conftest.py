@@ -6,11 +6,23 @@ Notes on Test Fixtures Organization:
 ------------------------------------
 This file contains fixtures for test data and workspace setup.
 
-As the project grows, consider these organizational best practices:
-1. Move fixture implementation code to specialized modules in tests/fixtures/ directory
-2. Keep registration of fixtures in conftest.py files for auto-discovery
-3. Group fixtures by feature or functional area
-4. Split into domain-specific conftest.py files in subdirectories
+As the project grows, follow these organizational best practices:
+
+1. Keep in conftest.py:
+   - Simple fixtures that just extract files or create basic directory structures
+   - Fixtures that need to be broadly available to many tests
+   - Fixture registrations (even if implementation is elsewhere)
+
+2. Move to specialized modules in tests/fixtures/ directory:
+   - Complex fixtures over ~100 lines
+   - Fixtures that run CLI commands or invoke application logic
+   - Fixtures with extensive validation or setup logic
+   - Fixtures that depend on multiple other fixtures
+
+3. General organization principles:
+   - Group fixtures by feature or functional area
+   - Split into domain-specific conftest.py files in subdirectories as needed
+   - Maintain clear documentation on fixture dependencies and usage
 
 The assertions in fixtures are appropriate for verifying setup preconditions
 and ensuring the test environment is correctly configured before tests run.
