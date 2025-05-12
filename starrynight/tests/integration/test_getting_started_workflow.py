@@ -121,31 +121,26 @@ def validate_loaddata_csv(
     ref_csv_path: Path,
     additional_checks: list[dict[str, Any]] | None = None,
 ) -> list[str]:
-    """Validate a generated LoadData CSV file against a reference CSV file.
+    """Validate generated LoadData CSV against reference file.
 
-    This function compares key aspects of the generated CSV with a reference CSV:
-    1. Checks if certain columns have matching distinct values
-    2. Verifies required columns aren't null
-    3. Performs custom checks for specific validation requirements
+    Compares CSVs for:
+    1. Matching distinct values in key columns
+    2. Non-null required fields
+    3. Pattern-matching for formatted fields
 
     Args:
-        generated_csv_path: Path to the generated CSV file
-        ref_csv_path: Path to the reference CSV file
-        additional_checks: List of SQL queries that count invalid records,
-                          each with "query" and "error_msg" keys
+        generated_csv_path: Path to generated CSV
+        ref_csv_path: Path to reference CSV
+        additional_checks: SQL checks with "query" and "error_msg" keys
 
     Returns:
-        List of validation error messages (empty if validation passed)
+        Error messages (empty list if validation passed)
 
     Example:
-        validate_loaddata_csv(
-            generated_csv_path=Path("generated.csv"),
-            ref_csv_path=Path("reference.csv"),
-            additional_checks=[{
-                "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
-                "error_msg": "Found {count} rows missing ImageNumber"
-            }]
-        )
+        additional_checks=[{
+            "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
+            "error_msg": "Found {count} rows missing ImageNumber"
+        }]
 
     """
     errors = []
@@ -226,10 +221,7 @@ def validate_loaddata_csv(
                     errors.append(check["error_msg"].format(count=count))
 
     except duckdb.Error as e:
-        errors.append(
-            f"DuckDB error during CSV validation: {str(e)} "
-            f"(possible issue with CSV format or column types)"
-        )
+        errors.append(f"Database error: {str(e)} (check CSV format/types)")
 
     return errors
 
@@ -241,14 +233,14 @@ def check_column_values(
     label: str,
     mode: str = "subset",  # "subset", "exact", "superset"
 ) -> None:
-    """Check if column values match between reference and generated CSVs.
+    """Compare column values between reference and generated tables.
 
     Args:
-        conn: Database connection with 'reference' and 'generated' views
+        conn: Database connection with views
         errors: List to append errors to
-        columns: Column name(s) to check (string or list)
-        label: Human-readable name for this check in error messages
-        mode: Comparison mode - subset (default), exact, or superset
+        columns: Column(s) to check
+        label: Name for error messages
+        mode: "subset" (default), "exact", or "superset"
 
     """
     # Handle single column or multiple columns
