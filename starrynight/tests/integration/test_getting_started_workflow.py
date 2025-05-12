@@ -47,9 +47,7 @@ from typing import Any, Optional
 import pandas as pd
 import pytest
 
-from starrynight.tests.integration.loaddata_validation import (
-    validate_loaddata_csv,
-)
+from .loaddata_validation import validate_loaddata_csv
 
 # LoadData type configurations
 LOADDATA_CONFIGS = [
