@@ -48,6 +48,20 @@ In StarryNight, we deal with two distinct types of pipelines:
 - **StarryNight Pipeline tests**: Workflow composition and structure
 - **Utilities tests**: Supporting functionality
 
+### Hybrid Testing Approach
+
+StarryNight uses a pragmatic hybrid testing approach:
+
+1. **Direct programmatic testing** for components without CellProfiler dependencies:
+   - Parser logic, utilities, configuration handling
+   - Faster execution and easier debugging
+
+2. **Subprocess CLI testing** for components requiring CellProfiler:
+   - Integration tests, workflow validation
+   - Leverages Nix environment with CellProfiler properly installed
+
+Both approaches use `uv run pytest` to execute tests within the Nix environment, ensuring consistent dependency availability while avoiding the complexity of mocking CellProfiler's Java VM integration.
+
 ### Testing Philosophy
 
 - **Test Independence**: Each test should be isolated from others
