@@ -136,8 +136,25 @@ def validate_loaddata_csv(
         generated_csv_path: Path to the generated LoadData CSV file
         ref_csv_path: Path to the reference LoadData CSV file
         additional_checks: List of additional SQL checks to perform, each with:
-            - query: SQL query to execute (should return a single value)
+            - query: SQL query executing a COUNT that identifies invalid records
             - error_msg: Error message template (can use {count} placeholder)
+
+    The additional_checks should contain SQL queries that:
+    - Return a single COUNT of records that fail validation
+    - Have access to the "generated" table (the CSV being validated)
+    - Return 0 if validation passes, >0 if validation fails
+
+    Example additional checks:
+    [
+        {
+            "query": "SELECT COUNT(*) FROM generated WHERE ImageNumber IS NULL",
+            "error_msg": "Found {count} rows missing ImageNumber"
+        },
+        {
+            "query": "SELECT COUNT(*) FROM generated WHERE Metadata_Well NOT LIKE '[A-Z]%'",
+            "error_msg": "Found {count} malformed well IDs"
+        }
+    ]
 
     Returns:
         List of validation error messages. Empty list if validation passed.
@@ -228,7 +245,14 @@ def validate_loaddata_csv(
 
             # Check 4: Run any additional pipeline-specific checks
             if additional_checks:
-                for check in additional_checks:
+                for i, check in enumerate(additional_checks):
+                    # Verify check has required keys
+                    if "query" not in check or "error_msg" not in check:
+                        validation_errors.append(
+                            f"Invalid additional check #{i + 1}: must contain 'query' and 'error_msg' keys"
+                        )
+                        continue
+
                     run_count_check(check["query"], check["error_msg"])
 
     except duckdb.Error as e:
