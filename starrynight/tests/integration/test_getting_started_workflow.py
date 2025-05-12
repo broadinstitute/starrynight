@@ -60,7 +60,6 @@ LOADDATA_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "pipeline_type": "cp_illum_calc",
         "required_columns": [
-            "Metadata_Batch",
             "Metadata_Plate",
             "Metadata_Well",
             "Metadata_Site",
@@ -81,7 +80,6 @@ LOADDATA_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "pipeline_type": "cp_illum_apply",
         "required_columns": [
-            "Metadata_Batch",
             "Metadata_Plate",
             "Metadata_Well",
             "Metadata_Site",
