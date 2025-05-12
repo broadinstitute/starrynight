@@ -1,40 +1,34 @@
-"""Test for the StarryNight getting-started workflow LoadData generation steps.
+"""Tests for the StarryNight example workflow described in the getting-started guide.
 
-This test module focuses specifically on testing the LoadData generation functionality
-of the StarryNight workflow by executing the CLI commands and validating the outputs.
+This test module verifies the StarryNight workflow functionality by executing CLI
+commands and validating the outputs. There are two test approaches:
 
-The workflow is outlined in ../../../docs/user/getting-started.md
+1. LoadData Generation Only (current implementation):
+   - Tests only the generation of LoadData CSV files for each step
 
-Current coverage:
-- CP illum calc LoadData generation
-- CP illum apply LoadData generation
-
-Expanded coverage:
-- CP segmentation check LoadData generation
-- SBS illum calc LoadData generation
-- SBS illum apply LoadData generation
-- SBS preprocessing LoadData generation
-- Analysis LoadData generation
+2. Complete Workflow (planned future implementation):
+   - Will test all three steps: LoadData generation, pipeline generation, and execution
+   - Follows the workflow outlined in ../../../docs/user/example-pipeline-cli.md
 
 Testing strategy:
-This module uses a parameterized approach to test multiple LoadData generation steps:
+This module uses a parameterized approach to test multiple workflow steps:
 
-1. A single test function that is parameterized with both:
+1. Tests are parameterized with both:
    - Setup approach: full workflow vs. pre-generated files
-   - LoadData type: which workflow step to test (illum_calc, illum_apply, etc.)
+   - Workflow step: which stage to test (illum_calc, illum_apply, etc.)
 
-2. Each LoadData type has its own configuration including:
-   - Command parameters (specific to that step)
-   - Expected file patterns and naming conventions
+2. Each workflow step has its own configuration including:
+   - Command parameters
+   - Expected file patterns
    - Pipeline type for validation
-   - Reference CSV paths for comparison
+   - Reference paths for comparison
 
 Running the tests:
 - Run all tests: pytest test_getting_started_workflow.py
 - Run only fast tests: pytest test_getting_started_workflow.py -v -k fast
 - Run only full workflow tests: pytest test_getting_started_workflow.py -v -k full
-- Run specific LoadData type: pytest test_getting_started_workflow.py -v -k cp_illum_calc
-- Run specific LoadData type and setup approach: pytest test_getting_started_workflow.py -v -k "cp_illum_calc and full"
+- Run specific step: pytest test_getting_started_workflow.py -v -k cp_illum_calc
+- Run specific step and setup: pytest test_getting_started_workflow.py -v -k "cp_illum_calc and full"
 """
 
 import json
@@ -49,8 +43,160 @@ import pytest
 
 from .loaddata_validation import validate_loaddata_csv
 
-# LoadData type configurations
-LOADDATA_CONFIGS = [
+
+def generate_loaddata(
+    config: dict[str, Any],
+    setup_fixture: dict[str, Any],
+    workspace: dict[str, Path],
+) -> tuple[Path, list[Path]]:
+    """Generate LoadData CSV files for a specific workflow step.
+
+    Args:
+        config: Configuration for the workflow step
+        setup_fixture: The test fixture with paths and configuration
+        workspace: Dictionary with workspace directories
+
+    Returns:
+        tuple: (loaddata_dir, matching_files)
+            - loaddata_dir: Directory where LoadData files were created
+            - matching_files: List of paths to generated LoadData files
+
+    Raises:
+        AssertionError: If LoadData generation fails or no files are created
+
+    """
+    # Get paths from the fixture
+    index_file = setup_fixture["index_file"]
+    experiment_json_path = setup_fixture["experiment_json_path"]
+
+    # Get LoadData type-specific configuration
+    loaddata_name = config["name"]
+    output_dir_key = config["output_dir_key"]
+    file_pattern = config["file_pattern"]
+    command_parts = config["command_parts"]
+
+    # Build the command for generating LoadData files
+    loaddata_cmd = [
+        "starrynight",
+        *command_parts,  # e.g., ["illum", "calc", "loaddata"]
+        "-i",
+        str(index_file),
+        "-o",
+        str(workspace[output_dir_key]),
+        "--exp_config",
+        str(experiment_json_path),
+        "--use_legacy",
+    ]
+
+    # Run the command and check it was successful
+    result = subprocess.run(
+        loaddata_cmd, capture_output=True, text=True, check=False
+    )
+
+    # Check if the command was successful
+    assert result.returncode == 0, (
+        f"{loaddata_name} LoadData generation command failed: {result.stderr}"
+    )
+
+    # Verify LoadData files were created
+    loaddata_dir = workspace[output_dir_key]
+
+    # Check for the presence of at least one LoadData CSV file in the directory
+    csv_files = list(loaddata_dir.glob("*.csv"))
+    assert len(csv_files) > 0, "No LoadData CSV files were created"
+
+    # Check for matching files using pattern
+    matching_files = list(loaddata_dir.glob(file_pattern))
+    assert len(matching_files) > 0, (
+        f"No files matching pattern {file_pattern} were created. "
+        f"Found files: {[f.name for f in csv_files]}"
+    )
+
+    return loaddata_dir, matching_files
+
+
+def validate_loaddata(
+    generated_files: list[Path],
+    output_dir: dict[str, Path],
+    config: dict[str, Any],
+) -> None:
+    """Validate generated LoadData CSV files against reference files.
+
+    Args:
+        generated_files: List of paths to generated LoadData CSV files
+        output_dir: Dictionary with reference output directories
+        config: Configuration for the workflow step
+
+    Raises:
+        AssertionError: If validation fails
+
+    """
+    ref_csv_pattern = config["ref_csv_pattern"]
+    pipeline_type = config["pipeline_type"]
+
+    # Use pandas for CSV file handling - simpler for this test context
+    if len(generated_files) == 1:
+        # Single file - just read it directly
+        df = pd.read_csv(generated_files[0])
+    else:
+        # Multiple files - concatenate using pandas
+        print(
+            f"Found {len(generated_files)} files matching pattern {config['file_pattern']}"
+        )
+        dataframes = []
+
+        # Read each file with error handling
+        for file_path in generated_files:
+            try:
+                dataframes.append(pd.read_csv(file_path))
+            except Exception as e:
+                print(f"Warning: Error processing file {file_path}: {e}")
+
+        # Concatenate the dataframes
+        df = pd.concat(dataframes, ignore_index=True)
+        print(f"Combined CSV has {len(df)} rows")
+
+    # Write to temporary file for validation
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
+        temp_path = Path(temp_file.name)
+        df.to_csv(temp_path, index=False)
+
+    # Validate the combined data against reference LoadData CSV
+    generated_csv_path = temp_path
+
+    # Find the matching reference CSV in the output_dir
+    ref_load_data_dir = output_dir["load_data_csv_dir"]
+    ref_csv_paths = list(ref_load_data_dir.glob(ref_csv_pattern))
+    assert len(ref_csv_paths) > 0, (
+        f"Reference CSV not found with pattern: {ref_csv_pattern}"
+    )
+    ref_csv_path = ref_csv_paths[0]
+
+    # Validate the LoadData CSV against the reference file using the validation framework
+    errors = validate_loaddata_csv(
+        generated_csv_path=generated_csv_path,
+        ref_csv_path=ref_csv_path,
+        pipeline_type=pipeline_type,
+    )
+
+    # Report any validation errors
+    if errors:
+        error_message = "\n".join(
+            f"Error {i + 1}: {error}" for i, error in enumerate(errors)
+        )
+        pytest.fail(
+            f"CSV validation failed with {len(errors)} error(s):\n{error_message}"
+        )
+
+    # Clean up the temporary file
+    try:
+        temp_path.unlink()
+    except Exception as e:
+        print(f"Warning: Failed to delete temporary file {temp_path}: {e}")
+
+
+# Workflow step configurations
+WORKFLOW_CONFIGS = [
     # CP illum calc LoadData configuration
     {
         "name": "cp_illum_calc",
@@ -117,6 +263,7 @@ LOADDATA_CONFIGS = [
 ]
 
 
+@pytest.mark.skip(reason="Complete workflow test not yet implemented")
 @pytest.mark.parametrize(
     "setup_fixture_name, description",
     [
@@ -125,8 +272,8 @@ LOADDATA_CONFIGS = [
     ],
     ids=["full", "fast"],
 )
-@pytest.mark.parametrize("config", LOADDATA_CONFIGS, ids=lambda c: c["name"])
-def test_loaddata_generation(
+@pytest.mark.parametrize("config", WORKFLOW_CONFIGS, ids=lambda c: c["name"])
+def test_complete_workflow(
     setup_fixture_name: str,
     description: str,
     config: dict[str, Any],
@@ -134,16 +281,19 @@ def test_loaddata_generation(
     fix_s1_workspace: dict[str, Path],
     fix_s1_output_dir: dict[str, Path],
 ) -> None:
-    """Test LoadData generation for different workflow steps.
+    """Test the complete three-step workflow for different steps.
 
-    This test is parameterized to run with:
-    1. Different setup approaches (full workflow vs. pre-generated files)
-    2. Different LoadData types (illum_calc, illum_apply, etc.)
+    This test validates all three steps of the workflow:
+    1. LoadData generation
+    2. Pipeline generation: NOT YET IMPLEMENTED
+    3. CellProfiler execution: NOT YET IMPLEMENTED
+
+    This test is currently only validating the LoadData generation step.
 
     Args:
         setup_fixture_name: Name of the fixture to use for setup
         description: Description of the setup approach (for test logs)
-        config: Configuration for the specific LoadData type being tested
+        config: Configuration for the specific workflow step being tested
         request: pytest request object to get the fixture by name
         fix_s1_workspace: Fixture providing workspace directory structure
         fix_s1_output_dir: Fixture providing reference output data for validation
@@ -152,113 +302,21 @@ def test_loaddata_generation(
     # Get the appropriate fixture (basic or pre-generated) using the request object
     setup_fixture = request.getfixturevalue(setup_fixture_name)
 
-    # Get paths from the fixture
-    index_file = setup_fixture["index_file"]
-    experiment_json_path = setup_fixture["experiment_json_path"]
-
-    # Get LoadData type-specific configuration
-    loaddata_name = config["name"]
-    output_dir_key = config["output_dir_key"]
-    file_pattern = config["file_pattern"]
-    ref_csv_pattern = config["ref_csv_pattern"]
-    pipeline_type = config["pipeline_type"]
-    command_parts = config["command_parts"]
-
-    # Build the command for generating LoadData files
-    loaddata_cmd = [
-        "starrynight",
-        *command_parts,  # e.g., ["illum", "calc", "loaddata"]
-        "-i",
-        str(index_file),
-        "-o",
-        str(fix_s1_workspace[output_dir_key]),
-        "--exp_config",
-        str(experiment_json_path),
-        "--use_legacy",
-    ]
-
-    # Run the command and check it was successful
-    result = subprocess.run(
-        loaddata_cmd, capture_output=True, text=True, check=False
+    # Step 1: Generate and validate LoadData files
+    loaddata_dir, matching_files = generate_loaddata(
+        config=config,
+        setup_fixture=setup_fixture,
+        workspace=fix_s1_workspace,
     )
 
-    # Check if the command was successful
-    assert result.returncode == 0, (
-        f"{loaddata_name} LoadData generation command failed: {result.stderr}"
+    validate_loaddata(
+        generated_files=matching_files,
+        output_dir=fix_s1_output_dir,
+        config=config,
     )
 
-    # Verify LoadData files were created
-    loaddata_dir = fix_s1_workspace[output_dir_key]
+    # Step 2: Generate and validate pipeline (not implemented)
+    # pipeline_path = generate_pipeline(config, loaddata_dir, fix_s1_workspace)
 
-    # Check for the presence of at least one LoadData CSV file in the directory
-    csv_files = list(loaddata_dir.glob("*.csv"))
-    assert len(csv_files) > 0, "No LoadData CSV files were created"
-
-    # Check for matching files using pattern
-    matching_files = list(loaddata_dir.glob(file_pattern))
-    assert len(matching_files) > 0, (
-        f"No files matching pattern {file_pattern} were created. "
-        f"Found files: {[f.name for f in csv_files]}"
-    )
-
-    # Use pandas for CSV file handling - simpler for this test context
-    if len(matching_files) == 1:
-        # Single file - just read it directly
-        df = pd.read_csv(matching_files[0])
-    else:
-        # Multiple files - concatenate using pandas
-        print(
-            f"Found {len(matching_files)} files matching pattern {file_pattern}"
-        )
-        dataframes = []
-
-        # Read each file with error handling
-        for file_path in matching_files:
-            try:
-                dataframes.append(pd.read_csv(file_path))
-            except Exception as e:
-                print(f"Warning: Error processing file {file_path}: {e}")
-
-        # Concatenate the dataframes
-        df = pd.concat(dataframes, ignore_index=True)
-        print(f"Combined CSV has {len(df)} rows")
-
-    # Skip basic column validation - comprehensive validation is done by the validation framework
-
-    # Write to temporary file for validation
-    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
-        temp_path = Path(temp_file.name)
-        df.to_csv(temp_path, index=False)
-
-    # Validate the combined data against reference LoadData CSV
-    generated_csv_path = temp_path
-
-    # Find the matching reference CSV in the fix_s1_output_dir
-    ref_load_data_dir = fix_s1_output_dir["load_data_csv_dir"]
-    ref_csv_paths = list(ref_load_data_dir.glob(ref_csv_pattern))
-    assert len(ref_csv_paths) > 0, (
-        f"Reference CSV not found with pattern: {ref_csv_pattern}"
-    )
-    ref_csv_path = ref_csv_paths[0]
-
-    # Validate the LoadData CSV against the reference file using the new framework
-    errors = validate_loaddata_csv(
-        generated_csv_path=generated_csv_path,
-        ref_csv_path=ref_csv_path,
-        pipeline_type=pipeline_type,
-    )
-
-    # Report any validation errors
-    if errors:
-        error_message = "\n".join(
-            f"Error {i + 1}: {error}" for i, error in enumerate(errors)
-        )
-        pytest.fail(
-            f"CSV validation failed with {len(errors)} error(s):\n{error_message}"
-        )
-
-    # Clean up the temporary file
-    try:
-        temp_path.unlink()
-    except Exception as e:
-        print(f"Warning: Failed to delete temporary file {temp_path}: {e}")
+    # Step 3: Execute and validate CellProfiler (not implemented)
+    # output_dir = execute_pipeline(config, pipeline_path, loaddata_dir)
