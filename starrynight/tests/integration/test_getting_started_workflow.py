@@ -44,17 +44,22 @@ import pytest
 from .loaddata_validation import validate_loaddata_csv
 
 
-def generate_loaddata(
+def generate_and_validate_loaddata(  # noqa: C901
     config: dict[str, Any],
     setup_fixture: dict[str, Any],
     workspace: dict[str, Path],
+    output_dir: dict[str, Path],
 ) -> tuple[Path, list[Path]]:
-    """Generate LoadData CSV files for a specific workflow step.
+    """Generate and validate LoadData CSV files for a workflow step.
+
+    This function performs both the generation of LoadData files via the
+    StarryNight CLI and their validation against reference files.
 
     Args:
         config: Configuration for the workflow step
         setup_fixture: The test fixture with paths and configuration
         workspace: Dictionary with workspace directories
+        output_dir: Dictionary with reference output directories
 
     Returns:
         tuple: (loaddata_dir, matching_files)
@@ -62,9 +67,10 @@ def generate_loaddata(
             - matching_files: List of paths to generated LoadData files
 
     Raises:
-        AssertionError: If LoadData generation fails or no files are created
+        AssertionError: If LoadData generation or validation fails
 
     """
+    # PART 1: GENERATE LOADDATA FILES
     # Get paths from the fixture
     index_file = setup_fixture["index_file"]
     experiment_json_path = setup_fixture["experiment_json_path"]
@@ -73,6 +79,8 @@ def generate_loaddata(
     loaddata_name = config["name"]
     output_dir_key = config["output_dir_key"]
     file_pattern = config["file_pattern"]
+    ref_csv_pattern = config["ref_csv_pattern"]
+    pipeline_type = config["pipeline_type"]
     command_parts = config["command_parts"]
 
     # Build the command for generating LoadData files
@@ -112,41 +120,20 @@ def generate_loaddata(
         f"Found files: {[f.name for f in csv_files]}"
     )
 
-    return loaddata_dir, matching_files
-
-
-def validate_loaddata(
-    generated_files: list[Path],
-    output_dir: dict[str, Path],
-    config: dict[str, Any],
-) -> None:
-    """Validate generated LoadData CSV files against reference files.
-
-    Args:
-        generated_files: List of paths to generated LoadData CSV files
-        output_dir: Dictionary with reference output directories
-        config: Configuration for the workflow step
-
-    Raises:
-        AssertionError: If validation fails
-
-    """
-    ref_csv_pattern = config["ref_csv_pattern"]
-    pipeline_type = config["pipeline_type"]
-
+    # PART 2: VALIDATE LOADDATA FILES
     # Use pandas for CSV file handling - simpler for this test context
-    if len(generated_files) == 1:
+    if len(matching_files) == 1:
         # Single file - just read it directly
-        df = pd.read_csv(generated_files[0])
+        df = pd.read_csv(matching_files[0])
     else:
         # Multiple files - concatenate using pandas
         print(
-            f"Found {len(generated_files)} files matching pattern {config['file_pattern']}"
+            f"Found {len(matching_files)} files matching pattern {file_pattern}"
         )
         dataframes = []
 
         # Read each file with error handling
-        for file_path in generated_files:
+        for file_path in matching_files:
             try:
                 dataframes.append(pd.read_csv(file_path))
             except Exception as e:
@@ -193,6 +180,8 @@ def validate_loaddata(
         temp_path.unlink()
     except Exception as e:
         print(f"Warning: Failed to delete temporary file {temp_path}: {e}")
+
+    return loaddata_dir, matching_files
 
 
 # Workflow step configurations
@@ -263,7 +252,6 @@ WORKFLOW_CONFIGS = [
 ]
 
 
-@pytest.mark.skip(reason="Complete workflow test not yet implemented")
 @pytest.mark.parametrize(
     "setup_fixture_name, description",
     [
@@ -303,16 +291,11 @@ def test_complete_workflow(
     setup_fixture = request.getfixturevalue(setup_fixture_name)
 
     # Step 1: Generate and validate LoadData files
-    loaddata_dir, matching_files = generate_loaddata(
+    loaddata_dir, matching_files = generate_and_validate_loaddata(
         config=config,
         setup_fixture=setup_fixture,
         workspace=fix_s1_workspace,
-    )
-
-    validate_loaddata(
-        generated_files=matching_files,
         output_dir=fix_s1_output_dir,
-        config=config,
     )
 
     # Step 2: Generate and validate pipeline (not implemented)
