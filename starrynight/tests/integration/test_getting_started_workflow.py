@@ -41,11 +41,11 @@ Running the tests:
 import json
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 from typing import Any, Optional
 
 import duckdb
-import pandas as pd
 import pytest
 
 # LoadData type configurations
@@ -348,32 +348,51 @@ def test_loaddata_generation(
         f"Found files: {[f.name for f in csv_files]}"
     )
 
-    # Load and potentially concatenate CSV files
-    if len(matching_files) == 1:
-        # Single file case - just load it directly
-        combined_df = pd.read_csv(matching_files[0])
-    else:
-        # Multiple files case - concatenate them all
-        print(
-            f"Found {len(matching_files)} files matching pattern {file_pattern}"
-        )
-        dataframes = [pd.read_csv(f) for f in matching_files]
-        combined_df = pd.concat(dataframes, ignore_index=True)
-        print(f"Combined dataframe has {len(combined_df)} rows")
-
-    # The combined CSV should contain required metadata columns
-    for col in required_columns:
-        assert col in combined_df.columns, (
-            f"Required column '{col}' missing in CSV"
-        )
-
-    # Save the combined data to a temporary file for validation
-    import tempfile
-
     # Create a temporary file for the combined CSV
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as temp_file:
         temp_path = Path(temp_file.name)
-        combined_df.to_csv(temp_path, index=False)
+
+        # Use DuckDB to process the CSV files
+        with duckdb.connect(":memory:") as conn:
+            # For checking columns, just look at the first file
+            columns = conn.execute(
+                f"SELECT * FROM read_csv_auto('{matching_files[0]}') LIMIT 0"
+            ).description
+            column_names = [col[0] for col in columns]
+
+            # Verify required columns exist
+            for col in required_columns:
+                assert col in column_names, (
+                    f"Required column '{col}' missing in CSV"
+                )
+
+            # Process single or multiple files
+            if len(matching_files) == 1:
+                # Single file - simpler query
+                conn.execute(f"""
+                    COPY (SELECT * FROM read_csv_auto('{matching_files[0]}'))
+                    TO '{temp_path}' (FORMAT CSV, HEADER)
+                """)
+            else:
+                # Multiple files - construct a UNION ALL query
+                print(
+                    f"Found {len(matching_files)} files matching pattern {file_pattern}"
+                )
+
+                # Simple approach using list of files with DuckDB
+                file_list = (
+                    "['" + "', '".join(str(f) for f in matching_files) + "']"
+                )
+                conn.execute(f"""
+                    COPY (SELECT * FROM read_csv_auto({file_list}))
+                    TO '{temp_path}' (FORMAT CSV, HEADER)
+                """)
+
+                # Report row count
+                row_count = conn.execute(
+                    f"SELECT COUNT(*) FROM '{temp_path}'"
+                ).fetchone()[0]
+                print(f"Combined CSV has {row_count} rows")
 
     # Validate the combined data against reference LoadData CSV
     generated_csv_path = temp_path
