@@ -120,6 +120,8 @@ def validate_loaddata_csv(
     generated_csv_path: Path,
     ref_csv_path: Path,
     additional_checks: list[dict[str, Any]] | None = None,
+    metadata_checks: list[dict[str, Any]] | None = None,
+    custom_value_checks: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Validate a generated LoadData CSV file against a reference CSV file.
 
@@ -135,9 +137,11 @@ def validate_loaddata_csv(
     Args:
         generated_csv_path: Path to the generated LoadData CSV file
         ref_csv_path: Path to the reference LoadData CSV file
-        additional_checks: List of additional SQL checks to perform, each with:
+        additional_checks: List of additional SQL count-based checks to perform, each with:
             - query: SQL query executing a COUNT that identifies invalid records
             - error_msg: Error message template (can use {count} placeholder)
+        metadata_checks: Optional custom metadata value coverage checks
+        custom_value_checks: Optional additional value coverage checks for columns
 
     Standard count-based checks and additional checks follow the same format:
     - Return a single COUNT of records that fail validation
@@ -145,18 +149,22 @@ def validate_loaddata_csv(
     - Return 0 if validation passes, >0 if validation fails
     - Use "{count}" in the error message to include the count of failing records
 
-    Validation Check Categories:
-    1. Standard checks (built-in) - Applied to all LoadData validations
-       - File path/name completeness
-       - Metadata field completeness
-       - Filename pattern checks
+    Value coverage checks can be customized to validate:
+    - Single columns or composite keys (multiple columns together)
+    - Exact matches, subsets, or supersets between reference and generated values
+    - Custom error messages with formatted values
 
-    2. Additional checks (pipeline-specific) - Applied to specific pipeline types
-       - Illumination correction file references (for illum_apply)
-       - Analysis measurement columns (for analysis LoadData)
-       - Module-specific reference columns
+    Example value coverage check:
+    [
+        {
+            "columns": ["Metadata_Plate", "Metadata_Well"], # Can be string for single column
+            "label": "plate-well combinations",
+            "mode": "subset", # "subset" (default), "superset", or "exact"
+            "error_msg_template": "Custom error format: {missing_values}"
+        }
+    ]
 
-    Example additional checks:
+    Example additional count checks:
     [
         # Basic missing field check
         {
@@ -169,7 +177,6 @@ def validate_loaddata_csv(
             "query": "SELECT COUNT(*) FROM generated WHERE Metadata_Well NOT LIKE '[A-Z]%'",
             "error_msg": "Found {count} rows with malformed well IDs"
         },
-
     ]
 
     Returns:
@@ -183,7 +190,11 @@ def validate_loaddata_csv(
 
     # Perform validation and collect errors
     return _perform_validation(
-        generated_csv_path, ref_csv_path, all_count_checks
+        generated_csv_path,
+        ref_csv_path,
+        all_count_checks,
+        metadata_checks,
+        custom_value_checks,
     )
 
 
@@ -249,6 +260,8 @@ def _perform_validation(
     generated_csv_path: Path,
     ref_csv_path: Path,
     all_count_checks: list[dict[str, Any]],
+    metadata_checks: list[dict[str, Any]] | None = None,
+    custom_value_checks: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Execute validation checks between generated and reference CSVs.
 
@@ -256,6 +269,8 @@ def _perform_validation(
         generated_csv_path: Path to the generated CSV to validate
         ref_csv_path: Path to the reference CSV for comparison
         all_count_checks: List of validation checks to perform
+        metadata_checks: Optional custom metadata checks (defaults to standard checks)
+        custom_value_checks: Optional additional value coverage checks
 
     Returns:
         List of validation error messages (empty if validation passed)
@@ -278,9 +293,34 @@ def _perform_validation(
             _check_reference_consistency(conn, validation_errors)
 
             # Check 2: Compare metadata values for complete coverage
-            _check_metadata_coverage(conn, validation_errors)
+            if metadata_checks is not None:
+                # Use custom metadata checks if provided
+                for check in metadata_checks:
+                    check_value_coverage(
+                        conn=conn,
+                        validation_errors=validation_errors,
+                        columns=check.get("columns") or check.get("column"),
+                        label=check["label"],
+                        mode=check.get("mode", "subset"),
+                        error_msg_template=check.get("error_msg_template"),
+                    )
+            else:
+                # Use standard metadata checks
+                _check_metadata_coverage(conn, validation_errors)
 
-            # Check 3: Run all count-based checks (standard and additional)
+            # Check 3: Run any custom value coverage checks
+            if custom_value_checks:
+                for check in custom_value_checks:
+                    check_value_coverage(
+                        conn=conn,
+                        validation_errors=validation_errors,
+                        columns=check.get("columns") or check.get("column"),
+                        label=check["label"],
+                        mode=check.get("mode", "subset"),
+                        error_msg_template=check.get("error_msg_template"),
+                    )
+
+            # Check 4: Run all count-based checks (standard and additional)
             _run_count_checks(conn, all_count_checks, validation_errors)
 
     except duckdb.Error as e:
@@ -308,21 +348,100 @@ def _check_reference_consistency(
         validation_errors: List to append any errors to
 
     """
-    channel_frames_sql = """
-        SELECT DISTINCT Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-        FROM {table} ORDER BY Frame_OrigDNA, Frame_OrigZO1, Frame_OrigPhalloidin
-    """
-    ref_channels = conn.execute(
-        channel_frames_sql.format(table="reference")
-    ).fetchall()
-    gen_channels = conn.execute(
-        channel_frames_sql.format(table="generated")
-    ).fetchall()
+    # Use our generalized check_value_coverage function with multiple columns
+    # and "exact" mode to ensure frame combinations match exactly
+    check_value_coverage(
+        conn=conn,
+        validation_errors=validation_errors,
+        columns=["Frame_OrigDNA", "Frame_OrigZO1", "Frame_OrigPhalloidin"],
+        label="channel frame assignments",
+        mode="exact",
+        error_msg_template="Channel frame assignments don't match between reference and generated CSVs. "
+        "This may indicate differences in channel ordering or missing frames.",
+    )
 
-    if ref_channels != gen_channels:
-        validation_errors.append(
-            f"Channel frame assignments don't match: Reference={ref_channels}, Generated={gen_channels}"
+
+def check_value_coverage(
+    conn: duckdb.DuckDBPyConnection,
+    validation_errors: list[str],
+    columns: list[str] | str,
+    label: str,
+    mode: str = "subset",  # "subset", "superset", "exact"
+    error_msg_template: str | None = None,
+) -> None:
+    """Check value coverage between reference and generated tables.
+
+    This function compares distinct values between reference and generated tables
+    for one or more columns, with different comparison modes.
+
+    Args:
+        conn: Active DuckDB connection with views registered
+        validation_errors: List to append any errors to
+        columns: Column name or list of column names to check
+        label: Human-readable label for the column(s) being checked
+        mode: Comparison mode -
+              "subset" (reference ⊆ generated, default),
+              "superset" (reference ⊇ generated),
+              "exact" (reference = generated)
+        error_msg_template: Custom error message template with placeholders
+                           {label}, {missing_values}, {ref_values}, {gen_values}
+
+    """
+    # Handle single column or multiple columns
+    if isinstance(columns, str):
+        columns = [columns]
+
+    # Build SQL for single column or composite key
+    if len(columns) == 1:
+        col = columns[0]
+        ref_sql = f"SELECT DISTINCT {col} FROM reference"
+        gen_sql = f"SELECT DISTINCT {col} FROM generated"
+    else:
+        # For multiple columns, create composite key using concatenation
+        concat_cols = " || ',' || ".join(columns)
+        ref_sql = (
+            f"SELECT DISTINCT {concat_cols} AS composite_key FROM reference"
         )
+        gen_sql = (
+            f"SELECT DISTINCT {concat_cols} AS composite_key FROM generated"
+        )
+
+    # Get distinct values from both tables
+    ref_values = {row[0] for row in conn.execute(ref_sql).fetchall()}
+    gen_values = {row[0] for row in conn.execute(gen_sql).fetchall()}
+
+    # Determine values to report based on comparison mode
+    if mode == "subset" or mode == "exact":
+        # Check if all reference values exist in generated
+        missing_values = ref_values - gen_values
+        if missing_values:
+            # Use custom template if provided, otherwise use default
+            if error_msg_template:
+                error_msg = error_msg_template.format(
+                    label=label,
+                    missing_values=missing_values,
+                    ref_values=sorted(ref_values),
+                    gen_values=sorted(gen_values),
+                )
+            else:
+                error_msg = (
+                    f"Reference {label} {missing_values} not found in generated CSV. "
+                    f"Reference values: {sorted(ref_values)}, "
+                    f"Generated values: {sorted(gen_values)}"
+                )
+            validation_errors.append(error_msg)
+
+    if mode == "superset" or mode == "exact":
+        # Check if generated has extra values not in reference
+        extra_values = gen_values - ref_values
+        if extra_values:
+            # For superset or exact mode, report extra values
+            extra_error = (
+                f"Generated {label} contains extra values not in reference: {extra_values}. "
+                f"Reference values: {sorted(ref_values)}, "
+                f"Generated values: {sorted(gen_values)}"
+            )
+            validation_errors.append(extra_error)
 
 
 def _check_metadata_coverage(
@@ -338,34 +457,22 @@ def _check_metadata_coverage(
         validation_errors: List to append any errors to
 
     """
-    for metadata_col, label in [
-        ("Metadata_Well", "wells"),
-        ("Metadata_Site", "sites"),
-        ("Metadata_Plate", "plates"),
-    ]:
-        # Get distinct values from both tables
-        ref_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {metadata_col} FROM reference"
-            ).fetchall()
-        }
+    # Define metadata checks for common columns
+    metadata_checks = [
+        {"column": "Metadata_Well", "label": "wells"},
+        {"column": "Metadata_Site", "label": "sites"},
+        {"column": "Metadata_Plate", "label": "plates"},
+    ]
 
-        gen_values = {
-            row[0]
-            for row in conn.execute(
-                f"SELECT DISTINCT {metadata_col} FROM generated"
-            ).fetchall()
-        }
-
-        # Find values in reference that are missing from generated
-        missing_values = ref_values - gen_values
-        if missing_values:
-            validation_errors.append(
-                f"Reference {label} {missing_values} not found in generated CSV. "
-                f"Reference values: {sorted(ref_values)}, "
-                f"Generated values: {sorted(gen_values)}"
-            )
+    # Run each metadata check using the generalized function
+    for check in metadata_checks:
+        check_value_coverage(
+            conn=conn,
+            validation_errors=validation_errors,
+            columns=check["column"],
+            label=check["label"],
+            mode="subset",  # We want to ensure reference ⊆ generated
+        )
 
 
 def _run_count_checks(
