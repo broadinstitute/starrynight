@@ -16,7 +16,7 @@ These utilities help manage the test fixture requirements by:
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 - `postprocess_loaddata_csv.py`: Updates paths, headers, and identifiers in LoadData CSV files
-- `create_fixture_archive.py`: Creates compressed archives and checksums for fixture data
+- `create_fixture_archive.sh`: Creates compressed archives and checksums for fixture data
 
 ## Typical Workflow
 
@@ -25,7 +25,7 @@ These utilities help manage the test fixture requirements by:
 3. Filter LoadData CSV files using `filter_loaddata_csv.py`
 4. Validate paths using `validate_loaddata_paths.py`
 5. Compress files using image compression tools
-6. Create archives using `create_fixture_archive.py`
+6. Create archives using `create_fixture_archive.sh`
 
 ## Usage Examples
 
@@ -178,7 +178,7 @@ This will:
 
 ### Creating Fixture Archives
 
-The `create_fixture_archive.py` script creates compressed archives of test fixture data and generates checksums for validation and distribution.
+The `create_fixture_archive.sh` script creates compressed archives of test fixture data and generates checksums for validation and distribution.
 
 ```sh
 # Archive the trimmed LoadData CSVs directory
@@ -190,11 +190,11 @@ SOURCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Sourc
 mkdir -p ${ARCHIVE_DIR}
 
 # Create archive and SHA256 checksum
-uv run create_fixture_archive.py \
-    --source-dir ${SOURCE_DIR} \
-    --output-dir ${ARCHIVE_DIR} \
-    --base-name "fix_${FIXTURE_ID}_loaddata_trimmed" \
-    --algorithm sha256
+./create_fixture_archive.sh \
+    ${SOURCE_DIR} \
+    ${ARCHIVE_DIR} \
+    "fix_${FIXTURE_ID}_loaddata_trimmed" \
+    sha256
 ```
 
 This will:
