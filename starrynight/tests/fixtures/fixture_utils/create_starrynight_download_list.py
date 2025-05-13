@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# This script generates s5cmd compatible download lists for test fixtures
+# Uses --no-clobber (-n) option to skip files that already exist at the destination
+# This optimizes downloads by only transferring files not already present
 # FIXME: Ensure that the folder created is workspace/analysis/Batch1 and not workspace/analysis/20...
 import itertools
 import os
@@ -153,8 +156,8 @@ def generate_download_list():
                         relative_path, is_input=True, is_image=True
                     )
                     s3_file = f"{S3_PATH_IMAGES}/{relative_path}Well{well}_Point{well}_{site_str}_ChannelC,A,T,G,DAPI_Seq{seq_str}.ome.tiff"
-                    download_file.write(f"cp '{s3_file}' {local_dir}\n")
-                    s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+                    download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+                    s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Cell Painting images
         for well in WELLS:
@@ -170,8 +173,8 @@ def generate_download_list():
                     relative_path, is_input=True, is_image=True
                 )
                 s3_file = f"{S3_PATH_IMAGES}/{relative_path}Well{well}_Point{well}_{site_str}_ChannelPhalloAF750,ZO1-AF488,DAPI_Seq{seq_str}.ome.tiff"
-                download_file.write(f"cp '{s3_file}' {local_dir}\n")
-                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+                download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+                s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Illumination correction images
         for cycle, channel in itertools.product(
@@ -182,8 +185,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}{PLATE}_Cycle{cycle}_Illum{channel}.npy"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         for channel in ["DNA", "Phalloidin", "ZO1"]:
             relative_path = f"illum/{PLATE}/"
@@ -193,8 +196,8 @@ def generate_download_list():
             s3_file = (
                 f"{S3_PATH_IMAGES}/{relative_path}{PLATE}_Illum{channel}.npy"
             )
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Cell Painting images: Illumination corrected
         for well, site, channel in itertools.product(
@@ -205,8 +208,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_{PLATE}_Well_Well{well}_Site_{site}_Corr{channel}.tiff"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         for well, csvfile in itertools.product(
             WELLS,
@@ -217,8 +220,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}PaintingIllumApplication_{csvfile}.csv"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # SBS images: Illumination aligned
         for well, site, cycle, channel in itertools.product(
@@ -231,8 +234,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_{PLATE}_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         for well, site, csvfile in itertools.product(
             WELLS, SITES, ["Experiment", "Image"]
@@ -244,8 +247,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}BarcodingApplication_{csvfile}.csv"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # SBS images: Illumination corrected
         for well, site, cycle, channel in itertools.product(
@@ -258,8 +261,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_{PLATE}_Well_{well}_Site_{site}_Cycle0{cycle}_{channel}.tiff"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # DAPI is present only in the first cycle
         for well, site in itertools.product(WELLS, SITES):
@@ -270,8 +273,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_{PLATE}_Well_{well}_Site_{site}_Cycle01_DAPI.tiff"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         for well, site, csvfile in itertools.product(
             WELLS,
@@ -285,8 +288,8 @@ def generate_download_list():
                 relative_path, is_input=False, is_image=True
             )
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}BarcodePreprocessing_{csvfile}.csv"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Segmentation images
         for well in WELLS:
@@ -296,8 +299,8 @@ def generate_download_list():
             )
             relative_path = f"images_segmentation/{PLATE}/"
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}Plate_{PLATE}_Well_Well{well}_Site_0_CorrDNA_SegmentCheck.png"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         for csvfile in [
             "Experiment",
@@ -313,8 +316,8 @@ def generate_download_list():
             )
             relative_path = f"images_segmentation/{PLATE}/"
             s3_file = f"{S3_PATH_IMAGES}/{relative_path}SegmentationCheck_{csvfile}.csv"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Analysis files
         # Define CSV and image files based on the YAML structure
@@ -345,8 +348,8 @@ def generate_download_list():
             # Add CSV files - get these from the analysisfix folder
             for csv_file in analysis_csv_files:
                 s3_file = f"{S3_PATH_WORKSPACE}/analysisfix/{BATCH_S3}/{PLATE}-Well{well}-{site}/{csv_file}"
-                download_file.write(f"cp '{s3_file}' {local_dir}\n")
-                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+                download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+                s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
             # Add segmentation mask TIFF files - get these from the analysis folder
             for object_type in ["Cells", "Cytoplasm", "Nuclei"]:
@@ -355,14 +358,14 @@ def generate_download_list():
                     relative_mask_path, is_input=False, is_image=False
                 )
                 s3_file = f"{S3_PATH_WORKSPACE}/analysis/{BATCH_S3}/{PLATE}-Well{well}-{site}/segmentation_masks/Plate_{PLATE}_Well_Well{well}_Site_{site}_{object_type}_Objects.tiff"
-                download_file.write(f"cp '{s3_file}' {mask_dir}\n")
-                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_mask_dir}'\n")
+                download_file.write(f"cp -n '{s3_file}' {mask_dir}\n")
+                s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_mask_dir}'\n")
 
             # Add overlay PNG files - get these from the analysis folder
             for overlay_type in ["Overlay", "SpotOverlay"]:
                 s3_file = f"{S3_PATH_WORKSPACE}/analysis/{BATCH_S3}/{PLATE}-Well{well}-{site}/Plate_{PLATE}_Well_Well{well}_Site_{site}_CorrDNA_{overlay_type}.png"
-                download_file.write(f"cp '{s3_file}' {local_dir}\n")
-                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+                download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+                s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Load Data CSV files
         load_data_csvs = [
@@ -384,8 +387,8 @@ def generate_download_list():
         # Add load data CSV files
         for csv_file in load_data_csvs:
             s3_file = f"{S3_PATH_WORKSPACE}/load_data_csv/{BATCH_S3}/{PLATE}/{csv_file}"
-            download_file.write(f"cp '{s3_file}' {local_dir}\n")
-            s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
+            download_file.write(f"cp -n '{s3_file}' {local_dir}\n")
+            s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_dir}'\n")
 
         # Metadata files
         # Create metadata directory
@@ -396,8 +399,8 @@ def generate_download_list():
 
         # Add Barcodes.csv file
         s3_file = f"{S3_PATH_WORKSPACE}/metadata/{BATCH_S3}/Barcodes.csv"
-        download_file.write(f"cp '{s3_file}' {metadata_dir}\n")
-        s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_metadata_dir}'\n")
+        download_file.write(f"cp -n '{s3_file}' {metadata_dir}\n")
+        s3_copy_file.write(f"cp -n'{s3_file}' '{s3_dest_metadata_dir}'\n")
 
         # Add pipeline files
         relative_path = "pipelines/"
@@ -441,7 +444,7 @@ def generate_download_list():
                 s3_file = (
                     f"{S3_PATH_WORKSPACE}/pipelines/{BATCH_S3}/{pipeline_file}"
                 )
-                download_file.write(f"cp '{s3_file}' {subfolder_dir}/\n")
+                download_file.write(f"cp -n '{s3_file}' {subfolder_dir}/\n")
                 s3_copy_file.write(
                     f"cp '{s3_file}' '{s3_dest_subfolder_dir}/'\n"
                 )
