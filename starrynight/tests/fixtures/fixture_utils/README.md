@@ -1,10 +1,10 @@
-# PCPIP Utils
+# Fixture Utils
 
-Utility scripts for creating, manipulating, and validating test fixtures for the PCPIP workflow.
+Utility scripts for creating, manipulating, and validating test fixtures.
 
 ## Purpose
 
-These utilities help manage the complex test fixture requirements for PCPIP (Painting + Coding Pipeline) workflows by:
+These utilities help manage the test fixture requirements by:
 
 1. **Creating test fixture datasets** from larger production data
 2. **Validating data integrity** of LoadData CSV files and referenced file paths
