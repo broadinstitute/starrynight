@@ -126,10 +126,10 @@ def validate_required_columns(
     return errors
 
 
-def check_column_pattern(
+def validate_column_pattern(
     conn: duckdb.DuckDBPyConnection, column: str, pattern: str
 ) -> list[str]:
-    """Check if values in a column match a pattern.
+    """Validate if values in a column match a pattern.
 
     Args:
         conn: Database connection with views
@@ -160,10 +160,10 @@ def check_column_pattern(
     return errors
 
 
-def run_sql_check(
+def validate_with_sql(
     conn: duckdb.DuckDBPyConnection, query: str, error_message: str
 ) -> list[str]:
-    """Run a custom SQL check.
+    """Validate data using a custom SQL query.
 
     Args:
         conn: Database connection with views
@@ -217,16 +217,16 @@ def validate_loaddata_csv(
             # Validate required columns exist, aren't null, and have matching metadata values
             errors.extend(validate_required_columns(conn, config))
 
-            # Check pattern validations for specific columns
+            # Validate pattern requirements for specific columns
             for column, pattern in (
                 config.get("columns", {}).get("pattern_check", {}).items()
             ):
-                errors.extend(check_column_pattern(conn, column, pattern))
+                errors.extend(validate_column_pattern(conn, column, pattern))
 
-            # Run custom SQL checks
+            # Validate with custom SQL checks
             for check in config.get("custom_checks", []):
                 errors.extend(
-                    run_sql_check(conn, check["sql"], check["message"])
+                    validate_with_sql(conn, check["sql"], check["message"])
                 )
 
     except duckdb.Error as e:
