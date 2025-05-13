@@ -94,6 +94,35 @@ def check_required_columns_not_null(
     except duckdb.Error as e:
         errors.append(f"Error checking null values: {str(e)}")
 
+    # Also check metadata column values match between reference and generated CSVs
+    metadata_columns = [
+        col for col in required_columns if col.startswith("Metadata_")
+    ]
+    for column in metadata_columns:
+        try:
+            # Get values from reference and generated
+            ref_values = {
+                row[0]
+                for row in conn.execute(
+                    f"SELECT DISTINCT {column} FROM reference"
+                ).fetchall()
+            }
+            gen_values = {
+                row[0]
+                for row in conn.execute(
+                    f"SELECT DISTINCT {column} FROM generated"
+                ).fetchall()
+            }
+
+            # Check that all reference values exist in generated (subset mode)
+            missing = ref_values - gen_values
+            if missing:
+                errors.append(f"Missing values in column '{column}': {missing}")
+        except duckdb.Error as e:
+            errors.append(
+                f"Error comparing values for column '{column}': {str(e)}"
+            )
+
     return errors
 
 
@@ -296,7 +325,7 @@ VALIDATION_CONFIGS = {
                 "Metadata_Well",
                 # Note: Using Metadata_Cycle instead of Metadata_SBSCycle
                 # The reference files use Metadata_Cycle while the code expects Metadata_SBSCycle
-                "Metadata_Cycle",
+                "Metadata_SBSCycle",
                 "PathName_OrigT",
                 "PathName_OrigG",
                 "PathName_OrigA",
