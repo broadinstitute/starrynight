@@ -73,7 +73,7 @@ mkdir -p ${SCRATCH_DIR}
 cp ./scratch/download_list.txt ${SCRATCH_DIR}/
 
 # Change to scratch directory
-cd ${SCRATCH_DIR}
+cd ${SCRATCH_DIR}/../
 
 # Download files using s5cmd (fast S3 command line client)
 # Install s5cmd first if not available: https://github.com/peak/s5cmd
@@ -81,6 +81,8 @@ s5cmd run download_list.txt
 
 # Verify download completion
 echo "Downloads completed. Verify files were downloaded successfully."
+
+cd -
 ```
 
 ### Compressing Files
@@ -116,12 +118,13 @@ LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
 
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
-./filter_loaddata_csv.py \
+
+uv run filter_loaddata_csv.py \
     ${LOAD_DATA_DIR} \
     ${LOAD_DATA_DIR_TRIMMED} \
     --plate Plate1 \
     --well WellA1,WellA2,WellB1 \
-    --site 0,1 \
+    --site 0,1,2,3 \
     --cycle 1,2,3
 ```
 
@@ -134,7 +137,7 @@ After filtering, use the `postprocess_loaddata_csv.py` script to handle all post
 # 1. Update file paths to match the local environment
 # 2. Rename Metadata_SBSCycle to Metadata_Cycle
 # 3. Remove the "Well" prefix from Metadata_Well values
-./postprocess_loaddata_csv.py \
+uv run postprocess_loaddata_csv.py \
     --input-dir ${LOAD_DATA_DIR_TRIMMED} \
     --fixture-id ${FIXTURE_ID} \
     --update-paths \
@@ -156,9 +159,13 @@ For more options and details, run `./postprocess_loaddata_csv.py --help`
 # Set fixture type (same as in create_starrynight_download_list.py)
 FIXTURE_ID="s1"
 
-STARRYNIGHT_REPO_REL="../../../.."
+STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
 TRIMMED_LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
-parallel python validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
+
+# Soft link images directory so it can be found when validating
+ln -s ${STARRYNIGHT_REPO_REL}/scratch/fix_s1_input/Source1/Batch1/images ${STARRYNIGHT_REPO_REL}/scratch/fix_s1_pcpip_output/Source1/Batch1/
+
+parallel uv run validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
 ```
 
 This will:

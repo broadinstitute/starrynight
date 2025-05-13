@@ -43,8 +43,8 @@ WELL_OFFSETS = {
 }
 
 # Paths
-LOCAL_INPUT_DIR = f"./scratch/fix_{FIXTURE_ID}_input"
-LOCAL_OUTPUT_DIR = f"./scratch/fix_{FIXTURE_ID}_pcpip_output"
+LOCAL_INPUT_DIR = f"./fix_{FIXTURE_ID}_input"
+LOCAL_OUTPUT_DIR = f"./fix_{FIXTURE_ID}_pcpip_output"
 
 LOCAL_PATH_IMAGES_INPUT = f"{LOCAL_INPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 LOCAL_PATH_IMAGES_OUTPUT = f"{LOCAL_OUTPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
@@ -198,7 +198,7 @@ def generate_download_list():
 
         # Cell Painting images: Illumination corrected
         for well, site, channel in itertools.product(
-            WELLS, [0, 1], ["DNA", "Phalloidin", "ZO1"]
+            WELLS, SITES, ["DNA", "Phalloidin", "ZO1"]
         ):
             relative_path = f"images_corrected/painting/{PLATE}-Well{well}/"
             local_dir, s3_dest_dir = get_paths(
