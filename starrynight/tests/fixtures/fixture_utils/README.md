@@ -16,7 +16,6 @@ These utilities help manage the test fixture requirements by:
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 - `postprocess_loaddata_csv.py`: Updates paths, headers, and identifiers in LoadData CSV files
-- `create_fixture_archive.sh`: Creates compressed archives and SHA256 checksums for fixture data
 
 ## Typical Workflow
 
@@ -25,7 +24,7 @@ These utilities help manage the test fixture requirements by:
 3. Filter LoadData CSV files using `filter_loaddata_csv.py`
 4. Validate paths using `validate_loaddata_paths.py`
 5. Compress files using image compression tools
-6. Create archives using `create_fixture_archive.sh`
+6. Create archives for distribution using standard tar and sha256sum commands
 
 ## Usage Examples
 
@@ -178,34 +177,36 @@ This will:
 
 ### Creating Fixture Archives
 
-The `create_fixture_archive.sh` script creates compressed archives of test fixture data and generates SHA256 checksums for validation and distribution.
+Use standard Unix commands to create tar.gz archives with SHA256 checksums for fixture data distribution:
 
 ```sh
 # Archive the trimmed LoadData CSVs directory
 FIXTURE_ID="s1"
 ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
 SOURCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
+ARCHIVE_NAME="fix_${FIXTURE_ID}_output.tar.gz"
 
 # Create directory for archives if it doesn't exist
 mkdir -p ${ARCHIVE_DIR}
 
-# Create archive and SHA256 checksum
-./create_fixture_archive.sh \
-    ${SOURCE_DIR} \
-    ${ARCHIVE_DIR} \
-    "fix_${FIXTURE_ID}_loaddata_trimmed"
+# Create the archive
+cd $(dirname ${SOURCE_DIR})
+tar -czf ${ARCHIVE_DIR}/${ARCHIVE_NAME} $(basename ${SOURCE_DIR})
+cd -
+
+# Generate SHA256 checksum
+cd ${ARCHIVE_DIR}
+sha256sum ${ARCHIVE_NAME} > ${ARCHIVE_NAME}.sha256
+cd -
+
+echo "Archive created: ${ARCHIVE_DIR}/${ARCHIVE_NAME}"
+echo "Checksum saved: ${ARCHIVE_DIR}/${ARCHIVE_NAME}.sha256"
 ```
-
-This will:
-
-1. Create a `tar.gz` archive of the specified directory
-2. Generate a SHA256 checksum file
-3. Save both files to the output directory
 
 The outputs can be verified later using:
 
 ```sh
 # Verify the archive integrity
 cd ${ARCHIVE_DIR}
-sha256sum -c fix_${FIXTURE_ID}_loaddata_trimmed.tar.gz.sha256
+sha256sum -c fix_${FIXTURE_ID}_output.tar.gz.sha256
 ```
