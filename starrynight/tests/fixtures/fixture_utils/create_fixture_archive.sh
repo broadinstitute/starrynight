@@ -1,33 +1,31 @@
 #!/bin/bash
 #
-# Create compressed archives of fixture data with checksums
+# Create compressed archives of fixture data with SHA256 checksums
 #
 # This script creates tar.gz archives of StarryNight test fixture directories
-# and generates checksums for future validation.
+# and generates SHA256 checksums for future validation.
 #
 # Usage:
-#   ./create_fixture_archive.sh SOURCE_DIR [OUTPUT_DIR] [ARCHIVE_NAME] [ALGORITHM]
+#   ./create_fixture_archive.sh SOURCE_DIR [OUTPUT_DIR] [ARCHIVE_NAME]
 #
 # Example:
-#   ./create_fixture_archive.sh /path/to/fixture/data ./archives fixture_data sha256
+#   ./create_fixture_archive.sh /path/to/fixture/data ./archives fixture_data
 #
 
 # Default values
 OUTPUT_DIR="./archives"
-ALGORITHM="sha256"
 
 # Function to show usage
 show_usage() {
-    echo "Usage: $0 SOURCE_DIR [OUTPUT_DIR] [ARCHIVE_NAME] [ALGORITHM]"
+    echo "Usage: $0 SOURCE_DIR [OUTPUT_DIR] [ARCHIVE_NAME]"
     echo ""
     echo "Arguments:"
     echo "  SOURCE_DIR    Source directory to archive (required)"
     echo "  OUTPUT_DIR    Directory where archive will be saved (default: ./archives)"
     echo "  ARCHIVE_NAME  Base name for the archive (default: basename of SOURCE_DIR)"
-    echo "  ALGORITHM     Checksum algorithm to use: md5 or sha256 (default: sha256)"
     echo ""
     echo "Example:"
-    echo "  $0 /path/to/fixture/data ./archives fixture_data sha256"
+    echo "  $0 /path/to/fixture/data ./archives fixture_data"
     exit 1
 }
 
@@ -60,15 +58,6 @@ else
     ARCHIVE_NAME=$(basename "$SOURCE_DIR")
 fi
 
-# Set checksum algorithm if provided
-if [ ! -z "$4" ]; then
-    if [ "$4" != "md5" ] && [ "$4" != "sha256" ]; then
-        echo "Error: Invalid algorithm. Use 'md5' or 'sha256'"
-        exit 1
-    fi
-    ALGORITHM="$4"
-fi
-
 # Full path to the archive file
 ARCHIVE_PATH="$OUTPUT_DIR/$ARCHIVE_NAME.tar.gz"
 
@@ -82,25 +71,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Generate checksum
-echo "Generating $ALGORITHM checksum for $ARCHIVE_PATH"
-if [ "$ALGORITHM" == "md5" ]; then
-    md5sum "$ARCHIVE_PATH" > "$ARCHIVE_PATH.md5"
-    CHECKSUM=$(cat "$ARCHIVE_PATH.md5" | cut -d ' ' -f 1)
-    echo "Saved checksum to: $ARCHIVE_PATH.md5"
-else
-    # Default to sha256
-    sha256sum "$ARCHIVE_PATH" > "$ARCHIVE_PATH.sha256"
-    CHECKSUM=$(cat "$ARCHIVE_PATH.sha256" | cut -d ' ' -f 1)
-    echo "Saved checksum to: $ARCHIVE_PATH.sha256"
-fi
+# Generate SHA256 checksum
+echo "Generating SHA256 checksum for $ARCHIVE_PATH"
+sha256sum "$ARCHIVE_PATH" > "$ARCHIVE_PATH.sha256"
+CHECKSUM=$(cut -d ' ' -f 1 "$ARCHIVE_PATH.sha256")
+echo "Saved checksum to: $ARCHIVE_PATH.sha256"
 
 # Print summary
 echo ""
 echo "Summary:"
 echo "Archive: $ARCHIVE_PATH"
-echo "${ALGORITHM^^}: $CHECKSUM"
+echo "SHA256: $CHECKSUM"
 echo ""
-echo "To verify: ${ALGORITHM}sum -c $ARCHIVE_PATH.$ALGORITHM"
+echo "To verify: sha256sum -c $ARCHIVE_PATH.sha256"
 
 exit 0

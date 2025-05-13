@@ -16,7 +16,7 @@ These utilities help manage the test fixture requirements by:
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 - `postprocess_loaddata_csv.py`: Updates paths, headers, and identifiers in LoadData CSV files
-- `create_fixture_archive.sh`: Creates compressed archives and checksums for fixture data
+- `create_fixture_archive.sh`: Creates compressed archives and SHA256 checksums for fixture data
 
 ## Typical Workflow
 
@@ -178,7 +178,7 @@ This will:
 
 ### Creating Fixture Archives
 
-The `create_fixture_archive.sh` script creates compressed archives of test fixture data and generates checksums for validation and distribution.
+The `create_fixture_archive.sh` script creates compressed archives of test fixture data and generates SHA256 checksums for validation and distribution.
 
 ```sh
 # Archive the trimmed LoadData CSVs directory
@@ -193,14 +193,13 @@ mkdir -p ${ARCHIVE_DIR}
 ./create_fixture_archive.sh \
     ${SOURCE_DIR} \
     ${ARCHIVE_DIR} \
-    "fix_${FIXTURE_ID}_loaddata_trimmed" \
-    sha256
+    "fix_${FIXTURE_ID}_loaddata_trimmed"
 ```
 
 This will:
 
 1. Create a `tar.gz` archive of the specified directory
-2. Generate a checksum file using the specified algorithm (SHA256 or MD5)
+2. Generate a SHA256 checksum file
 3. Save both files to the output directory
 
 The outputs can be verified later using:
