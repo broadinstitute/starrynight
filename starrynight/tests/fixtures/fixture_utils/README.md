@@ -28,6 +28,22 @@ These utilities help manage the test fixture requirements by:
 
 ## Usage Examples
 
+The following examples demonstrate a complete workflow. Set these common variables once at the start of your workflow:
+
+```sh
+# Common variables used across all steps
+FIXTURE_ID="s1"  # Change this for different fixtures: s1, s2, l1
+STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
+SCRATCH_DIR="${STARRYNIGHT_REPO_REL}/scratch"
+
+# Derived paths
+FIX_INPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_input"
+FIX_OUTPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_pcpip_output"
+LOAD_DATA_DIR="${FIX_OUTPUT_DIR}/Source1/workspace/load_data_csv/Batch1/Plate1"
+LOAD_DATA_DIR_TRIMMED="${LOAD_DATA_DIR}_trimmed"
+ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
+```
+
 ### Creating Download Lists
 
 `create_starrynight_download_list.py` creates two files:
@@ -38,16 +54,11 @@ These utilities help manage the test fixture requirements by:
 The script supports different fixture types (s1, s2, l1) through a `FIXTURE_ID` variable at the top of the script.
 
 ```sh
-# Set required environment variables
+# Set required environment variables for S3 access
 export BUCKET="your-source-bucket"
 export PROJECT="your-project-path"
 export BATCH="your-batch-name"
 export DEST_BUCKET="your-destination-bucket"
-
-# Edit FIXTURE_ID in the script to select fixture type
-# FIXTURE_ID = "s1"  # For fix_s1 fixture
-# FIXTURE_ID = "s2"  # For fix_s2 fixture
-# FIXTURE_ID = "l1"  # For fix_l1 fixture
 
 # Run the script
 uv run create_starrynight_download_list.py
@@ -58,10 +69,6 @@ uv run create_starrynight_download_list.py
 These commands download the test fixture files from AWS S3 using the previously generated download list.
 
 ```sh
-# Define repository paths
-STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
-SCRATCH_DIR=${STARRYNIGHT_REPO_REL}/scratch
-
 # Backup existing scratch directory if it exists
 if [ -d "${SCRATCH_DIR}" ]; then
     mv ${SCRATCH_DIR} ${SCRATCH_DIR}_archive
@@ -89,15 +96,7 @@ cd -
 ### Compressing Files
 
 ```sh
-# Set fixture type (same as in create_starrynight_download_list.py)
-FIXTURE_ID="s1"
-
 # Compress TIFF and CSV files to reduce disk usage
-
-## Compress all TIFF files
-# Define input and output directories
-FIX_INPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_input"
-FIX_OUTPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_pcpip_output"
 
 # Compress TIFF files in both directories
 find ${FIX_INPUT_DIR}  -type f -name "*.tiff" | parallel 'magick {} -compress jpeg -quality 80 {}'
@@ -110,13 +109,6 @@ find ${FIX_OUTPUT_DIR} -type f -name "*.csv" | parallel 'gzip -9 {}'
 ### Filtering LoadData CSVs
 
 ```sh
-# Set fixture type (same as in create_starrynight_download_list.py)
-FIXTURE_ID="s1"
-
-STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
-LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1"
-LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
-
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
 
@@ -157,16 +149,11 @@ For more options and details, run `uv run postprocess_loaddata_csv.py --help`
 ### Validating LoadData Paths
 
 ```sh
-# Set fixture type (same as in create_starrynight_download_list.py)
-FIXTURE_ID="s1"
-
-STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
-TRIMMED_LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
-
 # Soft link images directory so it can be found when validating
-ln -s ${STARRYNIGHT_REPO_REL}/scratch/fix_s1_input/Source1/Batch1/images ${STARRYNIGHT_REPO_REL}/scratch/fix_s1_pcpip_output/Source1/Batch1/
+ln -s ${FIX_INPUT_DIR}/Source1/Batch1/images ${FIX_OUTPUT_DIR}/Source1/Batch1/
 
-parallel uv run validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
+# Validate all pipeline CSVs in parallel
+parallel uv run validate_loaddata_paths.py ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
 ```
 
 This will:
@@ -180,18 +167,15 @@ This will:
 Use standard Unix commands to create tar.gz archives with SHA256 checksums for fixture data distribution:
 
 ```sh
-# Archive the trimmed LoadData CSVs directory
-FIXTURE_ID="s1"
-ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
-SOURCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
+# Set archive name
 ARCHIVE_NAME="fix_${FIXTURE_ID}_output.tar.gz"
 
 # Create directory for archives if it doesn't exist
 mkdir -p ${ARCHIVE_DIR}
 
 # Create the archive
-cd $(dirname ${SOURCE_DIR})
-tar -czf ${ARCHIVE_DIR}/${ARCHIVE_NAME} $(basename ${SOURCE_DIR})
+cd $(dirname ${LOAD_DATA_DIR_TRIMMED})
+tar -czf ${ARCHIVE_DIR}/${ARCHIVE_NAME} $(basename ${LOAD_DATA_DIR_TRIMMED})
 cd -
 
 # Generate SHA256 checksum
@@ -208,5 +192,5 @@ The outputs can be verified later using:
 ```sh
 # Verify the archive integrity
 cd ${ARCHIVE_DIR}
-sha256sum -c fix_${FIXTURE_ID}_output.tar.gz.sha256
+sha256sum -c ${ARCHIVE_NAME}.sha256
 ```
