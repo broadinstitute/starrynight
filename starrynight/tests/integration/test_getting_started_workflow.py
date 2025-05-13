@@ -227,8 +227,8 @@ WORKFLOW_CONFIGS = [
         "file_pattern": "Batch1_Plate1_*_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
         "pipeline_type": "sbs_illum_calc",
-        "skip": True,
-        "skip_reason": "Failing",
+        "skip": False,  # Now testing with simplified validator
+        "skip_reason": None,
     },
     # SBS illum apply LoadData configuration
     {

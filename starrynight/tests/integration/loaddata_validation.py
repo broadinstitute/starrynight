@@ -316,8 +316,10 @@ VALIDATION_CONFIGS = {
             "required": [
                 "Metadata_Plate",
                 "Metadata_Site",
-                "Metadata_SBSCycle",
                 "Metadata_Well",
+                # Note: Using Metadata_Cycle instead of Metadata_SBSCycle
+                # The reference files use Metadata_Cycle while the code expects Metadata_SBSCycle
+                "Metadata_Cycle",
                 "PathName_OrigT",
                 "PathName_OrigG",
                 "PathName_OrigA",
@@ -344,8 +346,8 @@ VALIDATION_CONFIGS = {
         },
         "custom_checks": [
             {
-                "sql": "SELECT COUNT(*) FROM generated WHERE Metadata_SBSCycle IS NULL",
-                "message": "Found rows with missing SBS cycle information",
+                "sql": "SELECT COUNT(*) FROM generated WHERE Metadata_Cycle IS NULL",
+                "message": "Found rows with missing cycle information",
             }
         ],
     },
