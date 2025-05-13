@@ -170,13 +170,13 @@ def generate_and_validate_loaddata(  # noqa: C901
 
     # Report any validation errors
     if report.warnings:
-        print(
-            f"CSV validation has {len(report.warnings)} warning(s):\n{report.format_warnings()}"
-        )
+        warning_message = f"CSV validation has {len(report.warnings)} warning(s):\n{report.format_warnings()}"
+        print(warning_message)  # Print to console immediately (but don't fail)
     if report.errors:
-        pytest.fail(
-            f"CSV validation failed with {len(report.errors)} error(s):\n{report.format_errors()}"
-        )
+        error_message = f"CSV validation failed with {len(report.errors)} error(s):\n{report.format_errors()}"
+        print(error_message)  # Print to console immediately
+        pytest.fail(error_message)  # Fail the test with same message
+
     # Clean up the temporary file
     return loaddata_dir, matching_files
 
