@@ -2,11 +2,14 @@
 
 # FIXME: Ensure that the folder created is workspace/analysis/Batch1 and not workspace/analysis/20...
 import itertools
-
-# Configuration
 import os
 import sys
 from pathlib import Path
+
+# Fixture configuration - change this for different fixture types (s1, s2, l1)
+FIXTURE_ID = "s1"
+
+# Configuration
 
 # Get configuration from environment variables
 BUCKET = os.environ.get("BUCKET")
@@ -40,8 +43,8 @@ WELL_OFFSETS = {
 }
 
 # Paths
-LOCAL_INPUT_DIR = "./scratch/starrynight_example_input"
-LOCAL_OUTPUT_DIR = "./scratch/pcpip_example_output"
+LOCAL_INPUT_DIR = f"./scratch/fix_{FIXTURE_ID}_input"
+LOCAL_OUTPUT_DIR = f"./scratch/fix_{FIXTURE_ID}_pcpip_output"
 
 LOCAL_PATH_IMAGES_INPUT = f"{LOCAL_INPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 LOCAL_PATH_IMAGES_OUTPUT = f"{LOCAL_OUTPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
@@ -53,10 +56,10 @@ S3_PATH_WORKSPACE = f"s3://{BUCKET}/projects/{PROJECT_S3}/workspace"
 
 # New S3 destination bucket
 S3_DEST_BUCKET = f"s3://{DEST_BUCKET}"
-S3_DEST_INPUT_DIR = f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/starrynight_example_input"
-S3_DEST_OUTPUT_DIR = (
-    f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/pcpip_example_output"
+S3_DEST_INPUT_DIR = (
+    f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/fix_{FIXTURE_ID}_input"
 )
+S3_DEST_OUTPUT_DIR = f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/fix_{FIXTURE_ID}_pcpip_output"
 S3_DEST_IMAGES_INPUT = f"{S3_DEST_INPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 S3_DEST_IMAGES_OUTPUT = f"{S3_DEST_OUTPUT_DIR}/{PROJECT_LOCAL}/{BATCH_LOCAL}"
 S3_DEST_WORKSPACE_INPUT = f"{S3_DEST_INPUT_DIR}/{PROJECT_LOCAL}/workspace"

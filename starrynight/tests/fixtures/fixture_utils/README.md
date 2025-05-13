@@ -12,8 +12,8 @@ These utilities help manage the test fixture requirements by:
 
 ## Components
 
-- `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures from AWS S3 buckets
-- `compress_starrynight_example.sh`: Compresses TIFF and CSV files to reduce disk usage
+- `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures (fix_s1, fix_s2, fix_l1) from AWS S3 buckets
+- `compress_starrynight_example.sh`: Compresses TIFF and CSV files in fixture data to reduce disk usage
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 
@@ -34,12 +34,19 @@ These utilities help manage the test fixture requirements by:
 - `download_list.txt`: Commands to download from S3 to local
 - `s3_copy_list.txt`: Commands to copy from one S3 bucket to another
 
+The script supports different fixture types (s1, s2, l1) through a `FIXTURE_ID` variable at the top of the script.
+
 ```sh
 # Set required environment variables
 export BUCKET="your-source-bucket"
 export PROJECT="your-project-path"
 export BATCH="your-batch-name"
 export DEST_BUCKET="your-destination-bucket"
+
+# Edit FIXTURE_ID in the script to select fixture type
+# FIXTURE_ID = "s1"  # For fix_s1 fixture
+# FIXTURE_ID = "s2"  # For fix_s2 fixture
+# FIXTURE_ID = "l1"  # For fix_l1 fixture
 
 # Run the script
 python create_starrynight_download_list.py
@@ -79,15 +86,22 @@ echo "Downloads completed. Verify files were downloaded successfully."
 ### Compressing Files
 
 ```sh
+# Set fixture type (same as in create_starrynight_download_list.py)
+FIXTURE_ID="s1"
+
 # Compress TIFF and CSV files to reduce disk usage
+# Note: You may need to modify the script to use FIXTURE_ID
 ./compress_starrynight_example.sh
 ```
 
 ### Filtering LoadData CSVs
 
 ```sh
+# Set fixture type (same as in create_starrynight_download_list.py)
+FIXTURE_ID="s1"
+
 STARRYNIGHT_REPO_REL="../../../.."
-LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1"
+LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1"
 LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
 
 ./filter_loaddata_csv.py \
@@ -104,9 +118,12 @@ LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
 After filtering, you may need to update paths in the CSV files:
 
 ```sh
+# Set fixture type (same as in create_starrynight_download_list.py)
+FIXTURE_ID="s1"
+
 # Update this
 STARRYNIGHT_REPO=/Users/shsingh/Documents/GitHub/starrynight
-BASE_DIR=${STARRYNIGHT_REPO}/scratch/pcpip_example_output
+BASE_DIR=${STARRYNIGHT_REPO}/scratch/fix_${FIXTURE_ID}_pcpip_output
 
 # Replace path in all trimmed CSV files
 find ${LOAD_DATA_DIR_TRIMMED} \
@@ -117,8 +134,11 @@ find ${LOAD_DATA_DIR_TRIMMED} \
 ### Validating LoadData Paths
 
 ```sh
+# Set fixture type (same as in create_starrynight_download_list.py)
+FIXTURE_ID="s1"
+
 STARRYNIGHT_REPO_REL="../../../.."
-TRIMMED_LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/pcpip_example_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
+TRIMMED_LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
 parallel python validate_loaddata_paths.py ${TRIMMED_LOAD_DATA_DIR}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
 ```
 
