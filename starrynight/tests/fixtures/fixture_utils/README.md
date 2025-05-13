@@ -13,9 +13,10 @@ These utilities help manage the test fixture requirements by:
 ## Components
 
 - `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures (fix_s1, fix_s2, fix_l1) from AWS S3 buckets
-- `compress_starrynight_example.sh`: Compresses TIFF and CSV files in fixture data to reduce disk usage
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
+- `postprocess_loaddata_csv.py`: Updates paths, headers, and identifiers in LoadData CSV files
+- `create_fixture_archive.py`: Creates compressed archives and checksums for fixture data
 
 ## Typical Workflow
 
@@ -23,7 +24,8 @@ These utilities help manage the test fixture requirements by:
 2. Download files from S3
 3. Filter LoadData CSV files using `filter_loaddata_csv.py`
 4. Validate paths using `validate_loaddata_paths.py`
-5. Compress files using `compress_starrynight_example.sh`
+5. Compress files using image compression tools
+6. Create archives using `create_fixture_archive.py`
 
 ## Usage Examples
 
@@ -151,7 +153,7 @@ This script will:
 - Rename the `Metadata_SBSCycle` header to `Metadata_Cycle` if it exists
 - Remove "Well" prefix from values in the `Metadata_Well` column (e.g., "WellA1" becomes "A1")
 
-For more options and details, run `./postprocess_loaddata_csv.py --help`
+For more options and details, run `uv run postprocess_loaddata_csv.py --help`
 
 ### Validating LoadData Paths
 
@@ -173,3 +175,38 @@ This will:
 1. Check if files referenced in the CSV exist
 2. Output a summary of missing files
 3. Create a `missing_files.csv` if any files are missing
+
+### Creating Fixture Archives
+
+The `create_fixture_archive.py` script creates compressed archives of test fixture data and generates checksums for validation and distribution.
+
+```sh
+# Archive the trimmed LoadData CSVs directory
+FIXTURE_ID="s1"
+ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
+SOURCE_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1_trimmed"
+
+# Create directory for archives if it doesn't exist
+mkdir -p ${ARCHIVE_DIR}
+
+# Create archive and SHA256 checksum
+uv run create_fixture_archive.py \
+    --source-dir ${SOURCE_DIR} \
+    --output-dir ${ARCHIVE_DIR} \
+    --base-name "fix_${FIXTURE_ID}_loaddata_trimmed" \
+    --algorithm sha256
+```
+
+This will:
+
+1. Create a `tar.gz` archive of the specified directory
+2. Generate a checksum file using the specified algorithm (SHA256 or MD5)
+3. Save both files to the output directory
+
+The outputs can be verified later using:
+
+```sh
+# Verify the archive integrity
+cd ${ARCHIVE_DIR}
+sha256sum -c fix_${FIXTURE_ID}_loaddata_trimmed.tar.gz.sha256
+```
