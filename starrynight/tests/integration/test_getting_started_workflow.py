@@ -31,17 +31,15 @@ Running the tests:
 - Run specific step and setup: pytest test_getting_started_workflow.py -v -k "cp_illum_calc and full"
 """
 
-import json
-import re
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import pandas as pd
 import pytest
 
-from .loaddata_validation import validate_loaddata_csv
+from .loaddata_validation import compare_csvs
 
 
 def generate_and_validate_loaddata(  # noqa: C901
@@ -80,7 +78,6 @@ def generate_and_validate_loaddata(  # noqa: C901
     output_dir_key = config["output_dir_key"]
     file_pattern = config["file_pattern"]
     ref_csv_pattern = config["ref_csv_pattern"]
-    pipeline_type = config["pipeline_type"]
     command_parts = config["command_parts"]
 
     # Build the command for generating LoadData files
@@ -149,7 +146,7 @@ def generate_and_validate_loaddata(  # noqa: C901
         df.to_csv(temp_path, index=False)
 
     # Validate the combined data against reference LoadData CSV
-    generated_csv_path = temp_path
+    gen_csv_path = temp_path
 
     # Find the matching reference CSV in the output_dir
     ref_load_data_dir = output_dir["load_data_csv_dir"]
@@ -160,27 +157,27 @@ def generate_and_validate_loaddata(  # noqa: C901
     ref_csv_path = ref_csv_paths[0]
 
     # Validate the LoadData CSV against the reference file using the validation framework
-    errors = validate_loaddata_csv(
-        generated_csv_path=generated_csv_path,
-        ref_csv_path=ref_csv_path,
-        pipeline_type=pipeline_type,
+    report = compare_csvs(
+        reference_csv_path=ref_csv_path,
+        generated_csv_path=gen_csv_path,
+        skip_column_substrings=["PathName"],
     )
 
-    # Report any validation errors
-    if errors:
-        error_message = "\n".join(
-            f"Error {i + 1}: {error}" for i, error in enumerate(errors)
-        )
-        pytest.fail(
-            f"CSV validation failed with {len(errors)} error(s):\n{error_message}"
-        )
-
-    # Clean up the temporary file
     try:
         temp_path.unlink()
     except Exception as e:
         print(f"Warning: Failed to delete temporary file {temp_path}: {e}")
 
+    # Report any validation errors
+    if report.warnings:
+        print(
+            f"CSV validation has {len(report.warnings)} warning(s):\n{report.format_warnings()}"
+        )
+    if report.errors:
+        pytest.fail(
+            f"CSV validation failed with {len(report.errors)} error(s):\n{report.format_errors()}"
+        )
+    # Clean up the temporary file
     return loaddata_dir, matching_files
 
 
@@ -193,7 +190,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "cp_illum_calc_dir",
         "file_pattern": "Batch1_Plate1_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
-        "pipeline_type": "cp_illum_calc",
         "skip": False,
         "skip_reason": None,
     },
@@ -204,7 +200,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "cp_illum_apply_dir",
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
-        "pipeline_type": "cp_illum_apply",
         "skip": False,
         "skip_reason": None,
     },
@@ -215,7 +210,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "cp_segcheck_dir",
         "file_pattern": "Batch1_Plate1_*_segcheck.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
-        "pipeline_type": "cp_segmentation_check",
         "skip": True,
         "skip_reason": "Not implemented",
     },
@@ -226,8 +220,7 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "sbs_illum_calc_dir",
         "file_pattern": "Batch1_Plate1_*_illum_calc.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
-        "pipeline_type": "sbs_illum_calc",
-        "skip": True,  # Now testing with simplified validator
+        "skip": False,  # Now testing with simplified validator
         "skip_reason": None,
     },
     # SBS illum apply LoadData configuration
@@ -237,7 +230,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "sbs_illum_apply_dir",
         "file_pattern": "Batch1_Plate1_*_illum_apply.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline6.csv",
-        "pipeline_type": "sbs_illum_apply",
         "skip": False,
         "skip_reason": None,
     },
@@ -248,7 +240,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "sbs_preprocess_dir",
         "file_pattern": "Batch1_Plate1_*_preprocess.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
-        "pipeline_type": "sbs_preprocessing",
         "skip": True,
         "skip_reason": "Not implemented",
     },
@@ -259,7 +250,6 @@ WORKFLOW_CONFIGS = [
         "output_dir_key": "analysis_dir",
         "file_pattern": "Batch1_Plate1_*_analysis.csv",
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
-        "pipeline_type": "analysis",
         "skip": True,
         "skip_reason": "Not implemented",
     },

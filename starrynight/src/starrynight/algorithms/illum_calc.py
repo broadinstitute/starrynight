@@ -69,7 +69,8 @@ def write_loaddata_illum_calc(
 
     # Setup metadata headers
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
+        f"Metadata_{col}"
+        for col in ["Batch", "Plate", "Site", "Well", "SBSCycle"]
     ]
 
     if use_legacy:
