@@ -2,11 +2,11 @@
 
 # FIXME: Ensure that the folder created is workspace/analysis/Batch1 and not workspace/analysis/20...
 import itertools
-from pathlib import Path
 
 # Configuration
 import os
 import sys
+from pathlib import Path
 
 # Get configuration from environment variables
 BUCKET = os.environ.get("BUCKET")
@@ -17,7 +17,9 @@ DEST_BUCKET = os.environ.get("DEST_BUCKET")
 # Check if all required environment variables are set
 if not all([BUCKET, PROJECT_S3, BATCH_S3, DEST_BUCKET]):
     print("Error: Required environment variables not set.")
-    print("Please set BUCKET, PROJECT, BATCH, and DEST_BUCKET environment variables.")
+    print(
+        "Please set BUCKET, PROJECT, BATCH, and DEST_BUCKET environment variables."
+    )
     sys.exit(1)
 
 PROJECT_LOCAL = "Source1"
@@ -51,9 +53,7 @@ S3_PATH_WORKSPACE = f"s3://{BUCKET}/projects/{PROJECT_S3}/workspace"
 
 # New S3 destination bucket
 S3_DEST_BUCKET = f"s3://{DEST_BUCKET}"
-S3_DEST_INPUT_DIR = (
-    f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/starrynight_example_input"
-)
+S3_DEST_INPUT_DIR = f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/starrynight_example_input"
 S3_DEST_OUTPUT_DIR = (
     f"{S3_DEST_BUCKET}/projects/2024_03_12_starrynight/pcpip_example_output"
 )
@@ -83,19 +83,20 @@ def create_directories():
     ).mkdir(parents=True, exist_ok=True)
 
     # Illumination correction directory
-    Path(f"{LOCAL_PATH_IMAGES_OUTPUT}/illum/{PLATE}").mkdir(parents=True, exist_ok=True)
-
-    # Workspace directory
-    Path(f"{LOCAL_PATH_WORKSPACE_OUTPUT}/load_data_csv/${BATCH_LOCAL}/{PLATE}").mkdir(
+    Path(f"{LOCAL_PATH_IMAGES_OUTPUT}/illum/{PLATE}").mkdir(
         parents=True, exist_ok=True
     )
+
+    # Workspace directory
+    Path(
+        f"{LOCAL_PATH_WORKSPACE_OUTPUT}/load_data_csv/${BATCH_LOCAL}/{PLATE}"
+    ).mkdir(parents=True, exist_ok=True)
 
     # Other directories will be created as needed when generating the file list
 
 
 def get_paths(relative_path, is_input=True, is_image=True):
-    """
-    Generate local and S3 destination paths from a relative path.
+    """Generate local and S3 destination paths from a relative path.
 
     Args:
         relative_path (str): The relative path to append to base paths
@@ -104,15 +105,22 @@ def get_paths(relative_path, is_input=True, is_image=True):
 
     Returns:
         tuple: (local_dir, s3_dest_dir)
+
     """
     if is_image:
-        local_base = LOCAL_PATH_IMAGES_INPUT if is_input else LOCAL_PATH_IMAGES_OUTPUT
+        local_base = (
+            LOCAL_PATH_IMAGES_INPUT if is_input else LOCAL_PATH_IMAGES_OUTPUT
+        )
         s3_base = S3_DEST_IMAGES_INPUT if is_input else S3_DEST_IMAGES_OUTPUT
     else:
         local_base = (
-            LOCAL_PATH_WORKSPACE_INPUT if is_input else LOCAL_PATH_WORKSPACE_OUTPUT
+            LOCAL_PATH_WORKSPACE_INPUT
+            if is_input
+            else LOCAL_PATH_WORKSPACE_OUTPUT
         )
-        s3_base = S3_DEST_WORKSPACE_INPUT if is_input else S3_DEST_WORKSPACE_OUTPUT
+        s3_base = (
+            S3_DEST_WORKSPACE_INPUT if is_input else S3_DEST_WORKSPACE_OUTPUT
+        )
 
     local_dir = f"{local_base}/{relative_path}"
     s3_dest_dir = f"{s3_base}/{relative_path}"
@@ -152,7 +160,9 @@ def generate_download_list():
                 seq_str = f"{WELL_OFFSETS[well] + site:04d}"
                 # Format point as 4-digit string
                 site_str = f"{site:04d}"
-                relative_path = f"images/{PLATE}/20X_CP_{PLATE}_{PLATE_FOLDER_SUFFIX}/"
+                relative_path = (
+                    f"images/{PLATE}/20X_CP_{PLATE}_{PLATE_FOLDER_SUFFIX}/"
+                )
                 local_dir, s3_dest_dir = get_paths(
                     relative_path, is_input=True, is_image=True
                 )
@@ -161,7 +171,9 @@ def generate_download_list():
                 s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
         # Illumination correction images
-        for cycle, channel in itertools.product(CYCLES, ["DNA", "A", "T", "G", "C"]):
+        for cycle, channel in itertools.product(
+            CYCLES, ["DNA", "A", "T", "G", "C"]
+        ):
             relative_path = f"illum/{PLATE}/"
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
@@ -175,7 +187,9 @@ def generate_download_list():
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
-            s3_file = f"{S3_PATH_IMAGES}/{relative_path}{PLATE}_Illum{channel}.npy"
+            s3_file = (
+                f"{S3_PATH_IMAGES}/{relative_path}{PLATE}_Illum{channel}.npy"
+            )
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -192,7 +206,8 @@ def generate_download_list():
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for well, csvfile in itertools.product(
-            WELLS, ["Cells", "ConfluentRegions", "Experiment", "Image", "Nuclei"]
+            WELLS,
+            ["Cells", "ConfluentRegions", "Experiment", "Image", "Nuclei"],
         ):
             relative_path = f"images_corrected/painting/{PLATE}-Well{well}/"
             local_dir, s3_dest_dir = get_paths(
@@ -206,7 +221,9 @@ def generate_download_list():
         for well, site, cycle, channel in itertools.product(
             WELLS, SITES, CYCLES, ["A", "T", "G", "C", "DAPI"]
         ):
-            relative_path = f"images_aligned/barcoding/{PLATE}-Well{well}-{site}/"
+            relative_path = (
+                f"images_aligned/barcoding/{PLATE}-Well{well}-{site}/"
+            )
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
@@ -217,13 +234,13 @@ def generate_download_list():
         for well, site, csvfile in itertools.product(
             WELLS, SITES, ["Experiment", "Image"]
         ):
-            relative_path = f"images_aligned/barcoding/{PLATE}-Well{well}-{site}/"
+            relative_path = (
+                f"images_aligned/barcoding/{PLATE}-Well{well}-{site}/"
+            )
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
-            s3_file = (
-                f"{S3_PATH_IMAGES}/{relative_path}BarcodingApplication_{csvfile}.csv"
-            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}BarcodingApplication_{csvfile}.csv"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -231,7 +248,9 @@ def generate_download_list():
         for well, site, cycle, channel in itertools.product(
             WELLS, SITES, CYCLES, ["A", "T", "G", "C"]
         ):
-            relative_path = f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            relative_path = (
+                f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            )
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
@@ -241,7 +260,9 @@ def generate_download_list():
 
         # DAPI is present only in the first cycle
         for well, site in itertools.product(WELLS, SITES):
-            relative_path = f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            relative_path = (
+                f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            )
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
@@ -250,15 +271,17 @@ def generate_download_list():
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
         for well, site, csvfile in itertools.product(
-            WELLS, SITES, ["BarcodeFoci", "PreFoci", "Experiment", "Image", "Nuclei"]
+            WELLS,
+            SITES,
+            ["BarcodeFoci", "PreFoci", "Experiment", "Image", "Nuclei"],
         ):
-            relative_path = f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            relative_path = (
+                f"images_corrected/barcoding/{PLATE}-Well{well}-{site}/"
+            )
             local_dir, s3_dest_dir = get_paths(
                 relative_path, is_input=False, is_image=True
             )
-            s3_file = (
-                f"{S3_PATH_IMAGES}/{relative_path}BarcodePreprocessing_{csvfile}.csv"
-            )
+            s3_file = f"{S3_PATH_IMAGES}/{relative_path}BarcodePreprocessing_{csvfile}.csv"
             download_file.write(f"cp '{s3_file}' {local_dir}\n")
             s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_dir}'\n")
 
@@ -412,9 +435,13 @@ def generate_download_list():
 
             for pipeline_file in files:
                 # S3 path has all files in the base directory (not in subfolders)
-                s3_file = f"{S3_PATH_WORKSPACE}/pipelines/{BATCH_S3}/{pipeline_file}"
+                s3_file = (
+                    f"{S3_PATH_WORKSPACE}/pipelines/{BATCH_S3}/{pipeline_file}"
+                )
                 download_file.write(f"cp '{s3_file}' {subfolder_dir}/\n")
-                s3_copy_file.write(f"cp '{s3_file}' '{s3_dest_subfolder_dir}/'\n")
+                s3_copy_file.write(
+                    f"cp '{s3_file}' '{s3_dest_subfolder_dir}/'\n"
+                )
 
 
 def main():
@@ -423,7 +450,9 @@ def main():
     generate_download_list()
     print(f"Download list created at {DOWNLOAD_LIST}")
     print(f"S3-to-S3 copy list created at {S3_COPY_LIST}")
-    print("Review the files and run the download/copy commands to transfer the files.")
+    print(
+        "Review the files and run the download/copy commands to transfer the files."
+    )
 
 
 if __name__ == "__main__":

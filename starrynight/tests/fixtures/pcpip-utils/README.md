@@ -1,8 +1,14 @@
-# pcpip-create-fixture
+# PCPIP Utils
 
-Tools for creating and manipulating test fixtures for PCPIP workflow.
+Utility scripts for creating, manipulating, and validating test fixtures for the PCPIP workflow.
 
-<https://github.com/broadinstitute/starrynight/tree/main/docs/tester/assets/pcpip-create-fixture>
+## Purpose
+
+These utilities help manage the complex test fixture requirements for PCPIP (Painting + Coding Pipeline) workflows by:
+
+1. **Creating test fixture datasets** from larger production data
+2. **Validating data integrity** of LoadData CSV files and referenced file paths
+3. **Optimizing disk usage** through compression techniques for large image files
 
 ## Components
 
@@ -11,9 +17,7 @@ Tools for creating and manipulating test fixtures for PCPIP workflow.
 - `filter_loaddata_csv.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
 - `validate_loaddata_paths.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 
-## Workflow
-
-The typical workflow for creating test fixtures is:
+## Typical Workflow
 
 1. Create download lists using `create_starrynight_download_list.py`
 2. Download files from S3

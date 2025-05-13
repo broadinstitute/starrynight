@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import os
-import pandas as pd
-import glob
 import argparse
+import glob
+import os
+
+import pandas as pd
 
 
 def process_csv_file(csv_path, filter_criteria, output_dir):
@@ -90,12 +91,21 @@ def main():
         "directory_path", help="Directory containing CSV files to process"
     )
     parser.add_argument(
-        "output_directory", help="Directory where trimmed CSV files will be saved"
+        "output_directory",
+        help="Directory where trimmed CSV files will be saved",
     )
-    parser.add_argument("--well", help="Comma-separated list of well values to keep")
-    parser.add_argument("--site", help="Comma-separated list of site values to keep")
-    parser.add_argument("--plate", help="Comma-separated list of plate values to keep")
-    parser.add_argument("--cycle", help="Comma-separated list of cycle values to keep")
+    parser.add_argument(
+        "--well", help="Comma-separated list of well values to keep"
+    )
+    parser.add_argument(
+        "--site", help="Comma-separated list of site values to keep"
+    )
+    parser.add_argument(
+        "--plate", help="Comma-separated list of plate values to keep"
+    )
+    parser.add_argument(
+        "--cycle", help="Comma-separated list of cycle values to keep"
+    )
 
     args = parser.parse_args()
 
@@ -123,7 +133,9 @@ def main():
     # Process each CSV file
     processed_files = []
     for csv_file in csv_files:
-        output_file = process_csv_file(csv_file, filter_criteria, args.output_directory)
+        output_file = process_csv_file(
+            csv_file, filter_criteria, args.output_directory
+        )
         if output_file:
             processed_files.append(output_file)
 

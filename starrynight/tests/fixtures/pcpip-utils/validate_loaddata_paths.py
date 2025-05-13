@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import click
-import pandas as pd
 import os
 from pathlib import Path
+
+import click
+import pandas as pd
 
 
 def process_csv_file(file_path, base_path):
@@ -12,7 +13,9 @@ def process_csv_file(file_path, base_path):
     df = pd.read_csv(file_path)
 
     # Find PathName and FileName column pairs
-    pathname_columns = [col for col in df.columns if col.startswith("PathName_")]
+    pathname_columns = [
+        col for col in df.columns if col.startswith("PathName_")
+    ]
     channels = [col.replace("PathName_", "") for col in pathname_columns]
 
     # Create FilePathName columns by joining PathName and FileName columns
@@ -79,7 +82,9 @@ def main(csv_files, base_path):
             # Print summary for this file
             missing_files = result_df[~result_df["FileExists"]]
             if not missing_files.empty:
-                click.echo(f"Found {len(missing_files)} missing files in {csv_file}")
+                click.echo(
+                    f"Found {len(missing_files)} missing files in {csv_file}"
+                )
             else:
                 click.echo(f"All files in {csv_file} exist")
         else:

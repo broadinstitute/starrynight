@@ -6,6 +6,7 @@ Files used by test fixtures for the StarryNight project.
 
 - `basic_setup/`: Pre-generated files for LoadData tests - [details](basic_setup/README.md)
 - `stitch_images/`: Test images for stitching functionality - [details](stitch_images/README.md)
+- `pcpip-utils/`: Utilities for creating and validating PCPIP workflow fixtures - [details](pcpip-utils/README.md)
 
 ## Adding New Fixtures
 
