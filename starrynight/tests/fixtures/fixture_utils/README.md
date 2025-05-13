@@ -49,7 +49,7 @@ export DEST_BUCKET="your-destination-bucket"
 # FIXTURE_ID = "l1"  # For fix_l1 fixture
 
 # Run the script
-python create_starrynight_download_list.py
+uv run create_starrynight_download_list.py
 ```
 
 ### Download the files
