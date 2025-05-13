@@ -2,6 +2,7 @@
 import argparse
 import glob
 import os
+from pathlib import Path
 
 import pandas as pd
 
@@ -61,8 +62,8 @@ def process_csv_file(csv_path, filter_criteria, output_dir):
         filtered_row_count = len(df_trimmed)
 
         # Create output filename
-        base_name = os.path.basename(csv_path)
-        output_path = os.path.join(output_dir, base_name)
+        base_name = Path.name(csv_path)
+        output_path = Path.joinpath(output_dir, base_name)
 
         # Save trimmed dataframe
         df_trimmed.to_csv(output_path, index=False)
@@ -110,7 +111,7 @@ def main():
     args = parser.parse_args()
 
     # Create output directory if it doesn't exist
-    os.makedirs(args.output_directory, exist_ok=True)
+    Path(args.output_directory).mkdir(parents=True, exist_ok=True)
     print(f"Output will be saved to: {args.output_directory}")
 
     # Parse filter criteria
@@ -127,7 +128,7 @@ def main():
             print(f"Filtering {col}: keeping {values}")
 
     # Find all CSV files in the directory
-    csv_files = glob.glob(os.path.join(args.directory_path, "*.csv"))
+    csv_files = Path.glob(Path.joinpath(args.directory_path, "*.csv"))
     print(f"Found {len(csv_files)} CSV files to process")
 
     # Process each CSV file

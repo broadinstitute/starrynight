@@ -45,7 +45,7 @@ def process_csv_file(file_path, base_path):
         # Add base_path to make paths relative if provided
         if base_path:
             result_df["FilePath"] = result_df["FilePath"].apply(
-                lambda x: os.path.join(base_path, x)
+                lambda x: Path.joinpath(base_path, x)
             )
 
         # Check which files exist
