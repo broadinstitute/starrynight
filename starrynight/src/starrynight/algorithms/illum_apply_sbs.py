@@ -151,7 +151,8 @@ def write_loaddata_illum_apply(
                 )
     # Setup metadata headers
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+        f"Metadata_{col}"
+        for col in ["Batch", "Plate", "Site", "Well", "Well_Value"]
     ]
 
     filename_heads = [
@@ -172,7 +173,15 @@ def write_loaddata_illum_apply(
         for cycle in plate_cycles_list
     ]
 
-    # Add illum apply specific chumns
+    # Add Frame_Cycle##_Illum* columns
+    # For non-legacy mode, use channel directly; for legacy mode, use mapped channel
+    illum_frame_heads = [
+        f"Frame_Cycle{int(cycle):02d}_Illum{legacy_channel_map.get(ch, ch) if use_legacy else ch}"
+        for ch in plate_channel_list
+        for cycle in plate_cycles_list
+    ]
+
+    # Add illum apply specific columns
     illum_pathname_heads = [
         get_illum_pathname_header(cycle, ch, use_legacy, legacy_channel_map)
         for ch in plate_channel_list
@@ -193,6 +202,7 @@ def write_loaddata_illum_apply(
             *frame_heads,
             *illum_filename_heads,
             *illum_pathname_heads,
+            *illum_frame_heads,
         ]
     )
 
@@ -248,6 +258,12 @@ def write_loaddata_illum_apply(
                 for cycle in plate_cycles_list
             ]
 
+            # Setup illum frame values (always 0 for illum files)
+            illum_frame_values = ["0" for _ in illum_frame_heads]
+
+            # Extract well value from well_id by stripping 'Well' prefix if present
+            well_value = well_id[4:] if well_id.startswith("Well") else well_id
+
             # make sure frame heads are matched with their order in the filenames
             loaddata_writer.writerow(
                 [
@@ -256,6 +272,8 @@ def write_loaddata_illum_apply(
                     sample_index.plate_id,
                     site_id,
                     well_id,
+                    # Well_Value is always needed
+                    well_value,
                     # Filename heads
                     *filenames,
                     # Pathname heads
@@ -266,6 +284,8 @@ def write_loaddata_illum_apply(
                     *illum_filename_values,
                     # illum pathnames
                     *illum_pathname_values,
+                    # illum frames (legacy only)
+                    *illum_frame_values,
                 ]
             )
 
