@@ -186,6 +186,72 @@ def validate_with_sql(
     return errors
 
 
+def check_csv_relationships(
+    conn: duckdb.DuckDBPyConnection, ignore_path_cols: bool = True
+) -> dict[str, bool]:
+    """Check if reference is a subset of or identical to generated CSV.
+
+    Args:
+        conn: Database connection with views
+        ignore_path_cols: Whether to ignore PathName columns
+
+    Returns:
+        Dictionary with 'is_subset' and 'is_identical' boolean results
+
+    """
+    results = {"is_subset": False, "is_identical": False}
+
+    try:
+        # Get column lists
+        ref_cols = (
+            conn.execute("PRAGMA table_info(reference)")
+            .fetchdf()["name"]
+            .tolist()
+        )
+
+        # Remove PathName columns if specified
+        if ignore_path_cols:
+            ref_cols = [
+                col for col in ref_cols if not col.startswith("PathName_")
+            ]
+
+        # Build column list for SQL query
+        col_list = ", ".join(ref_cols)
+
+        # Check if reference is a subset of generated
+        subset_query = f"""
+        SELECT COUNT(*) FROM (
+            SELECT {col_list} FROM reference
+            EXCEPT
+            SELECT {col_list} FROM generated
+        )
+        """
+
+        # Check if generated is a subset of reference (for identity check)
+        superset_query = f"""
+        SELECT COUNT(*) FROM (
+            SELECT {col_list} FROM generated
+            EXCEPT
+            SELECT {col_list} FROM reference
+        )
+        """
+
+        # Run queries
+        subset_count = conn.execute(subset_query).fetchone()[0]
+        results["is_subset"] = subset_count == 0
+
+        if results["is_subset"]:
+            # Only check for identity if subset check passed
+            superset_count = conn.execute(superset_query).fetchone()[0]
+            results["is_identical"] = superset_count == 0
+
+    except Exception:
+        # Return defaults (False) on any error
+        pass
+
+    return results
+
+
 def validate_loaddata_csv(
     generated_csv_path: Path,
     ref_csv_path: Path,
@@ -228,6 +294,21 @@ def validate_loaddata_csv(
                 errors.extend(
                     validate_with_sql(conn, check["sql"], check["message"])
                 )
+
+            # Check CSV relationships (subset and identity)
+            relationships = check_csv_relationships(conn)
+
+            # Add informational messages about relationship checks
+            if relationships["is_identical"]:
+                print(
+                    "✅ Reference and generated CSVs are identical (ignoring PathName columns)"
+                )
+            elif relationships["is_subset"]:
+                print(
+                    "✅ Reference CSV is a subset of generated CSV (ignoring PathName columns)"
+                )
+            else:
+                print("❌ Reference CSV is not a subset of generated CSV")
 
     except duckdb.Error as e:
         errors.append(f"Database error: {str(e)} (check CSV format/types)")
