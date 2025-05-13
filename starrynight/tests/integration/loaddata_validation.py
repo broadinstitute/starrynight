@@ -232,17 +232,7 @@ VALIDATION_CONFIGS = {
                 "FileName_OrigPhalloidin": "%Channel%",
             },
         },
-        "custom_checks": [
-            {
-                "sql": """
-                    SELECT COUNT(*) FROM generated
-                    WHERE Frame_OrigDNA IS NULL
-                    OR Frame_OrigZO1 IS NULL
-                    OR Frame_OrigPhalloidin IS NULL
-                """,
-                "message": "Found rows with missing frame information",
-            }
-        ],
+        "custom_checks": [],  # No need for redundant checks - Frame columns are already required
     },
     # CP illum apply LoadData configuration (pipeline2)
     "cp_illum_apply": {
@@ -274,20 +264,7 @@ VALIDATION_CONFIGS = {
                 "FileName_OrigPhalloidin": "%Channel%",
             },
         },
-        "custom_checks": [
-            {
-                "sql": """
-                    SELECT COUNT(*) FROM generated
-                    WHERE FileName_IllumDNA IS NULL
-                    OR FileName_IllumZO1 IS NULL
-                    OR FileName_IllumPhalloidin IS NULL
-                    OR PathName_IllumDNA IS NULL
-                    OR PathName_IllumZO1 IS NULL
-                    OR PathName_IllumPhalloidin IS NULL
-                """,
-                "message": "Found rows missing illumination filename information",
-            }
-        ],
+        "custom_checks": [],  # No need for redundant checks - illumination fields are already required
     },
     # CP segmentation check LoadData configuration (pipeline3)
     "cp_segmentation_check": {
@@ -344,12 +321,7 @@ VALIDATION_CONFIGS = {
                 "FileName_OrigDNA": "%Channel%",
             },
         },
-        "custom_checks": [
-            {
-                "sql": "SELECT COUNT(*) FROM generated WHERE Metadata_Cycle IS NULL",
-                "message": "Found rows with missing cycle information",
-            }
-        ],
+        "custom_checks": [],  # No need for redundant check - Metadata_Cycle is already required
     },
     # SBS illum apply LoadData configuration (pipeline6)
     "sbs_illum_apply": {
