@@ -31,7 +31,6 @@ Running the tests:
 - Run specific step and setup: pytest test_getting_started_workflow.py -v -k "cp_illum_calc and full"
 """
 
-import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any
