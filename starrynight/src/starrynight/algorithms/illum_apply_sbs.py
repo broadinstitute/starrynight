@@ -284,7 +284,7 @@ def write_loaddata_illum_apply(
                     *illum_filename_values,
                     # illum pathnames
                     *illum_pathname_values,
-                    # illum frames (legacy only)
+                    # illum frames
                     *illum_frame_values,
                 ]
             )
@@ -398,7 +398,7 @@ def gen_illum_apply_sbs_load_data(
 ###################################
 
 
-def generate_illum_apply_sbs_pipeline(
+def generate_illum_apply_sbs_pipeline(  # noqa: C901
     pipeline: Pipeline,
     load_data_path: Path | CloudPath,
     nuclei_channel: str,
