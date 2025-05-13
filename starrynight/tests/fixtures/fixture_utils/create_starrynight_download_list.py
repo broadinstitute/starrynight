@@ -137,8 +137,8 @@ def get_paths(relative_path, is_input=True, is_image=True):
 def generate_download_list():
     # Initialize both files
     with (
-        Path.open()(DOWNLOAD_LIST, "w") as download_file,
-        Path.open()(S3_COPY_LIST, "w") as s3_copy_file,
+        Path(DOWNLOAD_LIST).open("w") as download_file,
+        Path(S3_COPY_LIST).open("w") as s3_copy_file,
     ):
         # SBS images
         for cycle in CYCLES:
