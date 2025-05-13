@@ -446,7 +446,7 @@ def generate_download_list():
                 )
                 download_file.write(f"cp -n '{s3_file}' {subfolder_dir}/\n")
                 s3_copy_file.write(
-                    f"cp '{s3_file}' '{s3_dest_subfolder_dir}/'\n"
+                    f"cp -n'{s3_file}' '{s3_dest_subfolder_dir}/'\n"
                 )
 
 
