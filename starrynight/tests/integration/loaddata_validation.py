@@ -359,8 +359,8 @@ VALIDATION_CONFIGS = {
                 "Metadata_Plate",
                 "Metadata_Site",
                 "Metadata_Well",
-                # Note: Many more columns would be needed for a complete validation
-                # but this covers the basic metadata requirements
+                # Note: Unlike SBS illum calc, this doesn't have Metadata_Cycle
+                # Cycle info is embedded in column names like Cycle01_*, Cycle02_*, etc.
             ],
             "pattern_check": {},
         },
