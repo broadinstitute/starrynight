@@ -54,10 +54,10 @@ def column_exists(conn: duckdb.DuckDBPyConnection, column: str) -> bool:
         return False
 
 
-def check_required_columns_not_null(
+def validate_required_columns(
     conn: duckdb.DuckDBPyConnection, config: dict[str, Any]
 ) -> list[str]:
-    """Check that required columns exist and don't contain nulls.
+    """Check that required columns exist, don't contain nulls, and validate metadata values.
 
     Args:
         conn: Database connection with views
@@ -214,8 +214,8 @@ def validate_loaddata_csv(
         with duckdb.connect(":memory:") as conn:
             create_db_views(conn, generated_csv_path, ref_csv_path)
 
-            # Validate required columns exist and aren't null
-            errors.extend(check_required_columns_not_null(conn, config))
+            # Validate required columns exist, aren't null, and have matching metadata values
+            errors.extend(validate_required_columns(conn, config))
 
             # Check pattern validations for specific columns
             for column, pattern in (
