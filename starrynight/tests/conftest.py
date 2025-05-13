@@ -41,7 +41,13 @@ from pathlib import Path
 
 import pooch
 import pytest
+from click.testing import CliRunner
 from pooch import Untar
+
+from starrynight.cli.exp import init as exp_init
+from starrynight.cli.exp import new as exp_new
+from starrynight.cli.index import gen_index
+from starrynight.cli.inv import gen_inv
 
 # Configure a single Pooch registry for all test data
 STARRYNIGHT_CACHE = pooch.create(
@@ -363,23 +369,14 @@ def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
         input_dir = fix_s1_input_dir["input_dir"]
 
         # Step 1: Initialize experiment configuration
-        exp_init_cmd = [
-            "starrynight",
-            "exp",
-            "init",
-            "-e",
-            "Pooled CellPainting [Generic]",
-            "-o",
-            str(workspace_dir),
-        ]
-
-        # Run the command and check it was successful
-        result = subprocess.run(
-            exp_init_cmd, capture_output=True, text=True, check=False
+        runner = CliRunner()
+        result = runner.invoke(
+            exp_init,
+            ["-e", "Pooled CellPainting [Generic]", "-o", str(workspace_dir)],
         )
 
         # Check if the command was successful
-        assert result.returncode == 0, (
+        assert result.exit_code == 0, (
             f"Experiment init command failed: {result.stderr}"
         )
 
@@ -412,23 +409,12 @@ def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
         assert exp_init_path.exists(), "Modified experiment_init.json not found"
 
         # Step 3: Generate inventory
-        inventory_cmd = [
-            "starrynight",
-            "inventory",
-            "gen",
-            "-d",
-            str(input_dir),
-            "-o",
-            str(inventory_dir),
-        ]
-
-        # Run the command and check it was successful
-        result = subprocess.run(
-            inventory_cmd, capture_output=True, text=True, check=False
+        result = runner.invoke(
+            gen_inv, ["-d", str(input_dir), "-o", str(inventory_dir)]
         )
 
         # Check if the command was successful
-        assert result.returncode == 0, (
+        assert result.exit_code == 0, (
             f"Inventory generation command failed: {result.stderr}"
         )
 
@@ -437,26 +423,15 @@ def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
         assert inventory_file.exists(), "Inventory file was not created"
 
         # Step 4: Generate index
-        index_gen_cmd = [
-            "starrynight",
-            "index",
-            "gen",
-            "-i",
-            str(inventory_file),
-            "-o",
-            str(index_dir),
-        ]
-
         # Create the index directory if it doesn't exist
         index_dir.mkdir(exist_ok=True, parents=True)
 
-        # Run the command and check it was successful
-        result = subprocess.run(
-            index_gen_cmd, capture_output=True, text=True, check=False
+        result = runner.invoke(
+            gen_index, ["-i", str(inventory_file), "-o", str(index_dir)]
         )
 
         # Check if the command was successful
-        assert result.returncode == 0, (
+        assert result.exit_code == 0, (
             f"Index generation command failed: {result.stderr}"
         )
 
@@ -465,27 +440,22 @@ def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
         assert index_file.exists(), "Index file was not created"
 
         # Step 5: Create experiment file
-        exp_create_cmd = [
-            "starrynight",
-            "exp",
-            "new",
-            "-i",
-            str(index_file),
-            "-e",
-            "Pooled CellPainting [Generic]",
-            "-c",
-            str(exp_init_path),
-            "-o",
-            str(workspace_dir),
-        ]
-
-        # Run the command and check it was successful
-        result = subprocess.run(
-            exp_create_cmd, capture_output=True, text=True, check=False
+        result = runner.invoke(
+            exp_new,
+            [
+                "-i",
+                str(index_file),
+                "-e",
+                "Pooled CellPainting [Generic]",
+                "-c",
+                str(exp_init_path),
+                "-o",
+                str(workspace_dir),
+            ],
         )
 
         # Check if the command was successful
-        assert result.returncode == 0, (
+        assert result.exit_code == 0, (
             f"Experiment file creation command failed: {result.stderr}"
         )
 

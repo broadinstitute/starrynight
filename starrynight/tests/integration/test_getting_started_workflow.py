@@ -38,6 +38,15 @@ from typing import Any
 
 import pandas as pd
 import pytest
+from click.testing import CliRunner
+
+from starrynight.cli.analysis import gen_analysis_load_data
+from starrynight.cli.illum import (
+    gen_illum_apply_load_data_cli,
+    gen_illum_calc_load_data_cli,
+)
+from starrynight.cli.preprocess import gen_preprocess_load_data
+from starrynight.cli.segcheck import gen_segcheck_load_data
 
 from .loaddata_validation import compare_csvs
 
@@ -80,26 +89,50 @@ def generate_and_validate_loaddata(  # noqa: C901
     ref_csv_pattern = config["ref_csv_pattern"]
     command_parts = config["command_parts"]
 
-    # Build the command for generating LoadData files
-    loaddata_cmd = [
-        "starrynight",
-        *command_parts,  # e.g., ["illum", "calc", "loaddata"]
-        "-i",
-        str(index_file),
-        "-o",
-        str(workspace[output_dir_key]),
-        "--exp_config",
-        str(experiment_json_path),
-        "--use_legacy",
-    ]
+    # Determine which CLI command to use based on command_parts
+    command_function = None
+    cli_args = []
 
-    # Run the command and check it was successful
-    result = subprocess.run(
-        loaddata_cmd, capture_output=True, text=True, check=False
+    # Map command_parts to the appropriate CLI function
+    if "illum" in command_parts:
+        if "calc" in command_parts:
+            command_function = gen_illum_calc_load_data_cli
+            if "--sbs" in command_parts:
+                cli_args.append("--sbs")
+        elif "apply" in command_parts:
+            command_function = gen_illum_apply_load_data_cli
+            if "--sbs" in command_parts:
+                cli_args.append("--sbs")
+    elif "segcheck" in command_parts:
+        command_function = gen_segcheck_load_data
+    elif "preprocess" in command_parts:
+        command_function = gen_preprocess_load_data
+    elif "analysis" in command_parts:
+        command_function = gen_analysis_load_data
+
+    assert command_function is not None, (
+        f"Could not determine CLI command for {command_parts}"
     )
 
+    # Build the arguments for the CLI command
+    cli_args.extend(
+        [
+            "-i",
+            str(index_file),
+            "-o",
+            str(workspace[output_dir_key]),
+            "--exp_config",
+            str(experiment_json_path),
+            "--use_legacy",
+        ]
+    )
+
+    # Use CliRunner to invoke the command
+    runner = CliRunner()
+    result = runner.invoke(command_function, cli_args)
+
     # Check if the command was successful
-    assert result.returncode == 0, (
+    assert result.exit_code == 0, (
         f"{loaddata_name} LoadData generation command failed: {result.stderr}"
     )
 
