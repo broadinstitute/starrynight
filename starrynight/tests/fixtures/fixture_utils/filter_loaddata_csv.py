@@ -62,8 +62,9 @@ def process_csv_file(csv_path, filter_criteria, output_dir):
         filtered_row_count = len(df_trimmed)
 
         # Create output filename
-        base_name = Path.name(csv_path)
-        output_path = Path.joinpath(output_dir, base_name)
+        path_obj = Path(csv_path)
+        base_name = path_obj.name
+        output_path = Path(output_dir) / base_name
 
         # Save trimmed dataframe
         df_trimmed.to_csv(output_path, index=False)
@@ -128,7 +129,8 @@ def main():
             print(f"Filtering {col}: keeping {values}")
 
     # Find all CSV files in the directory
-    csv_files = Path.glob(Path.joinpath(args.directory_path, "*.csv"))
+    path_obj = Path(args.directory_path)
+    csv_files = list(path_obj.glob("*.csv"))
     print(f"Found {len(csv_files)} CSV files to process")
 
     # Process each CSV file
