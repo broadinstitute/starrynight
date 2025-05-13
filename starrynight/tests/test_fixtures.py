@@ -43,39 +43,6 @@ def test_fix_s1_input_dir(fix_s1_input_dir):
         print(f"  {img}")
 
 
-def test_fix_s1_workspace(fix_s1_workspace):
-    """Test that the FIX-S1 workspace fixture is working correctly.
-
-    Note: The fixture already ensures directory creation.
-    This test focuses on functional validation of the workspace.
-    """
-    # Verify all keys are present in the returned dictionary
-    expected_keys = [
-        "workspace_dir",
-        "index_dir",
-        "inventory_dir",
-        "inventory_inv_dir",
-        "cp_illum_calc_dir",
-        "cp_illum_apply_dir",
-        "sbs_illum_calc_dir",
-        "sbs_illum_apply_dir",
-        "experiment_json",
-        "experiment_init_json",
-    ]
-    for key in expected_keys:
-        assert key in fix_s1_workspace, (
-            f"Missing '{key}' in workspace fixture output"
-        )
-
-    # Verify we can write to these directories (functional test)
-    test_file = fix_s1_workspace["workspace_dir"] / "test_file.txt"
-    test_file.write_text("Test content")
-    assert test_file.exists()
-
-    # Print the directory structure for debugging
-    print(f"FIX-S1 workspace directory: {fix_s1_workspace['workspace_dir']}")
-
-
 def test_fix_s1_output_dir(fix_s1_output_dir):
     """Test that the FIX-S1 output directory fixture is working correctly.
 
@@ -110,6 +77,39 @@ def test_fix_s1_output_dir(fix_s1_output_dir):
     print("FIX-S1 LoadData CSV files:")
     for csv_file in load_data_files[:3]:  # Show the first 3 files
         print(f"  {csv_file}")
+
+
+def test_fix_s1_workspace(fix_s1_workspace):
+    """Test that the FIX-S1 workspace fixture is working correctly.
+
+    Note: The fixture already ensures directory creation.
+    This test focuses on functional validation of the workspace.
+    """
+    # Verify all keys are present in the returned dictionary
+    expected_keys = [
+        "workspace_dir",
+        "index_dir",
+        "inventory_dir",
+        "inventory_inv_dir",
+        "cp_illum_calc_dir",
+        "cp_illum_apply_dir",
+        "sbs_illum_calc_dir",
+        "sbs_illum_apply_dir",
+        "experiment_json",
+        "experiment_init_json",
+    ]
+    for key in expected_keys:
+        assert key in fix_s1_workspace, (
+            f"Missing '{key}' in workspace fixture output"
+        )
+
+    # Verify we can write to these directories (functional test)
+    test_file = fix_s1_workspace["workspace_dir"] / "test_file.txt"
+    test_file.write_text("Test content")
+    assert test_file.exists()
+
+    # Print the directory structure for debugging
+    print(f"FIX-S1 workspace directory: {fix_s1_workspace['workspace_dir']}")
 
 
 @pytest.mark.parametrize(
