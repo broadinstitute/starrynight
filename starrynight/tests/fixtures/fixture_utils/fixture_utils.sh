@@ -61,9 +61,6 @@ cd -
 find ${FIX_INPUT_DIR} -type f -name "*.tiff" | parallel 'magick {} -compress jpeg -quality 80 {}'
 find ${FIX_OUTPUT_DIR} -type f -name "*.tiff" | parallel 'magick {} -compress jpeg -quality 80 {}'
 
-# Compress CSV files in output directory
-find ${FIX_OUTPUT_DIR} -type f -name "*.csv" | parallel 'gzip -9 {}'
-
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
 uv run filter_loaddata_csv.py \
