@@ -1,4 +1,6 @@
-You working on the StarryNight codebase and need to assist with testing.
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository, in specific, for assisting with testing.
 
 Here's the testing plan:
 
