@@ -322,8 +322,8 @@ class LoadDataValidator:
                 self.errors.append(f"Extra {label} in generated CSV: {extra}")
 
 
-# Dictionary of pipeline configurations for different LoadData types
-PIPELINE_CONFIGS = {
+# Dictionary of validation configurations for different LoadData CSV formats
+LOADDATA_VALIDATION_CONFIGS = {
     # CP illum calc LoadData configuration (pipeline1)
     "cp_illum_calc": {
         "name": "CP Illumination Calculation",
@@ -582,12 +582,12 @@ def validate_loaddata_csv(
         Error messages (empty list if validation passed)
 
     """
-    # Get the appropriate pipeline configuration
-    if pipeline_type not in PIPELINE_CONFIGS:
+    # Get the appropriate validation configuration
+    if pipeline_type not in LOADDATA_VALIDATION_CONFIGS:
         return [f"Unknown pipeline type: {pipeline_type}"]
 
-    pipeline_config = PIPELINE_CONFIGS[pipeline_type]
+    validation_config = LOADDATA_VALIDATION_CONFIGS[pipeline_type]
 
     # Create validator and run validation
-    validator = LoadDataValidator(pipeline_config)
+    validator = LoadDataValidator(validation_config)
     return validator.validate(generated_csv_path, ref_csv_path)
