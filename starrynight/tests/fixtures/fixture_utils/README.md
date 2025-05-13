@@ -58,7 +58,7 @@ These commands download the test fixture files from AWS S3 using the previously 
 
 ```sh
 # Define repository paths
-STARRYNIGHT_REPO_REL="../../../.."
+STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
 SCRATCH_DIR=${STARRYNIGHT_REPO_REL}/scratch
 
 # Backup existing scratch directory if it exists
@@ -70,7 +70,7 @@ fi
 mkdir -p ${SCRATCH_DIR}
 
 # Copy the download list to scratch directory
-cp download_list.txt ${SCRATCH_DIR}/
+cp ./scratch/download_list.txt ${SCRATCH_DIR}/
 
 # Change to scratch directory
 cd ${SCRATCH_DIR}
@@ -90,8 +90,18 @@ echo "Downloads completed. Verify files were downloaded successfully."
 FIXTURE_ID="s1"
 
 # Compress TIFF and CSV files to reduce disk usage
-# Note: You may need to modify the script to use FIXTURE_ID
-./compress_starrynight_example.sh
+
+## Compress all TIFF files
+# Define input and output directories
+FIX_INPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_input"
+FIX_OUTPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_pcpip_output"
+
+# Compress TIFF files in both directories
+find ${FIX_INPUT_DIR}  -type f -name "*.tiff" | parallel 'magick {} -compress jpeg -quality 80 {}'
+find ${FIX_OUTPUT_DIR} -type f -name "*.tiff" | parallel 'magick {} -compress jpeg -quality 80 {}'
+
+# Compress CSV files in output directory
+find ${FIX_OUTPUT_DIR} -type f -name "*.csv" | parallel 'gzip -9 {}'
 ```
 
 ### Filtering LoadData CSVs
@@ -100,10 +110,12 @@ FIXTURE_ID="s1"
 # Set fixture type (same as in create_starrynight_download_list.py)
 FIXTURE_ID="s1"
 
-STARRYNIGHT_REPO_REL="../../../.."
+STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)"
 LOAD_DATA_DIR="${STARRYNIGHT_REPO_REL}/scratch/fix_${FIXTURE_ID}_pcpip_output/Source1/workspace/load_data_csv/Batch1/Plate1"
 LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
 
+# IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
+# Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
 ./filter_loaddata_csv.py \
     ${LOAD_DATA_DIR} \
     ${LOAD_DATA_DIR_TRIMMED} \
@@ -113,23 +125,30 @@ LOAD_DATA_DIR_TRIMMED=${LOAD_DATA_DIR}_trimmed
     --cycle 1,2,3
 ```
 
-#### Updating Paths in Filtered CSVs
+#### Post-processing LoadData CSVs
 
-After filtering, you may need to update paths in the CSV files:
+After filtering, use the `postprocess_loaddata_csv.py` script to handle all post-processing tasks:
 
 ```sh
-# Set fixture type (same as in create_starrynight_download_list.py)
-FIXTURE_ID="s1"
-
-# Update this
-STARRYNIGHT_REPO=/Users/shsingh/Documents/GitHub/starrynight
-BASE_DIR=${STARRYNIGHT_REPO}/scratch/fix_${FIXTURE_ID}_pcpip_output
-
-# Replace path in all trimmed CSV files
-find ${LOAD_DATA_DIR_TRIMMED} \
-    -name "*.csv" \
-    -exec sed -i.bak "s|/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/|${BASE_DIR}/Source1/Batch1/|g" {} \; -exec rm {}.bak \;
+# Run all post-processing steps on the filtered CSVs:
+# 1. Update file paths to match the local environment
+# 2. Rename Metadata_SBSCycle to Metadata_Cycle
+# 3. Remove the "Well" prefix from Metadata_Well values
+./postprocess_loaddata_csv.py \
+    --input-dir ${LOAD_DATA_DIR_TRIMMED} \
+    --fixture-id ${FIXTURE_ID} \
+    --update-paths \
+    --update-headers \
+    --clean-wells
 ```
+
+This script will:
+- Automatically determine the repository's absolute path using git
+- Update all file paths in the CSVs from the original S3 paths to local paths
+- Rename the `Metadata_SBSCycle` header to `Metadata_Cycle` if it exists
+- Remove "Well" prefix from values in the `Metadata_Well` column (e.g., "WellA1" becomes "A1")
+
+For more options and details, run `./postprocess_loaddata_csv.py --help`
 
 ### Validating LoadData Paths
 
