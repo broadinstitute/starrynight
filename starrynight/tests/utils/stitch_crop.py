@@ -1,4 +1,3 @@
-import os
 import time
 from pathlib import Path
 
@@ -6,15 +5,15 @@ from ij import IJ
 from loci.plugins import LociExporter
 from loci.plugins.out import Exporter
 
-input_file_location = "D:\\AMD_screening\\20231011_batch_1"
+input_file_location = "/Users/shsingh/Documents/GitHub/starrynight/scratch/fix_s1_pcpip_output/Source1/Batch1"
 step_to_stitch = "images_corrected"
-subdir = "images_corrected\\painting"
+subdir = "images_corrected/painting"
 out_subdir_tag = "Plate_Well"
 rows = "2"
 columns = "2"
 imperwell = "unused"
 stitchorder = "unused"
-channame = "DNA"
+channame = "CorrDNA"
 size = "1480"
 overlap_pct = "10"
 tileperside = "2"
@@ -22,7 +21,7 @@ filterstring = "unused"
 scalingstring = "1.99"
 awsdownload = "unused"
 bucketname = "unused"
-localtemp = "D:\\FIJI_temp"
+localtemp = "/Users/shsingh/Documents/GitHub/starrynight/scratch/FIJI_temp"
 downloadfilter = "unused"
 round_or_square = "square"
 quarter_if_round = "unused"
@@ -107,29 +106,42 @@ for x in a:
             c.rename(subdir / c.name)
 
 if subdir.is_dir():
-    dirlist = list(subdir.iterdir())
     welllist = []
     presuflist = []
     permprefix = None
     permsuffix = None
-    for eachfile in dirlist:
-        filename = eachfile.name
-        if ".tif" in filename:
-            # removed filterstring for test
-            if "Overlay" not in filename:
-                prefix_before_well, suffix_with_well = filename.split("_Well_")
-                well, suffix_after_well = suffix_with_well.split("_Site_")
-                channel_suffix = suffix_after_well[
-                    suffix_after_well.index("_") + 1 :
-                ]
-                if (prefix_before_well, channel_suffix) not in presuflist:
-                    presuflist.append((prefix_before_well, channel_suffix))
-                if well not in welllist:
-                    welllist.append(well)
-                if channame in channel_suffix:
-                    if permprefix is None:
-                        permprefix = prefix_before_well
-                        permsuffix = channel_suffix
+
+    # Get all well directories
+    well_dirs = [d for d in subdir.iterdir() if d.is_dir()]
+
+    for well_dir in well_dirs:
+        # Extract well name from directory name (e.g., 'Plate1-WellA1' -> 'WellA1')
+        well = well_dir.name.split("-")[1]
+        if well not in welllist:
+            welllist.append(well)
+
+        # Process all files in this well directory
+        for eachfile in well_dir.iterdir():
+            filename = eachfile.name
+            if ".tif" in filename and "Overlay" not in filename:
+                # Files follow pattern: Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
+                try:
+                    # Use the same parsing logic as before but adapted to the new format
+                    prefix_before_well, suffix_with_well = filename.split(
+                        "_Well_"
+                    )
+                    well_with_site, suffix = suffix_with_well.split("_Site_")
+                    site_num, channel_suffix = suffix.split("_", 1)
+
+                    if (prefix_before_well, channel_suffix) not in presuflist:
+                        presuflist.append((prefix_before_well, channel_suffix))
+
+                    if channame in channel_suffix:
+                        if permprefix is None:
+                            permprefix = prefix_before_well
+                            permsuffix = channel_suffix
+                except Exception as e:
+                    print(f"Error parsing filename {filename}: {e}")
     for eachpresuf in presuflist:
         if eachpresuf[1][-4:] != ".tif":
             if eachpresuf[1][-5:] != ".tiff":
@@ -149,6 +161,17 @@ if subdir.is_dir():
 
         for eachwell in welllist:
             # simplified for test
+            # Find the correct well directory
+            well_dir = None
+            for d in well_dirs:
+                if d.name.split("-")[1] == eachwell:
+                    well_dir = d
+                    break
+
+            if well_dir is None:
+                print(f"Could not find directory for well {eachwell}")
+                continue
+
             standard_grid_instructions = [
                 "type=[Grid: row-by-row] order=[Right & Down                ] grid_size_x="
                 + rows
@@ -157,7 +180,7 @@ if subdir.is_dir():
                 + " tile_overlap="
                 + overlap_pct
                 + " first_file_index_i=0 directory="
-                + subdir
+                + str(well_dir)
                 + " file_names=",
                 " output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 compute_overlap computation_parameters=[Save computation time (but use more RAM)] image_output=[Fuse and display]",
             ]
@@ -169,6 +192,7 @@ if subdir.is_dir():
                 tile_subdir_persuf = tile_subdir / thissuffixnicename
                 if not tile_subdir_persuf.exists():
                     tile_subdir_persuf.mkdir()
+                # Pattern: Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff
                 filename = (
                     thisprefix + "_Well_" + eachwell + "_Site_{i}_" + thissuffix
                 )
@@ -300,6 +324,8 @@ if subdir.is_dir():
         print("Must identify well as round or square")
 else:
     print("Could not find input directory ", subdir)
-for eachlogfile in ["TileConfiguration.txt"]:
-    (subdir / eachlogfile).rename(out_subdir / eachlogfile)
+# Commented out since we're working with individual well directories
+# and TileConfiguration.txt might be in different locations
+# for eachlogfile in ["TileConfiguration.txt"]:
+#     (subdir / eachlogfile).rename(out_subdir / eachlogfile)
 print("done")
