@@ -46,7 +46,7 @@ class VincentAstToIR(BaseTransformer):
 
     def well_id(self, items) -> dict:
         # assert len(set(items)) == 1
-        return {"well_id": "Well" + "".join(items)}
+        return {"well_id": "".join(items)}
 
     def site_id(self, items) -> dict:
         # assert len(set(items)) == 1
