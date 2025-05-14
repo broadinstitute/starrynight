@@ -2,14 +2,20 @@
 
 import os
 import time
-
+import logging
 from ij import IJ
 from loci.plugins import LociExporter
 from loci.plugins.out import Exporter
 
-input_file_location = "D:\\AMD_screening\\20231011_batch_1"
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+input_file_location = "../../scratch/fix_s1_pcpip_output/Source1/Batch1"
 step_to_stitch = "images_corrected"
-subdir = "images_corrected\\painting"
+subdir = "images_corrected/painting"
 out_subdir_tag = "Plate_Well"
 rows = "2"
 columns = "2"
@@ -23,7 +29,7 @@ filterstring = "unused"
 scalingstring = "1.99"
 awsdownload = "unused"
 bucketname = "unused"
-localtemp = "D:\\FIJI_temp"
+localtemp = "../../scratch/FIJI_temp"
 downloadfilter = "unused"
 round_or_square = "square"
 quarter_if_round = "unused"
@@ -69,7 +75,9 @@ def savefile(im, imname, plugin, compress="false"):
         print("failed 5 times at saving")
 
 
+logger.info(f"Top output folder: {top_outfolder}")
 if not os.path.exists(top_outfolder):
+    logger.info(f"Creating top output folder: {top_outfolder}")
     os.mkdir(top_outfolder)
 
 # Define and create the parent folders where the images will be output
@@ -78,11 +86,18 @@ tile_outdir = os.path.join(top_outfolder, (step_to_stitch + "_cropped"))
 downsample_outdir = os.path.join(
     top_outfolder, (step_to_stitch + "_stitched_10X")
 )
+logger.info(
+    f"Output folders: \n - Stitched: {outfolder}\n - Cropped: {tile_outdir}\n - Downsampled: {downsample_outdir}"
+)
+
 if not os.path.exists(outfolder):
+    logger.info(f"Creating output folder: {outfolder}")
     os.mkdir(outfolder)
 if not os.path.exists(tile_outdir):
+    logger.info(f"Creating tile output folder: {tile_outdir}")
     os.mkdir(tile_outdir)
 if not os.path.exists(downsample_outdir):
+    logger.info(f"Creating downsample output folder: {downsample_outdir}")
     os.mkdir(downsample_outdir)
 
 # Define and create the batch-specific subfolders where the images will be output
@@ -97,44 +112,77 @@ if not os.path.exists(out_subdir):
     os.mkdir(out_subdir)
 
 subdir = os.path.join(input_file_location, subdir)
+logger.info(f"Input subdirectory: {subdir}")
 
 # bypassed awsdownload == 'True' for test
 
+logger.info(f"Checking if directory exists: {subdir}")
 a = os.listdir(subdir)
+logger.info(f"Contents of {subdir}: {a}")
+
 for x in a:
     if os.path.isdir(os.path.join(subdir, x)):
+        logger.info(f"Processing subdirectory: {x}")
         b = os.listdir(os.path.join(subdir, x))
         for c in b:
+            src = os.path.join(subdir, x, c)
+            dst = os.path.join(subdir, c)
+            logger.info(f"Moving file: {src} -> {dst}")
             os.rename(os.path.join(subdir, x, c), os.path.join(subdir, c))
 
 if os.path.isdir(subdir):
+    logger.info(f"Processing directory content: {subdir}")
     dirlist = os.listdir(subdir)
+    logger.info(f"Files in directory: {dirlist}")
     welllist = []
     presuflist = []
     permprefix = None
     permsuffix = None
     for eachfile in dirlist:
         if ".tif" in eachfile:
+            logger.info(f"Processing TIFF file: {eachfile}")
             # removed filterstring for test
             if "Overlay" not in eachfile:
-                prefixBeforeWell, suffixWithWell = eachfile.split("_Well_")
-                Well, suffixAfterWell = suffixWithWell.split("_Site_")
-                channelSuffix = suffixAfterWell[
-                    suffixAfterWell.index("_") + 1 :
-                ]
-                if (prefixBeforeWell, channelSuffix) not in presuflist:
-                    presuflist.append((prefixBeforeWell, channelSuffix))
-                if Well not in welllist:
-                    welllist.append(Well)
-                if channame in channelSuffix:
-                    if permprefix is None:
-                        permprefix = prefixBeforeWell
-                        permsuffix = channelSuffix
+                try:
+                    prefixBeforeWell, suffixWithWell = eachfile.split("_Well_")
+                    Well, suffixAfterWell = suffixWithWell.split("_Site_")
+                    logger.info(
+                        f"File parts: Prefix={prefixBeforeWell}, Well={Well}, SuffixAfter={suffixAfterWell}"
+                    )
+                    channelSuffix = suffixAfterWell[
+                        suffixAfterWell.index("_") + 1 :
+                    ]
+                    logger.info(f"Channel suffix: {channelSuffix}")
+                    if (prefixBeforeWell, channelSuffix) not in presuflist:
+                        presuflist.append((prefixBeforeWell, channelSuffix))
+                        logger.info(
+                            f"Added to presuflist: {(prefixBeforeWell, channelSuffix)}"
+                        )
+                    if Well not in welllist:
+                        welllist.append(Well)
+                        logger.info(f"Added to welllist: {Well}")
+                    if channame in channelSuffix:
+                        logger.info(
+                            f"Found target channel ({channame}) in {channelSuffix}"
+                        )
+                        if permprefix is None:
+                            permprefix = prefixBeforeWell
+                            permsuffix = channelSuffix
+                            logger.info(
+                                f"Set permanent prefix: {permprefix} and suffix: {permsuffix}"
+                            )
+                except Exception as e:
+                    logger.error(f"Error processing file {eachfile}: {e}")
+
+    logger.info(f"Before filtering presuflist: {presuflist}")
     for eachpresuf in presuflist:
         if eachpresuf[1][-4:] != ".tif":
             if eachpresuf[1][-5:] != ".tiff":
                 presuflist.remove(eachpresuf)
+                logger.info(f"Removed from presuflist: {eachpresuf}")
     presuflist.sort()
+    logger.info(f"Final welllist: {welllist}")
+    logger.info(f"Final presuflist: {presuflist}")
     print(welllist, presuflist)
 
     if round_or_square == "square":
