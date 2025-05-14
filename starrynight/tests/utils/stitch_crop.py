@@ -131,7 +131,7 @@ def savefile(im, imname, plugin, compress="false"):
     """
     attemptcount = 0
     imname = tiffextend(imname)
-    print("Saving ", imname, im.width, im.height)
+    logger.info(f"Saving {imname}, width={im.width}, height={im.height}")
 
     # Simple save without compression
     if compress.lower() != "true":
@@ -147,11 +147,11 @@ def savefile(im, imname, plugin, compress="false"):
                 )
                 exporter = Exporter(plugin, im)
                 exporter.run()
-                print("Succeeded after attempt ", attemptcount)
+                logger.info(f"Succeeded after attempt {attemptcount}")
                 return
             except:
                 attemptcount += 1
-        print("failed 5 times at saving")
+        logger.error(f"Failed 5 times at saving {imname}")
 
 
 # STEP 1: Create directory structure for output files
@@ -304,7 +304,9 @@ if os.path.isdir(subdir):
     presuflist.sort()
     logger.info(f"Final welllist: {welllist}")
     logger.info(f"Final presuflist: {presuflist}")
-    print(welllist, presuflist)
+    logger.info(
+        f"Analysis complete - wells: {welllist}, channels: {presuflist}"
+    )
 
     # Confirm proceeding after file analysis
     if not confirm_continue(
@@ -410,17 +412,8 @@ if os.path.isdir(subdir):
 
                 # STEP 8: Scale the stitched image
                 # This scales the barcoding and cell painting images to match each other
-                print(
-                    "Scale...",
-                    "x="
-                    + scalingstring
-                    + " y="
-                    + scalingstring
-                    + " width="
-                    + width
-                    + " height="
-                    + height
-                    + " interpolation=Bilinear average create",
+                logger.info(
+                    f"Scale... x={scalingstring} y={scalingstring} width={width} height={height} interpolation=Bilinear average create"
                 )
                 IJ.run(
                     "Scale...",
@@ -441,13 +434,8 @@ if os.path.isdir(subdir):
 
                 # STEP 9: Adjust the canvas size
                 # Padding ensures tiles are all the same size (for CellProfiler later on)
-                print(
-                    "Canvas Size...",
-                    "width="
-                    + str(upscaledsize)
-                    + " height="
-                    + str(upscaledsize)
-                    + " position=Top-Left zero",
+                logger.info(
+                    f"Canvas Size... width={upscaledsize} height={upscaledsize} position=Top-Left zero"
                 )
                 IJ.run(
                     "Canvas Size...",
@@ -517,13 +505,8 @@ if os.path.isdir(subdir):
                 im = IJ.getImage()
 
                 # STEP 12: Create downsampled version for quality control
-                print(
-                    "Scale...",
-                    "x=0.1 y=0.1 width="
-                    + str(im.width / 10)
-                    + " height="
-                    + str(im.width / 10)
-                    + " interpolation=Bilinear average create",
+                logger.info(
+                    f"Scale... x=0.1 y=0.1 width={im.width / 10} height={im.width / 10} interpolation=Bilinear average create"
                 )
                 # Scale down to 10% of original size
                 im_10 = IJ.run(
@@ -557,12 +540,12 @@ if os.path.isdir(subdir):
                 # IJ.run("Close All")
     # Code for round wells is disabled for testing
     elif round_or_square == "round":
-        print("Removed round for testing")
+        logger.info("Removed round for testing")
 
     else:
-        print("Must identify well as round or square")
+        logger.error("Must identify well as round or square")
 else:
-    print("Could not find input directory ", subdir)
+    logger.error(f"Could not find input directory {subdir}")
 
 # STEP 13: Move the TileConfiguration.txt file to the output directory
 for eachlogfile in ["TileConfiguration.txt"]:
@@ -597,4 +580,4 @@ if autorun or confirm_continue(
     logger.info(f"Channels processed: {[s[1] for s in presuflist]}")
     logger.info("=" * 50)
 
-print("done")
+logger.info("Processing completed successfully")
