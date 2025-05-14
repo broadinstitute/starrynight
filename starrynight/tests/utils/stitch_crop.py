@@ -306,6 +306,13 @@ if os.path.isdir(subdir):
         # Calculate the size of each tile
         tilesize = int(upscaledsize / tileperside)
 
+        # Confirm proceeding with stitching
+        if not confirm_continue(
+            f"Setup complete. Ready to process {len(welllist)} wells and {len(presuflist)} channels. Proceed with stitching?"
+        ):
+            logger.info("Exiting at user request before processing wells")
+            sys.exit(0)
+
         # STEP 5: Process each well
         for eachwell in welllist:
             # Create the instructions for ImageJ's Grid/Collection stitching plugin
@@ -324,6 +331,16 @@ if os.path.isdir(subdir):
                 # Second part with stitching parameters
                 " output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 compute_overlap computation_parameters=[Save computation time (but use more RAM)] image_output=[Fuse and display]",
             ]
+            # Confirm before processing this well
+            if eachwell == welllist[0]:  # Only confirm on the first well
+                if not confirm_continue(
+                    f"Ready to process well {eachwell} and all its channels. Proceed?"
+                ):
+                    logger.info(
+                        f"Exiting at user request before processing well {eachwell}"
+                    )
+                    sys.exit(0)
+
             # STEP 6: Process each channel for this well
             for eachpresuf in presuflist:  # for each channel
                 # Extract the prefix and suffix (channel name)
@@ -364,14 +381,8 @@ if os.path.isdir(subdir):
                 width = str(int(round(im.width * float(scalingstring))))
                 height = str(int(round(im.height * float(scalingstring))))
 
-                # Confirm proceeding with scaling after stitching
-                if not confirm_continue(
-                    f"Stitching complete for {eachwell} - {thissuffix}. Proceed with scaling?"
-                ):
-                    logger.info(
-                        f"Exiting at user request after stitching well {eachwell}"
-                    )
-                    sys.exit(0)
+                # Log progress of stitching
+                logger.info(f"Stitching complete for {eachwell} - {thissuffix}")
 
                 # STEP 8: Scale the stitched image
                 # This scales the barcoding and cell painting images to match each other
@@ -440,14 +451,10 @@ if os.path.isdir(subdir):
                 im = IJ.open(os.path.join(out_subdir, fileoutname))
                 im = IJ.getImage()
 
-                # Confirm proceeding with cropping
-                if not confirm_continue(
-                    f"Scaling and saving complete for {eachwell} - {thissuffix}. Proceed with cropping?"
-                ):
-                    logger.info(
-                        f"Exiting at user request after saving stitched image for {eachwell}"
-                    )
-                    sys.exit(0)
+                # Log progress
+                logger.info(
+                    f"Scaling and saving complete for {eachwell} - {thissuffix}"
+                )
 
                 # STEP 11: Crop the stitched image into tiles
                 for eachxtile in range(tileperside):
@@ -511,6 +518,11 @@ if os.path.isdir(subdir):
                     os.path.join(downsample_subdir, fileoutname),
                     plugin,
                     compress=compress,
+                )
+
+                # Log crop and downsample completion
+                logger.info(
+                    f"Cropping and downsampling complete for {eachwell} - {thissuffix}"
                 )
 
                 # Close all open images before next iteration
