@@ -1,5 +1,6 @@
 import os
 import time
+from pathlib import Path
 
 from ij import IJ
 from loci.plugins import LociExporter
@@ -68,66 +69,67 @@ def savefile(im, imname, plugin, compress="false"):
         print("failed 5 times at saving")
 
 
-if not os.path.exists(top_outfolder):
-    os.mkdir(top_outfolder)
+top_outfolder_path = Path(top_outfolder)
+if not top_outfolder_path.exists():
+    top_outfolder_path.mkdir()
 
 # Define and create the parent folders where the images will be output
-outfolder = os.path.join(top_outfolder, (step_to_stitch + "_stitched"))
-tile_outdir = os.path.join(top_outfolder, (step_to_stitch + "_cropped"))
-downsample_outdir = os.path.join(
-    top_outfolder, (step_to_stitch + "_stitched_10X")
-)
-if not os.path.exists(outfolder):
-    os.mkdir(outfolder)
-if not os.path.exists(tile_outdir):
-    os.mkdir(tile_outdir)
-if not os.path.exists(downsample_outdir):
-    os.mkdir(downsample_outdir)
+outfolder = top_outfolder_path / f"{step_to_stitch}_stitched"
+tile_outdir = top_outfolder_path / f"{step_to_stitch}_cropped"
+downsample_outdir = top_outfolder_path / f"{step_to_stitch}_stitched_10X"
+
+if not outfolder.exists():
+    outfolder.mkdir()
+if not tile_outdir.exists():
+    tile_outdir.mkdir()
+if not downsample_outdir.exists():
+    downsample_outdir.mkdir()
 
 # Define and create the batch-specific subfolders where the images will be output
-out_subdir = os.path.join(outfolder, out_subdir_tag)
-tile_subdir = os.path.join(tile_outdir, out_subdir_tag)
-downsample_subdir = os.path.join(downsample_outdir, out_subdir_tag)
-if not os.path.exists(tile_subdir):
-    os.mkdir(tile_subdir)
-if not os.path.exists(downsample_subdir):
-    os.mkdir(downsample_subdir)
-if not os.path.exists(out_subdir):
-    os.mkdir(out_subdir)
+out_subdir = outfolder / out_subdir_tag
+tile_subdir = tile_outdir / out_subdir_tag
+downsample_subdir = downsample_outdir / out_subdir_tag
+if not tile_subdir.exists():
+    tile_subdir.mkdir()
+if not downsample_subdir.exists():
+    downsample_subdir.mkdir()
+if not out_subdir.exists():
+    out_subdir.mkdir()
 
-subdir = os.path.join(input_file_location, subdir)
+subdir = Path(input_file_location) / subdir
 
 # bypassed awsdownload == 'True' for test
-a = os.listdir(subdir)
+a = list(subdir.iterdir())
 for x in a:
-    if os.path.isdir(os.path.join(subdir, x)):
-        b = os.listdir(os.path.join(subdir, x))
+    if x.is_dir():
+        b = list(x.iterdir())
         for c in b:
-            os.rename(os.path.join(subdir, x, c), os.path.join(subdir, c))
+            c.rename(subdir / c.name)
 
-if os.path.isdir(subdir):
-    dirlist = os.listdir(subdir)
+if subdir.is_dir():
+    dirlist = list(subdir.iterdir())
     welllist = []
     presuflist = []
     permprefix = None
     permsuffix = None
     for eachfile in dirlist:
-        if ".tif" in eachfile:
+        filename = eachfile.name
+        if ".tif" in filename:
             # removed filterstring for test
-            if "Overlay" not in eachfile:
-                prefixBeforeWell, suffixWithWell = eachfile.split("_Well_")
-                Well, suffixAfterWell = suffixWithWell.split("_Site_")
-                channelSuffix = suffixAfterWell[
-                    suffixAfterWell.index("_") + 1 :
+            if "Overlay" not in filename:
+                prefix_before_well, suffix_with_well = filename.split("_Well_")
+                well, suffix_after_well = suffix_with_well.split("_Site_")
+                channel_suffix = suffix_after_well[
+                    suffix_after_well.index("_") + 1 :
                 ]
-                if (prefixBeforeWell, channelSuffix) not in presuflist:
-                    presuflist.append((prefixBeforeWell, channelSuffix))
-                if Well not in welllist:
-                    welllist.append(Well)
-                if channame in channelSuffix:
+                if (prefix_before_well, channel_suffix) not in presuflist:
+                    presuflist.append((prefix_before_well, channel_suffix))
+                if well not in welllist:
+                    welllist.append(well)
+                if channame in channel_suffix:
                     if permprefix is None:
-                        permprefix = prefixBeforeWell
-                        permsuffix = channelSuffix
+                        permprefix = prefix_before_well
+                        permsuffix = channel_suffix
     for eachpresuf in presuflist:
         if eachpresuf[1][-4:] != ".tif":
             if eachpresuf[1][-5:] != ".tiff":
@@ -164,11 +166,9 @@ if os.path.isdir(subdir):
                 thissuffixnicename = thissuffix.split(".")[0]
                 if thissuffixnicename[0] == "_":
                     thissuffixnicename = thissuffixnicename[1:]
-                tile_subdir_persuf = os.path.join(
-                    tile_subdir, thissuffixnicename
-                )
-                if not os.path.exists(tile_subdir_persuf):
-                    os.mkdir(tile_subdir_persuf)
+                tile_subdir_persuf = tile_subdir / thissuffixnicename
+                if not tile_subdir_persuf.exists():
+                    tile_subdir_persuf.mkdir()
                 filename = (
                     thisprefix + "_Well_" + eachwell + "_Site_{i}_" + thissuffix
                 )
@@ -231,13 +231,13 @@ if os.path.isdir(subdir):
                 im3 = IJ.getImage()
                 savefile(
                     im3,
-                    os.path.join(out_subdir, fileoutname),
+                    str(out_subdir / fileoutname),
                     plugin,
                     compress=compress,
                 )
 
                 IJ.run("Close All")
-                im = IJ.open(os.path.join(out_subdir, fileoutname))
+                im = IJ.open(str(out_subdir / fileoutname))
                 im = IJ.getImage()
 
                 for eachxtile in range(tileperside):
@@ -252,19 +252,16 @@ if os.path.isdir(subdir):
                         im_tile = im.crop()
                         savefile(
                             im_tile,
-                            os.path.join(
-                                tile_subdir_persuf,
-                                thissuffixnicename
-                                + "_Site_"
-                                + str(each_tile_num)
-                                + ".tiff",
+                            str(
+                                tile_subdir_persuf
+                                / f"{thissuffixnicename}_Site_{each_tile_num}.tiff"
                             ),
                             plugin,
                             compress=compress,
                         )
 
                 IJ.run("Close All")
-                im = IJ.open(os.path.join(out_subdir, fileoutname))
+                im = IJ.open(str(out_subdir / fileoutname))
                 im = IJ.getImage()
 
                 # scaling to make a downsampled image for QC
@@ -287,7 +284,7 @@ if os.path.isdir(subdir):
                 im_10 = IJ.getImage()
                 savefile(
                     im_10,
-                    os.path.join(downsample_subdir, fileoutname),
+                    str(downsample_subdir / fileoutname),
                     plugin,
                     compress=compress,
                 )
@@ -304,7 +301,5 @@ if os.path.isdir(subdir):
 else:
     print("Could not find input directory ", subdir)
 for eachlogfile in ["TileConfiguration.txt"]:
-    os.rename(
-        os.path.join(subdir, eachlogfile), os.path.join(out_subdir, eachlogfile)
-    )
+    (subdir / eachlogfile).rename(out_subdir / eachlogfile)
 print("done")
