@@ -7,6 +7,7 @@ This script combines functionality for:
 3. Filtering LoadData CSVs based on criteria
 """
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -34,11 +35,12 @@ def validate_process_csv_file(file_path, base_path):
     filepathname_dfs = []
     for channel in channels:
         if f"FileName_{channel}" in df.columns:
-            # Join path and filename to create full path
-            df[f"FilePathName_{channel}"] = (
-                df[f"PathName_{channel}"].str.rstrip("/")
-                + "/"
-                + df[f"FileName_{channel}"]
+            # Join path and filename to create full path using pathlib
+            df[f"FilePathName_{channel}"] = df.apply(
+                lambda r: str(
+                    Path(r[f"PathName_{channel}"]) / r[f"FileName_{channel}"]
+                ),
+                axis=1,
             )
 
             # Select only the created column and "melt" it
@@ -115,22 +117,23 @@ def postprocess_csv_file(
         bool: Whether any modifications were made
 
     """
-    # Determine target file
-    target_file = output_path if output_path else file_path
+    # Convert to Path objects
+    file_path = Path(file_path)
+    target_file = Path(output_path) if output_path else file_path
 
     # If we need to copy to output_path
-    if output_path and file_path != output_path:
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        Path(output_path).write_text(Path(file_path).read_text())
+    if output_path and file_path != target_file:
+        target_file.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(file_path, target_file)
 
     modified = False
 
     # Update paths if requested
     if update_paths and source_path and target_path:
-        content = Path(target_file).read_text()
+        content = target_file.read_text()
         updated_content = content.replace(source_path, target_path)
         if content != updated_content:
-            Path(target_file).write_text(updated_content)
+            target_file.write_text(updated_content)
             print(f"Updated paths in: {target_file}")
             modified = True
 
@@ -187,6 +190,10 @@ def parse_filter_values(value_str):
 def filter_process_csv_file(csv_path, filter_criteria, output_dir):
     """Process a single CSV file and keep only required columns and rows matching filter criteria."""
     try:
+        # Convert to Path objects
+        csv_path = Path(csv_path)
+        output_dir = Path(output_dir)
+
         # Read the CSV file
         df = pd.read_csv(csv_path)
 
@@ -239,9 +246,10 @@ def filter_process_csv_file(csv_path, filter_criteria, output_dir):
         filtered_row_count = len(df_trimmed)
 
         # Create output filename
-        path_obj = Path(csv_path)
-        base_name = path_obj.name
-        output_path = Path(output_dir) / base_name
+        output_path = output_dir / csv_path.name
+
+        # Ensure output directory exists
+        output_dir.mkdir(parents=True, exist_ok=True)
 
         # Save trimmed dataframe
         df_trimmed.to_csv(output_path, index=False)
@@ -256,106 +264,93 @@ def filter_process_csv_file(csv_path, filter_criteria, output_dir):
 
 
 # -------------------------------------------------------------------------
-# Command-line interface
+# High-level functions that bring together the core operations
 # -------------------------------------------------------------------------
 
 
-@click.group()
-def cli():
-    """Work with CellProfiler LoadData CSV files."""
-    pass
+def validate_files(csv_files, base_path=None, output_file="missing_files.csv"):
+    """Validate existence of files referenced in LoadData CSV files.
 
+    Args:
+        csv_files: List of CSV file paths to process
+        base_path: Optional base path to prepend to file paths
+        output_file: Path where to save missing files list if any
 
-@cli.command("validate")
-@click.argument("csv_files", nargs=-1, type=click.Path(exists=True))
-@click.option(
-    "--base-path",
-    type=click.Path(exists=True),
-    help="Base path to prepend to file paths",
-)
-def validate_command(csv_files, base_path):
-    """Process CSV files containing PathName and FileName columns.
+    Returns:
+        dict: Summary statistics and results
 
-    Creates a melted dataframe with paths and checks file existence.
     """
     all_results = []
+    summary = {"total_files": 0, "missing_files": 0, "processed_files": 0}
 
     for csv_file in csv_files:
-        click.echo(f"Processing {csv_file}...")
+        print(f"Processing {csv_file}...")
         result_df = validate_process_csv_file(csv_file, base_path)
 
         if result_df is not None:
             all_results.append(result_df)
+            summary["processed_files"] += 1
 
             # Print summary for this file
             missing_files = result_df[~result_df["FileExists"]]
             if not missing_files.empty:
-                click.echo(
-                    f"Found {len(missing_files)} missing files in {csv_file}"
-                )
+                print(f"Found {len(missing_files)} missing files in {csv_file}")
             else:
-                click.echo(f"All files in {csv_file} exist")
+                print(f"All files in {csv_file} exist")
         else:
-            click.echo(f"No PathName/FileName pairs found in {csv_file}")
+            print(f"No PathName/FileName pairs found in {csv_file}")
 
     # Combine all results if there are any
     if all_results:
         combined_df = pd.concat(all_results, ignore_index=True)
         missing_files_df = combined_df[~combined_df["FileExists"]]
 
-        click.echo("\nSummary:")
-        click.echo(f"Total files: {len(combined_df)}")
-        click.echo(f"Missing files: {len(missing_files_df)}")
+        summary["total_files"] = len(combined_df)
+        summary["missing_files"] = len(missing_files_df)
+
+        print("\nSummary:")
+        print(f"Total files: {summary['total_files']}")
+        print(f"Missing files: {summary['missing_files']}")
 
         # Save missing files to CSV if any are found
-        if not missing_files_df.empty:
-            output_file = "missing_files.csv"
+        if not missing_files_df.empty and output_file:
             missing_files_df.to_csv(output_file, index=False)
-            click.echo(f"Missing files saved to {output_file}")
+            print(f"Missing files saved to {output_file}")
+
+    return summary
 
 
-@cli.command("postprocess")
-@click.option(
-    "--input-dir",
-    required=True,
-    help="Directory containing CSV files to process",
-    type=click.Path(exists=True),
-)
-@click.option(
-    "--output-dir",
-    help="Directory to save processed files (if different from input)",
-    type=click.Path(),
-)
-@click.option("--source-path", help="Original path to replace")
-@click.option("--target-path", help="New path to use")
-@click.option("--fixture-id", default="s1", help="Fixture ID (s1, s2, l1)")
-@click.option("--update-paths", is_flag=True, help="Update file paths")
-@click.option(
-    "--update-headers",
-    is_flag=True,
-    help="Update headers (SBSCycle to Cycle)",
-)
-@click.option("--clean-wells", is_flag=True, help="Clean well identifiers")
-def postprocess_command(
+def postprocess_directory(
     input_dir,
-    output_dir,
-    source_path,
-    target_path,
-    fixture_id,
-    update_paths,
-    update_headers,
-    clean_wells,
+    output_dir=None,
+    source_path=None,
+    target_path=None,
+    fixture_id="s1",
+    update_paths=False,
+    update_headers=False,
+    clean_wells=False,
 ):
-    """Post-process LoadData CSV files.
+    """Post-process all LoadData CSV files in a directory.
 
-    Updates file paths, headers, and well identifiers.
+    Args:
+        input_dir: Directory containing CSV files to process
+        output_dir: Directory to save processed files (if different from input)
+        source_path: Original path to replace
+        target_path: New path to use
+        fixture_id: Fixture ID for auto path generation (s1, s2, l1)
+        update_paths: Whether to update file paths
+        update_headers: Whether to update headers (SBSCycle to Cycle)
+        clean_wells: Whether to clean well identifiers
+
+    Returns:
+        dict: Statistics about the processing
+
     """
     # Check if at least one operation is specified
     if not any([update_paths, update_headers, clean_wells]):
-        click.echo(
-            "Error: At least one operation (--update-paths, --update-headers, --clean-wells) must be specified"
+        raise ValueError(
+            "At least one operation (update_paths, update_headers, clean_wells) must be specified"
         )
-        sys.exit(1)
 
     # Auto-generate paths if needed
     if update_paths and not target_path:
@@ -369,18 +364,18 @@ def postprocess_command(
                 "/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/"
             )
 
-        click.echo(f"Using source path: {source_path}")
-        click.echo(f"Using target path: {target_path}")
+        print(f"Using source path: {source_path}")
+        print(f"Using target path: {target_path}")
 
     # Process all CSV files in the input directory
     input_path = Path(input_dir)
     csv_files = list(input_path.glob("*.csv"))
 
     if not csv_files:
-        click.echo(f"No CSV files found in {input_dir}")
-        return
+        print(f"No CSV files found in {input_dir}")
+        return {"total_files": 0, "processed_files": 0}
 
-    click.echo(f"Processing {len(csv_files)} CSV files...")
+    print(f"Processing {len(csv_files)} CSV files...")
 
     # Process each CSV file
     processed_count = 0
@@ -397,24 +392,35 @@ def postprocess_command(
         ):
             processed_count += 1
 
-    click.echo(f"Processed {processed_count} out of {len(csv_files)} files")
+    print(f"Processed {processed_count} out of {len(csv_files)} files")
+    return {"total_files": len(csv_files), "processed_files": processed_count}
 
 
-@cli.command("filter")
-@click.argument("directory_path", type=click.Path(exists=True))
-@click.argument("output_directory", type=click.Path())
-@click.option("--well", help="Comma-separated list of well values to keep")
-@click.option("--site", help="Comma-separated list of site values to keep")
-@click.option("--plate", help="Comma-separated list of plate values to keep")
-@click.option("--cycle", help="Comma-separated list of cycle values to keep")
-def filter_command(directory_path, output_directory, well, site, plate, cycle):
-    """Filter CSV files based on criteria.
+def filter_directory(
+    directory_path,
+    output_directory,
+    well=None,
+    site=None,
+    plate=None,
+    cycle=None,
+):
+    """Filter CSV files in a directory based on criteria.
 
-    Filters rows by well, site, plate, and cycle values.
+    Args:
+        directory_path: Directory containing CSV files to process
+        output_directory: Directory where filtered files will be saved
+        well: Comma-separated list of well values to keep
+        site: Comma-separated list of site values to keep
+        plate: Comma-separated list of plate values to keep
+        cycle: Comma-separated list of cycle values to keep
+
+    Returns:
+        dict: Statistics about the filtering process
+
     """
     # Create output directory if it doesn't exist
     Path(output_directory).mkdir(parents=True, exist_ok=True)
-    click.echo(f"Output will be saved to: {output_directory}")
+    print(f"Output will be saved to: {output_directory}")
 
     # Parse filter criteria
     filter_criteria = {
@@ -427,12 +433,12 @@ def filter_command(directory_path, output_directory, well, site, plate, cycle):
     # Print filter criteria
     for col, values in filter_criteria.items():
         if values:
-            click.echo(f"Filtering {col}: keeping {values}")
+            print(f"Filtering {col}: keeping {values}")
 
     # Find all CSV files in the directory
     path_obj = Path(directory_path)
     csv_files = list(path_obj.glob("*.csv"))
-    click.echo(f"Found {len(csv_files)} CSV files to process")
+    print(f"Found {len(csv_files)} CSV files to process")
 
     # Process each CSV file
     processed_files = []
@@ -443,41 +449,142 @@ def filter_command(directory_path, output_directory, well, site, plate, cycle):
         if output_file:
             processed_files.append(output_file)
 
-    click.echo(f"Successfully processed {len(processed_files)} files")
+    print(f"Successfully processed {len(processed_files)} files")
+    return {
+        "total_files": len(csv_files),
+        "processed_files": len(processed_files),
+    }
 
 
-# For backward compatibility with direct script usage
-def main():
-    """Entry point for command-line use."""
-    # Check if we're invoked with a subcommand, otherwise guess intent
-    if len(sys.argv) > 1 and sys.argv[1] in [
-        "validate",
-        "postprocess",
-        "filter",
-    ]:
-        cli()
-    else:
-        # Attempt to determine which command was intended based on arguments
-        if "--base-path" in sys.argv:
-            # validate_loaddata_paths.py signature
-            # Convert original CLI (click) to our subcommand format
-            sys.argv.insert(1, "validate")
-            cli()
-        elif "--input-dir" in sys.argv:
-            # postprocess_loaddata_csv.py signature
-            sys.argv.insert(1, "postprocess")
-            cli()
-        elif len(sys.argv) >= 3 and all(
-            arg.startswith("--") is False for arg in sys.argv[1:3]
-        ):
-            # filter_loaddata_csv.py signature (2 positional args followed by options)
-            sys.argv.insert(1, "filter")
-            cli()
-        else:
-            # Default to showing help if we can't determine intent
-            sys.argv.insert(1, "--help")
-            cli()
-
+# -------------------------------------------------------------------------
+# Command-line interface
+# -------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import click
+
+    @click.group()
+    def cli():
+        """Work with CellProfiler LoadData CSV files."""
+        pass
+
+    @cli.command("validate")
+    @click.argument("csv_files", nargs=-1, type=click.Path(exists=True))
+    @click.option(
+        "--base-path",
+        type=click.Path(exists=True),
+        help="Base path to prepend to file paths",
+    )
+    def validate_command(csv_files, base_path):
+        """Process CSV files containing PathName and FileName columns.
+
+        Creates a melted dataframe with paths and checks file existence.
+        """
+        validate_files(csv_files, base_path)
+
+    @cli.command("postprocess")
+    @click.option(
+        "--input-dir",
+        required=True,
+        help="Directory containing CSV files to process",
+        type=click.Path(exists=True),
+    )
+    @click.option(
+        "--output-dir",
+        help="Directory to save processed files (if different from input)",
+        type=click.Path(),
+    )
+    @click.option("--source-path", help="Original path to replace")
+    @click.option("--target-path", help="New path to use")
+    @click.option("--fixture-id", default="s1", help="Fixture ID (s1, s2, l1)")
+    @click.option("--update-paths", is_flag=True, help="Update file paths")
+    @click.option(
+        "--update-headers",
+        is_flag=True,
+        help="Update headers (SBSCycle to Cycle)",
+    )
+    @click.option("--clean-wells", is_flag=True, help="Clean well identifiers")
+    def postprocess_command(
+        input_dir,
+        output_dir,
+        source_path,
+        target_path,
+        fixture_id,
+        update_paths,
+        update_headers,
+        clean_wells,
+    ):
+        """Post-process LoadData CSV files.
+
+        Updates file paths, headers, and well identifiers.
+        """
+        try:
+            postprocess_directory(
+                input_dir,
+                output_dir,
+                source_path,
+                target_path,
+                fixture_id,
+                update_paths,
+                update_headers,
+                clean_wells,
+            )
+        except ValueError as e:
+            click.echo(f"Error: {str(e)}")
+            sys.exit(1)
+
+    @cli.command("filter")
+    @click.argument("directory_path", type=click.Path(exists=True))
+    @click.argument("output_directory", type=click.Path())
+    @click.option("--well", help="Comma-separated list of well values to keep")
+    @click.option("--site", help="Comma-separated list of site values to keep")
+    @click.option(
+        "--plate", help="Comma-separated list of plate values to keep"
+    )
+    @click.option(
+        "--cycle", help="Comma-separated list of cycle values to keep"
+    )
+    def filter_command(
+        directory_path, output_directory, well, site, plate, cycle
+    ):
+        """Filter CSV files based on criteria.
+
+        Filters rows by well, site, plate, and cycle values.
+        """
+        filter_directory(
+            directory_path, output_directory, well, site, plate, cycle
+        )
+
+    # For backward compatibility with direct script usage
+    def main():
+        """Entry point for command-line use."""
+        # Check if we're invoked with a subcommand, otherwise guess intent
+        if len(sys.argv) > 1 and sys.argv[1] in [
+            "validate",
+            "postprocess",
+            "filter",
+        ]:
+            cli()
+        else:
+            # Attempt to determine which command was intended based on arguments
+            if "--base-path" in sys.argv:
+                # validate_loaddata_paths.py signature
+                # Convert original CLI (click) to our subcommand format
+                sys.argv.insert(1, "validate")
+                cli()
+            elif "--input-dir" in sys.argv:
+                # postprocess_loaddata_csv.py signature
+                sys.argv.insert(1, "postprocess")
+                cli()
+            elif len(sys.argv) >= 3 and all(
+                arg.startswith("--") is False for arg in sys.argv[1:3]
+            ):
+                # filter_loaddata_csv.py signature (2 positional args followed by options)
+                sys.argv.insert(1, "filter")
+                cli()
+            else:
+                # Default to showing help if we can't determine intent
+                sys.argv.insert(1, "--help")
+                cli()
+
     main()
