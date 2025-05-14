@@ -19,7 +19,12 @@
 # - loaddata_validate.py: Validates paths in LoadData CSVs and checks if referenced files exist
 # - loaddata_postprocess.py: Updates paths, headers, and identifiers in LoadData CSV files
 #
-# Install s5cmd first if not available: https://github.com/peak/s5cmd
+# Prerequisites:
+# - s5cmd: Download management tool - https://github.com/peak/s5cmd
+# - ImageMagick: Required for image compression (commands: magick, identify)
+# - GNU Parallel: Required for parallel processing
+# - UV: Python package management and script execution
+# - Git: For repository operations
 
 # Common variables used across all steps
 FIXTURE_ID="s1"  # Change this for different fixtures: s1, s2, l1
