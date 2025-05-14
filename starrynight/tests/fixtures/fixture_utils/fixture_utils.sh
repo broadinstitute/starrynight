@@ -15,9 +15,9 @@
 # Components
 #
 # - create_starrynight_download_list.py: Creates download and S3 copy lists for test fixtures
-# - filter_loaddata_csv.py: Filters CellProfiler LoadData CSV files to create smaller datasets
-# - validate_loaddata_paths.py: Validates paths in LoadData CSVs and checks if referenced files exist
-# - postprocess_loaddata_csv.py: Updates paths, headers, and identifiers in LoadData CSV files
+# - loaddata_filter.py: Filters CellProfiler LoadData CSV files to create smaller datasets
+# - loaddata_validate.py: Validates paths in LoadData CSVs and checks if referenced files exist
+# - loaddata_postprocess.py: Updates paths, headers, and identifiers in LoadData CSV files
 #
 # Install s5cmd first if not available: https://github.com/peak/s5cmd
 
@@ -79,34 +79,71 @@ find "${FIX_OUTPUT_DIR}" -type f -name '*.tiff' \
 
 rm compress_if_needed.sh
 
+# Create the trimmed directory if it doesn't exist
+mkdir -p ${LOAD_DATA_DIR_TRIMMED}
+
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
-cd ${FIXTURE_UTILS_DIR} &&
-uv run loaddata_filter.py \
-    ${LOAD_DATA_DIR} \
-    ${LOAD_DATA_DIR_TRIMMED} \
-    --plate Plate1 \
-    --well WellA1,WellA2,WellB1 \
-    --site 0,1,2,3 \
-    --cycle 1,2,3
 
-# Run all post-processing steps on the filtered CSVs:
-# 1. Update file paths to match the local environment
-# 2. Rename Metadata_SBSCycle to Metadata_Cycle
-# 3. Remove the "Well" prefix from Metadata_Well values
-cd ${FIXTURE_UTILS_DIR} &&
-uv run loaddata_postprocess.py \
-    --input-dir ${LOAD_DATA_DIR_TRIMMED} \
-    --fixture-id ${FIXTURE_ID} \
-    --update-paths \
-    --update-headers \
-    --clean-wells
+# Filter LoadData CSVs (now we need to iterate over files and call the script for each one)
+cd ${FIXTURE_UTILS_DIR}
+for csv_file in ${LOAD_DATA_DIR}/*.csv; do
+    if [ -f "$csv_file" ]; then
+        filename=$(basename "$csv_file")
+        echo "Filtering $filename..."
+
+        uv run loaddata_filter.py \
+            --input-csv "$csv_file" \
+            --output-csv "${LOAD_DATA_DIR_TRIMMED}/${filename}" \
+            --plate Plate1 \
+            --well WellA1,WellA2,WellB1 \
+            --site 0,1,2,3 \
+            --cycle 1,2,3
+    fi
+done
+
+# Define source and target paths for path replacement
+SOURCE_PATH="/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/"
+TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
+
+# Post-process LoadData CSVs (now we need to iterate over files and call the script for each one)
+cd ${FIXTURE_UTILS_DIR}
+for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
+    if [ -f "$csv_file" ]; then
+        filename=$(basename "$csv_file")
+        echo "Post-processing $filename..."
+
+        uv run loaddata_postprocess.py \
+            --input-csv "$csv_file" \
+            --output-csv "$csv_file" \
+            --source-path "$SOURCE_PATH" \
+            --target-path "$TARGET_PATH"
+    fi
+done
 
 # Soft link images directory so it can be found when validating
 ln -s ${FIX_INPUT_DIR}/Source1/Batch1/images ${FIX_OUTPUT_DIR}/Source1/Batch1/
 
-# Validate all pipeline CSVs in parallel
-parallel uv run loaddata_validate.py ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
+# Create a temporary directory for missing files reports
+TEMP_MISSING_DIR="${LOAD_DATA_DIR_TRIMMED}/temp_missing_files"
+mkdir -p "${TEMP_MISSING_DIR}"
+
+# Validate all CSV files in the trimmed directory
+cd ${FIXTURE_UTILS_DIR}
+for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
+    if [ -f "$csv_file" ]; then
+        filename=$(basename "$csv_file")
+        echo "Validating $filename..."
+
+        # Generate a temporary missing files report name
+        temp_missing_file="${TEMP_MISSING_DIR}/missing_files_$(basename "$csv_file" .csv).csv"
+
+        uv run loaddata_validate.py \
+            --input-csv "$csv_file" \
+            --base-path "${FIX_OUTPUT_DIR}" \
+            --output-file "$temp_missing_file"
+    fi
+done
 
 # Drop the soft link
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
