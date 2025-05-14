@@ -49,9 +49,7 @@ def confirm_continue(message="Continue to the next step?"):
         bool: True if the user wants to continue, False otherwise
     """
     global autorun
-    logger.info("\n" + "-" * 50)
-    logger.info(message)
-    logger.info("-" * 50)
+    logger.info(">>> CONFIRM: " + message)
 
     # If autorun is enabled, skip confirmation and return True
     if autorun:
