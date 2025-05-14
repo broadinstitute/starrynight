@@ -158,9 +158,17 @@ def compare_csvs(  # noqa: C901
         )
 
     for col, vals in missing_values.items():
-        sample = sorted(list(vals))[:10]
-        more = "..." if len(vals) > 10 else ""
-        errors.append(f"Column '{col}' missing reference values {sample}{more}")
+        missing_sample = sorted(list(vals))[:10]
+        missing_more = "..." if len(vals) > 10 else ""
+
+        # Get a sample of values that are present in the generated data
+        gen_vals = set(gen[col].dropna().unique())
+        present_sample = sorted(list(gen_vals))[:10]
+        present_more = "..." if len(gen_vals) > 10 else ""
+
+        errors.append(
+            f"Column '{col}' missing reference values {missing_sample}{missing_more} | Present values: {present_sample}{present_more}"
+        )
 
     # Build and return report
     report = ComparisonReport(
