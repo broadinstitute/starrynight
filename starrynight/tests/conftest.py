@@ -55,27 +55,17 @@ STARRYNIGHT_CACHE = pooch.create(
         "fix_s1_input.tar.gz": "sha256:ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
         # Output component of FIX-S1
         "fix_s1_output.tar.gz": "sha256:a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
+        # Input component of FIX-S2 (identical inputs to FIX-S1 but with different outputs)
+        "fix_s2_input.tar.gz": "sha256:ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
+        # Output component of FIX-S2
+        "fix_s2_output.tar.gz": "sha256:dummy_sha256_for_fix_s2_output_to_be_replaced_with_actual_hash",
     },
 )
 
 
-@pytest.fixture(scope="session")
-def fix_s1_input_archive():
-    """Fixture that downloads and caches the FIX-S1 input test data archive.
-
-    This fixture handles the input component of the standard FIX-S1 test fixture
-    (small test fixture without stitchcrop and QC).
-
-    Returns:
-        str: Path to the downloaded archive file.
-
-    """
-    # Download and cache the test data using the global registry
-    archive_path = STARRYNIGHT_CACHE.fetch(
-        "fix_s1_input.tar.gz", processor=None
-    )
-
-    # Verify the archive (essential for fixture to function)
+def _fetch_archive(archive_name: str) -> str:
+    """Fetch and verify a test data archive."""
+    archive_path = STARRYNIGHT_CACHE.fetch(archive_name, processor=None)
     archive_path_obj = Path(archive_path)
     assert archive_path_obj.exists(), (
         "Test data archive not downloaded correctly"
@@ -83,70 +73,61 @@ def fix_s1_input_archive():
     assert tarfile.is_tarfile(archive_path_obj), (
         "Downloaded file is not a valid tar archive"
     )
-
     return archive_path
 
 
 @pytest.fixture(scope="session")
+def fix_s1_input_archive():
+    """Fixture that downloads and caches the FIX-S1 input test data archive."""
+    return _fetch_archive("fix_s1_input.tar.gz")
+
+
+@pytest.fixture(scope="session")
 def fix_s1_output_archive():
-    """Fixture that downloads and caches the FIX-S1 output test data archive.
-
-    This fixture handles the output component of the standard FIX-S1 test fixture
-    (small test fixture without stitchcrop and QC).
-
-    Returns:
-        str: Path to the downloaded archive file.
-
-    """
-    # Download and cache the test data using the global registry
-    archive_path = STARRYNIGHT_CACHE.fetch(
-        "fix_s1_output.tar.gz", processor=None
-    )
-
-    # Verify the archive (essential for fixture to function)
-    archive_path_obj = Path(archive_path)
-    assert archive_path_obj.exists(), (
-        "Output test data archive not downloaded correctly"
-    )
-    assert tarfile.is_tarfile(archive_path_obj), (
-        "Output file is not a valid tar archive"
-    )
-
-    return archive_path
+    """Fixture that downloads and caches the FIX-S1 output test data archive."""
+    return _fetch_archive("fix_s1_output.tar.gz")
 
 
-@pytest.fixture(scope="module")
-def fix_s1_input_dir(tmp_path_factory):
-    """Fixture that provides a temporary directory with extracted FIX-S1 input data.
+@pytest.fixture(scope="session")
+def fix_s2_input_archive():
+    """Fixture that downloads and caches the FIX-S2 input test data archive."""
+    return _fetch_archive("fix_s2_input.tar.gz")
 
-    This fixture handles the input component of the standard FIX-S1 test fixture
-    (small test fixture without stitchcrop and QC).
 
-    This fixture:
-    1. Creates a temporary directory
-    2. Uses pooch processor to extract the FIX-S1 input data archive into it
-    3. Yields a dictionary with paths to key directories
-    4. Cleans up the temporary directory after the test is done
+@pytest.fixture(scope="session")
+def fix_s2_output_archive():
+    """Fixture that downloads and caches the FIX-S2 output test data archive."""
+    return _fetch_archive("fix_s2_output.tar.gz")
+
+
+def _setup_input_dir(
+    tmp_path_factory: pytest.TempPathFactory,
+    archive_name: str,
+    dir_prefix: str,
+    input_dir_name: str,
+) -> dict[str, Path]:
+    """Set up an input directory from a test archive.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
+        archive_name: Name of the archive file to extract
+        dir_prefix: Prefix for the temporary directory name
+        input_dir_name: Name of the extracted input directory
 
     Returns:
-        dict: Dictionary containing paths to key directories:
-            - base_dir: The base temporary directory
-            - input_dir: Path to the extracted fix_s1_input directory
+        dict: Dictionary with base_dir and input_dir paths
 
     """
     # Create a temporary directory
-    base_dir = tmp_path_factory.mktemp("fix_s1_input_test")
+    base_dir = tmp_path_factory.mktemp(dir_prefix)
 
     # Use pooch to download and extract in one step
     STARRYNIGHT_CACHE.fetch(
-        "fix_s1_input.tar.gz", processor=Untar(extract_dir=str(base_dir))
+        archive_name, processor=Untar(extract_dir=str(base_dir))
     )
 
     # Create paths to important directories
-    input_dir = base_dir / "fix_s1_input"
+    input_dir = base_dir / input_dir_name
 
     # Essential check: did extraction work at all?
     assert input_dir.exists(), "Input test data not extracted correctly"
@@ -156,44 +137,63 @@ def fix_s1_input_dir(tmp_path_factory):
         "Expected Source1 directory not found in input data"
     )
 
-    yield {"base_dir": base_dir, "input_dir": input_dir}
+    return {"base_dir": base_dir, "input_dir": input_dir}
 
+
+@pytest.fixture(scope="module")
+def fix_s1_input_dir(tmp_path_factory):
+    """Fixture that provides a temporary directory with extracted FIX-S1 input data."""
+    result = _setup_input_dir(
+        tmp_path_factory,
+        "fix_s1_input.tar.gz",
+        "fix_s1_input_test",
+        "fix_s1_input",
+    )
+    yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
 
 @pytest.fixture(scope="module")
-def fix_s1_output_dir(tmp_path_factory):
-    """Fixture that provides a temporary directory with extracted FIX-S1 output data.
+def fix_s2_input_dir(tmp_path_factory):
+    """Fixture that provides a temporary directory with extracted FIX-S2 input data."""
+    result = _setup_input_dir(
+        tmp_path_factory,
+        "fix_s2_input.tar.gz",
+        "fix_s2_input_test",
+        "fix_s2_input",
+    )
+    yield result
+    # Cleanup is handled automatically by pytest's tmp_path_factory
 
-    This fixture handles the output component of the standard FIX-S1 test fixture
-    (small test fixture without stitchcrop and QC).
 
-    This fixture:
-    1. Creates a temporary directory
-    2. Uses pooch processor to extract the FIX-S1 output data archive into it
-    3. Yields a dictionary with paths to key directories
-    4. Cleans up the temporary directory after the test is done
+def _setup_output_dir(
+    tmp_path_factory: pytest.TempPathFactory,
+    archive_name: str,
+    dir_prefix: str,
+    output_dir_name: str,
+) -> dict[str, Path]:
+    """Set up an output directory from a test archive.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
+        archive_name: Name of the archive file to extract
+        dir_prefix: Prefix for the temporary directory name
+        output_dir_name: Name of the extracted output directory
 
     Returns:
-        dict: Dictionary containing paths to key directories:
-            - base_dir: The base temporary directory
-            - output_dir: Path to the extracted fix_s1_output directory
-            - workspace_dir: Path to Source1/workspace directory with outputs
+        dict: Dictionary with paths to key directories
 
     """
     # Create a temporary directory
-    base_dir = tmp_path_factory.mktemp("fix_s1_output_test")
+    base_dir = tmp_path_factory.mktemp(dir_prefix)
 
     # Use pooch to download and extract in one step
     STARRYNIGHT_CACHE.fetch(
-        "fix_s1_output.tar.gz", processor=Untar(extract_dir=str(base_dir))
+        archive_name, processor=Untar(extract_dir=str(base_dir))
     )
 
     # Create paths to important directories
-    output_dir = base_dir / "fix_s1_pcpip_output"
+    output_dir = base_dir / output_dir_name
     workspace_dir = output_dir / "Source1" / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 
@@ -203,45 +203,55 @@ def fix_s1_output_dir(tmp_path_factory):
         "Workspace directory not found in output data"
     )
 
-    yield {
+    return {
         "base_dir": base_dir,
         "output_dir": output_dir,
         "workspace_dir": workspace_dir,
         "load_data_csv_dir": load_data_csv_dir,
     }
 
+
+@pytest.fixture(scope="module")
+def fix_s1_output_dir(tmp_path_factory):
+    """Fixture that provides a temporary directory with extracted FIX-S1 output data."""
+    result = _setup_output_dir(
+        tmp_path_factory,
+        "fix_s1_output.tar.gz",
+        "fix_s1_output_test",
+        "fix_s1_pcpip_output",
+    )
+    yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
 
-@pytest.fixture(scope="function")
-def fix_s1_workspace(tmp_path_factory):
-    """Fixture that creates a workspace directory structure for FIX-S1 tests.
+@pytest.fixture(scope="module")
+def fix_s2_output_dir(tmp_path_factory):
+    """Fixture that provides a temporary directory with extracted FIX-S2 output data."""
+    result = _setup_output_dir(
+        tmp_path_factory,
+        "fix_s2_output.tar.gz",
+        "fix_s2_output_test",
+        "fix_s2_pcpip_output",
+    )
+    yield result
+    # Cleanup is handled automatically by pytest's tmp_path_factory
 
-    This fixture creates a temporary directory with the structure needed for
-    processing the FIX-S1 test fixture (small test fixture without stitchcrop and QC).
-    The structure matches the expected output directory structure:
 
-    - workspace/
-      - cellprofiler/
-        - loaddata/
-          - cp/
-            - illum/
-              - illum_apply/
-              - illum_calc/
-          - sbs/
-            - illum/
-              - illum_apply/
-              - illum_calc/
-      - index/
-      - inventory/
-        - inv/
+def _setup_workspace(
+    tmp_path_factory: pytest.TempPathFactory, workspace_prefix: str
+) -> dict[str, Path]:
+    """Create a workspace directory structure for tests.
+
+    Args:
+        tmp_path_factory: pytest fixture for creating temporary directories
+        workspace_prefix: Prefix for the temporary workspace directory
 
     Returns:
         dict: Dictionary with paths to key directories in the workspace
 
     """
     # Create base workspace directory
-    workspace_dir = tmp_path_factory.mktemp("workspace")
+    workspace_dir = tmp_path_factory.mktemp(workspace_prefix)
 
     # Create subdirectories that match the expected output structure
     dir_structure = [
@@ -327,27 +337,201 @@ def fix_s1_workspace(tmp_path_factory):
 
 
 @pytest.fixture(scope="function")
-def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
+def fix_s1_workspace(tmp_path_factory):
+    """Fixture that creates a workspace directory structure for FIX-S1 tests."""
+    return _setup_workspace(tmp_path_factory, "fix_s1_workspace")
+
+
+@pytest.fixture(scope="function")
+def fix_s2_workspace(tmp_path_factory):
+    """Fixture that creates a workspace directory structure for FIX-S2 tests."""
+    return _setup_workspace(tmp_path_factory, "fix_s2_workspace")
+
+
+def _handle_generated_setup(
+    workspace: dict[str, Path], input_dir: Path
+) -> dict[str, Path]:
+    """Set up a StarryNight workflow environment using CLI commands.
+
+    Args:
+        workspace: Dictionary containing workspace directories
+        input_dir: Path to input data directory
+
+    Returns:
+        dict: Dictionary with index_file and experiment_json_path
+
+    """
+    workspace_dir = workspace["workspace_dir"]
+    inventory_dir = workspace["inventory_dir"]
+    index_dir = workspace["index_dir"]
+
+    # Step 1: Initialize experiment configuration
+    runner = CliRunner()
+    result = runner.invoke(
+        exp_init,
+        ["-e", "Pooled CellPainting [Generic]", "-o", str(workspace_dir)],
+    )
+
+    # Check if the command was successful
+    assert result.exit_code == 0, (
+        f"Experiment init command failed: {result.stderr}"
+    )
+
+    # Verify experiment_init.json was created (essential for next steps)
+    exp_init_path = workspace_dir / "experiment_init.json"
+    assert exp_init_path.exists(), "experiment_init.json was not created"
+
+    # Step 2: Edit experiment_init.json as specified in the docs
+    with exp_init_path.open() as f:
+        exp_init_data = json.load(f)
+
+    # Update with required channel values specifically mentioned in getting-started.md
+    exp_init_data.update(
+        {
+            "cp_nuclei_channel": "DAPI",
+            "cp_cell_channel": "PhalloAF750",
+            "cp_mito_channel": "ZO1AF488",
+            "sbs_nuclei_channel": "DAPI",
+            "sbs_cell_channel": "PhalloAF750",
+            "sbs_mito_channel": "ZO1AF488",
+        }
+    )
+
+    with exp_init_path.open("w") as f:
+        json.dump(exp_init_data, f, indent=4)
+
+    # Basic check that file still exists after modification
+    assert exp_init_path.exists(), "Modified experiment_init.json not found"
+
+    # Step 3: Generate inventory
+    result = runner.invoke(
+        gen_inv, ["-d", str(input_dir), "-o", str(inventory_dir)]
+    )
+
+    # Check if the command was successful
+    assert result.exit_code == 0, (
+        f"Inventory generation command failed: {result.stderr}"
+    )
+
+    # Essential check: inventory file must exist for next steps
+    inventory_file = inventory_dir / "inventory.parquet"
+    assert inventory_file.exists(), "Inventory file was not created"
+
+    # Step 4: Generate index
+    # Create the index directory if it doesn't exist
+    index_dir.mkdir(exist_ok=True, parents=True)
+
+    result = runner.invoke(
+        gen_index, ["-i", str(inventory_file), "-o", str(index_dir)]
+    )
+
+    # Check if the command was successful
+    assert result.exit_code == 0, (
+        f"Index generation command failed: {result.stderr}"
+    )
+
+    # Essential check: index file must exist for next steps
+    index_file = index_dir / "index.parquet"
+    assert index_file.exists(), "Index file was not created"
+
+    # Step 5: Create experiment file
+    result = runner.invoke(
+        exp_new,
+        [
+            "-i",
+            str(index_file),
+            "-e",
+            "Pooled CellPainting [Generic]",
+            "-c",
+            str(exp_init_path),
+            "-o",
+            str(workspace_dir),
+        ],
+    )
+
+    # Check if the command was successful
+    assert result.exit_code == 0, (
+        f"Experiment file creation command failed: {result.stderr}"
+    )
+
+    # Essential check: experiment.json file must exist to return it
+    experiment_json_path = workspace_dir / "experiment.json"
+    assert experiment_json_path.exists(), "experiment.json was not created"
+
+    # Return the paths needed for subsequent processing steps
+    return {
+        "index_file": index_file,
+        "experiment_json_path": experiment_json_path,
+    }
+
+
+def _handle_pregenerated_setup(workspace: dict[str, Path]) -> dict[str, Path]:
+    """Set up a StarryNight workflow environment using pre-generated files.
+
+    Args:
+        workspace: Dictionary containing workspace directories
+
+    Returns:
+        dict: Dictionary with index_file and experiment_json_path
+
+    """
+    workspace_dir = workspace["workspace_dir"]
+    fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
+
+    # Define paths to pre-generated files in fixtures directory
+    pregenerated_index_file = fixtures_dir / "index.parquet"
+    pregenerated_experiment_json = fixtures_dir / "experiment.json"
+
+    # Essential checks: source files must exist to be copied
+    assert pregenerated_index_file.exists(), (
+        "Pre-generated index file not found"
+    )
+    assert pregenerated_experiment_json.exists(), (
+        "Pre-generated experiment file not found"
+    )
+
+    # Copy files to workspace directory to maintain expected structure
+    index_file = workspace["index_dir"] / "index.parquet"
+    experiment_json_path = workspace_dir / "experiment.json"
+
+    # Create parent directories if they don't exist
+    index_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Copy the files
+    shutil.copy2(pregenerated_index_file, index_file)
+    shutil.copy2(pregenerated_experiment_json, experiment_json_path)
+
+    # Essential checks: copied files must exist for fixture to function
+    assert index_file.exists(), "Failed to copy index file to workspace"
+    assert experiment_json_path.exists(), (
+        "Failed to copy experiment file to workspace"
+    )
+
+    # Return the same structure as the generated mode
+    return {
+        "index_file": index_file,
+        "experiment_json_path": experiment_json_path,
+    }
+
+
+@pytest.fixture(scope="function")
+def fix_starrynight_setup(request):
     """Fixture that sets up the StarryNight workflow environment.
 
-    This fixture can operate in two modes, specified through indirect parameterization:
-    - "generated": Executes actual CLI commands to generate all files (slow but thorough)
-    - "pregenerated": Uses pre-generated files from fixtures (fast)
+    This fixture can operate in multiple modes, specified through indirect parameterization:
+    - Mode parameter: "generated" or "pregenerated"
+      - "generated": Executes actual CLI commands to generate all files (slow but thorough)
+      - "pregenerated": Uses pre-generated files from fixtures (fast)
 
-    Use indirect parameterization to specify the mode:
+    - Fixture parameter: "fix_s1" or "fix_s2"
+      - "fix_s1": Uses the FIX-S1 test fixture (default)
+      - "fix_s2": Uses the FIX-S2 test fixture (alternative with same inputs, different outputs)
+
+    Use indirect parameterization to specify the parameters:
     @pytest.mark.parametrize("fix_starrynight_setup", ["generated"], indirect=True)
-    @pytest.mark.parametrize("fix_starrynight_setup", ["pregenerated"], indirect=True)
+    @pytest.mark.parametrize("fix_starrynight_setup", [{"mode": "generated", "fixture": "fix_s2"}], indirect=True)
 
-    The default mode is "generated" if no parameter is specified.
-
-    Performs steps 1-5 of the getting-started workflow when using "generated" mode:
-    1. Initialize experiment configuration
-    2. Edit configuration with required channel values
-    3. Generate inventory from input data
-    4. Generate index from inventory
-    5. Create experiment file from index and configuration
-
-    "pregenerated" mode copies pre-made files without running CLI commands.
+    The default mode is "generated" with fixture "fix_s1" if no parameter is specified.
 
     Returns:
         dict: Dictionary containing:
@@ -355,155 +539,33 @@ def fix_starrynight_setup(request, fix_s1_input_dir, fix_s1_workspace):
             - experiment_json_path: Path to the generated/pre-generated experiment.json file
 
     """
-    # Default to "generated" mode if no parameter is specified
-    param = getattr(request, "param", "generated")
-
-    if param == "generated":
-        # Set up test environment
-        workspace_dir = fix_s1_workspace["workspace_dir"]
-        inventory_dir = fix_s1_workspace["inventory_dir"]
-        index_dir = fix_s1_workspace["index_dir"]
-        input_dir = fix_s1_input_dir["input_dir"]
-
-        # Step 1: Initialize experiment configuration
-        runner = CliRunner()
-        result = runner.invoke(
-            exp_init,
-            ["-e", "Pooled CellPainting [Generic]", "-o", str(workspace_dir)],
-        )
-
-        # Check if the command was successful
-        assert result.exit_code == 0, (
-            f"Experiment init command failed: {result.stderr}"
-        )
-
-        # Step 1 complete, proceed to next step
-
-        # Verify experiment_init.json was created (essential for next steps)
-        exp_init_path = workspace_dir / "experiment_init.json"
-        assert exp_init_path.exists(), "experiment_init.json was not created"
-
-        # Step 2: Edit experiment_init.json as specified in the docs
-        with exp_init_path.open() as f:
-            exp_init_data = json.load(f)
-
-        # Update with required channel values specifically mentioned in getting-started.md
-        exp_init_data.update(
-            {
-                "cp_nuclei_channel": "DAPI",
-                "cp_cell_channel": "PhalloAF750",
-                "cp_mito_channel": "ZO1AF488",
-                "sbs_nuclei_channel": "DAPI",
-                "sbs_cell_channel": "PhalloAF750",
-                "sbs_mito_channel": "ZO1AF488",
-            }
-        )
-
-        with exp_init_path.open("w") as f:
-            json.dump(exp_init_data, f, indent=4)
-
-        # Basic check that file still exists after modification
-        assert exp_init_path.exists(), "Modified experiment_init.json not found"
-
-        # Step 3: Generate inventory
-        result = runner.invoke(
-            gen_inv, ["-d", str(input_dir), "-o", str(inventory_dir)]
-        )
-
-        # Check if the command was successful
-        assert result.exit_code == 0, (
-            f"Inventory generation command failed: {result.stderr}"
-        )
-
-        # Essential check: inventory file must exist for next steps
-        inventory_file = inventory_dir / "inventory.parquet"
-        assert inventory_file.exists(), "Inventory file was not created"
-
-        # Step 4: Generate index
-        # Create the index directory if it doesn't exist
-        index_dir.mkdir(exist_ok=True, parents=True)
-
-        result = runner.invoke(
-            gen_index, ["-i", str(inventory_file), "-o", str(index_dir)]
-        )
-
-        # Check if the command was successful
-        assert result.exit_code == 0, (
-            f"Index generation command failed: {result.stderr}"
-        )
-
-        # Essential check: index file must exist for next steps
-        index_file = index_dir / "index.parquet"
-        assert index_file.exists(), "Index file was not created"
-
-        # Step 5: Create experiment file
-        result = runner.invoke(
-            exp_new,
-            [
-                "-i",
-                str(index_file),
-                "-e",
-                "Pooled CellPainting [Generic]",
-                "-c",
-                str(exp_init_path),
-                "-o",
-                str(workspace_dir),
-            ],
-        )
-
-        # Check if the command was successful
-        assert result.exit_code == 0, (
-            f"Experiment file creation command failed: {result.stderr}"
-        )
-
-        # Essential check: experiment.json file must exist to return it
-        experiment_json_path = workspace_dir / "experiment.json"
-        assert experiment_json_path.exists(), "experiment.json was not created"
-
-        # Return the paths needed for subsequent processing steps
-        return {
-            "index_file": index_file,
-            "experiment_json_path": experiment_json_path,
-        }
-
-    elif param == "pregenerated":
-        # Get paths to workspace and fixtures
-        workspace_dir = fix_s1_workspace["workspace_dir"]
-        fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
-
-        # Define paths to pre-generated files in fixtures directory
-        pregenerated_index_file = fixtures_dir / "index.parquet"
-        pregenerated_experiment_json = fixtures_dir / "experiment.json"
-
-        # Essential checks: source files must exist to be copied
-        assert pregenerated_index_file.exists(), (
-            "Pre-generated index file not found"
-        )
-        assert pregenerated_experiment_json.exists(), (
-            "Pre-generated experiment file not found"
-        )
-
-        # Copy files to workspace directory to maintain expected structure
-        index_file = fix_s1_workspace["index_dir"] / "index.parquet"
-        experiment_json_path = workspace_dir / "experiment.json"
-
-        # Create parent directories if they don't exist
-        index_file.parent.mkdir(parents=True, exist_ok=True)
-
-        # Copy the files
-        shutil.copy2(pregenerated_index_file, index_file)
-        shutil.copy2(pregenerated_experiment_json, experiment_json_path)
-
-        # Essential checks: copied files must exist for fixture to function
-        assert index_file.exists(), "Failed to copy index file to workspace"
-        assert experiment_json_path.exists(), (
-            "Failed to copy experiment file to workspace"
-        )
-
-        # Return the same structure as the generated mode
-        return {
-            "index_file": index_file,
-            "experiment_json_path": experiment_json_path,
-        }
+    # Parse parameters - support both string and dictionary format
+    if isinstance(getattr(request, "param", "generated"), str):
+        mode = getattr(request, "param", "generated")
+        fixture_id = "fix_s1"  # Default to fix_s1
     else:
-        raise ValueError(f"Unknown parameter: {param}")
+        param_dict = getattr(
+            request, "param", {"mode": "generated", "fixture": "fix_s1"}
+        )
+        mode = param_dict.get("mode", "generated")
+        fixture_id = param_dict.get("fixture", "fix_s1")
+
+    # Dynamically import the right fixtures based on fixture_id
+    if fixture_id == "fix_s1":
+        input_dir_fixture = pytest.getfixturevalue("fix_s1_input_dir")
+        workspace_fixture = pytest.getfixturevalue("fix_s1_workspace")
+    elif fixture_id == "fix_s2":
+        input_dir_fixture = pytest.getfixturevalue("fix_s2_input_dir")
+        workspace_fixture = pytest.getfixturevalue("fix_s2_workspace")
+    else:
+        raise ValueError(f"Unknown fixture: {fixture_id}")
+
+    # Execute the appropriate setup based on mode parameter
+    if mode == "generated":
+        return _handle_generated_setup(
+            workspace_fixture, input_dir_fixture["input_dir"]
+        )
+    elif mode == "pregenerated":
+        return _handle_pregenerated_setup(workspace_fixture)
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
