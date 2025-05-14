@@ -145,6 +145,9 @@ for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
     fi
 done
 
+# Remove the temporary directory
+rm -rf "${TEMP_MISSING_DIR}"
+
 # Drop the soft link
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
 
