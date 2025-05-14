@@ -1,7 +1,21 @@
-"""Mock implementation of ImageJ/Fiji libraries for testing control flow."""
+"""Mock implementation of ImageJ/Fiji libraries for testing control flow.
 
+This module provides mock classes and functions that mimic the behavior of
+ImageJ/Fiji without requiring the actual libraries. It can be used for:
+
+1. Testing scripts that depend on ImageJ in environments where it's not available
+2. Validating control flow without performing actual image operations
+3. Simulating ImageJ API responses for unit testing
+"""
+
+import logging
 import sys
-from typing import Any, Optional, Union
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 class ImagePlus:
@@ -36,7 +50,7 @@ class IJ:
             options: Optional parameters for the command.
 
         """
-        print(f"Mock IJ.run: {command} with options: {options}")
+        logger.info(f"Mock IJ.run: {command} with options: {options}")
         return None
 
     # Keep camelCase method names to match ImageJ's Java API
@@ -48,7 +62,7 @@ class IJ:
             A mock ImagePlus object.
 
         """
-        print("Mock IJ.getImage called")
+        logger.info("Mock IJ.getImage called")
         return ImagePlus()
 
     @staticmethod
@@ -62,7 +76,7 @@ class IJ:
             height: Height of the selection.
 
         """
-        print(f"Mock IJ.makeRectangle: {x}, {y}, {width}, {height}")
+        logger.info(f"Mock IJ.makeRectangle: {x}, {y}, {width}, {height}")
         return None
 
     @staticmethod
@@ -73,7 +87,7 @@ class IJ:
             path: Path to the image file.
 
         """
-        print(f"Mock IJ.open: {path}")
+        logger.info(f"Mock IJ.open: {path}")
         return None
 
     @staticmethod
@@ -86,7 +100,7 @@ class IJ:
             path: The file path to save to.
 
         """
-        print(f"Mock IJ.saveAs: Saving {format_type} to {path}")
+        logger.info(f"Mock IJ.saveAs: Saving {format_type} to {path}")
         return None
 
 
@@ -125,7 +139,7 @@ class LociExporter:
 
     def run(self) -> None:
         """Run the exporter with the current settings."""
-        print(f"Mock LociExporter.run with arg: {self.arg}")
+        logger.info(f"Mock LociExporter.run with arg: {self.arg}")
 
 
 class Exporter:
@@ -144,7 +158,7 @@ class Exporter:
 
     def run(self) -> None:
         """Run the exporter with the current settings."""
-        print(f"Mock Exporter.run with plugin: {self.plugin}")
+        logger.info(f"Mock Exporter.run with plugin: {self.plugin}")
 
 
 # Assign the classes to their modules
