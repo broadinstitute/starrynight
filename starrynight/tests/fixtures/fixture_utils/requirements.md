@@ -143,6 +143,7 @@ The external shell script will handle file iteration and pass appropriate argume
 
 - Use Python 3.8+
 - Use pathlib for all file path handling
+- When simple, use duckdb otherwise pandas
 - Use click for command-line interface implementation
 - Follow functional programming principles
 - Keep scripts simple and focused only on the task at hand
