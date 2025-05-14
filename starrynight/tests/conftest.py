@@ -105,6 +105,7 @@ def _setup_input_dir(
     archive_name: str,
     dir_prefix: str,
     input_dir_name: str,
+    dataset_dir_name: str,
 ) -> dict[str, Path]:
     """Set up an input directory from a test archive.
 
@@ -113,6 +114,7 @@ def _setup_input_dir(
         archive_name: Name of the archive file to extract
         dir_prefix: Prefix for the temporary directory name
         input_dir_name: Name of the extracted input directory
+        dataset_dir_name: Name of the dataset directory within input_dir
 
     Returns:
         dict: Dictionary with base_dir and input_dir paths
@@ -133,8 +135,8 @@ def _setup_input_dir(
     assert input_dir.exists(), "Input test data not extracted correctly"
 
     # Check that at least one expected subdirectory exists
-    assert (input_dir / "Source1").exists(), (
-        "Expected Source1 directory not found in input data"
+    assert (input_dir / dataset_dir_name).exists(), (
+        f"Expected {dataset_dir_name} directory not found in input data"
     )
 
     return {"base_dir": base_dir, "input_dir": input_dir}
@@ -148,6 +150,7 @@ def fix_s1_input_dir(tmp_path_factory):
         "fix_s1_input.tar.gz",
         "fix_s1_input_test",
         "fix_s1_input",
+        "Source1",
     )
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
@@ -161,6 +164,7 @@ def fix_s2_input_dir(tmp_path_factory):
         "fix_s2_input.tar.gz",
         "fix_s2_input_test",
         "fix_s2_input",
+        "Source1",  # Using same dataset directory name for now, can be changed as needed
     )
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
@@ -171,6 +175,7 @@ def _setup_output_dir(
     archive_name: str,
     dir_prefix: str,
     output_dir_name: str,
+    dataset_dir_name: str,
 ) -> dict[str, Path]:
     """Set up an output directory from a test archive.
 
@@ -179,6 +184,7 @@ def _setup_output_dir(
         archive_name: Name of the archive file to extract
         dir_prefix: Prefix for the temporary directory name
         output_dir_name: Name of the extracted output directory
+        dataset_dir_name: Name of the dataset directory (e.g., 'Source1')
 
     Returns:
         dict: Dictionary with paths to key directories
@@ -194,13 +200,13 @@ def _setup_output_dir(
 
     # Create paths to important directories
     output_dir = base_dir / output_dir_name
-    workspace_dir = output_dir / "Source1" / "workspace"
+    workspace_dir = output_dir / dataset_dir_name / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 
     # Essential check: did extraction create the main output directory?
     assert output_dir.exists(), "Output test data not extracted correctly"
     assert workspace_dir.exists(), (
-        "Workspace directory not found in output data"
+        f"Workspace directory not found in {dataset_dir_name} output data"
     )
 
     return {
@@ -219,6 +225,7 @@ def fix_s1_output_dir(tmp_path_factory):
         "fix_s1_output.tar.gz",
         "fix_s1_output_test",
         "fix_s1_pcpip_output",
+        "Source1",
     )
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
@@ -232,6 +239,7 @@ def fix_s2_output_dir(tmp_path_factory):
         "fix_s2_output.tar.gz",
         "fix_s2_output_test",
         "fix_s2_pcpip_output",
+        "Source1",  # Using same dataset directory name for now, can be changed as needed
     )
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
