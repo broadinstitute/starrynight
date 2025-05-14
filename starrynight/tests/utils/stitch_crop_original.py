@@ -1,4 +1,4 @@
-# ruff: noqa
+# ruff: noqa: ANN002,ANN003,ANN202,ANN204,ANN401,D100,D104,D202,D400,D413,D415,E501,F401,F541,F821,F841,I001,N803,N806,N816,PTH102,PTH104,PTH110,PTH112,PTH113,PTH118,PTH123,UP015,UP024,UP031,UP035,W605,E722
 
 import os
 import time
@@ -99,7 +99,6 @@ if not os.path.exists(out_subdir):
 subdir = os.path.join(input_file_location, subdir)
 
 # bypassed awsdownload == 'True' for test
-import os
 
 a = os.listdir(subdir)
 for x in a:
@@ -128,7 +127,7 @@ if os.path.isdir(subdir):
                 if Well not in welllist:
                     welllist.append(Well)
                 if channame in channelSuffix:
-                    if permprefix == None:
+                    if permprefix is None:
                         permprefix = prefixBeforeWell
                         permsuffix = channelSuffix
     for eachpresuf in presuflist:
