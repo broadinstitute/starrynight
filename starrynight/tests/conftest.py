@@ -52,9 +52,9 @@ STARRYNIGHT_CACHE = pooch.create(
     base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
     registry={
         # Input component of FIX-S1 (small test fixture without stitchcrop and QC)
-        "fix_s1_input.tar.gz": "md5:01de912bdff0379b671c39b400dda915",
+        "fix_s1_input.tar.gz": "sha256:ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
         # Output component of FIX-S1
-        "fix_s1_output.tar.gz": "md5:1bcc54c61cbe2c4b96c6b09ffc8d4f0f",
+        "fix_s1_output.tar.gz": "sha256:a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
     },
 )
 
@@ -193,7 +193,7 @@ def fix_s1_output_dir(tmp_path_factory):
     )
 
     # Create paths to important directories
-    output_dir = base_dir / "fix_s1_output"
+    output_dir = base_dir / "fix_s1_pcpip_output"
     workspace_dir = output_dir / "Source1" / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 

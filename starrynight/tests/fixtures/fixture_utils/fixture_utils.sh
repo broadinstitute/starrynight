@@ -159,9 +159,7 @@ INPUT_ARCHIVE_NAME="fix_${FIXTURE_ID}_input.tar.gz"
 mkdir -p ${ARCHIVE_DIR}
 
 # Create the output archive
-cd $(dirname ${LOAD_DATA_DIR_TRIMMED}) &&
-tar -czf ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME} $(basename ${LOAD_DATA_DIR_TRIMMED}) &&
-cd -
+tar -czf ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME} -C ${SCRATCH_DIR} "${LOAD_DATA_DIR_TRIMMED#${SCRATCH_DIR}/}"
 
 # Generate SHA256 checksum for output archive
 cd ${ARCHIVE_DIR} &&
@@ -171,10 +169,11 @@ cd -
 echo "Output archive created: ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME}"
 echo "Verify with: cd ${ARCHIVE_DIR} && sha256sum -c ${OUTPUT_ARCHIVE_NAME}.sha256"
 
+# View the structure of the output archive
+tar -tvf ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME}
+
 # Create the input archive
-cd $(dirname ${FIX_INPUT_DIR}) &&
-tar -czf ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME} --exclude="*pipelines*" $(basename ${FIX_INPUT_DIR}) &&
-cd -
+tar -czf ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME} --exclude="*pipelines*" -C ${SCRATCH_DIR} "${FIX_INPUT_DIR#${SCRATCH_DIR}/}"
 
 # Generate SHA256 checksum for input archive
 cd ${ARCHIVE_DIR} &&
@@ -183,3 +182,6 @@ cd -
 
 echo "Input archive created: ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME}"
 echo "Verify with: cd ${ARCHIVE_DIR} && sha256sum -c ${INPUT_ARCHIVE_NAME}.sha256"
+
+# View the structure of the input archive
+tar -tvf ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME}
