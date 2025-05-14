@@ -39,8 +39,9 @@ class IJ:
         print(f"Mock IJ.run: {command} with options: {options}")
         return None
 
+    # Keep camelCase method names to match ImageJ's Java API
     @staticmethod
-    def get_image() -> ImagePlus:
+    def getImage() -> ImagePlus:  # noqa: N802
         """Get the current image in ImageJ.
 
         Returns:
@@ -50,33 +51,6 @@ class IJ:
         print("Mock IJ.getImage called")
         return ImagePlus()
 
-    # Keep camelCase method names to match ImageJ's Java API
-    # noqa: N802 - Function name should be lowercase
-    @staticmethod
-    def getImage() -> ImagePlus:  # noqa: N802
-        """Get the current image in ImageJ.
-
-        Returns:
-            A mock ImagePlus object.
-
-        """
-        return IJ.get_image()
-
-    @staticmethod
-    def make_rectangle(x: int, y: int, width: int, height: int) -> None:
-        """Create a rectangular selection.
-
-        Args:
-            x: X-coordinate of the selection.
-            y: Y-coordinate of the selection.
-            width: Width of the selection.
-            height: Height of the selection.
-
-        """
-        print(f"Mock IJ.makeRectangle: {x}, {y}, {width}, {height}")
-        return None
-
-    # Keep camelCase method names to match ImageJ's Java API
     @staticmethod
     def makeRectangle(x: int, y: int, width: int, height: int) -> None:  # noqa: N802
         """Create a rectangular selection.
@@ -88,7 +62,8 @@ class IJ:
             height: Height of the selection.
 
         """
-        return IJ.make_rectangle(x, y, width, height)
+        print(f"Mock IJ.makeRectangle: {x}, {y}, {width}, {height}")
+        return None
 
     @staticmethod
     def open(path: str) -> None:
@@ -102,7 +77,7 @@ class IJ:
         return None
 
     @staticmethod
-    def save_as(image: ImagePlus, format_type: str, path: str) -> None:
+    def saveAs(image: ImagePlus, format_type: str, path: str) -> None:  # noqa: N802
         """Save an image to a file.
 
         Args:
@@ -113,19 +88,6 @@ class IJ:
         """
         print(f"Mock IJ.saveAs: Saving {format_type} to {path}")
         return None
-
-    # Keep camelCase method names to match ImageJ's Java API
-    @staticmethod
-    def saveAs(image: ImagePlus, format_type: str, path: str) -> None:  # noqa: N802
-        """Save an image to a file.
-
-        Args:
-            image: The image to save.
-            format_type: The format to save as (tiff, etc).
-            path: The file path to save to.
-
-        """
-        return IJ.save_as(image, format_type, path)
 
 
 class ModuleType:
