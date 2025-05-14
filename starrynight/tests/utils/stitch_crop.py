@@ -1,4 +1,4 @@
-# ruff: noqa: ANN002,ANN003,ANN202,ANN204,ANN401,D100,D104,D202,D400,D413,D415,E501,F401,F541,F821,F841,I001,N803,N806,N816,PTH102,PTH104,PTH110,PTH112,PTH113,PTH118,PTH123,UP015,UP024,UP031,UP035,W605,E722
+# ruff: noqa: ANN002,ANN003,ANN202,ANN204,ANN401,D100,D104,D202,D400,D413,D415,E501,F401,F541,F821,F841,I001,N803,N806,N816,PTH102,PTH104,PTH110,PTH112,PTH113,PTH114,PTH115,PTH118,PTH123,UP015,UP024,UP031,UP035,W605,E722
 """Script for stitching and cropping microscopy images using ImageJ/Fiji.
 
 This script:
@@ -41,7 +41,7 @@ def confirm_continue(message="Continue to the next step?"):
 
 # Configuration parameters
 # Input/output directories
-input_file_location = "../../scratch/fix_s1_pcpip_output/Source1/Batch1"  # Base directory for input/output
+input_file_location = "../../../scratch/fix_s1_pcpip_output/Source1/Batch1"  # Base directory for input/output
 step_to_stitch = "images_corrected"  # Input subdirectory name
 subdir = "images_corrected/painting"  # Specific input directory with images
 out_subdir_tag = "Plate_Well"  # Output subdirectory name
@@ -190,11 +190,18 @@ for x in a:
         logger.info(f"Processing subdirectory: {x}")
         b = os.listdir(os.path.join(subdir, x))
         for c in b:
+            # Skip CSV files
+            if c.lower().endswith(".csv"):
+                logger.info(f"Skipping CSV file: {c}")
+                continue
+
             src = os.path.join(subdir, x, c)
             dst = os.path.join(subdir, c)
             logger.info(f"Creating symlink: {src} -> {dst}")
-            # Skip if the symlink already exists
-            if not os.path.exists(dst):
+            # Check if destination exists
+            if os.path.exists(dst) or os.path.islink(dst):
+                logger.info(f"Destination already exists, skipping: {dst}")
+            else:
                 os.symlink(src, dst)
 
 # Confirm completion of directory setup
@@ -393,7 +400,8 @@ if os.path.isdir(subdir):
                     + " interpolation=Bilinear average create",
                 )
                 # Wait for the operation to complete
-                time.sleep(15)
+                # TODO: Uncomment this after testing
+                # time.sleep(15)
                 im2 = IJ.getImage()
 
                 # STEP 9: Adjust the canvas size
@@ -415,7 +423,8 @@ if os.path.isdir(subdir):
                     + " position=Top-Left zero",
                 )
                 # Wait for the operation to complete
-                time.sleep(15)
+                # TODO: Uncomment this after testing
+                # time.sleep(15)
                 im3 = IJ.getImage()
 
                 # STEP 10: Save the stitched image
