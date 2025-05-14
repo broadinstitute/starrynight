@@ -14,8 +14,8 @@ This directory contains Python scripts and utilities to help manage test fixture
 
 - `create_starrynight_download_list.py`: Creates download and S3 copy lists for test fixtures
 - `loaddata_filter.py`: Filters CellProfiler LoadData CSV files to create smaller datasets
-- `loaddata_validate.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 - `loaddata_postprocess.py`: Updates paths, headers, and identifiers in LoadData CSV files
+- `loaddata_validate.py`: Validates paths in LoadData CSVs and checks if referenced files exist
 
 ## Script Design
 
