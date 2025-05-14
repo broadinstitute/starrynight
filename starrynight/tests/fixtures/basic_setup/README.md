@@ -23,7 +23,7 @@ To regenerate these files (if needed after code changes):
 
 ```bash
 cd /Users/shsingh/Documents/GitHub/starrynight
-uv run pytest -xvs starrynight/tests/fixtures/basic_setup/generate_fixtures.py
+REGENERATE_FIXTURES=1 uv run pytest -xvs starrynight/tests/fixtures/basic_setup/generate_fixtures.py
 ```
 
 This will run the fixture generation process and replace the existing files with freshly generated versions.
