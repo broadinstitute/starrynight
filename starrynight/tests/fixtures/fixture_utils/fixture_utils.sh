@@ -82,7 +82,7 @@ rm compress_if_needed.sh
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
 cd ${FIXTURE_UTILS_DIR} &&
-uv run filter_loaddata_csv.py \
+uv run loaddata_filter.py \
     ${LOAD_DATA_DIR} \
     ${LOAD_DATA_DIR_TRIMMED} \
     --plate Plate1 \
@@ -95,7 +95,7 @@ uv run filter_loaddata_csv.py \
 # 2. Rename Metadata_SBSCycle to Metadata_Cycle
 # 3. Remove the "Well" prefix from Metadata_Well values
 cd ${FIXTURE_UTILS_DIR} &&
-uv run postprocess_loaddata_csv.py \
+uv run loaddata_postprocess.py \
     --input-dir ${LOAD_DATA_DIR_TRIMMED} \
     --fixture-id ${FIXTURE_ID} \
     --update-paths \
@@ -106,7 +106,7 @@ uv run postprocess_loaddata_csv.py \
 ln -s ${FIX_INPUT_DIR}/Source1/Batch1/images ${FIX_OUTPUT_DIR}/Source1/Batch1/
 
 # Validate all pipeline CSVs in parallel
-parallel uv run validate_loaddata_paths.py ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
+parallel uv run loaddata_validate.py ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
 
 # Drop the soft link
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
