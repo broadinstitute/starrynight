@@ -11,6 +11,7 @@ This script:
 import os
 import time
 import logging
+import sys
 from ij import IJ
 from loci.plugins import LociExporter
 from loci.plugins.out import Exporter
@@ -20,6 +21,23 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+
+def confirm_continue(message="Continue to the next step?"):
+    """Ask the user for confirmation to continue.
+
+    Args:
+        message: The message to display to the user
+
+    Returns:
+        bool: True if the user wants to continue, False otherwise
+    """
+    logger.info("\n" + "-" * 50)
+    logger.info(message)
+    logger.info("-" * 50)
+    response = input("Continue? (y/n): ").strip().lower()
+    return response == "y" or response == "yes"
+
 
 # Configuration parameters
 # Input/output directories
@@ -166,7 +184,7 @@ logger.info(f"Checking if directory exists: {subdir}")
 a = os.listdir(subdir)
 logger.info(f"Contents of {subdir}: {a}")
 
-# Flatten any nested directories - move files from subdirectories to main directory
+# Flatten any nested directories - create symlinks from subdirectories to main directory
 for x in a:
     if os.path.isdir(os.path.join(subdir, x)):
         logger.info(f"Processing subdirectory: {x}")
@@ -174,8 +192,15 @@ for x in a:
         for c in b:
             src = os.path.join(subdir, x, c)
             dst = os.path.join(subdir, c)
-            logger.info(f"Moving file: {src} -> {dst}")
-            os.rename(os.path.join(subdir, x, c), os.path.join(subdir, c))
+            logger.info(f"Creating symlink: {src} -> {dst}")
+            # Skip if the symlink already exists
+            if not os.path.exists(dst):
+                os.symlink(src, dst)
+
+# Confirm completion of directory setup
+if not confirm_continue("Directory setup complete. Proceed to analyze files?"):
+    logger.info("Exiting at user request after directory setup")
+    sys.exit(0)
 
 # STEP 3: Analyze input files and organize by well and channel
 if os.path.isdir(subdir):
@@ -249,6 +274,13 @@ if os.path.isdir(subdir):
     logger.info(f"Final welllist: {welllist}")
     logger.info(f"Final presuflist: {presuflist}")
     print(welllist, presuflist)
+
+    # Confirm proceeding after file analysis
+    if not confirm_continue(
+        f"Found {len(welllist)} wells and {len(presuflist)} channels. Proceed to stitching?"
+    ):
+        logger.info("Exiting at user request after file analysis")
+        sys.exit(0)
 
     # STEP 4: Set up parameters for image stitching and cropping
     if round_or_square == "square":
@@ -325,6 +357,15 @@ if os.path.isdir(subdir):
                 width = str(int(round(im.width * float(scalingstring))))
                 height = str(int(round(im.height * float(scalingstring))))
 
+                # Confirm proceeding with scaling after stitching
+                if not confirm_continue(
+                    f"Stitching complete for {eachwell} - {thissuffix}. Proceed with scaling?"
+                ):
+                    logger.info(
+                        f"Exiting at user request after stitching well {eachwell}"
+                    )
+                    sys.exit(0)
+
                 # STEP 8: Scale the stitched image
                 # This scales the barcoding and cell painting images to match each other
                 print(
@@ -389,6 +430,15 @@ if os.path.isdir(subdir):
                 IJ.run("Close All")
                 im = IJ.open(os.path.join(out_subdir, fileoutname))
                 im = IJ.getImage()
+
+                # Confirm proceeding with cropping
+                if not confirm_continue(
+                    f"Scaling and saving complete for {eachwell} - {thissuffix}. Proceed with cropping?"
+                ):
+                    logger.info(
+                        f"Exiting at user request after saving stitched image for {eachwell}"
+                    )
+                    sys.exit(0)
 
                 # STEP 11: Crop the stitched image into tiles
                 for eachxtile in range(tileperside):
@@ -485,5 +535,20 @@ for eachlogfile in ["TileConfiguration.txt"]:
                 f.write("# This is a placeholder file\n")
             logger.info(f"Created empty {eachlogfile} in output directory")
 
+# Final confirmation
 logger.info("Processing complete")
+if confirm_continue(
+    "All processing is complete. Would you like to see a summary?"
+):
+    logger.info("\n" + "=" * 50)
+    logger.info("PROCESSING SUMMARY")
+    logger.info("=" * 50)
+    logger.info(f"Input directory: {subdir}")
+    logger.info(f"Stitched images: {outfolder}")
+    logger.info(f"Cropped tiles: {tile_outdir}")
+    logger.info(f"Downsampled QC images: {downsample_outdir}")
+    logger.info(f"Wells processed: {welllist}")
+    logger.info(f"Channels processed: {[s[1] for s in presuflist]}")
+    logger.info("=" * 50)
+
 print("done")
