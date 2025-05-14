@@ -18,6 +18,7 @@ documentation previously in this README.
 ## Available Scripts
 
 - `create_starrynight_download_list.py`: Creates download lists for test fixtures
-- `filter_loaddata_csv.py`: Filters LoadData CSV files to create smaller datasets
-- `validate_loaddata_paths.py`: Validates paths in LoadData CSVs
-- `postprocess_loaddata_csv.py`: Updates paths, headers, and identifiers in CSVs
+- `loaddata_utils.py`: Consolidated utility for processing LoadData CSV files:
+  - `filter`: Filters LoadData CSV files to create smaller datasets
+  - `validate`: Validates paths in LoadData CSVs
+  - `postprocess`: Updates paths, headers, and identifiers in CSVs
