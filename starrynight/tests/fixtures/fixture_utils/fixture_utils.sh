@@ -15,10 +15,9 @@
 # Components
 #
 # - create_starrynight_download_list.py: Creates download and S3 copy lists for test fixtures
-# - loaddata_utils.py: Processes LoadData CSV files (filter, validate, and postprocess)
-#   - filter: Filters CellProfiler LoadData CSV files to create smaller datasets
-#   - validate: Validates paths in LoadData CSVs and checks if referenced files exist
-#   - postprocess: Updates paths, headers, and identifiers in LoadData CSV files
+# - filter_loaddata_csv.py: Filters CellProfiler LoadData CSV files to create smaller datasets
+# - validate_loaddata_paths.py: Validates paths in LoadData CSVs and checks if referenced files exist
+# - postprocess_loaddata_csv.py: Updates paths, headers, and identifiers in LoadData CSV files
 #
 # Install s5cmd first if not available: https://github.com/peak/s5cmd
 
@@ -83,7 +82,7 @@ rm compress_if_needed.sh
 # IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
 # Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
 cd ${FIXTURE_UTILS_DIR} &&
-uv run loaddata_utils.py filter \
+uv run filter_loaddata_csv.py \
     ${LOAD_DATA_DIR} \
     ${LOAD_DATA_DIR_TRIMMED} \
     --plate Plate1 \
@@ -96,7 +95,7 @@ uv run loaddata_utils.py filter \
 # 2. Rename Metadata_SBSCycle to Metadata_Cycle
 # 3. Remove the "Well" prefix from Metadata_Well values
 cd ${FIXTURE_UTILS_DIR} &&
-uv run loaddata_utils.py postprocess \
+uv run postprocess_loaddata_csv.py \
     --input-dir ${LOAD_DATA_DIR_TRIMMED} \
     --fixture-id ${FIXTURE_ID} \
     --update-paths \
@@ -107,7 +106,7 @@ uv run loaddata_utils.py postprocess \
 ln -s ${FIX_INPUT_DIR}/Source1/Batch1/images ${FIX_OUTPUT_DIR}/Source1/Batch1/
 
 # Validate all pipeline CSVs in parallel
-parallel uv run loaddata_utils.py validate ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
+parallel uv run validate_loaddata_paths.py ${LOAD_DATA_DIR_TRIMMED}/load_data_pipeline{}.csv ::: 1 2 3 5 6 7 9
 
 # Drop the soft link
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
