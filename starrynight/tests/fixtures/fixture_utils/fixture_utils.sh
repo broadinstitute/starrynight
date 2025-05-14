@@ -152,20 +152,34 @@ rm -rf "${TEMP_MISSING_DIR}"
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
 
 # Set archive name
-ARCHIVE_NAME="fix_${FIXTURE_ID}_output.tar.gz"
+OUTPUT_ARCHIVE_NAME="fix_${FIXTURE_ID}_output.tar.gz"
+INPUT_ARCHIVE_NAME="fix_${FIXTURE_ID}_input.tar.gz"
 
 # Create directory for archives if it doesn't exist
 mkdir -p ${ARCHIVE_DIR}
 
-# Create the archive
+# Create the output archive
 cd $(dirname ${LOAD_DATA_DIR_TRIMMED}) &&
-tar -czf ${ARCHIVE_DIR}/${ARCHIVE_NAME} $(basename ${LOAD_DATA_DIR_TRIMMED}) &&
+tar -czf ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME} $(basename ${LOAD_DATA_DIR_TRIMMED}) &&
 cd -
 
-# Generate SHA256 checksum
+# Generate SHA256 checksum for output archive
 cd ${ARCHIVE_DIR} &&
-sha256sum ${ARCHIVE_NAME} > ${ARCHIVE_NAME}.sha256 &&
+sha256sum ${OUTPUT_ARCHIVE_NAME} > ${OUTPUT_ARCHIVE_NAME}.sha256 &&
 cd -
 
-echo "Archive created: ${ARCHIVE_DIR}/${ARCHIVE_NAME}"
-echo "Verify with: cd ${ARCHIVE_DIR} && sha256sum -c ${ARCHIVE_NAME}.sha256"
+echo "Output archive created: ${ARCHIVE_DIR}/${OUTPUT_ARCHIVE_NAME}"
+echo "Verify with: cd ${ARCHIVE_DIR} && sha256sum -c ${OUTPUT_ARCHIVE_NAME}.sha256"
+
+# Create the input archive
+cd $(dirname ${FIX_INPUT_DIR}) &&
+tar -czf ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME} --exclude="*pipelines*" $(basename ${FIX_INPUT_DIR}) &&
+cd -
+
+# Generate SHA256 checksum for input archive
+cd ${ARCHIVE_DIR} &&
+sha256sum ${INPUT_ARCHIVE_NAME} > ${INPUT_ARCHIVE_NAME}.sha256 &&
+cd -
+
+echo "Input archive created: ${ARCHIVE_DIR}/${INPUT_ARCHIVE_NAME}"
+echo "Verify with: cd ${ARCHIVE_DIR} && sha256sum -c ${INPUT_ARCHIVE_NAME}.sha256"
