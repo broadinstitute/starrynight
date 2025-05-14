@@ -77,7 +77,7 @@ def filter_csv_by_metadata(
         for col in df.columns:
             # Check if this column has cycle information
             has_cycle_info = any(
-                f"_Cycle{i.zfill(2)}_" in col for i in range(100)
+                f"_Cycle{str(i).zfill(2)}_" in col for i in range(100)
             )
 
             if not has_cycle_info or any(
