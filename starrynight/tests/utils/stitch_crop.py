@@ -6,6 +6,15 @@ This script:
 2. Stitches them together into a full well image
 3. Crops the stitched image into tiles for analysis
 4. Creates downsampled versions for quality control
+
+Usage:
+  - Run normally for interactive mode with confirmations:
+    python stitch_crop.py
+
+  - Run in automatic mode (skip all confirmations):
+    python stitch_crop.py -y
+    python stitch_crop.py --yes
+    python stitch_crop.py auto
 """
 
 import os
@@ -22,6 +31,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Handle command-line arguments
+autorun = False
+if len(sys.argv) > 1:
+    if sys.argv[1].lower() in ("-y", "--yes", "yes", "auto"):
+        autorun = True
+        logger.info("Auto mode: All confirmations will be skipped")
+
 
 def confirm_continue(message="Continue to the next step?"):
     """Ask the user for confirmation to continue.
@@ -32,9 +48,17 @@ def confirm_continue(message="Continue to the next step?"):
     Returns:
         bool: True if the user wants to continue, False otherwise
     """
+    global autorun
     logger.info("\n" + "-" * 50)
     logger.info(message)
     logger.info("-" * 50)
+
+    # If autorun is enabled, skip confirmation and return True
+    if autorun:
+        logger.info("Auto-confirmed: Proceeding automatically")
+        return True
+
+    # Otherwise ask for confirmation
     response = input("Continue? (y/n): ").strip().lower()
     return response == "y" or response == "yes"
 
@@ -558,7 +582,8 @@ for eachlogfile in ["TileConfiguration.txt"]:
 
 # Final confirmation
 logger.info("Processing complete")
-if confirm_continue(
+# In autorun mode, always show summary
+if autorun or confirm_continue(
     "All processing is complete. Would you like to see a summary?"
 ):
     logger.info("\n" + "=" * 50)
