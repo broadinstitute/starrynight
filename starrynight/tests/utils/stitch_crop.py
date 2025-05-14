@@ -1,3 +1,10 @@
+import os
+import time
+
+from ij import IJ
+from loci.plugins import LociExporter
+from loci.plugins.out import Exporter
+
 input_file_location = "D:\\AMD_screening\\20231011_batch_1"
 step_to_stitch = "images_corrected"
 subdir = "images_corrected\\painting"
@@ -24,13 +31,6 @@ yoffset_tiles = "0"
 compress = "True"
 
 top_outfolder = input_file_location
-
-from ij import IJ
-import os
-import time
-
-from loci.plugins.out import Exporter
-from loci.plugins import LociExporter
 
 plugin = LociExporter()
 
@@ -62,7 +62,8 @@ def savefile(im, imname, plugin, compress="false"):
                 exporter.run()
                 print("Succeeded after attempt ", attemptcount)
                 return
-            except:
+            except Exception as e:
+                print(f"Error saving file: {e}")
                 attemptcount += 1
         print("failed 5 times at saving")
 
@@ -97,8 +98,6 @@ if not os.path.exists(out_subdir):
 subdir = os.path.join(input_file_location, subdir)
 
 # bypassed awsdownload == 'True' for test
-import os
-
 a = os.listdir(subdir)
 for x in a:
     if os.path.isdir(os.path.join(subdir, x)):
@@ -126,7 +125,7 @@ if os.path.isdir(subdir):
                 if Well not in welllist:
                     welllist.append(Well)
                 if channame in channelSuffix:
-                    if permprefix == None:
+                    if permprefix is None:
                         permprefix = prefixBeforeWell
                         permsuffix = channelSuffix
     for eachpresuf in presuflist:
