@@ -567,15 +567,13 @@ logger.info("Processing complete")
 if autorun or confirm_continue(
     "All processing is complete. Would you like to see a summary?"
 ):
-    logger.info("\n" + "=" * 50)
-    logger.info("PROCESSING SUMMARY")
-    logger.info("=" * 50)
+    logger.info("======== PROCESSING SUMMARY =========")
     logger.info(f"Input directory: {subdir}")
     logger.info(f"Stitched images: {outfolder}")
     logger.info(f"Cropped tiles: {tile_outdir}")
     logger.info(f"Downsampled QC images: {downsample_outdir}")
     logger.info(f"Wells processed: {welllist}")
     logger.info(f"Channels processed: {[s[1] for s in presuflist]}")
-    logger.info("=" * 50)
+    logger.info("=====================================")
 
 logger.info("Processing completed successfully")
