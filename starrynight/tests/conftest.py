@@ -83,26 +83,51 @@ STARRYNIGHT_CACHE = pooch.create(
 )
 
 
-def _setup_input_dir(
-    tmp_path_factory: pytest.TempPathFactory,
-    archive_name: str,
-    dir_prefix: str,
-    input_dir_name: str,
-    dataset_dir_name: str,
-) -> dict[str, Path]:
-    """Set up an input directory from a test archive.
+@pytest.fixture(scope="module")
+def fix_input_dir(request, tmp_path_factory):
+    """Fixture that provides a temporary directory with extracted input data.
 
-    Args:
-        tmp_path_factory: pytest fixture for creating temporary directories
-        archive_name: Name of the archive file to extract
-        dir_prefix: Prefix for the temporary directory name
-        input_dir_name: Name of the extracted input directory
-        dataset_dir_name: Name of the dataset directory within input_dir
+    This fixture can be parameterized to use different input data:
+    - "fix_s1": Uses the FIX-S1 test fixture (default)
+    - "fix_s2": Uses the FIX-S2 test fixture
+
+    Use indirect parameterization to specify the parameters:
+    @pytest.mark.parametrize("fix_input_dir", ["fix_s1"], indirect=True)
+    @pytest.mark.parametrize("fix_input_dir", ["fix_s2"], indirect=True)
+
+    The default fixture is "fix_s1" if no parameter is specified.
 
     Returns:
-        dict: Dictionary with base_dir and input_dir paths
+        dict: Dictionary with base_dir, input_dir, and fixture_id
 
     """
+    # Get fixture ID from parameter, default to fix_s1
+    fixture_id = getattr(request, "param", "fix_s1")
+
+    # If parameter is a dictionary, extract fixture key
+    if isinstance(fixture_id, dict):
+        fixture_id = fixture_id.get("fixture", "fix_s1")
+
+    # Validate the fixture ID
+    if fixture_id not in FIXTURE_CHANNEL_CONFIGS:
+        raise ValueError(
+            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CHANNEL_CONFIGS.keys())}"
+        )
+
+    # Set up parameters based on fixture ID
+    if fixture_id == "fix_s1":
+        archive_name = "fix_s1_input.tar.gz"
+        dir_prefix = "fix_s1_input_test"
+        input_dir_name = "fix_s1_input"
+        dataset_dir_name = "Source1"
+    elif fixture_id == "fix_s2":
+        archive_name = "fix_s2_input.tar.gz"
+        dir_prefix = "fix_s2_input_test"
+        input_dir_name = "fix_s2_input"
+        dataset_dir_name = (
+            "Source1"  # Using same dataset directory name for now
+        )
+
     # Create a temporary directory
     base_dir = tmp_path_factory.mktemp(dir_prefix)
 
@@ -133,35 +158,12 @@ def _setup_input_dir(
         f"No image files (*.tiff, *.tif) found in {input_dir_name}"
     )
 
-    return {"base_dir": base_dir, "input_dir": input_dir}
-
-
-@pytest.fixture(scope="module")
-def fix_s1_input_dir(tmp_path_factory):
-    """Fixture that provides a temporary directory with extracted FIX-S1 input data."""
-    result = _setup_input_dir(
-        tmp_path_factory,
-        "fix_s1_input.tar.gz",
-        "fix_s1_input_test",
-        "fix_s1_input",
-        "Source1",
-    )
-    yield result
-    # Cleanup is handled automatically by pytest's tmp_path_factory
-
-
-@pytest.fixture(scope="module")
-def fix_s2_input_dir(tmp_path_factory):
-    """Fixture that provides a temporary directory with extracted FIX-S2 input data."""
-    result = _setup_input_dir(
-        tmp_path_factory,
-        "fix_s2_input.tar.gz",
-        "fix_s2_input_test",
-        "fix_s2_input",
-        "Source1",  # Using same dataset directory name for now, can be changed as needed
-    )
-    yield result
-    # Cleanup is handled automatically by pytest's tmp_path_factory
+    # Include fixture_id in the returned dictionary
+    return {
+        "base_dir": base_dir,
+        "input_dir": input_dir,
+        "fixture_id": fixture_id,
+    }
 
 
 def _setup_output_dir(
@@ -533,7 +535,7 @@ def _handle_pregenerated_setup(
 
 
 @pytest.fixture(scope="function")
-def fix_starrynight_setup(request):
+def fix_starrynight_setup(request, fix_input_dir):
     """Fixture that sets up the StarryNight workflow environment.
 
     This fixture can operate in multiple modes, specified through indirect parameterization:
@@ -541,15 +543,19 @@ def fix_starrynight_setup(request):
       - "generated": Executes actual CLI commands to generate all files (slow but thorough)
       - "pregenerated": Uses pre-generated files from fixtures (fast)
 
-    - Fixture parameter: "fix_s1" or "fix_s2"
-      - "fix_s1": Uses the FIX-S1 test fixture (default)
-      - "fix_s2": Uses the FIX-S2 test fixture (alternative with same inputs, different outputs)
+    The fixture ID is taken directly from the fix_input_dir fixture.
 
-    Use indirect parameterization to specify the parameters:
-    @pytest.mark.parametrize("fix_starrynight_setup", ["generated"], indirect=True)
-    @pytest.mark.parametrize("fix_starrynight_setup", [{"mode": "generated", "fixture": "fix_s2"}], indirect=True)
-
-    The default mode is "generated" with fixture "fix_s1" if no parameter is specified.
+    Use indirect parameterization to specify both parameters:
+    @pytest.mark.parametrize(
+        "fix_input_dir,fix_starrynight_setup",
+        [
+            ("fix_s1", {"mode": "generated"}),
+            ("fix_s1", {"mode": "pregenerated"}),
+            ("fix_s2", {"mode": "generated"}),
+            ("fix_s2", {"mode": "pregenerated"}),
+        ],
+        indirect=True,
+    )
 
     Returns:
         dict: Dictionary containing:
@@ -557,40 +563,26 @@ def fix_starrynight_setup(request):
             - experiment_json_path: Path to the generated/pre-generated experiment.json file
 
     """
-    # Parse parameters - support both string and dictionary format
-    if isinstance(getattr(request, "param", "generated"), str):
-        mode = getattr(request, "param", "generated")
-        fixture_id = "fix_s1"  # Default to fix_s1
-    else:
-        param_dict = getattr(
-            request, "param", {"mode": "generated", "fixture": "fix_s1"}
-        )
-        mode = param_dict.get("mode", "generated")
-        fixture_id = param_dict.get("fixture", "fix_s1")
+    # Extract the fixture ID from fix_input_dir
+    fixture_id = fix_input_dir["fixture_id"]
 
-    # Validate the fixture ID
-    if fixture_id not in FIXTURE_CHANNEL_CONFIGS:
-        raise ValueError(
-            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CHANNEL_CONFIGS.keys())}"
-        )
+    # Extract mode parameter with a default of "generated"
+    param = getattr(request, "param", {"mode": "generated"})
+    if isinstance(param, str):
+        mode = param
+    else:
+        mode = param.get("mode", "generated")
 
     # Get the channel configuration for this fixture
     channel_config = FIXTURE_CHANNEL_CONFIGS[fixture_id]
 
-    # Dynamically import the right fixtures based on fixture_id
-    if fixture_id == "fix_s1":
-        input_dir_fixture = pytest.getfixturevalue("fix_s1_input_dir")
-        workspace_fixture = pytest.getfixturevalue("fix_s1_workspace")
-    elif fixture_id == "fix_s2":
-        input_dir_fixture = pytest.getfixturevalue("fix_s2_input_dir")
-        workspace_fixture = pytest.getfixturevalue("fix_s2_workspace")
-    else:
-        raise ValueError(f"Unknown fixture: {fixture_id}")
+    # Get workspace fixture dynamically
+    workspace_fixture = request.getfixturevalue(f"{fixture_id}_workspace")
 
     # Execute the appropriate setup based on mode parameter
     if mode == "generated":
         return _handle_generated_setup(
-            workspace_fixture, input_dir_fixture["input_dir"], channel_config
+            workspace_fixture, fix_input_dir["input_dir"], channel_config
         )
     elif mode == "pregenerated":
         return _handle_pregenerated_setup(workspace_fixture, fixture_id)
