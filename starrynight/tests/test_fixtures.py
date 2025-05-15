@@ -14,104 +14,6 @@ import pytest
 # Both fixtures provide the same output contract but serve different testing purposes.
 
 
-def test_fix_s1_input_dir(fix_s1_input_dir):
-    """Test that the FIX-S1 input directory fixture is working correctly.
-
-    Note: Basic existence checks are already performed in the fixture itself.
-    This test focuses on validating functional aspects and contents.
-    """
-    # Verify that we can find image files in the input directory
-    images = list(fix_s1_input_dir["input_dir"].glob("**/*.tiff"))
-    assert len(images) > 0, "No test images found in the FIX-S1 input data"
-
-    # Verify structure - should contain source folders
-    source_dirs = [
-        d
-        for d in fix_s1_input_dir["input_dir"].iterdir()
-        if d.is_dir() and d.name.startswith("Source")
-    ]
-    assert len(source_dirs) > 0, "No Source directories found in input data"
-
-    # Print the directory structure for debugging
-    print(f"FIX-S1 input directory: {fix_s1_input_dir['input_dir']}")
-
-    # Print a few image paths
-    print("FIX-S1 test images:")
-    for img in (
-        images[:3] if len(images) >= 3 else images
-    ):  # Show up to 3 images
-        print(f"  {img}")
-
-
-def test_fix_s1_output_dir(fix_s1_output_dir):
-    """Test that the FIX-S1 output directory fixture is working correctly.
-
-    Note: Basic existence checks are already performed in the fixture itself.
-    This test focuses on validating functional aspects and contents.
-    """
-    # Verify all keys are present in the returned dictionary
-    expected_keys = [
-        "base_dir",
-        "output_dir",
-        "workspace_dir",
-        "load_data_csv_dir",
-    ]
-    for key in expected_keys:
-        assert key in fix_s1_output_dir, (
-            f"Missing '{key}' in output fixture output"
-        )
-
-    # Check for load data CSV files
-    load_data_files = list(
-        fix_s1_output_dir["load_data_csv_dir"].glob("**/load_data_*.csv")
-    )
-    assert len(load_data_files) > 0, (
-        "No LoadData CSV files found in the output data"
-    )
-
-    # Print the directory structure for debugging
-    print(f"FIX-S1 output directory: {fix_s1_output_dir['output_dir']}")
-    print(f"FIX-S1 output workspace: {fix_s1_output_dir['workspace_dir']}")
-
-    # Print a few LoadData CSV file paths
-    print("FIX-S1 LoadData CSV files:")
-    for csv_file in load_data_files[:3]:  # Show the first 3 files
-        print(f"  {csv_file}")
-
-
-def test_fix_s1_workspace(fix_s1_workspace):
-    """Test that the FIX-S1 workspace fixture is working correctly.
-
-    Note: The fixture already ensures directory creation.
-    This test focuses on functional validation of the workspace.
-    """
-    # Verify all keys are present in the returned dictionary
-    expected_keys = [
-        "workspace_dir",
-        "index_dir",
-        "inventory_dir",
-        "inventory_inv_dir",
-        "cp_illum_calc_dir",
-        "cp_illum_apply_dir",
-        "sbs_illum_calc_dir",
-        "sbs_illum_apply_dir",
-        "experiment_json",
-        "experiment_init_json",
-    ]
-    for key in expected_keys:
-        assert key in fix_s1_workspace, (
-            f"Missing '{key}' in workspace fixture output"
-        )
-
-    # Verify we can write to these directories (functional test)
-    test_file = fix_s1_workspace["workspace_dir"] / "test_file.txt"
-    test_file.write_text("Test content")
-    assert test_file.exists()
-
-    # Print the directory structure for debugging
-    print(f"FIX-S1 workspace directory: {fix_s1_workspace['workspace_dir']}")
-
-
 @pytest.mark.parametrize(
     "fix_starrynight_setup", ["generated", "pregenerated"], indirect=True
 )
@@ -127,13 +29,6 @@ def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
     """
     # The fixture is provided directly
     setup_fixture = fix_starrynight_setup
-
-    # Validate fixture structure
-    assert isinstance(setup_fixture, dict), "Fixture should return a dictionary"
-    assert "index_file" in setup_fixture, "Missing index_file in fixture output"
-    assert "experiment_json_path" in setup_fixture, (
-        "Missing experiment_json_path in fixture output"
-    )
 
     # Get paths from fixture
     index_file = setup_fixture["index_file"]

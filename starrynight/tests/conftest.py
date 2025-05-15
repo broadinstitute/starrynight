@@ -157,9 +157,20 @@ def _setup_input_dir(
     # Essential check: did extraction work at all?
     assert input_dir.exists(), "Input test data not extracted correctly"
 
-    # Check that at least one expected subdirectory exists
-    assert (input_dir / dataset_dir_name).exists(), (
+    # Check that at least one expected dataset directory exists
+    dataset_dir = input_dir / dataset_dir_name
+    assert dataset_dir.exists(), (
         f"Expected {dataset_dir_name} directory not found in input data"
+    )
+
+    # Verify that image files exist in the input directory
+    image_files = list(input_dir.glob("**/*.tiff"))
+    if not image_files:
+        # Try alternative extensions
+        image_files = list(input_dir.glob("**/*.tif"))
+
+    assert len(image_files) > 0, (
+        f"No image files (*.tiff, *.tif) found in {input_dir_name}"
     )
 
     return {"base_dir": base_dir, "input_dir": input_dir}
@@ -230,6 +241,17 @@ def _setup_output_dir(
     assert output_dir.exists(), "Output test data not extracted correctly"
     assert workspace_dir.exists(), (
         f"Workspace directory not found in {dataset_dir_name} output data"
+    )
+
+    # Verify that load_data_csv directory exists
+    assert load_data_csv_dir.exists(), (
+        f"load_data_csv directory not found in {dataset_dir_name} workspace"
+    )
+
+    # Check for LoadData CSV files
+    load_data_files = list(load_data_csv_dir.glob("load_data_*.csv"))
+    assert len(load_data_files) > 0, (
+        f"No LoadData CSV files found in {dataset_dir_name} output data"
     )
 
     return {
@@ -510,7 +532,9 @@ def _handle_pregenerated_setup(
 
     # If fixture directory doesn't exist, fall back to basic_setup for backward compatibility
     if not fixtures_dir.exists():
-        fixtures_dir = fixtures_base_dir
+        raise FileNotFoundError(
+            f"Fixture directory not found for {fixture_id} at {fixtures_dir}"
+        )
 
     # Define paths to pre-generated files in fixtures directory
     pregenerated_index_file = fixtures_dir / "index.parquet"
