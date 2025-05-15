@@ -287,20 +287,26 @@ WORKFLOW_CONFIGS = [
     },
 ]
 
+# Define which tests are compatible with which fixture IDs
+FIXTURE_COMPATIBILITY = {
+    "cp_illum_calc": ["fix_s1", "fix_s2"],
+    "cp_illum_apply": ["fix_s1", "fix_s2"],
+    "cp_segmentation_check": ["fix_s1", "fix_s2"],
+    "sbs_illum_calc": ["fix_s1", "fix_s2"],
+    "sbs_illum_apply": ["fix_s1", "fix_s2"],
+    "sbs_preprocessing": ["fix_s1", "fix_s2"],
+    "analysis": ["fix_s1", "fix_s2"],
+}
 
-@pytest.mark.parametrize(
-    "fix_starrynight_setup",
-    ["generated", "pregenerated"],
-    ids=["full", "fast"],
-    indirect=True,
-)
+
+@pytest.mark.parametrize("fixture_id", ["fix_s1", "fix_s2"])
+@pytest.mark.parametrize("mode", ["generated", "pregenerated"])
 @pytest.mark.parametrize("config", WORKFLOW_CONFIGS, ids=lambda c: c["name"])
 def test_complete_workflow(
-    fix_starrynight_setup: dict[str, Path],
+    fixture_id: str,
+    mode: str,
     config: dict[str, Any],
     request: pytest.FixtureRequest,
-    fix_s1_workspace: dict[str, Path],
-    fix_s1_output_dir: dict[str, Path],
 ) -> None:
     """Test the complete three-step workflow for different steps.
 
@@ -318,11 +324,10 @@ def test_complete_workflow(
     with the skip reason taken from the "skip_reason" field.
 
     Args:
-        fix_starrynight_setup: Fixture providing index and experiment configuration
+        fixture_id: Identifier for the test fixture (fix_s1, fix_s2)
+        mode: Setup mode ("generated" or "pregenerated")
         config: Configuration for the specific workflow step being tested
         request: pytest request object for parameter access
-        fix_s1_workspace: Fixture providing workspace directory structure
-        fix_s1_output_dir: Fixture providing reference output data for validation
 
     """
     # Skip test if config has skip=True
@@ -330,24 +335,37 @@ def test_complete_workflow(
         skip_reason = config.get("skip_reason", "Test is disabled")
         pytest.skip(skip_reason)
 
-    # Use the parameterized fixture directly
-    setup_fixture = fix_starrynight_setup
+    # Skip test if not compatible with this fixture_id
+    test_name = config["name"]
+    compatible_fixtures = FIXTURE_COMPATIBILITY.get(test_name, [])
+    if fixture_id not in compatible_fixtures:
+        pytest.skip(
+            f"Test '{test_name}' is not compatible with fixture '{fixture_id}'"
+        )
 
-    # Get current fixture mode for debugging
-    current_mode = request.node.callspec.params.get("fix_starrynight_setup")
-    print(f"\nRunning test with setup mode: {current_mode}")
+    # Dynamically select the appropriate fixtures based on fixture_id and mode
+    fixture_name = f"{fixture_id}_starrynight_{mode}"
+    workspace_name = f"{fixture_id}_workspace"
+    output_dir_name = f"{fixture_id}_output_dir"
+
+    # Get the fixtures from the request
+    setup_fixture = request.getfixturevalue(fixture_name)
+    workspace = request.getfixturevalue(workspace_name)
+    output_dir = request.getfixturevalue(output_dir_name)
+
+    print(f"\nRunning test with fixture: {fixture_id}, mode: {mode}")
     print(f"Testing workflow step: {config['name']}")
 
     # Step 1: Generate and validate LoadData files
     loaddata_dir, matching_files = generate_and_validate_loaddata(
         config=config,
         setup_fixture=setup_fixture,
-        workspace=fix_s1_workspace,
-        output_dir=fix_s1_output_dir,
+        workspace=workspace,
+        output_dir=output_dir,
     )
 
     # Step 2: Generate and validate pipeline (not implemented)
-    # pipeline_path = generate_pipeline(config, loaddata_dir, fix_s1_workspace)
+    # pipeline_path = generate_pipeline(config, loaddata_dir, workspace)
 
     # Step 3: Execute and validate CellProfiler (not implemented)
     # output_dir = execute_pipeline(config, pipeline_path, loaddata_dir)
