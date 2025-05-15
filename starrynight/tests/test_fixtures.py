@@ -15,17 +15,24 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    "fix_starrynight_setup", ["generated", "pregenerated"], indirect=True
+    "fix_starrynight_setup",
+    [
+        {"mode": "generated", "fixture": "fix_s1"},
+        {"mode": "pregenerated", "fixture": "fix_s1"},
+        {"mode": "generated", "fixture": "fix_s2"},
+        {"mode": "pregenerated", "fixture": "fix_s2"},
+    ],
+    indirect=True,
 )
 def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
-    """Test both modes of the workflow setup fixture with identical validation logic.
+    """Test all fixture modes and configurations with identical validation logic.
 
-    This test uses explicit parameterization to run against both fixture modes:
-    - "generated": Runs the actual CLI commands to generate files (slow but validates CLI)
-    - "pregenerated": Copies pre-generated files for faster testing
+    This test uses explicit parameterization to run against all combinations:
+    - Modes: "generated" vs "pregenerated"
+    - Fixtures: "fix_s1" vs "fix_s2"
 
-    Both modes provide identical output structure (index.parquet and experiment.json files).
-    The parameterization ensures both approaches meet the same requirements.
+    This ensures that all fixture configurations work correctly regardless of how
+    they're created (via CLI or from pre-generated files).
     """
     # The fixture is provided directly
     setup_fixture = fix_starrynight_setup
@@ -178,6 +185,8 @@ def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
     # Print some debug information
     # Get current parameter value for the parameterized test
     current_param = request.node.callspec.params.get("fix_starrynight_setup")
-    print(f"Fixture mode: {current_param}")
+    mode = current_param.get("mode")
+    fixture = current_param.get("fixture")
+    print(f"Testing fixture={fixture}, mode={mode}")
     print(f"Index file location: {index_file}")
     print(f"Experiment JSON location: {experiment_json_path}")
