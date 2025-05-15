@@ -57,15 +57,12 @@ FIXTURE_CHANNEL_CONFIGS = {
         "sbs_mito_channel": "ZO1AF488",
     },
     "fix_s2": {
-        # Example of a different channel configuration for FIX-S2
-        # This will create different outputs despite identical inputs
         "cp_nuclei_channel": "DAPI",
         "cp_cell_channel": "PhalloAF750",
         "cp_mito_channel": "ZO1AF488",
-        # Different SBS channel assignments
         "sbs_nuclei_channel": "DAPI",
-        "sbs_cell_channel": "ZO1AF488",  # Swapped from FIX-S1
-        "sbs_mito_channel": "PhalloAF750",  # Swapped from FIX-S1
+        "sbs_cell_channel": "PhalloAF750",
+        "sbs_mito_channel": "ZO1AF488",
     },
 }
 
@@ -84,43 +81,6 @@ STARRYNIGHT_CACHE = pooch.create(
         "fix_s2_output.tar.gz": "sha256:dummy_sha256_for_fix_s2_output_to_be_replaced_with_actual_hash",
     },
 )
-
-
-def _fetch_archive(archive_name: str) -> str:
-    """Fetch and verify a test data archive."""
-    archive_path = STARRYNIGHT_CACHE.fetch(archive_name, processor=None)
-    archive_path_obj = Path(archive_path)
-    assert archive_path_obj.exists(), (
-        "Test data archive not downloaded correctly"
-    )
-    assert tarfile.is_tarfile(archive_path_obj), (
-        "Downloaded file is not a valid tar archive"
-    )
-    return archive_path
-
-
-@pytest.fixture(scope="session")
-def fix_s1_input_archive():
-    """Fixture that downloads and caches the FIX-S1 input test data archive."""
-    return _fetch_archive("fix_s1_input.tar.gz")
-
-
-@pytest.fixture(scope="session")
-def fix_s1_output_archive():
-    """Fixture that downloads and caches the FIX-S1 output test data archive."""
-    return _fetch_archive("fix_s1_output.tar.gz")
-
-
-@pytest.fixture(scope="session")
-def fix_s2_input_archive():
-    """Fixture that downloads and caches the FIX-S2 input test data archive."""
-    return _fetch_archive("fix_s2_input.tar.gz")
-
-
-@pytest.fixture(scope="session")
-def fix_s2_output_archive():
-    """Fixture that downloads and caches the FIX-S2 output test data archive."""
-    return _fetch_archive("fix_s2_output.tar.gz")
 
 
 def _setup_input_dir(
