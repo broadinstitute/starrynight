@@ -44,13 +44,7 @@ from .fixtures.fixture_setup import (
 @pytest.fixture(scope="module")
 def fix_s1_input_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S1 input data."""
-    result = _setup_input_dir(
-        tmp_path_factory,
-        "fix_s1_input.tar.gz",
-        "fix_s1_input_test",
-        "fix_s1_input",
-        "Source1",
-    )
+    result = _setup_input_dir(tmp_path_factory, "fix_s1")
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
@@ -58,13 +52,7 @@ def fix_s1_input_dir(tmp_path_factory):
 @pytest.fixture(scope="module")
 def fix_s2_input_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S2 input data."""
-    result = _setup_input_dir(
-        tmp_path_factory,
-        "fix_s2_input.tar.gz",
-        "fix_s2_input_test",
-        "fix_s2_input",
-        "Source1",  # Using same dataset directory name for now, can be changed as needed
-    )
+    result = _setup_input_dir(tmp_path_factory, "fix_s2")
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
@@ -72,13 +60,7 @@ def fix_s2_input_dir(tmp_path_factory):
 @pytest.fixture(scope="module")
 def fix_s1_output_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S1 output data."""
-    result = _setup_output_dir(
-        tmp_path_factory,
-        "fix_s1_output.tar.gz",
-        "fix_s1_output_test",
-        "fix_s1_pcpip_output",
-        "Source1",
-    )
+    result = _setup_output_dir(tmp_path_factory, "fix_s1")
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
@@ -86,13 +68,7 @@ def fix_s1_output_dir(tmp_path_factory):
 @pytest.fixture(scope="module")
 def fix_s2_output_dir(tmp_path_factory):
     """Fixture that provides a temporary directory with extracted FIX-S2 output data."""
-    result = _setup_output_dir(
-        tmp_path_factory,
-        "fix_s2_output.tar.gz",
-        "fix_s2_output_test",
-        "fix_s2_pcpip_output",
-        "Source1",  # Using same dataset directory name for now, can be changed as needed
-    )
+    result = _setup_output_dir(tmp_path_factory, "fix_s2")
     yield result
     # Cleanup is handled automatically by pytest's tmp_path_factory
 
@@ -100,13 +76,13 @@ def fix_s2_output_dir(tmp_path_factory):
 @pytest.fixture(scope="function")
 def fix_s1_workspace(tmp_path_factory):
     """Fixture that creates a workspace directory structure for FIX-S1 tests."""
-    return _setup_workspace(tmp_path_factory, "fix_s1_workspace")
+    return _setup_workspace(tmp_path_factory, "fix_s1")
 
 
 @pytest.fixture(scope="function")
 def fix_s2_workspace(tmp_path_factory):
     """Fixture that creates a workspace directory structure for FIX-S2 tests."""
-    return _setup_workspace(tmp_path_factory, "fix_s2_workspace")
+    return _setup_workspace(tmp_path_factory, "fix_s2")
 
 
 @pytest.fixture(scope="function")

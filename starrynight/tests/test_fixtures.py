@@ -20,8 +20,8 @@ import pytest
     [
         "fix_s1_starrynight_generated",
         "fix_s1_starrynight_pregenerated",
-        # "fix_s2_starrynight_generated",
-        # "fix_s2_starrynight_pregenerated",
+        "fix_s2_starrynight_generated",
+        "fix_s2_starrynight_pregenerated",
     ],
 )
 def test_starrynight_setup_fixtures(starrynight_fixture, request):

@@ -12,23 +12,61 @@ from starrynight.cli.exp import new as exp_new
 from starrynight.cli.index import gen_index
 from starrynight.cli.inv import gen_inv
 
-# Define fixture-specific channel configurations
-FIXTURE_CHANNEL_CONFIGS = {
+# Comprehensive fixture configuration
+FIXTURE_CONFIGS = {
     "fix_s1": {
-        "cp_nuclei_channel": "DAPI",
-        "cp_cell_channel": "PhalloAF750",
-        "cp_mito_channel": "ZO1AF488",
-        "sbs_nuclei_channel": "DAPI",
-        "sbs_cell_channel": "PhalloAF750",
-        "sbs_mito_channel": "ZO1AF488",
+        # Channel configurations
+        "channels": {
+            "cp_nuclei_channel": "DAPI",
+            "cp_cell_channel": "PhalloAF750",
+            "cp_mito_channel": "ZO1AF488",
+            "sbs_nuclei_channel": "DAPI",
+            "sbs_cell_channel": "PhalloAF750",
+            "sbs_mito_channel": "ZO1AF488",
+        },
+        # Input configuration
+        "input": {
+            "archive_name": "fix_s1_input.tar.gz",
+            "dir_prefix": "fix_s1_input_test",
+            "dir_name": "fix_s1_input",
+            "dataset_dir_name": "Source1",
+            "sha256": "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
+        },
+        # Output configuration
+        "output": {
+            "archive_name": "fix_s1_output.tar.gz",
+            "dir_prefix": "fix_s1_output_test",
+            "dir_name": "fix_s1_pcpip_output",
+            "dataset_dir_name": "Source1",
+            "sha256": "a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
+        },
     },
     "fix_s2": {
-        "cp_nuclei_channel": "DAPI",
-        "cp_cell_channel": "PhalloAF750",
-        "cp_mito_channel": "ZO1AF488",
-        "sbs_nuclei_channel": "DAPI",
-        "sbs_cell_channel": "PhalloAF750",
-        "sbs_mito_channel": "ZO1AF488",
+        # Channel configurations
+        "channels": {
+            "cp_nuclei_channel": "DAPI",
+            "cp_cell_channel": "PhalloAF750",
+            "cp_mito_channel": "ZO1AF488",
+            "sbs_nuclei_channel": "DAPI",
+            "sbs_cell_channel": "PhalloAF750",
+            "sbs_mito_channel": "ZO1AF488",
+        },
+        # Input configuration
+        "input": {
+            "archive_name": "fix_s1_input.tar.gz",
+            "dir_prefix": "fix_s1_input_test",
+            "dir_name": "fix_s1_input",
+            "dataset_dir_name": "Source1",
+            "sha256": "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
+        },
+        # Output configuration
+        "output": {
+            "archive_name": "fix_s1_output.tar.gz",
+            "dir_prefix": "fix_s1_output_test",
+            "dir_name": "fix_s1_pcpip_output",
+            "dataset_dir_name": "Source1",
+            "sha256": "a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
+        },
     },
 }
 
@@ -37,56 +75,57 @@ STARRYNIGHT_CACHE = pooch.create(
     path=pooch.os_cache("starrynight"),
     base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
     registry={
-        # Input component of FIX-S1 (small test fixture without stitchcrop and QC)
-        "fix_s1_input.tar.gz": "sha256:ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
-        # Output component of FIX-S1
-        "fix_s1_output.tar.gz": "sha256:a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
-        # Input component of FIX-S2 (identical inputs to FIX-S1 but with different outputs)
-        "fix_s2_input.tar.gz": "sha256:ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0",
-        # Output component of FIX-S2
-        "fix_s2_output.tar.gz": "sha256:dummy_sha256_for_fix_s2_output_to_be_replaced_with_actual_hash",
+        # Dynamically create registry from FIXTURE_CONFIGS
+        config["input"]["archive_name"]: f"sha256:{config['input']['sha256']}"
+        for fixture_id, config in FIXTURE_CONFIGS.items()
+    }
+    | {
+        # Add output archives
+        config["output"]["archive_name"]: f"sha256:{config['output']['sha256']}"
+        for fixture_id, config in FIXTURE_CONFIGS.items()
     },
 )
 
 
 def _setup_input_dir(
     tmp_path_factory: pytest.TempPathFactory,
-    archive_name: str,
-    dir_prefix: str,
-    input_dir_name: str,
-    dataset_dir_name: str,
+    fixture_id: str,
 ) -> dict[str, Path]:
     """Set up an input directory from a test archive.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        archive_name: Name of the archive file to extract
-        dir_prefix: Prefix for the temporary directory name
-        input_dir_name: Name of the extracted input directory
-        dataset_dir_name: Name of the dataset directory within input_dir
+        fixture_id: Identifier for the fixture configuration to use
 
     Returns:
         dict: Dictionary with base_dir and input_dir paths
 
     """
+    # Get configuration for this fixture
+    config = FIXTURE_CONFIGS.get(fixture_id)
+    if not config:
+        raise ValueError(f"Unknown fixture ID: {fixture_id}")
+
+    input_config = config["input"]
+
     # Create a temporary directory
-    base_dir = tmp_path_factory.mktemp(dir_prefix)
+    base_dir = tmp_path_factory.mktemp(input_config["dir_prefix"])
 
     # Use pooch to download and extract in one step
     STARRYNIGHT_CACHE.fetch(
-        archive_name, processor=Untar(extract_dir=str(base_dir))
+        input_config["archive_name"], processor=Untar(extract_dir=str(base_dir))
     )
 
     # Create paths to important directories
-    input_dir = base_dir / input_dir_name
+    input_dir = base_dir / input_config["dir_name"]
 
     # Essential check: did extraction work at all?
     assert input_dir.exists(), "Input test data not extracted correctly"
 
     # Check that at least one expected dataset directory exists
-    dataset_dir = input_dir / dataset_dir_name
+    dataset_dir = input_dir / input_config["dataset_dir_name"]
     assert dataset_dir.exists(), (
-        f"Expected {dataset_dir_name} directory not found in input data"
+        f"Expected {input_config['dataset_dir_name']} directory not found in input data"
     )
 
     # Verify that image files exist in the input directory
@@ -96,7 +135,7 @@ def _setup_input_dir(
         image_files = list(input_dir.glob("**/*.tif"))
 
     assert len(image_files) > 0, (
-        f"No image files (*.tiff, *.tif) found in {input_dir_name}"
+        f"No image files (*.tiff, *.tif) found in {input_config['dir_name']}"
     )
 
     return {"base_dir": base_dir, "input_dir": input_dir}
@@ -104,52 +143,54 @@ def _setup_input_dir(
 
 def _setup_output_dir(
     tmp_path_factory: pytest.TempPathFactory,
-    archive_name: str,
-    dir_prefix: str,
-    output_dir_name: str,
-    dataset_dir_name: str,
+    fixture_id: str,
 ) -> dict[str, Path]:
     """Set up an output directory from a test archive.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        archive_name: Name of the archive file to extract
-        dir_prefix: Prefix for the temporary directory name
-        output_dir_name: Name of the extracted output directory
-        dataset_dir_name: Name of the dataset directory (e.g., 'Source1')
+        fixture_id: Identifier for the fixture configuration to use
 
     Returns:
         dict: Dictionary with paths to key directories
 
     """
+    # Get configuration for this fixture
+    config = FIXTURE_CONFIGS.get(fixture_id)
+    if not config:
+        raise ValueError(f"Unknown fixture ID: {fixture_id}")
+
+    output_config = config["output"]
+
     # Create a temporary directory
-    base_dir = tmp_path_factory.mktemp(dir_prefix)
+    base_dir = tmp_path_factory.mktemp(output_config["dir_prefix"])
 
     # Use pooch to download and extract in one step
     STARRYNIGHT_CACHE.fetch(
-        archive_name, processor=Untar(extract_dir=str(base_dir))
+        output_config["archive_name"],
+        processor=Untar(extract_dir=str(base_dir)),
     )
 
     # Create paths to important directories
-    output_dir = base_dir / output_dir_name
-    workspace_dir = output_dir / dataset_dir_name / "workspace"
+    output_dir = base_dir / output_config["dir_name"]
+    workspace_dir = output_dir / output_config["dataset_dir_name"] / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 
     # Essential check: did extraction create the main output directory?
     assert output_dir.exists(), "Output test data not extracted correctly"
     assert workspace_dir.exists(), (
-        f"Workspace directory not found in {dataset_dir_name} output data"
+        f"Workspace directory not found in {output_config['dataset_dir_name']} output data"
     )
 
     # Verify that load_data_csv directory exists
     assert load_data_csv_dir.exists(), (
-        f"load_data_csv directory not found in {dataset_dir_name} workspace"
+        f"load_data_csv directory not found in {output_config['dataset_dir_name']} workspace"
     )
 
     # Check for LoadData CSV files
     load_data_files = list(load_data_csv_dir.glob("load_data_*.csv"))
     assert len(load_data_files) > 0, (
-        f"No LoadData CSV files found in {dataset_dir_name} output data"
+        f"No LoadData CSV files found in {output_config['dataset_dir_name']} output data"
     )
 
     return {
@@ -161,18 +202,21 @@ def _setup_output_dir(
 
 
 def _setup_workspace(
-    tmp_path_factory: pytest.TempPathFactory, workspace_prefix: str
+    tmp_path_factory: pytest.TempPathFactory, fixture_id: str
 ) -> dict[str, Path]:
     """Create a workspace directory structure for tests.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
-        workspace_prefix: Prefix for the temporary workspace directory
+        fixture_id: Fixture identifier (e.g., 'fix_s1', 'fix_s2')
 
     Returns:
         dict: Dictionary with paths to key directories in the workspace
 
     """
+    # Create workspace prefix from fixture_id
+    workspace_prefix = f"{fixture_id}_workspace"
+
     # Create base workspace directory
     workspace_dir = tmp_path_factory.mktemp(workspace_prefix)
 
@@ -260,19 +304,26 @@ def _setup_workspace(
 
 
 def _handle_generated_setup(
-    workspace: dict[str, Path], input_dir: Path, channel_config: dict[str, str]
+    workspace: dict[str, Path],
+    input_dir: Path,
+    fixture_id: str,
 ) -> dict[str, Path]:
     """Set up a StarryNight workflow environment using CLI commands.
 
     Args:
         workspace: Dictionary containing workspace directories
         input_dir: Path to input data directory
-        channel_config: Dictionary with required channel configuration
+        fixture_id: Fixture identifier (e.g., 'fix_s1', 'fix_s2')
 
     Returns:
         dict: Dictionary with index_file and experiment_json_path
 
     """
+    # Get configuration for this fixture
+    config = FIXTURE_CONFIGS.get(fixture_id)
+    if not config:
+        raise ValueError(f"Unknown fixture ID: {fixture_id}")
+
     workspace_dir = workspace["workspace_dir"]
     inventory_dir = workspace["inventory_dir"]
     index_dir = workspace["index_dir"]
@@ -298,7 +349,7 @@ def _handle_generated_setup(
         exp_init_data = json.load(f)
 
     # Update with required channel values from config parameter
-    exp_init_data.update(channel_config)
+    exp_init_data.update(config["channels"])
 
     with exp_init_path.open("w") as f:
         json.dump(exp_init_data, f, indent=4)
@@ -381,6 +432,12 @@ def _handle_pregenerated_setup(
         dict: Dictionary with index_file and experiment_json_path
 
     """
+    # Validate the fixture ID
+    if fixture_id not in FIXTURE_CONFIGS:
+        raise ValueError(
+            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CONFIGS.keys())}"
+        )
+
     workspace_dir = workspace["workspace_dir"]
 
     # Use fixture-specific subdirectory for pregenerated files
@@ -449,18 +506,15 @@ def _setup_starrynight(
 
     """
     # Validate the fixture ID
-    if fixture_id not in FIXTURE_CHANNEL_CONFIGS:
+    if fixture_id not in FIXTURE_CONFIGS:
         raise ValueError(
-            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CHANNEL_CONFIGS.keys())}"
+            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CONFIGS.keys())}"
         )
-
-    # Get the channel configuration for this fixture
-    channel_config = FIXTURE_CHANNEL_CONFIGS[fixture_id]
 
     # Execute the appropriate setup based on mode parameter
     if mode == "generated":
         return _handle_generated_setup(
-            workspace, input_dir_fixture["input_dir"], channel_config
+            workspace, input_dir_fixture["input_dir"], fixture_id
         )
     elif mode == "pregenerated":
         return _handle_pregenerated_setup(workspace, fixture_id)
