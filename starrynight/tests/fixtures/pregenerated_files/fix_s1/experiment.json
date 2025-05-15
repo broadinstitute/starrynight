@@ -1,6 +1,6 @@
 {
     "dataset_id": "fix-s1-input",
-    "index_path": "/private/tmp/nix-shell.eS7ema/pytest-of-shsingh/pytest-15/workspace0/index/index.parquet",
+    "index_path": "/private/tmp/nix-shell.eS7ema/pytest-of-shsingh/pytest-41/fix_s1_workspace0/index/index.parquet",
     "inventory_path": null,
     "data_production_contact": null,
     "data_processing_contact": null,
