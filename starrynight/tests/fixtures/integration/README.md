@@ -6,9 +6,9 @@ StarryNight test fixtures provide standardized test environments for consistent,
 
 Key components:
 - **constants.py**: Single source of truth for fixture configurations
-- **conftest.py**: Defines pytest fixtures that make test data available
+- **../../conftest.py**: Defines pytest fixtures that make test data available
 - **pregenerated_files/**: Contains pre-generated files for faster test runs
-- **integration/constants.py**: Defines fixture compatibility with test workflows
+- **../../integration/constants.py**: Defines fixture compatibility with test workflows
 
 ## 2. End-to-End Fixture Creation Process
 
@@ -37,19 +37,19 @@ Key components:
 
 ```bash
 # Filter a dataset to create smaller test data
-python -m starrynight.tests.fixtures.utils.loaddata_filter \
+python -m starrynight.tests.fixtures.integration.utils.loaddata_filter \
     --input /path/to/original.csv \
     --output /path/to/new_fixture/filtered.csv \
     --filter "Well='A01',Site='1'"
 
 # Update paths in the filtered data
-python -m starrynight.tests.fixtures.utils.loaddata_postprocess \
+python -m starrynight.tests.fixtures.integration.utils.loaddata_postprocess \
     --input /path/to/new_fixture/filtered.csv \
     --output /path/to/new_fixture/processed.csv \
     --update-paths
 
 # Validate the processed data
-python -m starrynight.tests.fixtures.utils.loaddata_validate \
+python -m starrynight.tests.fixtures.integration.utils.loaddata_validate \
     --input /path/to/new_fixture/processed.csv
 ```
 
@@ -166,12 +166,12 @@ mkdir -p pregenerated_files/fix_new
 
 ```bash
 # Run the regeneration script for your specific fixture
-REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/pregenerated_files/regenerate.py::test_generate_pregenerated_files_files[fix_new]
+REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/integration/pregenerated_files/regenerate.py::test_generate_pregenerated_files_files[fix_new]
 ```
 
 4. **Verify** the generated files exist:
-   - `pregenerated_files/fix_new/experiment.json`
-   - `pregenerated_files/fix_new/index.parquet`
+   - `fixtures/integration/pregenerated_files/fix_new/experiment.json`
+   - `fixtures/integration/pregenerated_files/fix_new/index.parquet`
 
 ### D. Integration with Workflow Tests
 
