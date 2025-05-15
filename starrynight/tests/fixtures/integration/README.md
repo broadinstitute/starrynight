@@ -1,6 +1,6 @@
 # StarryNight Integration Test Fixtures Guide
 
-## 1. Overview
+## Overview
 
 This guide describes how to create and manage fixtures for integration tests in the StarryNight project. Integration test fixtures provide standardized environments for testing complete workflows and CLI commands. These fixtures use a centralized configuration approach to ensure consistency across all integration tests.
 
@@ -10,16 +10,7 @@ Key components:
 - **pregenerated_files/**: Contains pre-generated files for faster test runs
 - **../../integration/constants.py**: Defines fixture compatibility with test workflows
 
-## 2. End-to-End Fixture Creation Process
-
-1. Data Prep - Create tar.gz and generate SHA
-2. Configuration - Update constants.py
-3. Registration - Add fixture to conftest.py
-4. Pregeneration - Update regenerate.py
-5. Integration - Update compatibility
-6. Use in Tests - Run tests with new fixture
-
-## 3. Step-by-Step Workflow
+## Step-by-Step Workflow
 
 ### Prepare test data using utils scripts
 
