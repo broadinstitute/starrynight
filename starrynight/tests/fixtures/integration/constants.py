@@ -12,8 +12,6 @@ Each fixture has a unique identifier (e.g., 'fix_s1') that is used to:
 - Reference the fixture in test parameterization
 - Locate pregenerated files in the pregenerated_files/ directory
 - Generate fixture-specific pytest fixtures in conftest.py
-
-For complete documentation on adding new fixtures and the entire workflow, see FIXTURE_MANAGEMENT.md.
 """
 
 # Comprehensive fixture configuration
