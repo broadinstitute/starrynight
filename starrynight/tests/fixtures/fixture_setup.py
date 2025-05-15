@@ -188,7 +188,9 @@ def _setup_output_dir(
     )
 
     # Check for LoadData CSV files
+    # Check for load_data files at the top level and in any subdirectories
     load_data_files = list(load_data_csv_dir.glob("load_data_*.csv"))
+    load_data_files.extend(list(load_data_csv_dir.glob("**/load_data_*.csv")))
     assert len(load_data_files) > 0, (
         f"No LoadData CSV files found in {output_config['dataset_dir_name']} output data"
     )
