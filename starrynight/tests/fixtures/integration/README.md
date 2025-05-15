@@ -1,8 +1,8 @@
-# StarryNight Fixture Management Guide
+# StarryNight Integration Test Fixtures Guide
 
 ## 1. Overview
 
-StarryNight test fixtures provide standardized test environments for consistent, repeatable testing. Our centralized configuration approach ensures that fixture definitions, generation, and usage remain synchronized.
+This guide describes how to create and manage fixtures for integration tests in the StarryNight project. Integration test fixtures provide standardized environments for testing complete workflows and CLI commands. These fixtures use a centralized configuration approach to ensure consistency across all integration tests.
 
 Key components:
 - **constants.py**: Single source of truth for fixture configurations
