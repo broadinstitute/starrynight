@@ -1,25 +1,23 @@
 """Common tools for creating modules."""
 
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 from inspect import getdoc, signature
 from pathlib import Path
-from typing import Callable, Generic, Self, TypeVar
+from typing import Callable, Generic, Self, TypeVar, Unpack
 
 import requests
 from linkml.generators import PydanticGenerator
 from numpydoc.docscrape import NumpyDocString
 from pipecraft.node import Container as PipeContainer
-from pipecraft.node import ContainerConfig as PipeContainerConifg
+from pipecraft.node import ContainerConfig as PipeContainerConfig
 from pipecraft.node import UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
 from pydantic import BaseModel
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.schema import (
-    Container as SpecContainer,
-)
-from starrynight.modules.schema import (
     ExecFunction,
+    SpecContainer,
     TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
@@ -34,49 +32,81 @@ class StarrynightModule(BaseModel, ABC):
 
     Attributes
     ----------
+    data_config: Module data configuration
     spec : Module spec
     pipe : Module pipeline
     uow : Module unit of work
 
     """
 
-    spec: SpecContainer
-    pipe: Pipeline
-    uow: list[UnitOfWork]
+    data_config: DataConfig
+    experiment: Experiment | None
+    spec: SpecContainer | None
+
+    @property
+    @abstractmethod
+    def uid() -> str:
+        """Return unique module id."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def _spec(self: Self) -> SpecContainer:
+        """Return default spec of the module."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def _create_pipe(self: Self) -> Pipeline:
+        """Create pipeline."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def _create_uow(self: Self) -> list[UnitOfWork]:
+        """Create units of work."""
+        raise NotImplementedError
+
+    @property
+    def pipe(self: Self) -> Pipeline:
+        """Module pipeline property."""
+        return self._create_pipe()
+
+    @property
+    def uow(self: Self) -> Pipeline:
+        """Module unit of work property."""
+        return self._create_uow()
 
     class Config:
         """Model config."""
 
         arbitrary_types_allowed = True
 
-    @staticmethod
-    @abstractmethod
-    def from_config(
-        data: DataConfig,
+    def __init__(
+        self,
+        data_config: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-    ) -> "StarrynightModule":
-        """Create module from experiment and data config."""
-        raise NotImplementedError
+        /,
+        **data: Unpack,
+    ) -> None:
+        """Init Starrynight module."""
+        # First init pydantic model with an empty spec
+        super().__init__(
+            data_config=data_config, experiment=experiment, spec=None, **data
+        )
+        # If no spec provided by the user then generate default spec
+        if spec is None:
+            spec = self._spec()
 
-    @staticmethod
-    @abstractmethod
-    def uid() -> str:
-        """Return unique module id."""
-        raise NotImplementedError
-
-    @staticmethod
-    @abstractmethod
-    def _spec() -> SpecContainer:
-        """Return default spec of the module."""
-        raise NotImplementedError
+        # Init again with spec ( We validate the spec here)
+        super().__init__(
+            data_config=data_config, experiment=experiment, spec=spec, **data
+        )
 
 
 _P = TypeVar("_P")
 _R = TypeVar("_R")
 
 TYPE_MAP = {
-    "Path | CloudPath": TypeEnum.files,
+    "Path | CloudPath": TypeEnum.dir,
     "str": TypeEnum.textbox,
     "bool": TypeEnum.boolean,
 }
@@ -130,7 +160,7 @@ class StarrynightDecoratedFunction(Generic[_P, _R]):
                         output.name: [Path(output.path).parent.__str__()]
                         for output in spec.outputs
                     },
-                    config=PipeContainerConifg(
+                    config=PipeContainerConfig(
                         image=self._container_img,
                         cmd=cmd,
                         env={},
