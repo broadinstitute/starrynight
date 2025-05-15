@@ -46,6 +46,29 @@ from starrynight.cli.exp import new as exp_new
 from starrynight.cli.index import gen_index
 from starrynight.cli.inv import gen_inv
 
+# Define fixture-specific channel configurations
+FIXTURE_CHANNEL_CONFIGS = {
+    "fix_s1": {
+        "cp_nuclei_channel": "DAPI",
+        "cp_cell_channel": "PhalloAF750",
+        "cp_mito_channel": "ZO1AF488",
+        "sbs_nuclei_channel": "DAPI",
+        "sbs_cell_channel": "PhalloAF750",
+        "sbs_mito_channel": "ZO1AF488",
+    },
+    "fix_s2": {
+        # Example of a different channel configuration for FIX-S2
+        # This will create different outputs despite identical inputs
+        "cp_nuclei_channel": "DAPI",
+        "cp_cell_channel": "PhalloAF750",
+        "cp_mito_channel": "ZO1AF488",
+        # Different SBS channel assignments
+        "sbs_nuclei_channel": "DAPI",
+        "sbs_cell_channel": "ZO1AF488",  # Swapped from FIX-S1
+        "sbs_mito_channel": "PhalloAF750",  # Swapped from FIX-S1
+    },
+}
+
 # Configure a single Pooch registry for all test data
 STARRYNIGHT_CACHE = pooch.create(
     path=pooch.os_cache("starrynight"),
@@ -357,13 +380,14 @@ def fix_s2_workspace(tmp_path_factory):
 
 
 def _handle_generated_setup(
-    workspace: dict[str, Path], input_dir: Path
+    workspace: dict[str, Path], input_dir: Path, channel_config: dict[str, str]
 ) -> dict[str, Path]:
     """Set up a StarryNight workflow environment using CLI commands.
 
     Args:
         workspace: Dictionary containing workspace directories
         input_dir: Path to input data directory
+        channel_config: Dictionary with required channel configuration
 
     Returns:
         dict: Dictionary with index_file and experiment_json_path
@@ -393,17 +417,8 @@ def _handle_generated_setup(
     with exp_init_path.open() as f:
         exp_init_data = json.load(f)
 
-    # Update with required channel values specifically mentioned in getting-started.md
-    exp_init_data.update(
-        {
-            "cp_nuclei_channel": "DAPI",
-            "cp_cell_channel": "PhalloAF750",
-            "cp_mito_channel": "ZO1AF488",
-            "sbs_nuclei_channel": "DAPI",
-            "sbs_cell_channel": "PhalloAF750",
-            "sbs_mito_channel": "ZO1AF488",
-        }
-    )
+    # Update with required channel values from config parameter
+    exp_init_data.update(channel_config)
 
     with exp_init_path.open("w") as f:
         json.dump(exp_init_data, f, indent=4)
@@ -473,18 +488,29 @@ def _handle_generated_setup(
     }
 
 
-def _handle_pregenerated_setup(workspace: dict[str, Path]) -> dict[str, Path]:
+def _handle_pregenerated_setup(
+    workspace: dict[str, Path], fixture_id: str
+) -> dict[str, Path]:
     """Set up a StarryNight workflow environment using pre-generated files.
 
     Args:
         workspace: Dictionary containing workspace directories
+        fixture_id: Fixture identifier (e.g., 'fix_s1', 'fix_s2')
 
     Returns:
         dict: Dictionary with index_file and experiment_json_path
 
     """
     workspace_dir = workspace["workspace_dir"]
-    fixtures_dir = Path(__file__).parent / "fixtures" / "basic_setup"
+
+    # Use fixture-specific subdirectory for pregenerated files
+    # Each fixture must have its own subdirectory under basic_setup
+    fixtures_base_dir = Path(__file__).parent / "fixtures" / "basic_setup"
+    fixtures_dir = fixtures_base_dir / fixture_id
+
+    # If fixture directory doesn't exist, fall back to basic_setup for backward compatibility
+    if not fixtures_dir.exists():
+        fixtures_dir = fixtures_base_dir
 
     # Define paths to pre-generated files in fixtures directory
     pregenerated_index_file = fixtures_dir / "index.parquet"
@@ -492,10 +518,10 @@ def _handle_pregenerated_setup(workspace: dict[str, Path]) -> dict[str, Path]:
 
     # Essential checks: source files must exist to be copied
     assert pregenerated_index_file.exists(), (
-        "Pre-generated index file not found"
+        f"Pre-generated index file not found for {fixture_id} at {pregenerated_index_file}"
     )
     assert pregenerated_experiment_json.exists(), (
-        "Pre-generated experiment file not found"
+        f"Pre-generated experiment file not found for {fixture_id} at {pregenerated_experiment_json}"
     )
 
     # Copy files to workspace directory to maintain expected structure
@@ -558,6 +584,15 @@ def fix_starrynight_setup(request):
         mode = param_dict.get("mode", "generated")
         fixture_id = param_dict.get("fixture", "fix_s1")
 
+    # Validate the fixture ID
+    if fixture_id not in FIXTURE_CHANNEL_CONFIGS:
+        raise ValueError(
+            f"Unknown fixture ID: {fixture_id}. Must be one of: {', '.join(FIXTURE_CHANNEL_CONFIGS.keys())}"
+        )
+
+    # Get the channel configuration for this fixture
+    channel_config = FIXTURE_CHANNEL_CONFIGS[fixture_id]
+
     # Dynamically import the right fixtures based on fixture_id
     if fixture_id == "fix_s1":
         input_dir_fixture = pytest.getfixturevalue("fix_s1_input_dir")
@@ -571,9 +606,9 @@ def fix_starrynight_setup(request):
     # Execute the appropriate setup based on mode parameter
     if mode == "generated":
         return _handle_generated_setup(
-            workspace_fixture, input_dir_fixture["input_dir"]
+            workspace_fixture, input_dir_fixture["input_dir"], channel_config
         )
     elif mode == "pregenerated":
-        return _handle_pregenerated_setup(workspace_fixture)
+        return _handle_pregenerated_setup(workspace_fixture, fixture_id)
     else:
         raise ValueError(f"Unknown mode: {mode}")

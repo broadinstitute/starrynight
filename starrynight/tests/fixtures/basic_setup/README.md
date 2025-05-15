@@ -1,29 +1,62 @@
-# Basic Setup Fixtures
+# Basic Test Fixtures for StarryNight
 
-Pre-generated files for faster LoadData test execution.
+This directory contains basic test fixtures used for testing the StarryNight workflow.
 
-## Files
+## Directory Structure
 
-- `experiment.json`: Generated experiment config (steps 1-5 of getting-started workflow)
-- `index.parquet`: Generated index file (steps 1-5 of getting-started workflow)
-- `generate_fixtures.py`: Utility to regenerate these files when needed
+Each fixture has its own subdirectory:
 
-## Usage
+- `fix_s1/`: FIX-S1 test fixture (original configuration)
+- `fix_s2/`: FIX-S2 test fixture (identical inputs but different channel mappings)
 
-Used by fix_starrynight_setup["pregenerated"]` fixture to skip steps 1-5 of workflow.
+## Fixture Generation
 
-Run fast tests with:
-```bash
-pytest test_getting_started_workflow.py -k fast
+Fixtures are generated using the `fixture_utils.sh` script in the `fixtures/fixture_utils/` directory.
+
+To generate new fixtures:
+
+1. Modify the `FIXTURE_ID` variable in the script (e.g., "s1", "s2")
+2. Run the script to create the archives and SHA256 hashes
+3. Update the SHA256 hashes in `conftest.py` with the values from the generated `.sha256` files
+4. Copy the archives to the appropriate release location
+
+## Using Fixtures in Tests
+
+Fixtures can be used in tests by parameterizing the `fix_starrynight_setup` fixture:
+
+```python
+@pytest.mark.parametrize(
+    "fix_starrynight_setup",
+    [{"mode": "generated", "fixture": "fix_s1"}],
+    indirect=True
+)
+def test_with_fix_s1(fix_starrynight_setup):
+    # Test with FIX-S1 configuration
+    ...
+
+@pytest.mark.parametrize(
+    "fix_starrynight_setup",
+    [{"mode": "generated", "fixture": "fix_s2"}],
+    indirect=True
+)
+def test_with_fix_s2(fix_starrynight_setup):
+    # Test with FIX-S2 configuration
+    ...
 ```
 
-## Regenerating Fixtures
+For faster tests, use the "pregenerated" mode:
 
-To regenerate these files (if needed after code changes):
-
-```bash
-cd /Users/shsingh/Documents/GitHub/starrynight
-REGENERATE_FIXTURES=1 uv run pytest -xvs starrynight/tests/fixtures/basic_setup/generate_fixtures.py
+```python
+@pytest.mark.parametrize(
+    "fix_starrynight_setup",
+    [{"mode": "pregenerated", "fixture": "fix_s2"}],
+    indirect=True
+)
 ```
 
-This will run the fixture generation process and replace the existing files with freshly generated versions.
+## Adding New Fixtures
+
+1. Create a new fixture ID in the `FIXTURE_CHANNEL_CONFIGS` dictionary in `conftest.py`
+2. Generate the fixture data using `fixture_utils.sh` with the new fixture ID
+3. Create a subdirectory with the fixture name and add the required files
+4. Update the registry in `conftest.py` with the new SHA256 hashes
