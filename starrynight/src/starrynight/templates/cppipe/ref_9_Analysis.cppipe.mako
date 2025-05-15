@@ -1,0 +1,1419 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:426
+GitHash:
+ModuleCount:85
+HasImagePlaneDetails:False
+
+LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Input data file location:Default Input Folder sub-folder|Downloads
+    Name of the file:load_data_pipeline9.csv
+    Load images based on this data?:Yes
+    Base image location:None|
+    Process just a range of rows?:No
+    Rows to process:1,100000
+    Group images by metadata?:Yes
+    Select metadata tags for grouping:Plate,Site,Well
+    Rescale intensities?:Yes
+
+MeasureImageIntensity:[module_num:2|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrDNA, Cycle01_DNA
+    Measure the intensity only from areas enclosed by objects?:No
+    Select input object sets:
+    Calculate custom percentiles:No
+    Specify percentiles to measure:10,90
+
+FlagImage:[module_num:3|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Flag and remove images that are empty in either Paint or BC']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Hidden:2
+    Hidden:1
+    Name the flag's category:Metadata
+    Name the flag:EmptyFlag_BC
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:Yes
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Intensity_MaxIntensity_CorrDNA
+    Flag images based on low values?:Yes
+    Minimum value:0.000001
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Hidden:1
+    Name the flag's category:Metadata
+    Name the flag:EmptyFlag_Paint
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:Yes
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Intensity_MaxIntensity_Cycle01_DNA
+    Flag images based on low values?:Yes
+    Minimum value:0.000001
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Ignore flag skips on last cycle?:No
+
+Align:[module_num:4|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the alignment method:Normalized Cross Correlation
+    Crop mode:Keep size
+    Select the first input image:Cycle01_DNA
+    Name the first output image:AlignedRed
+    Select the second input image:CorrDNA
+    Name the second output image:DNA_Painting
+    Select the additional image:CorrZO1
+    Name the output image:ZO1
+    Select how the alignment is to be applied:Similarly
+    Select the additional image:CorrPhalloidin
+    Name the output image:Phalloidin
+    Select how the alignment is to be applied:Similarly
+
+Threshold:[module_num:5|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:['Identifies actual image area ']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Cycle01_DNA
+    Name the output image:NonPaddedAreas_Barcode
+    Threshold strategy:Global
+    Thresholding method:Manual
+    Threshold smoothing scale:0.0
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.00001
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+Threshold:[module_num:6|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA_Painting
+    Name the output image:NonPaddedAreas_Paint
+    Threshold strategy:Global
+    Thresholding method:Manual
+    Threshold smoothing scale:0.0
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.00001
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+ImageMath:[module_num:7|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Signal that is present in both BC and Paint']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Minimum
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:NonPaddedAreas_Both
+    Image or measurement?:Image
+    Select the first image:NonPaddedAreas_Barcode
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:NonPaddedAreas_Paint
+    Multiply the second image by:1.0
+    Measurement:
+
+ImageMath:[module_num:8|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Signal that is present in either BC or Paint']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Maximum
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:NonPaddedAreas_Any
+    Image or measurement?:Image
+    Select the first image:NonPaddedAreas_Barcode
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:NonPaddedAreas_Paint
+    Multiply the second image by:1.0
+    Measurement:
+
+MaskImage:[module_num:9|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA_Painting
+    Name the output image:DNA_Painting_EdgeMasked
+    Use objects or an image as a mask?:Image
+    Select object for mask:PaddedObjects_Both
+    Select image for mask:NonPaddedAreas_Both
+    Invert the mask?:No
+
+MaskImage:[module_num:10|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Cycle01_DNA
+    Name the output image:Cycle01_DNA_EdgeMasked
+    Use objects or an image as a mask?:Image
+    Select object for mask:None
+    Select image for mask:NonPaddedAreas_Both
+    Invert the mask?:No
+
+MaskImage:[module_num:11|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Phalloidin
+    Name the output image:Phalloidin_EdgeMasked
+    Use objects or an image as a mask?:Image
+    Select object for mask:None
+    Select image for mask:NonPaddedAreas_Both
+    Invert the mask?:No
+
+MaskImage:[module_num:12|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:ZO1
+    Name the output image:ZO1_EdgeMasked
+    Use objects or an image as a mask?:Image
+    Select object for mask:None
+    Select image for mask:NonPaddedAreas_Both
+    Invert the mask?:No
+
+MeasureColocalization:[module_num:13|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Cycle01_DNA_EdgeMasked, DNA_Painting_EdgeMasked
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Across entire image
+    Select objects to measure:
+    Run all metrics?:No
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:No
+    Calculate the Rank Weighted Colocalization coefficients?:No
+    Calculate the Overlap coefficients?:No
+    Calculate the Manders coefficients using Costes auto threshold?:No
+    Method for Costes thresholding:Faster
+
+FlagImage:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Flag and remove image set if not aligned well']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Hidden:1
+    Hidden:1
+    Name the flag's category:Metadata
+    Name the flag:AlignmentFlag
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:Correlation_Correlation_Cycle01_DNA_EdgeMasked_DNA_Painting_EdgeMasked
+    Flag images based on low values?:Yes
+    Minimum value:0.7
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Ignore flag skips on last cycle?:No
+
+ImageMath:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Invert
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:PaddedAreas_Barcode
+    Image or measurement?:Image
+    Select the first image:NonPaddedAreas_Any
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:None
+    Multiply the second image by:1.0
+    Measurement:
+
+Morph:[module_num:16|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Creates gradient of distance from foreground (actual image) to background (zero padding).', 'In images without foreground/background (i.e. images without well edge present) it morphs from 0,0 corner which is not what we want so we use subsequent math to remove that spurious data.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:NonPaddedAreas_Barcode
+    Name the output image:WellEdgeDistancePreMultiply
+    Select the operation to perform:distance
+    Number of times to repeat operation:Once
+    Repetition number:2
+    Rescale values from 0 to 1?:No
+
+MeasureImageIntensity:[module_num:17|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measures image intensity in binary PaddedAreas.', 'Max intensity in images with padding is 1, max intesnity in images without padding is 0.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:PaddedAreas_Barcode
+    Measure the intensity only from areas enclosed by objects?:No
+    Select input object sets:
+    Calculate custom percentiles:No
+    Specify percentiles to measure:10,90
+
+ImageMath:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Multiplies WellEdgeDistance created by morph by maxintensity of PaddedAreas so that morphs with well edge are unaffected (x1) but spurious data in morphs without well edges are zeroed (x0)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Multiply
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:No
+    Set values greater than 1 equal to 1?:No
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:WellEdgeDistance
+    Image or measurement?:Image
+    Select the first image:WellEdgeDistancePreMultiply
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Measurement
+    Select the second image:None
+    Multiply the second image by:1.0
+    Measurement:Intensity_MaxIntensity_PaddedAreas_Barcode
+
+IdentifyPrimaryObjects:[module_num:19|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA_Painting_EdgeMasked
+    Name the primary objects to be identified:ConfluentRegions
+    Typical diameter of objects, in pixel units (Min,Max):500,5000
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:No
+    Method to distinguish clumped objects:Intensity
+    Method to draw dividing lines between clumped objects:None
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:2
+    Threshold correction factor:.5
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+MeasureImageAreaOccupied:[module_num:20|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Measure the area occupied by:Objects
+    Select binary images to measure:
+    Select object sets to measure:ConfluentRegions
+
+CalculateMath:[module_num:21|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Name the output measurement:PercentConfluent
+    Operation:Divide
+    Select the numerator measurement type:Image
+    Select the numerator objects:None
+    Select the numerator measurement:AreaOccupied_AreaOccupied_ConfluentRegions
+    Multiply the above operand by:100.0
+    Raise the power of above operand by:1.0
+    Select the denominator measurement type:Image
+    Select the denominator objects:None
+    Select the denominator measurement:AreaOccupied_TotalArea_ConfluentRegions
+    Multiply the above operand by:1.0
+    Raise the power of above operand by:1.0
+    Take log10 of result?:No
+    Multiply the result by:1.0
+    Raise the power of result by:1.0
+    Add to the result:0.0
+    How should the output value be rounded?:Not rounded
+    Enter how many decimal places the value should be rounded to:0.0
+    Constrain the result to a lower bound?:Not rounded
+    Enter the lower bound:0.0
+    Constrain the result to an upper bound?:No
+    Enter the upper bound:1.0
+
+MaskImage:[module_num:22|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA_Painting_EdgeMasked
+    Name the output image:MaskedDNA_Painting
+    Use objects or an image as a mask?:Objects
+    Select object for mask:ConfluentRegions
+    Select image for mask:None
+    Invert the mask?:Yes
+
+MaskImage:[module_num:23|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Phalloidin_EdgeMasked
+    Name the output image:MaskedPhalloidin
+    Use objects or an image as a mask?:Objects
+    Select object for mask:ConfluentRegions
+    Select image for mask:None
+    Invert the mask?:Yes
+
+MaskImage:[module_num:24|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:ZO1_EdgeMasked
+    Name the output image:MaskedZO1
+    Use objects or an image as a mask?:Objects
+    Select object for mask:ConfluentRegions
+    Select image for mask:None
+    Invert the mask?:Yes
+
+IdentifyPrimaryObjects:[module_num:25|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:MaskedDNA_Painting
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:8
+    Suppress local maxima that are closer than this minimum allowed distance:8
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Display accepted local maxima?:No
+    Select maxima color:Blue
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.4
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifyPrimaryObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the input image:MaskedDNA_Painting
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:8
+    Suppress local maxima that are closer than this minimum allowed distance:8
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.4
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifySecondaryObjects:[module_num:27|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:Cells
+    Select the method to identify the secondary objects:Watershed - Image
+    Select the input image:MaskedZEB1
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0.0005
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:No
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:2
+    Threshold correction factor:.7
+    Lower and upper bounds on threshold:0.000001,.9
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifySecondaryObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:PreCells
+    Select the method to identify the secondary objects:Propagation
+    Select the input image:MaskedZO1
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:0.7
+    Lower and upper bounds on threshold:.000001,1
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Background
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifySecondaryObjects:[module_num:29|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:PreCells
+    Name the objects to be identified:Cells
+    Select the method to identify the secondary objects:Propagation
+    Select the input image:MaskedZO1
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Otsu
+    Threshold smoothing scale:5
+    Threshold correction factor:.5
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifyTertiaryObjects:[module_num:30|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the larger identified objects:Cells
+    Select the smaller identified objects:Nuclei
+    Name the tertiary objects to be identified:Cytoplasm
+    Shrink smaller object prior to subtraction?:Yes
+
+ResizeObjects:[module_num:31|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input object:ConfluentRegions
+    Name the output object:ResizeConfluent
+    Method:Factor
+    X Factor:0.50
+    Y Factor:0.50
+    Z Factor:1.0
+    Width (X):100
+    Height (Y):100
+    Planes (Z):10
+    Select the image with the desired dimensions:None
+
+ResizeObjects:[module_num:32|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input object:Nuclei
+    Name the output object:ResizeNuclei
+    Method:Factor
+    X Factor:0.5
+    Y Factor:0.5
+    Z Factor:1.0
+    Width (X):100
+    Height (Y):100
+    Planes (Z):10
+    Select the image with the desired dimensions:None
+
+ResizeObjects:[module_num:33|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input object:Cells
+    Name the output object:ResizeCells
+    Method:Factor
+    X Factor:0.5
+    Y Factor:0.5
+    Z Factor:1.0
+    Width (X):100
+    Height (Y):100
+    Planes (Z):10
+    Select the image with the desired dimensions:None
+
+OverlayOutlines:[module_num:34|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['For use in identifying foci touching cell edges']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:Yes
+    Select image on which to display outlines:None
+    Name the output image:CellOutlineImage
+    Outline display mode:Grayscale
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:white
+    Select objects to display:Cells
+
+ImageMath:[module_num:35|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Maximum
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:MaxOfCycle01
+    Image or measurement?:Image
+    Select the first image:Cycle01_A
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:Cycle01_C
+    Multiply the second image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the third image:Cycle01_G
+    Multiply the third image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the fourth image:Cycle01_T
+    Multiply the fourth image by:1.0
+    Measurement:
+
+MaskImage:[module_num:36|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:MaxOfCycle01
+    Name the output image:MaxOfCycle01_EdgeMasked
+    Use objects or an image as a mask?:Image
+    Select object for mask:WellEdgeObjects
+    Select image for mask:NonPaddedAreas_Both
+    Invert the mask?:No
+
+IdentifyPrimaryObjects:[module_num:37|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:MaxOfCycle01
+    Name the primary objects to be identified:Foci_PreMask
+    Typical diameter of objects, in pixel units (Min,Max):3,20
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Intensity
+    Method to draw dividing lines between clumped objects:Intensity
+    Size of smoothing filter:2
+    Suppress local maxima that are closer than this minimum allowed distance:4
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After declumping only
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Robust Background
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:4
+    Lower and upper bounds on threshold:0.0002,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:Math_NonBackgroundCycleThreshold
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.005
+    Averaging method:Median
+    Variance method:Median absolute deviation
+    # of deviations:4
+    Thresholding method:Otsu
+
+MaskObjects:[module_num:38|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+    Select objects to be masked:Foci_PreMask
+    Name the masked objects:Foci
+    Mask using a region defined by other objects or by binary image?:Objects
+    Select the masking object:ConfluentRegions
+    Select the masking image:None
+    Handling of objects that are partially masked:Remove
+    Fraction of object that must overlap:0.5
+    Numbering of resulting objects:Renumber
+    Invert the mask?:Yes
+
+FilterObjects:[module_num:39|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Creates duplicate of Foci called BarcodeFoci (all Object_Number are greater than .5)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the objects to filter:Foci
+    Name the output objects:BarcodeFoci
+    Select the filtering mode:Measurements
+    Select the filtering method:Limits
+    Select the objects that contain the filtered objects:None
+    Select the location of the rules or classifier file:Elsewhere...|
+    Rules or classifier file name:rules.txt
+    Class number:1
+    Measurement count:1
+    Additional object count:0
+    Assign overlapping child to:Both parents
+    Keep removed objects as a separate set?:No
+    Name the objects removed by the filter:RemovedObjects
+    Select the measurement to filter by:Number_Object_Number
+    Filter using a minimum measurement value?:Yes
+    Minimum value:0.5
+    Filter using a maximum measurement value?:No
+    Maximum value:1.0
+    Allow fuzzy feature matching?:No
+
+ResizeObjects:[module_num:40|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input object:Foci
+    Name the output object:Resize_Foci
+    Method:Factor
+    X Factor:0.5
+    Y Factor:0.5
+    Z Factor:1.0
+    Width (X):100
+    Height (Y):100
+    Planes (Z):10
+    Select the image with the desired dimensions:None
+
+MeasureObjectIntensity:[module_num:41|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G, Cycle03_T
+    Select objects to measure:Foci
+
+CallBarcodes:[module_num:42|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Number of cycles:3
+    Input object name:Foci
+    Select one of the measures from Cycle 1 to use for calling:Intensity_MaxIntensity_Cycle01_A
+    Input data file location:Elsewhere...|${barcode_csv_path.parent}
+    Name of the file:${barcode_csv_path.name}
+    Select the column containing barcodes to match against:sgRNA
+    Select the column containing gene/transcript barcode names:gene_symbol
+    Retain an image of the barcodes color coded by call?:Yes
+    Enter the called barcode image name:Barcodes_IntValues
+    Retain an image of the barcodes color coded by score match?:Yes
+    Enter the barcode score image name:BarcodeScores_IntValues
+    Do you have an empty vector barcode you would like to add to the barcode list?:No
+    What is the empty vector sequence?:AAAAAAAAAAAAAAA
+
+ImageMath:[module_num:43|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:None
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:Barcodes_Barcodes
+    Image or measurement?:Image
+    Select the first image:Barcodes_IntValues
+    Multiply the first image by:0.000015259021897
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:
+    Multiply the second image by:1.0
+    Measurement:
+
+ImageMath:[module_num:44|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:None
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:Barcodes_Scores
+    Image or measurement?:Image
+    Select the first image:BarcodeScores_IntValues
+    Multiply the first image by:0.000015259021897
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:
+    Multiply the second image by:1.0
+    Measurement:
+
+MeasureObjectIntensity:[module_num:45|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Barcodes_Scores, Barcodes_Barcodes, CellOutlineImage
+    Select objects to measure:BarcodeFoci
+
+MaskImage:[module_num:46|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Barcodes_IntValues
+    Name the output image:MaskedBarcodes_IntValues
+    Use objects or an image as a mask?:Objects
+    Select object for mask:BarcodeFoci
+    Select image for mask:Barcodes_Thresh
+    Invert the mask?:No
+
+MaskImage:[module_num:47|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Barcodes_Scores
+    Name the output image:MaskedScores_IntValues
+    Use objects or an image as a mask?:Objects
+    Select object for mask:BarcodeFoci
+    Select image for mask:Barcodes_Thresh
+    Invert the mask?:No
+
+EnhanceOrSuppressFeatures:[module_num:48|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the input image:Mito
+    Name the output image:mito_tubeness
+    Select the operation:Enhance
+    Feature size:10
+    Feature type:Neurites
+    Range of hole sizes:1,10
+    Smoothing scale:1
+    Shear angle:0.0
+    Decay:0.95
+    Enhancement method:Tubeness
+    Speed and accuracy:Fast
+    Rescale result image:Yes
+
+Threshold:[module_num:49|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the input image:mito_tubeness
+    Name the output image:mito_bw
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1
+    Lower and upper bounds on threshold:0,1
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:10
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2
+    Thresholding method:Otsu
+
+MorphologicalSkeleton:[module_num:50|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the input image:mito_bw
+    Name the output image:mito_skel
+
+MeasureObjectSkeleton:[module_num:51|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the seed objects:Nuclei
+    Select the skeletonized image:mito_skel
+    Retain the branchpoint image?:Yes
+    Name the branchpoint image:BranchpointImage
+    Fill small holes?:Yes
+    Maximum hole size:10
+    Export the skeleton graph relationships?:No
+    Intensity image:None
+    File output directory:Default Output Folder|
+    Vertex file name:vertices.csv
+    Edge file name:edges.csv
+
+MeasureObjectNeighbors:[module_num:52|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Adjacent
+    Neighbor distance:5
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectNeighbors:[module_num:53|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Within a specified distance
+    Neighbor distance:10
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectNeighbors:[module_num:54|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select objects to measure:Nuclei
+    Select neighboring objects to measure:Nuclei
+    Method to determine neighbors:Within a specified distance
+    Neighbor distance:2
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureColocalization:[module_num:55|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Cycle01_DNA, DNA_Painting, Phalloidin, ZO1
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Both
+    Select objects to measure:Cytoplasm, Cells, Nuclei
+    Run all metrics?:Yes
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:No
+    Calculate the Rank Weighted Colocalization coefficients?:No
+    Calculate the Overlap coefficients?:Yes
+    Calculate the Manders coefficients using Costes auto threshold?:No
+    Method for Costes thresholding:Faster
+
+FlagImage:[module_num:56|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Hidden:1
+    Hidden:1
+    Name the flag's category:Metadata
+    Name the flag:PoorAlignment
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:No
+    Flag is based on:Average measurement for all objects in each image
+    Select the object to be used for flagging:Nuclei
+    Which measurement?:Correlation_Correlation_Cycle01_DNA_DNA_Painting
+    Flag images based on low values?:Yes
+    Minimum value:0.9
+    Flag images based on high values?:No
+    Maximum value:1.0
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Ignore flag skips on last cycle?:No
+
+MeasureObjectIntensity:[module_num:57|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:MaskedBarcodes_IntValues, MaskedScores_IntValues, WellEdgeDistance
+    Select objects to measure:Cells
+
+MeasureObjectIntensity:[module_num:58|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA_Painting, Phalloidin, ZO1
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+
+MeasureObjectSizeShape:[module_num:59|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select object sets to measure:Cells, Cytoplasm, Nuclei
+    Calculate the Zernike features?:Yes
+    Calculate the advanced features?:Yes
+
+MeasureObjectIntensityDistribution:[module_num:60|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select images to measure:DNA_Painting, Phalloidin, ZO1
+    Hidden:3
+    Hidden:1
+    Hidden:0
+    Calculate intensity Zernikes?:None
+    Maximum zernike moment:9
+    Select objects to measure:Cells
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Cytoplasm
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Nuclei
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Scale the bins?:Yes
+    Number of bins:4
+    Maximum radius:100
+
+MeasureObjectIntensityDistribution:[module_num:61|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['Mito measurements ', 'EDIT MAXIMUM RADIUS']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select images to measure:mito_tubeness
+    Hidden:2
+    Hidden:2
+    Hidden:1
+    Calculate intensity Zernikes?:None
+    Maximum zernike moment:9
+    Select objects to measure:Cells
+    Object to use as center?:Centers of other objects
+    Select objects to use as centers:Nuclei
+    Select objects to measure:Cytoplasm
+    Object to use as center?:Centers of other objects
+    Select objects to use as centers:Nuclei
+    Scale the bins?:Yes
+    Number of bins:16
+    Maximum radius:100
+    Scale the bins?:No
+    Number of bins:20
+    Maximum radius:200
+    Image:None
+    Objects to display:Cytoplasm
+    Number of bins:16
+    Measurement:Fraction at Distance
+    Color map:Default
+    Save display as image?:Yes
+    Output image name:mito_radial_heatmap
+
+MeasureGranularity:[module_num:62|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select images to measure:DNA_Painting, Phalloidin, ZO1
+    Measure within objects?:Yes
+    Select objects to measure:Cytoplasm, Cells, Nuclei
+    Subsampling factor for granularity measurements:0.25
+    Subsampling factor for background reduction:0.25
+    Radius of structuring element:10
+    Range of the granular spectrum:16
+
+MeasureTexture:[module_num:63|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select images to measure:DNA_Painting, Phalloidin, ZO1
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Enter how many gray levels to measure the texture at:256
+    Hidden:3
+    Measure whole images or objects?:Both
+    Texture scale to measure:5
+    Texture scale to measure:10
+    Texture scale to measure:20
+
+SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:mito_radial_heatmap
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:mito_radial_heatmap_\g<Site>
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:png
+    Output file location:Default Output Folder sub-folder|heatmap
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:Yes
+    When to save:Every cycle
+    Record the file and path information to the saved image?:Yes
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+MeasureImageQuality:[module_num:65|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Calculate metrics for which images?:All loaded images
+    Image count:1
+    Scale count:1
+    Threshold count:1
+    Select the images to measure:
+    Include the image rescaling value?:No
+    Calculate blur metrics?:Yes
+    Spatial scale for blur measurements:50
+    Calculate saturation metrics?:Yes
+    Calculate intensity metrics?:Yes
+    Calculate thresholds?:No
+    Use all thresholding methods?:No
+    Select a thresholding method:Otsu
+    Typical fraction of the image covered by objects:0.1
+    Two-class or three-class thresholding?:Two classes
+    Minimize the weighted variance or the entropy?:Weighted variance
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+
+MeasureColocalization:[module_num:66|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Cycle01_A, Cycle01_C, Cycle01_DNA, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_G
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Across entire image
+    Select objects to measure:
+    Run all metrics?:No
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:No
+    Calculate the Rank Weighted Colocalization coefficients?:No
+    Calculate the Overlap coefficients?:No
+    Calculate the Manders coefficients using Costes auto threshold?:No
+    Method for Costes thresholding:Accurate
+
+FilterObjects:[module_num:67|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Remove foci that are touching the cell edge']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the objects to filter:BarcodeFoci
+    Name the output objects:Foci_NonCellEdge
+    Select the filtering mode:Measurements
+    Select the filtering method:Limits
+    Select the objects that contain the filtered objects:None
+    Select the location of the rules or classifier file:Elsewhere...|
+    Rules or classifier file name:rules.txt
+    Class number:1
+    Measurement count:1
+    Additional object count:0
+    Assign overlapping child to:Both parents
+    Keep removed objects as a separate set?:No
+    Name the objects removed by the filter:RemovedObjects
+    Select the measurement to filter by:Intensity_MaxIntensity_CellOutlineImage
+    Filter using a minimum measurement value?:Yes
+    Minimum value:0.0
+    Filter using a maximum measurement value?:Yes
+    Maximum value:.5
+    Allow fuzzy feature matching?:No
+
+RelateObjects:[module_num:68|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:Cells
+    Child objects:BarcodeFoci
+    Calculate child-parent distances?:Both
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:Yes
+    Name the output object:RelateObjects
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+    Parent name:None
+
+Resize:[module_num:69|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Phalloidin
+    Name the output image:ResizePhalloidinForVis
+    Resizing method:Resize by a fraction or multiple of the original size
+    X Resizing factor:0.5
+    Y Resizing factor:0.5
+    Z Resizing factor:1.0
+    Width (x) of the final image:100
+    Height (y) of the final image:100
+    # of planes (z) in the final image:10
+    Interpolation method:Nearest Neighbor
+    Method to specify the dimensions:Manual
+    Select the image with the desired dimensions:None
+    Additional image count:0
+
+Resize:[module_num:70|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA_Painting
+    Name the output image:ResizeDNAPaintingForVis
+    Resizing method:Resize by a fraction or multiple of the original size
+    X Resizing factor:0.5
+    Y Resizing factor:0.5
+    Z Resizing factor:1.0
+    Width (x) of the final image:100
+    Height (y) of the final image:100
+    # of planes (z) in the final image:10
+    Interpolation method:Nearest Neighbor
+    Method to specify the dimensions:Manual
+    Select the image with the desired dimensions:None
+    Additional image count:0
+
+GrayToColor:[module_num:71|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select a color scheme:RGB
+    Rescale intensity:Yes
+    Select the image to be colored red:Leave this black
+    Select the image to be colored green:ResizePhalloidinForVis
+    Select the image to be colored blue:ResizeDNAPaintingForVis
+    Name the output image:ColorImage
+    Relative weight for the red image:1.0
+    Relative weight for the green image:1.0
+    Relative weight for the blue image:1.0
+    Select the image to be colored cyan:Leave this black
+    Select the image to be colored magenta:Leave this black
+    Select the image to be colored yellow:Leave this black
+    Select the image that determines brightness:Leave this black
+    Relative weight for the cyan image:1.0
+    Relative weight for the magenta image:1.0
+    Relative weight for the yellow image:1.0
+    Relative weight for the brightness image:1.0
+    Hidden:1
+    Image name:None
+    Color:#ff0000
+    Weight:1.0
+
+OverlayOutlines:[module_num:72|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:No
+    Select image on which to display outlines:ColorImage
+    Name the output image:OrigOverlay
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:yellow
+    Select objects to display:ResizeNuclei
+    Select outline color:white
+    Select objects to display:ResizeCells
+    Select outline color:#FF8000
+    Select objects to display:ResizeConfluent
+
+SaveImages:[module_num:73|svn_version:'Unknown'|variable_revision_number:16|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:True]
+    Select the type of image to save:Image
+    Select the image to save:ColorImage
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:Pre_DNA_Painting
+    Enter single file name:VisualizeAlignment
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Color
+    Saved file format:png
+    Output file location:Default Output Folder|
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:OrigOverlay
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:CorrDNA
+    Enter single file name:VisualizeAlignment
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Overlay
+    Saved file format:png
+    Output file location:Default Output Folder|
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+Resize:[module_num:75|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:MaxOfCycle01
+    Name the output image:ResizedCycle01Spots
+    Resizing method:Resize by a fraction or multiple of the original size
+    X Resizing factor:0.5
+    Y Resizing factor:0.5
+    Z Resizing factor:1.0
+    Width (x) of the final image:100
+    Height (y) of the final image:100
+    # of planes (z) in the final image:10
+    Interpolation method:Nearest Neighbor
+    Method to specify the dimensions:Manual
+    Select the image with the desired dimensions:None
+    Additional image count:0
+
+RescaleIntensity:[module_num:76|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:ResizedCycle01Spots
+    Name the output image:RescaledCycle01Spots
+    Rescaling method:Stretch each image to use the full intensity range
+    Method to calculate the minimum intensity:Custom
+    Method to calculate the maximum intensity:Custom
+    Lower intensity limit for the input image:0.0
+    Upper intensity limit for the input image:1.0
+    Intensity range for the input image:0.0,1.0
+    Intensity range for the output image:0.0,1.0
+    Select image to match in maximum intensity:None
+    Divisor value:1.0
+    Divisor measurement:None
+
+OverlayOutlines:[module_num:77|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:No
+    Select image on which to display outlines:RescaledCycle01Spots
+    Name the output image:SpotOverlay
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:Red
+    Select objects to display:Resize_Foci
+
+SaveImages:[module_num:78|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:SpotOverlay
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:CorrDNA
+    Enter single file name:VisualizeAlignment
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_SpotOverlay
+    Saved file format:png
+    Output file location:Default Output Folder|
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+ConvertObjectsToImage:[module_num:79|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Cells
+    Name the output image:Cells_Objects
+    Select the color format:uint16
+    Select the colormap:Default
+
+ConvertObjectsToImage:[module_num:80|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the output image:Nuclei_Objects
+    Select the color format:uint16
+    Select the colormap:Default
+
+ConvertObjectsToImage:[module_num:81|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Cytoplasm
+    Name the output image:Cytoplasm_Objects
+    Select the color format:uint16
+    Select the colormap:Default
+
+SaveImages:[module_num:82|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:Cells_Objects
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cells_Objects
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Output Folder sub-folder|segmentation_masks
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+SaveImages:[module_num:83|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:Cytoplasm_Objects
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Cytoplasm_Objects
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Output Folder sub-folder|segmentation_masks
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+SaveImages:[module_num:84|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:Nuclei_Objects
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_Nuclei_Objects
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Output Folder sub-folder|segmentation_masks
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+ExportToSpreadsheet:[module_num:85|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:No
+    Select the measurements to export:No
+    Calculate the per-image mean values for object measurements?:No
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:No
+    Output file location:Default Output Folder|
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Image filename
+    Select the image to use as the identifier:Barcodes_Barcodes
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:Yes
+    Press button to select measurements:
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:No
+    Filename prefix:MyExpt_
+    Overwrite existing files without warning?:No
+    Data to export:Image
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Experiment
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cells
+    Combine these object measurements with those of the previous object?:No
+    File name:Object.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cytoplasm
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Nuclei
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes

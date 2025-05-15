@@ -15,10 +15,8 @@ from starrynight.modules.sbs_align.constants import (
     SBS_ALIGN_OUT_PATH_SUFFIX,
 )
 from starrynight.modules.schema import (
-    Container as SpecContainer,
-)
-from starrynight.modules.schema import (
     ExecFunction,
+    SpecContainer,
     TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
@@ -45,9 +43,13 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
@@ -187,7 +189,9 @@ class SBSAlignInvokeCPModule(StarrynightModule):
             )
 
             spec.inputs[1].path = (
-                data.workspace_path.joinpath(SBS_ALIGN_CP_LOADDATA_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    SBS_ALIGN_CP_LOADDATA_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -201,6 +205,8 @@ class SBSAlignInvokeCPModule(StarrynightModule):
             uid=SBSAlignInvokeCPModule.uid(),
             spec=spec,
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return SBSAlignInvokeCPModule(spec=spec, pipe=pipe, uow=uow)

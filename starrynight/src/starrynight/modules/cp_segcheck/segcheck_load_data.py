@@ -9,15 +9,15 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.cp_illum_apply.constants import CP_ILLUM_APPLY_OUT_PATH_SUFFIX
+from starrynight.modules.cp_illum_apply.constants import (
+    CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.cp_segcheck.constants import (
     CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX,
 )
 from starrynight.modules.schema import (
-    Container as SpecContainer,
-)
-from starrynight.modules.schema import (
     ExecFunction,
+    SpecContainer,
     TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
@@ -27,148 +27,98 @@ from starrynight.modules.schema import (
 from starrynight.schema import DataConfig
 
 
-def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
-    """Create units of work for Generate Index step.
-
-    Parameters
-    ----------
-    out_dir : Path | CloudPath
-        Path to load data csv. Can be local or cloud.
-
-    Returns
-    -------
-    list[UnitOfWork]
-        List of unit of work.
-
-    """
-    uow_list = [
-        UnitOfWork(
-            inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
-            },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
-        )
-    ]
-
-    return uow_list
-
-
-def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
-    """Create pipeline for generating load data.
-
-    Parameters
-    ----------
-    uid: str
-        Module unique id.
-    spec: SpecContainer
-        CPPreSegcheckGenLoadDataModule specification.
-
-    Returns
-    -------
-    Pipeline
-        Pipeline instance.
-
-    """
-    cmd = [
-        "starrynight",
-        "segcheck",
-        "loaddata",
-        "-i",
-        spec.inputs[0].path,
-        "-o",
-        spec.outputs[0].path,
-        "-c",
-        spec.inputs[4].path,
-        "--nuclei",
-        spec.inputs[2].path,
-        "--cell",
-        spec.inputs[3].path,
-    ]
-    # Use user provided parser if available
-    if spec.inputs[1].path is not None:
-        cmd += ["--path_mask", spec.inputs[1].path]
-    gen_load_data_pipe = Seq(
-        [
-            Container(
-                name=uid,
-                input_paths={"index": [spec.inputs[0].path]},
-                output_paths={"load_data_path": [spec.outputs[0].path]},
-                config=ContainerConfig(
-                    image="ghrc.io/leoank/starrynight:dev",
-                    cmd=cmd,
-                    env={},
-                ),
-            ),
-        ]
-    )
-    return gen_load_data_pipe
-
-
 class CPSegcheckGenLoadDataModule(StarrynightModule):
     """CP segmentation generate loaddata module."""
 
-    @staticmethod
-    def uid() -> str:
+    @property
+    def uid(self) -> str:
         """Return module unique id."""
         return "cp_segchek_gen_loaddata"
 
-    @staticmethod
-    def _spec() -> SpecContainer:
+    def _spec(self) -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
-            inputs=[
-                TypeInput(
-                    name="index_path",
-                    type=TypeEnum.files,
+            inputs={
+                "index_path": TypeInput(
+                    name="Project Index",
+                    type=TypeEnum.file,
                     description="Path to the index.",
                     optional=False,
-                    path="path/to/the/index",
+                    value=self.data_config.workspace_path.joinpath(
+                        "index/index.parquet"
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-                TypeInput(
-                    name="path_mask",
-                    type=TypeEnum.file,
+                "path_mask": TypeInput(
+                    name="Path mask",
+                    type=TypeEnum.textbox,
                     description="Path prefix mask to use.",
                     optional=True,
-                    path=None,
                 ),
-                TypeInput(
+                "nuclei_channel": TypeInput(
                     name="nuclei_channel",
-                    type=TypeEnum.file,
+                    type=TypeEnum.textbox,
                     description="Which channel to use for nuclei segmentation.",
                     optional=False,
-                    path=None,
+                    value=self.experiment.cp_config.nuclei_channel,
                 ),
-                TypeInput(
+                "cell_channel": TypeInput(
                     name="cell_channel",
-                    type=TypeEnum.file,
+                    type=TypeEnum.textbox,
                     description="Which channel to use for cell segmentation.",
                     optional=False,
-                    path=None,
+                    value=self.experiment.cp_config.cell_channel,
                 ),
-                TypeInput(
-                    name="corr_images_path",
-                    type=TypeEnum.file,
+                "corrected_images_path": TypeInput(
+                    name="Corrected images",
+                    type=TypeEnum.dir,
                     description="Path to corrected images.",
                     optional=False,
-                    path="path/to/corr_images",
+                    value=self.data_config.workspace_path.joinpath(
+                        CP_ILLUM_APPLY_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-            ],
-            outputs=[
-                TypeOutput(
-                    name="cp_segchek_loaddata",
-                    type=TypeEnum.files,
+                "use_legacy": TypeInput(
+                    name="Use legacy pipeline",
+                    type=TypeEnum.boolean,
+                    description="Flag for using legacy pipeline.",
+                    optional=True,
+                    value=False,
+                ),
+                "exp_config_path": TypeInput(
+                    name="Experiment configuration json path",
+                    type=TypeEnum.file,
+                    description="Path to the generated experiment json file.",
+                    optional=True,
+                    value=self.data_config.workspace_path.joinpath(
+                        "experiment/experiment.json"
+                    )
+                    .resolve()
+                    .__str__(),
+                ),
+            },
+            outputs={
+                "loaddata_path": TypeOutput(
+                    name="Cellprofiler LoadData csvs",
+                    type=TypeEnum.dir,
                     description="Generated seg check loaddata files",
                     optional=False,
-                    path="random/path/to/loaddata_dir",
+                    value=self.data_config.workspace_path.joinpath(
+                        CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-                TypeOutput(
-                    name="loaddata_notebook",
+                "notebook_path": TypeOutput(
+                    name="QC notebook",
                     type=TypeEnum.notebook,
                     description="Notebook for inspecting load data files",
                     optional=False,
-                    path="http://karkinos:2720/?file=.%2FillumCPApplyOutput.py",
                 ),
-            ],
+            },
             parameters=[],
             display_only=[],
             results=[],
@@ -190,34 +140,69 @@ class CPSegcheckGenLoadDataModule(StarrynightModule):
             ),
         )
 
-    @staticmethod
-    def from_config(
-        data: DataConfig,
-        experiment: Experiment | None = None,
-        spec: SpecContainer | None = None,
-    ) -> Self:
-        """Create module from experiment and data config."""
-        if spec is None:
-            spec = CPSegcheckGenLoadDataModule._spec()
-            spec.inputs[0].path = (
-                data.workspace_path.joinpath("index/index.parquet").resolve().__str__()
-            )
-            spec.inputs[2].path = experiment.cp_config.nuclei_channel
-            spec.inputs[3].path = experiment.cp_config.cell_channel
-            spec.inputs[4].path = (
-                data.workspace_path.joinpath(CP_ILLUM_APPLY_OUT_PATH_SUFFIX)
-                .resolve()
-                .__str__()
-            )
-            spec.outputs[0].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX)
-                .resolve()
-                .__str__()
-            )
-        pipe = create_pipe_gen_load_data(
-            uid=CPSegcheckGenLoadDataModule.uid(),
-            spec=spec,
-        )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+    def _create_uow(self) -> list[UnitOfWork]:
+        """Create units of work for Generate Index step.
 
-        return CPSegcheckGenLoadDataModule(spec=spec, pipe=pipe, uow=uow)
+        Returns
+        -------
+        list[UnitOfWork]
+            List of unit of work.
+
+        """
+        return []
+
+    def _create_pipe(self) -> Pipeline:
+        """Create pipeline for generating load data.
+
+        Returns
+        -------
+        Pipeline
+            Pipeline instance.
+
+        """
+        spec = self.spec
+        cmd = [
+            "starrynight",
+            "segcheck",
+            "loaddata",
+            "-i",
+            spec.inputs["index_path"].value,
+            "-o",
+            spec.outputs["loaddata_path"].value,
+            "-c",
+            spec.inputs["corrected_images_path"].value,
+            "--nuclei",
+            spec.inputs["nuclei_channel"].value,
+            "--cell",
+            spec.inputs["cell_channel"].value,
+        ]
+        # Use user provided parser if available
+        if spec.inputs["path_mask"].value is not None:
+            cmd += ["--path_mask", spec.inputs["path_mask"].value]
+
+        if spec.inputs["use_legacy"].value is True:
+            assert spec.inputs["exp_config_path"].value is not None
+            cmd += [
+                "--use_legacy",
+                "--exp_config",
+                spec.inputs["exp_config_path"].value,
+            ]
+        gen_load_data_pipe = Seq(
+            [
+                Container(
+                    name=self.uid,
+                    input_paths={
+                        "index_path": [spec.inputs["index_path"].value]
+                    },
+                    output_paths={
+                        "loaddata_path": [spec.outputs["loaddata_path"].value]
+                    },
+                    config=ContainerConfig(
+                        image="ghrc.io/leoank/starrynight:dev",
+                        cmd=cmd,
+                        env={},
+                    ),
+                ),
+            ]
+        )
+        return gen_load_data_pipe

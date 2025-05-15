@@ -83,7 +83,7 @@ from starrynight.utils.globbing import flatten_dict, get_files_by
 
 
 def write_loaddata_illum_apply(
-    images_df: pl.DataFrame,
+    images_df: pl.LazyFrame,
     plate_channel_list: list[str],
     illum_by_channel_dict: dict[str, Path],
     path_mask: str,
@@ -248,13 +248,17 @@ def gen_illum_apply_load_data(
 
         # Find illum files for this level
         illum_by_channel_dict = {
-            ch: illum_path.joinpath(f"{levels[1]}_Illum{ch}.npy")
+            ch: illum_path.joinpath(
+                # INFO: This is not optimal, output form previous step is calculated per plate
+                # INFO: So, level[:2] is used and not just levels
+                f"{'-'.join(levels[:2])}/{levels[1]}_Illum{ch}.npy"
+            )
             for ch in plate_channel_list
         }
 
         # Construct filename for the loaddata csv
         level_out_path = out_path.joinpath(
-            f"{'_'.join(levels)}_illum_apply.csv"
+            f"{'_'.join(levels)}-illum_apply.csv"
         )
 
         with level_out_path.open("w") as f:
@@ -352,7 +356,7 @@ def generate_illum_apply_pipeline(
         # save_image.root_dir.value = ""
         save_image.stack_axis.value = AXIS_T
         # save_image.tiff_compress.value = ""
-        save_image.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
+        save_image.single_file_name.value = f"Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_{col.replace('Orig', 'Corr')}"
         pipeline.add_module(save_image)
 
     # INFO: Create and configure required modules
@@ -589,7 +593,6 @@ def gen_illum_apply_cppipe(
         cpipe = generate_illum_apply_pipeline(
             cpipe, sample_loaddata_file, nuclei_channel, cell_channel
         )
-        filename = "illum_apply_painting.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
         filename = "illum_apply_painting.json"

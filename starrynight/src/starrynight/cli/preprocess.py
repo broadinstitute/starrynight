@@ -4,8 +4,8 @@ import click
 from cloudpathlib import AnyPath
 
 from starrynight.algorithms.preprocess import (
-    gen_preprocess_cppipe_by_batch_plate,
-    gen_preprocess_load_data_by_batch_plate,
+    gen_preprocess_cppipe,
+    gen_preprocess_load_data,
 )
 
 
@@ -14,15 +14,19 @@ from starrynight.algorithms.preprocess import (
 @click.option("-o", "--out", required=True)
 @click.option("-c", "--corr_images", required=True)
 @click.option("-a", "--align_images", required=True)
-@click.option("-n", "--nuclei", required=True)
+@click.option("-n", "--nuclei", default=None)
 @click.option("-m", "--path_mask", default=None)
-def gen_preprocess_load_data(
+@click.option("--use_legacy", is_flag=True, default=False)
+@click.option("--exp_config", default=None)
+def gen_preprocess_load_data_cli(
     index: str,
     out: str,
     corr_images: str,
     align_images: str,
-    nuclei: str,
+    nuclei: str | None,
     path_mask: str | None,
+    use_legacy: bool,
+    exp_config: str | None,
 ) -> None:
     """Generate preprocess loaddata file.
 
@@ -40,15 +44,28 @@ def gen_preprocess_load_data(
         Channel to use for nuceli segmentation
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
+    use_legacy : bool
+        Flag for using legacy names in loaddata.
+    exp_config : str | None
+        Experiment config json path. Can be local or a cloud path.
 
     """
-    gen_preprocess_load_data_by_batch_plate(
+    # If use_legacy, then exp_config path is required
+    if use_legacy:
+        assert exp_config is not None
+        exp_config = AnyPath(exp_config)
+    else:
+        assert nuclei is not None
+
+    gen_preprocess_load_data(
         AnyPath(index),
         AnyPath(out),
         path_mask,
         nuclei,
         AnyPath(corr_images),
         AnyPath(align_images),
+        use_legacy,
+        exp_config,
     )
 
 
@@ -58,8 +75,14 @@ def gen_preprocess_load_data(
 @click.option("-w", "--workspace", required=True)
 @click.option("-b", "--barcode", required=True)
 @click.option("-n", "--nuclei", required=True)
-def gen_preprocess_cppipe(
-    loaddata: str, out: str, workspace: str, barcode: str, nuclei: str
+@click.option("--use_legacy", is_flag=True, default=False)
+def gen_preprocess_cppipe_cli(
+    loaddata: str,
+    out: str,
+    workspace: str,
+    barcode: str,
+    nuclei: str,
+    use_legacy: bool,
 ) -> None:
     """Generate preprocess cppipe file.
 
@@ -75,10 +98,20 @@ def gen_preprocess_cppipe(
         Path to barcode csv. Can be local or a cloud path.
     nuclei : str
         Channel to use for nuceli segmentation
+    use_legacy : bool
+        Flag for using legacy cppipe.
 
     """
-    gen_preprocess_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), AnyPath(barcode), nuclei
+    if use_legacy is False:
+        assert nuclei is not None
+
+    gen_preprocess_cppipe(
+        AnyPath(loaddata),
+        AnyPath(out),
+        AnyPath(workspace),
+        AnyPath(barcode),
+        nuclei,
+        use_legacy,
     )
 
 
@@ -88,5 +121,5 @@ def preprocess() -> None:
     pass
 
 
-preprocess.add_command(gen_preprocess_load_data)
-preprocess.add_command(gen_preprocess_cppipe)
+preprocess.add_command(gen_preprocess_load_data_cli)
+preprocess.add_command(gen_preprocess_cppipe_cli)

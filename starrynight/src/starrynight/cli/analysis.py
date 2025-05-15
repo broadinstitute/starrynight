@@ -4,8 +4,8 @@ import click
 from cloudpathlib import AnyPath
 
 from starrynight.algorithms.analysis import (
-    gen_analysis_cppipe_by_batch_plate,
-    gen_analysis_load_data_by_batch_plate,
+    gen_analysis_cppipe,
+    gen_analysis_load_data,
 )
 
 
@@ -15,12 +15,16 @@ from starrynight.algorithms.analysis import (
 @click.option("-c", "--corr_images", required=True)
 @click.option("-p", "--comp_images", required=True)
 @click.option("-m", "--path_mask", default=None)
-def gen_analysis_load_data(
+@click.option("--use_legacy", is_flag=True, default=False)
+@click.option("--exp_config", default=None)
+def gen_analysis_load_data_cli(
     index: str,
     out: str,
     corr_images: str,
     comp_images: str,
     path_mask: str | None,
+    use_legacy: bool,
+    exp_config: str | None,
 ) -> None:
     """Generate analysis loaddata file.
 
@@ -36,14 +40,24 @@ def gen_analysis_load_data(
         Color compensated sbs images dir. Can be local or a cloud path.
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
+    use_legacy : bool
+        Flag for using legacy names in loaddata.
+    exp_config : str | None
+        Experiment config json path. Can be local or a cloud path.
 
     """
-    gen_analysis_load_data_by_batch_plate(
+    if use_legacy:
+        assert exp_config is not None
+        exp_config = AnyPath(exp_config)
+
+    gen_analysis_load_data(
         AnyPath(index),
         AnyPath(out),
         path_mask,
         AnyPath(corr_images),
         AnyPath(comp_images),
+        use_legacy,
+        exp_config,
     )
 
 
@@ -52,17 +66,19 @@ def gen_analysis_load_data(
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
 @click.option("-b", "--barcode", required=True)
-@click.option("-n", "--nuclei", required=True)
-@click.option("-e", "--cell", required=True)
-@click.option("-m", "--mito", required=True)
-def gen_analysis_cppipe(
+@click.option("-n", "--nuclei", default=None)
+@click.option("-e", "--cell", default=None)
+@click.option("-m", "--mito", default=None)
+@click.option("--use_legacy", is_flag=True, default=False)
+def gen_analysis_cppipe_cli(
     loaddata: str,
     out: str,
     workspace: str,
     barcode: str,
-    nuclei: str,
-    cell: str,
-    mito: str,
+    nuclei: str | None,
+    cell: str | None,
+    mito: str | None,
+    use_legacy: bool,
 ) -> None:
     """Generate analysis cppipe file.
 
@@ -76,15 +92,20 @@ def gen_analysis_cppipe(
         Path to workspace directory. Can be local or a cloud path.
     barcode : str
         Path to barcode csv. Can be local or a cloud path.
-    nuclei : str
+    nuclei : str | None
         Channel to use for nuceli segmentation
-    cell : str
+    cell : str | None
         Channel to use for cell segmentation
-    mito : str
+    mito : str | None
         Channel to use for mito segmentation
+    use_legacy : bool
+        Flag for using legacy cppipe.
 
     """
-    gen_analysis_cppipe_by_batch_plate(
+    if use_legacy is False:
+        assert nuclei and cell and mito is not None
+
+    gen_analysis_cppipe(
         AnyPath(loaddata),
         AnyPath(out),
         AnyPath(workspace),
@@ -92,6 +113,7 @@ def gen_analysis_cppipe(
         nuclei,
         cell,
         mito,
+        use_legacy,
     )
 
 
@@ -101,5 +123,5 @@ def analysis() -> None:
     pass
 
 
-analysis.add_command(gen_analysis_load_data)
-analysis.add_command(gen_analysis_cppipe)
+analysis.add_command(gen_analysis_load_data_cli)
+analysis.add_command(gen_analysis_cppipe_cli)

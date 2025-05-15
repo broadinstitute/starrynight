@@ -8,9 +8,9 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.17.0
 #   kernelspec:
-#     display_name: Python 3 (ipyflow)
+#     display_name: Python 3 (ipykernel)
 #     language: python
-#     name: ipyflow
+#     name: python3
 # ---
 
 # %% [markdown]

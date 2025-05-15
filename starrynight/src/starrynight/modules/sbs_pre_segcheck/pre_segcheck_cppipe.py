@@ -15,10 +15,8 @@ from starrynight.modules.sbs_pre_segcheck.constants import (
     SBS_PRE_SEGCHECK_OUT_PATH_SUFFIX,
 )
 from starrynight.modules.schema import (
-    Container as SpecContainer,
-)
-from starrynight.modules.schema import (
     ExecFunction,
+    SpecContainer,
     TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
@@ -45,9 +43,13 @@ def create_work_unit_gen_index(out_dir: Path | CloudPath) -> list[UnitOfWork]:
     uow_list = [
         UnitOfWork(
             inputs={
-                "inventory": [out_dir.joinpath("inventory.parquet").resolve().__str__()]
+                "inventory": [
+                    out_dir.joinpath("inventory.parquet").resolve().__str__()
+                ]
             },
-            outputs={"index": [out_dir.joinpath("index.parquet").resolve().__str__()]},
+            outputs={
+                "index": [out_dir.joinpath("index.parquet").resolve().__str__()]
+            },
         )
     ]
 
@@ -189,7 +191,9 @@ class SBSPreSegcheckGenCPPipeModule(StarrynightModule):
             )
 
             spec.outputs[0].path = (
-                data.workspace_path.joinpath(SBS_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
+                data.workspace_path.joinpath(
+                    SBS_PRE_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX
+                )
                 .resolve()
                 .__str__()
             )
@@ -197,6 +201,8 @@ class SBSPreSegcheckGenCPPipeModule(StarrynightModule):
             uid=SBSPreSegcheckGenCPPipeModule.uid(),
             spec=spec,
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
+        uow = create_work_unit_gen_index(
+            out_dir=data.storage_path.joinpath("index")
+        )
 
         return SBSPreSegcheckGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)

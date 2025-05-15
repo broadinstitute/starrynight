@@ -64,14 +64,24 @@ from cellprofiler_core.constants.modules.load_data import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.pipeline.io import dump as dumpit
+from cellprofiler_core.preferences import json
 from cloudpathlib import AnyPath, CloudPath
 
 from starrynight.algorithms.index import PCPIndex
+from starrynight.modules.cp_illum_apply.constants import (
+    CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
+)
+from starrynight.templates import get_templates_path
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
+    filter_df_by_hierarchy,
+    filter_images,
     gen_image_hierarchy,
+    gen_legacy_channel_map,
     get_channels_by_batch_plate,
+    get_channels_from_df,
     get_cycles_by_batch_plate,
+    get_default_path_prefix,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
@@ -81,25 +91,72 @@ from starrynight.utils.misc import resolve_path_loaddata
 ###############################
 
 
-def write_loaddata(
-    images_df: pl.DataFrame,
+def get_filename_header(
+    ch: str, use_legacy: bool = False, legacy_channel_map: dict = {}
+) -> str:
+    if not use_legacy:
+        return f"FileName_Corr{ch}"
+    else:
+        return f"FileName_{legacy_channel_map[ch]}"
+
+
+def get_filename_value(
+    index: PCPIndex,
+    ch: str,
+    use_legacy: bool = False,
+    legacy_channel_map: dict = {},
+) -> str:
+    if not use_legacy:
+        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{ch}.tiff"
+    else:
+        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{legacy_channel_map[ch]}.tiff"
+
+
+def get_pathname_header(
+    ch: str, use_legacy: bool = False, legacy_channel_map: dict = {}
+) -> str:
+    if not use_legacy:
+        return f"PathName_Corr{ch}"
+    else:
+        return f"PathName_{legacy_channel_map[ch]}"
+
+
+def write_loaddata_segcheck(
+    images_df: pl.LazyFrame,
     plate_channel_list: list[str],
     corr_images_path: Path | CloudPath,
-    nuclei_channel: str,
-    cell_channel: str,
+    nuclei_channel: str | None,
+    cell_channel: str | None,
     path_mask: str,
     f: TextIOWrapper,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+    legacy_channel_map = {}
+
+    if use_legacy:
+        # Load experiment config
+        exp_config = json.loads(exp_config_path.read_text())
+
+        # setup legacy_channel_map
+        legacy_channel_map = gen_legacy_channel_map(
+            plate_channel_list, exp_config
+        )
+        # nuclei_channel = exp_config["cp_config"]["nuclei_channel"]
+        # cell_channel = exp_config["cp_config"]["cell_channel"]
+
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well", "Cycle"]
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
     ]
     filename_heads = [
-        f"FileName_Corr{col}" for col in [nuclei_channel, cell_channel]
+        get_filename_header(ch, use_legacy, legacy_channel_map)
+        for ch in plate_channel_list
     ]
     pathname_heads = [
-        f"PathName_Corr{col}" for col in [nuclei_channel, cell_channel]
+        get_pathname_header(ch, use_legacy, legacy_channel_map)
+        for ch in plate_channel_list
     ]
     loaddata_writer.writerow(
         [
@@ -108,11 +165,11 @@ def write_loaddata(
             *pathname_heads,
         ]
     )
-    for index in images_df.to_dicts():
+    for index in images_df.collect().to_dicts():
         index = PCPIndex(**index)
         filenames = [
-            f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-            for col in [nuclei_channel, cell_channel]
+            get_filename_value(index, ch, use_legacy, legacy_channel_map)
+            for ch in plate_channel_list
         ]
         pathnames = [
             resolve_path_loaddata(AnyPath(path_mask), corr_images_path)
@@ -128,7 +185,6 @@ def write_loaddata(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
-                index.cycle_id or 0,
                 # Filename heads
                 *filenames,
                 # Pathname heads
@@ -137,91 +193,15 @@ def write_loaddata(
         )
 
 
-def write_loaddata_csv_by_batch_plate(
-    images_df: pl.DataFrame,
-    out_path: Path | CloudPath,
-    corr_images_path: Path | CloudPath,
-    nuclei_channel: str,
-    cell_channel: str,
-    path_mask: str,
-    batch: str,
-    plate: str,
-) -> None:
-    pass
-
-    # Setup channel list for that plate
-    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
-    # setup df by filtering for plate id
-    df_plate = images_df.filter(
-        pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
-    )
-
-    # Write load data csv for the plate
-    batch_out_path = out_path.joinpath(batch)
-    batch_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_out_path.joinpath(f"segcheck_{batch}_{plate}.csv").open(
-        "w"
-    ) as f:
-        write_loaddata(
-            df_plate,
-            plate_channel_list,
-            corr_images_path,
-            nuclei_channel,
-            cell_channel,
-            path_mask,
-            f,
-        )
-
-
-def write_loaddata_csv_by_batch_plate_cycle(
-    images_df: pl.DataFrame,
-    out_path: Path | CloudPath,
-    corr_images_path: Path | CloudPath,
-    nuclei_channel: str,
-    cell_channel: str,
-    path_mask: str,
-    batch: str,
-    plate: str,
-    cycle: str,
-) -> None:
-    pass
-
-    # Setup channel list for that plate
-    plate_channel_list = get_channels_by_batch_plate(images_df, batch, plate)
-
-    # setup df by filtering for plate id
-    df_batch_plate_cycle = images_df.filter(
-        pl.col("batch_id").eq(batch)
-        & pl.col("plate_id").eq(plate)
-        & pl.col("cycle_id").eq(cycle)
-    )
-
-    # Write load data csv for the plate
-    batch_plate_out_path = out_path.joinpath(batch, plate)
-    batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-    with batch_plate_out_path.joinpath(
-        f"segcheck_{batch}_{plate}_{int(cycle):02}.csv"
-    ).open("w") as f:
-        write_loaddata(
-            df_batch_plate_cycle,
-            plate_channel_list,
-            corr_images_path,
-            nuclei_channel,
-            cell_channel,
-            path_mask,
-            f,
-        )
-
-
-def gen_segcheck_load_data_by_batch_plate(
+def gen_segcheck_load_data(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
-    nuclei_channel: str,
-    cell_channel: str,
+    nuclei_channel: str | None = None,
+    cell_channel: str | None = None,
     corr_images_path: Path | CloudPath | None = None,
-    for_sbs: bool = False,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     """Generate load data for segcheck pipeline.
 
@@ -239,78 +219,66 @@ def gen_segcheck_load_data_by_batch_plate(
         Channel to use for doing cell segmentation
     corr_images_path : Path | CloudPath
         Path | CloudPath to corr images directory.
-    for_sbs : str | None
-        Generate illums for SBS images.
+    use_legacy : bool
+        Use legacy cppipe and loaddata.
+    exp_config_path : Path | CloudPath
+        Path to experiment config json path.
 
     """
-    # Construct illum path if not given
-    if corr_images_path is None and not for_sbs:
+    # Construct corr images path if not given
+    if corr_images_path is None:
         corr_images_path = index_path.parents[1].joinpath(
-            "illum/cp/illum_apply"
+            CP_ILLUM_APPLY_OUT_PATH_SUFFIX
         )
-    elif corr_images_path is None and for_sbs:
-        corr_images_path = index_path.parents[1].joinpath(
-            "illum/sbs/illum_apply"
-        )
-    df = pl.read_parquet(index_path.resolve().__str__())
+
+    df = pl.scan_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    if not for_sbs:
-        images_df = df.filter(
-            pl.col("is_sbs_image").ne(True), pl.col("is_image").eq(True)
-        )
-    else:
-        images_df = df.filter(
-            pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-        )
+    images_df = filter_images(df, False)
 
     # Only subsample if df is large
-    if len(images_df) > 10:
+    # TODO: implement contiguous sampling
+    if images_df.select(pl.len()).collect().item() > 10:
         images_df = images_df.sample(fraction=0.1)
 
-    images_hierarchy_dict = gen_image_hierarchy(images_df)
-
     # Query default path prefix
-    default_path_prefix = (
-        images_df.select("prefix").unique().to_series().to_list()[0]
-    )
+    default_path_prefix = get_default_path_prefix(images_df)
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
 
-    # Setup chunking and write loaddata for each batch/plate
-    for batch in images_hierarchy_dict.keys():
-        for plate in images_hierarchy_dict[batch].keys():
-            if not for_sbs:
-                # Write loaddata assuming no image nesting with cycles
-                write_loaddata_csv_by_batch_plate(
-                    images_df,
-                    out_path,
-                    corr_images_path,
-                    nuclei_channel,
-                    cell_channel,
-                    path_mask,
-                    batch,
-                    plate,
-                )
-            else:
-                # Write loaddata assuming image nesting with cycles
-                plate_cycles_list = get_cycles_by_batch_plate(
-                    images_df, batch, plate
-                )
-                for cycle in plate_cycles_list:
-                    write_loaddata_csv_by_batch_plate_cycle(
-                        images_df,
-                        out_path,
-                        corr_images_path,
-                        nuclei_channel,
-                        cell_channel,
-                        path_mask,
-                        batch,
-                        plate,
-                        cycle,
-                    )
+    # Setup chunking and write loaddata for parallel processing
+    images_hierarchy_dict = gen_image_hierarchy(
+        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
+    )
+
+    levels_leaf = flatten_dict(images_hierarchy_dict)
+    for levels, _ in levels_leaf:
+        # setup filtered df for chunked levels
+        levels_df = filter_df_by_hierarchy(images_df, levels, False)
+
+        # Setup channel list for this level
+        plate_channel_list = get_channels_from_df(levels_df)
+
+        # Construct filename for the loaddata csv
+        level_out_path = out_path.joinpath(f"{'_'.join(levels)}-segcheck.csv")
+
+        # Construct corr images path for this level
+        corr_images_path_level = corr_images_path.joinpath("-".join(levels))
+        with level_out_path.open("w") as f:
+            write_loaddata_segcheck(
+                levels_df,
+                plate_channel_list,
+                corr_images_path_level,
+                nuclei_channel,
+                cell_channel,
+                path_mask,
+                f,
+                use_legacy,
+                exp_config_path,
+            )
+    return out_path
 
 
 ###################################
@@ -323,7 +291,6 @@ def generate_segcheck_pipeline(
     load_data_path: Path | CloudPath,
     nuclei_channel: str,
     cell_channel: str,
-    for_sbs: bool = False,
 ) -> Pipeline:
     load_data_df = pl.read_csv(load_data_path.resolve().__str__())
     channel_list = list(
@@ -351,10 +318,7 @@ def generate_segcheck_pipeline(
     load_data.wants_rows.value = False
     # load_data.row_range.value = ""
     load_data.wants_image_groupings.value = True
-    if not for_sbs:
-        load_data.metadata_fields.value = "Batch,Plate"
-    else:
-        load_data.metadata_fields.value = "Batch,Plate,Cycle"
+    load_data.metadata_fields.value = "Batch,Plate"
     load_data.rescale.value = True
     pipeline.add_module(load_data)
 
@@ -599,12 +563,9 @@ def generate_segcheck_pipeline(
     save_image.stack_axis.value = AXIS_T
     # save_image.tiff_compress.value = ""
 
-    if not for_sbs:
-        save_image.single_file_name.value = (
-            "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
-        )
-    else:
-        save_image.single_file_name.value = "\\g<Batch>_\\g<Plate>_\\g<Cycle>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
+    save_image.single_file_name.value = (
+        "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_OrigOverlay"
+    )
     pipeline.add_module(save_image)
 
     # export measurements to spreadsheet
@@ -614,10 +575,7 @@ def generate_segcheck_pipeline(
     export_measurements.delimiter.value = DELIMITER_COMMA
     export_measurements.directory.value = f"{DEFAULT_OUTPUT_FOLDER_NAME}|"
     export_measurements.wants_prefix.value = True
-    if not for_sbs:
-        export_measurements.prefix.value = "Segcheck_"
-    else:
-        export_measurements.prefix.value = "Segcheck_"
+    export_measurements.prefix.value = "Segcheck_"
     export_measurements.wants_overwrite_without_warning.value = False
     export_measurements.add_metadata.value = False
     export_measurements.add_filepath.value = False
@@ -637,13 +595,13 @@ def generate_segcheck_pipeline(
     return pipeline
 
 
-def gen_segcheck_cppipe_by_batch_plate(
+def gen_segcheck_cppipe(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
     nuclei_channel: str,
     cell_channel: str,
-    for_sbs: bool = False,
+    use_legacy: bool = False,
 ) -> None:
     """Write out segcheck pipeline to file.
 
@@ -659,32 +617,33 @@ def gen_segcheck_cppipe_by_batch_plate(
         Channel to use for nuclei segmentation
     cell_channel : str
         Channel to use for cell segmentation
-    for_sbs : bool
-        Generate illums for SBS images.
+    use_legacy : bool
+        Use legacy segmentation pipeline.
 
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
 
-    # Get all the generated load data files by batch
-    if not for_sbs:
-        type_suffix = "painting"
-        files_by_hierarchy = get_files_by(["batch"], load_data_path, "*.csv")
-    else:
-        type_suffix = "sbs"
-        files_by_hierarchy = get_files_by(
-            ["batch", "plate"], load_data_path, "*.csv"
+    filename = "segcheck_painting.cppipe"
+
+    # Write old cppipe and return early if use_old is true
+    if use_legacy:
+        ref_cppipe = (
+            get_templates_path() / "cppipe/ref_3_CP_SegmentationCheck.cppipe"
         )
 
+        out_dir.joinpath(filename).write_text(ref_cppipe.read_text())
+        return
+
     # get one of the load data file for generating cppipe
-    _, files = flatten_dict(files_by_hierarchy)[0]
+    sample_loaddata_file = next(load_data_path.rglob("*.csv"))
+
     with CellProfilerContext(out_dir=workspace_path) as cpipe:
         cpipe = generate_segcheck_pipeline(
-            cpipe, files[0], nuclei_channel, cell_channel, for_sbs
+            cpipe, sample_loaddata_file, nuclei_channel, cell_channel
         )
-        filename = f"segcheck_{type_suffix}.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
-        filename = f"segcheck_{type_suffix}.json"
+        filename = "segcheck_painting.json"
         with out_dir.joinpath(filename).open("w") as f:
             dumpit(cpipe, f, version=6)

@@ -101,8 +101,11 @@ from cellprofiler_core.constants.modules.load_data import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline.io import dump as dumpit
+from cellprofiler_core.preferences import json
 from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import AnyPath, CloudPath
+from mako.template import Template
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
 from starrynight.algorithms.cp_plugin_compensate_colors import (
@@ -110,11 +113,21 @@ from starrynight.algorithms.cp_plugin_compensate_colors import (
     CompensateColors,
 )
 from starrynight.algorithms.index import PCPIndex
+from starrynight.modules.sbs_illum_apply.constants import (
+    SBS_ILLUM_APPLY_OUT_PATH_SUFFIX,
+)
+from starrynight.templates import get_templates_path
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
+    filter_df_by_hierarchy,
+    filter_images,
     gen_image_hierarchy,
+    gen_legacy_channel_map,
     get_channels_by_batch_plate,
+    get_channels_from_df,
     get_cycles_by_batch_plate,
+    get_cycles_from_df,
+    get_default_path_prefix,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
@@ -124,8 +137,42 @@ from starrynight.utils.misc import resolve_path_loaddata
 ###############################
 
 
+def get_filename_header(
+    cycle: int, ch: str, use_legacy: bool = False, legacy_channel_map: dict = {}
+) -> str:
+    if not use_legacy:
+        return f"FileName_Cycle_{int(cycle)}_{ch}"
+    else:
+        return f"FileName_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}"
+
+
+def get_filename_value(
+    index: PCPIndex,
+    cycle: int,
+    ch: str,
+    use_legacy: bool = False,
+    legacy_channel_map: dict = {},
+) -> str:
+    if not use_legacy:
+        if int(cycle) != 1:
+            return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Aligned{ch}.tiff"
+        else:
+            return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{ch}.tiff"
+    else:
+        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(cycle):02d}_{ch}.tiff"
+
+
+def get_pathname_header(
+    cycle: int, ch: str, use_legacy: bool = False, legacy_channel_map: dict = {}
+) -> str:
+    if not use_legacy:
+        return f"PathName_Cycle_{int(cycle)}_{ch}"
+    else:
+        return f"PathName_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}"
+
+
 def write_loaddata(
-    images_df: pl.DataFrame,
+    images_df: pl.LazyFrame,
     plate_channel_list: list[str],
     plate_cycles_list: list[str],
     corr_images_path: Path | CloudPath,
@@ -133,22 +180,34 @@ def write_loaddata(
     nuclei_channel: str,
     path_mask: str,
     f: TextIOWrapper,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
-    # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+    legacy_channel_map = {}
+
+    if use_legacy:
+        # Load experiment config
+        exp_config = json.loads(exp_config_path.read_text())
+
+        # setup legacy_channel_map
+        legacy_channel_map = gen_legacy_channel_map(
+            plate_channel_list, exp_config
+        )
+
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
     ]
 
     filename_heads = [
-        f"FileName_Cycle{int(cycle)}_{col}"
+        get_filename_header(cycle, ch, use_legacy, legacy_channel_map)
         for cycle in plate_cycles_list
-        for col in plate_channel_list
+        for ch in plate_channel_list
     ]
     pathname_heads = [
-        f"PathName_Cycle{int(cycle)}_{col}"
+        get_pathname_header(cycle, ch, use_legacy, legacy_channel_map)
         for cycle in plate_cycles_list
-        for col in plate_channel_list
+        for ch in plate_channel_list
     ]
     loaddata_writer.writerow(
         [
@@ -157,10 +216,13 @@ def write_loaddata(
             *pathname_heads,
         ]
     )
-    index = images_df[0].to_dicts()[0]
+    index = images_df.first().collect().to_dicts()[0]
     index = PCPIndex(**index)
     wells_sites = (
-        images_df.group_by("well_id").agg(pl.col("site_id").unique()).to_dicts()
+        images_df.collect()
+        .group_by("well_id")
+        .agg(pl.col("site_id").unique())
+        .to_dicts()
     )
     for well_sites in wells_sites:
         index.well_id = well_sites["well_id"]
@@ -169,8 +231,10 @@ def write_loaddata(
             assert index.cycle_id is not None
             assert index.site_id is not None
             filenames = [
-                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Aligned{col}.tiff"
-                for col in plate_channel_list
+                get_filename_value(
+                    index, cycle, ch, use_legacy, legacy_channel_map
+                )
+                for ch in plate_channel_list
                 for cycle in plate_cycles_list
             ]
             if int(index.cycle_id) != 1:
@@ -201,13 +265,15 @@ def write_loaddata(
             )
 
 
-def gen_preprocess_load_data_by_batch_plate(
+def gen_preprocess_load_data(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
     nuclei_channel: str,
     corr_images_path: Path | CloudPath | None = None,
     align_images_path: Path | CloudPath | None = None,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     """Generate load data for preprocess pipeline.
 
@@ -225,67 +291,75 @@ def gen_preprocess_load_data_by_batch_plate(
         Path | CloudPath to corr images directory.
     align_images_path : Path | CloudPath
         Path | CloudPath to aligned images directory.
+    use_legacy : bool
+        Use legacy cppipe and loaddata.
+    exp_config_path : Path | CloudPath
+        Path to experiment config json path.
 
     """
     # Construct illum path if not given
     if corr_images_path is None:
         corr_images_path = index_path.parents[1].joinpath(
-            "illum/sbs/illum_apply"
+            SBS_ILLUM_APPLY_OUT_PATH_SUFFIX
         )
     if align_images_path is None:
-        align_images_path = index_path.parents[1].joinpath("align/sbs")
+        align_images_path = index_path.parents[1].joinpath(
+            SBS_ILLUM_APPLY_OUT_PATH_SUFFIX
+        )
 
-    df = pl.read_parquet(index_path.resolve().__str__())
+    # Load index
+    df = pl.scan_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(
-        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-    )
-
-    images_hierarchy_dict = gen_image_hierarchy(images_df)
+    images_df = filter_images(df, True)
 
     # Query default path prefix
-    default_path_prefix = (
-        images_df.select("prefix").unique().to_series().to_list()[0]
-    )
+    default_path_prefix: str = get_default_path_prefix(images_df)
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
 
+    # Setup chunking and write loaddata for parallel processing
+    images_hierarchy_dict = gen_image_hierarchy(
+        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
+    )
+    levels_leaf = flatten_dict(images_hierarchy_dict)
+
     # Setup chunking and write loaddata for each batch/plate
-    for batch in images_hierarchy_dict.keys():
-        for plate in images_hierarchy_dict[batch].keys():
-            # Setup channel list for that plate
-            plate_channel_list = get_channels_by_batch_plate(
-                images_df, batch, plate
-            )
+    for levels, _ in levels_leaf:
+        # setup filtered df for chunked levels
+        levels_df = filter_df_by_hierarchy(images_df, levels, False)
 
-            # Get plate cycle list
-            plate_cycles_list = get_cycles_by_batch_plate(
-                images_df, batch, plate
-            )
+        # Setup channel list for this level
+        plate_channel_list = get_channels_from_df(levels_df)
 
-            # filter batch and plate images
-            df_plate = images_df.filter(
-                pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
-            )
+        # Setup cycles list
+        plate_cycles_list = get_cycles_from_df(levels_df)
 
-            batch_plate_out_path = out_path.joinpath(batch, plate)
-            batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-            with batch_plate_out_path.joinpath(
-                f"preprocess_{batch}_{plate}.csv"
-            ).open("w") as f:
-                write_loaddata(
-                    df_plate,
-                    plate_channel_list,
-                    plate_cycles_list,
-                    corr_images_path,
-                    align_images_path,
-                    nuclei_channel,
-                    path_mask,
-                    f,
-                )
+        # Construct filename for the loaddata csv
+        level_out_path = out_path.joinpath(
+            f"{'_'.join(levels)}-preprocess_sbs.csv"
+        )
+
+        # Construct corr images path for this level
+        corr_images_path_level = corr_images_path.joinpath("-".join(levels))
+
+        # Construct align images path for this level
+        align_images_path_level = align_images_path.joinpath("-".join(levels))
+        with level_out_path.open("w") as f:
+            write_loaddata(
+                levels_df,
+                plate_channel_list,
+                plate_cycles_list,
+                corr_images_path_level,
+                align_images_path_level,
+                nuclei_channel,
+                path_mask,
+                f,
+                use_legacy,
+                exp_config_path,
+            )
 
 
 ###################################
@@ -1068,12 +1142,13 @@ def generate_preprocess_pipeline(
     return pipeline
 
 
-def gen_preprocess_cppipe_by_batch_plate(
+def gen_preprocess_cppipe(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
     barcode_csv_path: Path | CloudPath,
     nuclei_channel: str,
+    use_legacy: bool = False,
 ) -> None:
     """Write out preprocess pipeline to file.
 
@@ -1089,22 +1164,36 @@ def gen_preprocess_cppipe_by_batch_plate(
         Path | CloudPath to barcode csv.
     nuclei_channel : str
         Channel to use for nuclei segmentation
+    use_legacy : bool
+        Use legacy illumination apply pipeline.
 
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
 
-    # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(
-        ["batch", "plate"], load_data_path, "*.csv"
-    )
+    filename = "preprocess_sbs.cppipe"
+
+    # Write old cppipe and return early if use_old is true
+    if use_legacy:
+        ref_cppipe = Template(
+            text=get_templates_path()
+            .joinpath("cppipe/ref_7_BC_Preprocess.cppipe.mako")
+            .read_text(),
+            output_encoding="utf-8",
+        ).render(barcode_csv_path=barcode_csv_path)
+        ref_cppipe = ref_cppipe.decode("utf-8")
+        out_dir.joinpath(filename).write_text(ref_cppipe)
+        return
 
     # get one of the load data file for generating cppipe
-    _, files = flatten_dict(files_by_hierarchy)[0]
+    sample_loaddata_file = next(load_data_path.rglob("*.csv"))
+
     with CellProfilerContext(out_dir=workspace_path) as cpipe:
         cpipe = generate_preprocess_pipeline(
-            cpipe, files[0], barcode_csv_path, nuclei_channel
+            cpipe, sample_loaddata_file, barcode_csv_path, nuclei_channel
         )
-        filename = "preprocess_sbs.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+        filename = "illum_apply_painting.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)

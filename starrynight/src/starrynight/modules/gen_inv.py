@@ -10,10 +10,8 @@ from pipecraft.pipeline import Pipeline, Seq
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.schema import (
-    Container as SpecContainer,
-)
-from starrynight.modules.schema import (
     ExecFunction,
+    SpecContainer,
     TypeAlgorithmFromCitation,
     TypeCitations,
     TypeEnum,
@@ -23,116 +21,39 @@ from starrynight.modules.schema import (
 from starrynight.schema import DataConfig
 
 
-def create_work_unit_gen_inv(out_dir: Path | CloudPath) -> list[UnitOfWork]:
-    """Create units of work for Generate Inv step.
-
-    Parameters
-    ----------
-    out_dir : Path | CloudPath
-        Path to load data csv. Can be local or cloud.
-
-    Returns
-    -------
-    list[UnitOfWork]
-        List of unit of work.
-
-    """
-    uow_list = [
-        UnitOfWork(
-            inputs={},
-            outputs={
-                "inventory": [
-                    out_dir.joinpath("inventory.parquet").resolve().__str__()
-                ]
-            },
-        )
-    ]
-
-    return uow_list
-
-
-def create_pipe_gen_inv(
-    uid: str,
-    spec: SpecContainer,
-) -> Pipeline:
-    """Create pipeline for gen inv.
-
-    Parameters
-    ----------
-    uid: str
-        Module unique id.
-    spec: SpecContainer
-        GenInvModule specification.
-    dataset_path : Path | CloudPath
-        Dataset path. Can be local or cloud.
-    out_dir : Path | CloudPath
-        Path to save outputs. Can be local or cloud.
-
-    Returns
-    -------
-    Pipeline
-        Pipeline instance.
-
-    """
-    cmd = [
-        "starrynight",
-        "inventory",
-        "gen",
-        "-d",
-        spec.inputs[0].path,
-        "-o",
-        Path(spec.outputs[0].path).parent.__str__(),
-    ]
-
-    gen_inv_pipe = Seq(
-        [
-            Container(
-                name=uid,
-                input_paths={},
-                output_paths={
-                    "inventory": [Path(spec.outputs[0].path).parent.__str__()]
-                },
-                config=ContainerConfig(
-                    image="ghrc.io/leoank/starrynight:dev",
-                    cmd=cmd,
-                    env={},
-                ),
-            ),
-        ]
-    )
-    return gen_inv_pipe
-
-
 class GenInvModule(StarrynightModule):
     """Generate Inventory module."""
 
-    @staticmethod
-    def uid() -> str:
+    @property
+    def uid(self) -> str:
         """Return module unique id."""
         return "generate_inventory"
 
-    @staticmethod
-    def _spec() -> SpecContainer:
+    def _spec(self) -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
-            inputs=[
-                TypeInput(
-                    name="dataset_path",
-                    type=TypeEnum.files,
+            inputs={
+                "dataset_path": TypeInput(
+                    name="Dataset path",
+                    type=TypeEnum.dir,
                     description="Path to the dataset.",
                     optional=False,
-                    path="path/to/the/dataset",
+                    value=self.data_config.dataset_path.resolve().__str__(),
                 ),
-            ],
-            outputs=[
-                TypeOutput(
-                    name="project_inventory",
+            },
+            outputs={
+                "project_inventory": TypeOutput(
+                    name="Inventory path",
                     type=TypeEnum.file,
                     description="Generated Inventory",
                     optional=False,
-                    path="random/path/to/inventory.parquet",
+                    value=self.data_config.workspace_path.joinpath(
+                        "inventory/inventory.parquet"
+                    )
+                    .resolve()
+                    .__str__(),
                 )
-            ],
+            },
             parameters=[],
             display_only=[],
             results=[],
@@ -154,24 +75,55 @@ class GenInvModule(StarrynightModule):
             ),
         )
 
-    @staticmethod
-    def from_config(
-        data: DataConfig,
-        experiment: Experiment | None = None,
-        spec: SpecContainer | None = None,
-    ) -> Self:
-        """Create module from experiment and data config."""
-        if spec is None:
-            spec = GenInvModule._spec()
-            spec.inputs[0].path = data.dataset_path.resolve().__str__()
-            spec.outputs[0].path = (
-                data.workspace_path.joinpath("inventory/inventory.parquet")
-                .resolve()
-                .__str__()
-            )
-        pipe = create_pipe_gen_inv(uid=GenInvModule.uid(), spec=spec)
-        uow = create_work_unit_gen_inv(
-            out_dir=data.workspace_path.joinpath("inventory")
-        )
+    def _create_pipe(self) -> Pipeline:
+        """Create pipeline for gen inv.
 
-        return GenInvModule(spec=spec, pipe=pipe, uow=uow)
+        Returns
+        -------
+        Pipeline
+            Pipeline instance.
+
+        """
+        spec = self.spec
+        cmd = [
+            "starrynight",
+            "inventory",
+            "gen",
+            "-d",
+            spec.inputs["dataset_path"].value,
+            "-o",
+            Path(spec.outputs["project_inventory"].value).parent.__str__(),
+        ]
+
+        gen_inv_pipe = Seq(
+            [
+                Container(
+                    name=self.uid,
+                    input_paths={},
+                    output_paths={
+                        "inventory": [
+                            Path(
+                                spec.outputs["project_inventory"].value
+                            ).parent.__str__()
+                        ]
+                    },
+                    config=ContainerConfig(
+                        image="ghrc.io/leoank/starrynight:dev",
+                        cmd=cmd,
+                        env={},
+                    ),
+                ),
+            ]
+        )
+        return gen_inv_pipe
+
+    def _create_uow(self) -> list[UnitOfWork]:
+        """Create units of work for Generate Inv step.
+
+        Returns
+        -------
+        list[UnitOfWork]
+            List of unit of work.
+
+        """
+        return []

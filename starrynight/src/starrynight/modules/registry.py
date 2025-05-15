@@ -87,46 +87,46 @@ from starrynight.modules.sbs_preprocess.preprocess_load_data import (
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {
     # Generate inventory and index for the project
-    GenInvModule.uid(): GenInvModule,
-    GenIndexModule.uid(): GenIndexModule,
+    GenInvModule.uid: GenInvModule,
+    GenIndexModule.uid: GenIndexModule,
     # CP illum calc
-    CPCalcIllumGenLoadDataModule.uid(): CPCalcIllumGenLoadDataModule,
-    CPCalcIllumGenCPPipeModule.uid(): CPCalcIllumGenCPPipeModule,
-    CPCalcIllumInvokeCPModule.uid(): CPCalcIllumInvokeCPModule,
+    CPCalcIllumGenLoadDataModule.uid: CPCalcIllumGenLoadDataModule,
+    CPCalcIllumGenCPPipeModule.uid: CPCalcIllumGenCPPipeModule,
+    CPCalcIllumInvokeCPModule.uid: CPCalcIllumInvokeCPModule,
     # CP illum apply
-    CPApplyIllumGenLoadDataModule.uid(): CPApplyIllumGenLoadDataModule,
-    CPApplyIllumGenCPPipeModule.uid(): CPApplyIllumGenCPPipeModule,
-    CPApplyIllumInvokeCPModule.uid(): CPApplyIllumInvokeCPModule,
+    CPApplyIllumGenLoadDataModule.uid: CPApplyIllumGenLoadDataModule,
+    CPApplyIllumGenCPPipeModule.uid: CPApplyIllumGenCPPipeModule,
+    CPApplyIllumInvokeCPModule.uid: CPApplyIllumInvokeCPModule,
     # CP pre segcheck
-    CPPreSegcheckGenLoadDataModule.uid(): CPPreSegcheckGenLoadDataModule,
-    CPPreSegcheckGenCPPipeModule.uid(): CPPreSegcheckGenCPPipeModule,
-    CPPreSegcheckInvokeCPModule.uid(): CPPreSegcheckInvokeCPModule,
+    CPPreSegcheckGenLoadDataModule.uid: CPPreSegcheckGenLoadDataModule,
+    CPPreSegcheckGenCPPipeModule.uid: CPPreSegcheckGenCPPipeModule,
+    CPPreSegcheckInvokeCPModule.uid: CPPreSegcheckInvokeCPModule,
     # CP segcheck
-    CPSegcheckGenLoadDataModule.uid(): CPSegcheckGenLoadDataModule,
-    CPSegcheckGenCPPipeModule.uid(): CPSegcheckGenCPPipeModule,
-    CPSegcheckInvokeCPModule.uid(): CPSegcheckInvokeCPModule,
+    CPSegcheckGenLoadDataModule.uid: CPSegcheckGenLoadDataModule,
+    CPSegcheckGenCPPipeModule.uid: CPSegcheckGenCPPipeModule,
+    CPSegcheckInvokeCPModule.uid: CPSegcheckInvokeCPModule,
     # SBS illum calc
-    SBSCalcIllumGenLoadDataModule.uid(): SBSCalcIllumGenLoadDataModule,
-    SBSCalcIllumGenCPPipeModule.uid(): SBSCalcIllumGenCPPipeModule,
-    SBSCalcIllumInvokeCPModule.uid(): SBSCalcIllumInvokeCPModule,
+    SBSCalcIllumGenLoadDataModule.uid: SBSCalcIllumGenLoadDataModule,
+    SBSCalcIllumGenCPPipeModule.uid: SBSCalcIllumGenCPPipeModule,
+    SBSCalcIllumInvokeCPModule.uid: SBSCalcIllumInvokeCPModule,
     # SBS illum apply
-    SBSApplyIllumGenLoadDataModule.uid(): SBSApplyIllumGenLoadDataModule,
-    SBSApplyIllumGenCPPipeModule.uid(): SBSApplyIllumGenCPPipeModule,
-    SBSApplyIllumInvokeCPModule.uid(): SBSApplyIllumInvokeCPModule,
+    SBSApplyIllumGenLoadDataModule.uid: SBSApplyIllumGenLoadDataModule,
+    SBSApplyIllumGenCPPipeModule.uid: SBSApplyIllumGenCPPipeModule,
+    SBSApplyIllumInvokeCPModule.uid: SBSApplyIllumInvokeCPModule,
     # SBS pre segcheck
-    SBSPreSegcheckGenLoadDataModule.uid(): SBSPreSegcheckGenLoadDataModule,
-    SBSPreSegcheckGenCPPipeModule.uid(): SBSPreSegcheckGenLoadDataModule,
-    SBSPreSegcheckInvokeCPModule.uid(): SBSPreSegcheckInvokeCPModule,
+    SBSPreSegcheckGenLoadDataModule.uid: SBSPreSegcheckGenLoadDataModule,
+    SBSPreSegcheckGenCPPipeModule.uid: SBSPreSegcheckGenLoadDataModule,
+    SBSPreSegcheckInvokeCPModule.uid: SBSPreSegcheckInvokeCPModule,
     # SBS align
-    SBSAlignGenLoadDataModule.uid(): SBSAlignGenLoadDataModule,
-    SBSAlignGenCPPipeModule.uid(): SBSAlignGenCPPipeModule,
-    SBSAlignInvokeCPModule.uid(): SBSAlignInvokeCPModule,
+    SBSAlignGenLoadDataModule.uid: SBSAlignGenLoadDataModule,
+    SBSAlignGenCPPipeModule.uid: SBSAlignGenCPPipeModule,
+    SBSAlignInvokeCPModule.uid: SBSAlignInvokeCPModule,
     # SBS preprocess
-    SBSPreprocessGenLoadDataModule.uid(): SBSPreprocessGenLoadDataModule,
-    SBSPreprocessGenCPPipeModule.uid(): SBSPreprocessGenCPPipeModule,
-    SBSPreprocessInvokeCPModule.uid(): SBSPreprocessInvokeCPModule,
+    SBSPreprocessGenLoadDataModule.uid: SBSPreprocessGenLoadDataModule,
+    SBSPreprocessGenCPPipeModule.uid: SBSPreprocessGenCPPipeModule,
+    SBSPreprocessInvokeCPModule.uid: SBSPreprocessInvokeCPModule,
     # Analysis
-    AnalysisGenLoadDataModule.uid(): AnalysisGenLoadDataModule,
-    AnalysisGenCPPipeModule.uid(): AnalysisGenCPPipeModule,
-    AnalysisInvokeCPModule.uid(): AnalysisInvokeCPModule,
+    AnalysisGenLoadDataModule.uid: AnalysisGenLoadDataModule,
+    AnalysisGenCPPipeModule.uid: AnalysisGenCPPipeModule,
+    AnalysisInvokeCPModule.uid: AnalysisInvokeCPModule,
 }

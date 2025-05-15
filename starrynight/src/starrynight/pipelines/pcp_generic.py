@@ -74,6 +74,12 @@ def create_pcp_generic_pipeline(
     experiment: Experiment | None = None,
     updated_spec_dict: dict[str, Container] = {},
 ) -> tuple[list[StarrynightModule], Pipeline]:
+    # Write out the experiment config as a json file
+    experiment_dir = data.workspace_path.joinpath("experiment")
+    experiment_dir.mkdir(parents=True, exist_ok=True)
+    experiment_dir.write_text(experiment.model_dump_json())
+
+    # Initialize modules
     init_module = partial(
         apply_module_params, data, experiment, updated_spec_dict
     )

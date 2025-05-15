@@ -130,6 +130,7 @@ def write_loaddata_illum_apply(
     exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+    legacy_channel_map = {}
 
     if use_legacy:
         # Load experiment config
@@ -357,7 +358,9 @@ def gen_illum_apply_sbs_load_data(
         illum_by_cycle_channel_dict = {
             cycle: {
                 ch: illum_path.joinpath(
-                    f"{levels[1]}_Cycle{int(cycle)}_Illum{ch}.npy"
+                    # INFO: This is not optimal, output form previous step is calculated per plate
+                    # INFO: So, level[:2] is used and not just levels
+                    f"{'-'.join(levels[:2] + [str(cycle)])}/{levels[1]}_Cycle{int(cycle)}_Illum{ch}.npy"
                 )
                 for ch in plate_channel_list
             }
@@ -374,7 +377,7 @@ def gen_illum_apply_sbs_load_data(
 
         # Construct filename for the loaddata csv
         level_out_path = out_path.joinpath(
-            f"{'_'.join(levels)}_illum_apply.csv"
+            f"{'_'.join(levels)}-illum_apply_sbs.csv"
         )
 
         with level_out_path.open("w") as f:
@@ -671,7 +674,7 @@ def gen_illum_apply_sbs_cppipe(
         Path | CloudPath to workspace directory.
     nuclei_channel : str
         Channel to use for nuclei segmentation
-    use_legacy : str | None
+    use_legacy : bool
         Use legacy illumination apply pipeline.
 
     """
@@ -694,7 +697,6 @@ def gen_illum_apply_sbs_cppipe(
         cpipe = generate_illum_apply_sbs_pipeline(
             cpipe, sample_loaddata_file, nuclei_channel
         )
-        filename = "illum_apply_sbs.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
         filename = "illum_apply_painting.json"

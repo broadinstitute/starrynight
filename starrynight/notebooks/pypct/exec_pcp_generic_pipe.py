@@ -7,13 +7,16 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.17.0
 #   kernelspec:
-#     display_name: Python 3 (ipyflow)
+#     display_name: Python 3 (ipykernel)
 #     language: python
-#     name: ipyflow
+#     name: python3
 # ---
 
 # %% [markdown]
 # # Execute PCP generic pipeline step by step
+
+# %% [markdown]
+# ## Imports
 
 # %%
 from pathlib import Path
@@ -94,9 +97,9 @@ from starrynight.schema import DataConfig
 # %%
 dataset_path = Path("../../../scratch/starrynight_example_input")
 barcode_csv_path = dataset_path.joinpath("workspace/metadata/barcode.csv")
-workspace_path = Path("../../../scratch/starrynight_example_output")
-exec_runs = Path("../../../scratch/starrynight_runs")
-exec_mounts = Path("../../../scratch/starrynight_mounts")
+workspace_path = Path("../../../scratch/new_starrynight_example_output")
+exec_runs = Path("../../../scratch/new_starrynight_runs")
+exec_mounts = Path("../../../scratch/new_starrynight_mounts")
 
 
 # %% [markdown]
@@ -125,20 +128,19 @@ backend_config = SnakeMakeConfig(
 # This module is special and doesn't require an experiment for configuration
 
 # %%
-gen_inv_mod = GenInvModule.from_config(data_config)
+gen_inv_mod = GenInvModule(data_config)
 exec_backend = SnakeMakeBackend(
     gen_inv_mod.pipe, backend_config, exec_runs / "run001", exec_mounts
 )
 run = exec_backend.run()
 run.wait()
-run.print_log()
 
 # %% [markdown]
 # ## Configure the generate index module
 # This module is special and doesn't require an experiment for configuration
 
 # %%
-gen_ind_mod = GenIndexModule.from_config(data_config)
+gen_ind_mod = GenIndexModule(data_config)
 exec_backend = SnakeMakeBackend(
     gen_ind_mod.pipe, backend_config, exec_runs / "run002", exec_mounts
 )
@@ -151,7 +153,7 @@ run.wait()
 # %%
 index_path = workspace_path / "index/index.parquet"
 pcp_exp_init = PCPGenericInitConfig(
-    barcode_csv_path=barcode_csv_path,
+    barcode_csv_path=barcode_csv_path.resolve(),
     cp_acquisition_order=AcquisitionOrderType.SNAKE,
     cp_img_frame_type=ImageFrameType.ROUND,
     cp_img_overlap_pct=10,
@@ -168,6 +170,14 @@ pcp_exp_init = PCPGenericInitConfig(
 pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
 
+# %%
+# Write out the experiment as a json file
+experiment_dir = data_config.workspace_path.joinpath("experiment")
+experiment_dir.mkdir(parents=True, exist_ok=True)
+experiment_dir.joinpath("experiment.json").write_text(
+    pcp_experiment.model_dump_json()
+)
+
 # %% [markdown]
 # ## Configure the following modules with the experiment
 #
@@ -180,9 +190,11 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 # ### Gen load data
 
 # %%
-cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
+cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule(
     data_config, pcp_experiment
 )
+# Change default value to use legacy pipeline compatible load data
+cp_calc_illum_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_calc_illum_load_data_mod.pipe,
@@ -197,9 +209,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule.from_config(
+cp_calc_illum_cppipe_mod = CPCalcIllumGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+cp_calc_illum_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_calc_illum_cppipe_mod.pipe,
@@ -214,7 +229,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule.from_config(
+cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule(
     data_config, pcp_experiment
 )
 
@@ -236,9 +251,12 @@ run.wait()
 # ### Gen load data
 
 # %%
-cp_apply_illum_load_data_mod = CPApplyIllumGenLoadDataModule.from_config(
+cp_apply_illum_load_data_mod = CPApplyIllumGenLoadDataModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+cp_apply_illum_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_apply_illum_load_data_mod.pipe,
@@ -253,9 +271,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-cp_apply_illum_cppipe_mod = CPApplyIllumGenCPPipeModule.from_config(
+cp_apply_illum_cppipe_mod = CPApplyIllumGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+cp_apply_illum_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_apply_illum_cppipe_mod.pipe,
@@ -270,7 +291,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-cp_apply_illum_invoke_mod = CPApplyIllumInvokeCPModule.from_config(
+cp_apply_illum_invoke_mod = CPApplyIllumInvokeCPModule(
     data_config, pcp_experiment
 )
 
@@ -292,9 +313,12 @@ run.wait()
 # ### Gen load data
 
 # %%
-cp_segcheck_load_data_mod = CPSegcheckGenLoadDataModule.from_config(
+cp_segcheck_load_data_mod = CPSegcheckGenLoadDataModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+cp_segcheck_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_segcheck_load_data_mod.pipe,
@@ -309,9 +333,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule.from_config(
+cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+cp_segcheck_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     cp_segcheck_cppipe_mod.pipe,
@@ -326,7 +353,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule.from_config(
+cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule(
     data_config, pcp_experiment
 )
 
@@ -348,9 +375,12 @@ run.wait()
 # ### Gen load data
 
 # %%
-sbs_calc_illum_load_data_mod = SBSCalcIllumGenLoadDataModule.from_config(
+sbs_calc_illum_load_data_mod = SBSCalcIllumGenLoadDataModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+sbs_calc_illum_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     sbs_calc_illum_load_data_mod.pipe,
@@ -365,9 +395,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-sbs_calc_illum_cppipe_mod = SBSCalcIllumGenCPPipeModule.from_config(
+sbs_calc_illum_cppipe_mod = SBSCalcIllumGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+sbs_calc_illum_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     sbs_calc_illum_cppipe_mod.pipe,
@@ -382,7 +415,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-sbs_calc_illum_invoke_mod = SBSCalcIllumInvokeCPModule.from_config(
+sbs_calc_illum_invoke_mod = SBSCalcIllumInvokeCPModule(
     data_config, pcp_experiment
 )
 
@@ -404,9 +437,12 @@ run.wait()
 # ### Gen load data
 
 # %%
-sbs_apply_illum_load_data_mod = SBSApplyIllumGenLoadDataModule.from_config(
+sbs_apply_illum_load_data_mod = SBSApplyIllumGenLoadDataModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+sbs_apply_illum_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     sbs_apply_illum_load_data_mod.pipe,
@@ -417,13 +453,16 @@ exec_backend = SnakeMakeBackend(
 run = exec_backend.run()
 run.wait()
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ### Gen cppipe file
 
 # %%
-sbs_apply_illum_cppipe_mod = SBSApplyIllumGenCPPipeModule.from_config(
+sbs_apply_illum_cppipe_mod = SBSApplyIllumGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+sbs_apply_illum_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     sbs_apply_illum_cppipe_mod.pipe,
@@ -438,7 +477,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-sbs_apply_illum_invoke_mod = SBSApplyIllumInvokeCPModule.from_config(
+sbs_apply_illum_invoke_mod = SBSApplyIllumInvokeCPModule(
     data_config, pcp_experiment
 )
 
@@ -460,10 +499,14 @@ run.wait()
 # ### Gen load data
 
 # %%
-sbs_preprocess_load_data_mod = SBSPreprocessGenLoadDataModule.from_config(
+sbs_preprocess_load_data_mod = SBSPreprocessGenLoadDataModule(
     data_config, pcp_experiment
 )
 
+# Change default value to use legacy pipeline compatible load data
+sbs_preprocess_load_data_mod.spec.inputs["use_legacy"].value = True
+#Fix align path for legacy module
+sbs_preprocess_load_data_mod.spec.inputs["aligned_images_path"].value = sbs_preprocess_load_data_mod.spec.inputs["corrected_images_path"].value
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_load_data_mod.pipe,
     backend_config,
@@ -477,9 +520,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-sbs_preprocess_cppipe_mod = SBSPreprocessGenCPPipeModule.from_config(
+sbs_preprocess_cppipe_mod = SBSPreprocessGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+sbs_preprocess_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_cppipe_mod.pipe,
@@ -494,9 +540,11 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-sbs_preprocess_invoke_mod = SBSPreprocessInvokeCPModule.from_config(
+sbs_preprocess_invoke_mod = SBSPreprocessInvokeCPModule(
     data_config, pcp_experiment
 )
+# Add the CP plugin directory
+sbs_preprocess_invoke_mod.spec.inputs["plugin_path"] = "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
 
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_invoke_mod.pipe,
@@ -515,9 +563,12 @@ run.wait()
 # ### Gen load data
 
 # %%
-analysis_load_data_mod = AnalysisGenLoadDataModule.from_config(
+analysis_load_data_mod = AnalysisGenLoadDataModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+analysis_load_data_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     analysis_load_data_mod.pipe,
@@ -532,9 +583,12 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-analysis_cppipe_mod = AnalysisGenCPPipeModule.from_config(
+analysis_cppipe_mod = AnalysisGenCPPipeModule(
     data_config, pcp_experiment
 )
+
+# Change default value to use legacy pipeline compatible load data
+analysis_cppipe_mod.spec.inputs["use_legacy"].value = True
 
 exec_backend = SnakeMakeBackend(
     analysis_cppipe_mod.pipe,
@@ -549,9 +603,12 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-analysis_invoke_mod = AnalysisInvokeCPModule.from_config(
+analysis_invoke_mod = AnalysisInvokeCPModule(
     data_config, pcp_experiment
 )
+
+# Add the CP plugin directory
+analysis_invoke_mod.spec.inputs["plugin_path"] = "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
 
 exec_backend = SnakeMakeBackend(
     analysis_invoke_mod.pipe,

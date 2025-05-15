@@ -4,8 +4,8 @@ import click
 from cloudpathlib import AnyPath
 
 from starrynight.algorithms.segcheck import (
-    gen_segcheck_cppipe_by_batch_plate,
-    gen_segcheck_load_data_by_batch_plate,
+    gen_segcheck_cppipe,
+    gen_segcheck_load_data,
 )
 
 
@@ -13,18 +13,20 @@ from starrynight.algorithms.segcheck import (
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-c", "--corr_images", required=True)
-@click.option("-n", "--nuclei", required=True)
-@click.option("--cell", required=True)
+@click.option("-n", "--nuclei", default=None)
+@click.option("--cell", default=None)
 @click.option("-m", "--path_mask", default=None)
-@click.option("--sbs", is_flag=True, default=False)
-def gen_segcheck_load_data(
+@click.option("--use_legacy", is_flag=True, default=False)
+@click.option("--exp_config", default=None)
+def gen_segcheck_load_data_cli(
     index: str,
     out: str,
     corr_images: str,
-    nuclei: str,
-    cell: str,
+    nuclei: str | None,
+    cell: str | None,
     path_mask: str | None,
-    sbs: bool,
+    use_legacy: bool,
+    exp_config: str | None,
 ) -> None:
     """Generate segcheck loaddata file.
 
@@ -42,12 +44,28 @@ def gen_segcheck_load_data(
         Channel to use for cell segmentation
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
-    sbs : str | Mask
-        Flag for treating as sbs images.
+    use_legacy : bool
+        Flag for using legacy names in loaddata.
+    exp_config : str | None
+        Experiment config json path. Can be local or a cloud path.
 
     """
-    gen_segcheck_load_data_by_batch_plate(
-        AnyPath(index), AnyPath(out), path_mask, nuclei, cell, AnyPath(corr_images), sbs
+    # If use_legacy, then exp_config path is required
+    if use_legacy:
+        assert exp_config is not None
+        exp_config = AnyPath(exp_config)
+    else:
+        assert nuclei and cell is not None
+
+    gen_segcheck_load_data(
+        AnyPath(index),
+        AnyPath(out),
+        path_mask,
+        nuclei,
+        cell,
+        AnyPath(corr_images),
+        use_legacy,
+        exp_config,
     )
 
 
@@ -58,8 +76,15 @@ def gen_segcheck_load_data(
 @click.option("-n", "--nuclei", required=True)
 @click.option("-c", "--cell", required=True)
 @click.option("--sbs", is_flag=True, default=False)
-def gen_segcheck_cppipe(
-    loaddata: str, out: str, workspace: str, nuclei: str, cell: str, sbs: bool
+@click.option("--use_legacy", is_flag=True, default=False)
+def gen_segcheck_cppipe_cli(
+    loaddata: str,
+    out: str,
+    workspace: str,
+    nuclei: str,
+    cell: str,
+    sbs: bool,
+    use_legacy: bool,
 ) -> None:
     """Generate segcheck cppipe file.
 
@@ -77,10 +102,20 @@ def gen_segcheck_cppipe(
         Channel to use for cell segmentation
     sbs : str | Mask
         Flag for treating as sbs images.
+    use_legacy : bool
+        Flag for using legacy cppipe.
 
     """
-    gen_segcheck_cppipe_by_batch_plate(
-        AnyPath(loaddata), AnyPath(out), AnyPath(workspace), nuclei, cell, sbs
+    if use_legacy is False:
+        assert cell and nuclei is not None
+    gen_segcheck_cppipe(
+        AnyPath(loaddata),
+        AnyPath(out),
+        AnyPath(workspace),
+        nuclei,
+        cell,
+        sbs,
+        use_legacy,
     )
 
 
@@ -90,5 +125,5 @@ def segcheck() -> None:
     pass
 
 
-segcheck.add_command(gen_segcheck_load_data)
-segcheck.add_command(gen_segcheck_cppipe)
+segcheck.add_command(gen_segcheck_load_data_cli)
+segcheck.add_command(gen_segcheck_cppipe_cli)

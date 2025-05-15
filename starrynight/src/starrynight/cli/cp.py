@@ -37,7 +37,7 @@ def invoke_cp(
         Path to cellprofiler plugin directory.
     jobs : int
         Number of jobs to launch.
-    sbs : str | Mask
+    sbs : bool
         Flag for treating as sbs images.
 
     """

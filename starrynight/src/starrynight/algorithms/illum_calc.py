@@ -174,7 +174,7 @@ def gen_illum_calc_load_data(
     images_df = filter_images(df, for_sbs)
 
     # Query default path prefix
-    default_path_prefix: str = get_default_path_prefix(images_df)
+    default_path_prefix = get_default_path_prefix(images_df)
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -198,7 +198,7 @@ def gen_illum_calc_load_data(
         plate_channel_list = get_channels_from_df(levels_df)
 
         # Construct filename for the loaddata csv
-        level_out_path = out_path.joinpath(f"{'_'.join(levels)}_illum_calc.csv")
+        level_out_path = out_path.joinpath(f"{'_'.join(levels)}-illum_calc.csv")
 
         with level_out_path.open("w") as f:
             write_loaddata_illum_calc(

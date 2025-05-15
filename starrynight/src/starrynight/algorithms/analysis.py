@@ -154,15 +154,31 @@ from cellprofiler_core.modules.align import (
 )
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
+from cellprofiler_core.pipeline.io import dump as dumpit
+from cellprofiler_core.preferences import json
 from cloudpathlib import AnyPath, CloudPath
+from mako.template import Template
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
 from starrynight.algorithms.index import PCPIndex
+from starrynight.modules.cp_illum_apply.constants import (
+    CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
+)
+from starrynight.modules.sbs_preprocess.constants import (
+    SBS_PREPROCESS_OUT_PATH_SUFFIX,
+)
+from starrynight.templates import get_templates_path
 from starrynight.utils.cellprofiler import CellProfilerContext
 from starrynight.utils.dfutils import (
+    filter_df_by_hierarchy,
+    filter_images,
     gen_image_hierarchy,
+    gen_legacy_channel_map,
     get_channels_by_batch_plate,
+    get_channels_from_df,
     get_cycles_by_batch_plate,
+    get_cycles_from_df,
+    get_default_path_prefix,
 )
 from starrynight.utils.globbing import flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
@@ -172,8 +188,58 @@ from starrynight.utils.misc import resolve_path_loaddata
 ###############################
 
 
+def get_header(
+    header: str,
+    cycle: int | None,
+    ch: str,
+    use_legacy: bool = False,
+    legacy_channel_map: dict = {},
+) -> str:
+    if not use_legacy:
+        if cycle is not None:
+            return f"{header}Name_Cycle_{int(cycle)}_{ch}"
+        else:
+            return f"{header}Name_Corr{ch}"
+    else:
+        if cycle is not None:
+            return (
+                f"{header}Name_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}"
+            )
+        else:
+            return f"{header}Name_Corr{legacy_channel_map[ch]}"
+
+
+def get_cp_filename_value(
+    index: PCPIndex,
+    ch: str,
+    use_legacy: bool = False,
+    legacy_channel_map: dict = {},
+) -> str:
+    if not use_legacy:
+        return f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{ch}.tiff"
+    else:
+        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{legacy_channel_map[ch]}.tiff"
+
+
+def get_sbs_filename_value(
+    index: PCPIndex,
+    cycle: int,
+    ch: str,
+    use_legacy: bool = False,
+    legacy_channel_map: dict = {},
+) -> str:
+    if not use_legacy:
+        return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{ch}.tiff"
+    else:
+        if ch == "DAPI":
+            return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(1):02d}_{legacy_channel_map[ch]}.tiff"
+
+        else:
+            return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}.tiff"
+
+
 def write_loaddata(
-    cp_images_df: pl.DataFrame,
+    cp_images_df: pl.LazyFrame,
     cp_plate_channel_list: list[str],
     sbs_plate_channel_list: list[str],
     plate_cycles_list: list[str],
@@ -181,24 +247,42 @@ def write_loaddata(
     sbs_comp_images_path: Path | CloudPath,
     path_mask: str,
     f: TextIOWrapper,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+    legacy_channel_map = {}
+
+    if use_legacy:
+        # Load experiment config
+        exp_config = json.loads(exp_config_path.read_text())
+
+        # setup legacy_channel_map
+        legacy_channel_map = gen_legacy_channel_map(
+            cp_plate_channel_list, exp_config
+        )
     metadata_heads = [
         f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
     ]
 
-    cp_filename_heads = [f"FileName_Corr{col}" for col in cp_plate_channel_list]
-    cp_pathname_heads = [f"PathName_Corr{col}" for col in cp_plate_channel_list]
+    cp_filename_heads = [
+        get_header("File", None, ch, use_legacy, legacy_channel_map)
+        for ch in cp_plate_channel_list
+    ]
+    cp_pathname_heads = [
+        get_header("Path", None, ch, use_legacy, legacy_channel_map)
+        for ch in cp_plate_channel_list
+    ]
     sbs_filename_heads = [
-        f"FileName_Cycle{int(cycle)}_{col}"
+        get_header("File", cycle, ch, use_legacy, legacy_channel_map)
         for cycle in plate_cycles_list
-        for col in sbs_plate_channel_list
+        for ch in sbs_plate_channel_list
     ]
     sbs_pathname_heads = [
-        f"PathName_Cycle{int(cycle)}_{col}"
+        get_header("Path", cycle, ch, use_legacy, legacy_channel_map)
         for cycle in plate_cycles_list
-        for col in sbs_plate_channel_list
+        for ch in sbs_plate_channel_list
     ]
     loaddata_writer.writerow(
         [
@@ -209,10 +293,11 @@ def write_loaddata(
             *sbs_pathname_heads,
         ]
     )
-    index = cp_images_df[0].to_dicts()[0]
+    index = cp_images_df.first().collect().to_dicts()[0]
     index = PCPIndex(**index)
     wells_sites = (
-        cp_images_df.group_by("well_id")
+        cp_images_df.collect()
+        .group_by("well_id")
         .agg(pl.col("site_id").unique())
         .to_dicts()
     )
@@ -221,12 +306,14 @@ def write_loaddata(
         for site_id in well_sites["site_id"]:
             index.site_id = site_id
             cp_filenames = [
-                f"{index.batch_id}_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{col}.tiff"
-                for col in cp_plate_channel_list
+                get_cp_filename_value(index, ch, use_legacy, legacy_channel_map)
+                for ch in cp_plate_channel_list
             ]
             sbs_filenames = [
-                f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{col}.tiff"
-                for col in sbs_plate_channel_list
+                get_sbs_filename_value(
+                    index, cycle, ch, use_legacy, legacy_channel_map
+                )
+                for ch in sbs_plate_channel_list
                 for cycle in plate_cycles_list
             ]
             cp_pathnames = [
@@ -257,12 +344,14 @@ def write_loaddata(
             )
 
 
-def gen_analysis_load_data_by_batch_plate(
+def gen_analysis_load_data(
     index_path: Path | CloudPath,
     out_path: Path | CloudPath,
     path_mask: str | None,
     cp_corr_images_path: Path | CloudPath | None = None,
     sbs_comp_images_path: Path | CloudPath | None = None,
+    use_legacy: bool = False,
+    exp_config_path: Path | CloudPath | None = None,
 ) -> None:
     """Generate load data for analysis pipeline.
 
@@ -278,73 +367,81 @@ def gen_analysis_load_data_by_batch_plate(
         Path | CloudPath to cp corr images directory.
     sbs_comp_images_path : Path | CloudPath
         Path | CloudPath to sbs compensated images directory.
+    use_legacy : bool
+        Use legacy cppipe and loaddata.
+    exp_config_path : Path | CloudPath
+        Path to experiment config json path.
 
     """
     # Construct illum path if not given
     if cp_corr_images_path is None:
         cp_corr_images_path = index_path.parents[1].joinpath(
-            "illum/cp/illum_apply"
+            CP_ILLUM_APPLY_OUT_PATH_SUFFIX
         )
     if sbs_comp_images_path is None:
-        sbs_comp_images_path = index_path.parents[1].joinpath("preprocess/sbs")
+        sbs_comp_images_path = index_path.parents[1].joinpath(
+            SBS_PREPROCESS_OUT_PATH_SUFFIX
+        )
 
-    df = pl.read_parquet(index_path.resolve().__str__())
+    # Load index
+    df = pl.scan_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    cp_images_df = df.filter(
-        pl.col("is_sbs_image").eq(False), pl.col("is_image").eq(True)
-    )
-    sbs_images_df = df.filter(
-        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
-    )
-
-    cp_images_hierarchy_dict = gen_image_hierarchy(cp_images_df)
+    cp_images_df = filter_images(df, False)
+    sbs_images_df = filter_images(df, True)
 
     # Query default path prefix
-    default_path_prefix = (
-        cp_images_df.select("prefix").unique().to_series().to_list()[0]
-    )
+    default_path_prefix: str = get_default_path_prefix(cp_images_df)
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
         path_mask = default_path_prefix
 
+    # Setup chunking and write loaddata for parallel processing
+    images_hierarchy_dict = gen_image_hierarchy(
+        cp_images_df, ["batch_id", "plate_id", "well_id", "site_id"]
+    )
+    levels_leaf = flatten_dict(images_hierarchy_dict)
+
     # Setup chunking and write loaddata for each batch/plate
-    for batch in cp_images_hierarchy_dict.keys():
-        for plate in cp_images_hierarchy_dict[batch].keys():
-            # Setup channel list for that plate
-            cp_plate_channel_list = get_channels_by_batch_plate(
-                cp_images_df, batch, plate
-            )
-            sbs_plate_channel_list = get_channels_by_batch_plate(
-                sbs_images_df, batch, plate
-            )
+    for levels, _ in levels_leaf:
+        # setup filtered df for chunked levels
+        cp_levels_df = filter_df_by_hierarchy(cp_images_df, levels, False)
 
-            # Get plate cycle list
-            plate_cycles_list = get_cycles_by_batch_plate(
-                sbs_images_df, batch, plate
-            )
+        # Setup channel list for this level
+        cp_plate_channel_list = get_channels_from_df(cp_levels_df)
+        # TODO: This is a hack for now, need to fix this later
+        # TODO: Find a way to filter sbs dataframe as well
+        sbs_plate_channel_list = get_channels_from_df(sbs_images_df)
 
-            # filter batch and plate images
-            cp_df_plate = cp_images_df.filter(
-                pl.col("batch_id").eq(batch) & pl.col("plate_id").eq(plate)
-            )
+        # Setup cycles list
+        plate_cycles_list = get_cycles_from_df(sbs_images_df)
 
-            batch_plate_out_path = out_path.joinpath(batch, plate)
-            batch_plate_out_path.mkdir(parents=True, exist_ok=True)
-            with batch_plate_out_path.joinpath(
-                f"preprocess_{batch}_{plate}.csv"
-            ).open("w") as f:
-                write_loaddata(
-                    cp_df_plate,
-                    cp_plate_channel_list,
-                    sbs_plate_channel_list,
-                    plate_cycles_list,
-                    cp_corr_images_path,
-                    sbs_comp_images_path,
-                    path_mask,
-                    f,
-                )
+        # Construct corr images path for this level
+        cp_corr_images_path_level = cp_corr_images_path.joinpath(
+            "-".join(levels)
+        )
+
+        # Construct align images path for this level
+        sbs_comp_images_path_level = sbs_comp_images_path.joinpath(
+            "-".join(levels)
+        )
+
+        # Construct filename for the loaddata csv
+        level_out_path = out_path.joinpath(f"{'_'.join(levels)}-analysis.csv")
+        with level_out_path.open("w") as f:
+            write_loaddata(
+                cp_levels_df,
+                cp_plate_channel_list,
+                sbs_plate_channel_list,
+                plate_cycles_list,
+                cp_corr_images_path_level,
+                sbs_comp_images_path_level,
+                path_mask,
+                f,
+                use_legacy,
+                exp_config_path,
+            )
 
 
 ###################################
@@ -1822,7 +1919,7 @@ def generate_analysis_pipeline(
     return pipeline
 
 
-def gen_analysis_cppipe_by_batch_plate(
+def gen_analysis_cppipe(
     load_data_path: Path | CloudPath,
     out_dir: Path | CloudPath,
     workspace_path: Path | CloudPath,
@@ -1830,6 +1927,7 @@ def gen_analysis_cppipe_by_batch_plate(
     nuclei_channel: str,
     cell_channel: str,
     mito_channel: str,
+    use_legacy: bool = False,
 ) -> None:
     """Write out analysis pipeline to file.
 
@@ -1849,27 +1947,40 @@ def gen_analysis_cppipe_by_batch_plate(
         Channel to use for cell segmentation
     mito_channel : str
         Channel to use for mito segmentation
+    use_legacy : bool
+        Use legacy illumination apply pipeline.
 
     """
     # Default run dir should already be present, otherwise CP raises an error
     out_dir.mkdir(exist_ok=True, parents=True)
 
-    # Get all the generated load data files by batch
-    files_by_hierarchy = get_files_by(
-        ["batch", "plate"], load_data_path, "*.csv"
-    )
+    filename = "analysis.cppipe"
+
+    # Write old cppipe and return early if use_old is true
+    if use_legacy:
+        ref_cppipe = Template(
+            text=get_templates_path()
+            .joinpath("cppipe/ref_9_Analysis.cppipe.mako")
+            .read_text(),
+            output_encoding="utf-8",
+        ).render(barcode_csv_path=barcode_csv_path)
+        ref_cppipe = ref_cppipe.decode("utf-8")
+        out_dir.joinpath(filename).write_text(ref_cppipe)
+        return
 
     # get one of the load data file for generating cppipe
-    _, files = flatten_dict(files_by_hierarchy)[0]
+    sample_loaddata_file = next(load_data_path.rglob("*.csv"))
     with CellProfilerContext(out_dir=workspace_path) as cpipe:
         cpipe = generate_analysis_pipeline(
             cpipe,
-            files[0],
+            sample_loaddata_file,
             barcode_csv_path,
             nuclei_channel,
             cell_channel,
             mito_channel,
         )
-        filename = "analysis.cppipe"
         with out_dir.joinpath(filename).open("w") as f:
             cpipe.dump(f)
+        filename = "analysis.json"
+        with out_dir.joinpath(filename).open("w") as f:
+            dumpit(cpipe, f, version=6)

@@ -39,8 +39,14 @@ def run_cp(
 
     """
     for pipe_path, load_data_path in tqdm(uow_list, position=job_idx):
+        # Create output dir for this load data
+        local_out_dir = out_dir.joinpath(
+            "-".join(load_data_path.name.split("-")[0].split("_"))
+        )
+        print(local_out_dir)
+        local_out_dir.mkdir(parents=True, exist_ok=True)
         with CellProfilerContext(
-            out_dir=out_dir,
+            out_dir=local_out_dir,
             loaddata_path=load_data_path,
             require_jvm=False,
             plugin_dir=plugin_dir,
