@@ -12,8 +12,8 @@ from starrynight.algorithms.analysis import (
 @click.command(name="loaddata")
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
-@click.option("-c", "--corr_images", required=True)
-@click.option("-p", "--comp_images", required=True)
+@click.option("-c", "--corr_images", default=None)
+@click.option("-p", "--comp_images", default=None)
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
@@ -54,8 +54,8 @@ def gen_analysis_load_data_cli(
         AnyPath(index),
         AnyPath(out),
         path_mask,
-        AnyPath(corr_images),
-        AnyPath(comp_images),
+        AnyPath(corr_images) if corr_images else None,
+        AnyPath(comp_images) if comp_images else None,
         use_legacy,
         exp_config,
     )

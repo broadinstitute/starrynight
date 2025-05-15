@@ -196,7 +196,8 @@ def write_loaddata(
         )
 
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+        f"Metadata_{col}"
+        for col in ["Batch", "Plate", "Site", "Well", "Well_Value"]
     ]
 
     filename_heads = [
@@ -248,6 +249,12 @@ def write_loaddata(
                     for _ in range(len(pathname_heads))
                 ]
 
+            well_value = (
+                index.well_id[4:]
+                if index.well_id.startswith("Well")
+                else index.well_id
+            )
+
             # make sure frame heads are matched with their order in the filenames
             assert index.key is not None
             loaddata_writer.writerow(
@@ -257,6 +264,7 @@ def write_loaddata(
                     index.plate_id,
                     index.site_id,
                     index.well_id,
+                    well_value,
                     # Filename heads
                     *filenames,
                     # Pathname heads

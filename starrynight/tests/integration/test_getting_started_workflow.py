@@ -39,13 +39,13 @@ import pandas as pd
 import pytest
 from click.testing import CliRunner
 
-from starrynight.cli.analysis import gen_analysis_load_data
+from starrynight.cli.analysis import gen_analysis_load_data_cli
 from starrynight.cli.illum import (
     gen_illum_apply_load_data_cli,
     gen_illum_calc_load_data_cli,
 )
-from starrynight.cli.preprocess import gen_preprocess_load_data
-from starrynight.cli.segcheck import gen_segcheck_load_data
+from starrynight.cli.preprocess import gen_preprocess_load_data_cli
+from starrynight.cli.segcheck import gen_segcheck_load_data_cli
 
 from .constants import FIXTURE_COMPATIBILITY, WORKFLOW_CONFIGS
 from .loaddata_validation import compare_csvs
@@ -104,11 +104,11 @@ def generate_and_validate_loaddata(  # noqa: C901
             if "--sbs" in command_parts:
                 cli_args.append("--sbs")
     elif "segcheck" in command_parts:
-        command_function = gen_segcheck_load_data
+        command_function = gen_segcheck_load_data_cli
     elif "preprocess" in command_parts:
-        command_function = gen_preprocess_load_data
+        command_function = gen_preprocess_load_data_cli
     elif "analysis" in command_parts:
-        command_function = gen_analysis_load_data
+        command_function = gen_analysis_load_data_cli
 
     assert command_function is not None, (
         f"Could not determine CLI command for {command_parts}"

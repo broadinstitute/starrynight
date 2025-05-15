@@ -148,7 +148,8 @@ def write_loaddata_segcheck(
         # cell_channel = exp_config["cp_config"]["cell_channel"]
 
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+        f"Metadata_{col}"
+        for col in ["Batch", "Plate", "Site", "Well", "Well_Value"]
     ]
     filename_heads = [
         get_filename_header(ch, use_legacy, legacy_channel_map)
@@ -176,6 +177,13 @@ def write_loaddata_segcheck(
             for _ in range(len(pathname_heads))
         ]
 
+        # Extract well value from well_id by stripping 'Well' prefix if present
+        well_value = (
+            index.well_id[4:]
+            if index.well_id.startswith("Well")
+            else index.well_id
+        )
+
         # make sure frame heads are matched with their order in the filenames
         assert index.key is not None
         loaddata_writer.writerow(
@@ -185,6 +193,7 @@ def write_loaddata_segcheck(
                 index.plate_id,
                 index.site_id,
                 index.well_id,
+                well_value,
                 # Filename heads
                 *filenames,
                 # Pathname heads
@@ -238,8 +247,8 @@ def gen_segcheck_load_data(
 
     # Only subsample if df is large
     # TODO: implement contiguous sampling
-    if images_df.select(pl.len()).collect().item() > 10:
-        images_df = images_df.sample(fraction=0.1)
+    # if images_df.select(pl.len()).collect().item() > 10:
+    #     images_df = images_df.sample(fraction=0.1)
 
     # Query default path prefix
     default_path_prefix = get_default_path_prefix(images_df)

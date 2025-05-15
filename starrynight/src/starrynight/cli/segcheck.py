@@ -12,7 +12,7 @@ from starrynight.algorithms.segcheck import (
 @click.command(name="loaddata")
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
-@click.option("-c", "--corr_images", required=True)
+@click.option("-c", "--corr_images", default=None)
 @click.option("-n", "--nuclei", default=None)
 @click.option("--cell", default=None)
 @click.option("-m", "--path_mask", default=None)
@@ -63,7 +63,7 @@ def gen_segcheck_load_data_cli(
         path_mask,
         nuclei,
         cell,
-        AnyPath(corr_images),
+        AnyPath(corr_images) if corr_images else None,
         use_legacy,
         exp_config,
     )

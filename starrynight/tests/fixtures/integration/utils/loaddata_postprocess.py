@@ -48,6 +48,8 @@ def process_csv_paths_and_metadata(
         df.rename(columns={"Metadata_SBSCycle": "Metadata_Cycle"}, inplace=True)
         stats["renamed_metadata_sbscycle"] = 1
 
+    # FIXME: Rename Columns that are like *_DAPI to *_DNA
+
     # Remove "Well" prefix from Metadata_Well values
     if "Metadata_Well" in df.columns:
         mask = df["Metadata_Well"].str.startswith("Well")
@@ -56,6 +58,10 @@ def process_csv_paths_and_metadata(
                 mask, "Metadata_Well"
             ].str.replace("Well", "", regex=False)
             stats["well_values_modified"] = mask.sum()
+
+    # FIXME: Remove similar prefixes from FileName_* columns
+
+    # E.g. Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff --> Plate_Plate1_Well_A1_Site_0_CorrDNA.tiff
 
     return df, stats
 

@@ -232,7 +232,7 @@ def get_sbs_filename_value(
         return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{ch}.tiff"
     else:
         if ch == "DAPI":
-            return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(1):02d}_{legacy_channel_map[ch]}.tiff"
+            return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{1:02d}_{legacy_channel_map[ch]}.tiff"
 
         else:
             return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}.tiff"
@@ -263,7 +263,8 @@ def write_loaddata(
             cp_plate_channel_list, exp_config
         )
     metadata_heads = [
-        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+        f"Metadata_{col}"
+        for col in ["Batch", "Plate", "Site", "Well", "Well_Value"]
     ]
 
     cp_filename_heads = [
@@ -325,6 +326,12 @@ def write_loaddata(
                 for _ in range(len(sbs_pathname_heads))
             ]
 
+            well_value = (
+                index.well_id[4:]
+                if index.well_id.startswith("Well")
+                else index.well_id
+            )
+
             # make sure frame heads are matched with their order in the filenames
             assert index.key is not None
             loaddata_writer.writerow(
@@ -334,6 +341,7 @@ def write_loaddata(
                     index.plate_id,
                     index.site_id,
                     index.well_id,
+                    well_value,
                     # CP Filename and Pathname heads
                     *cp_filenames,
                     *cp_pathnames,
@@ -1632,7 +1640,7 @@ def generate_analysis_pipeline(
     # save_mito_radial.root_dir.value = ""
     save_mito_radial.stack_axis.value = AXIS_T
     # save_mito_radial.tiff_compress.value = ""
-    save_mito_radial.single_file_name.value = f"\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
+    save_mito_radial.single_file_name.value = "\\g<Batch>_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_mito_radial_heatmap"
     pipeline.add_module(save_mito_radial)
 
     # MeasureImageQuality

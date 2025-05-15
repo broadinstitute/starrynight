@@ -12,8 +12,8 @@ from starrynight.algorithms.preprocess import (
 @click.command(name="loaddata")
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
-@click.option("-c", "--corr_images", required=True)
-@click.option("-a", "--align_images", required=True)
+@click.option("-c", "--corr_images", default=None)
+@click.option("-a", "--align_images", default=None)
 @click.option("-n", "--nuclei", default=None)
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
@@ -62,8 +62,8 @@ def gen_preprocess_load_data_cli(
         AnyPath(out),
         path_mask,
         nuclei,
-        AnyPath(corr_images),
-        AnyPath(align_images),
+        AnyPath(corr_images) if corr_images else None,
+        AnyPath(align_images) if align_images else None,
         use_legacy,
         exp_config,
     )
