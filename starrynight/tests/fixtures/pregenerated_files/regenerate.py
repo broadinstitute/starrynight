@@ -1,11 +1,11 @@
 """Utility to generate the basic setup fixture files.
 
 This file is used to regenerate the experiment.json and index.parquet files
-in the basic_setup directory. It's skipped by default and should only be run
+in the pregenerated_files directory. It's skipped by default and should only be run
 manually when you need to update these files.
 
 Usage:
-    REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/basic_setup/generate_fixtures.py
+    REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/pregenerated_files/generate_fixtures.py
 """
 
 import os
@@ -19,11 +19,11 @@ import pytest
     os.getenv("REGENERATE_FIXTURES") != "1",
     reason="Only run manually to regenerate fixtures; set REGENERATE_FIXTURES=1 to run",
 )
-def test_generate_basic_setup_files(fix_starrynight_setup):
-    """Generate experiment.json and index.parquet files for the basic_setup fixture.
+def test_generate_pregenerated_files_files(fix_starrynight_setup):
+    """Generate experiment.json and index.parquet files for the pregenerated_files fixture.
 
     This test uses the fix_starrynight_setup fixture with the "generated" parameter
-    to create fresh copies of these files and save them to the fixtures/basic_setup
+    to create fresh copies of these files and save them to the fixtures/pregenerated_files
     directory.
     """
     # Get file paths from the fixture
