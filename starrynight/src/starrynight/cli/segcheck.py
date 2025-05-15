@@ -114,7 +114,6 @@ def gen_segcheck_cppipe_cli(
         AnyPath(workspace),
         nuclei,
         cell,
-        sbs,
         use_legacy,
     )
 
