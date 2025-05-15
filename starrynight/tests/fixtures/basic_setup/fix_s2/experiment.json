@@ -1,1 +1,41 @@
-{"dataset_id":"fix-s2-input","index_path":"/private/tmp/nix-shell.eS7ema/pytest-of-shsingh/pytest-15/workspace0/index/index.parquet","inventory_path":null,"data_production_contact":null,"data_processing_contact":null,"init_config_":null,"sbs_config":{"im_per_well":4,"n_cycles":3,"img_overlap_pct":10,"img_frame_type":"round","channel_list":["C","A","T","G","DAPI"],"acquisition_order":"snake","barcode_csv_path":".","nuclei_channel":"DAPI","cell_channel":"ZO1AF488","mito_channel":"PhalloAF750"},"cp_config":{"im_per_well":4,"img_overlap_pct":10,"img_frame_type":"round","channel_list":["PhalloAF750","ZO1AF488","DAPI"],"acquisition_order":"snake","nuclei_channel":"DAPI","cell_channel":"PhalloAF750","mito_channel":"ZO1AF488"},"use_legacy":false}
+{
+    "dataset_id": "fix-s2-input",
+    "index_path": "/private/tmp/nix-shell.eS7ema/pytest-of-shsingh/pytest-15/workspace0/index/index.parquet",
+    "inventory_path": null,
+    "data_production_contact": null,
+    "data_processing_contact": null,
+    "init_config_": null,
+    "sbs_config": {
+        "im_per_well": 4,
+        "n_cycles": 3,
+        "img_overlap_pct": 10,
+        "img_frame_type": "round",
+        "channel_list": [
+            "C",
+            "A",
+            "T",
+            "G",
+            "DAPI"
+        ],
+        "acquisition_order": "snake",
+        "barcode_csv_path": ".",
+        "nuclei_channel": "DAPI",
+        "cell_channel": "ZO1AF488",
+        "mito_channel": "PhalloAF750"
+    },
+    "cp_config": {
+        "im_per_well": 4,
+        "img_overlap_pct": 10,
+        "img_frame_type": "round",
+        "channel_list": [
+            "PhalloAF750",
+            "ZO1AF488",
+            "DAPI"
+        ],
+        "acquisition_order": "snake",
+        "nuclei_channel": "DAPI",
+        "cell_channel": "PhalloAF750",
+        "mito_channel": "ZO1AF488"
+    },
+    "use_legacy": false
+}
