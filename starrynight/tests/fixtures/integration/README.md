@@ -21,8 +21,6 @@ Key components:
 
 ## 3. Step-by-Step Workflow
 
-### A. Initial Fixture Preparation
-
 1. **Prepare test data** using utils scripts:
 
 ```bash
@@ -93,7 +91,7 @@ sha256sum fix_NEW_output.tar.gz > fix_NEW_output.tar.gz.sha256
 }
 ```
 
-### B. Fixture Registration in conftest.py
+5. **Register fixtures in conftest.py**:
 
 Add the following fixture wrapper functions to `conftest.py`:
 
@@ -132,9 +130,9 @@ def fix_NEW_starrynight_pregenerated(fix_NEW_workspace, fix_NEW_input_dir):
     )
 ```
 
-### C. Pregenerated Files Setup
+6. **Set up pregenerated files**:
 
-1. **Update regenerate.py** to include your new fixture:
+First, update regenerate.py to include your new fixture:
 
 ```python
 @pytest.mark.parametrize(
@@ -147,26 +145,26 @@ def fix_NEW_starrynight_pregenerated(fix_NEW_workspace, fix_NEW_input_dir):
 )
 ```
 
-2. **Create directory structure**:
+Then create directory structure:
 
 ```bash
 mkdir -p pregenerated_files/fix_NEW
 ```
 
-3. **Run regenerate.py** to populate fixture files:
+Next, run regenerate.py to populate fixture files:
 
 ```bash
 # Run the regeneration script for your specific fixture
 REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/integration/pregenerated_files/regenerate.py::test_generate_pregenerated_files_files[fix_NEW]
 ```
 
-4. **Verify** the generated files exist:
+Finally, verify the generated files exist:
    - `fixtures/integration/pregenerated_files/fix_NEW/experiment.json`
    - `fixtures/integration/pregenerated_files/fix_NEW/index.parquet`
 
-### D. Integration with Workflow Tests
+7. **Update workflow tests**:
 
-1. **Update integration/constants.py** to include your fixture in `FIXTURE_COMPATIBILITY`:
+Update integration/constants.py to include your fixture in `FIXTURE_COMPATIBILITY`:
 
 ```python
 # Add your fixture to compatible tests
@@ -181,7 +179,7 @@ FIXTURE_COMPATIBILITY = {
 }
 ```
 
-2. **Verify fixture compatibility** with a test run:
+8. **Verify fixture compatibility** with a test run:
 
 ```bash
 # Run a specific test with your new fixture
