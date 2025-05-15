@@ -21,7 +21,7 @@ Key components:
 
 ## 3. Step-by-Step Workflow
 
-1. **Prepare test data** using utils scripts:
+### Prepare test data using utils scripts
 
 ```bash
 # Filter a dataset to create smaller test data
@@ -42,7 +42,7 @@ python -m starrynight.tests.fixtures.integration.utils.loaddata_validate \
     --input-csv /path/to/new_fixture/processed.csv
 ```
 
-2. **Create archives and calculate hashes**:
+### Create archives and calculate hashes
 
 ```bash
 # Create input archive
@@ -56,9 +56,11 @@ sha256sum fix_NEW_input.tar.gz > fix_NEW_input.tar.gz.sha256
 sha256sum fix_NEW_output.tar.gz > fix_NEW_output.tar.gz.sha256
 ```
 
-3. **Upload archives** to the designated release location.
+###  Upload archives
 
-4. **Update constants.py** with the new fixture configuration:
+Upload to the designated release location
+
+### Update constants.py with the new fixture configuration
 
 ```python
 # Add to FIXTURE_CONFIGS in constants.py
@@ -91,7 +93,7 @@ sha256sum fix_NEW_output.tar.gz > fix_NEW_output.tar.gz.sha256
 }
 ```
 
-5. **Register fixtures in conftest.py**:
+### Register fixtures in conftest.py
 
 Add the following fixture wrapper functions to `conftest.py`:
 
@@ -130,7 +132,7 @@ def fix_NEW_starrynight_pregenerated(fix_NEW_workspace, fix_NEW_input_dir):
     )
 ```
 
-6. **Set up pregenerated files**:
+### Set up pregenerated files
 
 First, update regenerate.py to include your new fixture:
 
@@ -162,7 +164,7 @@ Finally, verify the generated files exist:
    - `fixtures/integration/pregenerated_files/fix_NEW/experiment.json`
    - `fixtures/integration/pregenerated_files/fix_NEW/index.parquet`
 
-7. **Update workflow tests**:
+### Update workflow tests
 
 Update integration/constants.py to include your fixture in `FIXTURE_COMPATIBILITY`:
 
@@ -179,7 +181,7 @@ FIXTURE_COMPATIBILITY = {
 }
 ```
 
-8. **Verify fixture compatibility** with a test run:
+### Verify fixture compatibility with a test run
 
 ```bash
 # Run a specific test with your new fixture
