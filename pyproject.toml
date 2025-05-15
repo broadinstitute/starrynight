@@ -21,7 +21,7 @@ dev = [
   "jupyterlab",
   "jupyterlab-quarto",
   "jupyter-collaboration",
-  "jldracula",
+  "jupyterlab-horizon-theme",
   "nbdotrun",
   "nbdev",
   "mkdocs>=1.6.1",

@@ -1542,18 +1542,6 @@ wheels = [
 ]
 
 [[package]]
-name = "jldracula"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "jupyterlab" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/c3/bae43ff38c96715e0f9757f755e9ca3fca7e1c98e3d27070734c8b7fe903/JLDracula-0.2.0.tar.gz", hash = "sha256:d2a07e1ccd5e70f01c5b380e8a588d5dbdf603f1ec9a06879002e18a6cf196d2", size = 371766 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b0/fe/ca790045f8dc5c74190a600512d81075b40c84c2c29c56c83949eb5cf6ba/JLDracula-0.2.0-py3-none-any.whl", hash = "sha256:86ff223f1b72caf379b2be183aba3dd06de69a3b6efe934c9622dd58a9bcd6f6", size = 38146 },
-]
-
-[[package]]
 name = "jmespath"
 version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1946,6 +1934,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/46/49/0beaab21155e5f7438032f3da920abbcf46159b28adafbdf596dd33c57a6/jupyterlab-4.4.0.tar.gz", hash = "sha256:f1767d5f0104e40f3b4a63bf6892bbef8e4704dcabf0c78408a3bdc411792f04", size = 22996521 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/64/1a559e1b945c3d424c1ac9f333bfd6f595d5819efde3a6d8b036e6b0585f/jupyterlab-4.4.0-py3-none-any.whl", hash = "sha256:61d33991fbb352cc7caac08bd0c34577fea86d8d5d9772600d9d5a6bcbc882c0", size = 12291918 },
+]
+
+[[package]]
+name = "jupyterlab-horizon-theme"
+version = "4.0.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/70/bd/3b7ab3165016e073d2a6f494cb19c146420259501f02ff75a261e76ce4ca/jupyterlab_horizon_theme-4.0.2.tar.gz", hash = "sha256:0f5f4c7d0876f3b2ad7e730493e348964d54e23bc312fd491d2bb072d15410fb", size = 496979 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cc/b0/655cf4771a328b1d234af1327d3d96cc5416eb0636e68aa39589f8d98953/jupyterlab_horizon_theme-4.0.2-py3-none-any.whl", hash = "sha256:560a04890ff74e8d356d50d5154d0c72bbfa057aff0ee64fef957f633b0b8a52", size = 156649 },
 ]
 
 [[package]]
@@ -2850,15 +2847,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d/parso-0.8.4.tar.gz", hash = "sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d", size = 400609 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c6/ac/dac4a63f978e4dcb3c6d3a78c4d8e0192a113d288502a1216950c41b1027/parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18", size = 103650 },
-]
-
-[[package]]
-name = "pathspec"
-version = "0.12.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf/pathspec-0.12.1.tar.gz", hash = "sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712", size = 51043 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cc/20/ff623b09d963f88bfde16306a54e12ee5ea43e9b597108672ff3a408aad6/pathspec-0.12.1-py3-none-any.whl", hash = "sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08", size = 31191 },
 ]
 
 [[package]]
@@ -5002,9 +4990,9 @@ dev = [
     { name = "build" },
     { name = "duckdb" },
     { name = "ipython" },
-    { name = "jldracula" },
     { name = "jupyter-collaboration" },
     { name = "jupyterlab" },
+    { name = "jupyterlab-horizon-theme" },
     { name = "jupyterlab-quarto" },
     { name = "jupytext" },
     { name = "mkdocs" },
@@ -5023,9 +5011,9 @@ requires-dist = [
     { name = "conductor", editable = "conductor" },
     { name = "duckdb", marker = "extra == 'dev'", specifier = ">=1.2.1" },
     { name = "ipython", marker = "extra == 'dev'" },
-    { name = "jldracula", marker = "extra == 'dev'" },
     { name = "jupyter-collaboration", marker = "extra == 'dev'" },
     { name = "jupyterlab", marker = "extra == 'dev'" },
+    { name = "jupyterlab-horizon-theme", marker = "extra == 'dev'" },
     { name = "jupyterlab-quarto", marker = "extra == 'dev'" },
     { name = "jupytext", marker = "extra == 'dev'" },
     { name = "mkdocs", marker = "extra == 'dev'", specifier = ">=1.6.1" },
