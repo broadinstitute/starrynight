@@ -1,3 +1,21 @@
+"""Centralized fixture configuration module for StarryNight tests.
+
+This module provides a single source of truth for all test fixture configurations,
+eliminating duplication and inconsistencies across the test suite.
+
+The FIXTURE_CONFIGS dictionary defines all available test fixtures with their:
+1. Channel mappings - Used for experiment configuration
+2. Input archive configuration - Used for downloading and extracting input data
+3. Output archive configuration - Used for validation against reference output
+
+Each fixture has a unique identifier (e.g., 'fix_s1') that is used to:
+- Reference the fixture in test parameterization
+- Locate pregenerated files in the pregenerated_files/ directory
+- Generate fixture-specific pytest fixtures in conftest.py
+
+For complete documentation on adding new fixtures and the entire workflow, see FIXTURE_MANAGEMENT.md.
+"""
+
 # Comprehensive fixture configuration
 FIXTURE_CONFIGS = {
     "fix_s1": {

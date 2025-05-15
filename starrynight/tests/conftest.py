@@ -29,11 +29,15 @@ Assertion Philosophy:
 - Verify basic preconditions (file exists, command succeeded) in fixtures
 - Move detailed validation (content structure, schema, values) to test functions
 - Fixtures verify "Can I do my job?" while tests verify "Did the fixture do its job correctly?"
+
+Fixture Management:
+- For complete instructions on creating and managing fixtures, see fixtures/integration/README.md
+- Follow the standard pattern when adding new fixtures (fix_XX_*)
 """
 
 import pytest
 
-from .fixtures.fixture_setup import (
+from .fixtures.integration.fixture_setup import (
     _setup_input_dir,
     _setup_output_dir,
     _setup_starrynight,

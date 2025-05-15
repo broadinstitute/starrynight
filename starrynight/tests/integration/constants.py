@@ -1,4 +1,5 @@
-# Workflow step configurations
+# Workflow step configurations for integration tests
+# See fixtures/FIXTURE_MANAGEMENT.md for details on adding fixtures
 WORKFLOW_CONFIGS = [
     # CP illum calc LoadData configuration
     {
@@ -73,6 +74,7 @@ WORKFLOW_CONFIGS = [
 ]
 
 # Define which tests are compatible with which fixture IDs
+# For instructions on adding new fixtures, see tests/fixtures/FIXTURE_MANAGEMENT.md
 FIXTURE_COMPATIBILITY = {
     "cp_illum_calc": ["fix_s1", "fix_s2"],
     "cp_illum_apply": ["fix_s1", "fix_s2"],

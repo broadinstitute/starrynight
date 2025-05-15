@@ -1,11 +1,8 @@
-"""Utility to generate the basic setup fixture files.
-
-This file is used to regenerate the experiment.json and index.parquet files
-in the pregenerated_files directory. It's skipped by default and should only be run
-manually when you need to update these files.
+"""Regenerates fixture files for faster test execution.
 
 Usage:
-    REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/pregenerated_files/regenerate.py
+    REGENERATE_FIXTURES=1 uv run pytest -xvs fixtures/integration/pregenerated_files/regenerate.py::test_generate_pregenerated_files_files[fix_s1]
+
 """
 
 import os
@@ -20,21 +17,26 @@ import pytest
     reason="Only run manually to regenerate fixtures; set REGENERATE_FIXTURES=1 to run",
 )
 @pytest.mark.parametrize(
-    "fixture",
+    "fixture_id",
     [
         "fix_s1",
-        # "fix_s2",
+        "fix_s2",
     ],
 )
-def test_generate_pregenerated_files_files(fixture, request):
+def test_generate_pregenerated_files_files(fixture_id, request):
     """Generate experiment.json and index.parquet files for the pregenerated_files fixture.
 
     This test uses the fix_starrynight_setup fixture with the "generated" parameter
     to create fresh copies of these files and save them to the fixtures/pregenerated_files
     directory.
+
+    Run with:
+    pytest fixtures/pregenerated_files/regenerate.py::test_generate_pregenerated_files_files[fix_s1]
     """
     # Get the fixture dynamically
-    setup_fixture = request.getfixturevalue(fixture + "_starrynight_generated")
+    setup_fixture = request.getfixturevalue(
+        fixture_id + "_starrynight_generated"
+    )
 
     # Get file paths from the fixture
     index_file = setup_fixture["index_file"]
@@ -44,9 +46,12 @@ def test_generate_pregenerated_files_files(fixture, request):
     target_dir = Path(__file__).parent
 
     # Copy the files to the current directory
-    shutil.copy2(index_file, target_dir / fixture / "index.parquet")
-    shutil.copy2(experiment_json_path, target_dir / fixture / "experiment.json")
+    shutil.copy2(index_file, target_dir / fixture_id / "index.parquet")
+    shutil.copy2(
+        experiment_json_path, target_dir / fixture_id / "experiment.json"
+    )
 
     print(f"Files copied to: {target_dir}")
+    print(f"Fixture ID: {fixture_id}")
     print("- index.parquet")
     print("- experiment.json")
