@@ -15,12 +15,12 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    "fix_input_dir,fix_starrynight_setup",
+    "fix_starrynight_setup",
     [
-        ("fix_s1", {"mode": "generated"}),
-        ("fix_s1", {"mode": "pregenerated"}),
-        ("fix_s2", {"mode": "generated"}),
-        ("fix_s2", {"mode": "pregenerated"}),
+        {"mode": "generated", "fixture": "fix_s1"},
+        {"mode": "pregenerated", "fixture": "fix_s1"},
+        {"mode": "generated", "fixture": "fix_s2"},
+        {"mode": "pregenerated", "fixture": "fix_s2"},
     ],
     indirect=True,
 )
