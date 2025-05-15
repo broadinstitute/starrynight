@@ -532,42 +532,24 @@ def _handle_pregenerated_setup(
     }
 
 
-@pytest.fixture(scope="function")
-def fix_starrynight_setup(request):
-    """Fixture that sets up the StarryNight workflow environment.
+def _setup_starrynight(
+    workspace: dict[str, Path],
+    input_dir_fixture: dict[str, Path],
+    fixture_id: str,
+    mode: str,
+) -> dict[str, Path]:
+    """Set up the StarryNight workflow environment.
 
-    This fixture can operate in multiple modes, specified through indirect parameterization:
-    - Mode parameter: "generated" or "pregenerated"
-      - "generated": Executes actual CLI commands to generate all files (slow but thorough)
-      - "pregenerated": Uses pre-generated files from fixtures (fast)
-
-    - Fixture parameter: "fix_s1" or "fix_s2"
-      - "fix_s1": Uses the FIX-S1 test fixture (default)
-      - "fix_s2": Uses the FIX-S2 test fixture (alternative with same inputs, different outputs)
-
-    Use indirect parameterization to specify the parameters:
-    @pytest.mark.parametrize("fix_starrynight_setup", ["generated"], indirect=True)
-    @pytest.mark.parametrize("fix_starrynight_setup", [{"mode": "generated", "fixture": "fix_s2"}], indirect=True)
-
-    The default mode is "generated" with fixture "fix_s1" if no parameter is specified.
+    Args:
+        workspace: Dictionary containing workspace directories
+        input_dir_fixture: Dict containing input directory information
+        fixture_id: Fixture identifier (e.g., 'fix_s1', 'fix_s2')
+        mode: Setup mode ("generated" or "pregenerated")
 
     Returns:
-        dict: Dictionary containing:
-            - index_file: Path to the generated/pre-generated index.parquet file
-            - experiment_json_path: Path to the generated/pre-generated experiment.json file
+        dict: Dictionary containing index_file and experiment_json_path
 
     """
-    # Parse parameters - support both string and dictionary format
-    if isinstance(getattr(request, "param", "generated"), str):
-        mode = getattr(request, "param", "generated")
-        fixture_id = "fix_s1"  # Default to fix_s1
-    else:
-        param_dict = getattr(
-            request, "param", {"mode": "generated", "fixture": "fix_s1"}
-        )
-        mode = param_dict.get("mode", "generated")
-        fixture_id = param_dict.get("fixture", "fix_s1")
-
     # Validate the fixture ID
     if fixture_id not in FIXTURE_CHANNEL_CONFIGS:
         raise ValueError(
@@ -577,22 +559,44 @@ def fix_starrynight_setup(request):
     # Get the channel configuration for this fixture
     channel_config = FIXTURE_CHANNEL_CONFIGS[fixture_id]
 
-    # Dynamically import the right fixtures based on fixture_id
-    if fixture_id == "fix_s1":
-        input_dir_fixture = pytest.getfixturevalue("fix_s1_input_dir")
-        workspace_fixture = pytest.getfixturevalue("fix_s1_workspace")
-    elif fixture_id == "fix_s2":
-        input_dir_fixture = pytest.getfixturevalue("fix_s2_input_dir")
-        workspace_fixture = pytest.getfixturevalue("fix_s2_workspace")
-    else:
-        raise ValueError(f"Unknown fixture: {fixture_id}")
-
     # Execute the appropriate setup based on mode parameter
     if mode == "generated":
         return _handle_generated_setup(
-            workspace_fixture, input_dir_fixture["input_dir"], channel_config
+            workspace, input_dir_fixture["input_dir"], channel_config
         )
     elif mode == "pregenerated":
-        return _handle_pregenerated_setup(workspace_fixture, fixture_id)
+        return _handle_pregenerated_setup(workspace, fixture_id)
     else:
         raise ValueError(f"Unknown mode: {mode}")
+
+
+@pytest.fixture(scope="function")
+def fix_s1_starrynight_generated(fix_s1_workspace, fix_s1_input_dir):
+    """Fixture for FIX-S1 setup with generated files (via CLI)."""
+    return _setup_starrynight(
+        fix_s1_workspace, fix_s1_input_dir, "fix_s1", "generated"
+    )
+
+
+@pytest.fixture(scope="function")
+def fix_s1_starrynight_pregenerated(fix_s1_workspace, fix_s1_input_dir):
+    """Fixture for FIX-S1 setup with pre-generated files."""
+    return _setup_starrynight(
+        fix_s1_workspace, fix_s1_input_dir, "fix_s1", "pregenerated"
+    )
+
+
+@pytest.fixture(scope="function")
+def fix_s2_starrynight_generated(fix_s2_workspace, fix_s2_input_dir):
+    """Fixture for FIX-S2 setup with generated files (via CLI)."""
+    return _setup_starrynight(
+        fix_s2_workspace, fix_s2_input_dir, "fix_s2", "generated"
+    )
+
+
+@pytest.fixture(scope="function")
+def fix_s2_starrynight_pregenerated(fix_s2_workspace, fix_s2_input_dir):
+    """Fixture for FIX-S2 setup with pre-generated files."""
+    return _setup_starrynight(
+        fix_s2_workspace, fix_s2_input_dir, "fix_s2", "pregenerated"
+    )

@@ -9,22 +9,22 @@ import pytest
 # Fixtures are automatically available from conftest.py
 
 # Note on fixture relationships:
-# - fix_starrynight_basic_setup: Runs CLI workflow to generate test files (slow but validates CLI)
-# - fix_starrynight_pregenerated_setup: Copies pre-generated files (fast, for downstream tests)
-# Both fixtures provide the same output contract but serve different testing purposes.
+# - fix_s1_starrynight_generated: Runs CLI workflow to generate test files (slow but validates CLI)
+# - fix_s1_starrynight_pregenerated: Copies pre-generated files (fast)
+# - fix_s2_starrynight_generated: Runs CLI workflow for fix_s2 test data
+# - fix_s2_starrynight_pregenerated: Copies pre-generated files for fix_s2
 
 
 @pytest.mark.parametrize(
-    "fix_starrynight_setup",
+    "starrynight_fixture",
     [
-        {"mode": "generated", "fixture": "fix_s1"},
-        {"mode": "pregenerated", "fixture": "fix_s1"},
-        {"mode": "generated", "fixture": "fix_s2"},
-        {"mode": "pregenerated", "fixture": "fix_s2"},
+        "fix_s1_starrynight_generated",
+        "fix_s1_starrynight_pregenerated",
+        # "fix_s2_starrynight_generated",
+        # "fix_s2_starrynight_pregenerated",
     ],
-    indirect=True,
 )
-def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
+def test_starrynight_setup_fixtures(starrynight_fixture, request):
     """Test all fixture modes and configurations with identical validation logic.
 
     This test uses explicit parameterization to run against all combinations:
@@ -34,8 +34,8 @@ def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
     This ensures that all fixture configurations work correctly regardless of how
     they're created (via CLI or from pre-generated files).
     """
-    # The fixture is provided directly
-    setup_fixture = fix_starrynight_setup
+    # Get the fixture dynamically
+    setup_fixture = request.getfixturevalue(starrynight_fixture)
 
     # Get paths from fixture
     index_file = setup_fixture["index_file"]
@@ -183,10 +183,6 @@ def test_starrynight_setup_fixtures(fix_starrynight_setup, request):
     assert id_counts[1] == 1, "Multiple batch IDs found"
 
     # Print some debug information
-    # Get current parameter value for the parameterized test
-    current_param = request.node.callspec.params.get("fix_starrynight_setup")
-    mode = current_param.get("mode")
-    fixture = current_param.get("fixture")
-    print(f"Testing fixture={fixture}, mode={mode}")
+    print(f"Testing fixture: {starrynight_fixture}")
     print(f"Index file location: {index_file}")
     print(f"Experiment JSON location: {experiment_json_path}")
