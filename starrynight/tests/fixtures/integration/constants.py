@@ -19,10 +19,10 @@ FIXTURE_CONFIGS = {
     "fix_s1": {
         # Channel configurations
         "channels": {
-            "cp_nuclei_channel": "DAPI",
+            "cp_nuclei_channel": "DAPI",  # DNA
             "cp_cell_channel": "PhalloAF750",
             "cp_mito_channel": "ZO1AF488",
-            "sbs_nuclei_channel": "DAPI",
+            "sbs_nuclei_channel": "DAPI",  # DNA
             "sbs_cell_channel": "PhalloAF750",
             "sbs_mito_channel": "ZO1AF488",
         },
@@ -40,16 +40,16 @@ FIXTURE_CONFIGS = {
             "dir_prefix": "fix_s1_output_test",
             "dir_name": "fix_s1_pcpip_output",
             "dataset_dir_name": "Source1",
-            "sha256": "bcbd01ed62533f92b6657734a87df3f360585950e9b1c76f6bbb86dfa0019ea3",
+            "sha256": "f9e183d48448694ce712d5d2dbb9ba013ce9856f1ab34a3054490df7329bd12c",
         },
     },
     "fix_s2": {
         # Channel configurations
         "channels": {
-            "cp_nuclei_channel": "DAPI",
+            "cp_nuclei_channel": "DAPI",  # DNA
             "cp_cell_channel": "PhalloAF750",
             "cp_mito_channel": "ZO1AF488",
-            "sbs_nuclei_channel": "DAPI",
+            "sbs_nuclei_channel": "DAPI",  # DNA
             "sbs_cell_channel": "PhalloAF750",
             "sbs_mito_channel": "ZO1AF488",
         },
@@ -67,7 +67,7 @@ FIXTURE_CONFIGS = {
             "dir_prefix": "fix_s1_output_test",
             "dir_name": "fix_s1_pcpip_output",
             "dataset_dir_name": "Source1",
-            "sha256": "bcbd01ed62533f92b6657734a87df3f360585950e9b1c76f6bbb86dfa0019ea3",
+            "sha256": "f9e183d48448694ce712d5d2dbb9ba013ce9856f1ab34a3054490df7329bd12c",
         },
     },
 }
