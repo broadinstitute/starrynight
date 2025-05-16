@@ -343,6 +343,11 @@ def gen_preprocess_load_data(
         # Setup channel list for this level
         plate_channel_list = get_channels_from_df(levels_df)
 
+        # assert that none of the channels should contain a substring of "DAPI"
+        assert "DAPI" not in plate_channel_list, (
+            f"DAPI found in plate_channel_list: {plate_channel_list}"
+        )
+
         # Setup cycles list
         plate_cycles_list = get_cycles_from_df(levels_df)
 
