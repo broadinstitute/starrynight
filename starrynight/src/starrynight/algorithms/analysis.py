@@ -310,12 +310,13 @@ def write_loaddata(
                 get_cp_filename_value(index, ch, use_legacy, legacy_channel_map)
                 for ch in cp_plate_channel_list
             ]
+            # Match the order of iteration in sbs_filename_heads to ensure correct alignment
             sbs_filenames = [
                 get_sbs_filename_value(
                     index, cycle, ch, use_legacy, legacy_channel_map
                 )
-                for ch in sbs_plate_channel_list
                 for cycle in plate_cycles_list
+                for ch in sbs_plate_channel_list
             ]
             cp_pathnames = [
                 resolve_path_loaddata(AnyPath(path_mask), cp_corr_images_path)

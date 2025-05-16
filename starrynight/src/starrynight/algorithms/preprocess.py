@@ -231,12 +231,13 @@ def write_loaddata(
             index.site_id = site_id
             assert index.cycle_id is not None
             assert index.site_id is not None
+            # Match the order of iteration in filename_heads to ensure correct alignment
             filenames = [
                 get_filename_value(
                     index, cycle, ch, use_legacy, legacy_channel_map
                 )
-                for ch in plate_channel_list
                 for cycle in plate_cycles_list
+                for ch in plate_channel_list
             ]
             if int(index.cycle_id) != 1:
                 pathnames = [
