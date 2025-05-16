@@ -40,7 +40,7 @@ FIXTURE_CONFIGS = {
             "dir_prefix": "fix_s1_output_test",
             "dir_name": "fix_s1_pcpip_output",
             "dataset_dir_name": "Source1",
-            "sha256": "a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
+            "sha256": "bcbd01ed62533f92b6657734a87df3f360585950e9b1c76f6bbb86dfa0019ea3",
         },
     },
     "fix_s2": {
@@ -67,7 +67,7 @@ FIXTURE_CONFIGS = {
             "dir_prefix": "fix_s1_output_test",
             "dir_name": "fix_s1_pcpip_output",
             "dataset_dir_name": "Source1",
-            "sha256": "a84788c2d5296c02e58c38c382c9b4019c414162a58021a7bfc7c5f20a38be2a",
+            "sha256": "bcbd01ed62533f92b6657734a87df3f360585950e9b1c76f6bbb86dfa0019ea3",
         },
     },
 }

@@ -14,38 +14,19 @@ Key components:
 
 ### Prepare test data using utils scripts
 
-```bash
-# Filter a dataset to create smaller test data
-python -m starrynight.tests.fixtures.integration.utils.loaddata_filter \
-    --input-csv /path/to/original.csv \
-    --output-csv /path/to/new_fixture/filtered.csv \
-    --well A01 --site 1
+The `fixture_utils.sh` script in the `utils/` directory automates the fixture creation process. It downloads required data, filters datasets to manageable sizes, updates file paths for the test environment, validates data integrity, and handles archive creation with checksums.
 
-# Update paths in the filtered data
-python -m starrynight.tests.fixtures.integration.utils.loaddata_postprocess \
-    --input-csv /path/to/new_fixture/filtered.csv \
-    --output-csv /path/to/new_fixture/processed.csv \
-    --source-path /original/path \
-    --target-path /new/path
+> **IMPORTANT**: You should manually inspect and edit `fixture_utils.sh` before running it, as it contains hardcoded paths and lacks robust error checking. Edit the FIXTURE_ID variable (currently set to "s1") and other configuration variables at the top of the script to match your requirements.
 
-# Validate the processed data
-python -m starrynight.tests.fixtures.integration.utils.loaddata_validate \
-    --input-csv /path/to/new_fixture/processed.csv
-```
+For fixture preparation (assuming we're creating a "NEW" fixture), the script produces:
 
-### Create archives and calculate hashes
+- Filtered datasets with only required wells and sites
+- CSV files with updated paths appropriate for testing
+- Input and output archives with SHA256 checksums
 
-```bash
-# Create input archive
-tar -czf fix_NEW_input.tar.gz -C /path/to/new_fixture input/
-
-# Create output archive (if applicable)
-tar -czf fix_NEW_output.tar.gz -C /path/to/new_fixture output/
-
-# Generate SHA256 hashes
-sha256sum fix_NEW_input.tar.gz > fix_NEW_input.tar.gz.sha256
-sha256sum fix_NEW_output.tar.gz > fix_NEW_output.tar.gz.sha256
-```
+The archives created will be:
+- `fix_NEW_input.tar.gz` and `fix_NEW_input.tar.gz.sha256`
+- `fix_NEW_output.tar.gz` and `fix_NEW_output.tar.gz.sha256`
 
 ###  Upload archives
 
@@ -124,6 +105,13 @@ def fix_NEW_starrynight_pregenerated(fix_NEW_workspace, fix_NEW_input_dir):
 ```
 
 ### Set up pregenerated files
+
+This step is ONLY needed in the following cases:
+- When creating a new fixture
+- When input data paths have changed
+- When FIXTURE_CONFIGS in constants.py has been updated affecting input configurations
+
+Skip this entire section when only updating output archives.
 
 First, update regenerate.py to include your new fixture:
 

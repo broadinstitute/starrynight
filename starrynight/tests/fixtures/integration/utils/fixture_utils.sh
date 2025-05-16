@@ -26,6 +26,10 @@
 # - UV: Python package management and script execution
 # - Git: For repository operations
 
+###########################################################
+# SECTION 1: SETUP AND CONFIGURATION
+###########################################################
+
 # Common variables used across all steps
 FIXTURE_ID="s1"  # Change this for different fixtures: s1, s2, l1
 STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)" &&
@@ -34,16 +38,33 @@ SCRATCH_DIR="${STARRYNIGHT_REPO_REL}/scratch"
 # Derived paths
 FIX_INPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_input"
 FIX_OUTPUT_DIR="${SCRATCH_DIR}/fix_${FIXTURE_ID}_pcpip_output"
+ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
+FIXTURE_UTILS_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/integration/utils"
+
+# NOTE: LOAD_DATA_DIR is dataset-specific and should be updated for each fixture
 LOAD_DATA_DIR="${FIX_OUTPUT_DIR}/Source1/workspace/load_data_csv/Batch1/Plate1"
 LOAD_DATA_DIR_TRIMMED="${LOAD_DATA_DIR}_trimmed"
-ARCHIVE_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/archives"
-FIXTURE_UTILS_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/fixture_utils"
 
 # Set required environment variables for S3 access
 # export BUCKET="your-source-bucket"
 # export PROJECT="your-project-path"
 # export BATCH="your-batch-name"
 # export DEST_BUCKET="your-destination-bucket"
+
+###########################################################
+# SECTION 2: DATA ACQUISITION
+###########################################################
+
+# Note: The create_starrynight_download_list.py script provides configurable parameters to specify what subset of data to download:
+#  - FIXTURE_ID: Choose the fixture type (s1, s2, l1)
+#  - WELLS: Select which wells to include (default: ["A1", "A2", "B1"])
+#  - SITES: Select which sites per well to include (default: [0, 1, 2, 3])
+#  - CYCLES: Select which SBS cycles to include (default: range(1, 4))
+#  - PLATE: Select which plate to use (default: "Plate1")
+#
+# Important: The script is currently tailored to work with a specific dataset format/structure.
+# To use with other datasets that have different organization or naming conventions,
+# code modifications would be needed beyond just changing the configuration parameters.
 
 # Run create_starrynight_download_list.py script to create download lists
 uv run create_starrynight_download_list.py
@@ -63,6 +84,9 @@ s5cmd run download_list.txt &&
 echo "Downloads completed. Verify files were downloaded successfully." &&
 cd -
 
+###########################################################
+# SECTION 3: DATA COMPRESSION
+###########################################################
 # Function to compress file only if not already JPEG compressed
 cat > compress_if_needed.sh <<'EOF'
 #!/usr/bin/env bash
@@ -84,6 +108,9 @@ find "${FIX_OUTPUT_DIR}" -type f -name '*.tiff' \
 
 rm compress_if_needed.sh
 
+###########################################################
+# SECTION 4: DATA FILTERING AND PROCESSING
+###########################################################
 # Create the trimmed directory if it doesn't exist
 mkdir -p ${LOAD_DATA_DIR_TRIMMED}
 
@@ -95,6 +122,7 @@ cd ${FIXTURE_UTILS_DIR}
 for csv_file in ${LOAD_DATA_DIR}/*.csv; do
     if [ -f "$csv_file" ]; then
         filename=$(basename "$csv_file")
+        echo "----------------------------------------"
         echo "Filtering $filename..."
 
         uv run loaddata_filter.py \
@@ -104,10 +132,12 @@ for csv_file in ${LOAD_DATA_DIR}/*.csv; do
             --well WellA1,WellA2,WellB1 \
             --site 0,1,2,3 \
             --cycle 1,2,3
+        echo "----------------------------------------"
     fi
 done
 
 # Define source and target paths for path replacement
+# Note: SOURCE_PATH and TARGET_PATH are dataset-specific and should be updated for each fixture
 SOURCE_PATH="/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/"
 TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
 
@@ -116,6 +146,7 @@ cd ${FIXTURE_UTILS_DIR}
 for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
     if [ -f "$csv_file" ]; then
         filename=$(basename "$csv_file")
+        echo "----------------------------------------"
         echo "Post-processing $filename..."
 
         uv run loaddata_postprocess.py \
@@ -123,9 +154,18 @@ for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
             --output-csv "$csv_file" \
             --source-path "$SOURCE_PATH" \
             --target-path "$TARGET_PATH"
+        echo "----------------------------------------"
     fi
 done
 
+# Note: The loaddata_postprocess.py script will update the values of some FileName_X columns.
+# This means that it will now be out of sync with the actual file paths in the images directory in the FIX_INPUT_DIR.
+# Therefore, the paths in FIX_INPUT_DIR need to be updated to match the new values in the FileName_X columns.
+# W have not yet implemented this.
+
+###########################################################
+# SECTION 5: DATA VALIDATION
+###########################################################
 # Soft link images directory so it can be found when validating
 ln -s ${FIX_INPUT_DIR}/Source1/Batch1/images ${FIX_OUTPUT_DIR}/Source1/Batch1/
 
@@ -134,10 +174,14 @@ TEMP_MISSING_DIR="${LOAD_DATA_DIR_TRIMMED}/temp_missing_files"
 mkdir -p "${TEMP_MISSING_DIR}"
 
 # Validate all CSV files in the trimmed directory
+# Note: This will generate a missing files report for each CSV file in the LOAD_DATA_DIR_TRIMMED directory.
+# Given the renaming of the FileName_X indicated in SECTION 4, we should expect to see missing files for the renamed columns.
+
 cd ${FIXTURE_UTILS_DIR}
 for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
     if [ -f "$csv_file" ]; then
         filename=$(basename "$csv_file")
+        echo "----------------------------------------"
         echo "Validating $filename..."
 
         # Generate a temporary missing files report name
@@ -147,6 +191,7 @@ for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do
             --input-csv "$csv_file" \
             --base-path "${FIX_OUTPUT_DIR}" \
             --output-file "$temp_missing_file"
+        echo "----------------------------------------"
     fi
 done
 
@@ -156,6 +201,9 @@ rm -rf "${TEMP_MISSING_DIR}"
 # Drop the soft link
 rm ${FIX_OUTPUT_DIR}/Source1/Batch1/images
 
+###########################################################
+# SECTION 6: ARCHIVE CREATION
+###########################################################
 # Set archive name
 OUTPUT_ARCHIVE_NAME="fix_${FIXTURE_ID}_output.tar.gz"
 INPUT_ARCHIVE_NAME="fix_${FIXTURE_ID}_input.tar.gz"

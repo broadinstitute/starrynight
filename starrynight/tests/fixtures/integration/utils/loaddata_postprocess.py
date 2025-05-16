@@ -48,7 +48,16 @@ def process_csv_paths_and_metadata(
         df.rename(columns={"Metadata_SBSCycle": "Metadata_Cycle"}, inplace=True)
         stats["renamed_metadata_sbscycle"] = 1
 
-    # FIXME: Rename Columns that are like *_DAPI to *_DNA
+    # Rename columns with _DAPI to _DNA
+    dapi_columns = [col for col in df.columns if "_DAPI" in col]
+    dna_column_mapping = {
+        col: col.replace("_DAPI", "_DNA") for col in dapi_columns
+    }
+    if dapi_columns:
+        df.rename(columns=dna_column_mapping, inplace=True)
+        stats["dapi_columns_renamed"] = len(dapi_columns)
+    else:
+        stats["dapi_columns_renamed"] = 0
 
     # Remove "Well" prefix from Metadata_Well values
     if "Metadata_Well" in df.columns:
@@ -59,7 +68,20 @@ def process_csv_paths_and_metadata(
             ].str.replace("Well", "", regex=False)
             stats["well_values_modified"] = mask.sum()
 
-    # FIXME: Remove similar prefixes from FileName_* columns
+    # Remove "Well" prefix from values in FileName_* columns
+    filename_columns = [
+        col for col in df.columns if col.startswith("FileName_")
+    ]
+
+    for col in filename_columns:
+        if df[col].dtype == object:
+            # Look for patterns like Well_WellA1 and replace with Well_A1
+            mask = df[col].str.contains("Well_Well", na=False)
+            if mask.any():
+                df.loc[mask, col] = df.loc[mask, col].str.replace(
+                    "Well_Well", "Well_", regex=False
+                )
+                stats[f"{col.lower()}_well_prefix_removed"] = mask.sum()
 
     # E.g. Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff --> Plate_Plate1_Well_A1_Site_0_CorrDNA.tiff
 
@@ -118,8 +140,26 @@ def main(
         f"  Renamed 'Metadata_SBSCycle' to 'Metadata_Cycle': {'Yes' if stats['renamed_metadata_sbscycle'] else 'No'}"
     )
     click.echo(
-        f"  'Well' prefix removed from {stats['well_values_modified']} values"
+        f"  'Well' prefix removed from {stats['well_values_modified']} Metadata_Well values"
     )
+
+    # Report DAPI to DNA column renames
+    if stats.get("dapi_columns_renamed", 0) > 0:
+        click.echo(
+            f"  Renamed {stats['dapi_columns_renamed']} columns from _DAPI to _DNA"
+        )
+
+    # Report filename well prefix removals
+    filename_stats = {
+        k: v for k, v in stats.items() if k.endswith("_well_prefix_removed")
+    }
+    if filename_stats:
+        for col, count in filename_stats.items():
+            column_name = col.replace("_well_prefix_removed", "")
+            click.echo(
+                f"  'Well' prefix removed from {count} values in {column_name}"
+            )
+
     click.echo(f"Saved processed CSV to {output_path}")
 
 
