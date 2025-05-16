@@ -69,6 +69,7 @@ def process_csv_paths_and_metadata(
             stats["well_values_modified"] = mask.sum()
 
     # Remove "Well" prefix from values in FileName_* columns
+    # Also convert DAPI to DNA in filenames
     filename_columns = [
         col for col in df.columns if col.startswith("FileName_")
     ]
@@ -82,6 +83,14 @@ def process_csv_paths_and_metadata(
                     "Well_Well", "Well_", regex=False
                 )
                 stats[f"{col.lower()}_well_prefix_removed"] = mask.sum()
+
+            # Replace DAPI with DNA in filenames (e.g., Cycle01_DAPI.tiff → Cycle01_DNA.tiff)
+            mask_dapi = df[col].str.contains("_DAPI.", na=False)
+            if mask_dapi.any():
+                df.loc[mask_dapi, col] = df.loc[mask_dapi, col].str.replace(
+                    "_DAPI.", "_DNA.", regex=False
+                )
+                stats[f"{col.lower()}_dapi_to_dna"] = mask_dapi.sum()
 
     # E.g. Plate_Plate1_Well_WellA1_Site_0_CorrDNA.tiff --> Plate_Plate1_Well_A1_Site_0_CorrDNA.tiff
 
@@ -158,6 +167,15 @@ def main(
             column_name = col.replace("_well_prefix_removed", "")
             click.echo(
                 f"  'Well' prefix removed from {count} values in {column_name}"
+            )
+
+    # Report DAPI to DNA conversions
+    dapi_stats = {k: v for k, v in stats.items() if k.endswith("_dapi_to_dna")}
+    if dapi_stats:
+        for col, count in dapi_stats.items():
+            column_name = col.replace("_dapi_to_dna", "")
+            click.echo(
+                f"  'DAPI' replaced with 'DNA' in {count} values in {column_name}"
             )
 
     click.echo(f"Saved processed CSV to {output_path}")
