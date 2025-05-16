@@ -29,7 +29,7 @@ class SBSConfig(BaseModel):
     channel_list: list[str]
     acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
     barcode_csv_path: Path | CloudPath
-    nuclei_channel: str = Field("DAPI")
+    nuclei_channel: str = Field("DNA")
     cell_channel: str = Field("CELL")
     mito_channel: str = Field("MITO")
 
@@ -42,7 +42,7 @@ class CPConfig(BaseModel):
     img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
     channel_list: list[str]
     acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
-    nuclei_channel: str = Field("DAPI")
+    nuclei_channel: str = Field("DNA")
     cell_channel: str = Field("CELL")
     mito_channel: str = Field("MITO")
 
@@ -62,10 +62,10 @@ class PCPGenericInitConfig(BaseModel):
     sbs_acquisition_order: AcquisitionOrderType = Field(
         AcquisitionOrderType.SNAKE
     )
-    cp_nuclei_channel: str = Field("DAPI")
+    cp_nuclei_channel: str = Field("DNA")
     cp_cell_channel: str = Field("CELL")
     cp_mito_channel: str = Field("MITO")
-    sbs_nuclei_channel: str = Field("DAPI")
+    sbs_nuclei_channel: str = Field("DNA")
     sbs_cell_channel: str = Field("CELL")
     sbs_mito_channel: str = Field("MITO")
 
