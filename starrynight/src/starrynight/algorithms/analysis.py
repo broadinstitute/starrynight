@@ -231,7 +231,7 @@ def get_sbs_filename_value(
     if not use_legacy:
         return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{ch}.tiff"
     else:
-        if ch == "DAPI":
+        if ch == "DNA":
             return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{1:02d}_{legacy_channel_map[ch]}.tiff"
 
         else:
@@ -536,11 +536,11 @@ def generate_analysis_pipeline(
     # -> MeasureImageIntensity(PaddedAreasSBS)
     # -> ImageMath (Multiply, (WellEdgeDistance, WellEdgeDistancePreMultiply))
     # preserves morpths with well edge and zeros out spurious data
-    # -> IdentifyPrimaryObjects (DAPI EdgedMasked, ConfluentRegions)
+    # -> IdentifyPrimaryObjects (DNA EdgedMasked, ConfluentRegions)
     # -> MeasureImageAreaOccupied (Objects, ConfluentRegions)
     # -> CalculateMath (Percent Confluent,  Divide)
-    # -> for ch in (DAPI, Phalloidin): MaskImage(Image, ConfluentRegions)
-    # -> IdentifyPrimaryObjects(MaskedDAPIPainting, Nuclei)
+    # -> for ch in (DNA, Phalloidin): MaskImage(Image, ConfluentRegions)
+    # -> IdentifyPrimaryObjects(MaskedDNAPainting, Nuclei)
     # -> IdentifySecondaryObjects(MaksedPhalloidin, Cells)
     # -> IdentifyTertiaryObjects (Cells, Nuclei, Cytoplasm)
     # -> for obj in (ConfluentRegions, Cell, Nuclei): ResizeObjects(Objects, 0.5x)
@@ -563,7 +563,7 @@ def generate_analysis_pipeline(
     # -> MeasureObjectNeighbors (Cells, 10)
     # -> MeasureObjectNeighbors (Cells, 5)
     # -> MeasureObjectNeighbors (Nuclei, 2)
-    # -> MeasureColocalization (cycle, dapi, Phalloidin)
+    # -> MeasureColocalization (cycle, dna, Phalloidin)
     # -> FlagImage(PoorAlignment)
     # -> MeasureObjectIntensity( MaskedBarcodes, Cells)
     # -> MeasureObjectIntensity( Painting, (Cells, Nuclei, Cytoplasm))
@@ -577,7 +577,7 @@ def generate_analysis_pipeline(
     # -> MeasureColocalization (all cycles and channels)
     # -> FilterObjects(BarcodeFoci, Foci_NonCellEdge)
     # -> RelateObjects(Cells, BarcodeFoci)
-    # -> Resize Images for Vis (Phalloidin, DAPI)
+    # -> Resize Images for Vis (Phalloidin, DNA)
     # -> GraytoColor (Combine Painting for Vis)
     # -> OverlayOutlines(Resized Nuclei, Cells and Confluent)
     # -> SaveImages for Vis Alignment
