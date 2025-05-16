@@ -159,7 +159,7 @@ def get_filename_value(
         else:
             return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Corr{ch}.tiff"
     else:
-        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(cycle):02d}_{ch}.tiff"
+        return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{int(cycle):02d}_{legacy_channel_map[ch]}.tiff"
 
 
 def get_pathname_header(
