@@ -1,5 +1,7 @@
 # Complete Workflow Example (CLI Approach)
 
+FIXME: Remove this line
+
 This guide walks through a complete example of processing microscopy images using StarryNight's key modules and CLI commands. It builds on the foundation established in the [Getting Started](getting-started.md) guide, extending those concepts into a full image processing workflow.
 
 ## Prerequisites
