@@ -190,6 +190,21 @@ The result will be an `index.parquet` file containing structured metadata for ea
 !!! info "Path Parsing System"
     StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
 
+!!! note "Expected Parse Errors"
+    During index generation, you may see error messages for files that don't match the expected image path patterns. This is normal and expected:
+
+    ```
+    Unable to parse: {'key': 'fix_s1_input/Source1/.DS_Store', ...} because of Unexpected token Token('DOT', '.')
+    Unable to parse: {'key': 'fix_s1_input/Source1/workspace/metadata/Barcodes.csv', ...} because of Unexpected token Token('WORKSPACE', 'workspace')
+    ```
+
+    These errors occur because:
+
+    - Hidden files like `.DS_Store` (starting with a dot) are not valid image files
+    - The parser is currently developed only to handle image files
+
+    The parser is intentionally strict and only accepts properly formatted Cell Painting and SBS image paths. These non-image files are safely skipped and won't affect your workflow.
+
 ## Create Experiment File
 
 Initialize an experiment using your index and configuration:
