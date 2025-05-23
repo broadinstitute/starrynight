@@ -119,6 +119,18 @@ def extract_metadata(
             },
             "CP",
         ),
+        # Test case for .DS_Store (should fail)
+        (
+            "fix_s1_input/Source1/.DS_Store",
+            {},  # Empty dict since we expect it to fail
+            "DS_Store",
+        ),
+        # Test case for workspace path (should fail)
+        (
+            "fix_s1_input/Source1/workspace/metadata/Barcodes.csv",
+            {},  # Empty dict since we expect it to fail
+            "Workspace",
+        ),
     ],
 )
 def test_path_parsing(
@@ -143,6 +155,12 @@ def test_path_parsing(
         Type of path being tested ('SBS' or 'CP')
 
     """
+    # Check if this is an expected failure case
+    if path_type in ["DS_Store", "Workspace"]:
+        with pytest.raises(ParseError):
+            parser.parse(filepath)
+        return
+
     result = extract_metadata(filepath, parser, transformer)
 
     # Verify common core metadata extraction
