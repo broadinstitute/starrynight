@@ -243,7 +243,6 @@ starrynight preprocess cppipe \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/ \
     -w ${WKDIR}/preprocess/sbs/ \
     -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
-    --exp_config ${WKDIR}/experiment.json \
     --use_legacy
 
 # Execute preprocessing pipelines
