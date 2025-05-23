@@ -36,7 +36,7 @@ def resolve_path_loaddata(
 
     """
     try:
-        filepath.relative_to(path_mask.resolve())
+        filepath.resolve().relative_to(path_mask.resolve())
         return filepath.resolve().__str__()
     except ValueError:
         return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
@@ -61,10 +61,14 @@ def write_pq(
     out_path.parent.mkdir(exist_ok=True, parents=True)
     with out_path.open("wb") as f:
         with pq.ParquetWriter(f, pq_schema) as pq_witer:
-            pq_witer.write_table(pa.Table.from_pydict(col_dict, schema=pq_schema))
+            pq_witer.write_table(
+                pa.Table.from_pydict(col_dict, schema=pq_schema)
+            )
 
 
-def merge_pq(files_list: list[CloudPath | Path], out_file: CloudPath | Path) -> None:
+def merge_pq(
+    files_list: list[CloudPath | Path], out_file: CloudPath | Path
+) -> None:
     """Merge parquet files.
 
     Parameters
