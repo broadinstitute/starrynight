@@ -1,5 +1,7 @@
 # Getting Started with StarryNight
 
+FIXME: Remove this line
+
 This guide will help you install StarryNight and run your first workflow using the CLI (Command Line Interface) approach. You'll set up the environment and calculate illumination correction functions for Cell Painting images.
 
 !!! info "Implementation Approaches"

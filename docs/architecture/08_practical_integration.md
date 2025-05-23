@@ -1,5 +1,7 @@
 # Connecting the Layers: A Practical Walkthrough of the StarryNight Architecture
 
+FIXME: Remove this line
+
 This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining the `exec_pcp_generic_pipe.py` file. While the previous documents explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
 
 !!!note "Pedagogical Approach"
