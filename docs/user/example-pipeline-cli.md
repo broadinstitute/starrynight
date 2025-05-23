@@ -74,10 +74,10 @@ This guide assumes you have completed the [Getting Started](getting-started.md) 
 
 ```sh
 # Set environment variables for convenience
-export DATADIR='./scratch/starrynight_example_input'
-export WKDIR='./scratch/starrynight_example_output/workspace'
+export DATADIR='./scratch/fix_s1_input'
+export WKDIR='./scratch/fix_s1_output/workspace'
 # Add new environment variable needed for the complete workflow
-export INPUT_WKDIR='./scratch/starrynight_example_input/Source1/workspace'
+export INPUT_WKDIR='./scratch/fix_s1_input/Source1/workspace'
 ```
 
 You should already have:
@@ -242,7 +242,7 @@ starrynight preprocess cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess/ \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/ \
     -w ${WKDIR}/preprocess/sbs/ \
-    -b ${INPUT_WKDIR}/metadata/barcode.csv \
+    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy
 
@@ -278,7 +278,7 @@ starrynight analysis cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
     -o ${WKDIR}/cellprofiler/cppipe/sbs/analysis/ \
     -w ${WKDIR}/analysis/sbs/ \
-    -b ${INPUT_WKDIR}/metadata/barcode.csv \
+    -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy
 

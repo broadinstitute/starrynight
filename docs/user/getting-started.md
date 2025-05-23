@@ -73,22 +73,33 @@ flowchart LR
 
 ## Download Sample Data
 
+StarryNight includes curated test data (FIX-S1) that provides a complete, small-scale dataset for learning the workflow:
+
 ```sh
 # Create a directory for the sample data
 mkdir -p scratch
 
-# Download sample data from S3 (requires AWS CLI and proper credentials)
-aws s3 sync s3://imaging-platform/projects/2024_03_12_starrynight/starrynight_example_input scratch/starrynight_example_input
+# Download the FIX-S1 test dataset (36MB)
+cd scratch
+wget https://github.com/shntnu/starrynight/releases/download/v0.0.1/fix_s1_input.tar.gz
+
+# Verify the download integrity
+echo "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0  fix_s1_input.tar.gz" | sha256sum -c
+
+# Extract the data
+tar -xzf fix_s1_input.tar.gz
+
+# Return to project root
+cd ..
 ```
 
-!!! note "AWS Access"
-    The sample data is stored in an AWS S3 bucket. You'll need AWS CLI installed and configured with appropriate credentials to access it. If you don't have access, contact your administrator for alternative data sources.
+This creates a `fix_s1_input/` directory containing Cell Painting and SBS imaging data from 2 wells with multiple sites and channels.
 
 Before running any commands, set up your data and workspace directories as environment variables:
 
 ```sh
-export DATADIR='./scratch/starrynight_example_input'
-export WKDIR='./scratch/starrynight_example_output/workspace'
+export DATADIR='./scratch/fix_s1_input'
+export WKDIR='./scratch/fix_s1_output/workspace'
 ```
 
 ## Create Experiment Configuration
@@ -97,7 +108,7 @@ The experiment configuration file defines parameters for your processing workflo
 
 ```sh
 # Create necessary directories for the workflow
-mkdir -p scratch/starrynight_example_output/workspace/
+mkdir -p scratch/fix_s1_output/workspace/
 
 # Generate a default experiment configuration template
 starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
@@ -278,7 +289,7 @@ import matplotlib.pyplot as plt
 
 # Load one of the illumination correction files
 import os
-wkdir = os.environ.get('WKDIR', './scratch/starrynight_example_output/workspace')
+wkdir = os.environ.get('WKDIR', './scratch/fix_s1_output/workspace')
 data = np.load(f'{wkdir}/illum/cp/illum_calc/Plate1_IllumDNA.npy')
 
 # Create a visualization
