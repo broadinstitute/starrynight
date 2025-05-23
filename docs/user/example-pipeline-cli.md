@@ -251,6 +251,7 @@ starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/sbs/preprocess/preprocess_sbs.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/sbs/preprocess \
     -o ${WKDIR}/preprocess/sbs/ \
+    -d ${CP_PLUGINS} \
     --sbs
 ```
 
@@ -260,36 +261,34 @@ Extract cellular measurements and generate the final dataset by combining CP and
 
 ```sh
 # Create necessary directories
-mkdir -p ${WKDIR}/cellprofiler/loaddata/sbs/analysis/
-mkdir -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis/
-mkdir -p ${WKDIR}/analysis/sbs/
+mkdir -p ${WKDIR}/cellprofiler/loaddata/analysis/
+mkdir -p ${WKDIR}/cellprofiler/cppipe/analysis/
+mkdir -p ${WKDIR}/analysis/
 
 # Generate LoadData files
 starrynight analysis loaddata \
     -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
-    -c ${WKDIR}/illum/sbs/illum_apply/ \
+    -o ${WKDIR}/cellprofiler/loaddata/analysis/ \
+    -c ${WKDIR}/illum/cp/illum_apply/ \
     -p ${WKDIR}/preprocess/sbs/ \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy
 
 # Generate CellProfiler pipelines
 starrynight analysis cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis/ \
-    -o ${WKDIR}/cellprofiler/cppipe/sbs/analysis/ \
-    -w ${WKDIR}/analysis/sbs/ \
+    -l ${WKDIR}/cellprofiler/loaddata/analysis/ \
+    -o ${WKDIR}/cellprofiler/cppipe/analysis/ \
+    -w ${WKDIR}/analysis/ \
     -b ${INPUT_WKDIR}/metadata/Barcodes.csv \
-    --exp_config ${WKDIR}/experiment.json \
     --use_legacy
 
 # Execute analysis pipelines
 starrynight cp \
-    -p ${WKDIR}/cellprofiler/cppipe/sbs/analysis/analysis_sbs.cppipe \
-    -l ${WKDIR}/cellprofiler/loaddata/sbs/analysis \
-    -o ${WKDIR}/analysis/sbs/ \
-    --sbs
+    -p ${WKDIR}/cellprofiler/cppipe/analysis/analysis.cppipe \
+    -l ${WKDIR}/cellprofiler/loaddata/analysis \
+    -o ${WKDIR}/analysis/ \
+    -d ${CP_PLUGINS}
 ```
-
 
 ## Common Parameters
 

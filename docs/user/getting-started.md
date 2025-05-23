@@ -50,8 +50,6 @@ uv pip install -e ".[dev]"
 ```sh
 # Verify the installation
 starrynight --help
-pipecraft --help
-conductor --help
 ```
 
 **For Developers**:
@@ -90,8 +88,8 @@ echo "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0  fix_s1_i
 tar -xzf fix_s1_input.tar.gz
 
 # Clean up macOS metadata files
-find scratch/fix_s1_input -name '._*' -delete
-find scratch/fix_s1_input -name '.DS_Store' -delete
+find fix_s1_input -name '._*' -delete
+find fix_s1_input -name '.DS_Store' -delete
 
 # Return to project root
 cd ..
@@ -101,9 +99,21 @@ This creates a `fix_s1_input/` directory containing Cell Painting and SBS imagin
 
 Before running any commands, set up your data and workspace directories as environment variables:
 
+## Clone CellProfiler plugins github repository
+
+```sh
+cd scratch
+git clone https://github.com/CellProfiler/CellProfiler-plugins.git
+
+# Return to project root
+cd ..
+
+```
+
 ```sh
 export DATADIR='./scratch/fix_s1_input'
 export WKDIR='./scratch/fix_s1_output/workspace'
+export CP_PLUGINS='./scratch/CellProfiler-plugins/active_plugins/'
 ```
 
 ## Create Experiment Configuration
@@ -121,6 +131,8 @@ starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
 This creates an `experiment_init.json` file in your workspace that you can edit to match your dataset's characteristics:
 
 FIXME: `sbs_cell_channel` and `sbs_mito_channel` should not need to be specified in the `experiment_init.json` file.
+
+For the example experiment, the following values can be used.
 
 ```json
 {
@@ -294,7 +306,7 @@ starrynight cp \
 The illumination correction files will be created in the output directory:
 
 ```
-${WKDIR}/illum/cp/illum_calc/
+${WKDIR}/illum/cp/illum_calc/Batch1-Plate1
 ├── Plate1_IllumDNA.npy
 ├── Plate1_IllumPhalloidin.npy
 └── Plate1_IllumZO1.npy
@@ -309,13 +321,14 @@ import matplotlib.pyplot as plt
 # Load one of the illumination correction files
 import os
 wkdir = os.environ.get('WKDIR', './scratch/fix_s1_output/workspace')
-data = np.load(f'{wkdir}/illum/cp/illum_calc/Plate1_IllumDNA.npy')
+data = np.load(f'{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.npy')
 
 # Create a visualization
 plt.figure(figsize=(10,8))
 plt.imshow(data, cmap='viridis')
 plt.colorbar()
 plt.title('DNA Illumination Correction')
+plt.savefig(f'{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.npy')
 plt.show()
 ```
 
@@ -347,7 +360,6 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 - Continue to the [Complete Workflow Example](example-pipeline-cli.md)
 - Check the architecture docs to understand the [system structure](../architecture/00_architecture_overview.md)
 - For the Python/Module approach used in production, see [Practical Integration](../architecture/08_practical_integration.md)
-
 
 !!! info "For Document Contributors"
     This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.
