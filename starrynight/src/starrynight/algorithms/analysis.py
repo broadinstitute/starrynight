@@ -231,7 +231,7 @@ def get_sbs_filename_value(
     if not use_legacy:
         return f"{index.batch_id}_{index.plate_id}_{int(cycle)}_Well_{index.well_id}_Site_{int(index.site_id)}_Compensated{ch}.tiff"
     else:
-        if ch == "DNA":
+        if legacy_channel_map[ch] == "DNA":
             return f"Plate_{index.plate_id}_Well_{index.well_id}_Site_{int(index.site_id)}_Cycle{1:02d}_{legacy_channel_map[ch]}.tiff"
 
         else:
