@@ -89,6 +89,10 @@ echo "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0  fix_s1_i
 # Extract the data
 tar -xzf fix_s1_input.tar.gz
 
+# Clean up macOS metadata files
+find scratch/fix_s1_input -name '._*' -delete
+find scratch/fix_s1_input -name '.DS_Store' -delete
+
 # Return to project root
 cd ..
 ```
