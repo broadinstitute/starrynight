@@ -36,7 +36,9 @@ def write_loaddata(
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
-    metadata_heads = [f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]]
+    metadata_heads = [
+        f"Metadata_{col}" for col in ["Batch", "Plate", "Site", "Well"]
+    ]
 
     filename_heads = [
         f"FileName_Corr_Cycle_{int(cycle)}_{col}"
@@ -116,7 +118,9 @@ def write_loaddata_csv_by_batch_plate_cycle(
     # Write load data csv for the plate
     batch_plate_out_path = out_path.joinpath(batch, plate)
 
-    with batch_plate_out_path.joinpath(f"align_{batch}_{plate}.csv").open("w") as f:
+    with batch_plate_out_path.joinpath(f"align_{batch}_{plate}.csv").open(
+        "w"
+    ) as f:
         write_loaddata(
             df_batch_plate_cycle,
             plate_cycles_list,
@@ -153,17 +157,23 @@ def gen_align_load_data_by_batch_plate(
     """
     # Construct illum path if not given
     if corr_images_path is None:
-        corr_images_path = index_path.parents[1].joinpath("illum/sbs/illum_apply")
+        corr_images_path = index_path.parents[1].joinpath(
+            "illum/sbs/illum_apply"
+        )
 
     df = pl.read_parquet(index_path.resolve().__str__())
 
     # Filter for relevant images
-    images_df = df.filter(pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True))
+    images_df = df.filter(
+        pl.col("is_sbs_image").eq(True), pl.col("is_image").eq(True)
+    )
 
     images_hierarchy_dict = gen_image_hierarchy(images_df)
 
     # Query default path prefix
-    default_path_prefix = images_df.select("prefix").unique().to_series().to_list()[0]
+    default_path_prefix = (
+        images_df.select("prefix").unique().to_series().to_list()[0]
+    )
 
     # Setup path mask (required for resolving pathnames during the execution)
     if path_mask is None:
@@ -219,14 +229,17 @@ def get_row_config(im_per_well: int) -> list[int]:
         + [20, 20, 20, 20, 18, 18, 16, 16, 14, 10, 6],
         "293": [7, 11, 13, 15, 17, 17, 19, 19, 19, 19]
         + [19, 19, 19, 17, 17, 15, 13, 11, 7],
-        "256": [6, 10, 12, 14, 16, 16, 18, 18, 18, 18, 18, 18, 16, 16, 14, 12, 10, 6],
+        "256": [6, 10, 12, 14, 16, 16, 18, 18, 18]
+        + [18, 18, 18, 16, 16, 14, 12, 10, 6],
         "88": [6, 8, 10, 10, 10, 10, 10, 10, 8, 6],
         "52": [4, 6, 8, 8, 8, 8, 6, 4],
     }
     return im_per_well_dict[str(im_per_well)]
 
 
-def save_image_fiji(ij, image: Any, out_path: Path, compress: bool = False) -> None:
+def save_image_fiji(
+    ij, image: Any, out_path: Path, compress: bool = False
+) -> None:
     plugin = "Bio-Formats Exporter"
     params = {
         # "imageid": image.getID(),
@@ -257,7 +270,7 @@ def stitch_images_fiji(
     row_config = get_row_config(len(sorted_imgs_list))
 
     # get image shape and generate approx img file coordinates
-    img_shape = ij.io().open(image_files[0].resolve().__str__()).shape
+    img_shape = ij.io().open(sorted_imgs_list[0].resolve().__str__()).shape
     file_coord_tuple_list = []
     agg = 0
     for i, _ in enumerate(row_config):
