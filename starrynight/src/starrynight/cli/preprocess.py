@@ -74,14 +74,14 @@ def gen_preprocess_load_data_cli(
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
 @click.option("-b", "--barcode", required=True)
-@click.option("-n", "--nuclei", required=True)
+@click.option("-n", "--nuclei", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 def gen_preprocess_cppipe_cli(
     loaddata: str,
     out: str,
     workspace: str,
     barcode: str,
-    nuclei: str,
+    nuclei: str | None,
     use_legacy: bool,
 ) -> None:
     """Generate preprocess cppipe file.
