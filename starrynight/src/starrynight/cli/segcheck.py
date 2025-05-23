@@ -73,8 +73,8 @@ def gen_segcheck_load_data_cli(
 @click.option("-l", "--loaddata", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-w", "--workspace", required=True)
-@click.option("-n", "--nuclei", required=True)
-@click.option("-c", "--cell", required=True)
+@click.option("-n", "--nuclei", required=False)
+@click.option("-c", "--cell", required=False)
 @click.option("--sbs", is_flag=True, default=False)
 @click.option("--use_legacy", is_flag=True, default=False)
 def gen_segcheck_cppipe_cli(
