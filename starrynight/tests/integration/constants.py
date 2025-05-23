@@ -1,4 +1,19 @@
 # Workflow step configurations for integration tests
+#
+# Each configuration defines a workflow step with:
+# - name: Unique identifier for the workflow step
+# - command_parts: CLI command components (used to determine which function to call)
+# - output_dir_key: Key to find the output directory in the workspace dict
+# - file_pattern: Pattern to match generated LoadData files
+# - ref_csv_pattern: Pattern to find reference CSV for validation
+# - skip: Whether to skip this test
+# - skip_reason: Explanation if skipped
+# - optional_params: Additional CLI parameters for this step
+#
+# NOTE: optional_params is currently empty for all steps. StarryNight uses
+# smart defaults to resolve paths (e.g., illum files, corrected images).
+# When implementing full pipeline testing, we may need to populate these
+# with explicit paths to ensure correct data flow between workflow steps.
 WORKFLOW_CONFIGS = [
     # CP illum calc LoadData configuration
     {
@@ -9,6 +24,8 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline1.csv",
         "skip": False,
         "skip_reason": None,
+        # Optional parameters for this step
+        "optional_params": {},
     },
     # CP illum apply LoadData configuration
     {
@@ -19,6 +36,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline2.csv",
         "skip": False,
         "skip_reason": None,
+        "optional_params": {},
     },
     # CP segmentation check LoadData configuration
     {
@@ -29,6 +47,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline3.csv",
         "skip": False,
         "skip_reason": None,
+        "optional_params": {},
     },
     # SBS illum calc LoadData configuration
     {
@@ -39,6 +58,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline5.csv",
         "skip": False,  # Now testing with simplified validator
         "skip_reason": None,
+        "optional_params": {},
     },
     # SBS illum apply LoadData configuration
     {
@@ -49,6 +69,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline6.csv",
         "skip": False,
         "skip_reason": None,
+        "optional_params": {},
     },
     # SBS preprocessing LoadData configuration
     {
@@ -59,6 +80,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline7.csv",
         "skip": False,
         "skip_reason": None,
+        "optional_params": {},
     },
     # Analysis LoadData configuration
     {
@@ -69,6 +91,7 @@ WORKFLOW_CONFIGS = [
         "ref_csv_pattern": "**/Plate1_trimmed/load_data_pipeline9.csv",
         "skip": False,
         "skip_reason": None,
+        "optional_params": {},
     },
 ]
 

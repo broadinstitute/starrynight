@@ -88,6 +88,7 @@ def generate_and_validate_loaddata(  # noqa: C901
     file_pattern = config["file_pattern"]
     ref_csv_pattern = config["ref_csv_pattern"]
     command_parts = config["command_parts"]
+    optional_params = config.get("optional_params", {})
 
     # Determine which CLI command to use based on command_parts
     command_function = None
@@ -126,6 +127,14 @@ def generate_and_validate_loaddata(  # noqa: C901
             "--use_legacy",
         ]
     )
+
+    # Add optional parameters if specified
+    # NOTE: Currently relying on StarryNight's default path resolution
+    # for workflow dependencies (e.g., illum paths, corrected images).
+    # When implementing full pipeline testing, we'll need to pass these
+    # paths explicitly to ensure correct data flow between steps.
+    for param_name, param_value in optional_params.items():
+        cli_args.extend([f"--{param_name}", str(param_value)])
 
     # Use CliRunner to invoke the command
     runner = CliRunner()
