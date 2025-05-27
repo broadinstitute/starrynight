@@ -1,6 +1,6 @@
 """Common tools for creating modules."""
 
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod, abstractproperty, abstractstaticmethod
 from inspect import getdoc, signature
 from pathlib import Path
 from typing import Callable, Generic, Self, TypeVar, Unpack
@@ -33,6 +33,7 @@ class StarrynightModule(BaseModel, ABC):
     Attributes
     ----------
     data_config: Module data configuration
+    experiment: Module Experiment
     spec : Module spec
     pipe : Module pipeline
     uow : Module unit of work
@@ -43,9 +44,14 @@ class StarrynightModule(BaseModel, ABC):
     experiment: Experiment | None
     spec: SpecContainer | None
 
+    @abstractstaticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "default"
+
     @property
     @abstractmethod
-    def uid() -> str:
+    def uid(self: Self) -> str:
         """Return unique module id."""
         raise NotImplementedError
 
@@ -84,7 +90,6 @@ class StarrynightModule(BaseModel, ABC):
         data_config: DataConfig,
         experiment: Experiment | None = None,
         spec: SpecContainer | None = None,
-        /,
         **data: Unpack,
     ) -> None:
         """Init Starrynight module."""

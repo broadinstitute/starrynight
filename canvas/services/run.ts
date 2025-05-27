@@ -10,8 +10,8 @@ export type TRun = {
   name: string;
   run_status: TRunStatus;
   spec: {
-    outputs: TSpecPathRecord[];
-    inputs: TSpecPathRecord[];
+    outputs: Record<string, TSpecPathRecord>;
+    inputs: Record<string, TSpecPathRecord>;
   };
 };
 

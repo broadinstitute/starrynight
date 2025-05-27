@@ -2,7 +2,7 @@ import { TSpecPathRecord } from "@/services/misc";
 import React from "react";
 
 export type TUseParsePathRecordToArrayOptions = {
-  records: TSpecPathRecord[];
+  records: Record<string, TSpecPathRecord>;
 };
 
 export type TPathRecord = {
@@ -25,15 +25,15 @@ export function useParsePathRecordToArray(
 
     const out = [] as TUseParsePathRecordToArrayReturn;
 
-    for (const record of records) {
-      const { type, name, path } = record;
+    for (const key in records) {
+      const { type, name, value } = records[key];
 
       out.push({
         id: name,
         name,
         type,
-        value: path,
-        raw: record,
+        value: value,
+        raw: records[key],
       });
     }
 

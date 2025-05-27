@@ -11,4 +11,5 @@ export type TSpecPathRecord = {
   t: boolean;
   tiled: boolean;
   pyramidal: boolean;
+  value: string;
 };

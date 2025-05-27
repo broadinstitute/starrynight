@@ -24,6 +24,11 @@ from starrynight.schema import DataConfig
 class GenInvModule(StarrynightModule):
     """Generate Inventory module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "generate_inventory"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""
@@ -101,11 +106,7 @@ class GenInvModule(StarrynightModule):
                     name=self.uid,
                     input_paths={},
                     output_paths={
-                        "inventory": [
-                            Path(
-                                spec.outputs["project_inventory"].value
-                            ).parent.__str__()
-                        ]
+                        "inventory": [spec.outputs["project_inventory"].value]
                     },
                     config=ContainerConfig(
                         image="ghrc.io/leoank/starrynight:dev",

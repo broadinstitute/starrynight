@@ -8,7 +8,7 @@ from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
-from starrynight.modules.schema import Container as SpecContainer
+from starrynight.modules.schema import SpecContainer
 from starrynight.pipelines.common import apply_module_params
 from starrynight.schema import DataConfig
 
@@ -19,7 +19,9 @@ def create_index_pipeline(
     updated_spec_dict: dict[str, SpecContainer] = {},
 ) -> tuple[list[StarrynightModule], Pipeline]:
     """Generate indexing pipeline."""
-    init_module = partial(apply_module_params, data, experiment, updated_spec_dict)
+    init_module = partial(
+        apply_module_params, data, experiment, updated_spec_dict
+    )
     module_list = [
         gen_inv := init_module(GenInvModule),
         gen_index := init_module(GenIndexModule),

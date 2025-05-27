@@ -5,7 +5,7 @@ from collections.abc import Callable
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from starrynight.experiments.registry import EXPERIMENT_REGISTRY
-from starrynight.modules.common import Container as SpecContainer
+from starrynight.modules.common import SpecContainer
 
 from conductor.constants import ParserType
 from conductor.handlers.job import (
