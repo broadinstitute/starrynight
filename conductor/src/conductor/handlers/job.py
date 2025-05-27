@@ -315,7 +315,7 @@ def gen_orm_job_from_module(module: StarrynightModule) -> Job:
     """Generate ORM job from starrynight module."""
     job = Job(
         name=module.spec.citations.algorithm[0].name,
-        uid=module.uid(),
+        uid=module.module_name(),
         description=module.spec.citations.algorithm[0].description,
         spec=module.spec.model_dump(),
         outputs={},

@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starrynight.modules import MODULE_REGISTRY
 from starrynight.modules.common import DataConfig
-from starrynight.modules.schema import Container
+from starrynight.modules.schema import SpecContainer
 
 from conductor.constants import (
     ExecutorType,
@@ -85,11 +85,9 @@ def submit_job(
             storage_path=job.project.storage_uri,
             workspace_path=job.project.workspace_uri,
         )
-        pipe = (
-            MODULE_REGISTRY[job.uid]
-            .from_config(data=data, spec=Container.model_validate(job.spec))
-            .pipe
-        )
+        pipe = MODULE_REGISTRY[job.uid](
+            data_config=data, spec=SpecContainer.model_validate(job.spec)
+        ).pipe
 
         # Create a backend for execution
         executor = create_backend_for_pipe(

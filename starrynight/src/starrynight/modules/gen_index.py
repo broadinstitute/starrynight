@@ -24,6 +24,11 @@ from starrynight.schema import DataConfig
 class GenIndexModule(StarrynightModule):
     """Generate Index module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "generate_index"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

@@ -64,7 +64,7 @@ from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
 from starrynight.modules.sbs_preprocess.preprocess_load_data import (
     SBSPreprocessGenLoadDataModule,
 )
-from starrynight.modules.schema import Container
+from starrynight.modules.schema import SpecContainer
 from starrynight.pipelines.common import apply_module_params
 from starrynight.schema import DataConfig
 
@@ -72,12 +72,14 @@ from starrynight.schema import DataConfig
 def create_pcp_generic_pipeline(
     data: DataConfig,
     experiment: Experiment | None = None,
-    updated_spec_dict: dict[str, Container] = {},
+    updated_spec_dict: dict[str, SpecContainer] = {},
 ) -> tuple[list[StarrynightModule], Pipeline]:
     # Write out the experiment config as a json file
     experiment_dir = data.workspace_path.joinpath("experiment")
     experiment_dir.mkdir(parents=True, exist_ok=True)
-    experiment_dir.write_text(experiment.model_dump_json())
+    experiment_dir.joinpath("eperiment.json").write_text(
+        experiment.model_dump_json()
+    )
 
     # Initialize modules
     init_module = partial(

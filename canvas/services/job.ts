@@ -19,8 +19,8 @@ export type TJob = {
   description: string;
   type: string;
   spec: {
-    outputs: TSpecPathRecord[];
-    inputs: TSpecPathRecord[];
+    outputs: Record<string, TSpecPathRecord>;
+    inputs: Record<string, TSpecPathRecord>;
   };
 };
 

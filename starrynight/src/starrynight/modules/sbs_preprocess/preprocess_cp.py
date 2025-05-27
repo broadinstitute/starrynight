@@ -146,7 +146,7 @@ class SBSPreprocessInvokeCPModule(StarrynightModule):
         ]
 
         if spec.inputs["plugin_path"]:
-            cmd += ["--plugin_dir", spec.inputs["plugin_path"]]
+            cmd += ["--plugin_dir", spec.inputs["plugin_path"].value]
 
         gen_load_data_pipe = Seq(
             [
