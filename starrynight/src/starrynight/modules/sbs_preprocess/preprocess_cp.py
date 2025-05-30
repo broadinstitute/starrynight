@@ -33,6 +33,11 @@ from starrynight.schema import DataConfig
 class SBSPreprocessInvokeCPModule(StarrynightModule):
     """SBS Preprocess invoke cellprofiler module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_preprocess_invoke_cp"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""
@@ -145,7 +150,7 @@ class SBSPreprocessInvokeCPModule(StarrynightModule):
             "--sbs",
         ]
 
-        if spec.inputs["plugin_path"]:
+        if spec.inputs["plugin_path"].value:
             cmd += ["--plugin_dir", spec.inputs["plugin_path"].value]
 
         gen_load_data_pipe = Seq(
@@ -158,9 +163,7 @@ class SBSPreprocessInvokeCPModule(StarrynightModule):
                                 spec.inputs["cppipe_path"].value
                             ).parent.__str__()
                         ],
-                        "loaddata_path": [
-                            spec.inputs["loaddata_path"].value.__str__()
-                        ],
+                        "loaddata_path": [spec.inputs["loaddata_path"].value],
                         "sbs_illum_apply_path": [
                             self.data_config.workspace_path.joinpath(
                                 SBS_ILLUM_APPLY_OUT_PATH_SUFFIX

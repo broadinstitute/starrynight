@@ -84,7 +84,8 @@ export function useProcessFileOrURL(options: UseProcessFileOrURLOptions) {
 
   const _processURL = React.useCallback(
     (_url: string) => {
-      const fileType = getFileType(_url);
+      // FIXME: using template literal to coerce boolean value to string
+      const fileType = getFileType(`${_url}`);
 
       if (fileType === "notebook") {
         const filename = getNotebookFilename(_url);
@@ -92,7 +93,7 @@ export function useProcessFileOrURL(options: UseProcessFileOrURLOptions) {
       }
 
       if (fileType === "s3-directory" || fileType === "not-supported") {
-        return onSuccess(_url, fileType, getFileName(_url));
+        return onSuccess(`${_url}`, fileType, getFileName(`${_url}`));
       }
 
       // We need to fetch the file.

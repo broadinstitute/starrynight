@@ -106,6 +106,11 @@ class SBSPreSegcheckGenCPPipeModule(StarrynightModule):
     """SBS pre segmentation check generate cppipe module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_pre_segcheck_gen_cppipe"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_pre_segcheck_gen_cppipe"

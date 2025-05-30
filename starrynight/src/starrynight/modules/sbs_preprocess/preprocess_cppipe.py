@@ -30,6 +30,11 @@ from starrynight.schema import DataConfig
 class SBSPreprocessGenCPPipeModule(StarrynightModule):
     """SBS preprocess cppipe module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_preprocess_gen_cppipe"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

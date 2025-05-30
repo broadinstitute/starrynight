@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Callable, Generic, Self, TypeVar, Unpack
 
 import requests
+from click.decorators import _param_memo
 from linkml.generators import PydanticGenerator
 from numpydoc.docscrape import NumpyDocString
 from pipecraft.node import Container as PipeContainer
@@ -47,7 +48,7 @@ class StarrynightModule(BaseModel, ABC):
     @abstractstaticmethod
     def module_name() -> str:
         """Return module name."""
-        return "default"
+        raise NotImplementedError
 
     @property
     @abstractmethod
@@ -129,13 +130,16 @@ class StarrynightDecoratedFunction(Generic[_P, _R]):
     def __init__(
         self,
         func: Callable[_P, _R],
-        module_uid: str,
+        gen_cmd_callable: Callable | None,
+        gen_spec_callable: Callable | None,
+        gen_ui_callable: Callable | None,
+        module_name: str,
         cli_suffix: list[str],
         container_img: str,
     ) -> None:
         """Init module."""
         self._func = func
-        self._module_uid = module_uid
+        self._module_name = module_name
         self._sig = signature(self._func)
         self._params = self._sig.parameters
         self._return_ano = self._sig.return_annotation
@@ -145,7 +149,7 @@ class StarrynightDecoratedFunction(Generic[_P, _R]):
         self.module = self._gen_module()
 
     def __call__(self, *args, **kwargs) -> _R:
-        pass
+        return self._func(*args, **kwargs)
 
     def _gen_cli(self) -> Callable:
         pass
@@ -158,12 +162,12 @@ class StarrynightDecoratedFunction(Generic[_P, _R]):
                 PipeContainer(
                     name="",
                     input_paths={
-                        input.name: [Path(input.path).parent.__str__()]
-                        for input in spec.inputs
+                        inp_name: [Path(input.value).parent.__str__()]
+                        for inp_name, input in spec.inputs.items()
                     },
                     output_paths={
-                        output.name: [Path(output.path).parent.__str__()]
-                        for output in spec.outputs
+                        out_name: [Path(output.value).parent.__str__()]
+                        for out_name, output in spec.outputs.items()
                     },
                     config=PipeContainerConfig(
                         image=self._container_img,
@@ -177,46 +181,63 @@ class StarrynightDecoratedFunction(Generic[_P, _R]):
     def _gen_spec_from_anno(self) -> SpecContainer:
         parsed_doc = NumpyDocString(getdoc(self._func))
         return SpecContainer(
-            inputs=[
-                TypeInput(
+            inputs={
+                param.name: TypeInput(
                     name=param.name,
                     type=TYPE_MAP[param.type],
                     description=param.desc,
                     optional=False,
-                    path="path/to/the/somewhere",
+                    value="path/to/the/somewhere",
                 )
                 for param in parsed_doc["Parameters"]
-            ],
-            outputs=[
-                TypeOutput(
+            },
+            outputs={
+                param.desc[0]: TypeOutput(
                     name="out",
                     type=TYPE_MAP[param.type],
-                    description=param.desc,
+                    description="\n".join(param.desc),
                     optional=False,
-                    path="path/to/the/somewhere",
+                    value="path/to/the/somewhere",
                 )
                 for param in parsed_doc["Returns"]
-            ],
+            },
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name=parsed_doc["References"][0],
-                        description=parsed_doc["References"][2],
+                        name="",
+                        description="",
                     )
                 ]
+            ),
+            parameters=[],
+            exec_function=ExecFunction(
+                name="",
+                script="",
+                module="",
+                cli_command="",
             ),
         )
 
     def _gen_module(self) -> StarrynightModule:
-        def uid() -> str:
-            return self._module_uid
-
         spec = self._gen_spec_from_anno()
         pipe = self._gen_pipe_from_anno(spec)
+        func_name_list = self._func.__name__.split("_")
+        print(func_name_list)
+        func_name_list = [part.capitalize() for part in func_name_list]
+        print(func_name_list)
         uow = []
-        mod = StarrynightModule(spec, pipe, uow)
-        mod.uid = uid
-        return mod
+        mod_type = type(
+            f"{''.join(func_name_list)}Module",
+            (StarrynightModule,),
+            {
+                "module_name": lambda: "_".join(func_name_list),
+                "uid": lambda self: "_".join(func_name_list),
+                "_spec": lambda self: spec,
+                "_create_pipe": lambda self: pipe,
+                "_create_uow": lambda self: [],
+            },
+        )
+        return mod_type
 
     def show(self) -> None:
         raise NotImplementedError

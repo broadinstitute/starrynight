@@ -30,6 +30,11 @@ from starrynight.schema import DataConfig
 class SBSCalcIllumInvokeCPModule(StarrynightModule):
     """SBSCalculate illumination invoke cellprofiler module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_calc_illum_invoke_cp"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

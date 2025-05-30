@@ -109,6 +109,11 @@ class CPPreSegcheckGenCPPipeModule(StarrynightModule):
     """CP pre segmentation check generate cppipe module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_pre_segcheck_gen_cppipe"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "cp_pre_segcheck_gen_cppipe"

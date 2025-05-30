@@ -6,10 +6,8 @@ from pathlib import Path
 from cloudpathlib import AnyPath
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from starrynight.experiments.common import DummyExperiment
 from starrynight.experiments.registry import EXPERIMENT_REGISTRY
 from starrynight.modules.common import StarrynightModule
-from starrynight.modules.registry import MODULE_REGISTRY
 from starrynight.pipelines.registry import PIPELINE_REGISTRY
 from starrynight.schema import DataConfig
 
@@ -169,107 +167,6 @@ def gen_orm_job(job_type: JobType, job: Job | None = None) -> Job:
         inputs=job_input_dict[job_type],
     )
     return job
-
-
-# def create_jobs_for_step(
-#     step_type: StepType, step: Step | None = None, project: Project | None = None
-# ) -> list[Job]:
-#     """Create predefined jobs for the step.
-#
-#     Parameters
-#     ----------
-#     step_type : StepType
-#         Step type instance.
-#     step : Step | None
-#         Step instance.
-#     project : Project | None
-#         Project instance.
-#
-#     Returns
-#     -------
-#     list[Job]
-#         List of job instances.
-#
-#     """
-#     orm_jobs = []
-#     if step_type is StepType.GEN_INDEX:
-#         assert project is not None
-#         # Generate Inventory job
-#         gen_inv_job = gen_orm_job(JobType.GEN_INVENTORY)
-#         gen_inv_job.inputs["dataset_path"] = {
-#             "type": "path",
-#             "value": project.dataset_uri,
-#         }
-#         inventory_path = (
-#             AnyPath(project.workspace_uri)
-#             .joinpath("gen_index/inventory.parquet")
-#             .__str__()
-#         )
-#         gen_inv_job.outputs["inventory"]["uri"] = inventory_path
-#         orm_jobs.append(gen_inv_job)
-#
-#         # Generate Index job
-#         gen_index_job = gen_orm_job(JobType.GEN_INDEX)
-#         gen_index_job.inputs["inventory_path"] = {
-#             "type": "path",
-#             "value": inventory_path,
-#         }
-#         gen_index_job.outputs["index"]["uri"] = (
-#             AnyPath(project.workspace_uri).joinpath("gen_index/index.parquet").__str__()
-#         )
-#         orm_jobs.append(gen_index_job)
-#     if step_type is StepType.CP_ILLUM_CALC:
-#         assert project is not None
-#         # Generate load data job
-#         gen_loaddata_job = gen_orm_job(JobType.GEN_LOADDATA)
-#         gen_loaddata_job.inputs["index"] = {
-#             "type": "path",
-#             "value": AnyPath(project.workspace_uri)
-#             .joinpath("index/index.parquet")
-#             .__str__(),
-#         }
-#         loaddata_path = (
-#             AnyPath(project.workspace_uri).joinpath("illum/loaddata.csv").__str__()
-#         )
-#         gen_loaddata_job.outputs["loaddata"]["uri"] = loaddata_path
-#         orm_jobs.append(gen_loaddata_job)
-#
-#         # Generate cppipe job
-#         gen_cppipe_job = gen_orm_job(JobType.GEN_CP_PIPE)
-#         gen_cppipe_job.inputs["load_data_path"] = {
-#             "type": "path",
-#             "value": AnyPath(project.workspace_uri)
-#             .joinpath("illum/loaddata.csv")
-#             .__str__(),
-#         }
-#         cppipe_path = (
-#             AnyPath(project.workspace_uri).joinpath("illum/illum_calc.cppipe").__str__()
-#         )
-#         gen_cppipe_job.outputs["cppipe"]["uri"] = cppipe_path
-#         orm_jobs.append(gen_cppipe_job)
-#     elif step_type is StepType.CP_ILLUM_APPLY:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     elif step_type is StepType.CP_SEG_CHECK:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     elif step_type is StepType.CP_ST_CROP:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_FIJI))
-#     elif step_type is StepType.BC_ILLUM_CALC:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     elif step_type is StepType.BC_ILLUM_APPLY_ALIGN:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     elif step_type is StepType.BC_PRE:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     elif step_type is StepType.BC_ST_CROP:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_FIJI))
-#     elif step_type is StepType.ANALYSIS:
-#         orm_jobs.append(gen_orm_job(JobType.GEN_LOADDATA))
-#         orm_jobs.append(gen_orm_job(JobType.GEN_CP_PIPE))
-#     return orm_jobs
 
 
 def fetch_all_job_types() -> list[str]:

@@ -29,6 +29,11 @@ from starrynight.schema import DataConfig
 class CPSegcheckGenCPPipeModule(StarrynightModule):
     """CP segmentation check generate cppipe module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_segcheck_gen_cppipe"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

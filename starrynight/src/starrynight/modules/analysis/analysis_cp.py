@@ -36,6 +36,11 @@ from starrynight.schema import DataConfig
 class AnalysisInvokeCPModule(StarrynightModule):
     """Analysis invoke cellprofiler module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "analysis_invoke_cp"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""
@@ -147,8 +152,8 @@ class AnalysisInvokeCPModule(StarrynightModule):
             spec.outputs["analysis_out_path"].value,
         ]
 
-        if spec.inputs["plugin_path"]:
-            cmd += ["--plugin_dir", spec.inputs["plugin_path"]]
+        if spec.inputs["plugin_path"].value:
+            cmd += ["--plugin_dir", spec.inputs["plugin_path"].value]
 
         gen_load_data_pipe = Seq(
             [

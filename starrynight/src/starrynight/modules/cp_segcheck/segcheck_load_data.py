@@ -30,6 +30,11 @@ from starrynight.schema import DataConfig
 class CPSegcheckGenLoadDataModule(StarrynightModule):
     """CP segmentation generate loaddata module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_segchek_gen_loaddata"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

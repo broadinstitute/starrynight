@@ -104,6 +104,11 @@ class SBSPreSegcheckGenLoadDataModule(StarrynightModule):
     """SBS pre segmentation generate loaddata module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_pre_segchek_gen_loaddata"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_pre_segchek_gen_loaddata"

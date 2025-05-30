@@ -110,6 +110,11 @@ class SBSAlignGenLoadDataModule(StarrynightModule):
     """SBS align generate loaddata module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_align_gen_loaddata"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_align_gen_loaddata"

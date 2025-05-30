@@ -32,6 +32,11 @@ from starrynight.schema import DataConfig
 class SBSPreprocessGenLoadDataModule(StarrynightModule):
     """SBS Preprocess generate loaddata module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_preprocess_gen_loaddata"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""
@@ -75,7 +80,7 @@ class SBSPreprocessGenLoadDataModule(StarrynightModule):
                     description="Path to aligned images.",
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
-                        SBS_ALIGN_OUT_PATH_SUFFIX
+                        SBS_ILLUM_APPLY_OUT_PATH_SUFFIX
                     )
                     .resolve()
                     .__str__(),

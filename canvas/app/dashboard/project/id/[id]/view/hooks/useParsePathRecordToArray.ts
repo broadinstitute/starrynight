@@ -32,7 +32,8 @@ export function useParsePathRecordToArray(
         id: name,
         name,
         type,
-        value: value,
+        //FIXME: using string literal to coerce boolean to string
+        value: `${value}`,
         raw: records[key],
       });
     }
