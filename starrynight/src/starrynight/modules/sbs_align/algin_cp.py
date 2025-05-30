@@ -108,6 +108,11 @@ class SBSAlignInvokeCPModule(StarrynightModule):
     """SBS align invoke cellprofiler module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_align_invoke_cp"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_align_invoke_cp"

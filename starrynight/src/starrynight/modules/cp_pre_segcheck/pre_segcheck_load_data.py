@@ -108,6 +108,11 @@ class CPPreSegcheckGenLoadDataModule(StarrynightModule):
     """CP pre segmentation generate loaddata module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_pre_segchek_gen_loaddata"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "cp_pre_segchek_gen_loaddata"

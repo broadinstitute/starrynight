@@ -27,6 +27,11 @@ from starrynight.schema import DataConfig
 class CPCalcIllumGenLoadDataModule(StarrynightModule):
     """CPCalculate illumination generate loaddata module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_calc_illum_gen_loaddata"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

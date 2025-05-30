@@ -30,6 +30,11 @@ from starrynight.schema import DataConfig
 class AnalysisGenCPPipeModule(StarrynightModule):
     """Analysis generate cppipe module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "analysis_gen_cppipe"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

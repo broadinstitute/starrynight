@@ -27,6 +27,11 @@ from starrynight.schema import DataConfig
 class SBSCalcIllumGenLoadDataModule(StarrynightModule):
     """SBS Calculate illumination generate loaddata module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_calc_illum_gen_loaddata"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

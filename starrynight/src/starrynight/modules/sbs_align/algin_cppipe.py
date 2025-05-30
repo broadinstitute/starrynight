@@ -107,6 +107,11 @@ class SBSAlignGenCPPipeModule(StarrynightModule):
     """SBS align generate cppipe module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_align_gen_cppipe"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_align_gen_cppipe"

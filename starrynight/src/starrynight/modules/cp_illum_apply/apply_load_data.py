@@ -1,4 +1,4 @@
-"""CPApplyulate illumination correction calculate gen loaddata module."""
+"""CP Apply illumination correction calculate gen loaddata module."""
 
 from pathlib import Path
 from typing import Self
@@ -28,7 +28,12 @@ from starrynight.schema import DataConfig
 
 
 class CPApplyIllumGenLoadDataModule(StarrynightModule):
-    """CPApplyulate illumination generate loaddata module."""
+    """CP Apply illumination generate loaddata module."""
+
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_apply_illum_gen_loaddata"
 
     @property
     def uid(self) -> str:

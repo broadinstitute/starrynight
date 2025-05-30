@@ -77,7 +77,7 @@ def create_pcp_generic_pipeline(
     # Write out the experiment config as a json file
     experiment_dir = data.workspace_path.joinpath("experiment")
     experiment_dir.mkdir(parents=True, exist_ok=True)
-    experiment_dir.joinpath("eperiment.json").write_text(
+    experiment_dir.joinpath("experiment.json").write_text(
         experiment.model_dump_json()
     )
 
@@ -111,6 +111,13 @@ def create_pcp_generic_pipeline(
         analysis_cpipe := init_module(AnalysisGenCPPipeModule),
         analysis_cp := init_module(AnalysisInvokeCPModule),
     ]
+
+    # Set use legacy flag if required
+    if experiment.use_legacy:
+        for module in module_list:
+            if "use_legacy" in module.spec.inputs.keys():
+                module.spec.inputs["use_legacy"].value = True
+
     return module_list, Seq(
         [
             Parallel(

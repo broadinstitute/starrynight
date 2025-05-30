@@ -14,6 +14,7 @@ import {
 import { FeatureNotImplementedModal } from "@/components/custom/feature-not-implemented-modal";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProjectStore } from "@/stores/project";
+import { TSpecPathRecord } from "@/services/misc";
 
 export type TProjectJobInputProps = {
   job: TJob;
@@ -99,11 +100,15 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
       onRequestView();
     }
 
-    const specInputs = [...job.spec.inputs].map((input) => {
+    const specInputs: Record<string, TSpecPathRecord> = {};
+
+    Object.entries(job.spec.inputs).forEach(([key, input]) => {
       if (input.name === inputName) {
-        return { ...input, path: inputPath };
+        specInputs[key] = {...input, value: inputPath };
       }
-      return input;
+      else{
+        specInputs[key] = input;
+      }
     });
 
     updateJob({
@@ -111,7 +116,10 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
         ...job,
         spec: {
           ...job.spec,
-          inputs: [...specInputs],
+          inputs: {
+            ...job.spec.inputs,
+            ...specInputs,
+          },
         },
       },
     });

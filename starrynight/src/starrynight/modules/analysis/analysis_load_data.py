@@ -33,6 +33,11 @@ from starrynight.schema import DataConfig
 class AnalysisGenLoadDataModule(StarrynightModule):
     """Analysis generate loaddata module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "analysis_gen_loaddata"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

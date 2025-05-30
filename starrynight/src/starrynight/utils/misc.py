@@ -35,10 +35,19 @@ def resolve_path_loaddata(
         Path of the file in index
 
     """
-    try:
-        filepath.resolve().relative_to(path_mask.resolve())
-        return filepath.resolve().__str__()
-    except ValueError:
+    # print(f"Path mask: {path_mask}")
+    # print(f"File path: {filepath}")
+    # try:
+    #     filepath.resolve().relative_to(path_mask.resolve())
+    #     print(f"Relative path: {filepath.absolute().__str__()}")
+    #     return filepath.resolve().__str__()
+    # except ValueError:
+    #     print(
+    #         f"Absolute path:{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
+    #     )
+    if filepath.is_absolute():
+        return filepath
+    else:
         return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
 
 

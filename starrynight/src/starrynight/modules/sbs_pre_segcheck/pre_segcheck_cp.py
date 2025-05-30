@@ -108,6 +108,11 @@ class SBSPreSegcheckInvokeCPModule(StarrynightModule):
     """SBS pre segcheck invoke cellprofiler module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "sbs_pre_segcheck_invoke_cp"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "sbs_pre_segcheck_invoke_cp"

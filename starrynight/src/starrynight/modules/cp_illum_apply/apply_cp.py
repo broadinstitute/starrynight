@@ -33,6 +33,11 @@ from starrynight.schema import DataConfig
 class CPApplyIllumInvokeCPModule(StarrynightModule):
     """CPApplyulate illumination invoke cellprofiler module."""
 
+    @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_apply_illum_invoke_cp"
+
     @property
     def uid(self) -> str:
         """Return module unique id."""

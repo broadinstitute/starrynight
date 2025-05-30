@@ -34,7 +34,7 @@ class GenIndexModule(StarrynightModule):
         """Return module unique id."""
         return "generate_index"
 
-    def _spec(self) -> str:
+    def _spec(self) -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
             inputs={

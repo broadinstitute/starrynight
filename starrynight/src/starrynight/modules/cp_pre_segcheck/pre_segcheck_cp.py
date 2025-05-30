@@ -107,6 +107,11 @@ class CPPreSegcheckInvokeCPModule(StarrynightModule):
     """CP pre segcheck illumination invoke cellprofiler module."""
 
     @staticmethod
+    def module_name() -> str:
+        """Return module name."""
+        return "cp_pre_segcheck_invoke_cp"
+
+    @staticmethod
     def uid() -> str:
         """Return module unique id."""
         return "cp_pre_segcheck_invoke_cp"

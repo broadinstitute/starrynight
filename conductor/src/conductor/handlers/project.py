@@ -69,7 +69,11 @@ def configure_project(db_session: Callable[[], Session], project_id: int) -> PyP
             .where(Job.uid == "generate_index")
         )
         orm_run = session.scalar(select(Run).where(Run.job_id == orm_job.id))
-        index_path = SpecContainer.model_validate(orm_run.spec).outputs[0].path
+        index_path = (
+            SpecContainer.model_validate(orm_run.spec)
+            .outputs["project_index_path"]
+            .value
+        )
         orm_jobs = create_pipeline_jobs_for_project(orm_project, index_path)
         orm_project.jobs = orm_project.jobs + orm_jobs
         orm_project.is_configured = True
