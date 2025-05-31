@@ -2,7 +2,7 @@
 
 ## Navigating the Architecture Documentation
 
-This document provides a high-level structural map of the StarryNight system and serves as your main guide to the architecture documentation. Below is a recommended reading path based on your role and interests:
+This document provides a high-level structural map of the StarryNight system and serves as your main guide to the architecture documentation. Below is a recommended reading path based on your role and interests; see the [Layer Overview](#layer-overview) section below for an explanation of each layer:
 
 | If you are a...              | Start here                                                           | Then explore                                                      |
 | ---------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
@@ -12,12 +12,6 @@ This document provides a high-level structural map of the StarryNight system and
 | Pipeline developer           | [Pipeline Layer](04_pipeline_layer.md)                               | [Execution Layer](05_execution_layer.md)                          |
 | Configuration developer      | [Configuration Layer](06_configuration_layer.md)                     | Relevant layer docs                                               |
 | Biologist/Non-technical user | [Architecture for Biologists](07_architecture_for_biologists.md)     | [Practical Integration](08_practical_integration.md)              |
-
-For different perspectives on the architecture:
-
-- **Biological analogies**: See [Architecture for Biologists](07_architecture_for_biologists.md)
-- **Concrete implementation examples**: See [Practical Integration Walkthrough](08_practical_integration.md)
-- **Detailed layer explanations**: Follow links in the [Layer Overview](#layer-overview) section below
 
 ## Architecture at a Glance
 
