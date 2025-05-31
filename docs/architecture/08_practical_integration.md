@@ -33,10 +33,10 @@ For a detailed mapping between the [architecture overview's two-phase sequence d
 The PCP Generic pipeline processes optical pooled screening data through a series of steps:
 
 1. Generate inventory and index
-2. Calculate illumination correction (CP)
-3. Apply illumination and align (CP)
+2. Calculate illumination correction (CP-Cell Painting images)
+3. Apply illumination and segment (CP)
 4. Segmentation check (CP)
-5. Calculate illumination correction (SBS)
+5. Calculate illumination correction (SBS-Sequencing by Synthesis images)
 6. Apply illumination and align (SBS)
 7. Preprocess (SBS)
 8. Analysis
