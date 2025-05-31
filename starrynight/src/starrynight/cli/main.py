@@ -12,6 +12,7 @@ from starrynight.cli.inv import inventory
 from starrynight.cli.preprocess import preprocess
 from starrynight.cli.presegcheck import presegcheck
 from starrynight.cli.segcheck import segcheck
+from starrynight.cli.stitchcrop import stitchcrop
 
 
 @click.group
@@ -30,3 +31,4 @@ main.add_command(align)
 main.add_command(preprocess)
 main.add_command(analysis)
 main.add_command(exp)
+main.add_command(stitchcrop)
