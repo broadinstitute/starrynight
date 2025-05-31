@@ -6,7 +6,7 @@ This guide walks through a complete example of processing microscopy images usin
 
 Before starting this workflow, you need:
 
-- Completed the workflow from [Getting Started](getting-started.md), including:
+- To complete the workflow from [Getting Started](getting-started.md), including:
     - Setting up your environment
     - Downloading sample data
     - Creating experiment configuration
@@ -20,7 +20,7 @@ Before starting this workflow, you need:
 
 ## Workflow Overview
 
-This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks (Cell Painting and Barcoding) followed by a combined analysis step:
+This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks - Cell Painting (CP) and Barcoding (Sequencing by Synthesis, SBS) - followed by a combined analysis step:
 
 ```mermaid
 flowchart TD
@@ -52,7 +52,7 @@ The workflow includes these key steps:
 
 - **Setup and Preparation**: Generate inventory/index and create experiment configuration (completed in Getting Started)
 - **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
-- **CP Illumination Application**: Apply corrections to CP images and segment cells
+- **CP Illumination Application**: Apply illumination corrections to CP images and segment cells
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
 - **SBS Illumination Application**: Apply illumination corrections and align DAPI images across cycles
@@ -70,7 +70,7 @@ All CellProfiler-based modules in this workflow follow a consistent three-step p
 
 ## Starting Point
 
-This guide assumes you have completed the [Getting Started](getting-started.md) guide through the "Running Illumination Correction Calculation". Before continuing, make sure you have the following environment variables set:
+This guide assumes you have completed the [Getting Started](getting-started.md) guide through the step "Running Illumination Correction Calculation". Before continuing, make sure you have the following environment variables set:
 
 ```sh
 # Set environment variables for convenience
@@ -294,7 +294,7 @@ starrynight cp \
 Throughout the pipeline, you'll use these common parameters:
 
 - `--exp_config`: Path to the experiment configuration file
-- `--use_legacy`: Use pre-fabricated pipeline templates (recommended for stability)
+- `--use_legacy`: Use pre-fabricated CellProfiler pipelines (recommended for stability)
 - `-i, --index`: Path to the index.parquet file
 - `-o, --output`: Output directory for generated files
 - `-w, --workspace`: Path to the workspace directory
@@ -302,7 +302,7 @@ Throughout the pipeline, you'll use these common parameters:
 - `-p, --pipeline`: Path to CellProfiler pipeline file or directory
 - `-c, --corr_images`: Path to illumination-corrected images
 - `-b, --barcode`: Path to barcode CSV file for sequencing data
-- `--sbs`: Flag to indicate processing of Sequencing by Synthesis (barcoding) images
+- `--sbs`: Flag to process SBS images only
 
 ## Next Steps
 
