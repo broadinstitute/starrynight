@@ -40,7 +40,7 @@ MyDataset/Source1/Batch1/images/Plate1/20X_CP_Plate1/WellA01_PointA01_0_ChannelD
 
 The parser handles variations like:
 
-- SBS folders vs CP folders
+- Sequencing-by-synthesis (SBS) folders vs Cell Painting (CP) folders
 - Aligned images vs raw images
 - Metadata files vs image files
 - Illumination files
