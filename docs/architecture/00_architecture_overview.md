@@ -2,7 +2,7 @@
 
 ## Navigating the Architecture Documentation
 
-This document provides a high-level structural map of the StarryNight system and serves as your main guide to the architecture documentation. Below is a recommended reading path based on your role and interests; see the [Layer Overview](#layer-overview) section below for an explanation of each layer:
+This document provides a high-level structural map of the StarryNight system and serves as your main guide to the architecture documentation. Below is a recommended reading path based on your role and interests; the layer terminology is explained and defined next:
 
 | If you are a...              | Start here                                                           | Then explore                                                      |
 | ---------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
