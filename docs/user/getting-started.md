@@ -166,9 +166,9 @@ starrynight inventory gen \
     -o ${WKDIR}/inventory
 ```
 
-The inventory is a comprehensive catalog of all files in your dataset that contains:
+The inventory is a comprehensive catalog of all files in your dataset that:
 
-- Basic file information: path, name, extension
+- Contains basic file information: path, name, extension
 - Created by scanning the data directory recursively
 - Stored as a Parquet file for efficient querying
 
@@ -215,7 +215,7 @@ The result will be an `index.parquet` file containing structured metadata for ea
     - Hidden files like `.DS_Store` (starting with a dot) are not valid image files
     - The parser is currently developed only to handle image files
 
-    The parser is intentionally strict and only accepts properly formatted Cell Painting and SBS image paths. These non-image files are safely skipped and won't affect your workflow.
+    The parser is intentionally strict and only accepts properly formatted Cell Painting (CP) and SBS (Sequencing by Synthesis) image paths. These non-image files are safely skipped and won't affect your workflow.
 
 ## Create Experiment File
 
@@ -358,7 +358,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 ## Next Steps
 
 - Continue to the [Complete Workflow Example](example-pipeline-cli.md)
-- Check the architecture docs to understand the [system structure](../architecture/00_architecture_overview.md)
+- Check the [Architecture Overview](../architecture/00_architecture_overview.md) to understand the system structure
 - For the Python/Module approach used in production, see [Practical Integration](../architecture/08_practical_integration.md)
 
 !!! info "For Document Contributors"
