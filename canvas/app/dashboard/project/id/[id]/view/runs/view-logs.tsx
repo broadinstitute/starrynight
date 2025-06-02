@@ -1,7 +1,6 @@
 import { ActionButton } from "@/components/custom/action-button";
 import { LogViewer } from "@/components/custom/log-viewer";
 import { Modal } from "@/components/custom/modal";
-import { WS_BASE_URL } from "@/services/api";
 import { TRun } from "@/services/run";
 import { ScrollText } from "lucide-react";
 import React from "react";
@@ -27,7 +26,7 @@ export function RunViewLog(props: TRunViewLogProps) {
         className: "border-t-transparent",
       }}
     >
-      <LogViewer endpoint={`${WS_BASE_URL}/ws/run/log/${run.id}`} />
+      <LogViewer endpoint="ws://100.103.131.84:8000/ws/run/log/1" />
     </Modal>
   );
 }
