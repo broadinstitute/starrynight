@@ -10,7 +10,7 @@ import {
 import { GET_RUNS_QUERY_KEY } from "@/services/run";
 import { useProjectStore } from "@/stores/project";
 import { useQueryClient } from "@tanstack/react-query";
-import { Settings } from "lucide-react";
+import { PlayIcon } from "lucide-react";
 
 export function ProjectConfigureProject() {
   const queryClient = useQueryClient();
@@ -103,7 +103,7 @@ export function ProjectConfigureProject() {
       message="Configure this project"
       size="default"
       variant="default"
-      icon={<Settings />}
+      icon={<PlayIcon />}
       isLoading={isConfiguringProject}
       disabled={!canConfigureProject || isConfiguringProject}
       onClick={handleOnConfigureProject}
