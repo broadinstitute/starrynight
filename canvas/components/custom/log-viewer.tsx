@@ -36,7 +36,16 @@ export function LogViewer(props: TLogViewerProps) {
                 websocketOptions={{
                   reconnect: true,
                   reconnectWait: 5,
-                  formatMessage: (e) => JSON.parse(e).message
+                  formatMessage: (e) => {
+                    console.log("Message", e);
+                    return JSON.parse(e).message;
+                  },
+                  onOpen(e, socket) {
+                    console.log("Connection open");
+                  },
+                  onError() {
+                    console.log("Failed to connect to the endpoint");
+                  },
                 }}
                 onScroll={onScroll}
                 follow={follow}
