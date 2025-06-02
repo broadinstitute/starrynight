@@ -84,6 +84,12 @@ from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
 from starrynight.modules.sbs_preprocess.preprocess_load_data import (
     SBSPreprocessGenLoadDataModule,
 )
+from starrynight.modules.stitchcrop.stitchcrop_fiji import (
+    StitchcropInvokeFijiModule,
+)
+from starrynight.modules.stitchcrop.stitchcrop_pipeline import (
+    StitchcropGenPipelineModule,
+)
 
 MODULE_REGISTRY: dict[str, StarrynightModule] = {
     # Generate inventory and index for the project
@@ -125,6 +131,9 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
     SBSPreprocessGenLoadDataModule.module_name(): SBSPreprocessGenLoadDataModule,
     SBSPreprocessGenCPPipeModule.module_name(): SBSPreprocessGenCPPipeModule,
     SBSPreprocessInvokeCPModule.module_name(): SBSPreprocessInvokeCPModule,
+    # Stitchcrop
+    StitchcropInvokeFijiModule.module_name(): StitchcropInvokeFijiModule,
+    StitchcropGenPipelineModule.module_name(): StitchcropGenPipelineModule,
     # Analysis
     AnalysisGenLoadDataModule.module_name(): AnalysisGenLoadDataModule,
     AnalysisGenCPPipeModule.module_name(): AnalysisGenCPPipeModule,
