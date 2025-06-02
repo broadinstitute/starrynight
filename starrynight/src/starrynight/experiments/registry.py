@@ -6,4 +6,5 @@ from starrynight.experiments.pcp_generic import PCPGeneric
 
 EXPERIMENT_REGISTRY: dict[str, Experiment] = {
     "Pooled CellPainting [Generic]": PCPGeneric,
+    "Pooled CellPainting [Stitchcrop]": PCPGeneric,
 }

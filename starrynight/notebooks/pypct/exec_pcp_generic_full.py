@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.0
+#       jupytext_version: 1.17.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -29,6 +29,7 @@ from starrynight.modules.analysis.analysis_cppipe import AnalysisGenCPPipeModule
 # inventory and index
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.gen_inv import GenInvModule
+from starrynight.pipelines.index import create_index_pipeline
 from starrynight.pipelines.pcp_generic import create_pcp_generic_pipeline
 from starrynight.schema import DataConfig
 
@@ -62,27 +63,18 @@ backend_config = SnakeMakeConfig(
 
 
 # %% [markdown]
-# ## Configure the generate inventory module
-# This module is special and doesn't require an experiment for configuration
+# ## Configure and execute the indexing pipeline
 
 # %%
-gen_inv_mod = GenInvModule.from_config(data_config)
+# Create index pipeline
+index_modules, index_pipeline = create_index_pipeline(data_config)
+
+# %%
 exec_backend = SnakeMakeBackend(
-    gen_inv_mod.pipe, backend_config, exec_runs / "run001", exec_mounts
+    index_pipeline, backend_config, exec_runs / "run001", exec_mounts
 )
 run = exec_backend.run()
 run.wait()
-
-# %% [markdown]
-# ## Configure the generate index module
-# This module is special and doesn't require an experiment for configuration
-
-# %%
-gen_ind_mod = GenIndexModule.from_config(data_config)
-exec_backend = SnakeMakeBackend(
-    gen_ind_mod.pipe, backend_config, exec_runs / "run002", exec_mounts
-)
-run = exec_backend.run()
 
 # %% [markdown]
 # ## Configure the experiment with the generated index
