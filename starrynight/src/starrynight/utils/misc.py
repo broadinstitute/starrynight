@@ -10,6 +10,18 @@ from pydantic import BaseModel
 from starrynight.utils.py_to_pa import get_pyarrow_schema
 
 
+def anywidgets_path() -> Path:
+    """Get path to anywidgets directory.
+
+    Returns
+    -------
+    Path
+        Path to anywidgets directory.
+
+    """
+    return Path(__file__).parents[4].joinpath("canvas/anywidgets/_build")
+
+
 def get_scratch_path() -> Path:
     """Get path to scratch directory.
 
