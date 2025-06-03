@@ -111,6 +111,7 @@ channel: stringwithdash
 cycle_id: DIGIT~1..2
 extension: stringwithdots
 
+sep: "/"
 string: (LETTER | DIGIT)+
 stringwithdash: (string | "-")+
 stringwithdashcommaspace: ( string | "-" | "_" | "," | " " )+
