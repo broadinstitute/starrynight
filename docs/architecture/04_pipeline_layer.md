@@ -184,17 +184,17 @@ The pipeline composition function first creates and configures all necessary mod
 modules = []
 
 # Index and inventory
-index_module = GenIndexModule.from_config(data_config)
+index_module = GenIndexModule(data_config)
 modules.append(index_module)
 
-inventory_module = GenInvModule.from_config(data_config)
+inventory_module = GenInvModule(data_config)
 modules.append(inventory_module)
 
 # Cell Painting modules
-cp_illum_calc_load_data = CPIllumCalcGenLoadDataModule.from_config(data_config, experiment)
+cp_illum_calc_load_data = CPIllumCalcGenLoadDataModule(data_config, experiment)
 modules.append(cp_illum_calc_load_data)
 
-cp_illum_calc_pipeline = CPIllumCalcGenCPipeModule.from_config(data_config, experiment)
+cp_illum_calc_pipeline = CPIllumCalcGenCPipeModule(data_config, experiment)
 modules.append(cp_illum_calc_pipeline)
 
 # More module creation...

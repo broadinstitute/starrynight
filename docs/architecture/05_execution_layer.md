@@ -75,7 +75,7 @@ The execution model handles how modules are configured and run:
 
 ```python
 # Create and run index module
-gen_index_mod = GenIndexModule.from_config(data_config)
+gen_index_mod = GenIndexModule(data_config)
 exec_backend.run(
     gen_index_mod.pipeline,
     config=backend_config,
@@ -98,7 +98,7 @@ pcp_experiment = PCPGenericExperiment.from_index(
 )
 
 # Create and run pipeline module
-illum_load_data_mod = CPIllumCalcGenLoadDataModule.from_config(
+illum_load_data_mod = CPIllumCalcGenLoadDataModule(
     data_config=data_config,
     experiment=pcp_experiment
 )
@@ -404,7 +404,7 @@ exec_backend = pc.SnakemakeBackend(backend_config)
 
 # Run indexing and inventory
 print("Running indexing...")
-gen_index_mod = GenIndexModule.from_config(data_config)
+gen_index_mod = GenIndexModule(data_config)
 exec_backend.run(
     gen_index_mod.pipeline,
     config=backend_config,
@@ -412,7 +412,7 @@ exec_backend.run(
 )
 
 print("Running inventory...")
-gen_inv_mod = GenInvModule.from_config(data_config)
+gen_inv_mod = GenInvModule(data_config)
 exec_backend.run(
     gen_inv_mod.pipeline,
     config=backend_config,
