@@ -96,59 +96,78 @@ Below is an example of a module that generates a CellProfiler pipeline for segme
 class CPSegcheckGenCPPipeModule(StarrynightModule):
     """CP segmentation check generate cppipe module."""
 
-    @staticmethod
-    def uid() -> str:
+    @property
+    def uid(self) -> str:
         """Return module unique id."""
         return "cp_segcheck_gen_cppipe"
 
-    @staticmethod
-    def _spec() -> str:
+    def _spec(self) -> SpecContainer:
         """Return module default spec."""
         return SpecContainer(
-            inputs=[
-                TypeInput(
-                    name="load_data_path",
-                    type=TypeEnum.files,
+            inputs={
+                "loaddata_path": TypeInput(
+                    name="Cellprofiler LoadData csvs",
+                    type=TypeEnum.dir,
                     description="Path to the LoadData csv.",
                     optional=False,
-                    path="path/to/the/loaddata",
+                    value=self.data_config.workspace_path.joinpath(
+                        CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-                TypeInput(
-                    name="workspace_path",
-                    type=TypeEnum.file,
+                "workspace_path": TypeInput(
+                    name="Workspace",
+                    type=TypeEnum.dir,
                     description="Workspace path.",
                     optional=True,
-                    path=None,
+                    value=self.data_config.workspace_path.joinpath(
+                        CP_SEGCHECK_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-                TypeInput(
-                    name="nuclei_channel",
+                "nuclei_channel": TypeInput(
+                    name="Nuclei channel",
                     type=TypeEnum.textbox,
                     description="Channel to use for nuclei segmentation.",
                     optional=False,
+                    value=self.experiment.cp_config.nuclei_channel,
                 ),
-                TypeInput(
-                    name="cell_channel",
+                "cell_channel": TypeInput(
+                    name="Cell channel",
                     type=TypeEnum.textbox,
                     description="Channel to use for cell segmentation.",
                     optional=False,
+                    value=self.experiment.cp_config.cell_channel,
                 ),
-            ],
-            outputs=[
-                TypeOutput(
-                    name="cp_segcheck_cpipe",
-                    type=TypeEnum.files,
+                "use_legacy": TypeInput(
+                    name="Use legacy pipeline",
+                    type=TypeEnum.boolean,
+                    description="Flag for using legacy pipeline.",
+                    optional=True,
+                    value=False,
+                ),
+            },
+            outputs={
+                "cppipe_path": TypeOutput(
+                    name="Cellprofiler pipeline",
+                    type=TypeEnum.file,
                     description="Generated pre segcheck cppipe files",
                     optional=False,
-                    path="random/path/to/cppipe_dir",
+                    value=self.data_config.workspace_path.joinpath(
+                        CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
                 ),
-                TypeOutput(
-                    name="cppipe_notebook",
+                "notebook_path": TypeOutput(
+                    name="QC notebook",
                     type=TypeEnum.notebook,
                     description="Notebook for inspecting cellprofiler pipeline files",
                     optional=False,
-                    path="http://karkinos:2720/?file=.%2FillumCPApplyOutput.py",
                 ),
-            ],
+            },
             parameters=[],
             display_only=[],
             results=[],
@@ -170,59 +189,79 @@ class CPSegcheckGenCPPipeModule(StarrynightModule):
             ),
         )
 
-    @staticmethod
-    def from_config(
-        data: DataConfig,
-        experiment: Experiment | None = None,
-        spec: SpecContainer | None = None,
-    ) -> Self:
-        """Create module from experiment and data config."""
-        if spec is None:
-            spec = CPSegcheckGenCPPipeModule._spec()
-            spec.inputs[0].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX)
-                .resolve()
-                .__str__()
-            )
+    def _create_uow(self) -> list[UnitOfWork]:
+        """Create units of work for Generate Index step.
 
-            spec.inputs[1].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_OUT_PATH_SUFFIX)
-                .resolve()
-                .__str__()
-            )
+        Returns
+        -------
+        list[UnitOfWork]
+            List of unit of work.
 
-            spec.inputs[2].path = experiment.cp_config.nuclei_channel
-            spec.inputs[3].path = experiment.cp_config.cell_channel
+        """
+        return []
 
-            spec.outputs[0].path = (
-                data.workspace_path.joinpath(CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX)
-                .resolve()
-                .__str__()
-            )
-        pipe = create_pipe_gen_cppipe(
-            uid=CPSegcheckGenCPPipeModule.uid(),
-            spec=spec,
+    def _create_pipe(self) -> Pipeline:
+        """Create pipeline for generating cpipe.
+
+        Returns
+        -------
+        Pipeline
+            Pipeline instance.
+
+        """
+        spec = self.spec
+        cmd = [
+            "starrynight",
+            "segcheck",
+            "cppipe",
+            "-l",
+            spec.inputs["loaddata_path"].value,
+            "-o",
+            spec.outputs["cppipe_path"].value,
+            "-w",
+            spec.inputs["workspace_path"].value,
+            "-n",
+            spec.inputs["nuclei_channel"].value,
+            "-c",
+            spec.inputs["cell_channel"].value,
+        ]
+
+        if spec.inputs["use_legacy"].value is True:
+            cmd += [
+                "--use_legacy",
+            ]
+        gen_load_data_pipe = Seq(
+            [
+                Container(
+                    name=self.uid,
+                    input_paths={
+                        "loaddata_path": [spec.inputs["loaddata_path"].value]
+                    },
+                    output_paths={
+                        "cppipe_path": [spec.outputs["cppipe_path"].value]
+                    },
+                    config=ContainerConfig(
+                        image="ghrc.io/leoank/starrynight:dev",
+                        cmd=cmd,
+                        env={},
+                    ),
+                ),
+            ]
         )
-        uow = create_work_unit_gen_index(out_dir=data.storage_path.joinpath("index"))
-
-        return CPSegcheckGenCPPipeModule(spec=spec, pipe=pipe, uow=uow)
-
-
-
+        return gen_load_data_pipe
 ```
 
 This example illustrates several important aspects of module implementation:
 
 1. **Module Identity** - The `uid()` method provides a unique identifier
-2. **Module Specification** - The `_spec()` method defines inputs, outputs, and metadata
-3. **Automatic Configuration** - The `from_config` method populates the specification based on standard configurations
-4. **Compute Graph Creation** - The module uses the `create_pipe_gen_cppipe` function to generate a Pipecraft pipeline
+2. **Module Specification** - The `_spec()` method defines inputs, outputs, and metadata and also set default values.
+4. **Compute Graph Creation** - The module uses the `_create_pipe` function to generate a Pipecraft pipeline
 5. **CLI Command Construction** - The module constructs a CLI command that will be executed in a container
 6. **Container Specification** - The module defines the container image and execution environment
 
 ### Module Configuration
 
-A powerful feature of the module layer is automatic configuration through the `from_config` method. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:
+A powerful feature of the module layer is automatic configuration. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:
 
 1. **Data Configuration** - Provides workspace paths, image paths, and scratch directories
 2. **Experiment Configuration** - Provides experiment-specific parameters like channel names, algorithms, and thresholds
@@ -235,11 +274,9 @@ This automatic configuration approach has several advantages:
 - **Standardization** - Enforces standard naming and path conventions
 - **Modularity** - Allows modules to be swapped without changing their configuration
 
-The `from_config` method bridges the gap between user-provided parameters and the detailed configuration required for execution.
-
 ### Compute Graph Generation with Pipecraft
 
-The `create_pipeline` method is where modules generate their compute graphs using the Pipecraft library. This method defines the structure of the computation without actually executing it:
+The `_create_pipe` method is where modules generate their compute graphs using the Pipecraft library. This method defines the structure of the computation without actually executing it:
 
 1. **CLI Command Construction** - The module builds a command-line invocation of the underlying algorithm
 2. **Container Configuration** - Specifies the container image, environment, and resource requirements
@@ -275,17 +312,22 @@ A simple example of how a module creates a compute graph:
 
 ```python
 # Create a pipeline with sequential execution
-pipeline = pc.Pipeline()
-with pipeline.sequential() as seq:
-    seq.container(
-        name="operation_name",
-        inputs={"input_path": input_file_path},
-        outputs={"output_path": output_file_path},
-        container_config=pc.ContainerConfig(
-            image="container/image:tag",
-            cmd=command_to_execute
-        )
+pipeline = Seq(
+    Container(
+        name="external_tool",
+        input_paths={
+            "some_input": [...],
+        },
+        output_paths={
+            "some_output": [...]
+        },
+        config=ContainerConfig(
+            image="externaltoolimage",
+            cmd=["externaltool"],
+            env={},
+        ),
     )
+)
 ```
 
 More detailed coverage of Pipecraft's capabilities and architecture is provided in the [Pipeline Layer](04_pipeline_layer.md) section.
@@ -303,7 +345,7 @@ For individual module operations, modules can be created and executed directly:
 from starrynight.config import DataConfig
 from starrynight.experiments.pcp_generic import PCPGenericExperiment
 from starrynight.modules.cp_segcheck import CPSegcheckGenCPPipeModule
-import pipecraft as pc
+from pipecraft.backend.snakemake import SnakeMakeBackend, SnakeMakeConfig
 
 # Create configurations
 data_config = DataConfig(
@@ -321,16 +363,21 @@ experiment = PCPGenericExperiment.from_index(
 )
 
 # Create module
-segcheck_module = CPSegcheckGenCPPipeModule.from_config(data_config, experiment)
+segcheck_module = CPSegcheckGenCPPipeModule(data_config, experiment)
 
 # Configure backend
-backend = pc.SnakemakeBackend()
+backend_config = SnakeMakeConfig(
+    use_fluent_bit=False, print_exec=True, background=False
+)
+
+# Create backend
+exec_backend = SnakeMakeBackend(
+    segcheck_module.pipe, backend_config, exec_runs / "run001", exec_mounts
+)
 
 # Execute module
-backend.run(
-    pipeline=segcheck_module.create_pipeline(),
-    working_dir=data_config.scratch_path / "segcheck_run"
-)
+run = exec_backend.run()
+run.wait()
 ```
 
 ### Pipeline Composition
@@ -347,16 +394,14 @@ modules.append(CPIllumCalcGenCPipeModule.from_config(data_config, experiment))
 modules.append(CPIllumCalcRunModule.from_config(data_config, experiment))
 
 # Create pipeline
-pipeline = pc.Pipeline()
-with pipeline.sequential() as seq:
-    for module in modules:
-        seq.add_pipeline(module.create_pipeline())
+pipeline = Seq(modules)
 
 # Execute pipeline
-backend.run(
-    pipeline=pipeline,
-    working_dir=data_config.scratch_path / "complete_run"
+exec_backend = SnakeMakeBackend(
+    pipeline, backend_config, exec_runs / "run001", exec_mounts
 )
+run = exec_backend.run()
+run.wait()
 ```
 
 In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in [Pipeline Layer](04_pipeline_layer.md).
