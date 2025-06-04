@@ -236,31 +236,6 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
 
 ##### Channel Dictionary Configuration
 
-```json
-{
-  "round0": {
-    "DAPI": [
-      "DNA_round0",
-      0
-    ],
-    "GFP": [
-      "Phalloidin",
-      1
-    ]
-  },
-  "round1": {
-    "DAPI": [
-      "DNA_round1",
-      0
-    ],
-    "GFP": [
-      "GM130",
-      1
-    ]
-  }
-}
-```
-
 - Maps microscope channel names to biological stains and frame indices
 - For multiple rounds (SABER) experiments:
     - Keys are the folder names of the rounds (e.g., '20X_c0-SABER-0', '20X_c1-SABER-1')
@@ -323,8 +298,31 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
 - For single-round experiments:
     - Single key matching the Cell Painting folder name (typically '20X_CP')
     - Example:
-      ```
-      "Channeldict":"{'20X_CP':{'DAPI':['DNA', 0], 'GFP':['Phalloidin',1], 'A594':['Mito',2], 'Cy5':['ER',3], '750':['WGA',4]}}"
+      ```json
+        {
+        "20X_CP": {
+            "750": [
+            "WGA",
+            4
+            ],
+            "DAPI": [
+            "DNA",
+            0
+            ],
+            "GFP": [
+            "Phalloidin",
+            1
+            ],
+            "A594": [
+            "Mito",
+            2
+            ],
+            "Cy5": [
+            "ER",
+            3
+            ]
+        }
+        }
       ```
 - First value in each array is the stain name, second is the frame index (0-based)
 - Used to determine the pipeline variant (SABER vs. standard)
