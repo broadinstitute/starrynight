@@ -268,56 +268,56 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
     - Example:
       ```json
         {
-            "20X_c0-SABER-0": {
-                "DAPI": [
-                "DNA_round0",
-                0
-                ],
-                "GFP": [
-                "Phalloidin",
-                1
-                ]
-            },
-            "20X_c1-SABER-1": {
-                "DAPI": [
-                "DNA_round1",
-                0
-                ],
-                "GFP": [
-                "GM130",
-                1
-                ],
-                "A594": [
-                "Tubulin",
-                2
-                ],
-                "Cy5": [
-                "Calnexin",
-                3
-                ]
-            },
-            "20X_c2-SABER-2": {
-                "DAPI": [
-                "DNA_round2",
-                0
-                ],
-                "GFP": [
-                "COX-IV",
-                1
-                ],
-                "A594": [
-                "TDP-43",
-                2
-                ],
-                "Cy5": [
-                "G3BP1",
-                3
-                ],
-                "750": [
-                "LAMP1",
-                4
-                ]
-            }
+        "20X_c0-SABER-0": {
+            "DAPI": [
+            "DNA_round0",
+            0
+            ],
+            "GFP": [
+            "Phalloidin",
+            1
+            ]
+        },
+        "20X_c1-SABER-1": {
+            "DAPI": [
+            "DNA_round1",
+            0
+            ],
+            "GFP": [
+            "GM130",
+            1
+            ],
+            "A594": [
+            "Tubulin",
+            2
+            ],
+            "Cy5": [
+            "Calnexin",
+            3
+            ]
+        },
+        "20X_c2-SABER-2": {
+            "750": [
+            "LAMP1",
+            4
+            ],
+            "DAPI": [
+            "DNA_round2",
+            0
+            ],
+            "GFP": [
+            "COX-IV",
+            1
+            ],
+            "A594": [
+            "TDP-43",
+            2
+            ],
+            "Cy5": [
+            "G3BP1",
+            3
+            ]
+        }
         }
       ```
 - For single-round experiments:
