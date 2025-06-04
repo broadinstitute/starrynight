@@ -235,16 +235,90 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
 - Note: Use rows/columns for square acquisition patterns; use imperwell for circular acquisition patterns
 
 ##### Channel Dictionary Configuration
+
 ```json
-"Channeldict":"{'round0':{'DAPI':['DNA_round0',0], 'GFP':['Phalloidin',1]}, 'round1':{'DAPI':['DNA_round1',0],'GFP':['GM130',1], ...}}"
+{
+  "round0": {
+    "DAPI": [
+      "DNA_round0",
+      0
+    ],
+    "GFP": [
+      "Phalloidin",
+      1
+    ]
+  },
+  "round1": {
+    "DAPI": [
+      "DNA_round1",
+      0
+    ],
+    "GFP": [
+      "GM130",
+      1
+    ]
+  }
+}
 ```
+
 - Maps microscope channel names to biological stains and frame indices
 - For multiple rounds (SABER) experiments:
     - Keys are the folder names of the rounds (e.g., '20X_c0-SABER-0', '20X_c1-SABER-1')
     - Common stains between rounds should include round identifiers (e.g., 'DNA_round0', 'DNA_round1')
     - Example:
-      ```
-      "Channeldict":"{'20X_c0-SABER-0':{'DAPI':['DNA_round0',0], 'GFP':['Phalloidin',1]}, '20X_c1-SABER-1':{'DAPI':['DNA_round1',0],'GFP':['GM130',1], 'A594':['Tubulin',2], 'Cy5':['Calnexin', 3]}, '20X_c2-SABER-2':{'DAPI':['DNA_round2',0],'GFP':['COX-IV',1], 'A594':['TDP-43',2], 'Cy5':['G3BP1',3], '750':['LAMP1',4]}}"
+      ```json
+        {
+        "20X_c0-SABER-0": {
+            "DAPI": [
+            "DNA_round0",
+            0
+            ],
+            "GFP": [
+            "Phalloidin",
+            1
+            ]
+        },
+        "20X_c1-SABER-1": {
+            "DAPI": [
+            "DNA_round1",
+            0
+            ],
+            "GFP": [
+            "GM130",
+            1
+            ],
+            "A594": [
+            "Tubulin",
+            2
+            ],
+            "Cy5": [
+            "Calnexin",
+            3
+            ]
+        },
+        "20X_c2-SABER-2": {
+            "DAPI": [
+            "DNA_round2",
+            0
+            ],
+            "GFP": [
+            "COX-IV",
+            1
+            ],
+            "A594": [
+            "TDP-43",
+            2
+            ],
+            "Cy5": [
+            "G3BP1",
+            3
+            ],
+            "750": [
+            "LAMP1",
+            4
+            ]
+        }
+        }
       ```
 - For single-round experiments:
     - Single key matching the Cell Painting folder name (typically '20X_CP')
@@ -256,6 +330,7 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
 - Used to determine the pipeline variant (SABER vs. standard)
 
 ##### Processing Configuration
+
 - `one_or_many_files`: Controls if each well is stored as a single file (`"one"`) or multiple files (`"many"`)
     - Should be locked to `"many"` for production runs
 - `fast_or_slow_mode`: Determines CSV generation strategy and processing path
@@ -265,6 +340,7 @@ The `metadata.json` file (based on `configs/metadatatemplate.json`) defines all 
     - Typically doesn't need to be changed from default
 
 ##### Stitching Configuration
+
 - `overlap_pct`: Controls image overlap percentage between adjacent fields
 - `stitchorder`: Specifies tile arrangement
     - For square acquisitions: "Grid: snake by rows" or "Grid: row-by-row"
