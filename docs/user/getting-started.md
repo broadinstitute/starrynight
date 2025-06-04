@@ -312,23 +312,34 @@ ${WKDIR}/illum/cp/illum_calc/Batch1-Plate1
 └── Plate1_IllumZO1.npy
 ```
 
-If you have Python with matplotlib installed, you can visualize the results:
+You can save the code below as a Python script (e.g., viz_example.py) and run it using uv:
+
+``` sh
+uv run viz_example.py
+```
 
 ```python
-import numpy as np
-import matplotlib.pyplot as plt
-
+# /// script
+# dependencies = [
+#   "numpy" ,
+#   "matplotlib",
+# ]
+# ///
 # Load one of the illumination correction files
 import os
-wkdir = os.environ.get('WKDIR', './scratch/fix_s1_output/workspace')
-data = np.load(f'{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.npy')
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+wkdir = os.environ.get("WKDIR", "./scratch/fix_s1_output/workspace")
+data = np.load(f"{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.npy")
 
 # Create a visualization
-plt.figure(figsize=(10,8))
-plt.imshow(data, cmap='viridis')
+plt.figure(figsize=(10, 8))
+plt.imshow(data, cmap="viridis")
 plt.colorbar()
-plt.title('DNA Illumination Correction')
-plt.savefig(f'{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.npy')
+plt.title("DNA Illumination Correction")
+plt.savefig(f"{wkdir}/illum/cp/illum_calc/Batch1-Plate1/Plate1_IllumDNA.png")
 plt.show()
 ```
 
