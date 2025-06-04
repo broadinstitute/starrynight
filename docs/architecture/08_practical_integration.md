@@ -80,7 +80,7 @@ Before running algorithm-specific modules, the pipeline needs two foundational c
 
 ```python
 # Generate inventory
-gen_inv_mod = GenInvModule.from_config(data_config)
+gen_inv_mod = GenInvModule(data_config)
 exec_backend = SnakeMakeBackend(
     gen_inv_mod.pipe, backend_config, exec_runs / "run001", exec_mounts
 )
@@ -88,7 +88,7 @@ run = exec_backend.run()
 run.wait()
 
 # Generate index
-gen_ind_mod = GenIndexModule.from_config(data_config)
+gen_ind_mod = GenIndexModule(data_config)
 exec_backend = SnakeMakeBackend(
     gen_ind_mod.pipe, backend_config, exec_runs / "run002", exec_mounts
 )
@@ -146,7 +146,7 @@ With the experiment configured, we can now examine one complete pipeline step (C
 First, a module generates the LoadData CSV file that tells CellProfiler which images to process:
 
 ```python
-cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule.from_config(
+cp_calc_illum_load_data_mod = CPCalcIllumGenLoadDataModule(
     data_config, pcp_experiment
 )
 exec_backend = SnakeMakeBackend(
@@ -186,7 +186,7 @@ This module automatically finds the LoadData file created in the previous phase 
 Finally, a module runs the pipeline on the data:
 
 ```python
-cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule.from_config(
+cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule(
     data_config, pcp_experiment
 )
 exec_backend = SnakeMakeBackend(
@@ -224,7 +224,6 @@ Looking at this example, we can see how all the architecture layers work togethe
 6. **Container Runtime**: Executes commands in isolated environments
 7. **CLI Layer**: Provides command-line tools that parse arguments and call algorithms
 8. **Algorithm Layer**: Contains pure functions that implement image processing operations
-
 
 ## Module Registry and Discovery
 
@@ -276,7 +275,7 @@ Container(
     },
     config=ContainerConfig(
         image="ghrc.io/leoank/starrynight:dev",
-        cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
+        cmd=["starrynight", "cp", "-p", spec.inputs["cppipe_path"].value, ...],
         env={},
     ),
 )
@@ -360,29 +359,32 @@ One powerful capability of StarryNight's architecture is the ability to integrat
 ```python
 # Simplified example based on actual codebase patterns
 class ExternalToolModule(StarrynightModule):
-    @staticmethod
-    def uid() -> str:
+    @property
+    def uid(self) -> str:
         return "external_tool_module"
-    
-    @staticmethod
-    def _spec():
+
+    def _spec(self) -> SpecContainer:
         # Default specification
         return ExternalToolSpec()
-    
-    @classmethod
-    def from_config(cls, data_config: DataConfig, experiment: Experiment, spec=None):
-        # Use default spec if none provided
-        if spec is None:
-            spec = cls._spec()
-            
-        # Update paths based on data config
-        spec.update_paths(data_config)
-        
-        # Define the pipeline
-        pipe = create_external_tool_pipe(spec, data_config, experiment)
-        
-        # Create and return module instance with spec and pipeline
-        return cls(spec, pipe, [])
+
+    def _create_pipe(self) -> Pipeline:
+        return Seq(
+            Container(
+                name="external_tool",
+                input_paths={
+                    "some_input": [...],
+                },
+                output_paths={
+                    "some_output": [...]
+                },
+                config=ContainerConfig(
+                    image="externaltoolimage",
+                    cmd=["externaltool"],
+                    env={},
+                ),
+            )
+        )
+
 ```
 
 This approach allows StarryNight to leverage existing tools by:
