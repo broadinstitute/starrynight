@@ -35,7 +35,7 @@
     "hyparquet": "^1.8.0",
     "hyparquet-compressors": "^1.0.0",
     "lucide-react": "^0.427.0",
-    "next": "14.2.5",
+    "next": "15.3.3",
     "papaparse": "^5.4.1",
     "react": "^18",
     "react-dom": "^18",
