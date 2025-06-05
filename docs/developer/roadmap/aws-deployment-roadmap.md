@@ -138,3 +138,19 @@ Snakemake provides intelligent recovery:
 | Container maintenance    | Automated builds       |
 | Cost overruns            | Monitoring and alerts  |
 | CellProfiler integration | Extensive testing      |
+
+!!! info "Context from Planning Discussions"
+
+    **IT Team Constraints**: IT team will likely lack bandwidth to implement custom infrastructure solutions. StarryNight must provide a predefined AWS configuration that IT teams can approve with a simple "yes/no" decision, rather than requiring custom backend development.
+
+    **AWS Batch Experience Gap**: The team has no hands-on experience with AWS Batch for scientific workloads. The 8-week timeline is based on theoretical assumptions rather than practical knowledge, creating significant unknown risks.
+
+    **Pulumi Cost Scaling Uncertainty**: Unclear how Pulumi pricing scales with infrastructure complexity (10 vs 1000 compute instances). Monthly costs could exceed projections if Pulumi charges per AWS resource rather than per managed service.
+
+    **Always-On Coordinator Requirements**: StarryNight needs a persistent coordinator node for job submission and state management. Requires dedicated EC2 instance running 24/7; this may introduce infrastructure complexity.
+
+    **Custom Container Maintenance**: Cannot use official CellProfiler containers due to need for custom telemetry and error handling wrappers. StarryNight must maintain its own CellProfiler builds, requiring automated CI/CD pipeline and coordination with CellProfiler releases.
+
+    **CellProfiler Integration Complexity**: CellProfiler doesn't behave like standard command-line tools - unreliable exit codes and inconsistent error reporting in containers. Standard containerization approaches may fail; requires custom error detection and handling mechanisms.
+
+    **Bottom Line**: While the roadmap provides a structured 8-week plan, several critical unknowns could significantly impact timeline and complexity. Early proof-of-concept testing is essential before committing to full deployment.
