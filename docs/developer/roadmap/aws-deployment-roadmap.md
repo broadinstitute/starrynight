@@ -95,7 +95,7 @@ flowchart TB
 
 ## Configuration
 
-### User Configuration
+### Job Resource Configuration
 
 Users set compute resources via the UI, which flows through the system:
 
@@ -106,6 +106,7 @@ UI → Module → Pipeline → AWS Batch job definitions
 **Note**: Specific requirements TBD during implementation.
 
 Potential areas:
+
 - Network setup (VPC, security groups)
 - S3 access policies
 - IAM permissions
@@ -116,6 +117,7 @@ StarryNight manages job execution; IT retains security/cost control.
 ### Failure Handling
 
 Snakemake provides intelligent recovery:
+
 - Successful jobs are never re-run
 - Failed jobs can be retried with adjusted resources
 - QC steps pause for manual review via dummy modules
