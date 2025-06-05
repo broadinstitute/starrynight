@@ -21,7 +21,6 @@ from psygnal import EventedModel
 from anywidget.experimental import widget
 
 import anywidget
-import traitlets
 
 js_path = anywidgets_path().joinpath("testwidget.js").read_text()
 css_path = anywidgets_path().joinpath("global.css").read_text()
@@ -44,5 +43,8 @@ a = CounterWidgetModel(spec=gen_inv_mod.spec)
 
 # %%
 a
+
+# %%
+a.spec
 
 # %%
