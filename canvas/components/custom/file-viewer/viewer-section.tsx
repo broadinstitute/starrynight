@@ -30,6 +30,7 @@ export function FileViewerViewerSection() {
       case "json":
       case "yml":
       case "xml":
+      case "cppipe":
         return <FileViewerText parentDimension={[width, height]} />;
       case "s3-directory":
         return <FileViewerListFiles parentDimension={[width, height]} />;
@@ -37,7 +38,7 @@ export function FileViewerViewerSection() {
         return <FileViewerNotebook parentDimension={[width, height]} />;
       default:
         return (
-          <FileViewerMessage message="A viewer for this file is not available. Please download the file to view it locally." />
+          <FileViewerMessage message="A viewer for this file/directory is not available." />
         );
     }
   }, [fileType, width, height]);

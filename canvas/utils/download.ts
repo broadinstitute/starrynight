@@ -1,5 +1,5 @@
 export type TDownloadFileOptions = {
-  content: string | Uint8Array | Blob;
+  content: string | Uint8Array | Blob | ArrayBuffer;
   filename: string;
 };
 
@@ -7,7 +7,7 @@ export function downloadFile(options: TDownloadFileOptions) {
   const { content, filename } = options;
   let type = "application/";
 
-  if (filename.endsWith(".txt")) {
+  if (filename.endsWith(".txt") || filename.endsWith(".cppipe")) {
     type += "txt";
   } else if (filename.endsWith(".xlsx")) {
     type += "xlsx";
@@ -20,8 +20,6 @@ export function downloadFile(options: TDownloadFileOptions) {
   } else if (filename.endsWith(".parquet")) {
     type += "parquet";
   }
-
-  console.log("Type", type);
 
   const blob = new Blob([content], { type });
   const link = document.createElement("a");

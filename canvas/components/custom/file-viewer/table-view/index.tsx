@@ -45,7 +45,7 @@ export function FileViewerTableView(props: TFileViewerTableView) {
         let height = 32;
 
         if (typeof val === "string") {
-          height = Math.round(val.length / 32) * 32;
+          height = Math.round(val.length / 24) * 48;
         }
         if (height > maxSoFar) {
           maxSoFar = height;

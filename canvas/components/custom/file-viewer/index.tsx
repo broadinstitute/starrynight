@@ -11,7 +11,7 @@ import {
   TUseProcessFileOrURLData,
   useProcessFileOrURL,
 } from "./useProcessFileOrURL";
-import { FeatureNotImplementedModal } from "../feature-not-implemented-modal";
+import { downloadFile } from "@/utils/download";
 
 export type TFileViewerProps = {
   /**
@@ -23,22 +23,41 @@ export type TFileViewerProps = {
    */
   file?: File;
   /**
-   * If true then download button will be shown.
-   */
-  hasDownloadButton?: boolean;
-  /**
    * Element that will trigger the modal/viewer to open.
    */
   trigger: React.ReactNode;
 };
 
 export function FileViewer(props: TFileViewerProps) {
-  const { url, file, trigger, hasDownloadButton } = props;
+  const { url, file, trigger } = props;
   const [storeOptions, setStoreOptions] =
     React.useState<TCreateFileViewerStoreOptions>();
 
+  const [canDownloadFile, setCanDownloadFile] = React.useState(false);
+
   const handleOnProcessFileSuccess = React.useCallback(
     (data: TUseProcessFileOrURLData, fileType: TFileType, name: string) => {
+      if (
+        (
+          [
+            "csv",
+            "jpg",
+            "json",
+            "parquet",
+            "png",
+            "tsv",
+            "txt",
+            "xml",
+            "yml",
+            "cppipe",
+          ] as TFileType[]
+        ).includes(fileType)
+      ) {
+        setCanDownloadFile(true);
+      } else {
+        setCanDownloadFile(false);
+      }
+
       if (fileType === "notebook") {
         return setStoreOptions({
           iframeViewerOption: {
@@ -82,8 +101,13 @@ export function FileViewer(props: TFileViewerProps) {
   });
 
   const handleDownload = React.useCallback(() => {
-    // TODO: Implement download logic here.
-  }, []);
+    if (!storeOptions?.bufferViewerOption) return;
+
+    downloadFile({
+      content: storeOptions.bufferViewerOption.data,
+      filename: storeOptions.name,
+    });
+  }, [storeOptions]);
 
   React.useEffect(() => {
     processFileOrURL();
@@ -102,20 +126,11 @@ export function FileViewer(props: TFileViewerProps) {
       trigger={trigger}
       hasCloseButtonInFooter
       actions={
-        hasDownloadButton
+        canDownloadFile
           ? [
-              <FeatureNotImplementedModal
-                key="download"
-                featureName="Download File"
-              >
-                <Button
-                  variant="default"
-                  key="download"
-                  onClick={handleDownload}
-                >
-                  <Download /> Download
-                </Button>
-              </FeatureNotImplementedModal>,
+              <Button variant="default" key="download" onClick={handleDownload}>
+                <Download /> Download
+              </Button>,
             ]
           : []
       }

@@ -69,10 +69,14 @@ export function FileViewerTableViewCell(props: TFileViewerTableViewCellProps) {
     >
       {hasOverflow ? (
         <WithTooltip message={text}>
-          <span>{text.slice(0, THRESHOLD)}...</span>
+          <span className="w-full" style={{ wordBreak: "break-all" }}>
+            {text.slice(0, THRESHOLD)}...
+          </span>
         </WithTooltip>
       ) : (
-        <span>{text}</span>
+        <span className="w-full" style={{ wordBreak: "break-all" }}>
+          {text}
+        </span>
       )}
     </div>
   );

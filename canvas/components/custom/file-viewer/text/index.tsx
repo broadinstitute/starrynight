@@ -38,7 +38,13 @@ export function FileViewerText(props: TFileViewerTextProps) {
           fileType !== "txt" && "whitespace-pre"
         )}
       >
-        {data}
+        {fileType === "json" ? (
+          <pre>
+            <code>{JSON.stringify(JSON.parse(data), null, 2)}</code>
+          </pre>
+        ) : (
+          data
+        )}
       </div>
     </div>
   );

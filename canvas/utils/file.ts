@@ -11,6 +11,7 @@ export type TFileType =
   | "parquet"
   | "jpg"
   | "png"
+  | "cppipe"
   | "notebook"
   | "s3-directory"
   | "not-supported";
@@ -106,6 +107,8 @@ export function getFileType(file: TGetFileTypeFile): TFileType {
       return "json";
     case "yml":
       return "yml";
+    case "cppipe":
+      return "cppipe";
 
     // ---------> Images
     case "jpg":
@@ -142,6 +145,8 @@ export const GET_FILE_QUERY_KEY = "GET_FILE_QUERY_KEY";
 
 export function useGetFile(options: TUseGetFileOptions) {
   const { url, enabled } = options;
+
+  console.log("Downlaod", url);
 
   return useQuery({
     queryKey: [GET_FILE_QUERY_KEY, url],
