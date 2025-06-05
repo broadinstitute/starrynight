@@ -1,31 +1,16 @@
-# AWS Deployment Strategic Roadmap
+# AWS Deployment Roadmap
 
-This document outlines the strategic vision and roadmap for deploying StarryNight on AWS. The current MVP operates on local servers, but this roadmap provides confidence in our future cloud deployment plans.
-
-## Document Navigation
-
-This roadmap is structured to address the key concerns of different stakeholders:
-
-| If you are a...         | Start here                                | Then explore               |
-| ----------------------- | ----------------------------------------- | -------------------------- |
-| Infrastructure engineer | Architecture → Deployment Strategy        | Configuration Requirements |
-| IT security team        | Architecture → Configuration Requirements | Cost Analysis              |
-| Project manager         | Deployment Strategy → Cost Analysis       | Review Framework           |
-| Developer               | Architecture → Configuration Requirements | Deployment Strategy        |
+This roadmap outlines our 8-week plan to deploy StarryNight on AWS, transitioning from local servers to cloud infrastructure.
 
 ## AWS Deployment Architecture
 
-### Required Services
+### Core Services
 
-StarryNight's AWS deployment leverages the following core services:
-
-- **AWS Batch**: Primary compute orchestration service for running containerized workloads
-- **EC2**: Login/coordinator node for job submission and state management
-- **S3**: Object storage for input data, intermediate results, and final outputs
-- **CloudWatch**: Centralized logging and monitoring
-- **IAM**: Identity and access management for secure resource access
-- **VPC**: Network isolation and security
-- **ECR**: Container registry for StarryNight-specific images
+- **AWS Batch**: Orchestrates containerized compute jobs
+- **EC2**: Hosts login node for job coordination
+- **S3**: Stores data and results
+- **Container Registry**: Public registry (GitHub or similar) for images
+- **Supporting**: CloudWatch (logs), IAM (access), VPC (networking)
 
 ### System Topology
 
@@ -45,7 +30,7 @@ flowchart TB
 
     subgraph "Storage"
         S3[S3 Buckets<br/>Data Lake]
-        ECR[ECR Registry<br/>Container Images]
+        REG[Container Registry<br/>GitHub/Public]
     end
 
     subgraph "Infrastructure Management"
@@ -55,240 +40,99 @@ flowchart TB
     EC2 -->|Submit Jobs| BATCH
     BATCH -->|Schedule| COMPUTE
     COMPUTE -->|Read/Write| S3
-    COMPUTE -->|Pull Images| ECR
+    COMPUTE -->|Pull Images| REG
     COMPUTE -->|Send Telemetry| GRAFANA
     EC2 <-->|Monitor| GRAFANA
-    PULUMI -->|Provision| EC2 & BATCH & S3 & ECR
+    PULUMI -->|Provision| EC2 & BATCH & S3
 ```
 
-### Expected Ongoing Costs
+### Monthly Costs (excluding compute/storage)
 
-Cost breakdown excluding compute and storage:
+| Service        | Cost        | Notes                       |
+| -------------- | ----------- | --------------------------- |
+| EC2 Login Node | $30-40      | t3.medium, always-on        |
+| CloudWatch     | $10-50      | Varies with job volume      |
+| Pulumi         | $0-75       | Free tier likely sufficient |
+| **Total**      | **$40-165** | Plus data transfer costs    |
 
-| Service          | Usage Pattern             | Estimated Monthly Cost | Notes                                  |
-| ---------------- | ------------------------- | ---------------------- | -------------------------------------- |
-| EC2 (Login Node) | t3.medium, always-on      | $30-40                 | Minimal compute requirements           |
-| AWS Batch        | Service fees              | $0                     | No additional charges beyond compute   |
-| CloudWatch       | Logs & metrics            | $10-50                 | Depends on job volume                  |
-| Data Transfer    | Cross-AZ traffic          | Variable               | Minimize by proper S3 bucket placement |
-| Pulumi           | Infrastructure management | $0-75                  | Free tier covers most use cases        |
-
-**Note**: Actual costs will vary based on:
-
-- Number of resources managed by Pulumi (free tier limitations)
-- Log retention policies
-- Data transfer patterns
-- NAT Gateway usage if required
-
-## Deployment Strategy
+## 8-Week Deployment Plan
 
 ### Phase 1: Infrastructure Foundation (Weeks 1-2)
 
-**Objectives**: Establish core AWS infrastructure
-
-**Key Activities**:
 1. Configure Pulumi project structure
-2. Define AWS Batch compute environments
-3. Set up VPC and security groups
-4. Create S3 bucket hierarchy
-5. Deploy EC2 login node
+2. Define AWS Batch compute environments (targeting Fargate)
+3. Create S3 bucket hierarchy
+4. Deploy EC2 login node
 
-**Pain Points & Decisions**:
-- **Unknown**: Optimal AWS Batch configuration for scientific workloads
-- **Decision**: EC2 vs Fargate for compute environment
-- **Risk**: Limited team experience with AWS Batch at scale
+**Key Unknown**: Optimal AWS Batch configuration for image processing workloads
 
-### Phase 2: Container Ecosystem (Weeks 3-4)
+### Phase 2: Container Pipeline (Weeks 3-4)
 
-**Objectives**: Build and deploy StarryNight container images
+1. Select public container registry
+2. Set up automated builds triggered by CellProfiler releases
+3. Implement independent StarryNight versioning
+4. Test build pipeline
 
-**Key Activities**:
-1. Set up ECR repositories
-2. Build StarryNight + CellProfiler containers
-3. Implement automated build pipeline
-4. Version tagging strategy
+**Note**: Automated builds minimize maintenance burden
 
-**Pain Points & Decisions**:
-- **Maintenance Burden**: Custom containers vs official CellProfiler images
-- **Decision**: Nightly build strategy for CellProfiler updates
-- **Complexity**: OpenTelemetry integration within containers
+### Phase 3: Integration Testing (Weeks 5-6)
 
-### Phase 3: Integration & Telemetry (Weeks 5-6)
+1. Test job submission pipeline
+2. Validate Snakemake → AWS Batch translation
+3. Verify telemetry (using StarryNight's built-in system)
+4. Run end-to-end workflows
 
-**Objectives**: Connect all components and validate telemetry
+**Key Risk**: CellProfiler error handling in containerized environment
 
-**Key Activities**:
-1. Deploy Grafana stack on EC2
-2. Configure OpenTelemetry collectors
-3. Test job submission pipeline
-4. Validate Snakemake → AWS Batch translation
+### Phase 4: Production Ready (Weeks 7-8)
 
-**Pain Points & Decisions**:
-- **Unknown**: OpenTelemetry reliability in distributed environment
-- **Challenge**: Log aggregation from ephemeral containers
-- **Risk**: CellProfiler error handling and exit codes
+1. Finalize documentation and runbooks
+2. Configure monitoring and alerts
+3. Complete VPC/security setup
+4. Optimize costs
 
-### Phase 4: Production Readiness (Weeks 7-8)
+**Note**: Security hardening deferred (internal users only)
 
-**Objectives**: Harden system for production use
+## Configuration
 
-**Key Activities**:
-1. Security audit and IAM policy refinement
-2. Backup and disaster recovery procedures
-3. Cost optimization review
-4. Documentation and runbooks
+### User Configuration
 
-**Pain Points & Decisions**:
-- **Integration**: Compatibility with institutional security policies
-- **Decision**: Multi-region strategy
-- **Requirement**: SLA definitions
+Users set compute resources via the UI, which flows through the system:
 
-## Configuration Requirements
-
-### User-Level Configuration
-
-Users configure job resources through module parameters:
-
-```python
-# In module definition
-class AnalysisModule:
-    memory_gb: int = Field(default=8, description="Memory allocation")
-    vcpus: int = Field(default=2, description="CPU allocation")
-```
-
-These parameters flow through the system:
-1. User sets values in UI/CLI
-2. Module passes to Pipeline layer
-3. Pipeline layer passes to Execution backend
-4. Backend maps to AWS Batch job definitions
+UI → Module → Pipeline → AWS Batch job definitions
 
 ### Infrastructure Configuration
 
-IT teams must configure:
+**Note**: Specific requirements TBD during implementation.
 
-**Required Settings**:
-- VPC CIDR ranges
-- Security group rules
-- S3 bucket policies
-- IAM role permissions
+Potential areas:
+- Network setup (VPC, security groups)
+- S3 access policies
+- IAM permissions
+- Compute preferences (spot vs on-demand)
 
-**Optional Overrides**:
-- Custom AMIs for compute nodes
-- Spot vs on-demand instance mix
-- CloudWatch log retention
+StarryNight manages job execution; IT retains security/cost control.
 
-**Automation Boundary**:
-- StarryNight manages: Job definitions, queue management, autoscaling
-- IT team manages: Network topology, security policies, cost controls
+### Failure Handling
 
-### Job Failure Handling
+Snakemake provides intelligent recovery:
+- Successful jobs are never re-run
+- Failed jobs can be retried with adjusted resources
+- QC steps pause for manual review via dummy modules
 
-StarryNight leverages Snakemake's built-in failure handling:
+## Validation Checklist
 
-**Full Pipeline Failure**:
-- Snakemake tracks successful outputs
-- Re-running automatically skips completed steps
-- Failed steps are retried with same parameters
+- [ ] 100-job pipeline test
+- [ ] Partial failure recovery
+- [ ] Container version switching
+- [ ] Telemetry completeness
+- [ ] Internal user testing
 
-**Partial Failures (e.g., 10% of jobs fail)**:
-- Individual job failures tracked via AWS Batch
-- Snakemake identifies missing outputs
-- User can increase memory/CPU and re-run specific steps
+## Key Risks
 
-**Manual Intervention Points**:
-- QC steps intentionally "fail" to pause pipeline
-- User reviews outputs and manually triggers continuation
-- State preserved between manual checkpoints
-
-**Example Workflow**:
-```bash
-# Initial run - 90% succeed, 10% fail due to memory
-starrynight run experiment.yaml
-
-# Review failures in Grafana dashboard
-# Increase memory for failed jobs
-starrynight run experiment.yaml --memory 16
-
-# Only failed jobs re-execute
-```
-
-## Research Gaps & Validation Requirements
-
-### Critical Unknowns
-
-1. **AWS Batch Performance**:
-   - No production testing completed
-   - Unknown: Optimal job size vs overhead tradeoff
-   - Required: Benchmark with representative workloads
-
-2. **Container Versioning**:
-   - Challenge: Maintaining StarryNight wrappers for multiple CellProfiler versions
-   - Unknown: Storage requirements for image registry
-   - Required: Automated testing pipeline for new builds
-
-3. **Telemetry at Scale**:
-   - Unknown: Grafana performance with 1000+ concurrent jobs
-   - Risk: Log loss from short-lived containers
-   - Required: Stress testing and fallback strategies
-
-### Validation Milestones
-
-Before production deployment:
-- [ ] Run 100-job test pipeline successfully
-- [ ] Validate partial failure recovery
-- [ ] Test container version switching
-- [ ] Confirm telemetry data completeness
-- [ ] Security audit by IT team
-
-## Review and Approval Framework
-
-### Stakeholder Review Process
-
-1. **Technical Review** (Week 1):
-   - Engineering team validates architecture
-   - DevOps confirms infrastructure approach
-   - Security team reviews IAM policies
-
-2. **Operational Review** (Week 2):
-   - IT evaluates against institutional policies
-   - Finance reviews cost projections
-   - Legal confirms data governance compliance
-
-3. **User Acceptance** (Week 3):
-   - Key users test workflow
-   - Documentation review
-   - Training plan approval
-
-### Go/No-Go Decision Criteria
-
-**Technical Criteria**:
-- [ ] All validation milestones passed
-- [ ] Security audit findings addressed
-- [ ] Disaster recovery plan tested
-
-**Operational Criteria**:
-- [ ] Cost within 20% of projections
-- [ ] IT team trained on maintenance
-- [ ] Monitoring dashboards operational
-
-**User Criteria**:
-- [ ] Performance meets or exceeds local deployment
-- [ ] Documentation complete and accurate
-- [ ] Support procedures established
-
-### Decision Timeline
-
-- **Week 8**: Technical review complete
-- **Week 9**: Operational review complete
-- **Week 10**: Final go/no-go decision
-- **Week 11-12**: Production deployment (if approved)
-
-## Appendix: Key Risks and Mitigations
-
-| Risk                                      | Impact | Likelihood | Mitigation                     |
-| ----------------------------------------- | ------ | ---------- | ------------------------------ |
-| AWS Batch complexity higher than expected | High   | Medium     | Early proof-of-concept testing |
-| Container maintenance burden              | Medium | High       | Automated build pipeline       |
-| Institutional security rejection          | High   | Low        | Early IT engagement            |
-| Cost overruns                             | Medium | Medium     | Detailed monitoring and alerts |
-| CellProfiler integration issues           | High   | Medium     | Extensive testing framework    |
+| Risk                     | Mitigation             |
+| ------------------------ | ---------------------- |
+| AWS Batch complexity     | Early proof-of-concept |
+| Container maintenance    | Automated builds       |
+| Cost overruns            | Monitoring and alerts  |
+| CellProfiler integration | Extensive testing      |
