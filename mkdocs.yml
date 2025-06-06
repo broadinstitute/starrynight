@@ -62,8 +62,6 @@ nav:
     - Architecture for Biologists: architecture/07_architecture_for_biologists.md
     - Practical Integration: architecture/08_practical_integration.md
     - Flow Example: architecture/09_architecture_flow_example.md
-  - Developer Reference:
-    - PCPIP Specifications: developer/reference/pcpip-specs.md
   - Developer Testing:
     - Testing Framework: developer/validation/testing-framework.md
     - Pipeline Validation: developer/validation/validation-pipeline-1-illum-calc.md
@@ -71,6 +69,9 @@ nav:
     - Design Requirements: developer/roadmap/requirements.md
     - Pipeline Automation: developer/roadmap/pipeline-automation.md
     - AWS Deployment Strategy: developer/roadmap/aws-deployment-roadmap.md
+  - Developer Legacy:
+    - PCPIP Specifications: developer/legacy/pcpip-specs.md
+    - PCPIP Reference Pipelines: developer/legacy/pcpip-pipelines/pcpip-pipelines.md
 
 plugins:
   - search

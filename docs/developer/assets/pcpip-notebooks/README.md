@@ -11,4 +11,4 @@ This directory contains Jupyter notebooks and Python scripts used to process, an
 
 ## Usage
 
-These notebooks/scripts are referenced in the [PCPIP Specifications](../../reference/pcpip-specs.md) document.
+These notebooks/scripts are referenced in the [PCPIP Specifications](../../legacy/pcpip-specs.md) document.

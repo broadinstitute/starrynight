@@ -24,3 +24,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with do
 ## Notes on Repository Restructuring
 This repository is undergoing restructuring to improve organization:
 - Notebooks will be moved to `/examples/notebooks/`
+
+## Interaction Guidelines
+- Sometimes it might be easiest to ask the human to do some tasks, typically when they involve moving large chunks of text or running some commands that are better run by hand. In these cases, ask the human to do it

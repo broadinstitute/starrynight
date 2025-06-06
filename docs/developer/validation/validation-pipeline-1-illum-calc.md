@@ -7,7 +7,7 @@
 
 - **Reference Pipeline**: `ref_1_CP_Illum.cppipe`
 - **StarryNight Module**: `illum_calc`
-- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across Cell Painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../reference/pcpip-specs.md) for details on all pipelines.
+- **Description**: Calculates illumination correction functions to normalize uneven lighting patterns across Cell Painting channels specifically. Barcoding/SPS channels are handled separately by Pipeline 5. See [PCPIP documentation](../legacy/pcpip-specs.md) for details on all pipelines.
 
 ## Validation Status
 
