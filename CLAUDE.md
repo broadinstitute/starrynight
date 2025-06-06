@@ -65,3 +65,6 @@ We will focus entirely on these directories
 ## Common Issues
 - If tests fail, check that you've installed the package in development mode
 - If linting fails, run `ruff --fix` to automatically fix some issues
+
+## Repository Details
+- The GitHub repo is git@github.com:broadinstitute/starrynight.git so be sure to use that with the GitHub MCP server
