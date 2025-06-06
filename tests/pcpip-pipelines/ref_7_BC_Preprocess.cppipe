@@ -400,9 +400,9 @@ ImageMath:[module_num:19|svn_version:'Unknown'|variable_revision_number:5|show_w
     Set values greater than 1 equal to 1?:Yes
     Replace invalid values with 0?:Yes
     Ignore the image masks?:No
-    Name the output image:SqrtDAPI
+    Name the output image:SqrtDNA
     Image or measurement?:Image
-    Select the first image:Cycle01_DAPI
+    Select the first image:Cycle01_DNA
     Multiply the first image by:1.0
     Measurement:
     Image or measurement?:Image
@@ -411,7 +411,7 @@ ImageMath:[module_num:19|svn_version:'Unknown'|variable_revision_number:5|show_w
     Measurement:
 
 IdentifyPrimaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
-    Select the input image:SqrtDAPI
+    Select the input image:SqrtDNA
     Name the primary objects to be identified:Nuclei
     Typical diameter of objects, in pixel units (Min,Max):12,50
     Discard objects outside the diameter range?:Yes
@@ -447,7 +447,7 @@ IdentifyPrimaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_nu
     Thresholding method:Otsu
 
 IdentifyPrimaryObjects:[module_num:21|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Select the input image:Cycle01_DAPI
+    Select the input image:Cycle01_DNA
     Name the primary objects to be identified:Nuclei
     Typical diameter of objects, in pixel units (Min,Max):10,80
     Discard objects outside the diameter range?:Yes
@@ -832,13 +832,13 @@ RelateObjects:[module_num:35|svn_version:'Unknown'|variable_revision_number:5|sh
 
 SaveImages:[module_num:36|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
     Select the type of image to save:Image
-    Select the image to save:Cycle01_DAPI
+    Select the image to save:Cycle01_DNA
     Select method for constructing file names:Single name
-    Select image name for file prefix:Cycle01_DAPI
-    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_DAPI
+    Select image name for file prefix:Cycle01_DNA
+    Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_DNA
     Number of digits:4
     Append a suffix to the image file name?:Yes
-    Text to append to the image name:__DAPI
+    Text to append to the image name:__DNA
     Saved file format:tiff
     Output file location:Default Output Folder|Cycle01
     Image bit depth:16-bit integer

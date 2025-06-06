@@ -13,7 +13,7 @@ LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_win
     Process just a range of rows?:No
     Rows to process:1,100000
     Group images by metadata?:Yes
-    Select metadata tags for grouping:Plate,SBSCycle
+    Select metadata tags for grouping:Plate,Cycle
     Rescale intensities?:Yes
 
 Resize:[module_num:2|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
@@ -266,7 +266,7 @@ SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:15|show
     Select the image to save:UpsampledIllumA
     Select method for constructing file names:Single name
     Select image name for file prefix:None
-    Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumA
+    Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumA
     Number of digits:4
     Append a suffix to the image file name?:No
     Text to append to the image name:
@@ -285,7 +285,7 @@ SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:15|show
     Select the image to save:UpsampledIllumDNA
     Select method for constructing file names:Single name
     Select image name for file prefix:None
-    Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumDNA
+    Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumDNA
     Number of digits:4
     Append a suffix to the image file name?:No
     Text to append to the image name:
@@ -304,7 +304,7 @@ SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:15|show
     Select the image to save:UpsampledIllumC
     Select method for constructing file names:Single name
     Select image name for file prefix:None
-    Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumC
+    Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumC
     Number of digits:4
     Append a suffix to the image file name?:No
     Text to append to the image name:
@@ -323,7 +323,7 @@ SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show
     Select the image to save:UpsampledIllumG
     Select method for constructing file names:Single name
     Select image name for file prefix:None
-    Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumG
+    Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumG
     Number of digits:4
     Append a suffix to the image file name?:No
     Text to append to the image name:
@@ -342,7 +342,7 @@ SaveImages:[module_num:21|svn_version:'Unknown'|variable_revision_number:15|show
     Select the image to save:UpsampledIllumT
     Select method for constructing file names:Single name
     Select image name for file prefix:None
-    Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumT
+    Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumT
     Number of digits:4
     Append a suffix to the image file name?:No
     Text to append to the image name:
