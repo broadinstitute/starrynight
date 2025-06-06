@@ -100,54 +100,49 @@ flowchart TB
 Based on planning discussions, users configure infrastructure through the UI:
 
 1. **Module Parameter Exposure**
-   - Module authors expose parameters like memory and compute requirements
-   - Example from discussion: inventory module exposes `dataset_path` parameter
-   - **Proposed**: Modules could expose `memory` or similar resource parameters
-   - Backend implementation decides how to handle these parameters
-   - **Note**: Specific parameter names and UI interface details TBD
-
+      - Module authors expose parameters like memory and compute requirements
+      - Example from discussion: inventory module exposes `dataset_path` parameter
+      - **Proposed**: Modules could expose `memory` or similar resource parameters
+      - Backend implementation decides how to handle these parameters
+      - **Note**: Specific parameter names and UI interface details TBD
 2. **Configuration Flow**
-   - UI → Module → Pipeline → AWS Batch job definitions
-   - Users cannot directly configure AWS Batch settings
-   - Backend determines infrastructure choices (e.g., AWS Batch vs alternatives)
+      - UI → Module → Pipeline → AWS Batch job definitions
+      - Users cannot directly configure AWS Batch settings
+      - Backend determines infrastructure choices (e.g., AWS Batch vs alternatives)
 
 ### Job Failure and Restart Procedures
 
 From the planning discussions:
 
 1. **Snakemake Intelligence**
-   - Snakemake automatically tracks successful jobs and won't re-run them
-   - Only failed or not-yet-run jobs execute on retry
-   - Target-based execution model checks for output files
-
+      - Snakemake automatically tracks successful jobs and won't re-run them
+      - Only failed or not-yet-run jobs execute on retry
+      - Target-based execution model checks for output files
 2. **QC Review Points**
-   - QC steps implemented as modules that fail by default
-   - Human review required before marking as passed
-   - After review, job can be manually marked to proceed
-   - **Note**: Specific UI for QC approval TBD
-
+      - QC steps implemented as modules that fail by default
+      - Human review required before marking as passed
+      - After review, job can be manually marked to proceed
+      - **Note**: Specific UI for QC approval TBD
 3. **Individual Module Re-execution**
-   - Each module can be run independently with different parameters
-   - Users can modify parameters and re-run specific modules
-   - Logs available for each run attempt
+      - Each module can be run independently with different parameters
+      - Users can modify parameters and re-run specific modules
+      - Logs available for each run attempt
 
 ### Partial Failure Recovery
 
 Based on the discussion about 90% success / 10% failure scenarios:
 
 1. **Automatic Detection**
-   - Snakemake identifies which jobs succeeded vs failed
-   - Re-running a pipeline only executes failed jobs
-   - **Note**: Specific mechanism for failure detection not fully detailed
-
+      - Snakemake identifies which jobs succeeded vs failed
+      - Re-running a pipeline only executes failed jobs
+      - **Note**: Specific mechanism for failure detection not fully detailed
 2. **Telemetry and Monitoring**
-   - OpenTelemetry integration sends logs to central Grafana stack
-   - All stdout/stderr piped through telemetry system
-   - **Challenge**: CellProfiler containers need custom wrappers for proper error reporting
-
+      - OpenTelemetry integration sends logs to central Grafana stack
+      - All stdout/stderr piped through telemetry system
+      - **Challenge**: CellProfiler containers need custom wrappers for proper error reporting
 3. **Resource Adjustment**
-   - Failed jobs can be retried with adjusted resources
-   - **Note**: UI mechanism for resource adjustment per retry TBD
+      - Failed jobs can be retried with adjusted resources
+      - **Note**: UI mechanism for resource adjustment per retry TBD
 
 ### Infrastructure Configuration Notes
 
@@ -186,7 +181,6 @@ StarryNight manages job execution; IT retains security/cost control.
 ### Proposed Review Structure (TBD)
 
 - [ ] Technical review by engineering team
-- [ ] Cost review by finance/IT
 - [ ] Security review by IT/compliance
 - [ ] Final approval by project sponsors
 
