@@ -59,30 +59,30 @@ flowchart TB
 
 ### Phase 1: Infrastructure Foundation (Weeks 1-2)
 
-1. Configure Pulumi project structure
-2. Define AWS Batch compute environments (targeting Fargate)
+1. Configure Pulumi project structure (team has experience from CytoSkel)
+2. Define AWS Batch compute environments
 3. Create S3 bucket hierarchy
-4. Deploy EC2 login node
+4. Deploy EC2 login node (24/7 coordinator)
 
-**Key Unknown**: Optimal AWS Batch configuration for image processing workloads
+**Key Unknown**: Team has no AWS Batch experience; configuration requirements unclear
 
 ### Phase 2: Container Pipeline (Weeks 3-4)
 
 1. Select public container registry
-2. Set up automated builds triggered by CellProfiler releases
-3. Implement independent StarryNight versioning
-4. Test build pipeline
+2. Adapt existing CI/CD pipeline for AWS containers
+3. Set up builds triggered by CellProfiler releases
+4. Test custom CellProfiler wrappers
 
-**Note**: Automated builds minimize maintenance burden
+**Note**: Must maintain custom StarryNight+CellProfiler containers (can't use official)
 
 ### Phase 3: Integration Testing (Weeks 5-6)
 
 1. Test job submission pipeline
 2. Validate Snakemake → AWS Batch translation
-3. Verify telemetry (using StarryNight's built-in system)
-4. Run end-to-end workflows
+3. Verify OpenTelemetry/Grafana integration
+4. Test Snakemake's job recovery features
 
-**Key Risk**: CellProfiler error handling in containerized environment
+**Key Risk**: CellProfiler error handling requires custom hooks
 
 ### Phase 4: Production Ready (Weeks 7-8)
 
@@ -93,19 +93,67 @@ flowchart TB
 
 **Note**: Security hardening deferred (internal users only)
 
-## Configuration
+## Configuration Requirements
 
-### Job Resource Configuration
+### User Infrastructure Configuration
 
-Users set compute resources via the UI, which flows through the system:
+Based on planning discussions, users configure infrastructure through the UI:
 
-UI → Module → Pipeline → AWS Batch job definitions
+1. **Module Parameter Exposure**
+   - Module authors expose parameters like memory and compute requirements
+   - Example from discussion: inventory module exposes `dataset_path` parameter
+   - **Proposed**: Modules could expose `memory` or similar resource parameters
+   - Backend implementation decides how to handle these parameters
+   - **Note**: Specific parameter names and UI interface details TBD
 
-### Infrastructure Configuration
+2. **Configuration Flow**
+   - UI → Module → Pipeline → AWS Batch job definitions
+   - Users cannot directly configure AWS Batch settings
+   - Backend determines infrastructure choices (e.g., AWS Batch vs alternatives)
 
-**Note**: Specific requirements TBD during implementation.
+### Job Failure and Restart Procedures
 
-Potential areas:
+From the planning discussions:
+
+1. **Snakemake Intelligence**
+   - Snakemake automatically tracks successful jobs and won't re-run them
+   - Only failed or not-yet-run jobs execute on retry
+   - Target-based execution model checks for output files
+
+2. **QC Review Points**
+   - QC steps implemented as modules that fail by default
+   - Human review required before marking as passed
+   - After review, job can be manually marked to proceed
+   - **Note**: Specific UI for QC approval TBD
+
+3. **Individual Module Re-execution**
+   - Each module can be run independently with different parameters
+   - Users can modify parameters and re-run specific modules
+   - Logs available for each run attempt
+
+### Partial Failure Recovery
+
+Based on the discussion about 90% success / 10% failure scenarios:
+
+1. **Automatic Detection**
+   - Snakemake identifies which jobs succeeded vs failed
+   - Re-running a pipeline only executes failed jobs
+   - **Note**: Specific mechanism for failure detection not fully detailed
+
+2. **Telemetry and Monitoring**
+   - OpenTelemetry integration sends logs to central Grafana stack
+   - All stdout/stderr piped through telemetry system
+   - **Challenge**: CellProfiler containers need custom wrappers for proper error reporting
+
+3. **Resource Adjustment**
+   - Failed jobs can be retried with adjusted resources
+   - **Note**: UI mechanism for resource adjustment per retry TBD
+
+### Infrastructure Configuration Notes
+
+**Note**: Many specifics remain TBD during implementation.
+
+Potential areas requiring configuration:
 
 - Network setup (VPC, security groups)
 - S3 access policies
@@ -113,14 +161,6 @@ Potential areas:
 - Compute preferences (spot vs on-demand)
 
 StarryNight manages job execution; IT retains security/cost control.
-
-### Failure Handling
-
-Snakemake provides intelligent recovery:
-
-- Successful jobs are never re-run
-- Failed jobs can be retried with adjusted resources
-- QC steps pause for manual review via dummy modules
 
 ## Validation Checklist
 
@@ -138,6 +178,24 @@ Snakemake provides intelligent recovery:
 | Container maintenance    | Automated builds       |
 | Cost overruns            | Monitoring and alerts  |
 | CellProfiler integration | Extensive testing      |
+
+## Stakeholder Approval Process
+
+**Note**: This section requires stakeholder input to define the approval process.
+
+### Proposed Review Structure (TBD)
+
+- [ ] Technical review by engineering team
+- [ ] Cost review by finance/IT
+- [ ] Security review by IT/compliance
+- [ ] Final approval by project sponsors
+
+### Open Questions for Stakeholders
+
+1. Who are the key stakeholders for approval?
+2. What are the approval criteria?
+3. What documentation is required for each review?
+4. What is the timeline for reviews?
 
 !!! info "Context from Planning Discussions"
 
