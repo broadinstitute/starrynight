@@ -39,6 +39,11 @@ We will focus entirely on these directories
 - Use click for CLI interfaces
 - Docstrings required for modules and public functions
 
+### Shell Scripts
+- Use exports for environment variables
+- Include clear error checking for required variables
+- Use consistent indentation and descriptive comments
+
 ## Error Handling & Logging
 - Use appropriate exception types
 - Include context information in exceptions

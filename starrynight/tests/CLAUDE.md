@@ -32,6 +32,10 @@ Here's the testing plan:
 - DO NOT over-mock with complex chains
 - DO NOT test every possible input; focus on boundaries and representative values
 
+# Tools
+- Filter LoadData CSVs: `python filter_loaddata_csv.py source_dir dest_dir --well WellA1,WellA2 --site 0,1 --cycle 1,2,3`
+- Validate paths: `python validate_loaddata_paths.py path/to/loaddata.csv`
+
 # Workflow
 - Code Quality: Run pre-commit checks before committing
   - `pre-commit run --files <path>`
