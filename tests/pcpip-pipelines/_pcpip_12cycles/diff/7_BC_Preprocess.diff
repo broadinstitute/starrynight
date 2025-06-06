@@ -10,7 +10,35 @@
 <     Input data file location:Default Output Folder|Desktop/PROJECT/workspace/load_data_csv/BATCH/Plate4
 ---
 >     Input data file location:Default Input Folder|/Users/bcimini/Downloads/PCPTroubleshooting
-68a69,76
+40a41,76
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_A
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_A
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_A
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_A
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_A
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_A
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_A
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_A
 >     Multiply the eleventh image by:1.0
@@ -19,7 +47,35 @@
 >     Select the twelfth image:Cycle12_A
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-119a128,135
+63a100,135
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_C
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_C
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_C
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_C
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_C
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_C
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_C
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_C
 >     Multiply the eleventh image by:1.0
@@ -28,7 +84,35 @@
 >     Select the twelfth image:Cycle12_C
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-170a187,194
+86a159,194
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_G
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_G
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_G
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_G
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_G
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_G
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_G
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_G
 >     Multiply the eleventh image by:1.0
@@ -37,7 +121,35 @@
 >     Select the twelfth image:Cycle12_G
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-221a246,253
+109a218,253
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_T
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_T
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_T
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_T
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_T
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_T
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_T
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_T
 >     Multiply the eleventh image by:1.0
@@ -46,7 +158,35 @@
 >     Select the twelfth image:Cycle12_T
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-363a396,403
+223a368,403
+>     Select the input image:Cycle04_A
+>     Name the output image:Cycle04_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle05_A
+>     Name the output image:Cycle05_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle06_A
+>     Name the output image:Cycle06_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle07_A
+>     Name the output image:Cycle07_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle08_A
+>     Name the output image:Cycle08_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle09_A
+>     Name the output image:Cycle09_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle10_A
+>     Name the output image:Cycle10_A_BackSub
+>     Select the illumination function:IllumMeanA
+>     Select how the illumination function is applied:Subtract
 >     Select the input image:Cycle11_A
 >     Name the output image:Cycle11_A_BackSub
 >     Select the illumination function:IllumMeanA
@@ -55,7 +195,35 @@
 >     Name the output image:Cycle12_A_BackSub
 >     Select the illumination function:IllumMeanA
 >     Select how the illumination function is applied:Subtract
-407a448,455
+239a420,455
+>     Select the input image:Cycle04_C
+>     Name the output image:Cycle04_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle05_C
+>     Name the output image:Cycle05_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle06_C
+>     Name the output image:Cycle06_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle07_C
+>     Name the output image:Cycle07_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle08_C
+>     Name the output image:Cycle08_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle09_C
+>     Name the output image:Cycle09_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle10_C
+>     Name the output image:Cycle10_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
 >     Select the input image:Cycle11_C
 >     Name the output image:Cycle11_C_BackSub
 >     Select the illumination function:IllumMeanC
@@ -64,7 +232,35 @@
 >     Name the output image:Cycle12_C_BackSub
 >     Select the illumination function:IllumMeanC
 >     Select how the illumination function is applied:Subtract
-451a500,507
+255a472,507
+>     Select the input image:Cycle04_G
+>     Name the output image:Cycle04_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle05_G
+>     Name the output image:Cycle05_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle06_G
+>     Name the output image:Cycle06_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle07_G
+>     Name the output image:Cycle07_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle08_G
+>     Name the output image:Cycle08_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle09_G
+>     Name the output image:Cycle09_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle10_G
+>     Name the output image:Cycle10_G_BackSub
+>     Select the illumination function:IllumMeanG
+>     Select how the illumination function is applied:Subtract
 >     Select the input image:Cycle11_G
 >     Name the output image:Cycle11_G_BackSub
 >     Select the illumination function:IllumMeanG
@@ -73,7 +269,35 @@
 >     Name the output image:Cycle12_G_BackSub
 >     Select the illumination function:IllumMeanG
 >     Select how the illumination function is applied:Subtract
-495a552,559
+271a524,559
+>     Select the input image:Cycle04_T
+>     Name the output image:Cycle04_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle05_T
+>     Name the output image:Cycle05_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle06_T
+>     Name the output image:Cycle06_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle07_T
+>     Name the output image:Cycle07_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle08_T
+>     Name the output image:Cycle08_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle09_T
+>     Name the output image:Cycle09_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle10_T
+>     Name the output image:Cycle10_T_BackSub
+>     Select the illumination function:IllumMeanT
+>     Select how the illumination function is applied:Subtract
 >     Select the input image:Cycle11_T
 >     Name the output image:Cycle11_T_BackSub
 >     Select the illumination function:IllumMeanT
@@ -82,7 +306,35 @@
 >     Name the output image:Cycle12_T_BackSub
 >     Select the illumination function:IllumMeanT
 >     Select how the illumination function is applied:Subtract
-548a613,620
+296a585,620
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_A
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_A
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_A
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_A
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_A
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_A
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_A
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_A
 >     Multiply the eleventh image by:1.0
@@ -91,7 +343,35 @@
 >     Select the twelfth image:Cycle12_A
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-599a672,679
+319a644,679
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_C
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_C
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_C
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_C
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_C
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_C
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_C
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_C
 >     Multiply the eleventh image by:1.0
@@ -100,7 +380,35 @@
 >     Select the twelfth image:Cycle12_C
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-650a731,738
+342a703,738
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_G
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_G
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_G
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_G
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_G
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_G
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_G
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_G
 >     Multiply the eleventh image by:1.0
@@ -109,7 +417,35 @@
 >     Select the twelfth image:Cycle12_G
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-701a790,797
+365a762,797
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_T
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_T
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_T
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_T
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_T
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_T
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_T
+>     Multiply the tenth image by:1.0
+>     Measurement:
 >     Image or measurement?:Image
 >     Select the eleventh image:Cycle11_T
 >     Multiply the eleventh image by:1.0
@@ -118,7 +454,7 @@
 >     Select the twelfth image:Cycle12_T
 >     Multiply the twelfth image by:1.0
 >     Measurement:
-730,750c826,827
+394,414c826,827
 < ImageMath:[module_num:19|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
 <     Operation:None
 <     Raise the power of the result by:.25
@@ -128,9 +464,9 @@
 <     Set values greater than 1 equal to 1?:Yes
 <     Replace invalid values with 0?:Yes
 <     Ignore the image masks?:No
-<     Name the output image:SqrtDAPI
+<     Name the output image:SqrtDNA
 <     Image or measurement?:Image
-<     Select the first image:Cycle01_DAPI
+<     Select the first image:Cycle01_DNA
 <     Multiply the first image by:1.0
 <     Measurement:
 <     Image or measurement?:Image
@@ -139,77 +475,79 @@
 <     Measurement:
 <
 < IdentifyPrimaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
-<     Select the input image:SqrtDAPI
+<     Select the input image:SqrtDNA
 ---
 > IdentifyPrimaryObjects:[module_num:19|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select the input image:Cycle01_DAPI
-752c829
+416c829
 <     Typical diameter of objects, in pixel units (Min,Max):12,50
 ---
 >     Typical diameter of objects, in pixel units (Min,Max):6,25
-764a842,843
->     Display accepted local maxima?:No
->     Select maxima color:Blue
-769,770c848,849
+425,460d837
+<     Automatically calculate size of smoothing filter for declumping?:No
+<     Automatically calculate minimum allowed distance between local maxima?:No
+<     Handling of objects if excessive number of objects identified:Continue
+<     Maximum number of objects:500
+<     Use advanced settings?:Yes
+<     Threshold setting version:12
+<     Threshold strategy:Global
+<     Thresholding method:Minimum Cross-Entropy
 <     Threshold smoothing scale:3
 <     Threshold correction factor:1
----
->     Threshold smoothing scale:1.3488
->     Threshold correction factor:1.0
-775c854
+<     Lower and upper bounds on threshold:0.0,1.0
+<     Manual threshold:0.0
+<     Select the measurement to threshold with:None
+<     Two-class or three-class thresholding?:Two classes
 <     Log transform before thresholding?:Yes
----
->     Log transform before thresholding?:No
-785,811c864
-< RunCellpose:[module_num:21|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-<     Select the input image:Cycle01_DAPI
-<     Rescale images before running Cellpose:Yes
-<     Run CellPose in docker or local python environment:Python
-<     Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:0.1
-<     Expected object diameter:20
-<     Detection mode:nuclei
-<     Name the output object:Nuclei
-<     Use GPU:No
-<     Use averaging:No
-<     Supply nuclei image as well?:No
-<     Select the nuclei image:None
-<     Save probability image?:No
-<     Name the probability image:Probabilities
-<     Location of the pre-trained model file:Elsewhere...|
-<     Pre-trained model file name:cyto_0
-<     Flow threshold:0.4
-<     Cell probability threshold:0.0
-<     GPU memory share for each worker:0.1
-<     Stitch Threshold:0.0
-<     Use 3D:No
-<     Minimum size:15
-<     Use Omnipose for mask reconstruction:No
-<     Invert images:No
-<     Remove objects that are touching the edge?:Yes
+<     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+<     Size of adaptive window:50
+<     Lower outlier fraction:0.05
+<     Upper outlier fraction:0.05
+<     Averaging method:Mean
+<     Variance method:Standard deviation
+<     # of deviations:2.0
+<     Thresholding method:Otsu
 <
+< IdentifyPrimaryObjects:[module_num:21|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:Cycle01_DNA
+<     Name the primary objects to be identified:Nuclei
+<     Typical diameter of objects, in pixel units (Min,Max):10,80
+<     Discard objects outside the diameter range?:Yes
+<     Discard objects touching the border of the image?:Yes
+<     Method to distinguish clumped objects:Shape
+<     Method to draw dividing lines between clumped objects:Shape
+<     Size of smoothing filter:8
+<     Suppress local maxima that are closer than this minimum allowed distance:8
+<     Speed up by using lower-resolution image to find local maxima?:Yes
+<     Fill holes in identified objects?:After declumping only
+472c849
+<     Threshold correction factor:1.4
+---
+>     Threshold correction factor:1.0
+487c864
 < IdentifySecondaryObjects:[module_num:22|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
 ---
 > IdentifySecondaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-841c894
+517c894
 < EnhanceOrSuppressFeatures:[module_num:23|svn_version:'Unknown'|variable_revision_number:7|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > EnhanceOrSuppressFeatures:[module_num:21|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
-855c908
+531c908
 < IdentifyPrimaryObjects:[module_num:24|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > IdentifyPrimaryObjects:[module_num:22|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-857c910
+533c910
 <     Name the primary objects to be identified:AllFoci
 ---
 >     Name the primary objects to be identified:Foci
-870a924,925
+546a924,925
 >     Display accepted local maxima?:No
 >     Select maxima color:Blue
-888c943
+564c943
 <     # of deviations:7
 ---
 >     # of deviations:4
-891,931c946
+567,607c946
 < MeasureObjectOverlap:[module_num:25|svn_version:'Unknown'|variable_revision_number:2|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
 <     Select the objects to be used as the ground truth basis for calculating the amount of overlap:Nuclei
 <     Select the objects to be tested for overlap against the ground truth:Foci
@@ -253,313 +591,736 @@
 < FilterObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > FilterObjects:[module_num:23|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-943,944d957
+619,620d957
 <     Keep removed objects as a separate set?:No
 <     Name the objects removed by the filter:RemovedObjects
-950d962
+626d962
 <     Allow fuzzy feature matching?:No
-952,953c964,965
+628,629c964,965
 < CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
-<     Hidden:40
+<     Hidden:12
 ---
 > CompensateColors:[module_num:24|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
 >     Hidden:48
-1065a1078,1083
+639a976,990
+>     Select an image to measure:Cycle04_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle04_A
+>     Select an image to measure:Cycle05_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle05_A
+>     Select an image to measure:Cycle06_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle06_A
+>     Select an image to measure:Cycle07_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle07_A
+>     Select an image to measure:Cycle08_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle08_A
+648a1000,1014
+>     Select an image to measure:Cycle04_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle04_C
+>     Select an image to measure:Cycle05_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle05_C
+>     Select an image to measure:Cycle06_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle06_C
+>     Select an image to measure:Cycle07_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle07_C
+>     Select an image to measure:Cycle08_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle08_C
+657a1024,1038
+>     Select an image to measure:Cycle04_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle04_G
+>     Select an image to measure:Cycle05_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle05_G
+>     Select an image to measure:Cycle06_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle06_G
+>     Select an image to measure:Cycle07_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle07_G
+>     Select an image to measure:Cycle08_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle08_G
+666a1048,1110
+>     Select an image to measure:Cycle04_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle04_T
+>     Select an image to measure:Cycle05_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle05_T
+>     Select an image to measure:Cycle06_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle06_T
+>     Select an image to measure:Cycle07_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle07_T
+>     Select an image to measure:Cycle08_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle08_T
+>     Select an image to measure:Cycle09_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle09_A
+>     Select an image to measure:Cycle09_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle09_C
+>     Select an image to measure:Cycle09_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle09_G
+>     Select an image to measure:Cycle09_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle09_T
+>     Select an image to measure:Cycle10_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle10_A
 >     Select an image to measure:Cycle11_A_BackSub
 >     What compensation class does this image belong to?:1
 >     Select an output image name:CorrCycle11_A
 >     Select an image to measure:Cycle12_A_BackSub
 >     What compensation class does this image belong to?:1
 >     Select an output image name:CorrCycle12_A
-1068a1087,1092
+>     Select an image to measure:Cycle10_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle10_C
 >     Select an image to measure:Cycle11_C_BackSub
 >     What compensation class does this image belong to?:2
 >     Select an output image name:CorrCycle11_C
 >     Select an image to measure:Cycle12_C_BackSub
 >     What compensation class does this image belong to?:2
 >     Select an output image name:CorrCycle12_C
-1071a1096,1101
+>     Select an image to measure:Cycle10_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle10_G
 >     Select an image to measure:Cycle11_G_BackSub
 >     What compensation class does this image belong to?:3
 >     Select an output image name:CorrCycle11_G
 >     Select an image to measure:Cycle12_G_BackSub
 >     What compensation class does this image belong to?:3
 >     Select an output image name:CorrCycle12_G
-1074a1105,1110
+>     Select an image to measure:Cycle10_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle10_T
 >     Select an image to measure:Cycle11_T_BackSub
 >     What compensation class does this image belong to?:4
 >     Select an output image name:CorrCycle11_T
 >     Select an image to measure:Cycle12_T_BackSub
 >     What compensation class does this image belong to?:4
 >     Select an output image name:CorrCycle12_T
-1092,1093c1128,1129
+684,685c1128,1129
 < MeasureObjectIntensity:[module_num:30|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-<     Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T, CorrCycle04_A, CorrCycle04_C, CorrCycle04_G, CorrCycle04_T, CorrCycle05_A, CorrCycle05_C, CorrCycle05_G, CorrCycle05_T, CorrCycle06_A, CorrCycle06_C, CorrCycle06_G, CorrCycle06_T, CorrCycle07_A, CorrCycle07_C, CorrCycle07_G, CorrCycle07_T, CorrCycle08_A, CorrCycle08_C, CorrCycle08_G, CorrCycle08_T, CorrCycle09_A, CorrCycle09_C, CorrCycle09_G, CorrCycle09_T, CorrCycle10_A, CorrCycle10_C, CorrCycle10_G, CorrCycle10_T
+<     Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T
 ---
 > MeasureObjectIntensity:[module_num:25|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T, CorrCycle04_A, CorrCycle04_C, CorrCycle04_G, CorrCycle04_T, CorrCycle05_A, CorrCycle05_C, CorrCycle05_G, CorrCycle05_T, CorrCycle06_A, CorrCycle06_C, CorrCycle06_G, CorrCycle06_T, CorrCycle07_A, CorrCycle07_C, CorrCycle07_G, CorrCycle07_T, CorrCycle08_A, CorrCycle08_C, CorrCycle08_G, CorrCycle08_T, CorrCycle09_A, CorrCycle09_C, CorrCycle09_G, CorrCycle09_T, CorrCycle10_A, CorrCycle10_C, CorrCycle10_G, CorrCycle10_T, CorrCycle11_A, CorrCycle11_C, CorrCycle11_G, CorrCycle11_T, CorrCycle12_A, CorrCycle12_C, CorrCycle12_G, CorrCycle12_T
-1096,1097c1132,1133
+688,689c1132,1133
 < CallBarcodes:[module_num:31|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-<     Number of cycles:10
+<     Number of cycles:3
 ---
 > CallBarcodes:[module_num:26|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Number of cycles:12
-1102,1103c1138,1139
+694,695c1138,1139
 <     Select the column containing barcodes to match against:sgRNA
 <     Select the column containing gene/transcript barcode names:gene_symbol
 ---
 >     Select the column of barcodes to match against:sgRNA
 >     Select the column with gene/transcript barcode names:gene_symbol
-1108,1109d1143
+700,701d1143
 <     Do you have an empty vector barcode you would like to add to the barcode list?:No
 <     What is the empty vector sequence?:AAAAAAAAAAAAAAA
-1111c1145
+703c1145
 < ImageMath:[module_num:32|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > ImageMath:[module_num:27|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1130c1164
+722c1164
 < ImageMath:[module_num:33|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > ImageMath:[module_num:28|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1149c1183
+741c1183
 < MeasureObjectIntensity:[module_num:34|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > MeasureObjectIntensity:[module_num:29|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1153c1187
+745c1187
 < RelateObjects:[module_num:35|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
 ---
 > RelateObjects:[module_num:30|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1241c1275
+833c1275
 < SaveImages:[module_num:36|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:31|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1259d1292
+835c1277
+<     Select the image to save:Cycle01_DNA
+---
+>     Select the image to save:Cycle01_DAPI
+837,838c1279,1280
+<     Select image name for file prefix:Cycle01_DNA
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_DNA
+---
+>     Select image name for file prefix:Cycle01_DAPI
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle01_DAPI
+841c1283
+<     Text to append to the image name:__DNA
+---
+>     Text to append to the image name:__DAPI
+851d1292
 <     Save with lossless compression?:No
-1261c1294
+853c1294
 < SaveImages:[module_num:37|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:32|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1279d1311
+871d1311
 <     Save with lossless compression?:No
-1281c1313
+873c1313
 < SaveImages:[module_num:38|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:33|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1299d1330
+891d1330
 <     Save with lossless compression?:No
-1301c1332
+893c1332
 < SaveImages:[module_num:39|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:34|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1319d1349
+911d1349
 <     Save with lossless compression?:No
-1321c1351
+913c1351
 < SaveImages:[module_num:40|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:35|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1339d1368
+931d1368
 <     Save with lossless compression?:No
-1341c1370
+933c1370
 < SaveImages:[module_num:41|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:36|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1359d1387
+951d1387
 <     Save with lossless compression?:No
-1361c1389
+953c1389
 < SaveImages:[module_num:42|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:37|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1379d1406
+971d1406
 <     Save with lossless compression?:No
-1381c1408
+973c1408
 < SaveImages:[module_num:43|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:38|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1399d1425
+991d1425
 <     Save with lossless compression?:No
-1401c1427
+993c1427
 < SaveImages:[module_num:44|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:39|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1419d1444
+1011d1444
 <     Save with lossless compression?:No
-1421c1446
+1013c1446
 < SaveImages:[module_num:45|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:40|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1439d1463
+1031d1463
 <     Save with lossless compression?:No
-1441c1465
+1033c1465
 < SaveImages:[module_num:46|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:41|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1459d1482
+1051d1482
 <     Save with lossless compression?:No
-1461c1484
+1053c1484
 < SaveImages:[module_num:47|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:42|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1479d1501
+1071d1501
 <     Save with lossless compression?:No
-1481c1503
+1073c1503
 < SaveImages:[module_num:48|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:43|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1499d1520
+1091d1520
 <     Save with lossless compression?:No
-1501c1522
-< SaveImages:[module_num:49|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1093c1522,2206
+< ExportToSpreadsheet:[module_num:77|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:44|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1519d1539
-<     Save with lossless compression?:No
-1521c1541
-< SaveImages:[module_num:50|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle04_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle04_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle04_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:45|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1539d1558
-<     Save with lossless compression?:No
-1541c1560
-< SaveImages:[module_num:51|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle04_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle04_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle04_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:46|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1559d1577
-<     Save with lossless compression?:No
-1561c1579
-< SaveImages:[module_num:52|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle04_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle04_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle04_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:47|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1579d1596
-<     Save with lossless compression?:No
-1581c1598
-< SaveImages:[module_num:53|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle04_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle04_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle04_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle04_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:48|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1599d1615
-<     Save with lossless compression?:No
-1601c1617
-< SaveImages:[module_num:54|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle05_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle05_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle05_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:49|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1619d1634
-<     Save with lossless compression?:No
-1621c1636
-< SaveImages:[module_num:55|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle05_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle05_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle05_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:50|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1639d1653
-<     Save with lossless compression?:No
-1641c1655
-< SaveImages:[module_num:56|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle05_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle05_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle05_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:51|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1659d1672
-<     Save with lossless compression?:No
-1661c1674
-< SaveImages:[module_num:57|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle05_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle05_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle05_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle05_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:52|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1679d1691
-<     Save with lossless compression?:No
-1681c1693
-< SaveImages:[module_num:58|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle06_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle06_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle06_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:53|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1699d1710
-<     Save with lossless compression?:No
-1701c1712
-< SaveImages:[module_num:59|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle06_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle06_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle06_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:54|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1719d1729
-<     Save with lossless compression?:No
-1721c1731
-< SaveImages:[module_num:60|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle06_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle06_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle06_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:55|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1739d1748
-<     Save with lossless compression?:No
-1741c1750
-< SaveImages:[module_num:61|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle06_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle06_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle06_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle06_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:56|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1759d1767
-<     Save with lossless compression?:No
-1761c1769
-< SaveImages:[module_num:62|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle07_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle07_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle07_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:57|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1779d1786
-<     Save with lossless compression?:No
-1781c1788
-< SaveImages:[module_num:63|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle07_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle07_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle07_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:58|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1799d1805
-<     Save with lossless compression?:No
-1801c1807
-< SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle07_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle07_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle07_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:59|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1819d1824
-<     Save with lossless compression?:No
-1821c1826
-< SaveImages:[module_num:65|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle07_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle07_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle07_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle07_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:60|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1839d1843
-<     Save with lossless compression?:No
-1841c1845
-< SaveImages:[module_num:66|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle08_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle08_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle08_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:61|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1859d1862
-<     Save with lossless compression?:No
-1861c1864
-< SaveImages:[module_num:67|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle08_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle08_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle08_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:62|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1879d1881
-<     Save with lossless compression?:No
-1881c1883
-< SaveImages:[module_num:68|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle08_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle08_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle08_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:63|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1899d1900
-<     Save with lossless compression?:No
-1901c1902
-< SaveImages:[module_num:69|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle08_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle08_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle08_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle08_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1919d1919
-<     Save with lossless compression?:No
-1921c1921
-< SaveImages:[module_num:70|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle09_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle09_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle09_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:65|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1939d1938
-<     Save with lossless compression?:No
-1941c1940
-< SaveImages:[module_num:71|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle09_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle09_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle09_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:66|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1959d1957
-<     Save with lossless compression?:No
-1961c1959
-< SaveImages:[module_num:72|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle09_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle09_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle09_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:67|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1979d1976
-<     Save with lossless compression?:No
-1981c1978
-< SaveImages:[module_num:73|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle09_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle09_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle09_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle09_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:68|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-1999d1995
-<     Save with lossless compression?:No
-2001c1997,2035
-< SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle10_A
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle10_A_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_A
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle10_A
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:69|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select the type of image to save:Image
 >     Select the image to save:CorrCycle11_A
@@ -599,11 +1360,24 @@
 >     How to save the series:T (Time)
 >
 > SaveImages:[module_num:71|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2019d2052
-<     Save with lossless compression?:No
-2021c2054,2092
-< SaveImages:[module_num:75|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle10_C
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle10_C_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_C
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle10_C
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:72|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select the type of image to save:Image
 >     Select the image to save:CorrCycle11_C
@@ -643,11 +1417,24 @@
 >     How to save the series:T (Time)
 >
 > SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2039d2109
-<     Save with lossless compression?:No
-2041c2111,2149
-< SaveImages:[module_num:76|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle10_G
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle10_G_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_G
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle10_G
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:75|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select the type of image to save:Image
 >     Select the image to save:CorrCycle11_G
@@ -687,11 +1474,24 @@
 >     How to save the series:T (Time)
 >
 > SaveImages:[module_num:77|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2059d2166
-<     Save with lossless compression?:No
-2061c2168,2206
-< ExportToSpreadsheet:[module_num:77|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
----
+>     Select the type of image to save:Image
+>     Select the image to save:CorrCycle10_T
+>     Select method for constructing file names:Single name
+>     Select image name for file prefix:Cycle10_T_PreAligned
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_Cycle10_T
+>     Number of digits:4
+>     Append a suffix to the image file name?:Yes
+>     Text to append to the image name:__Cycle10_T
+>     Saved file format:tiff
+>     Output file location:Default Output Folder|Cycle01
+>     Image bit depth:16-bit integer
+>     Overwrite existing files without warning?:No
+>     When to save:Every cycle
+>     Record the file and path information to the saved image?:No
+>     Create subfolders in the output folder?:No
+>     Base image folder:Elsewhere...|
+>     How to save the series:T (Time)
+>
 > SaveImages:[module_num:78|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 >     Select the type of image to save:Image
 >     Select the image to save:CorrCycle11_T
@@ -731,48 +1531,48 @@
 >     How to save the series:T (Time)
 >
 > ExportToSpreadsheet:[module_num:80|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2085c2230
+1117c2230
 < CalculateMath:[module_num:78|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > CalculateMath:[module_num:81|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2109c2254
+1141c2254
 < CalculateMath:[module_num:79|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > CalculateMath:[module_num:82|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2133c2278
+1165c2278
 < CalculateMath:[module_num:80|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > CalculateMath:[module_num:83|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2157c2302
+1189c2302
 < FlagImage:[module_num:81|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > FlagImage:[module_num:84|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2174d2318
+1206d2318
 <     Allow fuzzy feature matching?:No
-2177c2321
+1209c2321
 < ImageMath:[module_num:82|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > ImageMath:[module_num:85|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2196c2340
+1228c2340
 < RescaleIntensity:[module_num:83|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > RescaleIntensity:[module_num:86|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2210c2354
+1242c2354
 < OverlayOutlines:[module_num:84|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > OverlayOutlines:[module_num:87|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2218a2363,2364
+1250a2363,2364
 >     Select outline color:#0080FF
 >     Select objects to display:Cells
-2220c2366
+1252c2366
 < SaveImages:[module_num:85|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
 ---
 > SaveImages:[module_num:88|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2238d2383
+1270d2383
 <     Save with lossless compression?:No
-2240c2385
-< SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1272c2385
+< SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
 ---
 > SaveImages:[module_num:89|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-2258d2402
+1290d2402
 <     Save with lossless compression?:No

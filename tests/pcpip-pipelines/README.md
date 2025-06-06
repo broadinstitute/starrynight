@@ -64,6 +64,21 @@ The `_ref_graph_format/` directory contains pipeline visualizations to aid in un
 
 These visualizations help understand pipeline structure without requiring CellProfiler installation.
 
+## Reference Pipeline Updates
+
+### 2025-01-06: Template Synchronization
+
+The reference pipelines were updated to match the production template versions from `starrynight/src/starrynight/templates/cppipe/`. Key changes include:
+
+**Metadata tag standardization:**
+- `ref_5_BC_Illum.cppipe`: Changed from `SBSCycle` to `Cycle` metadata tag
+- `ref_6_BC_Apply_Illum.cppipe` and `ref_7_BC_Preprocess.cppipe`: Changed from `Well_Value` to `Well` metadata tag
+
+**Channel naming consistency:**
+- `ref_6_BC_Apply_Illum.cppipe` and `ref_7_BC_Preprocess.cppipe`: Changed from `DAPI` to `DNA` for DNA channel naming
+
+These changes ensure consistency between test fixtures and production templates, facilitating better validation and testing workflows.
+
 ## Appendix: Pipeline Selection Process
 
 <details>
@@ -96,7 +111,7 @@ After reviewing the diffs, these pipeline variants were selected:
 
 ### Reference Pipelines Creation
 
-The selected pipeline variants were copied to create the reference pipelines:
+The selected pipeline variants were initially copied to create the reference pipelines:
 
 ```sh
 cp _refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe ref_1_CP_Illum.cppipe
@@ -108,9 +123,10 @@ cp _refsource/7_BC_Preprocess/7_BC_Preprocess.cppipe ref_7_BC_Preprocess.cppipe
 cp _refsource/9_Analysis/9_Analysis_Plate1_Plate2.cppipe ref_9_Analysis.cppipe
 ```
 
-The reference pipelines were further modified by hand to:
+The reference pipelines were modified over time to:
 1. Drop cycles 4-10
 2. Replace `RunCellPose` with `IdentifyPrimaryObjects`
+3. Synchronize with production template versions (2025-01-06)
 
 You can view the commit history of specific pipeline files using GitHub, for example:
 ```

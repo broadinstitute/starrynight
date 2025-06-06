@@ -1,0 +1,24 @@
+16c16
+<     Select metadata tags for grouping:Plate,Cycle
+---
+>     Select metadata tags for grouping:Plate,SBSCycle
+269c269
+<     Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumA
+---
+>     Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumA
+288c288
+<     Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumDNA
+---
+>     Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumDNA
+307c307
+<     Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumC
+---
+>     Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumC
+326c326
+<     Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumG
+---
+>     Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumG
+345c345
+<     Enter single file name:\g<Plate>_Cycle\g<Cycle>_IllumT
+---
+>     Enter single file name:\g<Plate>_Cycle\g<SBSCycle>_IllumT
