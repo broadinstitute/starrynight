@@ -289,13 +289,120 @@ The compute graph provides a complete definition of how the operation should be 
 
 For the "specification" part of a module's dual nature, StarryNight uses Bilayers - an external schema system that standardizes how inputs, outputs, and metadata are defined.
 
+### What is Bilayers?
+
+Bilayers is an open-source specification and framework designed to make bioimage analysis algorithms accessible through auto-generated user interfaces. It bridges the gap between algorithm developers and biologists by providing:
+
+- A standardized YAML-based configuration format for describing algorithm interfaces
+- Automatic generation of web interfaces (Gradio) and Jupyter notebooks from these configurations
+- A consistent way to package algorithms in Docker containers with their interfaces
+- A schema validation system based on LinkML to ensure configurations are correct
+
+The Bilayers project enables algorithm developers to write a single configuration file that describes their tool's inputs, outputs, and parameters, and automatically get user-friendly interfaces without writing UI code.
+
+### How StarryNight Integrates Bilayers
+
+StarryNight leverages the Bilayers specification system to standardize its module interfaces. The integration works through several mechanisms:
+
+1. **Schema Download and Synchronization**: StarryNight maintains a local copy of the Bilayers validation schema, which is automatically downloaded from the Bilayers repository:
+   ```python
+   # From starrynight/modules/common.py
+   VALIDATE_SCHEMA_URL = "https://raw.githubusercontent.com/bilayer-containers/bilayers/master/tests/test_config/validate_schema.yaml"
+   ```
+
+2. **Pydantic Model Generation**: The Bilayers LinkML schema is converted into Pydantic models that StarryNight uses for runtime validation:
+   ```python
+   def update_module_schema() -> None:
+       """Download and update the module schema from bilayers."""
+       schema_yaml = Path(__file__).parent.joinpath("validate_schema.yaml")
+       schema_path = Path(__file__).parent.joinpath("schema.py")
+       # Download schema and generate Pydantic models
+   ```
+
+3. **SpecContainer Integration**: Each StarryNight module defines its specification using the `SpecContainer` class, which is derived from the Bilayers schema. This ensures compatibility with the broader Bilayers ecosystem.
+
+### The Bilayers Specification Structure
+
 The module layer uses Bilayers to create standardized definitions of:
 
-- Input ports with types and validation rules
-- Output ports with types and descriptions
-- Documentation and metadata
+- **Input Specifications**:
+  - Type definitions (image, file, directory, array, measurement)
+  - Validation rules and constraints
+  - Default values and optional flags
+  - Descriptions for documentation
+  - CLI tag mappings for command generation
 
-This standardized approach ensures consistent interface definitions across modules and enables automatic UI generation from specifications.
+- **Output Specifications**:
+  - Output types and formats
+  - File naming patterns
+  - Directory structures
+  - Relationships to inputs
+
+- **Parameter Definitions**:
+  - UI element types (checkbox, integer, float, dropdown, textbox)
+  - Value constraints and defaults
+  - Grouping for beginner/advanced modes
+  - Help text and documentation
+
+- **Algorithm Metadata**:
+  - Citations and references
+  - Docker image specifications
+  - License information
+  - Algorithm descriptions
+
+### Example: How a Module Uses Bilayers
+
+When a StarryNight module implements its `_spec()` method, it returns a `SpecContainer` that follows the Bilayers schema:
+
+```python
+def _spec(self) -> SpecContainer:
+    return SpecContainer(
+        inputs={
+            "input_image": TypeInput(
+                name="input_image",
+                type=TypeEnum.image,
+                description="Input microscopy image",
+                cli_tag="-i",
+                optional=False,
+            )
+        },
+        outputs={
+            "processed_image": TypeOutput(
+                name="processed_image",
+                type=TypeEnum.image,
+                description="Processed output image",
+            )
+        },
+        parameters=[
+            # Bilayers-compliant parameter definitions
+        ],
+        citations=TypeCitations(
+            algorithm=[
+                TypeAlgorithmFromCitation(
+                    name="Algorithm Name",
+                    description="Algorithm description",
+                )
+            ]
+        ),
+    )
+```
+
+### Benefits of Using Bilayers
+
+1. **Standardization**: All modules follow the same specification format, making them predictable and easy to understand.
+
+2. **Interoperability**: Because StarryNight uses the Bilayers specification, there's potential for:
+   - Importing Bilayers-compatible tools from other projects
+   - Exporting StarryNight modules for use in other Bilayers-compatible systems
+   - Leveraging the broader Bilayers ecosystem of tools and interfaces
+
+3. **Automatic UI Generation**: While StarryNight doesn't currently generate Gradio or Jupyter interfaces from these specs, the Bilayers-compliant specifications make this possible in the future.
+
+4. **Validation**: The LinkML-based schema provides robust validation of module specifications, catching configuration errors early.
+
+5. **Documentation**: The structured format ensures that all modules have consistent documentation for their inputs, outputs, and parameters.
+
+This standardized approach ensures consistent interface definitions across modules and enables potential future features like automatic UI generation from specifications.
 
 ## Compute Graphs with Pipecraft
 
