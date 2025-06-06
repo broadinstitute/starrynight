@@ -3,6 +3,8 @@
 This guide will help you install StarryNight and run your first workflow using the CLI (Command Line Interface) approach. You'll set up the environment and calculate illumination correction functions for Cell Painting images.
 
 !!! info "Implementation Approaches"
+    **GUI Approach** (coming soon): Point-and-click interface through Canvas for biologists who prefer visual workflows.
+
     **CLI Approach** (shown in this guide): Uses direct command-line commands for learning and exploration. It's a simpler way to understand workflow operations step-by-step.
 
     **Python/Module Approach** (used in production): Most users will execute these operations through Python code (as shown in `starrynight/notebooks/pypct/exec_pcp_generic_pipe.py`). This approach provides standardized components, containerized execution, and integration with the Canvas UI.
@@ -66,7 +68,7 @@ The following sections guide you through running a basic illumination correction
 ```mermaid
 flowchart LR
     Setup["Setup & Preparation"] --> CPIllumCalc["CP Illumination Calculation"]
-    style CPIllumCalc fill:#e6f3ff,stroke:#0066cc
+    style CPIllumCalc stroke:#0066cc
 ```
 
 ## Download Sample Data
@@ -153,6 +155,14 @@ For the example experiment, the following values can be used.
 }
 ```
 
+Key parameters explained:
+
+- `cp_img_overlap_pct`: Percentage overlap between adjacent images for stitching (typically 10%)
+- `cp_img_frame_type`: Image shape - "round" for circular fields, "square" for rectangular
+- `cp_acquisition_order`: Imaging pattern - "snake" for serpentine, "rows" for row-by-row
+- `cp_nuclei_channel`, `cp_cell_channel`, `cp_mito_channel`: Channel names for key cellular components
+- `use_legacy`: Whether to use pre-tested pipeline templates (recommended: false for new experiments)
+
 Adjust the values to match your experiment setup.
 
 ## Generate Inventory
@@ -200,7 +210,7 @@ The index is a structured database of metadata extracted from file paths that:
 The result will be an `index.parquet` file containing structured metadata for each image. This index will be used in all subsequent processing steps through the `-i` parameter.
 
 !!! info "Path Parsing System"
-    StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. This is how it identifies images by well, channel, and site without requiring separate metadata files. If your data follows a different organization, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
+    StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. The default parser handles the file structure shown in this example, but you can write custom parsers for different organizations. If your data follows a different organization than the pattern used as an example here, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
 
 !!! note "Expected Parse Errors"
     During index generation, you may see error messages for files that don't match the expected image path patterns. This is normal and expected:
@@ -212,7 +222,7 @@ The result will be an `index.parquet` file containing structured metadata for ea
 
     These errors occur because:
 
-    - Hidden files like `.DS_Store` (starting with a dot) are not valid image files
+    - Hidden files like `.DS_Store` can reappear even after deletion (macOS sometimes recreates them) and are not valid image files
     - The parser is currently developed only to handle image files
 
     The parser is intentionally strict and only accepts properly formatted Cell Painting (CP) and SBS (Sequencing by Synthesis) image paths. These non-image files are safely skipped and won't affect your workflow.
@@ -400,7 +410,7 @@ starrynight cp -d /path/to/plugins -p /path/to/pipeline.cppipe ...
 
     **Terminology Consistency**
 
-    - "CLI approach" vs "Module-based approach" - Different ways to use StarryNight
+    - "CLI approach" vs "Python/Module approach" - Different ways to use StarryNight
     - "Pre-fabricated pipelines" vs "Dynamic pipeline generation" - Two pipeline generation methods
     - "Workflow" - The end-to-end image processing sequence
     - "Pipeline" - The CellProfiler processing definition

@@ -12,7 +12,7 @@ flowchart LR
     Parser -->|Transformer| Metadata["Structured Metadata"]
     Metadata --> Index["Index Generation"]
 
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    classDef default stroke:#333,stroke-width:1px;
 ```
 
 ### How Path Parsing Works
@@ -27,7 +27,7 @@ This architecture enables flexible, robust parsing without relying on brittle st
 
 ## The Default "Vincent" Parser
 
-StarryNight's default parser handles file paths with this structure:
+StarryNight's default parser handles file paths with this structure, which is commonly produced by Phenix imaging systems:
 
 ```
 [dataset]/[source_id]/[batch_id]/images/[plate_id]/[experiment_id]/Well[well_id]_Point[site_id]_[index]_Channel[channels]_Seq[sequence].ome.tiff
@@ -202,9 +202,8 @@ Validate results by examining the `index.parquet` file.
     **Organization Principles**:
 
     1. Progressive disclosure (basics → advanced)
-    2. Visual explanations with diagrams
-    3. Practical, functional examples
-    4. Implementation details for extensibility
+    2. Practical, functional examples
+    3. Implementation details for extensibility
 
     **Style Guidelines**:
 
@@ -213,4 +212,4 @@ Validate results by examining the `index.parquet` file.
     3. Prioritize practical guidance over theory
     4. Use real-world examples
 
-    **Related Docs**: Builds on "Getting Started," complements workflow examples, references architecture docs for advanced details.
+    **Related Docs**: Builds on [Getting Started](getting-started.md), complements [Complete Workflow Example](example-pipeline-cli.md), references [Architecture Overview](../architecture/00_architecture_overview.md) for advanced details.
