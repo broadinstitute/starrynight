@@ -187,7 +187,7 @@
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
                     "text": "Name the output image",
-                    "value": "Cycle01_DAPI"
+                    "value": "Cycle01_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
@@ -207,7 +207,7 @@
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
                     "text": "Name the output image",
-                    "value": "Cycle02_DAPI_PreAligned"
+                    "value": "Cycle02_DNA_PreAligned"
                 },
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
@@ -227,7 +227,7 @@
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
                     "text": "Name the output image",
-                    "value": "Cycle03_DAPI_PreAligned"
+                    "value": "Cycle03_DNA_PreAligned"
                 },
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
@@ -622,7 +622,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the first input image",
-                    "value": "Cycle01_DAPI"
+                    "value": "Cycle01_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
@@ -632,12 +632,12 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the second input image",
-                    "value": "Cycle02_DAPI_PreAligned"
+                    "value": "Cycle02_DNA_PreAligned"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
                     "text": "Name the second output image",
-                    "value": "Cycle02_DAPI"
+                    "value": "Cycle02_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
@@ -728,7 +728,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the first input image",
-                    "value": "Cycle01_DAPI"
+                    "value": "Cycle01_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
@@ -738,12 +738,12 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the second input image",
-                    "value": "Cycle03_DAPI_PreAligned"
+                    "value": "Cycle03_DNA_PreAligned"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
                     "text": "Name the second output image",
-                    "value": "Cycle03_DAPI"
+                    "value": "Cycle03_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
@@ -824,7 +824,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.list_subscriber._image_list_subscriber.ImageListSubscriber",
                     "text": "Select images to measure",
-                    "value": "Cycle01_A, Cycle01_C, Cycle01_DAPI, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_DAPI, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_DAPI, Cycle03_G, Cycle03_T"
+                    "value": "Cycle01_A, Cycle01_C, Cycle01_DNA, Cycle01_G, Cycle01_T, Cycle02_A, Cycle02_C, Cycle02_DNA, Cycle02_G, Cycle02_T, Cycle03_A, Cycle03_C, Cycle03_DNA, Cycle03_G, Cycle03_T"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number._float.Float",
@@ -935,7 +935,7 @@
                 {
                     "name": "cellprofiler_core.setting._measurement.Measurement",
                     "text": "Which measurement?",
-                    "value": "Correlation_Correlation_Cycle01_DAPI_Cycle02_DAPI"
+                    "value": "Correlation_Correlation_Cycle01_DNA_Cycle02_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting._binary.Binary",
@@ -990,7 +990,7 @@
                 {
                     "name": "cellprofiler_core.setting._measurement.Measurement",
                     "text": "Which measurement?",
-                    "value": "Correlation_Correlation_Cycle01_DAPI_Cycle03_DAPI"
+                    "value": "Correlation_Correlation_Cycle01_DNA_Cycle03_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting._binary.Binary",
@@ -1061,7 +1061,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the image to save",
-                    "value": "Cycle01_DAPI"
+                    "value": "Cycle01_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.choice._choice.Choice",
@@ -1076,7 +1076,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle01_DAPI"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle01_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1167,7 +1167,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the image to save",
-                    "value": "Cycle02_DAPI"
+                    "value": "Cycle02_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.choice._choice.Choice",
@@ -1182,7 +1182,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle02_DAPI"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle02_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1273,7 +1273,7 @@
                 {
                     "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
                     "text": "Select the image to save",
-                    "value": "Cycle03_DAPI"
+                    "value": "Cycle03_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.choice._choice.Choice",
@@ -1288,7 +1288,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle03_DAPI"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle03_DNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1394,7 +1394,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle01_A"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle01_A"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1500,7 +1500,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle01_C"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle01_C"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1606,7 +1606,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle01_G"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle01_G"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1712,7 +1712,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle01_T"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle01_T"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1818,7 +1818,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle02_A"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle02_A"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1924,7 +1924,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle02_C"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle02_C"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2030,7 +2030,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle02_G"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle02_G"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2136,7 +2136,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle02_T"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle02_T"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2242,7 +2242,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle03_A"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle03_A"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2348,7 +2348,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle03_C"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle03_C"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2454,7 +2454,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle03_G"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle03_G"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -2560,7 +2560,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "Plate_\\g<Plate>_Well_\\g<Well_Value>_Site_\\g<Site>_Cycle03_T"
+                    "value": "Plate_\\g<Plate>_Well_\\g<Well>_Site_\\g<Site>_Cycle03_T"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",

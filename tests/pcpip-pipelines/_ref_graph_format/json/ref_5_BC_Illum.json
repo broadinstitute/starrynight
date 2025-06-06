@@ -55,7 +55,7 @@
                 {
                     "name": "cellprofiler_core.setting.multichoice._multichoice.MultiChoice",
                     "text": "Select metadata tags for grouping",
-                    "value": "Plate,SBSCycle"
+                    "value": "Plate,Cycle"
                 },
                 {
                     "name": "cellprofiler_core.setting._binary.Binary",
@@ -1566,7 +1566,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "\\g<Plate>_Cycle\\g<SBSCycle>_IllumA"
+                    "value": "\\g<Plate>_Cycle\\g<Cycle>_IllumA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1672,7 +1672,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "\\g<Plate>_Cycle\\g<SBSCycle>_IllumDNA"
+                    "value": "\\g<Plate>_Cycle\\g<Cycle>_IllumDNA"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1778,7 +1778,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "\\g<Plate>_Cycle\\g<SBSCycle>_IllumC"
+                    "value": "\\g<Plate>_Cycle\\g<Cycle>_IllumC"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1884,7 +1884,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "\\g<Plate>_Cycle\\g<SBSCycle>_IllumG"
+                    "value": "\\g<Plate>_Cycle\\g<Cycle>_IllumG"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
@@ -1990,7 +1990,7 @@
                 {
                     "name": "cellprofiler_core.setting.text._text.Text",
                     "text": "Enter single file name",
-                    "value": "\\g<Plate>_Cycle\\g<SBSCycle>_IllumT"
+                    "value": "\\g<Plate>_Cycle\\g<Cycle>_IllumT"
                 },
                 {
                     "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
