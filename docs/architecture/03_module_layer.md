@@ -326,29 +326,26 @@ StarryNight leverages the Bilayers specification system to standardize its modul
 The module layer uses Bilayers to create standardized definitions of:
 
 - **Input Specifications**:
-  - Type definitions (image, file, directory, array, measurement)
-  - Validation rules and constraints
-  - Default values and optional flags
-  - Descriptions for documentation
-  - CLI tag mappings for command generation
-
-- **Output Specifications**:
-  - Output types and formats
-  - File naming patterns
-  - Directory structures
-  - Relationships to inputs
-
+    - Type definitions (image, file, directory, array, measurement)
+    - Validation rules and constraints
+    - Default values and optional flags
+    - Descriptions for documentation
+    - CLI tag mappings for command generation
+  - **Output Specifications**:
+    - Output types and formats
+    - File naming patterns
+    - Directory structures
+    - Relationships to inputs
 - **Parameter Definitions**:
-  - UI element types (checkbox, integer, float, dropdown, textbox)
-  - Value constraints and defaults
-  - Grouping for beginner/advanced modes
-  - Help text and documentation
-
+    - UI element types (checkbox, integer, float, dropdown, textbox)
+    - Value constraints and defaults
+    - Grouping for beginner/advanced modes
+    - Help text and documentation
 - **Algorithm Metadata**:
-  - Citations and references
-  - Docker image specifications
-  - License information
-  - Algorithm descriptions
+    - Citations and references
+    - Docker image specifications
+    - License information
+    - Algorithm descriptions
 
 ### Example: How a Module Uses Bilayers
 
@@ -390,16 +387,12 @@ def _spec(self) -> SpecContainer:
 ### Benefits of Using Bilayers
 
 1. **Standardization**: All modules follow the same specification format, making them predictable and easy to understand.
-
 2. **Interoperability**: Because StarryNight uses the Bilayers specification, there's potential for:
-   - Importing Bilayers-compatible tools from other projects
-   - Exporting StarryNight modules for use in other Bilayers-compatible systems
-   - Leveraging the broader Bilayers ecosystem of tools and interfaces
-
+      - Importing Bilayers-compatible tools from other projects
+      - Exporting StarryNight modules for use in other Bilayers-compatible systems
+      - Leveraging the broader Bilayers ecosystem of tools and interfaces
 3. **Automatic UI Generation**: While StarryNight doesn't currently generate Gradio or Jupyter interfaces from these specs, the Bilayers-compliant specifications make this possible in the future.
-
 4. **Validation**: The LinkML-based schema provides robust validation of module specifications, catching configuration errors early.
-
 5. **Documentation**: The structured format ensures that all modules have consistent documentation for their inputs, outputs, and parameters.
 
 This standardized approach ensures consistent interface definitions across modules and enables potential future features like automatic UI generation from specifications.
