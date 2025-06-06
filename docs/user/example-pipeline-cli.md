@@ -26,13 +26,13 @@ This guide demonstrates a comprehensive workflow for processing optical pooled s
 flowchart TD
     subgraph "Cell Painting (CP) Track"
         CP1["CP Illumination Calculation"] -->
-        CP2["CP Illumination Application"] -->
+        CP2["CP Illumination Application and Segmentation"] -->
         CP3["CP Segmentation Check"]
     end
 
     subgraph "Barcoding (SBS) Track"
         SBS1["SBS Illumination Calculation"] -->
-        SBS2["SBS Illumination Application"] -->
+        SBS2["SBS Illumination Application and Alignment"] -->
         SBS3["SBS Preprocessing"]
     end
 
@@ -52,17 +52,17 @@ The workflow includes these key steps:
 
 - **Setup and Preparation**: Generate inventory/index and create experiment configuration (completed in Getting Started)
 - **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
-- **CP Illumination Application**: Apply illumination corrections to CP images and segment cells
+- **CP Illumination Application and Segmentation**: Apply illumination corrections to CP images and segment cells
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
-- **SBS Illumination Application**: Apply illumination corrections and align DAPI images across cycles
-- **SBS Preprocessing**: Process SBS images, compensate channels, and call barcodes
-- **Analysis**: Integrate CP and SBS data and extract measurements
+- **SBS Illumination Application and Alignment**: Apply illumination corrections and align DAPI images across cycles
+- **SBS Preprocessing**: Process SBS images, compensate channels, and perform preliminary barcode calling
+- **Analysis**: Integrate CP and SBS data, perform final barcode calling, and extract measurements
 
 All CellProfiler-based modules in this workflow follow a consistent three-step pattern:
 
 1. **Generate LoadData files**: Create CSV files that tell CellProfiler which images to process
-2. **Generate CellProfiler pipelines**: Create customized CellProfiler pipeline files (cppipe files)
+2. **Generate CellProfiler pipelines**: Create customized or point to existing CellProfiler pipeline files (cppipe files)
 3. **Execute CellProfiler**: Run CellProfiler with the generated files
 
 !!! note "Beyond CellProfiler"
@@ -88,7 +88,7 @@ You should already have:
 
 We'll now expand from there to the full pipeline.
 
-## CP Illumination Application
+## CP Illumination Application and Segmentation
 
 Since we've already completed the CP Illumination Calculation, we'll continue with applying those corrections:
 
@@ -121,7 +121,7 @@ starrynight cp \
 
 ## CP Segmentation Check
 
-Evaluate cell segmentation quality in CP images:
+Evaluate cell segmentation quality in CP images. This step generates quality control images that overlay the segmentation outlines on the original images, allowing you to manually inspect the segmentation accuracy. The output images will need to be reviewed to determine if the segmentation parameters need adjustment:
 
 ```sh
 # Create necessary directories
@@ -185,7 +185,7 @@ starrynight cp \
     --sbs
 ```
 
-## SBS Illumination Application
+## SBS Illumination Application and Alignment
 
 Apply illumination correction to SBS images:
 
@@ -306,9 +306,11 @@ Throughout the pipeline, you'll use these common parameters:
 
 ## Next Steps
 
-- Perform statistical analysis on the extracted features
-- Visualize results using tools like Python/Matplotlib
-- Export data for integration with other analysis platforms
+After completing this workflow, you can:
+
+1. Export the extracted data from the analysis output directories for use in downstream tools
+2. Perform statistical analysis on the extracted features using your preferred analysis framework
+3. Visualize results using tools like Python/Matplotlib or other visualization platforms
 
 ## Conclusion
 
