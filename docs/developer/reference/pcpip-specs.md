@@ -2,7 +2,7 @@
 
 PCPIP (Pooled Cell Painting Image Processing) is a specialized image processing system that automates the analysis of large-scale optical pooled screening experiments. The system integrates CellProfiler's image analysis capabilities with AWS Lambda-based orchestration to process thousands of microscopy images through a series of coordinated pipelines. PCPIP handles two parallel processing tracks - one for Cell Painting images that capture cellular morphology and another for barcoding images that identify genetic perturbations - before combining them for comprehensive phenotypic analysis. This document details the complete implementation of this workflow, including pipeline specifications, cloud infrastructure configuration, and execution patterns that enable reproducible, scalable image processing for high-content screening.
 
-See [Requirements](../design/requirements.md) for a specification of the new system we want to build, based on PCPIP.
+See [Requirements](../roadmap/requirements.md) for a specification of the new system we want to build, based on PCPIP.
 
 
 ## Overview
