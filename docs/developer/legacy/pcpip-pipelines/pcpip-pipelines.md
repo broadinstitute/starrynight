@@ -23,6 +23,8 @@ For full context, see the [original PCPIP repository pipelines](https://github.c
 
 ## Directory Structure
 
+Directory structure of <https://github.com/broadinstitute/starrynight/tree/main/docs/developer/legacy/pcpip-pipelines>:
+
 | Directory            | Description                                     |
 | -------------------- | ----------------------------------------------- |
 | `/` (root)           | Reference pipeline files (prefixed with `ref_`) |
