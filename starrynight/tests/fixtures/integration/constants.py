@@ -25,6 +25,18 @@ FIXTURE_CONFIGS = {
             "sbs_nuclei_channel": "DAPI",  # DNA
             "sbs_cell_channel": "PhalloAF750",
             "sbs_mito_channel": "ZO1AF488",
+            "cp_custom_channel_map": {
+                "DAPI": "DNA",
+                "ZO1AF488": "ZO1",
+                "PhalloAF750": "Phalloidin",
+            },
+            "sbs_custom_channel_map": {
+                "DAPI": "DNA",
+                "A": "A",
+                "T": "T",
+                "G": "G",
+                "C": "C",
+            },
         },
         # Input configuration
         "input": {
@@ -52,6 +64,18 @@ FIXTURE_CONFIGS = {
             "sbs_nuclei_channel": "DAPI",  # DNA
             "sbs_cell_channel": "PhalloAF750",
             "sbs_mito_channel": "ZO1AF488",
+            "cp_custom_channel_map": {
+                "DAPI": "DNA",
+                "ZO1AF488": "ZO1",
+                "PhalloAF750": "Phalloidin",
+            },
+            "sbs_custom_channel_map": {
+                "DAPI": "DNA",
+                "A": "A",
+                "T": "T",
+                "G": "G",
+                "C": "C",
+            },
         },
         # Input configuration
         "input": {

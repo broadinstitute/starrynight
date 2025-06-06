@@ -22,15 +22,21 @@ def gen_legacy_channel_map(
     plate_channel_list: list[str],
     exp_config: dict,
 ) -> dict:
-    return {
-        exp_config["cp_config"]["nuclei_channel"]: "DNA",
-        exp_config["cp_config"]["cell_channel"]: "Phalloidin",
-        exp_config["cp_config"]["mito_channel"]: "ZO1",
-        "A": "A",
-        "T": "T",
-        "G": "G",
-        "C": "C",
-    }
+    if exp_config["cp_config"].get("custom_channel_map", None) is not None:
+        return (
+            exp_config["cp_config"]["custom_channel_map"]
+            | exp_config["sbs_config"]["custom_channel_map"]
+        )
+    else:
+        return {
+            exp_config["cp_config"]["nuclei_channel"]: "DNA",
+            exp_config["cp_config"]["cell_channel"]: "Phalloidin",
+            exp_config["cp_config"]["mito_channel"]: "ZO1",
+            "A": "A",
+            "T": "T",
+            "G": "G",
+            "C": "C",
+        }
 
 
 def filter_images(df: pl.LazyFrame, for_sbs: bool = False) -> pl.LazyFrame:

@@ -32,6 +32,7 @@ class SBSConfig(BaseModel):
     nuclei_channel: str = Field("DNA")
     cell_channel: str = Field("CELL")
     mito_channel: str = Field("MITO")
+    custom_channel_map: dict | None = None
 
 
 class CPConfig(BaseModel):
@@ -45,6 +46,7 @@ class CPConfig(BaseModel):
     nuclei_channel: str = Field("DNA")
     cell_channel: str = Field("CELL")
     mito_channel: str = Field("MITO")
+    custom_channel_map: dict | None = None
 
 
 class PCPGenericInitConfig(BaseModel):
@@ -57,6 +59,7 @@ class PCPGenericInitConfig(BaseModel):
     cp_acquisition_order: AcquisitionOrderType = Field(
         AcquisitionOrderType.SNAKE
     )
+    cp_custom_channel_map: dict | None = None
     sbs_img_overlap_pct: int = Field(10)
     sbs_img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
     sbs_acquisition_order: AcquisitionOrderType = Field(
@@ -68,6 +71,7 @@ class PCPGenericInitConfig(BaseModel):
     sbs_nuclei_channel: str = Field("DNA")
     sbs_cell_channel: str = Field("CELL")
     sbs_mito_channel: str = Field("MITO")
+    sbs_custom_channel_map: dict | None = None
 
 
 class PCPGeneric(Experiment):
@@ -116,6 +120,13 @@ class PCPGeneric(Experiment):
 
         # Extract channel list
         cp_channel_list = get_channels_from_df(cp_images_df)
+
+        # Check custom channel map
+        for (
+            cp_custom_channel
+        ) in init_config_parsed.cp_custom_channel_map.keys():
+            assert cp_custom_channel in cp_channel_list
+
         # Construct SBS config
 
         # Extract images per well
@@ -139,6 +150,12 @@ class PCPGeneric(Experiment):
         # Extract channel list
         sbs_channel_list = get_channels_from_df(sbs_images_df)
 
+        # Check custom channel map
+        for (
+            sbs_custom_channel
+        ) in init_config_parsed.sbs_custom_channel_map.keys():
+            assert sbs_custom_channel in sbs_channel_list
+
         return PCPGeneric(
             dataset_id=dataset_id,
             index_path=index_path.resolve(),
@@ -152,6 +169,7 @@ class PCPGeneric(Experiment):
                 nuclei_channel=init_config_parsed.cp_nuclei_channel,
                 cell_channel=init_config_parsed.cp_cell_channel,
                 mito_channel=init_config_parsed.cp_mito_channel,
+                custom_channel_map=init_config_parsed.cp_custom_channel_map,
             ),
             sbs_config=SBSConfig(
                 n_cycles=sbs_n_cycles,
@@ -164,5 +182,6 @@ class PCPGeneric(Experiment):
                 nuclei_channel=init_config_parsed.sbs_nuclei_channel,
                 cell_channel=init_config_parsed.sbs_cell_channel,
                 mito_channel=init_config_parsed.sbs_mito_channel,
+                custom_channel_map=init_config_parsed.sbs_custom_channel_map,
             ),
         )

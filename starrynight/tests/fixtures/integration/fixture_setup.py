@@ -68,9 +68,7 @@ def _setup_input_dir(
 
     # Check that at least one expected dataset directory exists
     dataset_dir = input_dir / input_config["dataset_dir_name"]
-    assert dataset_dir.exists(), (
-        f"Expected {input_config['dataset_dir_name']} directory not found in input data"
-    )
+    assert dataset_dir.exists(), f"Expected {input_config['dataset_dir_name']} directory not found in input data"
 
     # Verify that image files exist in the input directory
     image_files = list(input_dir.glob("**/*.tiff"))
@@ -78,9 +76,9 @@ def _setup_input_dir(
         # Try alternative extensions
         image_files = list(input_dir.glob("**/*.tif"))
 
-    assert len(image_files) > 0, (
-        f"No image files (*.tiff, *.tif) found in {input_config['dir_name']}"
-    )
+    assert (
+        len(image_files) > 0
+    ), f"No image files (*.tiff, *.tif) found in {input_config['dir_name']}"
 
     return {"base_dir": base_dir, "input_dir": input_dir}
 
@@ -122,22 +120,18 @@ def _setup_output_dir(
 
     # Essential check: did extraction create the main output directory?
     assert output_dir.exists(), "Output test data not extracted correctly"
-    assert workspace_dir.exists(), (
-        f"Workspace directory not found in {output_config['dataset_dir_name']} output data"
-    )
+    assert workspace_dir.exists(), f"Workspace directory not found in {output_config['dataset_dir_name']} output data"
 
     # Verify that load_data_csv directory exists
-    assert load_data_csv_dir.exists(), (
-        f"load_data_csv directory not found in {output_config['dataset_dir_name']} workspace"
-    )
+    assert load_data_csv_dir.exists(), f"load_data_csv directory not found in {output_config['dataset_dir_name']} workspace"
 
     # Check for LoadData CSV files
     # Check for load_data files at the top level and in any subdirectories
     load_data_files = list(load_data_csv_dir.glob("load_data_*.csv"))
     load_data_files.extend(list(load_data_csv_dir.glob("**/load_data_*.csv")))
-    assert len(load_data_files) > 0, (
-        f"No LoadData CSV files found in {output_config['dataset_dir_name']} output data"
-    )
+    assert (
+        len(load_data_files) > 0
+    ), f"No LoadData CSV files found in {output_config['dataset_dir_name']} output data"
 
     return {
         "base_dir": base_dir,
@@ -282,9 +276,9 @@ def _handle_generated_setup(
     )
 
     # Check if the command was successful
-    assert result.exit_code == 0, (
-        f"Experiment init command failed: {result.stderr}"
-    )
+    assert (
+        result.exit_code == 0
+    ), f"Experiment init command failed: {result.stderr}"
 
     # Verify experiment_init.json was created (essential for next steps)
     exp_init_path = workspace_dir / "experiment_init.json"
@@ -309,9 +303,9 @@ def _handle_generated_setup(
     )
 
     # Check if the command was successful
-    assert result.exit_code == 0, (
-        f"Inventory generation command failed: {result.stderr}"
-    )
+    assert (
+        result.exit_code == 0
+    ), f"Inventory generation command failed: {result.stderr}"
 
     # Essential check: inventory file must exist for next steps
     inventory_file = inventory_dir / "inventory.parquet"
@@ -326,9 +320,9 @@ def _handle_generated_setup(
     )
 
     # Check if the command was successful
-    assert result.exit_code == 0, (
-        f"Index generation command failed: {result.stderr}"
-    )
+    assert (
+        result.exit_code == 0
+    ), f"Index generation command failed: {result.stderr}"
 
     # Essential check: index file must exist for next steps
     index_file = index_dir / "index.parquet"
@@ -350,9 +344,9 @@ def _handle_generated_setup(
     )
 
     # Check if the command was successful
-    assert result.exit_code == 0, (
-        f"Experiment file creation command failed: {result.stderr}"
-    )
+    assert (
+        result.exit_code == 0
+    ), f"Experiment file creation command failed: {result.stderr}"
 
     # Essential check: experiment.json file must exist to return it
     experiment_json_path = workspace_dir / "experiment.json"
@@ -402,12 +396,8 @@ def _handle_pregenerated_setup(
     pregenerated_experiment_json = fixtures_dir / "experiment.json"
 
     # Essential checks: source files must exist to be copied
-    assert pregenerated_index_file.exists(), (
-        f"Pre-generated index file not found for {fixture_id} at {pregenerated_index_file}"
-    )
-    assert pregenerated_experiment_json.exists(), (
-        f"Pre-generated experiment file not found for {fixture_id} at {pregenerated_experiment_json}"
-    )
+    assert pregenerated_index_file.exists(), f"Pre-generated index file not found for {fixture_id} at {pregenerated_index_file}"
+    assert pregenerated_experiment_json.exists(), f"Pre-generated experiment file not found for {fixture_id} at {pregenerated_experiment_json}"
 
     # Copy files to workspace directory to maintain expected structure
     index_file = workspace["index_dir"] / "index.parquet"
@@ -422,9 +412,9 @@ def _handle_pregenerated_setup(
 
     # Essential checks: copied files must exist for fixture to function
     assert index_file.exists(), "Failed to copy index file to workspace"
-    assert experiment_json_path.exists(), (
-        "Failed to copy experiment file to workspace"
-    )
+    assert (
+        experiment_json_path.exists()
+    ), "Failed to copy experiment file to workspace"
 
     # Return the same structure as the generated mode
     return {
