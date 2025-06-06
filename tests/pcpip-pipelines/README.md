@@ -19,6 +19,17 @@ For full context, see the [original PCPIP repository pipelines](https://github.c
 | `_refsource/`        | Source pipeline variants with comparison diffs  |
 | `_ref_graph_format/` | Pipeline visualizations (JSON, DOT, SVG, PNG)   |
 
+## ⚠️ Important: Reference Pipeline Maintenance
+
+**This directory contains legacy reference pipelines that are no longer actively maintained.**
+
+For current reference pipelines, use: **`starrynight/src/starrynight/templates/cppipe/`**
+
+- The templates directory is the single source of truth for production pipeline templates
+- This test directory was synchronized one final time on 2025-01-06 for historical consistency
+- Future updates will only be made to the templates directory
+- This directory remains useful for historical reference and specialized test fixtures
+
 ## Reference Pipelines Overview
 
 The PCPIP workflow consists of the following pipeline stages, represented by the reference pipelines in this repository:
