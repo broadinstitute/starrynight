@@ -57,10 +57,15 @@ def resolve_path_loaddata(
     #     print(
     #         f"Absolute path:{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
     #     )
-    if filepath.is_absolute():
-        return filepath
-    else:
-        return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
+    try:
+        # Try to see if filepath is already under path_mask
+        filepath.resolve().relative_to(path_mask.resolve())
+        # If successful, filepath is already under path_mask, return it resolved
+        return str(filepath.resolve())
+    except ValueError:
+        # If filepath is not under path_mask, concatenate them
+        # Use proper path joining instead of string manipulation
+        return str(path_mask.resolve() / filepath)
 
 
 def write_pq(
