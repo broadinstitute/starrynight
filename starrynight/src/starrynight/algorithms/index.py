@@ -54,11 +54,12 @@ class PCPIndex(BaseModel):
     is_sbs_image: Annotated[
         bool,
         BeforeValidator(
-            lambda v, info: v in IMG_FORMATS and bool(info.data["cycle_id"] is not None)
+            lambda v, info: v in IMG_FORMATS
+            and bool(info.data["cycle_id"] is not None)
         ),
     ] = Field(validation_alias="extension", default=False)
-    is_image: Annotated[bool, BeforeValidator(lambda v: v in IMG_FORMATS)] = Field(
-        validation_alias="extension", default=False
+    is_image: Annotated[bool, BeforeValidator(lambda v: v in IMG_FORMATS)] = (
+        Field(validation_alias="extension", default=False)
     )
     # WARN: This validation only runs when extension key is passed to the Model.
     # So set default to True, as directories won't have extension in their parse tree
@@ -68,7 +69,9 @@ class PCPIndex(BaseModel):
 
 
 def ast_to_pcp_index(
-    parsed_inv: FileInventory, path_parser: Lark, ast_transformer: type[BaseTransformer]
+    parsed_inv: FileInventory,
+    path_parser: Lark,
+    ast_transformer: type[BaseTransformer],
 ) -> PCPIndex:
     """Create PCPIndex from AST.
 
@@ -99,7 +102,9 @@ def ast_to_pcp_index(
     if pcp_index_dict.get("filename", False):
         assert parsed_inv.filename == pcp_index_dict["filename"]
     if pcp_index_dict.get("extension", False):
-        assert parsed_inv.extension.replace(".", "") == pcp_index_dict["extension"]
+        assert (
+            parsed_inv.extension.replace(".", "") == pcp_index_dict["extension"]
+        )
 
     return PCPIndex(
         **pcp_index_dict,
@@ -131,7 +136,7 @@ def gen_pcp_index(
 
     """
     df = pl.read_parquet(inv_path.resolve().__str__())
-    parsed_index = {key: [] for key in PCPIndex.model_construct().model_fields.keys()}
+    parsed_index = {key: [] for key in PCPIndex.model_fields.keys()}
     for batch in tqdm(
         df.iter_slices(), total=len(df) // 10000, desc="Generating Index"
     ):
