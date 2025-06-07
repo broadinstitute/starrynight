@@ -163,9 +163,21 @@ pcp_exp_init = PCPGenericInitConfig(
     cp_nuclei_channel="DAPI",
     cp_cell_channel="PhalloAF750",
     cp_mito_channel="ZO1AF488",
+    cp_custom_channel_map={
+        "DAPI": "DNA",
+        "ZO1AF488": "ZO1",
+        "PhalloAF750": "Phalloidin",
+    },
     sbs_nuclei_channel="DAPI",
     sbs_cell_channel="PhalloAF750",
     sbs_mito_channel="ZO1AF488",
+    sbs_custom_channel_map={
+        "DAPI": "DNA",
+        "A": "A",
+        "T": "T",
+        "G": "G",
+        "C": "C",
+    },
 )
 pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
@@ -333,9 +345,7 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule(
-    data_config, pcp_experiment
-)
+cp_segcheck_cppipe_mod = CPSegcheckGenCPPipeModule(data_config, pcp_experiment)
 
 # Change default value to use legacy pipeline compatible load data
 cp_segcheck_cppipe_mod.spec.inputs["use_legacy"].value = True
@@ -353,9 +363,7 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule(
-    data_config, pcp_experiment
-)
+cp_segcheck_invoke_mod = CPSegcheckInvokeCPModule(data_config, pcp_experiment)
 
 exec_backend = SnakeMakeBackend(
     cp_segcheck_invoke_mod.pipe,
@@ -505,8 +513,12 @@ sbs_preprocess_load_data_mod = SBSPreprocessGenLoadDataModule(
 
 # Change default value to use legacy pipeline compatible load data
 sbs_preprocess_load_data_mod.spec.inputs["use_legacy"].value = True
-#Fix align path for legacy module
-sbs_preprocess_load_data_mod.spec.inputs["aligned_images_path"].value = sbs_preprocess_load_data_mod.spec.inputs["corrected_images_path"].value
+# Fix align path for legacy module
+sbs_preprocess_load_data_mod.spec.inputs[
+    "aligned_images_path"
+].value = sbs_preprocess_load_data_mod.spec.inputs[
+    "corrected_images_path"
+].value
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_load_data_mod.pipe,
     backend_config,
@@ -544,7 +556,9 @@ sbs_preprocess_invoke_mod = SBSPreprocessInvokeCPModule(
     data_config, pcp_experiment
 )
 # Add the CP plugin directory
-sbs_preprocess_invoke_mod.spec.inputs["plugin_path"] = "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
+sbs_preprocess_invoke_mod.spec.inputs["plugin_path"] = (
+    "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
+)
 
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_invoke_mod.pipe,
@@ -563,9 +577,7 @@ run.wait()
 # ### Gen load data
 
 # %%
-analysis_load_data_mod = AnalysisGenLoadDataModule(
-    data_config, pcp_experiment
-)
+analysis_load_data_mod = AnalysisGenLoadDataModule(data_config, pcp_experiment)
 
 # Change default value to use legacy pipeline compatible load data
 analysis_load_data_mod.spec.inputs["use_legacy"].value = True
@@ -583,9 +595,7 @@ run.wait()
 # ### Gen cppipe file
 
 # %%
-analysis_cppipe_mod = AnalysisGenCPPipeModule(
-    data_config, pcp_experiment
-)
+analysis_cppipe_mod = AnalysisGenCPPipeModule(data_config, pcp_experiment)
 
 # Change default value to use legacy pipeline compatible load data
 analysis_cppipe_mod.spec.inputs["use_legacy"].value = True
@@ -603,12 +613,12 @@ run.wait()
 # ### Invoke cppipe file
 
 # %%
-analysis_invoke_mod = AnalysisInvokeCPModule(
-    data_config, pcp_experiment
-)
+analysis_invoke_mod = AnalysisInvokeCPModule(data_config, pcp_experiment)
 
 # Add the CP plugin directory
-analysis_invoke_mod.spec.inputs["plugin_path"] = "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
+analysis_invoke_mod.spec.inputs["plugin_path"] = (
+    "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
+)
 
 exec_backend = SnakeMakeBackend(
     analysis_invoke_mod.pipe,

@@ -92,9 +92,21 @@ pcp_exp_init = PCPGenericInitConfig(
     cp_nuclei_channel="DAPI",
     cp_cell_channel="PhalloAF750",
     cp_mito_channel="ZO1AF488",
+    cp_custom_channel_map={
+        "DAPI": "DNA",
+        "ZO1AF488": "ZO1",
+        "PhalloAF750": "Phalloidin",
+    },
     sbs_nuclei_channel="DAPI",
     sbs_cell_channel="PhalloAF750",
     sbs_mito_channel="ZO1AF488",
+    sbs_custom_channel_map={
+        "DAPI": "DNA",
+        "A": "A",
+        "T": "T",
+        "G": "G",
+        "C": "C",
+    },
 )
 pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
