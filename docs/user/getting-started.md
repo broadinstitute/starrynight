@@ -154,7 +154,7 @@ starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
 This creates an `experiment_init.json` file in your workspace that you can edit to match your dataset's characteristics:
 
 !!! warning "Known Issue: SBS Channel Requirements"
-    Currently, the `sbs_cell_channel` and `sbs_mito_channel` parameters must be specified in the `experiment_init.json` file even when only working with Cell Painting data. This is a known bug that will be addressed in a future release. For now, include these parameters with the same values as your Cell Painting channels.
+    Currently, the `sbs_cell_channel` and `sbs_mito_channel` parameters must be specified in the `experiment_init.json` file even when only working with Cell Painting (CP) data. This is a known bug that will be addressed in a future release. For now, include these parameters with the same values as your CP channels.
 
 For the example experiment, the following values can be used.
 
@@ -249,7 +249,7 @@ The result will be an `index.parquet` file containing structured metadata for ea
     - The parser is designed specifically for image files with structured paths
     - Non-image files (CSV, metadata) don't follow the expected naming pattern
 
-    **What this means:** The parser is intentionally strict and only accepts properly formatted Cell Painting and SBS image paths. While these warnings may seem numerous, they don't indicate failure - all valid image files are processed correctly and invalid files are safely skipped.
+    **What this means:** The parser is intentionally strict and only accepts properly formatted Cell Painting (CP) and SBS (Sequencing by Synthesis) image paths. While these warnings may seem numerous, they don't indicate failure - all valid image files are processed correctly and invalid files are safely skipped.
 
 ## Create Experiment File
 
