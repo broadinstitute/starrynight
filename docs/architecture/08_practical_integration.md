@@ -120,9 +120,21 @@ pcp_exp_init = PCPGenericInitConfig(
     cp_nuclei_channel="DAPI",
     cp_cell_channel="PhalloAF750",
     cp_mito_channel="ZO1AF488",
+    cp_custom_channel_map={
+        "DAPI": "DNA",
+        "ZO1AF488": "ZO1",
+        "PhalloAF750": "Phalloidin",
+    },
     sbs_nuclei_channel="DAPI",
     sbs_cell_channel="PhalloAF750",
     sbs_mito_channel="ZO1AF488",
+    sbs_custom_channel_map={
+        "DAPI": "DNA",
+        "A": "A",
+        "T": "T",
+        "G": "G",
+        "C": "C",
+    },
 )
 pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 ```
@@ -131,6 +143,7 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
 - `PCPGenericInitConfig` is a [Pydantic](https://docs.pydantic.dev/) model that validates experiment parameters
 - Channel names (DAPI, PhalloAF750, etc.) configure which image channels to use for specific purposes
+- Custom channel mappings (`cp_custom_channel_map`, `sbs_custom_channel_map`) translate microscope channel names to semantic biological names used in analysis pipelines
 - Acquisition settings (SNAKE, ROUND) define how the microscope captured the images
 - The `from_index` method loads data from the index and configures the experiment
 - This configuration will drive all subsequent module behavior without requiring repetitive parameter specification
