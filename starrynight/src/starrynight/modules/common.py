@@ -1,10 +1,9 @@
 """Common tools for creating modules."""
 
 from abc import ABC, abstractmethod, abstractproperty, abstractstaticmethod
-from collections.abc import Callable
 from inspect import getdoc, signature
 from pathlib import Path
-from typing import Generic, Self, TypeVar, Unpack
+from typing import Callable, Generic, ParamSpec, Self, TypeVar, Unpack
 
 import requests
 from click.decorators import _param_memo
@@ -106,7 +105,7 @@ class StarrynightModule(BaseModel, ABC):
         )
 
 
-_P = TypeVar("_P")
+_P = ParamSpec("_P")
 _R = TypeVar("_R")
 
 TYPE_MAP = {
