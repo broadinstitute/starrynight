@@ -13,6 +13,14 @@ This document provides a high-level structural map of the StarryNight system and
 | Configuration developer      | [Configuration Layer](06_configuration_layer.md)                     | Relevant layer docs                                               |
 | Biologist/Non-technical user | [Architecture for Biologists](07_architecture_for_biologists.md)     | [Practical Integration](08_practical_integration.md)              |
 
+!!!note "Pipeline Terminology"
+    Throughout this documentation, "pipeline" refers to **StarryNight pipelines** - complete scientific workflows composed of multiple processing modules. This is distinct from:
+
+    - **CellProfiler pipelines** (`.cppipe` files) - single-tool image analysis workflows
+    - **Snakemake pipelines** - the underlying execution engine's rule-based workflows
+
+    When we discuss CellProfiler or Snakemake pipelines specifically, we use those full terms. Otherwise, "pipeline" means StarryNight's higher-level workflow composition system.
+
 ## Architecture at a Glance
 
 The architecture consists of conceptual layers and their implementation:
