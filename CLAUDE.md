@@ -68,3 +68,6 @@ We will focus entirely on these directories
 
 ## Repository Details
 - The GitHub repo is git@github.com:broadinstitute/starrynight.git so be sure to use that with the GitHub MCP server
+
+## Development Tools
+- Use `gh project` for doing anything related to GitHub projects because the MCP server does not yet support it
