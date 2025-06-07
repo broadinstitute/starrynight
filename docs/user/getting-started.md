@@ -87,18 +87,8 @@ wget https://github.com/shntnu/starrynight/releases/download/v0.0.1/fix_s1_input
 echo "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0  fix_s1_input.tar.gz" | sha256sum -c
 
 # Extract the data
+# Ignore warnings like "tar: Ignoring unknown extended header keyword"
 tar -xzf fix_s1_input.tar.gz
-
-!!! note "Expected Tar Warnings"
-    When extracting the tar file, you may see warnings like:
-
-    ```
-    tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
-    tar: Ignoring unknown extended header keyword 'SCHILY.fflags'
-    tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.FinderInfo'
-    ```
-
-    These warnings are harmless and occur because the archive contains Apple-specific metadata. The extraction will complete successfully and all necessary files will be available.
 
 # Clean up macOS metadata files
 find fix_s1_input -name '._*' -delete
