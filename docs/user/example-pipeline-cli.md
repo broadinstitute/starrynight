@@ -73,11 +73,12 @@ All CellProfiler-based modules in this workflow follow a consistent three-step p
 This guide assumes you have completed the [Getting Started](getting-started.md) guide through the step "Running Illumination Correction Calculation". Before continuing, make sure you have the following environment variables set:
 
 ```sh
-# Set environment variables for convenience
-export DATADIR='./scratch/fix_s1_input'
-export WKDIR='./scratch/fix_s1_output/workspace'
+# Set environment variables for convenience (using absolute paths to avoid path resolution issues)
+export DATADIR="$(pwd)/scratch/fix_s1_input"
+export WKDIR="$(pwd)/scratch/fix_s1_output/workspace"
+export CP_PLUGINS="$(pwd)/scratch/CellProfiler-plugins/active_plugins/"
 # Add new environment variable needed for the complete workflow
-export INPUT_WKDIR='./scratch/fix_s1_input/Source1/workspace'
+export INPUT_WKDIR="$(pwd)/scratch/fix_s1_input/Source1/workspace"
 ```
 
 You should already have:

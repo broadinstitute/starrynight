@@ -114,13 +114,13 @@ cd ..
 ```
 
 ```sh
-# Set environment variables for convenience
-export DATADIR='./scratch/fix_s1_input'
-export WKDIR='./scratch/fix_s1_output/workspace'
-export CP_PLUGINS='./scratch/CellProfiler-plugins/active_plugins/'
+# Set environment variables for convenience (using absolute paths to avoid path resolution issues)
+export DATADIR="$(pwd)/scratch/fix_s1_input"
+export WKDIR="$(pwd)/scratch/fix_s1_output/workspace"
+export CP_PLUGINS="$(pwd)/scratch/CellProfiler-plugins/active_plugins/"
 
 # Additional environment variable needed for the complete workflow
-export INPUT_WKDIR='./scratch/fix_s1_input/Source1/workspace'
+export INPUT_WKDIR="$(pwd)/scratch/fix_s1_input/Source1/workspace"
 ```
 
 !!! info "Environment Variable Organization"
