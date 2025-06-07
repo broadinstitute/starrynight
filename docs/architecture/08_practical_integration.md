@@ -1,6 +1,6 @@
-# Connecting the Layers: A Practical Walkthrough of the StarryNight Architecture
+# Practical Integration: Connecting the StarryNight Architecture Layers
 
-This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining the `exec_pcp_generic_pipe.py` file. While the previous documents explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
+This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining `exec_pcp_generic_pipe.py`, an example pipeline implementation file that demonstrates the PCP Generic workflow. While the [architecture overview](00_architecture_overview.md) and individual layer documents ([Algorithm](01_algorithm_layer.md), [CLI](02_cli_layer.md), [Module](03_module_layer.md), [Pipeline](04_pipeline_layer.md), [Execution](05_execution_layer.md), [Configuration](06_configuration_layer.md)) explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
 
 !!!note "Pedagogical Approach"
     This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. This approach:
@@ -41,7 +41,7 @@ The PCP Generic pipeline processes optical pooled screening data through a serie
 7. Preprocess (SBS)
 8. Analysis
 
-Each step in this example follows a CellProfiler-specific three-phase pattern (see [Anatomy of a Pipeline Step](#anatomy-of-a-pipeline-step-lines-177-228) for details on this pattern):
+Each of the eight pipeline steps follows a CellProfiler-specific three-phase pattern (see [Anatomy of a Pipeline Step](#anatomy-of-a-pipeline-step-lines-177-228) for details on this pattern):
 
 - Generate load data (configuration data for CellProfiler)
 - Generate pipeline file (CellProfiler pipeline definition)
@@ -49,7 +49,7 @@ Each step in this example follows a CellProfiler-specific three-phase pattern (s
 
 ## Configuration Setup (Lines 19-120)
 
-The first section establishes three key configurations:
+The first section establishes two key configurations:
 
 ```python
 # Data configuration (Configuration Layer)
@@ -67,9 +67,10 @@ backend_config = SnakeMakeConfig(
 
 **What developers should note:**
 
-- `DataConfig` defines input/output paths for the entire pipeline
+- `DataConfig` is a Python class that defines input/output paths for the entire pipeline
 - `SnakeMakeBackend` provides the execution environment
 - These configurations will be reused across all modules
+- The actual experiment configuration (as a Python object) is created later after building the index
 
 ## Pipeline Initialization (Lines 121-169)
 
@@ -128,7 +129,7 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
 **What developers should note:**
 
-- `PCPGenericInitConfig` is a Pydantic model that validates experiment parameters
+- `PCPGenericInitConfig` is a [Pydantic](https://docs.pydantic.dev/) model that validates experiment parameters
 - Channel names (DAPI, PhalloAF750, etc.) configure which image channels to use for specific purposes
 - Acquisition settings (SNAKE, ROUND) define how the microscope captured the images
 - The `from_index` method loads data from the index and configures the experiment
@@ -183,7 +184,7 @@ This module automatically finds the LoadData file created in the previous phase 
 
 ### Phase 3: Execute Pipeline
 
-Finally, a module runs the pipeline on the data:
+Finally, a module runs the pipeline on the data (note that module names use "Invoke" but we refer to this as the "Execute" phase for clarity):
 
 ```python
 cp_calc_illum_invoke_mod = CPCalcIllumInvokeCPModule(
@@ -204,7 +205,7 @@ This module finds both the LoadData file and the pipeline file created in the pr
 **What developers should note:**
 
 - Each step follows the same three-phase pattern across all pipeline steps
-- Module names follow a consistent naming convention (Load → CPipe → Invoke)
+- Module names follow a consistent naming convention (LoadData → CPipe → Invoke), though we refer to the third phase as "Execute" for clarity
 - The same configuration (`data_config` and `pcp_experiment`) is used across all phases
 - Each module is independently executable but automatically finds outputs from previous phases
 - This pattern repeats for all eight pipeline steps, with variations in parameter specifics
@@ -253,7 +254,7 @@ This registry enables:
 
 - Runtime discovery of available modules
 - Dynamic instantiation based on configuration
-- Integration with experiment classes
+- Integration with experiment classes (like `PCPGeneric` that define workflow-specific configurations)
 - Extension with new module types
 
 When creating new modules, you must register them in this registry to make them discoverable within the system.
@@ -292,7 +293,7 @@ This containerization ensures reproducibility and isolation of each pipeline ste
 
 ## Pipeline Composition (Alternative Approach)
 
-While this document focuses on executing modules one by one, StarryNight provides a more elegant pipeline composition approach (focused on the Pipeline Composition Phase) through the `create_pcp_generic_pipeline` function:
+While this document focuses on executing modules one by one for clarity, StarryNight also supports composing all modules at once through the `create_pcp_generic_pipeline` function:
 
 ```python
 # From starrynight/src/starrynight/pipelines/pcp_generic.py
@@ -332,7 +333,7 @@ This approach enables complex parallel execution patterns, where CP and SBS proc
 When implementing your own modules, follow these patterns:
 
 !!!note "Module vs. Algorithm Extension"
-    This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools.
+    This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools. To add your own algorithms to StarryNight, see the ["Adding a New Algorithm"](#adding-a-new-algorithm) section below.
 
 1. **Module Structure**: Consider your module's specific requirements:
       - For CellProfiler integrations, use the three-phase pattern shown earlier
@@ -392,7 +393,7 @@ This approach allows StarryNight to leverage existing tools by:
 - Directly using their CLI interfaces rather than reimplementing algorithms
 - Wrapping them in StarryNight's module abstraction for consistent workflow integration
 - Using containerization to ensure reproducibility and isolation
-- Potentially using Bilayers specs directly, allowing integration with modules from other systems
+- Potentially using [Bilayers](https://github.com/bilayer-containers/bilayers) specifications directly (the external schema system StarryNight uses for module specifications), enabling integration with other Bilayers-compatible tools
 
 ## Common Development Tasks
 
@@ -409,10 +410,14 @@ Here are examples of common tasks and how to approach them:
 
 ### Modifying an Existing Pipeline
 
-1. Find the module implementations in `modules/`
-2. Update the module's `.from_config()` method to handle new configurations
-3. Modify the container configuration and CLI command construction
-4. Update the pipeline composition function if needed
+To modify how a pipeline works, you typically need to:
+
+1. **For changing module behavior**: Find the relevant module implementations in `modules/`
+   - Update the module's `.from_config()` method to handle new configurations
+   - Modify the container configuration and CLI command construction
+2. **For changing pipeline structure**: Update the pipeline composition function (e.g., in `pipelines/pcp_generic.py`)
+   - Add or remove modules from the composition
+   - Change the execution order or parallelization strategy
 
 ## Debugging and Troubleshooting
 
