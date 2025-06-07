@@ -30,7 +30,7 @@ class SnakeMakeConfig(BackendConfig):
     apptainer: bool = False
     print_exec: bool = False
     use_fluent_bit: bool = True
-    force_execution: bool = True
+    force_execution: bool = False
 
 
 class SnakeMakeBackendRun(BaseBackendRun):
