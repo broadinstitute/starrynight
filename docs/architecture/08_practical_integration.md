@@ -41,13 +41,13 @@ The PCP Generic pipeline processes optical pooled screening data through a serie
 7. Preprocess (SBS)
 8. Analysis
 
-Each of the eight pipeline steps follows a CellProfiler-specific three-phase pattern (see [Anatomy of a Pipeline Step](#anatomy-of-a-pipeline-step-lines-177-228) for details on this pattern):
+Each of the eight pipeline steps follows a CellProfiler-specific three-phase pattern (see [Anatomy of a Pipeline Step](#anatomy-of-a-pipeline-step) for details on this pattern):
 
 - Generate load data (configuration data for CellProfiler)
 - Generate pipeline file (CellProfiler pipeline definition)
 - Execute the pipeline (running CellProfiler)
 
-## Configuration Setup (Lines 19-120)
+## Configuration Setup
 
 The first section establishes two key configurations:
 
@@ -72,7 +72,7 @@ backend_config = SnakeMakeConfig(
 - These configurations will be reused across all modules
 - The actual experiment configuration (as a Python object) is created later after building the index
 
-## Pipeline Initialization (Lines 121-169)
+## Pipeline Initialization
 
 Before running algorithm-specific modules, the pipeline needs two foundational components:
 
@@ -103,7 +103,7 @@ run.wait()
 - Each module produces a "pipe" that's executed by the backend
 - The experiment is initialized from the index using type-validated configuration
 
-## Experiment Configuration (Lines 128-147)
+## Experiment Configuration
 
 After building the index, the notebook configures the experiment using `PCPGenericInitConfig`:
 
@@ -148,7 +148,7 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 - The `from_index` method loads data from the index and configures the experiment
 - This configuration will drive all subsequent module behavior without requiring repetitive parameter specification
 
-## Anatomy of a Pipeline Step (Lines 177-228)
+## Anatomy of a Pipeline Step
 
 !!!note "CellProfiler Integration Pattern"
     The three-phase pattern described below (Generate Load Data → Generate Pipeline File → Execute Pipeline) is specific to how StarryNight integrates with CellProfiler. This pattern isn't a requirement of the StarryNight architecture, but rather a practical approach for this particular integration. Other tools may use different patterns while still adhering to the module abstraction.
