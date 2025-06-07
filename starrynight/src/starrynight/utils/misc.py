@@ -47,20 +47,35 @@ def resolve_path_loaddata(
         Path of the file in index
 
     """
-    # print(f"Path mask: {path_mask}")
-    # print(f"File path: {filepath}")
-    # try:
-    #     filepath.resolve().relative_to(path_mask.resolve())
-    #     print(f"Relative path: {filepath.absolute().__str__()}")
-    #     return filepath.resolve().__str__()
-    # except ValueError:
-    #     print(
-    #         f"Absolute path:{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
-    #     )
-    if filepath.is_absolute():
-        return filepath
-    else:
-        return f"{path_mask.resolve().__str__().rstrip('/')}/{filepath.__str__().lstrip('/')}/"
+    # HACK: Temporary fix for issue #131 - path duplication bug
+    # 
+    # ORIGINAL DESIGN INTENT:
+    # This function was designed to support portable workflows where:
+    # - Index files contain only relative paths (relative to dataset root)
+    # - path_mask provides the absolute base path for the current machine/container
+    # - This allows the same index to be used across different machines where
+    #   data is mounted at different locations (e.g., local vs container environments)
+    #
+    # THE BUG:
+    # The original implementation had path overlap issues where both path_mask
+    # and filepath contained overlapping directory components, leading to 
+    # duplication like: /path/to/scratch/scratch/data/file.txt
+    #
+    # CURRENT HACK:
+    # We now ignore path_mask entirely and just resolve filepath to absolute.
+    # This breaks the portability feature but fixes the immediate duplication bug.
+    #
+    # FUTURE PLAN:
+    # The developer intends to properly fix this later by:
+    # 1. Ensuring index generation creates truly relative paths
+    # 2. Fixing path_mask derivation logic  
+    # 3. Implementing proper overlap detection in path resolution
+    # 4. Restoring the original portability design
+    #
+    # For now, this hack allows the pipeline to work with user-provided paths.
+    
+    # Just ignore path_mask and return filepath as absolute
+    return f"{filepath.resolve()}/"
 
 
 def write_pq(
