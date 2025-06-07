@@ -26,7 +26,7 @@ This guide demonstrates a comprehensive workflow for processing optical pooled s
 flowchart TD
     subgraph "Cell Painting (CP) Track"
         CP1["CP Illumination Calculation"] -->
-        CP2["CP Illumination Application and Segmentation"] -->
+        CP2["CP Illumination Application"] -->
         CP3["CP Segmentation Check"]
     end
 
@@ -52,7 +52,7 @@ The workflow includes these key steps:
 
 - **Setup and Preparation**: Generate inventory/index and create experiment configuration (completed in Getting Started)
 - **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
-- **CP Illumination Application and Segmentation**: Apply illumination corrections to CP images and segment cells
+- **CP Illumination Application**: Apply illumination corrections to CP images and segment cells
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
 - **SBS Illumination Application and Alignment**: Apply illumination corrections and align DAPI images across cycles
@@ -88,7 +88,7 @@ You should already have:
 
 We'll now expand from there to the full pipeline.
 
-## CP Illumination Application and Segmentation
+## CP Illumination Application
 
 Since we've already completed the CP Illumination Calculation, we'll continue with applying those corrections:
 
