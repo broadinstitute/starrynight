@@ -37,10 +37,10 @@ from starrynight.schema import DataConfig
 # ## Setup dataset paths
 
 # %%
-dataset_path = Path("../../scratch/fix_s1_input")
-workspace_path = Path("../../scratch/fix_s1_output/workspace")
-exec_runs = Path("../../scratch/fix_s1_runs_full")
-exec_mounts = Path("../../scratch/fix_s1_mounts")
+dataset_path = Path("../../../scratch/starrynight_example_input")
+workspace_path = Path("../../../scratch/starrynight_example_output")
+exec_runs = Path("../../../scratch/starrynight_runs_full")
+exec_mounts = Path("../../../scratch/starrynight_mounts")
 
 
 # %% [markdown]
@@ -82,7 +82,7 @@ run.wait()
 # %%
 index_path = workspace_path / "index/index.parquet"
 pcp_exp_init = PCPGenericInitConfig(
-    barcode_csv_path=dataset_path / "Source1/workspace/metadata/Barcodes.csv",
+    barcode_csv_path=dataset_path / "workspace/metadata/barcode.csv",
     cp_acquisition_order=AcquisitionOrderType.SNAKE,
     cp_img_frame_type=ImageFrameType.ROUND,
     cp_img_overlap_pct=10,
@@ -92,21 +92,9 @@ pcp_exp_init = PCPGenericInitConfig(
     cp_nuclei_channel="DAPI",
     cp_cell_channel="PhalloAF750",
     cp_mito_channel="ZO1AF488",
-    cp_custom_channel_map={
-        "DAPI": "DNA",
-        "ZO1AF488": "ZO1",
-        "PhalloAF750": "Phalloidin",
-    },
     sbs_nuclei_channel="DAPI",
     sbs_cell_channel="PhalloAF750",
     sbs_mito_channel="ZO1AF488",
-    sbs_custom_channel_map={
-        "DAPI": "DNA",
-        "A": "A",
-        "T": "T",
-        "G": "G",
-        "C": "C",
-    },
 )
 pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 
