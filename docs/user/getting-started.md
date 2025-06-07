@@ -89,6 +89,17 @@ echo "ddba28e1593986013d10880678d2d7715af8d2ee1cfa11ae7bcea4d50c30f9e0  fix_s1_i
 # Extract the data
 tar -xzf fix_s1_input.tar.gz
 
+!!! note "Expected Tar Warnings"
+    When extracting the tar file, you may see warnings like:
+
+    ```
+    tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.provenance'
+    tar: Ignoring unknown extended header keyword 'SCHILY.fflags'
+    tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.FinderInfo'
+    ```
+
+    These warnings are harmless and occur because the archive contains Apple-specific metadata. The extraction will complete successfully and all necessary files will be available.
+
 # Clean up macOS metadata files
 find fix_s1_input -name '._*' -delete
 find fix_s1_input -name '.DS_Store' -delete
@@ -113,10 +124,22 @@ cd ..
 ```
 
 ```sh
+# Set environment variables for convenience
 export DATADIR='./scratch/fix_s1_input'
 export WKDIR='./scratch/fix_s1_output/workspace'
 export CP_PLUGINS='./scratch/CellProfiler-plugins/active_plugins/'
+
+# Additional environment variable needed for the complete workflow
+export INPUT_WKDIR='./scratch/fix_s1_input/Source1/workspace'
 ```
+
+!!! info "Environment Variable Organization"
+    The directory structure separates input data from output workspace:
+
+    - `DATADIR`: Points to the downloaded sample data (input)
+    - `WKDIR`: Points to your working directory where outputs will be generated
+    - `INPUT_WKDIR`: Points to the input workspace folder, within which barcode files are located
+    - `CP_PLUGINS`: Points to CellProfiler plugins needed for advanced processing
 
 ## Create Experiment Configuration
 
@@ -130,9 +153,18 @@ mkdir -p scratch/fix_s1_output/workspace/
 starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
 ```
 
+!!! info "Available Experiment Configurations"
+    StarryNight currently supports these experiment types:
+
+    - `"Pooled CellPainting [Generic]"`: Standard Cell Painting workflow with SBS barcoding
+    - `"Pooled CellPainting [Stitchcrop]"`: Cell Painting workflow with image stitching and cropping
+
+    Both configurations use the same underlying experiment model and support the full range of Cell Painting and SBS processing steps. The choice determines which pipeline templates and processing modules are available for your workflow.
+
 This creates an `experiment_init.json` file in your workspace that you can edit to match your dataset's characteristics:
 
-FIXME: `sbs_cell_channel` and `sbs_mito_channel` should not need to be specified in the `experiment_init.json` file.
+!!! warning "Known Issue: SBS Channel Requirements"
+    Currently, the `sbs_cell_channel` and `sbs_mito_channel` parameters must be specified in the `experiment_init.json` file even when only working with Cell Painting (CP) data. This is a known bug that will be addressed in a future release. For now, include these parameters with the same values as your CP channels.
 
 For the example experiment, the following values can be used.
 
@@ -213,19 +245,21 @@ The result will be an `index.parquet` file containing structured metadata for ea
     StarryNight automatically extracts metadata from file paths using a grammar-based parsing system. The default parser handles the file structure shown in this example, but you can write custom parsers for different organizations. If your data follows a different organization than the pattern used as an example here, you can customize the parser as described in the [Parser Configuration](parser-configuration.md) guide.
 
 !!! note "Expected Parse Errors"
-    During index generation, you may see error messages for files that don't match the expected image path patterns. This is normal and expected:
+    During index generation, you may see multiple warning messages for files that don't match the expected image path patterns. This is normal and expected behavior:
 
     ```
     Unable to parse: {'key': 'fix_s1_input/Source1/.DS_Store', ...} because of Unexpected token Token('DOT', '.')
+    Unable to parse: {'key': 'fix_s1_input/Source1/workspace/._.DS_Store', ...} because of Unexpected token Token('WORKSPACE', 'workspace')
     Unable to parse: {'key': 'fix_s1_input/Source1/workspace/metadata/Barcodes.csv', ...} because of Unexpected token Token('WORKSPACE', 'workspace')
     ```
 
-    These errors occur because:
+    These warnings occur because:
 
-    - Hidden files like `.DS_Store` can reappear even after deletion (macOS sometimes recreates them) and are not valid image files
-    - The parser is currently developed only to handle image files
+    - Hidden files like `.DS_Store` and `._*` can reappear even after deletion (macOS metadata files)
+    - The parser is designed specifically for image files with structured paths
+    - Non-image files (CSV, metadata) don't follow the expected naming pattern
 
-    The parser is intentionally strict and only accepts properly formatted Cell Painting (CP) and SBS (Sequencing by Synthesis) image paths. These non-image files are safely skipped and won't affect your workflow.
+    **What this means:** The parser is intentionally strict and only accepts properly formatted Cell Painting (CP) and SBS (Sequencing by Synthesis) image paths. While these warnings may seem numerous, they don't indicate failure - all valid image files are processed correctly and invalid files are safely skipped.
 
 ## Create Experiment File
 
@@ -357,10 +391,11 @@ plt.show()
 
 StarryNight commands support additional options to customize processing:
 
-**Path Masking:** Filter files with path masks using the `-m/--path_mask` option:
+**Path Masking:** Specify a path prefix for resolving file locations using the `-m/--path_mask` option. This sets the base directory path that gets prepended to relative file paths in the generated LoadData CSV files:
 
 ```sh
-starrynight illum calc loaddata -m "Batch1/Plate1" ...
+# Set custom path prefix for file resolution
+starrynight illum calc loaddata -m "/absolute/path/to/data" ...
 ```
 
 **Parallel Processing:** Control the number of parallel jobs with the `-j/--jobs` option:
