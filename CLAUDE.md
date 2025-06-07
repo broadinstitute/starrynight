@@ -71,3 +71,7 @@ We will focus entirely on these directories
 
 ## Development Tools
 - Use `gh project` for doing anything related to GitHub projects because the MCP server does not yet support it
+
+## Terminology Guidelines
+- When first introducing SBS (Sequencing by Synthesis), clarify the full term initially, then use the abbreviation SBS thereafter
+- For Cell Painting, introduce the abbreviation CP in diagrams, but prefer using the full term "Cell Painting" in text, unless brevity is necessary
