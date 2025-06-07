@@ -4,10 +4,9 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from pprint import pprint
 from subprocess import Popen
-from typing import Annotated
 
 from cloudpathlib import CloudPath
-from pydantic import BaseModel, SkipValidation
+from pydantic import BaseModel, ConfigDict, SkipValidation
 
 from pipecraft.pipeline import Pipeline
 
@@ -32,10 +31,7 @@ class BaseBackendRun(ABC, BaseModel):
     log_path: Path | CloudPath
     process: SkipValidation[Popen]
 
-    class Config:
-        """Pydantic model config."""
-
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
     def terminate(self) -> None:

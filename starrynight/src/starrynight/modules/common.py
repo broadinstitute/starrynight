@@ -1,9 +1,10 @@
 """Common tools for creating modules."""
 
 from abc import ABC, abstractmethod, abstractproperty, abstractstaticmethod
+from collections.abc import Callable
 from inspect import getdoc, signature
 from pathlib import Path
-from typing import Callable, Generic, Self, TypeVar, Unpack
+from typing import Generic, Self, TypeVar, Unpack
 
 import requests
 from click.decorators import _param_memo
@@ -13,7 +14,7 @@ from pipecraft.node import Container as PipeContainer
 from pipecraft.node import ContainerConfig as PipeContainerConfig
 from pipecraft.node import UnitOfWork
 from pipecraft.pipeline import Pipeline, Seq
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.schema import (
@@ -81,10 +82,7 @@ class StarrynightModule(BaseModel, ABC):
         """Module unit of work property."""
         return self._create_uow()
 
-    class Config:
-        """Model config."""
-
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def __init__(
         self,
