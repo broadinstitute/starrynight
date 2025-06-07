@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -37,10 +37,10 @@ from starrynight.schema import DataConfig
 # ## Setup dataset paths
 
 # %%
-dataset_path = Path("../../scratch/starrynight_example_input")
-workspace_path = Path("../../scratch/starrynight_example_output")
-exec_runs = Path("../../scratch/starrynight_runs_full")
-exec_mounts = Path("../../scratch/starrynight_mounts")
+dataset_path = Path("../../scratch/fix_s1_input")
+workspace_path = Path("../../scratch/fix_s1_output/workspace")
+exec_runs = Path("../../scratch/fix_s1_runs_full")
+exec_mounts = Path("../../scratch/fix_s1_mounts")
 
 
 # %% [markdown]
@@ -82,7 +82,7 @@ run.wait()
 # %%
 index_path = workspace_path / "index/index.parquet"
 pcp_exp_init = PCPGenericInitConfig(
-    barcode_csv_path=dataset_path / "workspace/metadata/barcode.csv",
+    barcode_csv_path=dataset_path / "Source1/workspace/metadata/Barcodes.csv",
     cp_acquisition_order=AcquisitionOrderType.SNAKE,
     cp_img_frame_type=ImageFrameType.ROUND,
     cp_img_overlap_pct=10,

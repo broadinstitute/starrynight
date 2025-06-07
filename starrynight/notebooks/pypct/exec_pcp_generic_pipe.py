@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -95,11 +95,13 @@ from starrynight.schema import DataConfig
 # These paths are required for creating the `DataConfig` object and configure the execution backend.
 
 # %%
-dataset_path = Path("../../../scratch/starrynight_example_input")
-barcode_csv_path = dataset_path.joinpath("workspace/metadata/barcode.csv")
-workspace_path = Path("../../../scratch/new_starrynight_example_output")
-exec_runs = Path("../../../scratch/new_starrynight_runs")
-exec_mounts = Path("../../../scratch/new_starrynight_mounts")
+dataset_path = Path("../../../scratch/fix_s1_input")
+barcode_csv_path = dataset_path.joinpath(
+    "Source1/workspace/metadata/Barcodes.csv"
+)
+workspace_path = Path("../../../scratch/fix_s1_output/workspace")
+exec_runs = Path("../../../scratch/fix_s1_runs")
+exec_mounts = Path("../../../scratch/fix_s1_mounts")
 
 
 # %% [markdown]
@@ -461,7 +463,7 @@ exec_backend = SnakeMakeBackend(
 run = exec_backend.run()
 run.wait()
 
-# %% [markdown] jp-MarkdownHeadingCollapsed=true
+# %% [markdown]
 # ### Gen cppipe file
 
 # %%
@@ -556,9 +558,9 @@ sbs_preprocess_invoke_mod = SBSPreprocessInvokeCPModule(
     data_config, pcp_experiment
 )
 # Add the CP plugin directory
-sbs_preprocess_invoke_mod.spec.inputs["plugin_path"] = (
-    "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
-)
+sbs_preprocess_invoke_mod.spec.inputs[
+    "plugin_path"
+].value = "../../../scratch/CellProfiler-plugins/active_plugins/"
 
 exec_backend = SnakeMakeBackend(
     sbs_preprocess_invoke_mod.pipe,
@@ -616,9 +618,9 @@ run.wait()
 analysis_invoke_mod = AnalysisInvokeCPModule(data_config, pcp_experiment)
 
 # Add the CP plugin directory
-analysis_invoke_mod.spec.inputs["plugin_path"] = (
-    "/home/ank/workspace/hub/broad/starrynight/scratch/CellProfiler-plugins/active_plugins/"
-)
+analysis_invoke_mod.spec.inputs[
+    "plugin_path"
+].value = "../../../scratch/CellProfiler-plugins/active_plugins/"
 
 exec_backend = SnakeMakeBackend(
     analysis_invoke_mod.pipe,
