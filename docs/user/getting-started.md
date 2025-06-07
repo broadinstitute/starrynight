@@ -153,8 +153,10 @@ starrynight exp init -e "Pooled CellPainting [Generic]" -o ${WKDIR}
 
 This creates an `experiment_init.json` file in your workspace that you can edit to match your dataset's characteristics:
 
-!!! warning "Known Issue: SBS Channel Requirements"
-    Currently, the `sbs_cell_channel` and `sbs_mito_channel` parameters must be specified in the `experiment_init.json` file even when only working with Cell Painting (CP) data. This is a known bug that will be addressed in a future release. For now, include these parameters with the same values as your CP channels.
+!!! warning "Required Channel Mapping Configuration"
+    As of recent updates, StarryNight now requires custom channel mapping configurations in the `experiment_init.json` file. You must include both `cp_custom_channel_map` and `sbs_custom_channel_map` fields that map microscope channel names to semantic biological names.
+
+    Additionally, the `sbs_cell_channel` and `sbs_mito_channel` parameters must be specified even when only working with Cell Painting (CP) data. Include these parameters with the same values as your CP channels.
 
 For the example experiment, the following values can be used.
 
@@ -171,9 +173,21 @@ For the example experiment, the following values can be used.
     "cp_nuclei_channel": "DAPI",
     "cp_cell_channel": "PhalloAF750",
     "cp_mito_channel": "ZO1AF488",
+    "cp_custom_channel_map": {
+        "DAPI": "DNA",
+        "ZO1AF488": "ZO1",
+        "PhalloAF750": "Phalloidin"
+    },
     "sbs_nuclei_channel": "DAPI",
     "sbs_cell_channel": "PhalloAF750",
-    "sbs_mito_channel": "ZO1AF488"
+    "sbs_mito_channel": "ZO1AF488",
+    "sbs_custom_channel_map": {
+        "DAPI": "DNA",
+        "A": "A",
+        "T": "T",
+        "G": "G",
+        "C": "C"
+    }
 }
 ```
 
@@ -183,6 +197,8 @@ Key parameters explained:
 - `cp_img_frame_type`: Image shape - "round" for circular fields, "square" for rectangular
 - `cp_acquisition_order`: Imaging pattern - "snake" for serpentine, "rows" for row-by-row
 - `cp_nuclei_channel`, `cp_cell_channel`, `cp_mito_channel`: Channel names for key cellular components
+- `cp_custom_channel_map`: Maps microscope channel names (like "DAPI", "PhalloAF750") to semantic biological names (like "DNA", "Phalloidin") used in analysis pipelines
+- `sbs_custom_channel_map`: Maps SBS channel names to their biological meanings for barcode analysis
 - `use_legacy`: Whether to use pre-tested pipeline templates (recommended: false for new experiments)
 
 Adjust the values to match your experiment setup.
