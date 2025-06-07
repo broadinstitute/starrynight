@@ -64,14 +64,14 @@ Note: The Configuration Layer (in `/starrynight/experiments/`) provides paramete
 
 StarryNight consists of six interconnected layers:
 
-| Layer         | Primary Responsibility                     | Key Components                                          | Details                                |
-| ------------- | ------------------------------------------ | ------------------------------------------------------- | -------------------------------------- |
-| Algorithm     | Core image processing without dependencies | Functions for data prep, pipeline generation, execution | [Details →](01_algorithm_layer.md)     |
-| CLI           | Command-line interface                     | Command groups, parameter parsing/validation            | [Details →](02_cli_layer.md)           |
-| Module        | Standardized components                    | Input/output specs, compute graph generation            | [Details →](03_module_layer.md)        |
-| Pipeline      | Workflow composition                       | Sequential/parallel execution paths                     | [Details →](04_pipeline_layer.md)      |
-| Execution     | Backend runtime                            | Snakemake rules, container management                   | [Details →](05_execution_layer.md)     |
-| Configuration | Parameter inference                        | Experiment configs, adaptive settings                   | [Details →](06_configuration_layer.md) |
+| Layer                                      | Primary Responsibility             | Key Components                                                                             |
+| ------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------ |
+| [Algorithm](01_algorithm_layer.md)         | Core computational operations      | Python functions for LoadData generation, CellProfiler pipeline creation, image processing |
+| [CLI](02_cli_layer.md)                     | Command-line interface             | Click-based command groups (`illum`, `analysis`, `segcheck`, `cp`), parameter parsing      |
+| [Module](03_module_layer.md)               | Standardized processing steps      | Bilayers specifications, Pipecraft compute graphs, container configurations                |
+| [Pipeline](04_pipeline_layer.md)           | Complete workflow orchestration    | Module composition, sequential/parallel execution paths                                    |
+| [Execution](05_execution_layer.md)         | Backend runtime infrastructure     | Snakemake DAG generation, Docker/AWS Batch backends, resource management                   |
+| [Configuration](06_configuration_layer.md) | Parameter inference and management | Experiment definitions, adaptive parameter inference                                       |
 
 ## Data and Control Flow
 
@@ -120,13 +120,13 @@ sequenceDiagram
 
 The complete flow can be summarized in these key steps:
 
-1. **Configuration** defines parameters for all layers
-2. **Modules** generate compute graphs from configuration
-3. **Pipeline** composes modules into workflows
-4. **Execution** translates workflows to backend-specific formats
+1. **Configuration Layer** defines parameters for all layers
+2. **Module Layer** generates compute graphs from configuration
+3. **Pipeline Layer** composes modules into workflows
+4. **Execution Layer** translates workflows to backend-specific formats
 5. **Container runtime** executes the workflows
-6. **CLI layer** processes commands and invokes algorithms
-7. **Algorithm layer** performs core processing functions
+6. **CLI Layer** processes commands and invokes algorithms
+7. **Algorithm Layer** performs core processing functions
 8. **Results** are stored in configured locations
 
 ## Implementation Organization
@@ -163,7 +163,7 @@ Manages the execution environment:
 
 ### Canvas (Web UI for pipeline configuration)
 
-The web-based user interface:
+The web-based user interface handles:
 
 - **Job Configuration**: Interface for setting up and parameterizing workflows
 - **Run Monitoring**: Real-time status updates and logs
@@ -189,7 +189,7 @@ For examples of how to extend these components, see the [Practical Integration](
 - **Pipeline**: Composed workflow of modules
 - **Execution Backend**: System that runs pipelines
 - **Experiment**: Configuration for a specific workflow
-- **Bilayers**: Schema system for module specifications
+- **[Bilayers](https://github.com/bilayer-containers/bilayers)**: External schema system used by the Module Layer to standardize input/output specifications and enable UI generation
 - **Compute Graph**: Definition of operations and connections
 
 For practical examples showing how these concepts work together, see [Practical Integration](08_practical_integration.md)
