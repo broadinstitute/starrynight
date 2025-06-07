@@ -27,3 +27,7 @@ This repository is undergoing restructuring to improve organization:
 
 ## Interaction Guidelines
 - Sometimes it might be easiest to ask the human to do some tasks, typically when they involve moving large chunks of text or running some commands that are better run by hand. In these cases, ask the human to do it
+
+## Terminology Guidelines
+- When first introducing SBS (Sequencing by Synthesis), clarify the full term initially, then use the abbreviation SBS thereafter
+- For Cell Painting, introduce the abbreviation CP in diagrams, but prefer using the full term "Cell Painting" in text, unless brevity is necessary
