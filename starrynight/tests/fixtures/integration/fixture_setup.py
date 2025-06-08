@@ -1,3 +1,35 @@
+"""Integration test fixture setup module.
+
+This module provides the core infrastructure for loading test fixtures in StarryNight
+integration tests. It supports two modes of operation:
+
+1. Local Fixtures (Fast Mode):
+   - Set STARRYNIGHT_TEST_FIXTURE_DIR environment variable
+   - Points to pre-extracted fixture directories
+   - No download or extraction overhead
+   - Ideal for development and CI/CD environments
+
+2. Remote Fixtures (Default Mode):
+   - Downloads fixtures from GitHub releases using pooch
+   - Automatically caches downloads
+   - Extracts to temporary directories
+   - Works out of the box with no setup
+
+Architecture:
+- Uses a strategy pattern with dependency injection
+- _get_fixture_from_local_or_pooch() is the main orchestrator
+- Validation and path building are injected as functions
+- This design eliminates code duplication between fixture types
+
+Key Functions:
+- _setup_input_dir(): Sets up input data fixtures
+- _setup_output_dir(): Sets up output/reference data fixtures
+- _setup_workspace(): Creates empty workspace directory structure
+- _setup_starrynight(): Orchestrates full StarryNight environment setup
+
+See integration/README.md for detailed documentation.
+"""
+
 import json
 import os
 import shutil
@@ -64,25 +96,35 @@ def _get_fixture_from_local_or_pooch(
 
     fixture_config = config[fixture_type]
 
-    # Check for local directory via environment variable
+    # =================================================================
+    # DECISION POINT: Check for local fixtures first
+    # This is where we check if the user wants to use local fixtures
+    # instead of downloading them. This speeds up tests significantly.
+    # =================================================================
     fixture_dir_env = os.environ.get("STARRYNIGHT_TEST_FIXTURE_DIR")
     if fixture_dir_env:
         base_fixture_dir = Path(fixture_dir_env).expanduser()
         if base_fixture_dir.exists():
-            # Look for the fixture directory in the base fixture directory
+            # Look for the specific fixture subdirectory
+            # e.g., /path/to/fixtures/fix_s1_input/
             fixture_dir = base_fixture_dir / fixture_config["dir_name"]
             if fixture_dir.exists():
-                # Validate the local directory structure
+                # Validate that the local directory has the expected structure
+                # This ensures tests won't fail due to missing files
                 validate_func(fixture_dir, fixture_config)
 
-                # Build and return the paths dictionary
+                # Build and return paths using the local directory
                 return build_paths_func(base_fixture_dir, fixture_config)
 
-    # Fall back to pooch download and extraction
-    # Create a temporary directory
+    # =================================================================
+    # FALLBACK: Use pooch to download and cache fixtures
+    # This is the default behavior when no local fixtures are available
+    # =================================================================
+    # Create a temporary directory for this test session
     base_dir = tmp_path_factory.mktemp(fixture_config["dir_prefix"])
 
     # Use pooch to download and extract in one step
+    # Pooch handles caching, so repeated calls won't re-download
     STARRYNIGHT_CACHE.fetch(
         fixture_config["archive_name"],
         processor=Untar(extract_dir=str(base_dir)),
@@ -96,22 +138,34 @@ def _get_fixture_from_local_or_pooch(
         f"{fixture_type.capitalize()} test data not extracted correctly"
     )
 
-    # Validate the directory structure
+    # Validate the directory structure using the injected validation function
+    # This ensures consistency between local and remote fixtures
     validate_func(fixture_dir, fixture_config)
 
-    # Build and return the paths dictionary
+    # Build and return the paths dictionary using the injected builder function
+    # This allows different fixture types to return different path structures
     return build_paths_func(base_dir, fixture_config)
 
 
 def _validate_input_dir(input_dir: Path, input_config: dict) -> None:
-    """Validate input directory structure."""
-    # Check that at least one expected dataset directory exists
+    """Validate input directory structure.
+
+    Ensures the input fixture has:
+    1. The expected dataset directory (e.g., Source1/)
+    2. At least one image file (*.tiff or *.tif)
+
+    This validation runs for both local and remote fixtures to ensure
+    consistency regardless of the source.
+    """
+    # Check that the dataset directory exists
+    # This is typically "Source1" or similar, containing the actual data
     dataset_dir = input_dir / input_config["dataset_dir_name"]
     assert dataset_dir.exists(), (
         f"Expected {input_config['dataset_dir_name']} directory not found in {input_dir}"
     )
 
     # Verify that image files exist in the input directory
+    # StarryNight processes microscopy images, so we need at least one
     image_files = list(input_dir.glob("**/*.tiff"))
     if not image_files:
         # Try alternative extensions
@@ -157,7 +211,16 @@ def _setup_input_dir(
 
 
 def _validate_output_dir(output_dir: Path, output_config: dict) -> None:
-    """Validate output directory structure."""
+    """Validate output directory structure.
+
+    Ensures the output fixture has:
+    1. The workspace directory structure (e.g., Source1/workspace/)
+    2. The load_data_csv directory
+    3. At least one LoadData CSV file
+
+    These are reference outputs from previous pipeline runs that we use
+    to validate that our current code produces the same results.
+    """
     workspace_dir = output_dir / output_config["dataset_dir_name"] / "workspace"
     load_data_csv_dir = workspace_dir / "load_data_csv"
 
@@ -176,6 +239,10 @@ def _validate_output_dir(output_dir: Path, output_config: dict) -> None:
         f"No LoadData CSV files found in {output_config['dataset_dir_name']} output data at {load_data_csv_dir}"
     )
 
+    # Note: Currently we only validate LoadData CSV files exist, but this could be expanded
+    # to check for other output components like processed images, measurements, or metadata.
+    # For now, LoadData CSVs are the primary reference outputs used in our integration tests.
+
 
 def _build_output_paths(base_dir: Path, output_config: dict) -> dict[str, Path]:
     """Build the return dictionary for output directories."""
@@ -189,6 +256,10 @@ def _build_output_paths(base_dir: Path, output_config: dict) -> dict[str, Path]:
         "workspace_dir": workspace_dir,
         "load_data_csv_dir": load_data_csv_dir,
     }
+
+    # Note: This function currently returns the most commonly needed paths for output validation.
+    # Additional paths could be added here as needed (e.g., specific file paths, measurement
+    # directories, or other subdirectories within the output structure).
 
 
 def _setup_output_dir(
@@ -347,6 +418,9 @@ def _handle_generated_setup(
     index_dir = workspace["index_dir"]
 
     # Step 1: Initialize experiment configuration
+    # Note: Currently hardcoded to "Pooled CellPainting [Generic]" experiment type.
+    # Future expansion may require supporting additional experiment types such as
+    # "Pooled CellPainting [Stitchcrop]" or other specialized configurations.
     runner = CliRunner()
     result = runner.invoke(
         exp_init,

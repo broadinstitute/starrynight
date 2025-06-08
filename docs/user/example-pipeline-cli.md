@@ -52,12 +52,14 @@ The workflow includes these key steps:
 
 - **Setup and Preparation**: Generate inventory/index and create experiment configuration (completed in Getting Started)
 - **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
-- **CP Illumination Application**: Apply illumination corrections to CP images and segment cells
+- **CP Illumination Application**: Apply illumination corrections to CP images
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
 - **SBS Illumination Application and Alignment**: Apply illumination corrections and align DAPI images across cycles
 - **SBS Preprocessing**: Process SBS images, compensate channels, and perform preliminary barcode calling
 - **Analysis**: Integrate CP and SBS data, perform final barcode calling, and extract measurements
+
+This workflow follows the same processing pipeline described in the [PCPIP specifications](../developer/legacy/pcpip-specs.md), adapted for the StarryNight CLI interface.
 
 All CellProfiler-based modules in this workflow follow a consistent three-step pattern:
 
