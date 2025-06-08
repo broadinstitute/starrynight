@@ -2,11 +2,12 @@
 
 ## Background and Relationship to StarryNight
 
-Before StarryNight existed, the Broad Institute Imaging Platform iteratively developed a workflow using CellProfiler, ImageJ, and AWS Lambda functions to process optical pooled screening data, most notably as published in our collaboration to process three genome-scale CRISPR screens: [A genome-scale screen for synthetic viability and synthetic lethality in cancer](https://www.nature.com/articles/s41592-024-02537-7).
+Before StarryNight existed, the Broad Institute Imaging Platform iteratively developed a workflow using CellProfiler, ImageJ, and AWS Lambda functions to process optical pooled screening data, most notably as published in our collaboration to process three genome-scale CRISPR screens (Ramezani et al.,2023)
 
 PCPIP (Pooled Cell Painting Image Processing) represents this legacy system whose functionality and features served as the foundation for developing StarryNight. While PCPIP successfully processed large-scale experiments, it had limitations in modularity, maintainability, and extensibility that StarryNight was designed to address.
 
 This documentation is preserved to:
+
 - Document the proven workflow patterns that inform StarryNight's design
 - Provide reference for researchers familiar with the original PCPIP system
 - Support ongoing maintenance of legacy experiments processed with PCPIP

@@ -12,6 +12,7 @@ commands and validating the outputs. There are two test approaches:
 
 Testing strategy:
 This module uses a parameterized approach to test multiple workflow steps:
+FIXME: Need to explain what "Setup" means below (because otherwise "generated" and "pregenerated" don't make sense)
 
 1. Tests are parameterized with both:
    - Setup mode: "generated" (full workflow) vs. "pregenerated" (pre-generated files)
@@ -287,6 +288,10 @@ def test_complete_workflow(
         workspace=workspace,
         output_dir=output_dir,
     )
+
+    # FIXME: When implementing the two steps below remember that WORKFLOW_CONFIGS will also
+    # need to be updated. Right now it only references LoadData CSV files (e.g. file_pattern
+    # and ref_csv_pattern are both related to LoadData CSV files)
 
     # Step 2: Generate and validate pipeline (not implemented)
     # pipeline_path = generate_pipeline(config, loaddata_dir, workspace)
