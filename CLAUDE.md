@@ -35,7 +35,7 @@ We will focus entirely on these directories
 - 4-space indentation, 80-88 char line limit
 - NumPy-style docstrings with triple double-quotes
 - Prefer returning typed objects over raising exceptions
-- Prefer pathlib for file operations
+- Prefer pathlib over os for paths
 - Use click for CLI interfaces
 - Docstrings required for modules and public functions
 
