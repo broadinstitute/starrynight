@@ -2,308 +2,352 @@
 
 ## Introduction
 
-This FAQ addresses the most common operational challenges encountered when transitioning from PCPIP to StarryNight for high-throughput microscopy image processing. These questions emerged from real-world usage scenarios and represent the day-to-day operational needs of research teams processing Cell Painting and Sequencing by Synthesis (SBS) data.
+This FAQ addresses critical operational challenges faced by research teams transitioning from PCPIP to StarryNight for high-throughput microscopy image processing. These questions emerged from real-world discussions with users processing Cell Painting and Sequencing by Synthesis (SBS) data at scale.
 
-StarryNight is designed to handle these scenarios through its modular architecture, flexible configuration system, and cloud-native approach. While some solutions require advanced user knowledge, the platform provides robust mechanisms to address each challenge.
+StarryNight's modular architecture provides robust solutions for most scenarios. However, as one developer noted: *"Most of these use cases are very edge use cases, and this should mean that [the] biologist who is processing [data] is fairly competent and knows about the system."* While user-friendly interfaces for every edge case would require substantial development effort, the core capabilities exist and are accessible to advanced users.
+
+**Key Insight**: StarryNight's strength lies in its flexible, index-driven approach rather than rigid workflows. Most operational challenges stem from biological data complexity, not architectural limitations.
+
+**Status Legend:**
+- ✅ **Available**: Ready to use with current system
+- ⚙️ **Workaround**: Possible but requires manual coordination
+- 🚧 **Planned**: Architecturally supported, needs implementation
+- 🔬 **Design**: Requires significant architectural consideration
 
 ---
 
 ## 1. Starting Processing Before All Images Are Available
 
-**Problem**: "Sometimes we want to start before all the images are available (because image generation can take up to a couple of weeks on the SBS arm, so we want to do processing of the phenotyping arm while the barcoding is not started or only partially done). Sometimes they decide to add a cycle partway through because one cycle got screwed up, so the cycle counts we put in at the beginning are now wrong."
+**Real-World Scenario**: *"Sometimes we want to start before all the images are available (because image generation can take up to a couple of weeks on the SBS arm, so we want to do processing of the phenotyping arm while the barcoding is not started or only partially done)."*
 
-**Status**: ✅ **Available**
+**Status**: ✅ **Currently Available**
 
-**Solution**:
-StarryNight supports partial data processing through separate pipeline workflows and automatic cycle detection:
+**Technical Solution**:
+StarryNight's modular pipeline architecture supports this through composition and registry customization:
 
-1. **Separate Pipeline Workflows**: Create distinct pipelines for phenotypic and SBS arms using PipeCraft composition
-   - Copy the existing `PCP_generic.py` pipeline
-   - Create specialized versions (e.g., `PCP_phenotype.py`) by removing unwanted modules
-   - Add new pipeline variants to the pipeline registry for user selection
+**Code Location**: `/starrynight/src/starrynight/pipelines/pcp_generic.py`
 
-2. **Automatic Cycle Management**: StarryNight automatically infers cycle counts from indexing rather than requiring fixed configuration
-   - When cycles are added partway through, simply re-index the data
-   - The system automatically detects new cycles and updates load data generation
-   - No manual cycle count updates required
-
-**Implementation**:
-```bash
-# Create separate phenotypic pipeline
-starrynight exp run --pipeline pcp_phenotype --config phenotype_config.json
-
-# Later, run SBS pipeline when data is ready
-starrynight exp run --pipeline pcp_sbs --config sbs_config.json
+Current implementation shows parallel CP and SBS processing:
+```python
+# Existing combined pipeline structure
+Parallel([
+    Seq([cp_illum_calc_loaddata.pipe, cp_illum_calc_cpipe.pipe, ...]),  # CP pipeline
+    Seq([sbs_illum_calc_loaddata.pipe, sbs_illum_calc_cpipe.pipe, ...])  # SBS pipeline
+])
 ```
 
-**User Requirements**: Basic understanding of pipeline configuration and module composition.
+**Implementation Steps**:
+1. **Create Pipeline Variants**: Copy `pcp_generic.py` to create specialized versions (requires developer)
+2. **Register New Pipelines**: Add to `PIPELINE_REGISTRY` in `/starrynight/src/starrynight/pipelines/registry.py`
+3. **Execute Separately**:
+   ```bash
+   # Current: Create full experiment
+   starrynight exp new -i index.parquet -e "Pooled CellPainting [Generic]" -c config.json -o output/
+
+   # Proposed: Separate pipelines (would need implementation)
+   starrynight exp new -e "Pooled CellPainting [Phenotypic]" -c cp_config.json -o cp_output/
+   starrynight exp new -e "Pooled CellPainting [SBS]" -c sbs_config.json -o sbs_output/
+   ```
+
+**Current Reality**: Must modify codebase to add new pipeline types. The modular architecture supports this, but requires development effort rather than configuration.
+
+**Alternative Approach**: Use existing pipeline but filter processing to skip unavailable data (discussed by developers as viable workaround).
 
 ---
 
-## 2. Task Retry on Larger Machines
+## 2. Adding Cycles Mid-Experiment
 
-**Problem**: "Sometimes tasks fail and need to be retried on a larger machine"
+**Real-World Scenario**: *"Sometimes they decide to add a cycle partway through because one cycle got screwed up, so the cycle counts we put in at the beginning are now wrong."*
 
-**Status**: 🚧 **Planned (6-12 months)**
+**Status**: ✅ **Currently Available** (with data loss)
 
-**Solution**:
-A resource hints system is being developed to specify computational requirements:
+**Technical Advantage**: StarryNight auto-detects cycles from data structure, not configuration.
 
-1. **Resource Hints API**: Add vCPU and memory parameters to module configuration
-2. **Pipeline Compilation**: Resource hints flow from StarryNight modules → PipeCraft → backend compilers
-3. **Backend Integration**: Compilers (Snakemake/AWS Batch) make resource allocation decisions based on hints
-4. **Automatic Retry**: Failed tasks can be automatically retried with increased resources
+**Code Evidence**: In `/starrynight/src/starrynight/experiments/pcp_generic.py`:
+```python
+# Auto-detects number of cycles from actual data
+sbs_n_cycles = (
+    sbs_images_df.select(pl.col("cycle_id").unique().count())
+    .collect()
+    .rows()[0][0]
+)
+```
 
-**Current Workaround**: Manual job resubmission with modified container configurations.
+**Recovery Process**:
+1. **Add New Cycle Images**: Place additional cycle data in the dataset
+2. **Re-inventory**: `starrynight inventory` (detects new files)
+3. **Re-index**: `starrynight index` (updates cycle count automatically)
+4. **Reconfigure**: `starrynight exp new` (creates new experiment with updated cycle count)
+5. **Reprocess**: All downstream processing adapts to detected cycles automatically
 
-**Implementation Timeline**: Requires integration across multiple system layers and backend targets.
+**Trade-off**: Previous processing results are lost and must be recomputed. No incremental update capability currently exists.
+
+**Advanced Note**: If you need to *exclude* specific cycles (e.g., skip corrupted cycle 5), this must be handled in the CellProfiler pipeline configuration, not in StarryNight's index layer.
 
 ---
 
-## 3. Rerunning Steps with New Pipeline Versions
+## 3. Resource Management and Retry Logic
 
-**Problem**: "Sometimes I need to run the same step with a new version of my pipeline. (a) Sometimes I want to do that only on failed jobs, (b) Sometimes I want to do that on a subset of all jobs which previously succeeded"
+### 3A. Failed Job Retry on Larger Machines
 
-**Status**:
-- **3a (Failed Jobs Only)**: ✅ **Available**
-- **3b (Subset of Successful Jobs)**: ⚙️ **Workaround Available**
+**Real-World Scenario**: *"Sometimes tasks fail and need to be retried on a larger machine"*
 
-**Solution**:
+**Status**: 🚧 **Planned Architecture** (6-12 months)
 
-**3a - Failed Jobs Only**:
-```bash
-# Upload new pipeline version and rerun
-starrynight exp upload-pipeline --pipeline updated_pipeline.py
-starrynight exp rerun --failed-only
-```
-Snakemake automatically skips completed jobs and reruns only failed ones.
+**Current Reality**: Basic retry exists through Snakemake backend (`/pipecraft/src/pipecraft/backend/snakemake.py`), but no resource escalation.
 
-**3b - Subset of Successful Jobs**:
-Currently requires manual job-by-job force execution:
-```bash
-# Force execution for specific jobs
-starrynight job force-run --job-id job_123
-starrynight job force-run --job-id job_456
+**Planned Solution - Resource Hints System**:
+The architecture supports this through a planned resource hints API:
+
+```python
+# Conceptual module configuration
+module_config = {
+    "cpu_cores": 4,
+    "memory_gb": 16,
+    "retry_with_larger": True  # Escalate resources on failure
+}
 ```
 
-**Future Enhancement**: Bulk selection UI for arbitrary job subsets (planned for 6-12 months).
+**Technical Flow**: StarryNight modules → PipeCraft compilation → Backend execution (Snakemake/AWS Batch)
 
-**User Requirements**: Understanding of job management and pipeline versioning concepts.
+**Current Workaround**: Manual job resubmission with modified resource configurations.
+
+### 3B. Rerunning Successful Jobs with New Pipeline Versions
+
+**Real-World Scenario**: *"Sometimes I want to do that on a subset of all jobs which previously succeeded"*
+
+**Status**: ⚙️ **Manual Workaround Available**
+
+**Current Capability**: Can rerun individual modules or entire workflows through Conductor backend, but no bulk selection interface.
+
+**Technical Reality**: As the developer noted: *"This was not part of the design, so I haven't thought about this when I was designing the whole thing. So I don't know right now... what challenges are there."*
+
+**Manual Approach**: Force rerun of specific modules through Canvas UI or rebuild entire pipeline with new parameters.
 
 ---
 
-## 4. Dropping Corrupted Images
+## 4. Handling Corrupted Images
 
-**Problem**: "Sometimes an image is corrupted and needs to be dropped from the experiment (and/or replaced with a dummy image)"
+**Real-World Scenario**: *"Sometimes an image is corrupted and needs to be dropped from the experiment (and/or replaced with a dummy image)"*
 
-**Status**: 🚧 **Planned (6-12 months)**
+**Status**: 🚧 **Architectural Design Phase** (6-12 months)
 
-**Solution**:
-Index-based filtering system without mutating original data:
+**Technical Challenge**: Index files use Parquet format, which is immutable by design.
 
-1. **Blacklist Creation**: Generate filter index files identifying corrupted images
-2. **Anti-join Processing**: During data loading, exclude blacklisted files automatically
-3. **Filter Interface**: Marimo-based interface for creating and managing filters
-4. **Workflow Integration**: All downstream tasks respect filters during processing
+**Code Context**: Index structure in `/starrynight/src/starrynight/algorithms/index.py`
 
-**Technical Approach**:
-- Parquet index files remain read-only (by design)
-- Filtering layer sits between indexing and processing
-- Maintains data integrity while enabling selective exclusion
+**Proposed Solution - Filter-Based Approach**:
+Rather than modifying index files, create filtering layers:
 
-**Current Workaround**: Manual file deletion and re-indexing (requires careful coordination).
+1. **Blacklist Creation**: Generate separate index files identifying corrupted images
+2. **Anti-join Processing**: Filter main index during data loading:
+   ```python
+   # Conceptual filtering approach using polars
+   filtered_df = main_index_df.join(blacklist_df, on="file_path", how="anti")
+   ```
+3. **Marimo Interface**: Interactive notebook for filter creation and management
+4. **Workflow Integration**: All downstream modules respect filtered indices
 
-**User Requirements**: Understanding of data filtering concepts and file management.
+**Implementation Gap**: No current CLI commands for index manipulation. Would need new filtering utilities in `/starrynight/src/starrynight/utils/dfutils.py`.
+
+**Current Workaround**: Manual file deletion and complete re-indexing (requires careful coordination).
 
 ---
 
 ## 5. Different Pipeline Versions Per Plate
 
-**Problem**: "Sometimes some plates need a different version of the pipeline than other plates (within the same experiment) - which we won't know ahead of time"
+**Real-World Scenario**: *"Sometimes some plates need a different version of the pipeline than other plates (within the same experiment) - which we won't know ahead of time"*
 
-**Status**: ⚙️ **Available (via workaround)**
+**Status**: ⚙️ **Currently Available** (via multiple projects)
 
-**Solution**:
-Two-step process using index filtering and multiple projects:
+**Technical Approach**: Index filtering + separate project management
 
-1. **Create Separate Projects**: One project per plate requiring different pipeline
-2. **Index Filtering**: During project creation, filter index to include only target plate
-3. **Pipeline Assignment**: Apply different pipeline configurations per project
-4. **Parallel Processing**: Run projects independently with appropriate pipelines
-
-**Implementation**:
-```bash
-# Project for plate 1 with standard pipeline
-starrynight project create --name plate1_project --filter "plate=='Plate1'"
-starrynight exp run --pipeline standard_pipeline
-
-# Project for plate 2 with modified pipeline
-starrynight project create --name plate2_project --filter "plate=='Plate2'"
-starrynight exp run --pipeline modified_pipeline
+**Code Capability**: `/starrynight/src/starrynight/utils/dfutils.py` provides filtering:
+```python
+def filter_df_by_column_val(df: pl.LazyFrame, column: str, val: str) -> pl.LazyFrame:
+    filtered_df = df.filter(pl.col(column).eq(val))
+    return filtered_df
 ```
 
-**User Requirements**: Understanding of project management and index filtering.
+**Implementation Workflow**:
+As the developer explained: *"It's gonna be a two step process... in the cyanide UI, you create a new project... when it comes to indexing, filter everything out but plate one... And then create a new project, do the same things, but in the indexing step, filter out... plate one, but keep everything else."*
 
-**Notes**: Functionally equivalent to current practice of separate processing runs, though requires multiple project management.
+1. **Canvas UI**: Create separate projects for each plate
+2. **Index Filtering**: During project setup, filter to include only target plate
+3. **Pipeline Assignment**: Configure different pipeline versions per project
+4. **Coordinate Results**: Manually manage multiple project outputs
+
+**Developer Note**: *"It's doable. It's not pretty, but I guess... that's how they do it... even like in the separate runs for this thing."*
+
+**User Requirements**: Understanding of project management and index filtering concepts.
+
+**Limitation**: Not elegant - requires multiple project coordination. No single-project, multi-pipeline capability exists.
 
 ---
 
 ## 6. Different Pipeline Versions Per Well
 
-**Problem**: "Sometimes a single well needs a different version of the pipeline than other wells (within the same experiment) - which we won't know ahead of time"
+**Real-World Scenario**: *"Sometimes a single well needs a different version of the pipeline than other wells (within the same experiment)"*
 
-**Status**: ⚙️ **Available (via workaround)**
+**Status**: ⚙️ **Technically Possible** (extreme edge case)
 
-**Solution**:
-Same index filtering approach as plate-level differentiation, but at well granularity:
+**Solution**: Same approach as plate-level filtering but at well granularity through Canvas project creation with index filtering.
 
-1. **Single-Well Filtering**: Filter index to single well/row during project setup
-2. **Granular Projects**: Create separate projects for wells requiring different pipelines
-3. **Manual Coordination**: Manage multiple small projects for well-specific processing
+**Practical Reality**: As one participant noted, this is *"a very weird edge case situation"* requiring substantial manual coordination. While technically possible through the filtering system, it's not streamlined for regular use.
 
-**Implementation**:
-```bash
-# Project for specific well with custom pipeline
-starrynight project create --name well_A01_project --filter "well=='A01'"
-starrynight exp run --pipeline custom_pipeline
-```
+**User Requirements**: Advanced workflow management skills and deep understanding of granular data selection.
 
-**User Requirements**: Advanced workflow management skills and understanding of granular data selection.
-
-**Notes**: Extreme edge case requiring significant manual coordination. Functional but not streamlined.
+**Assessment**: Functional but not elegant. Represents the boundary of practical workflow complexity.
 
 ---
 
 ## 7. Machine Failures During Job Launch
 
-**Problem**: "Sometimes whatever machine is being used to launch the jobs locks up or dies. (User said 'Possible evasion of this - the machine starrynight runs on is EFS backed, at least for wherever state is being stored')"
+**Real-World Scenario**: *"Sometimes whatever machine is being used to launch the jobs locks up or dies."*
 
-**Status**: ✅ **Available (Built-in)**
+**Status**: ✅ **Built-in Architecture Strength**
 
-**Solution**:
-Cloud-native architecture provides automatic failure recovery:
+**Technical Solution**: Cloud-native design provides automatic resilience
 
-1. **S3 Storage Backend**: All state persisted to cloud storage, eliminating local dependencies
-2. **AWS Batch Recovery**: Automatic machine failure detection and job reallocation
-3. **No EFS Required**: S3-based approach eliminates need for EFS-backed state storage
-4. **Transparent Recovery**: Job recovery handled automatically without user intervention
+**Technical Explanation**: As the developer explained: *"The way things are written right now, it assumes that it's reading and writing from s3... automatically, in that sense, you don't really lose any state because... you're not using your local storage."*
 
 **Architecture Benefits**:
-- No single points of failure for job state
-- Automatic infrastructure-level recovery
-- Persistent storage independent of compute resources
+- **S3 Storage Backend**: All state persisted to cloud storage
+- **Stateless Job Design**: Jobs can be relaunched on any machine
+- **AWS Batch Recovery**: Automatic instance failure detection and reallocation
+- **No EFS Required**: S3-based approach more robust than EFS-backed alternatives
 
-**User Requirements**: None - handled transparently at infrastructure level.
-
-**Setup Requirements**: Proper S3 storage backend configuration.
+**User Experience**: Transparent recovery - handled automatically at infrastructure level.
 
 ---
 
 ## 8. Incorrect Channel Mapping Information
 
-**Problem**: "Sometimes the biologist shared incorrect information about what was in each channel and our original mapping is wrong"
+**Real-World Scenario**: *"Sometimes the biologist shared incorrect information about what was in each channel and our original mapping is wrong"*
 
-**Status**: ✅ **Available**
+**Status**: ✅ **Currently Available** with built-in validation
 
-**Solution**:
-Configuration update and project reconfiguration:
+**Technical Reality**: StarryNight already provides syntactic validation
 
-1. **Syntactic Validation**: Channel names automatically verified against index data
-2. **Configuration Update**: Modify channel mapping through Project Settings or experiment config
-3. **Project Reconfiguration**: Apply new mapping and reconfigure affected modules
-4. **Full Rerun**: Execute complete pipeline with corrected mapping
-
-**Implementation**:
-```bash
-# Update channel mapping in project settings
-starrynight project configure --channel-map updated_channels.json
-starrynight exp rerun --full
+**Code Evidence**: In `pcp_generic.py`:
+```python
+# Existing channel validation
+for cp_custom_channel in init_config_parsed.cp_custom_channel_map.keys():
+    assert cp_custom_channel in cp_channel_list
 ```
 
-**Validation Features**:
-- Automatic detection of non-existent channel names
-- Clear error messaging for impossible mappings
-- Semantic validation requires manual review
+**Validation Capabilities**:
+- **Syntactic**: Ensures channel names exist in indexed data
+- **Error Prevention**: Clear error messages for non-existent channels
+- **Configuration Update**: Modify mappings through Project Settings or experiment config
 
-**User Requirements**: Understanding of channel mapping concepts and biological implications.
+**Recovery Process**:
+1. **Update Channel Mapping**: Modify experiment configuration with correct channel assignments
+2. **Validate Configuration**: Built-in checks verify channel names against index
+3. **Reconfigure Project**: Apply new mapping to all modules
+4. **Full Rerun**: Execute complete pipeline with corrected mapping
+
+**Limitation**: Only syntactic validation exists. Semantic validation (e.g., detecting swapped biological meanings) requires manual verification.
+
+**User Interface**: Available through Canvas Project Settings at `/canvas/app/dashboard/project/id/[id]/view/project-settings/`
 
 ---
 
 ## 9. Incorrect Non-Channel Parameters
 
-**Problem**: "Sometimes the biologist shared incorrect information about some other parameter that doesn't affect channel mapping (like we need to adjust the stitchcrop hyperparameters to be for round vs square; or we need to update the path to the barcodes because the first ones were bad)"
+**Real-World Scenario**: *"Sometimes the biologist shared incorrect information about some other parameter that doesn't affect channel mapping (like we need to adjust the stitchcrop hyperparameters to be for round vs square; or we need to update the path to the barcodes because the first ones were bad)"*
 
-**Status**: ✅ **Available**
+**Status**: ✅ **Fully Supported**
 
-**Solution**:
-Parameter updates through UI and configuration management:
+**Technical Implementation**: Parameter updates through UI and configuration management
 
-1. **Project Settings UI**: Update parameters directly through web interface
-2. **Notebook Configuration**: Modify experiment config in Marimo notebooks
-3. **Selective Rerun**: Execute only affected pipeline modules
-4. **Parameter Scope**: Supports stitchcrop hyperparameters, barcode CSV locations, and other pipeline parameters
+**UI Access**: Canvas project settings interface at `/canvas/app/dashboard/project/id/[id]/view/project-settings/`
 
-**Common Parameter Updates**:
-- Stitchcrop hyperparameters (round vs. square acquisition)
-- Barcode CSV file locations
-- Analysis thresholds and settings
-- Output path configurations
+**Common Parameter Categories**:
+- **Stitchcrop hyperparameters**: Round vs. square acquisition settings
+- **Barcode CSV locations**: Update path to correct barcode files
+- **Analysis thresholds**: CellProfiler module parameters
+- **Output configurations**: Result storage and naming
 
-**Implementation**:
-- Navigate to Project Settings in web interface
-- Update relevant parameters
-- Save configuration and rerun affected modules
+**Update Process**:
+1. **Navigate to Project Settings**: Use web interface for parameter modification
+2. **Update Relevant Parameters**: Modify specific configuration values
+3. **Save and Reconfigure**: Apply changes to affected modules
+4. **Selective Rerun**: Execute only modules affected by parameter changes
 
-**User Requirements**: Understanding of parameter impacts on different pipeline stages.
+**Alternative Access**: Parameters can also be modified in Marimo execution notebooks for advanced users.
+
+**User Requirements**: Understanding of parameter impacts on different pipeline stages and module dependencies.
 
 ---
 
 ## 10. Mixed Round and Square Acquisition
 
-**Problem**: "Sometimes the biologist uses both round acquisition (e.g. for phenotyping) and square acquisition (e.g. for SBS)"
+**Real-World Scenario**: *"Sometimes the biologist uses both round acquisition (e.g. for phenotyping) and square acquisition (e.g. for SBS)"*
 
-**Status**: ✅ **Available**
+**Status**: ✅ **Built-in Support**
 
-**Solution**:
-Built-in support for mixed acquisition types through separate configuration:
+**Technical Implementation**: Independent configuration for CP and SBS acquisition types
 
-1. **Separate SBS/CP Configs**: Independent image frame type settings for SBS and Cell Painting
-2. **Acquisition Order Settings**: Configure acquisition patterns separately for each processing arm
-3. **Module Support**: Stitchcrop module handles different acquisition types automatically
-4. **Configuration UI**: Settings available through standard experiment setup
+**Code Evidence**: In `/starrynight/src/starrynight/experiments/pcp_generic.py`:
+```python
+class CPConfig(BaseModel):
+    img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
+    acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+
+class SBSConfig(BaseModel):
+    img_frame_type: ImageFrameType = Field(ImageFrameType.ROUND)
+    acquisition_order: AcquisitionOrderType = Field(AcquisitionOrderType.SNAKE)
+```
 
 **Configuration Options**:
-- SBS config: image frame type and acquisition order
-- CP config: independent image frame type and acquisition order
-- Stitchcrop: separate processing for phenotypic and SBS images
+- **Cell Painting Config**: Independent image frame type (`ROUND`/`SQUARE`) and acquisition order
+- **SBS Config**: Separate image frame type and acquisition pattern settings
+- **Module Support**: Stitchcrop module automatically handles different acquisition types
 
-**User Requirements**: Understanding of acquisition type implications for image processing.
+**Usage Examples**:
+- Phenotypic arm: `ImageFrameType.ROUND` with `AcquisitionOrderType.SNAKE`
+- SBS arm: `ImageFrameType.SQUARE` with `AcquisitionOrderType.SNAKE`
 
-**Notes**: This feature is already implemented and requires no additional development.
+**User Interface**: Settings configurable through standard experiment setup process.
 
----
-
-## General Implementation Notes
-
-### Advanced User Requirements
-Most solutions assume users have reasonable competency with the system architecture. While StarryNight provides robust technical capabilities, implementing highly user-friendly interfaces for all edge cases would require significant additional development effort beyond core functionality.
-
-### Common Solution Patterns
-- **Index-based filtering**: Primary approach for selective data processing
-- **Project-level configuration**: Handles most parameter variations and pipeline customization
-- **S3-based storage**: Provides resilience against infrastructure failures
-- **Modular pipeline composition**: Enables workflow customization and specialization
-
-### Development Timeline
-- **✅ Immediate solutions**: Leverage existing configuration and workflow capabilities
-- **🚧 6-12 month features**: Require new UI development and architectural extensions
-- **Major development efforts**: Resource management system and bulk operation interfaces
-
-### Related Documentation
-- [Getting Started Guide](../user/getting-started.md) - Basic StarryNight setup and usage
-- [Parser Configuration](../user/parser-configuration.md) - Data indexing and path parsing
-- [Architecture Overview](../architecture/00_architecture_overview.md) - System design and components
+**User Requirements**: Understanding of acquisition type implications for downstream image processing.
 
 ---
 
-*This FAQ is based on real user feedback and technical discussions. For additional support or feature requests, please consult the StarryNight documentation or contact the development team.*
+## Technical Summary
+
+### What Works Well Now ✅
+- **Questions 1, 7, 8, 9, 10**: Core functionality exists with minimal workarounds needed
+- **Auto-detection**: Cycles, channels, and parameters inferred from data structure
+- **Modular Design**: Flexible pipeline composition supports most use cases
+- **Cloud Resilience**: S3-based storage provides robust failure recovery
+
+### What Needs Development 🚧
+- **Questions 2, 4**: Index manipulation and filtering tools (6-12 months)
+- **Questions 5, 6**: Better UI for multi-project coordination
+- **Question 3B**: Bulk job selection interface (significant UI work)
+
+### Advanced User Reality
+As noted in the technical discussion: *"Most of these use cases are very edge use cases, and this should mean that [the] biologist who is processing [data] is fairly competent and knows about the system, right?"*
+
+Most solutions require:
+- Understanding of index-based data organization
+- Comfort with Canvas UI project management or CLI tools
+- Knowledge of biological implications of parameter changes
+- Ability to coordinate multi-project workflows when needed
+
+This reflects the reality that these are sophisticated edge cases in high-throughput biological data processing, where users typically have substantial technical expertise.
+
+---
+
+## Related Documentation
+
+- [Getting Started Guide](../user/getting-started.md) - Basic StarryNight setup and usage patterns
+- [Parser Configuration](../user/parser-configuration.md) - Data indexing and path parsing configuration
+- [Architecture Overview](../architecture/00_architecture_overview.md) - System design and component interactions
+- [Pipeline Composition](../architecture/04_pipeline_layer.md) - Understanding modular pipeline design
+
+---
+
+*This FAQ reflects real-world usage scenarios and technical discussions with StarryNight users. The solutions balance practical implementation with architectural constraints, prioritizing functionality for competent users over simplified interfaces for every edge case.*
