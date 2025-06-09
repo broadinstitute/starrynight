@@ -170,3 +170,9 @@ docs/architecture/transcripts/
 
 .ruff_cache/
 **/.claude/settings.local.json
+
+# FAQ intermediate documents - keep only the final operational-challenges.md
+docs/faq/transcript-analysis.md
+docs/faq/solutions-matrix.md
+docs/faq/user_questions.txt
+docs/faq/user_questions_discussion_transcript.txt

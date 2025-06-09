@@ -48,6 +48,7 @@ nav:
     - Getting Started: user/getting-started.md
     - Complete Workflow Example: user/example-pipeline-cli.md
     - Parser Configuration: user/parser-configuration.md
+    - Operational Challenges FAQ: user/operational-challenges.md
   - Developer Guide:
     - System Maintenance: developer/guides/system-maintenance-guide.md
     - Workflow Implementation: developer/guides/workflow-implementation-guide.md
