@@ -4,8 +4,6 @@
 
 This FAQ addresses critical operational challenges faced by research teams transitioning from PCPIP to StarryNight for high-throughput microscopy image processing. These questions emerged from real-world discussions with users processing Optical Pooled Screening (OPS) data at scale.
 
-StarryNight's modular architecture provides robust solutions for most scenarios. However, developers believe that most of these operational challenges represent edge cases that typically require users with substantial technical competence and system knowledge. While user-friendly interfaces for every edge case would require substantial development effort, the core capabilities exist and are accessible to advanced users.
-
 **Status Legend:**
 
 - ✅ **Available**: Ready to use with current system
