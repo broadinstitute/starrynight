@@ -2,13 +2,12 @@
 
 ## Introduction
 
-This FAQ addresses critical operational challenges faced by research teams transitioning from PCPIP to StarryNight for high-throughput microscopy image processing. These questions emerged from real-world discussions with users processing Cell Painting and Sequencing by Synthesis (SBS) data at scale.
+This FAQ addresses critical operational challenges faced by research teams transitioning from PCPIP to StarryNight for high-throughput microscopy image processing. These questions emerged from real-world discussions with users processing Optical Pooled Screening (OPS) data at scale.
 
-StarryNight's modular architecture provides robust solutions for most scenarios. However, as one developer noted: *"Most of these use cases are very edge use cases, and this should mean that [the] biologist who is processing [data] is fairly competent and knows about the system."* While user-friendly interfaces for every edge case would require substantial development effort, the core capabilities exist and are accessible to advanced users.
-
-**Key Insight**: StarryNight's strength lies in its flexible, index-driven approach rather than rigid workflows. Most operational challenges stem from biological data complexity, not architectural limitations.
+StarryNight's modular architecture provides robust solutions for most scenarios. However, developers believe that most of these operational challenges represent edge cases that typically require users with substantial technical competence and system knowledge. While user-friendly interfaces for every edge case would require substantial development effort, the core capabilities exist and are accessible to advanced users.
 
 **Status Legend:**
+
 - ✅ **Available**: Ready to use with current system
 - ⚙️ **Workaround**: Possible but requires manual coordination
 - 🚧 **Planned**: Architecturally supported, needs implementation
@@ -18,7 +17,7 @@ StarryNight's modular architecture provides robust solutions for most scenarios.
 
 ## 1. Starting Processing Before All Images Are Available
 
-**Real-World Scenario**: *"Sometimes we want to start before all the images are available (because image generation can take up to a couple of weeks on the SBS arm, so we want to do processing of the phenotyping arm while the barcoding is not started or only partially done)."*
+**Real-World Scenario**: Research teams often need to start processing before all images are available, particularly when SBS image generation takes weeks and they want to process the phenotyping arm while barcoding data is still being acquired.
 
 **Status**: ✅ **Currently Available**
 
@@ -28,6 +27,7 @@ StarryNight's modular pipeline architecture supports this through composition an
 **Code Location**: `/starrynight/src/starrynight/pipelines/pcp_generic.py`
 
 Current implementation shows parallel CP and SBS processing:
+
 ```python
 # Existing combined pipeline structure
 Parallel([
@@ -37,6 +37,7 @@ Parallel([
 ```
 
 **Implementation Steps**:
+
 1. **Create Pipeline Variants**: Copy `pcp_generic.py` to create specialized versions (requires developer)
 2. **Register New Pipelines**: Add to `PIPELINE_REGISTRY` in `/starrynight/src/starrynight/pipelines/registry.py`
 3. **Execute Separately**:
@@ -51,17 +52,17 @@ Parallel([
 
 **Current Reality**: Must modify codebase to add new pipeline types. The modular architecture supports this, but requires development effort rather than configuration.
 
-**Alternative Approach**: Use existing pipeline but filter processing to skip unavailable data (discussed by developers as viable workaround).
+**Current Workaround**: Use existing pipeline but filter processing to skip unavailable data (discussed by developers as viable workaround).
 
 ---
 
 ## 2. Adding Cycles Mid-Experiment
 
-**Real-World Scenario**: *"Sometimes they decide to add a cycle partway through because one cycle got screwed up, so the cycle counts we put in at the beginning are now wrong."*
+**Real-World Scenario**: Experiments sometimes require additional cycles mid-process due to failed acquisitions, making the original cycle count configuration incorrect.
 
 **Status**: ✅ **Currently Available** (with data loss)
 
-**Technical Advantage**: StarryNight auto-detects cycles from data structure, not configuration.
+**Technical Solution**: StarryNight auto-detects cycles from data structure, not configuration.
 
 **Code Evidence**: In `/starrynight/src/starrynight/experiments/pcp_generic.py`:
 ```python
@@ -74,15 +75,16 @@ sbs_n_cycles = (
 ```
 
 **Recovery Process**:
+
 1. **Add New Cycle Images**: Place additional cycle data in the dataset
 2. **Re-inventory**: `starrynight inventory` (detects new files)
 3. **Re-index**: `starrynight index` (updates cycle count automatically)
 4. **Reconfigure**: `starrynight exp new` (creates new experiment with updated cycle count)
 5. **Reprocess**: All downstream processing adapts to detected cycles automatically
 
-**Trade-off**: Previous processing results are lost and must be recomputed. No incremental update capability currently exists.
+**Limitation**: Previous processing results are lost and must be recomputed. No incremental update capability currently exists.
 
-**Advanced Note**: If you need to *exclude* specific cycles (e.g., skip corrupted cycle 5), this must be handled in the CellProfiler pipeline configuration, not in StarryNight's index layer.
+**Limitation**: If you need to *exclude* specific cycles (e.g., skip corrupted cycle 5), this must be handled in the CellProfiler pipeline configuration, not in StarryNight's index layer.
 
 ---
 
@@ -90,7 +92,7 @@ sbs_n_cycles = (
 
 ### 3A. Failed Job Retry on Larger Machines
 
-**Real-World Scenario**: *"Sometimes tasks fail and need to be retried on a larger machine"*
+**Real-World Scenario**: Tasks occasionally fail due to resource constraints and need retry with increased computational resources.
 
 **Status**: 🚧 **Planned Architecture** (6-12 months)
 
@@ -114,32 +116,32 @@ module_config = {
 
 ### 3B. Rerunning Successful Jobs with New Pipeline Versions
 
-**Real-World Scenario**: *"Sometimes I want to do that on a subset of all jobs which previously succeeded"*
+**Real-World Scenario**: Users sometimes need to rerun specific subsets of previously successful jobs with updated pipeline versions.
 
 **Status**: ⚙️ **Manual Workaround Available**
 
 **Current Capability**: Can rerun individual modules or entire workflows through Conductor backend, but no bulk selection interface.
 
-**Technical Reality**: As the developer noted: *"This was not part of the design, so I haven't thought about this when I was designing the whole thing. So I don't know right now... what challenges are there."*
+**Technical Reality**: Developers acknowledge this wasn't part of the original design considerations, so implementing bulk job selection would require significant architectural planning.
 
-**Manual Approach**: Force rerun of specific modules through Canvas UI or rebuild entire pipeline with new parameters.
+**Current Workaround**: Force rerun of specific modules through Canvas UI or rebuild entire pipeline with new parameters.
 
 ---
 
 ## 4. Handling Corrupted Images
 
-**Real-World Scenario**: *"Sometimes an image is corrupted and needs to be dropped from the experiment (and/or replaced with a dummy image)"*
+**Real-World Scenario**: Corrupted images occasionally need to be excluded from experiments or replaced with dummy images to maintain data consistency.
 
 **Status**: 🚧 **Architectural Design Phase** (6-12 months)
 
-**Technical Challenge**: Index files use Parquet format, which is immutable by design.
+**Technical Challenge**: Index files use Parquet format, which is (practically, given the size) immutable by design.
 
-**Code Context**: Index structure in `/starrynight/src/starrynight/algorithms/index.py`
+**Code Location**: Index structure in `/starrynight/src/starrynight/algorithms/index.py`
 
 **Proposed Solution - Filter-Based Approach**:
 Rather than modifying index files, create filtering layers:
 
-1. **Blacklist Creation**: Generate separate index files identifying corrupted images
+1. **Blocklist Creation**: Generate separate index files identifying corrupted images
 2. **Anti-join Processing**: Filter main index during data loading:
    ```python
    # Conceptual filtering approach using polars
@@ -156,13 +158,13 @@ Rather than modifying index files, create filtering layers:
 
 ## 5. Different Pipeline Versions Per Plate
 
-**Real-World Scenario**: *"Sometimes some plates need a different version of the pipeline than other plates (within the same experiment) - which we won't know ahead of time"*
+**Real-World Scenario**: Different plates within the same experiment sometimes require different pipeline versions, with the need for variation only discovered during processing.
 
 **Status**: ⚙️ **Currently Available** (via multiple projects)
 
-**Technical Approach**: Index filtering + separate project management
+**Technical Solution**: Index filtering + separate project management
 
-**Code Capability**: `/starrynight/src/starrynight/utils/dfutils.py` provides filtering:
+**Code Location**: `/starrynight/src/starrynight/utils/dfutils.py` provides filtering:
 ```python
 def filter_df_by_column_val(df: pl.LazyFrame, column: str, val: str) -> pl.LazyFrame:
     filtered_df = df.filter(pl.col(column).eq(val))
@@ -170,14 +172,14 @@ def filter_df_by_column_val(df: pl.LazyFrame, column: str, val: str) -> pl.LazyF
 ```
 
 **Implementation Workflow**:
-As the developer explained: *"It's gonna be a two step process... in the canvas UI, you create a new project... when it comes to indexing, filter everything out but plate one... And then create a new project, do the same things, but in the indexing step, filter out... plate one, but keep everything else."*
+Developers suggest a two-step approach: create separate Canvas projects for each plate group, using index filtering during project setup to include only the target plates for each pipeline version.
 
 1. **Canvas UI**: Create separate projects for each plate
 2. **Index Filtering**: During project setup, filter to include only target plate
 3. **Pipeline Assignment**: Configure different pipeline versions per project
 4. **Coordinate Results**: Manually manage multiple project outputs
 
-**Developer Note**: *"It's doable. It's not pretty, but I guess... that's how they do it... even like in the separate runs for this thing."*
+**Developer Assessment**: While functional, this approach requires manual coordination across multiple projects - a workable but inelegant solution similar to current multi-run workflows.
 
 **User Requirements**: Understanding of project management and index filtering concepts.
 
@@ -187,31 +189,32 @@ As the developer explained: *"It's gonna be a two step process... in the canvas 
 
 ## 6. Different Pipeline Versions Per Well
 
-**Real-World Scenario**: *"Sometimes a single well needs a different version of the pipeline than other wells (within the same experiment)"*
+**Real-World Scenario**: Individual wells occasionally require different pipeline processing than other wells within the same experiment.
 
 **Status**: ⚙️ **Technically Possible** (extreme edge case)
 
-**Solution**: Same approach as plate-level filtering but at well granularity through Canvas project creation with index filtering.
+**Technical Solution**: Same approach as plate-level filtering but at well granularity through Canvas project creation with index filtering.
 
-**Practical Reality**: As one participant noted, this is *"a very weird edge case situation"* requiring substantial manual coordination. While technically possible through the filtering system, it's not streamlined for regular use.
+**Technical Reality**: Developers consider this an extreme edge case requiring substantial manual coordination. While technically possible through the filtering system, it's not streamlined for regular use.
 
 **User Requirements**: Advanced workflow management skills and deep understanding of granular data selection.
 
-**Assessment**: Functional but not elegant. Represents the boundary of practical workflow complexity.
+**Limitation**: Functional but not elegant. Represents the boundary of practical workflow complexity.
 
 ---
 
 ## 7. Machine Failures During Job Launch
 
-**Real-World Scenario**: *"Sometimes whatever machine is being used to launch the jobs locks up or dies."*
+**Real-World Scenario**: Job launch machines occasionally fail or become unresponsive during processing.
 
 **Status**: ✅ **Built-in Architecture Strength**
 
 **Technical Solution**: Cloud-native design provides automatic resilience
 
-**Technical Explanation**: As the developer explained: *"The way things are written right now, it assumes that it's reading and writing from s3... automatically, in that sense, you don't really lose any state because... you're not using your local storage."*
+**Technical Explanation**: StarryNight's cloud-native design assumes S3-based storage for all operations, which means job state is automatically preserved in cloud storage rather than being dependent on local machine storage.
 
 **Architecture Benefits**:
+
 - **S3 Storage Backend**: All state persisted to cloud storage
 - **Stateless Job Design**: Jobs can be relaunched on any machine
 - **AWS Batch Recovery**: Automatic instance failure detection and reallocation
@@ -223,11 +226,11 @@ As the developer explained: *"It's gonna be a two step process... in the canvas 
 
 ## 8. Incorrect Channel Mapping Information
 
-**Real-World Scenario**: *"Sometimes the biologist shared incorrect information about what was in each channel and our original mapping is wrong"*
+**Real-World Scenario**: Channel mapping information provided during experiment setup is sometimes incorrect, requiring updates to the original configuration.
 
 **Status**: ✅ **Currently Available** with built-in validation
 
-**Technical Reality**: StarryNight already provides syntactic validation
+**Technical Solution**: StarryNight already provides syntactic validation
 
 **Code Evidence**: In `pcp_generic.py`:
 ```python
@@ -237,11 +240,13 @@ for cp_custom_channel in init_config_parsed.cp_custom_channel_map.keys():
 ```
 
 **Validation Capabilities**:
+
 - **Syntactic**: Ensures channel names exist in indexed data
 - **Error Prevention**: Clear error messages for non-existent channels
 - **Configuration Update**: Modify mappings through Project Settings or experiment config
 
 **Recovery Process**:
+
 1. **Update Channel Mapping**: Modify experiment configuration with correct channel assignments
 2. **Validate Configuration**: Built-in checks verify channel names against index
 3. **Reconfigure Project**: Apply new mapping to all modules
@@ -255,7 +260,7 @@ for cp_custom_channel in init_config_parsed.cp_custom_channel_map.keys():
 
 ## 9. Incorrect Non-Channel Parameters
 
-**Real-World Scenario**: *"Sometimes the biologist shared incorrect information about some other parameter that doesn't affect channel mapping (like we need to adjust the stitchcrop hyperparameters to be for round vs square; or we need to update the path to the barcodes because the first ones were bad)"*
+**Real-World Scenario**: Non-channel parameters like stitchcrop hyperparameters or barcode file paths sometimes need correction due to initially incorrect information or updated requirements.
 
 **Status**: ✅ **Fully Supported**
 
@@ -264,18 +269,20 @@ for cp_custom_channel in init_config_parsed.cp_custom_channel_map.keys():
 **UI Access**: Canvas project settings interface at `/canvas/app/dashboard/project/id/[id]/view/project-settings/`
 
 **Common Parameter Categories**:
+
 - **Stitchcrop hyperparameters**: Round vs. square acquisition settings
 - **Barcode CSV locations**: Update path to correct barcode files
 - **Analysis thresholds**: CellProfiler module parameters
 - **Output configurations**: Result storage and naming
 
 **Update Process**:
+
 1. **Navigate to Project Settings**: Use web interface for parameter modification
 2. **Update Relevant Parameters**: Modify specific configuration values
 3. **Save and Reconfigure**: Apply changes to affected modules
 4. **Selective Rerun**: Execute only modules affected by parameter changes
 
-**Alternative Access**: Parameters can also be modified in Marimo execution notebooks for advanced users.
+**Alternative Interface**: Parameters can also be modified in Marimo execution notebooks for advanced users.
 
 **User Requirements**: Understanding of parameter impacts on different pipeline stages and module dependencies.
 
@@ -283,7 +290,7 @@ for cp_custom_channel in init_config_parsed.cp_custom_channel_map.keys():
 
 ## 10. Mixed Round and Square Acquisition
 
-**Real-World Scenario**: *"Sometimes the biologist uses both round acquisition (e.g. for phenotyping) and square acquisition (e.g. for SBS)"*
+**Real-World Scenario**: Experiments often combine different acquisition patterns, such as round acquisition for phenotyping and square acquisition for SBS imaging.
 
 **Status**: ✅ **Built-in Support**
 
@@ -301,43 +308,19 @@ class SBSConfig(BaseModel):
 ```
 
 **Configuration Options**:
+
 - **Cell Painting Config**: Independent image frame type (`ROUND`/`SQUARE`) and acquisition order
 - **SBS Config**: Separate image frame type and acquisition pattern settings
 - **Module Support**: Stitchcrop module automatically handles different acquisition types
 
 **Usage Examples**:
+
 - Phenotypic arm: `ImageFrameType.ROUND` with `AcquisitionOrderType.SNAKE`
 - SBS arm: `ImageFrameType.SQUARE` with `AcquisitionOrderType.SNAKE`
 
 **User Interface**: Settings configurable through standard experiment setup process.
 
 **User Requirements**: Understanding of acquisition type implications for downstream image processing.
-
----
-
-## Technical Summary
-
-### What Works Well Now ✅
-- **Questions 1, 7, 8, 9, 10**: Core functionality exists with minimal workarounds needed
-- **Auto-detection**: Cycles, channels, and parameters inferred from data structure
-- **Modular Design**: Flexible pipeline composition supports most use cases
-- **Cloud Resilience**: S3-based storage provides robust failure recovery
-
-### What Needs Development 🚧
-- **Questions 2, 4**: Index manipulation and filtering tools (6-12 months)
-- **Questions 5, 6**: Better UI for multi-project coordination
-- **Question 3B**: Bulk job selection interface (significant UI work)
-
-### Advanced User Reality
-As noted in the technical discussion: *"Most of these use cases are very edge use cases, and this should mean that [the] biologist who is processing [data] is fairly competent and knows about the system, right?"*
-
-Most solutions require:
-- Understanding of index-based data organization
-- Comfort with Canvas UI project management or CLI tools
-- Knowledge of biological implications of parameter changes
-- Ability to coordinate multi-project workflows when needed
-
-This reflects the reality that these are sophisticated edge cases in high-throughput biological data processing, where users typically have substantial technical expertise.
 
 ---
 
