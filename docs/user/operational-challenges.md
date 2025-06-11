@@ -170,7 +170,7 @@ def filter_df_by_column_val(df: pl.LazyFrame, column: str, val: str) -> pl.LazyF
 ```
 
 **Implementation Workflow**:
-As the developer explained: *"It's gonna be a two step process... in the cyanide UI, you create a new project... when it comes to indexing, filter everything out but plate one... And then create a new project, do the same things, but in the indexing step, filter out... plate one, but keep everything else."*
+As the developer explained: *"It's gonna be a two step process... in the canvas UI, you create a new project... when it comes to indexing, filter everything out but plate one... And then create a new project, do the same things, but in the indexing step, filter out... plate one, but keep everything else."*
 
 1. **Canvas UI**: Create separate projects for each plate
 2. **Index Filtering**: During project setup, filter to include only target plate
