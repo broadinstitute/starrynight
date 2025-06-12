@@ -102,6 +102,13 @@ class StarrynightModule(BaseModel, ABC):
         if spec is None:
             spec = self._spec()
 
+        # Add common pipecraft resource hint options to the spec if not present
+        if spec.inputs.get("resource_hints", None) is None:
+            spec.inputs["resource_hints"] = {
+                "vcpus": 2,
+                "memory_gb": 0.5,
+            }
+
         # Init again with spec ( We validate the spec here)
         super().__init__(
             data_config=data_config, experiment=experiment, spec=spec, **data

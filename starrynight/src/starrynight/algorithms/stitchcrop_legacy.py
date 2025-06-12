@@ -75,7 +75,7 @@ from starrynight.utils.dfutils import (
     get_cycles_from_df,
     get_default_path_prefix,
 )
-from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
 
 ###################################
@@ -132,6 +132,7 @@ def gen_stitchcrop_pipeline(
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
     for_sbs: bool = False,
+    uow_hierarchy: list[str] = None,
 ) -> None:
     """Generate load data for segcheck pipeline.
 
@@ -153,6 +154,8 @@ def gen_stitchcrop_pipeline(
         Path to experiment config json path.
     for_sbs: bool
         For SBS images.
+    uow_hierarchy : list[str] | None
+        Unit of work list
 
     """
     # Construct images path if not given
@@ -176,14 +179,18 @@ def gen_stitchcrop_pipeline(
         path_mask = default_path_prefix
 
     # Setup chunking and write loaddata for parallel processing
-    images_hierarchy_dict = gen_image_hierarchy(
-        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
-    )
-    levels_leaf = flatten_dict(images_hierarchy_dict)
-    for levels, _ in levels_leaf:
+    uow_hierarchy = uow_hierarchy or [
+        "batch_id",
+        "plate_id",
+        "well_id",
+        "site_id",
+    ]
+    images_hierarchy_dict = gen_image_hierarchy(images_df, uow_hierarchy)
+    levels = flatten_all(images_hierarchy_dict)
+    for level in levels:
         # Construct filename for the loaddata csv
         level_out_path = pipe_out_dir.joinpath(
-            f"{'_'.join(levels)}-stitchcrop.py"
+            f"{'^'.join(levels)}#stitchcrop.py"
         )
 
         with level_out_path.open("w") as f:

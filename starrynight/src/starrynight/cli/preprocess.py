@@ -18,6 +18,7 @@ from starrynight.algorithms.preprocess import (
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
+@click.option("--uow", default=None)
 def gen_preprocess_load_data_cli(
     index: str,
     out: str,
@@ -27,6 +28,7 @@ def gen_preprocess_load_data_cli(
     path_mask: str | None,
     use_legacy: bool,
     exp_config: str | None,
+    uow: str | None,
 ) -> None:
     """Generate preprocess loaddata file.
 
@@ -48,8 +50,12 @@ def gen_preprocess_load_data_cli(
         Flag for using legacy names in loaddata.
     exp_config : str | None
         Experiment config json path. Can be local or a cloud path.
+    uow : list[str] | None
+        Unit of work list
 
     """
+    if uow is not None:
+        uow = uow.split(",")
     # If use_legacy, then exp_config path is required
     if use_legacy:
         assert exp_config is not None
@@ -66,6 +72,7 @@ def gen_preprocess_load_data_cli(
         AnyPath(align_images) if align_images else None,
         use_legacy,
         exp_config,
+        uow,
     )
 
 

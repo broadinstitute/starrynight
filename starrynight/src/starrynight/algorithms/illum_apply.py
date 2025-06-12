@@ -75,7 +75,7 @@ from starrynight.utils.dfutils import (
     get_channels_from_df,
     get_default_path_prefix,
 )
-from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
 
 ###############################
 ## Load data generation
@@ -196,6 +196,7 @@ def gen_illum_apply_load_data(
     illum_path: Path | CloudPath | None = None,
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
+    uow_hierarchy: list[str] | None = None,
 ) -> None:
     """Generate load data for illum calc pipeline.
 
@@ -213,6 +214,8 @@ def gen_illum_apply_load_data(
         Use legacy cppipe and loaddata.
     exp_config_path : Path | CloudPath
         Path to experiment config json path.
+    uow_hierarchy : list[str] | None
+        Unit of work list
 
     """
     # Construct illum path if not given
@@ -235,35 +238,37 @@ def gen_illum_apply_load_data(
         path_mask = default_path_prefix
 
     # Setup chunking and write loaddata for parallel processing
-    images_hierarchy_dict = gen_image_hierarchy(
-        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
-    )
-    levels_leaf = flatten_dict(images_hierarchy_dict)
-    for levels, _ in levels_leaf:
+    uow_hierarchy = uow_hierarchy or [
+        "batch_id",
+        "plate_id",
+        "well_id",
+        "site_id",
+    ]
+    images_hierarchy_dict = gen_image_hierarchy(images_df, uow_hierarchy)
+    levels = flatten_all(images_hierarchy_dict)
+    for level in levels:
         # setup filtered df for chunked levels
-        levels_df = filter_df_by_hierarchy(images_df, levels, False)
+        level_df = filter_df_by_hierarchy(images_df, level, False)
 
         # Setup channel list for this level
-        plate_channel_list = get_channels_from_df(levels_df)
+        plate_channel_list = get_channels_from_df(level_df)
 
         # Find illum files for this level
         illum_by_channel_dict = {
             ch: illum_path.joinpath(
                 # INFO: This is not optimal, output form previous step is calculated per plate
                 # INFO: So, level[:2] is used and not just levels
-                f"{'-'.join(levels[:2])}/{levels[1]}_Illum{ch}.npy"
+                f"{'-'.join(level[:2])}/{level[1]}_Illum{ch}.npy"
             )
             for ch in plate_channel_list
         }
 
         # Construct filename for the loaddata csv
-        level_out_path = out_path.joinpath(
-            f"{'_'.join(levels)}-illum_apply.csv"
-        )
+        level_out_path = out_path.joinpath(f"{'^'.join(level)}#illum_apply.csv")
 
         with level_out_path.open("w") as f:
             write_loaddata_illum_apply(
-                levels_df,
+                level_df,
                 plate_channel_list,
                 illum_by_channel_dict,
                 path_mask,

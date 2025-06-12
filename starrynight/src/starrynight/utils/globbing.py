@@ -146,3 +146,12 @@ def flatten_dict(
         flattened.append((path, nested_dict))
 
     return flattened
+
+
+def flatten_all(nested_dict: dict) -> list[str]:
+    levels_leaves = flatten_dict(nested_dict)
+    combined = []
+    for level, leaves in levels_leaves:
+        for leaf in leaves:
+            combined.append(level + [leaf])
+    return combined

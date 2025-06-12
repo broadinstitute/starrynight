@@ -83,7 +83,7 @@ from starrynight.utils.dfutils import (
     get_cycles_by_batch_plate,
     get_default_path_prefix,
 )
-from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
 
 ###############################
@@ -211,6 +211,7 @@ def gen_segcheck_load_data(
     corr_images_path: Path | CloudPath | None = None,
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
+    uow_hierarchy: list[str] = None,
 ) -> None:
     """Generate load data for segcheck pipeline.
 
@@ -232,6 +233,8 @@ def gen_segcheck_load_data(
         Use legacy cppipe and loaddata.
     exp_config_path : Path | CloudPath
         Path to experiment config json path.
+    uow_hierarchy : list[str] | None
+        Unit of work list
 
     """
     # Construct corr images path if not given
@@ -258,26 +261,30 @@ def gen_segcheck_load_data(
         path_mask = default_path_prefix
 
     # Setup chunking and write loaddata for parallel processing
-    images_hierarchy_dict = gen_image_hierarchy(
-        images_df, ["batch_id", "plate_id", "well_id", "site_id"]
-    )
+    uow_hierarchy = uow_hierarchy or [
+        "batch_id",
+        "plate_id",
+        "well_id",
+        "site_id",
+    ]
+    images_hierarchy_dict = gen_image_hierarchy(images_df, uow_hierarchy)
 
-    levels_leaf = flatten_dict(images_hierarchy_dict)
-    for levels, _ in levels_leaf:
+    levels = flatten_all(images_hierarchy_dict)
+    for level in levels:
         # setup filtered df for chunked levels
-        levels_df = filter_df_by_hierarchy(images_df, levels, False)
+        level_df = filter_df_by_hierarchy(images_df, level, False)
 
         # Setup channel list for this level
-        plate_channel_list = get_channels_from_df(levels_df)
+        plate_channel_list = get_channels_from_df(level_df)
 
         # Construct filename for the loaddata csv
-        level_out_path = out_path.joinpath(f"{'_'.join(levels)}-segcheck.csv")
+        level_out_path = out_path.joinpath(f"{'^'.join(level)}#segcheck.csv")
 
         # Construct corr images path for this level
-        corr_images_path_level = corr_images_path.joinpath("-".join(levels))
+        corr_images_path_level = corr_images_path.joinpath("-".join(level))
         with level_out_path.open("w") as f:
             write_loaddata_segcheck(
-                levels_df,
+                level_df,
                 plate_channel_list,
                 corr_images_path_level,
                 nuclei_channel,

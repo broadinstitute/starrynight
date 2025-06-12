@@ -103,6 +103,12 @@ class StitchcropGenPipelineModule(StarrynightModule):
                     .resolve()
                     .__str__(),
                 ),
+                "uow_list": TypeInput(
+                    name="Unit of work list",
+                    type=TypeEnum.file,
+                    description="List of index columns to use for grouping runs.",
+                    optional=True,
+                ),
             },
             outputs={
                 "pipeline_path": TypeOutput(
@@ -182,6 +188,9 @@ class StitchcropGenPipelineModule(StarrynightModule):
         ]
         if spec.inputs["path_mask"].value is not None:
             cmd += ["--path_mask", spec.inputs["path_mask"].value]
+
+        if spec.inputs["uow_list"].value is not None:
+            cmd += ["--uow", spec.inputs["uow_list"].value]
 
         if spec.inputs["use_legacy"].value is True:
             cmd += [

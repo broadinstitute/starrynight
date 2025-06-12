@@ -69,6 +69,7 @@ def filter_df_by_hierarchy_cp(
     df: pl.LazyFrame, levels: list[str]
 ) -> pl.LazyFrame:
     for i, level in enumerate(levels):
+        print(f"LEVEL FILTERING: {level}")
         df = df.filter(pl.col(HIERARCHY_COLUMN_MAP_CP[i]).eq(level))
     return df
 

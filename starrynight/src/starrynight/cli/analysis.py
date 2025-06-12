@@ -17,6 +17,7 @@ from starrynight.algorithms.analysis import (
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
+@click.option("--uow", default=None)
 def gen_analysis_load_data_cli(
     index: str,
     out: str,
@@ -25,6 +26,7 @@ def gen_analysis_load_data_cli(
     path_mask: str | None,
     use_legacy: bool,
     exp_config: str | None,
+    uow: str | None,
 ) -> None:
     """Generate analysis loaddata file.
 
@@ -44,8 +46,12 @@ def gen_analysis_load_data_cli(
         Flag for using legacy names in loaddata.
     exp_config : str | None
         Experiment config json path. Can be local or a cloud path.
+    uow : list[str] | None
+        Unit of work list
 
     """
+    if uow is not None:
+        uow = uow.split(",")
     if use_legacy:
         assert exp_config is not None
         exp_config = AnyPath(exp_config)
@@ -58,6 +64,7 @@ def gen_analysis_load_data_cli(
         AnyPath(comp_images) if comp_images else None,
         use_legacy,
         exp_config,
+        uow,
     )
 
 

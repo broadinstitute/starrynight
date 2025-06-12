@@ -91,6 +91,12 @@ class PCPGeneric(Experiment):
     @staticmethod
     def from_index(index_path: Path, init_config: dict) -> "PCPGeneric":
         """Configure experiment with index."""
+        # HACK: remove later after proper validation in front end canvas ui
+        if init_config["sbs_custom_channel_map"] == "":
+            init_config["sbs_custom_channel_map"] = None
+        if init_config["cp_custom_channel_map"] == "":
+            init_config["cp_custom_channel_map"] = None
+
         init_config_parsed = PCPGenericInitConfig.model_validate(init_config)
         if index_path.name.endswith(".csv"):
             index_df = pl.scan_csv(index_path)
@@ -122,10 +128,11 @@ class PCPGeneric(Experiment):
         cp_channel_list = get_channels_from_df(cp_images_df)
 
         # Check custom channel map
-        for (
-            cp_custom_channel
-        ) in init_config_parsed.cp_custom_channel_map.keys():
-            assert cp_custom_channel in cp_channel_list
+        if init_config_parsed.cp_custom_channel_map is not None:
+            for (
+                cp_custom_channel
+            ) in init_config_parsed.cp_custom_channel_map.keys():
+                assert cp_custom_channel in cp_channel_list
 
         # Construct SBS config
 
@@ -151,10 +158,11 @@ class PCPGeneric(Experiment):
         sbs_channel_list = get_channels_from_df(sbs_images_df)
 
         # Check custom channel map
-        for (
-            sbs_custom_channel
-        ) in init_config_parsed.sbs_custom_channel_map.keys():
-            assert sbs_custom_channel in sbs_channel_list
+        if init_config_parsed.sbs_custom_channel_map is not None:
+            for (
+                sbs_custom_channel
+            ) in init_config_parsed.sbs_custom_channel_map.keys():
+                assert sbs_custom_channel in sbs_channel_list
 
         return PCPGeneric(
             dataset_id=dataset_id,

@@ -26,6 +26,7 @@ from starrynight.algorithms.illum_calc import (
 @click.option("--sbs", is_flag=True, default=False)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
+@click.option("--uow", default=None)
 def gen_illum_calc_load_data_cli(
     index: str,
     out: str,
@@ -33,6 +34,7 @@ def gen_illum_calc_load_data_cli(
     sbs: bool,
     use_legacy: bool,
     exp_config: str | None,
+    uow: str | None,
 ) -> None:
     """Generate illum calc loaddata file.
 
@@ -50,15 +52,25 @@ def gen_illum_calc_load_data_cli(
         Flag for using legacy names in loaddata.
     exp_config : str | None
         Experiment config json path. Can be local or a cloud path.
+    uow : list[str] | None
+        Unit of work list
 
     """
+    if uow is not None:
+        uow = uow.split(",")
     # If use_legacy, then exp_config path is required
     if use_legacy:
         assert exp_config is not None
         exp_config = AnyPath(exp_config)
 
     gen_illum_calc_load_data(
-        AnyPath(index), AnyPath(out), path_mask, sbs, use_legacy, exp_config
+        AnyPath(index),
+        AnyPath(out),
+        path_mask,
+        sbs,
+        use_legacy,
+        exp_config,
+        uow,
     )
 
 
@@ -102,6 +114,7 @@ def gen_illum_calc_cppipe_cli(
 @click.option("--sbs", is_flag=True, default=False)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
+@click.option("--uow", default=None)
 def gen_illum_apply_load_data_cli(
     index: str,
     out: str,
@@ -111,6 +124,7 @@ def gen_illum_apply_load_data_cli(
     sbs: bool,
     use_legacy: bool,
     exp_config: str | None,
+    uow: str | None,
 ) -> None:
     """Generate illum apply loaddata file.
 
@@ -132,8 +146,13 @@ def gen_illum_apply_load_data_cli(
         Flag for using legacy names in loaddata.
     exp_config : str | None
         Experiment config json path. Can be local or a cloud path.
+    uow : list[str] | None
+        Unit of work list
 
     """
+    if uow is not None:
+        uow = uow.split(",")
+
     if illum is not None:
         illum = AnyPath(illum)
 
@@ -150,6 +169,7 @@ def gen_illum_apply_load_data_cli(
             illum,
             use_legacy,
             exp_config,
+            uow,
         )
     else:
         if use_legacy is False:
@@ -162,6 +182,7 @@ def gen_illum_apply_load_data_cli(
             illum,
             use_legacy,
             exp_config,
+            uow,
         )
 
 

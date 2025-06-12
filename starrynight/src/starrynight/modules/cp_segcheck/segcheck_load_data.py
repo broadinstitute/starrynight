@@ -104,6 +104,12 @@ class CPSegcheckGenLoadDataModule(StarrynightModule):
                     .resolve()
                     .__str__(),
                 ),
+                "uow_list": TypeInput(
+                    name="Unit of work list",
+                    type=TypeEnum.file,
+                    description="List of index columns to use for grouping runs.",
+                    optional=True,
+                ),
             },
             outputs={
                 "loaddata_path": TypeOutput(
@@ -184,6 +190,9 @@ class CPSegcheckGenLoadDataModule(StarrynightModule):
         # Use user provided parser if available
         if spec.inputs["path_mask"].value is not None:
             cmd += ["--path_mask", spec.inputs["path_mask"].value]
+
+        if spec.inputs["uow_list"].value is not None:
+            cmd += ["--uow", spec.inputs["uow_list"].value]
 
         if spec.inputs["use_legacy"].value is True:
             assert spec.inputs["exp_config_path"].value is not None

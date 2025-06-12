@@ -180,7 +180,7 @@ from starrynight.utils.dfutils import (
     get_cycles_from_df,
     get_default_path_prefix,
 )
-from starrynight.utils.globbing import flatten_dict, get_files_by
+from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
 
 ###############################
@@ -361,6 +361,7 @@ def gen_analysis_load_data(
     sbs_comp_images_path: Path | CloudPath | None = None,
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
+    uow_hierarchy: list[str] = None,
 ) -> None:
     """Generate load data for analysis pipeline.
 
@@ -380,6 +381,8 @@ def gen_analysis_load_data(
         Use legacy cppipe and loaddata.
     exp_config_path : Path | CloudPath
         Path to experiment config json path.
+    uow_hierarchy : list[str] | None
+        Unit of work list
 
     """
     # Construct illum path if not given
@@ -407,18 +410,21 @@ def gen_analysis_load_data(
         path_mask = default_path_prefix
 
     # Setup chunking and write loaddata for parallel processing
-    images_hierarchy_dict = gen_image_hierarchy(
-        cp_images_df, ["batch_id", "plate_id", "well_id", "site_id"]
-    )
-    levels_leaf = flatten_dict(images_hierarchy_dict)
-
+    uow_hierarchy = uow_hierarchy or [
+        "batch_id",
+        "plate_id",
+        "well_id",
+        "site_id",
+    ]
+    images_hierarchy_dict = gen_image_hierarchy(cp_images_df, uow_hierarchy)
+    levels = flatten_all(images_hierarchy_dict)
     # Setup chunking and write loaddata for each batch/plate
-    for levels, _ in levels_leaf:
+    for level in levels:
         # setup filtered df for chunked levels
-        cp_levels_df = filter_df_by_hierarchy(cp_images_df, levels, False)
+        cp_level_df = filter_df_by_hierarchy(cp_images_df, level, False)
 
         # Setup channel list for this level
-        cp_plate_channel_list = get_channels_from_df(cp_levels_df)
+        cp_plate_channel_list = get_channels_from_df(cp_level_df)
         # TODO: This is a hack for now, need to fix this later
         # TODO: Find a way to filter sbs dataframe as well
         sbs_plate_channel_list = get_channels_from_df(sbs_images_df)
@@ -428,19 +434,19 @@ def gen_analysis_load_data(
 
         # Construct corr images path for this level
         cp_corr_images_path_level = cp_corr_images_path.joinpath(
-            "-".join(levels)
+            "-".join(level)
         )
 
         # Construct align images path for this level
         sbs_comp_images_path_level = sbs_comp_images_path.joinpath(
-            "-".join(levels)
+            "-".join(level)
         )
 
         # Construct filename for the loaddata csv
-        level_out_path = out_path.joinpath(f"{'_'.join(levels)}-analysis.csv")
+        level_out_path = out_path.joinpath(f"{'^'.join(level)}#analysis.csv")
         with level_out_path.open("w") as f:
             write_loaddata(
-                cp_levels_df,
+                cp_level_df,
                 cp_plate_channel_list,
                 sbs_plate_channel_list,
                 plate_cycles_list,

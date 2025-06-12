@@ -19,6 +19,7 @@ from starrynight.algorithms.stitchcrop_legacy import (
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--sbs", is_flag=True, default=False)
+@click.option("--uow", default=None)
 def gen_stitchcrop_pipeline_cli(
     index: str,
     out: str,
@@ -28,6 +29,7 @@ def gen_stitchcrop_pipeline_cli(
     path_mask: str | None,
     use_legacy: bool,
     sbs: bool,
+    uow: str | None,
 ) -> None:
     """Generate preprocess loaddata file.
 
@@ -49,8 +51,12 @@ def gen_stitchcrop_pipeline_cli(
         Flag for using legacy names in loaddata.
     sbs : bool
         Flag for using sbs images.
+    uow : list[str] | None
+        Unit of work list
 
     """
+    if uow is not None:
+        uow = uow.split(",")
     # If use_legacy, then exp_config path is required
     if use_legacy:
         assert exp_config is not None
@@ -65,6 +71,7 @@ def gen_stitchcrop_pipeline_cli(
         use_legacy,
         exp_config,
         sbs,
+        uow,
     )
 
 
@@ -83,7 +90,7 @@ def run_stitchcrop_legacy_cli(
     ----------
     pipeline : str
         Pipeline dir path. Can be local or a cloud path.
-    fiji_path : Path
+    fiji : Path
         Path to fiji executable.
     jobs : int, optional
         Number of parallel jobs to use (default is 20).
