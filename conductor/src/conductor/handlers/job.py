@@ -274,7 +274,6 @@ def create_pipeline_jobs_for_project(
 
     """
     orm_jobs = []
-    print(f"I am experiment: {experiment}")
 
     # Setup the experiment and init the pipeline
 
@@ -285,6 +284,11 @@ def create_pipeline_jobs_for_project(
             index_path=AnyPath(index_path), init_config=project.init_config
         )
     else:
+        # HACK: remove later after proper validation in front end canvas ui
+        if experiment["sbs_config"]["custom_channel_map"] == "":
+            experiment["sbs_config"]["custom_channel_map"] = None
+        if experiment["cp_config"]["custom_channel_map"] == "":
+            experiment["cp_config"]["custom_channel_map"] = None
         experiment = experiment_spec(**experiment)
 
     data = DataConfig(
