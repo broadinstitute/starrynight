@@ -18,9 +18,9 @@ export function ProjectRunOrConfigureProject() {
     return false;
   }, [projectStatus]);
 
-  if (shouldShowConfigureProject) {
-    return <ProjectConfigureProject />;
-  }
+  // if (shouldShowConfigureProject) {
+  return <ProjectConfigureProject />;
+  // }
 
   return <ProjectRunProject />;
 }

@@ -23,7 +23,6 @@ export function ProjectRun(props: TProjectRun) {
       <div className="font-bold">{run.name}</div>
       <div className="pt-2 inline-flex flex-col md:flex md:flex-row md:justify-between md:items-center">
         <ProjectRunBadge status={run.run_status} />
-
         <div>
           <KillRun run={run} />
           <RunPathsPopover

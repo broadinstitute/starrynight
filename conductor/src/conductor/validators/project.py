@@ -14,6 +14,7 @@ class Project(BaseModel):
     workspace_uri: str
     storage_uri: str
     init_config: dict = {}
+    experiment: dict | None = {}
     img_uri: str | None = None
     description: str
     type: str

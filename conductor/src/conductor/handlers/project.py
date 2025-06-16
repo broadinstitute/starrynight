@@ -1,5 +1,6 @@
 """Project route handlers."""
 
+import json
 from collections.abc import Callable
 
 from sqlalchemy import func, select
@@ -44,6 +45,30 @@ def create_project(db_session: Callable[[], Session], project: PyProject) -> PyP
     return project
 
 
+def update_project(db_session: Callable[[], Session], project: PyProject) -> PyProject:
+    """Update project.
+
+    Parameters
+    ----------
+    db_session: Callable[[], Session]
+        Configured callable to create a db session.
+    project : PyProject
+        Project instance.
+
+    Returns
+    -------
+    PyProject
+        Updated project.
+
+    """
+    orm_object = Project(**project.model_dump())
+    with db_session() as session:
+        session.merge(orm_object)
+        session.commit()
+        project = PyProject.model_validate(orm_object)
+    return project
+
+
 def configure_project(db_session: Callable[[], Session], project_id: int) -> PyProject:
     """Create project.
 
@@ -74,9 +99,15 @@ def configure_project(db_session: Callable[[], Session], project_id: int) -> PyP
             .outputs["project_index_path"]
             .value
         )
-        orm_jobs = create_pipeline_jobs_for_project(orm_project, index_path)
-        orm_project.jobs = orm_project.jobs + orm_jobs
+        orm_jobs, experiment = create_pipeline_jobs_for_project(
+            orm_project, index_path, orm_project.experiment
+        )
+        if len(orm_jobs) == 2:
+            orm_project.jobs = orm_project.jobs + orm_jobs
+        else:
+            orm_project.jobs = orm_project.jobs[0:2] + orm_jobs
         orm_project.is_configured = True
+        orm_project.experiment = json.loads(experiment.model_dump_json())
         session.add(orm_project)
         session.commit()
         project = PyProject.model_validate(orm_project)

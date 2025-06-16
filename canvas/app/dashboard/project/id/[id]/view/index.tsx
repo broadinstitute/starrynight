@@ -25,17 +25,14 @@ export function ProjectView(props: TProjectViewProps) {
 }
 
 function ProjectDescription() {
-  const { projectStatus } = useProjectStore((store) => ({
+  const { projectStatus, description } = useProjectStore((store) => ({
     projectStatus: store.projectStatus,
+    description: store.project.description,
   }));
 
   if (projectStatus === "configuring" || projectStatus === "not-configured") {
     // TODO: Add description.
-    return (
-      <div className="px-4 py-2 text-gray-600">
-        Configure project description.
-      </div>
-    );
+    return <div className="px-4 py-2 text-gray-600">{description}</div>;
   }
 
   return null;

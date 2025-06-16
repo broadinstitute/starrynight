@@ -121,6 +121,17 @@ class SpecContainer(ConfiguredBaseModel):
         {"from_schema": "https://w3id.org/my-org/bilayers_schema"}
     )
 
+    resource_hints: Optional[dict[str, str]] = Field(
+        None,
+        description="""Resource hints for the this module""",
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "resource_hints",
+                "domain_of": ["SpecContainer"],
+            }
+        },
+    )
+
     inputs: dict[str, TypeInput] = Field(
         ...,
         description="""Inputs to the algorithm from the last step of the workflow""",

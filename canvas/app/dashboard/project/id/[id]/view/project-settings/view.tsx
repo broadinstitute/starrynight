@@ -3,18 +3,26 @@ import { AWSCredentialsTab } from "./aws-credentials-tab";
 import { UpdateExperimentTab } from "./update-experiment";
 import { ProjectViewTab } from "./project-view";
 
-export function ProjectSettingsView() {
+export type ProjectSettingsViewProps = {
+  onRequestClose: () => void;
+};
+
+export function ProjectSettingsView(props: ProjectSettingsViewProps) {
+  const { onRequestClose } = props;
+
   return (
     <div className="flex-1 flex py-4">
-      <Tabs defaultValue="aws-credentials">
-        <TabsList>
+      <Tabs className="flex flex-col flex-1" defaultValue="aws-credentials">
+        <TabsList className="justify-start">
           <TabsTrigger value="aws-credentials">AWS Credentials</TabsTrigger>
           <TabsTrigger value="update-experiment">Update Experiment</TabsTrigger>
           <TabsTrigger value="project-view">Project View</TabsTrigger>
         </TabsList>
-        <AWSCredentialsTab />
-        <UpdateExperimentTab />
-        <ProjectViewTab />
+        <div className="flex-1 overflow-auto py-4">
+          <AWSCredentialsTab />
+          <UpdateExperimentTab onRequestClose={onRequestClose} />
+          <ProjectViewTab />
+        </div>
       </Tabs>
     </div>
   );

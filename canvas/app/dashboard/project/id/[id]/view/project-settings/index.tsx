@@ -7,12 +7,19 @@ import { ProjectSettingsView } from "./view";
 export function ProjectSettings() {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const onRequestCloseModal = React.useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
     <Modal
       open={isOpen}
       contentProps={{
         className:
-          "sm:max-w-[95vw] md:max-w-2xl h-[95vh] max-h-[800px] flex flex-col gap-0",
+          "sm:max-w-[95vw] md:max-w-5xl h-[95vh] max-h-[800px] flex flex-col gap-0",
+      }}
+      footerProps={{
+        className: "hidden",
       }}
       onOpenChange={(state) => setIsOpen(state)}
       title="Project Settings"
@@ -28,7 +35,7 @@ export function ProjectSettings() {
         </ActionButton>
       }
     >
-      <ProjectSettingsView />
+      <ProjectSettingsView onRequestClose={onRequestCloseModal} />
     </Modal>
   );
 }

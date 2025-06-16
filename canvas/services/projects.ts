@@ -1,5 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
+import { GET_RUNS_QUERY_KEY } from "./run";
+import { GET_JOBS_QUERY_KEY } from "./job";
 
 // TODO: Updates once BE support sending project status as enum.
 export type TProjectStatus =
@@ -9,6 +12,23 @@ export type TProjectStatus =
   | "running"
   | "failed"
   | "success";
+
+export type TProjectExperimentInputWithoutObj =
+  | string
+  | string[]
+  | boolean
+  | null
+  | undefined;
+
+export type TProjectExperimentObjInput = Record<
+  string,
+  TProjectExperimentInputWithoutObj
+>;
+
+export type TProjectExperimentValidInput =
+  | TProjectExperimentInputWithoutObj
+  | TProjectExperimentObjInput;
+export type TProjectExperiment = Record<string, TProjectExperimentValidInput>;
 
 export type TProject = {
   id: number | string;
@@ -21,6 +41,8 @@ export type TProject = {
   workspace_uri: string;
   storage_uri: string;
   is_configured: boolean;
+  init_config: Record<string, unknown>;
+  experiment: TProjectExperiment;
 };
 
 export function getProjects(): Promise<TProject[]> {
@@ -37,7 +59,7 @@ export function useGetProjects() {
 }
 
 export type TGetProjectOptions = {
-  id: string;
+  id: string | number;
 };
 
 export function getProject(options: TGetProjectOptions): Promise<TProject> {
@@ -52,7 +74,7 @@ export type TUseGetProject = {
   /**
    * Project id
    */
-  id: string;
+  id: string | number;
 };
 
 export function useGetProject(options: TUseGetProject) {
@@ -76,7 +98,7 @@ export type TCreateProjectOptions = {
 };
 
 export function createProject(
-  options: TCreateProjectOptions
+  options: TCreateProjectOptions,
 ): Promise<TProject> {
   return api.post(options, "/project").json();
 }
@@ -86,7 +108,7 @@ export type TDeleteProjectOptions = {
 };
 
 export function deleteProject(
-  options: TDeleteProjectOptions
+  options: TDeleteProjectOptions,
 ): Promise<TProject> {
   const { project_id } = options;
   return api.delete(`/project?project_id=${project_id}`).json();
@@ -122,7 +144,7 @@ export type TUseGetParserAndProjectTypeOptions = {
 };
 
 export function useGetParserAndProjectType(
-  options: TUseGetParserAndProjectTypeOptions
+  options: TUseGetParserAndProjectTypeOptions,
 ) {
   return useQuery({
     queryKey: [GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY],
@@ -132,11 +154,11 @@ export function useGetParserAndProjectType(
 }
 
 export type TConfigureProjectOption = {
-  project_id: string;
+  project_id: string | number;
 };
 
 export function configureProject(
-  options: TConfigureProjectOption
+  options: TConfigureProjectOption,
 ): Promise<TProject> {
   const { project_id } = options;
 
@@ -151,8 +173,36 @@ export type TUseConfigureProjectOptions = {
 export function useConfigureProject(options: TUseConfigureProjectOptions) {
   const { onError, onSuccess } = options;
 
+  const queryClient = useQueryClient();
+
+  const handleConfigureProject = React.useCallback(
+    async (options: TConfigureProjectOption) => {
+      const data = await configureProject(options);
+
+      const invalidateJobQuery = queryClient.invalidateQueries({
+        queryKey: [GET_JOBS_QUERY_KEY],
+      });
+
+      const invalidateRunsQuery = queryClient.invalidateQueries({
+        queryKey: [GET_RUNS_QUERY_KEY],
+      });
+
+      const invalidateProjectQuery = queryClient.invalidateQueries({
+        queryKey: [GET_PROJECT_QUERY_KEY, options.project_id],
+      });
+
+      await Promise.all([
+        invalidateJobQuery,
+        invalidateRunsQuery,
+        invalidateProjectQuery,
+      ]);
+      return data;
+    },
+    [queryClient],
+  );
+
   return useMutation({
-    mutationFn: configureProject,
+    mutationFn: handleConfigureProject,
     onError,
     onSuccess,
   });
@@ -163,7 +213,7 @@ export type TExecuteProjectOptions = {
 };
 
 export function executeProject(
-  options: TExecuteProjectOptions
+  options: TExecuteProjectOptions,
 ): Promise<TProject> {
   const { project_id } = options;
 
@@ -192,7 +242,7 @@ export type TGetProjectInitConfigUsingProjectTypeOptions = {
 export type TProjectInitConfig = Record<string, Record<string, string>>;
 
 export function getProjectInitConfigUsingProjectType(
-  options: TGetProjectInitConfigUsingProjectTypeOptions
+  options: TGetProjectInitConfigUsingProjectTypeOptions,
 ): Promise<TProjectInitConfig> {
   const { project_type } = options;
 
@@ -207,12 +257,50 @@ export type TUseGetProjectInitConfigUsingProjectTypeOptions = {
 };
 
 export function useGetProjectInitConfigUsingProjectType(
-  options: TUseGetProjectInitConfigUsingProjectTypeOptions
+  options: TUseGetProjectInitConfigUsingProjectTypeOptions,
 ) {
   const { project_type } = options;
 
   return useQuery({
     queryKey: [GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE_KEY],
     queryFn: () => getProjectInitConfigUsingProjectType({ project_type }),
+  });
+}
+
+export type TUpdateProjectOptions = {
+  project: TProject;
+};
+
+export function updateProject(
+  options: TUpdateProjectOptions,
+): Promise<TProject> {
+  const { project } = options;
+  return api.put({ ...project }, "/project").json();
+}
+
+export type TUseUpdateProject = {
+  onError: (error?: unknown) => void;
+  onSuccess: (data: TProject) => void;
+};
+
+export function useUpdateProject(options: TUseUpdateProject) {
+  const { onError, onSuccess } = options;
+  const queryClient = useQueryClient();
+
+  const handleOnSuccess = React.useCallback(
+    async (project: TProject) => {
+      await queryClient.invalidateQueries({
+        queryKey: [GET_PROJECT_QUERY_KEY, project.id],
+      });
+
+      onSuccess(project);
+    },
+    [onSuccess, queryClient],
+  );
+
+  return useMutation({
+    mutationFn: updateProject,
+    onError,
+    onSuccess: handleOnSuccess,
   });
 }

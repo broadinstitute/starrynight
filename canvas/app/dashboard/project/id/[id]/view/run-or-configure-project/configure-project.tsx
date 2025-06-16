@@ -2,54 +2,28 @@ import React from "react";
 
 import { ActionButton } from "@/components/custom/action-button";
 import { useToast } from "@/components/ui/use-toast";
-import { GET_JOBS_QUERY_KEY } from "@/services/job";
-import {
-  GET_PROJECT_QUERY_KEY,
-  useConfigureProject,
-} from "@/services/projects";
-import { GET_RUNS_QUERY_KEY } from "@/services/run";
+import { useConfigureProject } from "@/services/projects";
 import { useProjectStore } from "@/stores/project";
-import { useQueryClient } from "@tanstack/react-query";
 import { PlayIcon } from "lucide-react";
 
 export function ProjectConfigureProject() {
-  const queryClient = useQueryClient();
-
   const { projectID, jobStatus, updateProjectStatus } = useProjectStore(
     (store) => ({
       projectID: store.project.id,
       jobStatus: store.jobStatus,
       updateProjectStatus: store.updateProjectStatus,
-    })
+    }),
   );
 
   const { toast } = useToast();
 
   const handleOnConfigureProjectSuccess = React.useCallback(async () => {
-    const invalidateJobQuery = queryClient.invalidateQueries({
-      queryKey: [GET_JOBS_QUERY_KEY],
-    });
-
-    const invalidateRunsQuery = queryClient.invalidateQueries({
-      queryKey: [GET_RUNS_QUERY_KEY],
-    });
-
-    const invalidateProjectQuery = queryClient.invalidateQueries({
-      queryKey: [GET_PROJECT_QUERY_KEY, projectID],
-    });
-
-    await Promise.all([
-      invalidateJobQuery,
-      invalidateRunsQuery,
-      invalidateProjectQuery,
-    ]);
-
     updateProjectStatus("configured");
     toast({
       title: "Project configured successfully!",
       variant: "default",
     });
-  }, [queryClient, projectID, updateProjectStatus, toast]);
+  }, [updateProjectStatus, toast]);
 
   const handleOnConfigureProjectError = React.useCallback(() => {
     toast({

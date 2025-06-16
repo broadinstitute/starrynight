@@ -6,7 +6,7 @@ from pathlib import Path
 from cloudpathlib import AnyPath
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from starrynight.experiments.registry import EXPERIMENT_REGISTRY
+from starrynight.experiments.registry import EXPERIMENT_REGISTRY, Experiment
 from starrynight.modules.common import StarrynightModule
 from starrynight.pipelines.registry import PIPELINE_REGISTRY
 from starrynight.schema import DataConfig
@@ -253,7 +253,9 @@ def create_indexing_jobs_for_project(project: Project) -> list[Job]:
     return orm_jobs
 
 
-def create_pipeline_jobs_for_project(project: Project, index_path: str) -> list[Job]:
+def create_pipeline_jobs_for_project(
+    project: Project, index_path: str, experiment: Experiment | None = None
+) -> tuple[list[Job], Experiment]:
     """Create pipelilne jobs for the project during the configure stage.
 
     Parameters
@@ -262,22 +264,28 @@ def create_pipeline_jobs_for_project(project: Project, index_path: str) -> list[
         Project instance.
     index_path: str
         Path to the generated index.
+    experiment: Experiment
+        Custom experiment config.
 
     Returns
     -------
-    list[Job]
+    tuple[list[Job], Experiment]
         List of job instances.
 
     """
     orm_jobs = []
+    print(f"I am experiment: {experiment}")
 
     # Setup the experiment and init the pipeline
 
     # fetch the experiment module and init using the index
-    experiment = EXPERIMENT_REGISTRY[project.type]
-    experiment = experiment.from_index(
-        index_path=AnyPath(index_path), init_config=project.init_config
-    )
+    experiment_spec = EXPERIMENT_REGISTRY[project.type]
+    if experiment is None or experiment == {}:
+        experiment = experiment_spec.from_index(
+            index_path=AnyPath(index_path), init_config=project.init_config
+        )
+    else:
+        experiment = experiment_spec(**experiment)
 
     data = DataConfig(
         dataset_path=Path(project.dataset_uri),
@@ -290,4 +298,4 @@ def create_pipeline_jobs_for_project(project: Project, index_path: str) -> list[
     # Extract the modules from the pipeline
     for module in project_modules:
         orm_jobs.append(gen_orm_job_from_module(module))
-    return orm_jobs
+    return (orm_jobs, experiment)

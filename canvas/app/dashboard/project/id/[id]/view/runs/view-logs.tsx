@@ -11,6 +11,7 @@ export type TRunViewLogProps = {
 
 export function RunViewLog(props: TRunViewLogProps) {
   const { run } = props;
+
   return (
     <Modal
       title="Logs"
@@ -26,7 +27,7 @@ export function RunViewLog(props: TRunViewLogProps) {
         className: "border-t-transparent",
       }}
     >
-      <LogViewer endpoint="ws://100.103.131.84:8000/ws/run/log/1" />
+      <LogViewer endpoint={`ws://100.103.131.84:8000/ws/run/log/${run.id}`} />
     </Modal>
   );
 }

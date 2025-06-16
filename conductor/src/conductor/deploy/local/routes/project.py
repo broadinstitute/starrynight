@@ -1,7 +1,6 @@
 """Project local route handlers."""
 
 from fastapi import APIRouter, Request
-from starrynight.experiments.common import Experiment
 
 from conductor.handlers.project import (
     configure_project,
@@ -13,6 +12,7 @@ from conductor.handlers.project import (
     fetch_project_by_id,
     fetch_project_count,
     fetch_project_details_by_type,
+    update_project,
 )
 from conductor.validators.project import Project
 from conductor.validators.run import Run
@@ -26,6 +26,12 @@ def post_project(request: Request, project: Project) -> Project:
     project.id = None
     project.is_configured = False
     return create_project(request.state.db_session, project)
+
+
+@project_router.put("/")
+def put_project(request: Request, project: Project) -> Project:
+    """Update project handler."""
+    return update_project(request.state.db_session, project)
 
 
 @project_router.delete("/")
