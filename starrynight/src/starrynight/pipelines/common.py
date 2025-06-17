@@ -13,8 +13,7 @@ def apply_module_params(
     module: StarrynightModule = None,
 ) -> StarrynightModule:
     """Apply modules params helper."""
-    return module(
-        data,
-        experiment,
-        updated_spec_dict.get(module.uid, None),
-    )
+    updated_spec = updated_spec_dict.get(module.module_name(), None)
+    if updated_spec is not None:
+        updated_spec = SpecContainer(**updated_spec)
+    return module(data, experiment, updated_spec)
