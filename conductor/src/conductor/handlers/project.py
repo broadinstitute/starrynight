@@ -260,7 +260,7 @@ def execute_project(
     db_session: Callable[[], Session],
     project_id: int,
     executor_type: ExecutorType = ExecutorType.LOCAL,
-) -> PyRun:
+) -> list[PyRun]:
     """Execute job.
 
     Parameters
@@ -274,9 +274,9 @@ def execute_project(
 
     Returns
     -------
-    PyRun
-        Instance of PyRun
+    list[PyRun]
+        list of PyRun
 
     """
-    run = submit_project(db_session, project_id, executor_type)
-    return run
+    run_list = submit_project(db_session, project_id, executor_type)
+    return run_list

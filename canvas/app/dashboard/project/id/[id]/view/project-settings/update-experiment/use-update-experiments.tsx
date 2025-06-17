@@ -25,7 +25,7 @@ export function useUpdateExperiments(options: TUseUpdateExperiemntsOptions) {
       variant: "default",
       title: "Project's experiment updated successfully!",
     });
-    onSuccess;
+    onSuccess();
   }, [toast, onSuccess]);
 
   const handleOnConfigureProjectError = React.useCallback(() => {

@@ -129,7 +129,7 @@ def submit_project(
     db_session: Callable[[], Session],
     project_id: int,
     executor_type: ExecutorType = ExecutorType.LOCAL,
-) -> PyRun:
+) -> list[PyRun]:
     """Execute job.
 
     Parameters
@@ -143,12 +143,15 @@ def submit_project(
 
     Returns
     -------
-    PyRun
-        Created run.
+    list[PyRun]
+        Created runs.
 
     """
     with db_session() as session:
         # Ensure the job exists
+        print("=============================================")
+        print("I am called submit job!!")
+        print("=============================================")
         project = session.scalar(select(Project).where(Project.id == project_id))
         assert project is not None
 
@@ -167,7 +170,13 @@ def submit_project(
         if experiment["cp_config"]["custom_channel_map"] == "":
             experiment["cp_config"]["custom_channel_map"] = None
         experiment = experiment_spec(**experiment)
-        project_modules, project_pipeline = project_pipeline(data, experiment, {})
+        current_jobs = project.jobs
+        current_job_specs_dict = {
+            curr_job.uid: curr_job.spec for curr_job in current_jobs
+        }
+        project_modules, project_pipeline = project_pipeline(
+            data, experiment, current_job_specs_dict
+        )
 
         # Create a backend for execution
         executor = create_backend_for_pipe(

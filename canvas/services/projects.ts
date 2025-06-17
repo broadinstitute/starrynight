@@ -5,13 +5,7 @@ import { GET_RUNS_QUERY_KEY } from "./run";
 import { GET_JOBS_QUERY_KEY } from "./job";
 
 // TODO: Updates once BE support sending project status as enum.
-export type TProjectStatus =
-  | "not-configured"
-  | "configuring"
-  | "configured"
-  | "running"
-  | "failed"
-  | "success";
+export type TProjectStatus = "not-configured" | "configuring" | "configured";
 
 export type TProjectExperimentInputWithoutObj =
   | string
@@ -209,7 +203,7 @@ export function useConfigureProject(options: TUseConfigureProjectOptions) {
 }
 
 export type TExecuteProjectOptions = {
-  project_id: string;
+  project_id: string | number;
 };
 
 export function executeProject(
@@ -217,7 +211,7 @@ export function executeProject(
 ): Promise<TProject> {
   const { project_id } = options;
 
-  return api.post({ project_id }, "/project/execute").json();
+  return api.post({}, `/project/execute?project_id=${project_id}`).json();
 }
 
 export type TUseExecuteProjectOptions = {
@@ -227,9 +221,36 @@ export type TUseExecuteProjectOptions = {
 
 export function useExecuteProject(options: TUseExecuteProjectOptions) {
   const { onSuccess, onError } = options;
+  const queryClient = useQueryClient();
+
+  const handleExecuteProject = React.useCallback(
+    async (options: TExecuteProjectOptions) => {
+      const data = await executeProject(options);
+
+      const invalidateJobQuery = queryClient.invalidateQueries({
+        queryKey: [GET_JOBS_QUERY_KEY],
+      });
+
+      const invalidateRunsQuery = queryClient.invalidateQueries({
+        queryKey: [GET_RUNS_QUERY_KEY],
+      });
+
+      const invalidateProjectQuery = queryClient.invalidateQueries({
+        queryKey: [GET_PROJECT_QUERY_KEY, options.project_id],
+      });
+
+      await Promise.all([
+        invalidateJobQuery,
+        invalidateRunsQuery,
+        invalidateProjectQuery,
+      ]);
+      return data;
+    },
+    [queryClient],
+  );
 
   return useMutation({
-    mutationFn: executeProject,
+    mutationFn: handleExecuteProject,
     onError,
     onSuccess,
   });

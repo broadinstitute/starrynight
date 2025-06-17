@@ -139,7 +139,7 @@ class CPCalcIllumInvokeCPModule(StarrynightModule):
                                 spec.inputs["cppipe_path"].value
                             ).parent.__str__()
                         ],
-                        "load_data_path": [spec.inputs["cppipe_path"].value],
+                        "load_data_path": [spec.inputs["loaddata_path"].value],
                     },
                     output_paths={
                         "illum_path": [spec.outputs["illum_path"].value]

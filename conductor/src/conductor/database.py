@@ -17,7 +17,7 @@ from conductor.models.run import Run  # noqa: F401
 
 def get_db_session(db_uri: str) -> Session:
     """Get db session."""
-    return Session(create_engine(db_uri, echo=True))
+    return Session(create_engine(db_uri, echo=False))
 
 
 def add_db_session_to_req(db_uri: str, request: Request) -> None:

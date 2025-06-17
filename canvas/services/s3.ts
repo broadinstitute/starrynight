@@ -15,8 +15,6 @@ const getS3Client = ({
 }): S3Client => {
   const cred = getAWSCredentials(projectId);
 
-  console.log("Cred", cred, projectId);
-
   if (!cred) {
     throw new Error("No AWS credentials found for this project");
   }

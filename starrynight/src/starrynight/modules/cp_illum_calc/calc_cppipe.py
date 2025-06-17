@@ -10,6 +10,7 @@ from pipecraft.pipeline import Pipeline, Seq
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_calc.constants import (
+    CP_ILLUM_CALC_CP_CPPIPE_OUT_NAME,
     CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_CP_LOADDATA_OUT_PATH_SUFFIX,
     CP_ILLUM_CALC_OUT_PATH_SUFFIX,
@@ -80,7 +81,7 @@ class CPCalcIllumGenCPPipeModule(StarrynightModule):
                     description="Generated Illum calc cppipe files",
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
-                        CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX
+                        CP_ILLUM_CALC_CP_CPPIPE_OUT_PATH_SUFFIX,
                     )
                     .resolve()
                     .__str__(),
@@ -145,14 +146,10 @@ class CPCalcIllumGenCPPipeModule(StarrynightModule):
                 Container(
                     name=self.uid,
                     input_paths={
-                        "loaddata_path": [
-                            spec.inputs["loaddata_path"].value.__str__()
-                        ]
+                        "loaddata_path": [spec.inputs["loaddata_path"].value]
                     },
                     output_paths={
-                        "cppipe_path": [
-                            spec.outputs["cppipe_path"].value.__str__()
-                        ]
+                        "cppipe_path": [spec.outputs["cppipe_path"].value]
                     },
                     config=ContainerConfig(
                         image="ghrc.io/leoank/starrynight:dev",

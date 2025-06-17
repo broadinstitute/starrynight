@@ -1,10 +1,7 @@
 import { ActionButton } from "@/components/custom/action-button";
 import { useToast } from "@/components/ui/use-toast";
-import { GET_JOBS_QUERY_KEY } from "@/services/job";
-import { GET_PROJECT_QUERY_KEY, useExecuteProject } from "@/services/projects";
-import { GET_RUNS_QUERY_KEY } from "@/services/run";
+import { useExecuteProject } from "@/services/projects";
 import { useProjectStore } from "@/stores/project";
-import { useQueryClient } from "@tanstack/react-query";
 import { PlayIcon } from "lucide-react";
 import React from "react";
 
@@ -14,38 +11,17 @@ export function ProjectRunProject() {
       projectID: store.project.id,
       projectStatus: store.projectStatus,
       updateProjectStatus: store.updateProjectStatus,
-    })
+    }),
   );
 
-  const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const handleOnExecuteProjectSuccessful = React.useCallback(async () => {
-    const invalidateJobQuery = queryClient.invalidateQueries({
-      queryKey: [GET_JOBS_QUERY_KEY],
-    });
-
-    const invalidateRunsQuery = queryClient.invalidateQueries({
-      queryKey: [GET_RUNS_QUERY_KEY],
-    });
-
-    const invalidateProjectQuery = queryClient.invalidateQueries({
-      queryKey: [GET_PROJECT_QUERY_KEY, projectID],
-    });
-
-    await Promise.all([
-      invalidateJobQuery,
-      invalidateRunsQuery,
-      invalidateProjectQuery,
-    ]);
-
-    updateProjectStatus("running");
-
     toast({
-      title: "Project configured successfully!",
+      title: "Project started successfully!",
       variant: "default",
     });
-  }, [projectID, queryClient, toast, updateProjectStatus]);
+  }, [toast]);
 
   const handleOnExecuteProjectError = React.useCallback(() => {
     toast({
@@ -56,14 +32,16 @@ export function ProjectRunProject() {
     updateProjectStatus("configured");
   }, [toast, updateProjectStatus]);
 
-  const { data, isPending } = useExecuteProject({
+  const { mutate: executeProject, isPending } = useExecuteProject({
     onError: handleOnExecuteProjectError,
     onSuccess: handleOnExecuteProjectSuccessful,
   });
 
-  React.useEffect(() => {
-    if (!data) return;
-  }, [data]);
+  const handleOnClickRunProject = React.useCallback(() => {
+    executeProject({
+      project_id: projectID,
+    });
+  }, [projectID, executeProject]);
 
   return (
     <ActionButton
@@ -71,10 +49,11 @@ export function ProjectRunProject() {
       variant="default"
       icon={<PlayIcon />}
       message="Run project"
-      disabled={isPending || projectStatus === "running"}
-      isLoading={isPending || projectStatus === "running"}
+      disabled={isPending}
+      isLoading={isPending}
+      onClick={handleOnClickRunProject}
     >
-      {projectStatus === "running" ? "Project is running" : "Run Project"}
+      Run Project
     </ActionButton>
   );
 }

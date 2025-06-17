@@ -77,12 +77,6 @@ def get_project_count(request: Request) -> int:
     return fetch_project_count(request.state.db_session)
 
 
-@project_router.post("/execute")
-def post_project_execute(request: Request, project_id: int) -> Run:
-    """Get project execute handler."""
-    return "test"
-
-
 @project_router.post("/configure")
 def post_configure_project(request: Request, project_id: int) -> Project:
     """Configure project by id handler."""
@@ -90,6 +84,6 @@ def post_configure_project(request: Request, project_id: int) -> Project:
 
 
 @project_router.post("/execute")
-def project_execute(request: Request, project_id: int) -> Run:
+def post_project_execute(request: Request, project_id: int) -> list[Run]:
     """Execute project."""
     return execute_project(request.state.db_session, project_id)
