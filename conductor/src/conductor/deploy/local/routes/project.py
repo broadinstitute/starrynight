@@ -6,6 +6,7 @@ from conductor.handlers.project import (
     configure_project,
     create_project,
     delete_project,
+    execute_project,
     fetch_all_parser_types,
     fetch_all_project_types,
     fetch_all_projects,
@@ -86,3 +87,9 @@ def post_project_execute(request: Request, project_id: int) -> Run:
 def post_configure_project(request: Request, project_id: int) -> Project:
     """Configure project by id handler."""
     return configure_project(request.state.db_session, project_id)
+
+
+@project_router.post("/execute")
+def project_execute(request: Request, project_id: int) -> Run:
+    """Execute project."""
+    return execute_project(request.state.db_session, project_id)

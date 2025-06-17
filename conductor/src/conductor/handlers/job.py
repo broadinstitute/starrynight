@@ -14,7 +14,6 @@ from starrynight.schema import DataConfig
 from conductor.constants import (
     ExecutorType,
     JobType,
-    StepType,
     job_desc_dict,
     job_input_dict,
     job_output_dict,

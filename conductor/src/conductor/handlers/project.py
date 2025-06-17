@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 from starrynight.experiments.registry import EXPERIMENT_REGISTRY
 from starrynight.modules.common import SpecContainer
 
-from conductor.constants import ParserType
+from conductor.constants import ExecutorType, ParserType
+from conductor.handlers.execute import submit_project
 from conductor.handlers.job import (
     create_indexing_jobs_for_project,
     create_pipeline_jobs_for_project,
@@ -17,6 +18,7 @@ from conductor.models.job import Job
 from conductor.models.project import Project
 from conductor.models.run import Run
 from conductor.validators.project import Project as PyProject
+from conductor.validators.run import Run as PyRun
 
 
 def create_project(db_session: Callable[[], Session], project: PyProject) -> PyProject:
@@ -252,3 +254,29 @@ def fetch_all_parser_types() -> list[str]:
     """
     parser_types = [pt.value for pt in ParserType]
     return parser_types
+
+
+def execute_project(
+    db_session: Callable[[], Session],
+    project_id: int,
+    executor_type: ExecutorType = ExecutorType.LOCAL,
+) -> PyRun:
+    """Execute job.
+
+    Parameters
+    ----------
+    db_session : Callable[[], Session]
+        Configured callable to create a db session.
+    project_id : int
+        ID of the project to execute.
+    executor_type : ExecutorType
+        Type to executor to use.
+
+    Returns
+    -------
+    PyRun
+        Instance of PyRun
+
+    """
+    run = submit_project(db_session, project_id, executor_type)
+    return run
