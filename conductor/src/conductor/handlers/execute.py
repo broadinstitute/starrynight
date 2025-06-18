@@ -149,9 +149,6 @@ def submit_project(
     """
     with db_session() as session:
         # Ensure the job exists
-        print("=============================================")
-        print("I am called submit job!!")
-        print("=============================================")
         project = session.scalar(select(Project).where(Project.id == project_id))
         assert project is not None
 

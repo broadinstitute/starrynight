@@ -76,7 +76,7 @@ class Backend(ABC):
     def __init__(
         self, pipeline: Pipeline, config: BackendConfig, output_dir: Path | CloudPath
     ) -> None:
-        """SbnakeMakeBackend.
+        """Init backend.
 
         Parameters
         ----------

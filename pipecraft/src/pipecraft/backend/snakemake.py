@@ -121,9 +121,9 @@ class SnakeMakeBackend(Backend):
                 for container in node.containers:
                     containers.append(container)
             elif isinstance(node, Scatter):
-                print(node)
+                pass
             elif isinstance(node, Gather):
-                print(node)
+                pass
             else:
                 raise NotImplementedType
         with self.output_dir.joinpath("Snakefile").open("w") as f:
