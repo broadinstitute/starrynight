@@ -19,7 +19,7 @@ def anywidgets_path() -> Path:
         Path to anywidgets directory.
 
     """
-    return Path(__file__).parents[4].joinpath("canvas/anywidgets/_build")
+    return Path(__file__).parents[4].joinpath("canvas/anywidget/dist")
 
 
 def get_scratch_path() -> Path:
