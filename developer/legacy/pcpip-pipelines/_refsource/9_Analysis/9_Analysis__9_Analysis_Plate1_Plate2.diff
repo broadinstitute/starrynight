@@ -1,0 +1,406 @@
+5c5
+< ModuleCount:81
+---
+> ModuleCount:85
+9,10c9,10
+<     Input data file location:Default Input Folder sub-folder|Desktop/load_data_csv
+<     Name of the file:Plate4_local.csv
+---
+>     Input data file location:Default Input Folder sub-folder|Downloads
+>     Name of the file:load_data_pipeline9.csv
+72,74d71
+<     Select the additional image:CorrZEB1
+<     Name the output image:ZEB1
+<     Select how the alignment is to be applied:Similarly
+78,80d74
+<     Select the additional image:CorrWGA
+<     Name the output image:WGA
+<     Select how the alignment is to be applied:Similarly
+179,180c173,174
+<     Select the input image:ZEB1
+<     Name the output image:ZEB1_EdgeMasked
+---
+>     Select the input image:Phalloidin
+>     Name the output image:Phalloidin_EdgeMasked
+186c180,188
+< MeasureColocalization:[module_num:12|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MaskImage:[module_num:12|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:ZO1
+>     Name the output image:ZO1_EdgeMasked
+>     Use objects or an image as a mask?:Image
+>     Select object for mask:None
+>     Select image for mask:NonPaddedAreas_Both
+>     Invert the mask?:No
+>
+> MeasureColocalization:[module_num:13|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+199c201
+< FlagImage:[module_num:13|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Flag and remove image set if not aligned well']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FlagImage:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Flag and remove image set if not aligned well']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+219c221
+< ImageMath:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+238c240
+< Morph:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Creates gradient of distance from foreground (actual image) to background (zero padding).', 'In images without foreground/background (i.e. images without well edge present) it morphs from 0,0 corner which is not what we want so we use subsequent math to remove that spurious data.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Morph:[module_num:16|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Creates gradient of distance from foreground (actual image) to background (zero padding).', 'In images without foreground/background (i.e. images without well edge present) it morphs from 0,0 corner which is not what we want so we use subsequent math to remove that spurious data.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+246c248
+< MeasureImageIntensity:[module_num:16|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measures image intensity in binary PaddedAreas.', 'Max intensity in images with padding is 1, max intesnity in images without padding is 0.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureImageIntensity:[module_num:17|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measures image intensity in binary PaddedAreas.', 'Max intensity in images with padding is 1, max intesnity in images without padding is 0.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+253c255
+< ImageMath:[module_num:17|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Multiplies WellEdgeDistance created by morph by maxintensity of PaddedAreas so that morphs with well edge are unaffected (x1) but spurious data in morphs without well edges are zeroed (x0)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Multiplies WellEdgeDistance created by morph by maxintensity of PaddedAreas so that morphs with well edge are unaffected (x1) but spurious data in morphs without well edges are zeroed (x0)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+272c274
+< IdentifyPrimaryObjects:[module_num:18|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:19|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+308c310
+< MeasureImageAreaOccupied:[module_num:19|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureImageAreaOccupied:[module_num:20|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+313c315
+< CalculateMath:[module_num:20|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CalculateMath:[module_num:21|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+337c339
+< MaskImage:[module_num:21|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MaskImage:[module_num:22|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+345,347c347,349
+< MaskImage:[module_num:22|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:ZEB1_EdgeMasked
+<     Name the output image:MaskedZEB1
+---
+> MaskImage:[module_num:23|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Phalloidin_EdgeMasked
+>     Name the output image:MaskedPhalloidin
+353,354c355,364
+< RunCellpose:[module_num:23|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:DAPI_Painting
+---
+> MaskImage:[module_num:24|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:ZO1_EdgeMasked
+>     Name the output image:MaskedZO1
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:ConfluentRegions
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+> RunCellpose:[module_num:25|svn_version:'Unknown'|variable_revision_number:6|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:MaskedDAPI_Painting
+377a388
+>     Rescale probability map?:No
+379c390
+< IdentifyPrimaryObjects:[module_num:24|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+415c426
+< IdentifySecondaryObjects:[module_num:25|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifySecondaryObjects:[module_num:27|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+445c456,516
+< IdentifyTertiaryObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifySecondaryObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input objects:Nuclei
+>     Name the objects to be identified:PreCells
+>     Select the method to identify the secondary objects:Propagation
+>     Select the input image:MaskedZO1
+>     Number of pixels by which to expand the primary objects:10
+>     Regularization factor:0
+>     Discard secondary objects touching the border of the image?:No
+>     Discard the associated primary objects?:No
+>     Name the new primary objects:FilteredNuclei
+>     Fill holes in identified objects?:Yes
+>     Threshold setting version:12
+>     Threshold strategy:Global
+>     Thresholding method:Minimum Cross-Entropy
+>     Threshold smoothing scale:1.3488
+>     Threshold correction factor:0.7
+>     Lower and upper bounds on threshold:.000001,1
+>     Manual threshold:0.0
+>     Select the measurement to threshold with:None
+>     Two-class or three-class thresholding?:Three classes
+>     Log transform before thresholding?:Yes
+>     Assign pixels in the middle intensity class to the foreground or the background?:Background
+>     Size of adaptive window:50
+>     Lower outlier fraction:0.05
+>     Upper outlier fraction:0.05
+>     Averaging method:Mean
+>     Variance method:Standard deviation
+>     # of deviations:2.0
+>     Thresholding method:Otsu
+>
+> IdentifySecondaryObjects:[module_num:29|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input objects:PreCells
+>     Name the objects to be identified:Cells
+>     Select the method to identify the secondary objects:Propagation
+>     Select the input image:MaskedZO1
+>     Number of pixels by which to expand the primary objects:10
+>     Regularization factor:0
+>     Discard secondary objects touching the border of the image?:No
+>     Discard the associated primary objects?:No
+>     Name the new primary objects:FilteredNuclei
+>     Fill holes in identified objects?:Yes
+>     Threshold setting version:12
+>     Threshold strategy:Global
+>     Thresholding method:Otsu
+>     Threshold smoothing scale:5
+>     Threshold correction factor:.5
+>     Lower and upper bounds on threshold:0.0,1.0
+>     Manual threshold:0.0
+>     Select the measurement to threshold with:None
+>     Two-class or three-class thresholding?:Three classes
+>     Log transform before thresholding?:No
+>     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+>     Size of adaptive window:50
+>     Lower outlier fraction:0.05
+>     Upper outlier fraction:0.05
+>     Averaging method:Mean
+>     Variance method:Standard deviation
+>     # of deviations:2.0
+>     Thresholding method:Minimum Cross-Entropy
+>
+> IdentifyTertiaryObjects:[module_num:30|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+451c522
+< ResizeObjects:[module_num:27|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ResizeObjects:[module_num:31|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+463c534
+< ResizeObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ResizeObjects:[module_num:32|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+475c546
+< ResizeObjects:[module_num:29|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ResizeObjects:[module_num:33|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+487c558
+< OverlayOutlines:[module_num:30|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['For use in identifying foci touching cell edges']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> OverlayOutlines:[module_num:34|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['For use in identifying foci touching cell edges']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+497c568
+< ImageMath:[module_num:31|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:35|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+524c595
+< MaskImage:[module_num:32|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MaskImage:[module_num:36|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+532c603
+< IdentifyPrimaryObjects:[module_num:33|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:37|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+568c639
+< MaskObjects:[module_num:34|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> MaskObjects:[module_num:38|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+579c650
+< FilterObjects:[module_num:35|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Creates duplicate of Foci called BarcodeFoci (all Object_Number are greater than .5)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FilterObjects:[module_num:39|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Creates duplicate of Foci called BarcodeFoci (all Object_Number are greater than .5)']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+600c671
+< ResizeObjects:[module_num:36|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ResizeObjects:[module_num:40|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+612c683
+< MeasureObjectIntensity:[module_num:37|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectIntensity:[module_num:41|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+616c687
+< CallBarcodes:[module_num:38|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CallBarcodes:[module_num:42|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+631c702
+< ImageMath:[module_num:39|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:43|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+650c721
+< ImageMath:[module_num:40|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:44|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+669c740
+< MeasureObjectIntensity:[module_num:41|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectIntensity:[module_num:45|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+673c744
+< MaskImage:[module_num:42|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MaskImage:[module_num:46|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+681c752
+< MaskImage:[module_num:43|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MaskImage:[module_num:47|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+689c760
+< EnhanceOrSuppressFeatures:[module_num:44|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> EnhanceOrSuppressFeatures:[module_num:48|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+703c774
+< Threshold:[module_num:45|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> Threshold:[module_num:49|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+724c795
+< MorphologicalSkeleton:[module_num:46|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> MorphologicalSkeleton:[module_num:50|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+728c799
+< MeasureObjectSkeleton:[module_num:47|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> MeasureObjectSkeleton:[module_num:51|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+741c812
+< MeasureObjectNeighbors:[module_num:48|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectNeighbors:[module_num:52|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+754c825
+< MeasureObjectNeighbors:[module_num:49|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectNeighbors:[module_num:53|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+767c838
+< MeasureObjectNeighbors:[module_num:50|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectNeighbors:[module_num:54|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+780,781c851,852
+< MeasureColocalization:[module_num:51|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select images to measure:Cycle01_DAPI, DAPI_Painting, Phalloidin, WGA, ZEB1, ZO1
+---
+> MeasureColocalization:[module_num:55|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:Cycle01_DAPI, DAPI_Painting, Phalloidin, ZO1
+793c864
+< FlagImage:[module_num:52|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FlagImage:[module_num:56|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+813c884
+< MeasureObjectIntensity:[module_num:53|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectIntensity:[module_num:57|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+817,818c888,889
+< MeasureObjectIntensity:[module_num:54|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select images to measure:DAPI_Painting, Phalloidin, WGA, ZEB1, ZO1
+---
+> MeasureObjectIntensity:[module_num:58|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:DAPI_Painting, Phalloidin, ZO1
+821c892
+< MeasureObjectSizeShape:[module_num:55|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectSizeShape:[module_num:59|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+826,827c897,898
+< MeasureObjectIntensityDistribution:[module_num:56|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select images to measure:DAPI_Painting, Phalloidin, WGA, ZEB1, ZO1
+---
+> MeasureObjectIntensityDistribution:[module_num:60|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:DAPI_Painting, Phalloidin, ZO1
+846c917
+< MeasureObjectIntensityDistribution:[module_num:57|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['Mito measurements ', 'EDIT MAXIMUM RADIUS']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> MeasureObjectIntensityDistribution:[module_num:61|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['Mito measurements ', 'EDIT MAXIMUM RADIUS']|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+873,874c944,945
+< MeasureGranularity:[module_num:58|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select images to measure:DAPI_Painting, Phalloidin, WGA, ZEB1, ZO1
+---
+> MeasureGranularity:[module_num:62|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:DAPI_Painting, Phalloidin, ZO1
+882,883c953,954
+< MeasureTexture:[module_num:59|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select images to measure:DAPI_Painting, Phalloidin, WGA, ZEB1, ZO1
+---
+> MeasureTexture:[module_num:63|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:DAPI_Painting, Phalloidin, ZO1
+892c963
+< SaveImages:[module_num:60|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+912c983
+< MeasureImageQuality:[module_num:61|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureImageQuality:[module_num:65|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+931c1002
+< MeasureColocalization:[module_num:62|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureColocalization:[module_num:66|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+944c1015
+< FilterObjects:[module_num:63|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Remove foci that are touching the cell edge']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FilterObjects:[module_num:67|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Remove foci that are touching the cell edge']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+965c1036
+< RelateObjects:[module_num:64|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> RelateObjects:[module_num:68|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1055c1126
+< Resize:[module_num:65|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:69|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1070c1141
+< Resize:[module_num:66|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:70|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1085c1156
+< GrayToColor:[module_num:67|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> GrayToColor:[module_num:71|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1108c1179
+< OverlayOutlines:[module_num:68|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> OverlayOutlines:[module_num:72|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1122c1193
+< SaveImages:[module_num:69|svn_version:'Unknown'|variable_revision_number:16|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:True]
+---
+> SaveImages:[module_num:73|svn_version:'Unknown'|variable_revision_number:16|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:True]
+1142c1213
+< SaveImages:[module_num:70|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1162c1233
+< Resize:[module_num:71|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> Resize:[module_num:75|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1177c1248
+< RescaleIntensity:[module_num:72|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> RescaleIntensity:[module_num:76|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1191c1262
+< OverlayOutlines:[module_num:73|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> OverlayOutlines:[module_num:77|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1201c1272
+< SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:78|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1221c1292
+< ConvertObjectsToImage:[module_num:75|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ConvertObjectsToImage:[module_num:79|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1227c1298
+< ConvertObjectsToImage:[module_num:76|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ConvertObjectsToImage:[module_num:80|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1233c1304
+< ConvertObjectsToImage:[module_num:77|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ConvertObjectsToImage:[module_num:81|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1239c1310
+< SaveImages:[module_num:78|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:82|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1259c1330
+< SaveImages:[module_num:79|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:83|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1279c1350
+< SaveImages:[module_num:80|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:84|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1299c1370
+< ExportToSpreadsheet:[module_num:81|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> ExportToSpreadsheet:[module_num:85|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+1329c1400
+<     Use the object name for the file name?:No
+---
+>     Use the object name for the file name?:Yes
+1331c1402
+<     Combine these object measurements with those of the previous object?:Yes
+---
+>     Combine these object measurements with those of the previous object?:No
