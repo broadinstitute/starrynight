@@ -57,7 +57,7 @@
               '';
               NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
                 # Add needed packages here
-                stdenv.cc.cc
+                mpkgs.stdenv.cc.cc
                 libGL
 
                 libxcrypt-legacy
@@ -86,6 +86,8 @@
                   gocryptfs
                   nextflow
                   arion
+                  just
+                  mpkgs.pueue
                 ]
                 ++ lib.optionals stdenv.isLinux [
                   goofys
