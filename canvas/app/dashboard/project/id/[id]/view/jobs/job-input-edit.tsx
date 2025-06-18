@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { ActionButton } from "@/components/custom/action-button";
 import { Check, Upload, XIcon } from "lucide-react";
-// import { JobInputUploadFile } from "./job-input-upload-file";
 import { ProjectJobInputEditWarningModal } from "./job-input-edit-warning-modal";
 import { PathFieldWithAction } from "@/components/custom/path-filed-with-actions";
 import { useToast } from "@/components/ui/use-toast";
@@ -15,6 +14,8 @@ import { FeatureNotImplementedModal } from "@/components/custom/feature-not-impl
 import { useQueryClient } from "@tanstack/react-query";
 import { useProjectStore } from "@/stores/project";
 import { TSpecPathRecord } from "@/services/misc";
+import { JobInputUploadFile } from "./job-input-upload-file";
+import { useUploadFile } from "@/services/s3";
 
 export type TProjectJobInputProps = {
   job: TJob;
@@ -36,6 +37,8 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
 
   // To upload new file.
   const [inputFile, setInputFile] = React.useState<File | null>(null);
+
+  const [isUpdating, setIsUpdating] = React.useState(false);
 
   const handleOnSuccessfulSavingChanges = React.useCallback(async () => {
     await queryClient.invalidateQueries({
@@ -66,6 +69,8 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
     onSuccess: handleOnSuccessfulSavingChanges,
   });
 
+  const { mutateAsync: uploadFile } = useUploadFile({});
+
   const hasAnyFieldUpdated = useMemo(() => {
     if (inputFile) {
       // If input file is not null, meaning we have updated input file.
@@ -93,20 +98,39 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
     onRequestView();
   }, [onInputPathChange, onRequestView]);
 
-  const handleOnSaveChanges = React.useCallback(() => {
+  const handleOnSaveChanges = React.useCallback(async () => {
     if (!hasAnyFieldUpdated) {
       // if no filed has been updated, then we don't have any thing to
       // updated, hence closing the edit view.
       onRequestView();
     }
 
+    setIsUpdating(true);
+    if (inputFile) {
+      try {
+        const formdata = new FormData();
+        formdata.append("file", inputFile);
+
+        await uploadFile({
+          filepath: inputPath,
+          formdata,
+        });
+      } catch {
+        toast({
+          title: "Uable to upload file. Please try again.",
+          variant: "destructive",
+        });
+        setIsUpdating(false);
+        return;
+      }
+    }
+
     const specInputs: Record<string, TSpecPathRecord> = {};
 
     Object.entries(job.spec.inputs).forEach(([key, input]) => {
       if (input.name === inputName) {
-        specInputs[key] = {...input, value: inputPath };
-      }
-      else{
+        specInputs[key] = { ...input, value: inputPath };
+      } else {
         specInputs[key] = input;
       }
     });
@@ -123,7 +147,17 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
         },
       },
     });
-  }, [hasAnyFieldUpdated, job, updateJob, onRequestView, inputName, inputPath]);
+  }, [
+    hasAnyFieldUpdated,
+    inputFile,
+    job,
+    updateJob,
+    onRequestView,
+    uploadFile,
+    inputPath,
+    toast,
+    inputName,
+  ]);
 
   return (
     <>
@@ -137,23 +171,17 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
         inputProps={{
           onChange: (e) => onInputPathChange(e.currentTarget.value),
           autoFocus: true,
+          disabled: isUpdating,
         }}
         actions={[
           {
             id: "upload-file",
             children: (
-              <FeatureNotImplementedModal featureName="Upload File">
-                <ActionButton
-                  message="Upload File"
-                  icon={<Upload />}
-                ></ActionButton>
-                {/* TODO: Implement Upload input file feature.
-                <JobInputUploadFile
-                  inputFile={inputFile}
-                  updateInputFile={setInputFile}
-                /> 
-                */}
-              </FeatureNotImplementedModal>
+              <JobInputUploadFile
+                inputFile={inputFile}
+                updateInputFile={setInputFile}
+                disabled={isUpdating}
+              />
             ),
           },
           {
@@ -164,6 +192,7 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
                 message="Close editing mode"
                 variant="ghost-warning"
                 onClick={handleOnCloseEditingModeClick}
+                disabled={isUpdating}
               />
             ),
           },
@@ -172,7 +201,7 @@ export function ProjectJobInputEdit(props: TProjectJobInputProps) {
             children: (
               <ActionButton
                 onClick={handleOnSaveChanges}
-                isLoading={isPending}
+                isLoading={isUpdating}
                 disabled={!hasAnyFieldUpdated}
                 icon={<Check />}
                 message="Save changes"

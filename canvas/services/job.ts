@@ -67,7 +67,7 @@ export type TCreateJobExecuteOptions = {
 };
 
 export function executeJob(
-  options: TCreateJobExecuteOptions
+  options: TCreateJobExecuteOptions,
 ): Promise<TJobExecuteResponse> {
   const { jobId } = options;
   return api.post({}, `/job/execute?job_id=${jobId}`).json();

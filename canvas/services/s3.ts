@@ -4,7 +4,8 @@ import {
   S3Client,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
-import { BASE_URL } from "@/services/api";
+import { api, BASE_URL } from "@/services/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export type TFileType = "png" | "csv" | "tsv" | "xlsx" | "txt";
 
@@ -102,3 +103,29 @@ const uploadToS3 = async (url: string, options: TUpdateFileOptions) => {
 };
 
 export { getS3Client, getFile, uploadToS3 };
+
+export type TUploadFileOptions = {
+  formdata: FormData;
+  filepath: string;
+};
+
+export async function uploadFile(options: TUploadFileOptions) {
+  const { formdata, filepath } = options;
+
+  return api.post(formdata, `/file?file_path=${filepath}`);
+}
+
+export type TUseUploadFileOptions = {
+  onSuccess?: () => void;
+  onError?: () => void;
+};
+
+export function useUploadFile(options: TUseUploadFileOptions) {
+  const { onSuccess, onError } = options;
+
+  return useMutation({
+    mutationFn: uploadFile,
+    onSuccess,
+    onError,
+  });
+}
