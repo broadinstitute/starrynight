@@ -63,6 +63,16 @@ nav:
     - Architecture for Biologists: architecture/07_architecture_for_biologists.md
     - Practical Integration: architecture/08_practical_integration.md
     - Flow Example: architecture/09_architecture_flow_example.md
+  - Developer Architecture (v2):
+    - Overview: architecturev2/README.md
+    - Principles: architecturev2/00-1-principles.md
+    - Algorithm Layer: architecturev2/01-algorithm.md
+    - CLI Layer: architecturev2/02-cli.md
+    - Module Layer: architecturev2/03-module.md
+    - Pipeline Layer: architecturev2/04-pipeline.md
+    - Execution Layer: architecturev2/05-execution.md
+    - Configuration Layer: architecturev2/06-configuration.md
+    - Examples: architecturev2/99-0-examples.md
   - Developer Testing:
     - Testing Framework: developer/validation/testing-framework.md
     - Pipeline Validation: developer/validation/validation-pipeline-1-illum-calc.md
