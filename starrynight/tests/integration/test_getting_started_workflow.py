@@ -224,7 +224,7 @@ def generate_and_validate_loaddata(  # noqa: C901
     return loaddata_dir, matching_files
 
 
-@pytest.mark.parametrize("fixture_id", ["fix_s1", "fix_s2"])
+@pytest.mark.parametrize("fixture_id", ["fix_s1", "fix_s2", "fix_l1"])
 @pytest.mark.parametrize("mode", ["generated", "pregenerated"])
 @pytest.mark.parametrize("config", WORKFLOW_CONFIGS, ids=lambda c: c["name"])
 def test_complete_workflow(
@@ -266,6 +266,15 @@ def test_complete_workflow(
     if fixture_id not in compatible_fixtures:
         pytest.skip(
             f"Test '{test_name}' is not compatible with fixture '{fixture_id}'"
+        )
+
+    # Check if this is a local-only fixture and enforce "generated" mode
+    from starrynight.tests.fixtures.integration.constants import FIXTURE_CONFIGS
+
+    fixture_config = FIXTURE_CONFIGS.get(fixture_id, {})
+    if fixture_config.get("local_only", False) and mode == "pregenerated":
+        pytest.skip(
+            f"Fixture '{fixture_id}' is local-only and does not support pregenerated mode"
         )
 
     # Dynamically select the appropriate fixtures based on fixture_id and mode

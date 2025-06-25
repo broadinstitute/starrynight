@@ -50,6 +50,7 @@ from starrynight.cli.inv import gen_inv
 from .constants import FIXTURE_CONFIGS
 
 # Configure a single Pooch registry for all test data
+# Only include fixtures that aren't local-only
 STARRYNIGHT_CACHE = pooch.create(
     path=pooch.os_cache("starrynight"),
     base_url="https://github.com/shntnu/starrynight/releases/download/v0.0.1/",
@@ -57,11 +58,15 @@ STARRYNIGHT_CACHE = pooch.create(
         # Dynamically create registry from FIXTURE_CONFIGS
         config["input"]["archive_name"]: f"sha256:{config['input']['sha256']}"
         for fixture_id, config in FIXTURE_CONFIGS.items()
+        if not config.get("local_only", False)
+        and "archive_name" in config["input"]
     }
     | {
         # Add output archives
         config["output"]["archive_name"]: f"sha256:{config['output']['sha256']}"
         for fixture_id, config in FIXTURE_CONFIGS.items()
+        if not config.get("local_only", False)
+        and "archive_name" in config["output"]
     },
 )
 
@@ -77,6 +82,8 @@ def _get_fixture_from_local_or_pooch(
 
     This function checks for a local directory via STARRYNIGHT_TEST_FIXTURE_DIR
     environment variable first. If not found, falls back to pooch download.
+
+    For local-only fixtures (with 'local_only': True), pooch is never used.
 
     Args:
         tmp_path_factory: pytest fixture for creating temporary directories
@@ -95,6 +102,7 @@ def _get_fixture_from_local_or_pooch(
         raise ValueError(f"Unknown fixture ID: {fixture_id}")
 
     fixture_config = config[fixture_type]
+    is_local_only = config.get("local_only", False)
 
     # =================================================================
     # DECISION POINT: Check for local fixtures first
@@ -115,6 +123,16 @@ def _get_fixture_from_local_or_pooch(
 
                 # Build and return paths using the local directory
                 return build_paths_func(base_fixture_dir, fixture_config)
+
+    # For local-only fixtures, fail if not found locally
+    if is_local_only:
+        if not fixture_dir_env:
+            raise ValueError(
+                f"Fixture '{fixture_id}' is local-only but STARRYNIGHT_TEST_FIXTURE_DIR is not set"
+            )
+        raise ValueError(
+            f"Local-only fixture '{fixture_id}' not found at {base_fixture_dir / fixture_config['dir_name']}"
+        )
 
     # =================================================================
     # FALLBACK: Use pooch to download and cache fixtures

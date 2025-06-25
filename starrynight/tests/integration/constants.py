@@ -97,11 +97,11 @@ WORKFLOW_CONFIGS = [
 
 # Define which tests are compatible with which fixture IDs
 FIXTURE_COMPATIBILITY = {
-    "cp_illum_calc": ["fix_s1", "fix_s2"],
-    "cp_illum_apply": ["fix_s1", "fix_s2"],
-    "cp_segmentation_check": ["fix_s1", "fix_s2"],
-    "sbs_illum_calc": ["fix_s1", "fix_s2"],
-    "sbs_illum_apply": ["fix_s1", "fix_s2"],
-    "sbs_preprocessing": ["fix_s1", "fix_s2"],
-    "analysis": ["fix_s1", "fix_s2"],
+    "cp_illum_calc": ["fix_s1", "fix_s2", "fix_l1"],
+    "cp_illum_apply": ["fix_s1", "fix_s2", "fix_l1"],
+    "cp_segmentation_check": ["fix_s1", "fix_s2", "fix_l1"],
+    "sbs_illum_calc": ["fix_s1", "fix_s2", "fix_l1"],
+    "sbs_illum_apply": ["fix_s1", "fix_s2", "fix_l1"],
+    "sbs_preprocessing": ["fix_s1", "fix_s2", "fix_l1"],
+    "analysis": ["fix_s1", "fix_s2", "fix_l1"],
 }

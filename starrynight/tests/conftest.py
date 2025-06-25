@@ -119,3 +119,39 @@ def fix_s2_starrynight_pregenerated(fix_s2_workspace, fix_s2_input_dir):
     return _setup_starrynight(
         fix_s2_workspace, fix_s2_input_dir, "fix_s2", "pregenerated"
     )
+
+
+@pytest.fixture(scope="module")
+def fix_l1_input_dir(tmp_path_factory):
+    """Fixture that provides a directory with FIX-L1 input data (local-only)."""
+    result = _setup_input_dir(tmp_path_factory, "fix_l1")
+    yield result
+
+
+@pytest.fixture(scope="module")
+def fix_l1_output_dir(tmp_path_factory):
+    """Fixture that provides a directory with FIX-L1 output data (local-only)."""
+    result = _setup_output_dir(tmp_path_factory, "fix_l1")
+    yield result
+
+
+@pytest.fixture(scope="function")
+def fix_l1_workspace(tmp_path_factory):
+    """Fixture that creates a workspace directory structure for FIX-L1 tests."""
+    return _setup_workspace(tmp_path_factory, "fix_l1")
+
+
+@pytest.fixture(scope="function")
+def fix_l1_starrynight_generated(fix_l1_workspace, fix_l1_input_dir):
+    """Fixture for FIX-L1 setup with generated files (via CLI) - local-only."""
+    return _setup_starrynight(
+        fix_l1_workspace, fix_l1_input_dir, "fix_l1", "generated"
+    )
+
+
+@pytest.fixture(scope="function")
+def fix_l1_starrynight_pregenerated(fix_l1_workspace, fix_l1_input_dir):
+    """Fixture for FIX-L1 setup with pre-generated files - local-only."""
+    return _setup_starrynight(
+        fix_l1_workspace, fix_l1_input_dir, "fix_l1", "pregenerated"
+    )

@@ -7,15 +7,55 @@ The FIXTURE_CONFIGS dictionary defines all available test fixtures with their:
 1. Channel mappings - Used for experiment configuration
 2. Input archive configuration - Used for downloading and extracting input data
 3. Output archive configuration - Used for validation against reference output
+4. local_only flag - Whether the fixture requires local files (no pooch download)
 
 Each fixture has a unique identifier (e.g., 'fix_s1') that is used to:
 - Reference the fixture in test parameterization
 - Locate pregenerated files in the pregenerated_files/ directory
 - Generate fixture-specific pytest fixtures in conftest.py
+
+Local-Only Fixtures:
+Set 'local_only': True in the fixture config to skip pooch entirely.
+These fixtures must exist in STARRYNIGHT_TEST_FIXTURE_DIR.
 """
 
 # Comprehensive fixture configuration
 FIXTURE_CONFIGS = {
+    # Example of a local-only fixture (no archives needed)
+    "fix_l1": {
+        "local_only": True,
+        # Channel configurations
+        "channels": {
+            "cp_nuclei_channel": "DAPI",  # DNA
+            "cp_cell_channel": "PhalloAF750",
+            "cp_mito_channel": "ZO1AF488",
+            "sbs_nuclei_channel": "DAPI",  # DNA
+            "sbs_cell_channel": "PhalloAF750",
+            "sbs_mito_channel": "ZO1AF488",
+            "cp_custom_channel_map": {
+                "DAPI": "DNA",
+                "ZO1AF488": "ZO1",
+                "PhalloAF750": "Phalloidin",
+            },
+            "sbs_custom_channel_map": {
+                "DAPI": "DNA",
+                "A": "A",
+                "T": "T",
+                "G": "G",
+                "C": "C",
+            },
+        },
+        # Input configuration (no archive, just directory names)
+        "input": {
+            "dir_name": "fix_l1_input",
+            "dataset_dir_name": "Source1",
+        },
+        # Output configuration (no archive, just directory names)
+        "output": {
+            "dir_name": "fix_l1_pcpip_output",
+            "dataset_dir_name": "Source1",
+        },
+    },
     "fix_s1": {
         # Channel configurations
         "channels": {
