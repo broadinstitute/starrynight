@@ -1,11 +1,8 @@
 """Test stitching module."""
 
 from pathlib import Path
-from typing import Any
 
-import polars as pl
-import scyjava as sj
-from cloudpathlib import AnyPath, CloudPath
+from cloudpathlib import CloudPath
 
 from starrynight.utils.pyimagej import ImagejContext
 
@@ -67,9 +64,7 @@ def get_row_config(im_per_well: int) -> list[int]:
     return im_per_well_dict[str(im_per_well)]
 
 
-def save_image_fiji(
-    ij, image: object, out_path: Path, compress: bool = False
-) -> None:
+def save_image_fiji(ij, image: object, out_path: Path, compress: bool = False) -> None:
     plugin = "Bio-Formats Exporter"
     params = {
         # "imageid": image.getID(),
@@ -137,9 +132,7 @@ def stitch_images_fiji(
 
 if __name__ == "__main__":
     with ImagejContext() as ij:
-        image_files = [
-            Path(f"../fixtures/stitch_images/{i}.tif") for i in range(1, 11)
-        ]
+        image_files = [Path(f"../fixtures/stitch_images/{i}.tif") for i in range(1, 11)]
         stitch_images_fiji(
             ij,
             image_files,

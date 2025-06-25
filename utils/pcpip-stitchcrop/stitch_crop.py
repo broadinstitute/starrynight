@@ -259,9 +259,7 @@ if os.path.isdir(subdir):
                     )
 
                     # Extract channel suffix (part after the Site_#_ portion)
-                    channelSuffix = suffixAfterWell[
-                        suffixAfterWell.index("_") + 1 :
-                    ]
+                    channelSuffix = suffixAfterWell[suffixAfterWell.index("_") + 1 :]
                     logger.info(f"Channel suffix: {channelSuffix}")
 
                     # Track this prefix-channel combination if new
@@ -302,9 +300,7 @@ if os.path.isdir(subdir):
     presuflist.sort()
     logger.info(f"Final welllist: {welllist}")
     logger.info(f"Final presuflist: {presuflist}")
-    logger.info(
-        f"Analysis complete - wells: {welllist}, channels: {presuflist}"
-    )
+    logger.info(f"Analysis complete - wells: {welllist}, channels: {presuflist}")
 
     # Confirm proceeding after file analysis
     if not confirm_continue(
@@ -376,17 +372,13 @@ if os.path.isdir(subdir):
                     thissuffixnicename = thissuffixnicename[1:]
 
                 # Create a channel-specific subdirectory for tile outputs
-                tile_subdir_persuf = os.path.join(
-                    tile_subdir, thissuffixnicename
-                )
+                tile_subdir_persuf = os.path.join(tile_subdir, thissuffixnicename)
                 if not os.path.exists(tile_subdir_persuf):
                     os.mkdir(tile_subdir_persuf)
 
                 # Set up the filename pattern for input images
                 # The {i} will be replaced with site numbers (1, 2, 3, 4...)
-                filename = (
-                    thisprefix + "_Well_" + eachwell + "_Site_{i}_" + thissuffix
-                )
+                filename = thisprefix + "_Well_" + eachwell + "_Site_{i}_" + thissuffix
 
                 # Set up the output filename for the stitched image
                 fileoutname = "Stitched" + filename.replace("{i}", "")
