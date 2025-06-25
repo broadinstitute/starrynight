@@ -269,7 +269,9 @@ def test_complete_workflow(
         )
 
     # Check if this is a local-only fixture and enforce "generated" mode
-    from starrynight.tests.fixtures.integration.constants import FIXTURE_CONFIGS
+    # NOTE: This import uses 'tests.' prefix because tests are run from starrynight/ directory
+    # Pre-commit may try to change this to relative imports, but that breaks when pytest runs
+    from tests.fixtures.integration.constants import FIXTURE_CONFIGS
 
     fixture_config = FIXTURE_CONFIGS.get(fixture_id, {})
     if fixture_config.get("local_only", False) and mode == "pregenerated":
