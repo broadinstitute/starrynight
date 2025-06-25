@@ -9,8 +9,15 @@ import os
 import sys
 from pathlib import Path
 
-# Fixture configuration - change this for different fixture types (s1, s2, l1)
-FIXTURE_ID = "l1"
+# Fixture configuration - get from environment or error out
+FIXTURE_ID = os.environ.get("FIXTURE_ID")
+if not FIXTURE_ID:
+    print("Error: FIXTURE_ID environment variable not set.")
+    print("Please set FIXTURE_ID to one of: s1, s2, l1")
+    print(
+        "This script is typically called from fixture_utils.sh which sets this variable."
+    )
+    sys.exit(1)
 
 # Configuration
 
@@ -31,10 +38,20 @@ if not all([BUCKET, PROJECT_S3, BATCH_S3, DEST_BUCKET]):
 PROJECT_LOCAL = "Source1"
 BATCH_LOCAL = "Batch1"
 
-# Define sample constants
-WELLS = ["A1"]  # Only Well A1 for FIX-L1
-SITES = list(range(0, 1025))  # All 1025 sites (0-1024)
-CYCLES = range(1, 4)  # SBS cycles (1, 2, 3)
+# Define sample constants based on FIXTURE_ID
+# IMPORTANT: These must align with the configuration in fixture_utils.sh
+if FIXTURE_ID in ["s1", "s2"]:
+    WELLS = ["A1", "A2", "B1"]
+    SITES = list(range(0, 4))  # Sites 0-3
+    CYCLES = range(1, 4)  # SBS cycles 1-3
+elif FIXTURE_ID == "l1":
+    WELLS = ["A1"]  # Only Well A1 for FIX-L1
+    SITES = list(range(0, 1025))  # All 1025 sites (0-1024)
+    CYCLES = range(1, 4)  # SBS cycles 1-3
+else:
+    print(f"Unknown FIXTURE_ID: {FIXTURE_ID}")
+    sys.exit(1)
+
 PLATE = "Plate1"
 PLATE_FOLDER_SUFFIX = "20240319_122800_179"
 

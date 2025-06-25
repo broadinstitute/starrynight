@@ -32,6 +32,7 @@
 
 # Common variables used across all steps
 FIXTURE_ID="l1"  # Change this for different fixtures: s1, s2, l1
+export FIXTURE_ID  # Export so Python scripts can access it
 
 # Define filter parameters based on FIXTURE_ID
 # IMPORTANT: These must align with the configuration in create_starrynight_download_list.py
@@ -96,6 +97,11 @@ TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
 # Run create_starrynight_download_list.py script to create download lists
 uv run create_starrynight_download_list.py
 
+# Create touch_list.txt from download_list.txt in ./scratch
+cd ./scratch &&
+awk -F"' " '{gsub(/^cp -n '\''/, ""); file=$1; gsub(/.*\//, "", file); dir=$2; print "mkdir -p '\''" dir "'\'' && touch '\''" dir "/" file "'\''";}' download_list.txt > touch_list.txt &&
+cd -
+
 # Backup existing scratch directory if it exists
 if [ -d "${SCRATCH_DIR}" ]; then
     mv ${SCRATCH_DIR} ${SCRATCH_DIR}_archive
@@ -103,16 +109,49 @@ fi
 
 # Create scratch directory structure
 mkdir -p ${SCRATCH_DIR}
+cp ./scratch/touch_list.txt ${SCRATCH_DIR}/touch_list.txt &&
+cp ./scratch/download_list.txt ${SCRATCH_DIR}/download_list.txt
 
-# Copy the download list, change directory, and download files
-cp ./scratch/download_list.txt ${SCRATCH_DIR}/download_list.txt &&
+# IMPORTANT: Choose ONE of the following approaches:
+#
+# APPROACH 1: Dummy Run (for testing without downloading large image files)
+#   - Uncomment the touch commands below to create empty placeholder files
+#   - This creates dummy files for everything EXCEPT load_data_csv files
+#   - The load_data_csv files are downloaded with real content (required for processing)
+#   - Skip SECTION 3 (compression) when using dummy files
+#
+# APPROACH 2: Full Dataset (for production use with all real data)
+#   - Keep the touch commands commented out
+#   - All files will be downloaded with actual content
+#   - Run all sections including compression
+#
+# WARNING: Due to the -n (no-clobber) flag in s5cmd, if dummy files exist,
+# they will NOT be overwritten by real downloads. Choose your approach before running.
+
+# Touch files to create dummy files (UNCOMMENT for Approach 1, KEEP COMMENTED for Approach 2)
+# cd ${SCRATCH_DIR}/ &&
+# echo "Creating dummy files using touch_list.txt..." &&
+# cat touch_list.txt | grep -v "load_data_csv" | parallel -j 100 &&
+# echo "Dummy files created successfully." &&
+# cd -
+
+# Download only load_data_csv files using s5cmd
 cd ${SCRATCH_DIR}/ &&
-s5cmd run download_list.txt &&
-echo "Downloads completed. Verify files were downloaded successfully." &&
+s5cmd run <(grep "load_data_csv" download_list.txt) &&
+echo "Downloads completed for load_data_csv files. Verify files were downloaded successfully." &&
+cd -
+
+# Download remaining files using s5cmd
+# For APPROACH 1 (dummy run): This step downloads nothing since dummy files already exist
+# For APPROACH 2 (full dataset): This step downloads all remaining files with real content
+cd ${SCRATCH_DIR}/ &&
+s5cmd run <(grep -v "load_data_csv" download_list.txt) &&
+echo "Downloads completed for remaining files. Verify files were downloaded successfully." &&
 cd -
 
 ###########################################################
 # SECTION 3: DATA COMPRESSION
+# SKIP THIS SECTION if using APPROACH 1 (dummy files)
 ###########################################################
 # Function to compress file only if not already JPEG compressed
 cat > compress_if_needed.sh <<'EOF'
@@ -198,7 +237,16 @@ mkdir -p "${TEMP_MISSING_DIR}"
 
 # Validate all CSV files in the trimmed directory
 # Note: This will generate a missing files report for each CSV file in the LOAD_DATA_DIR_TRIMMED directory.
-# Given the renaming of the FileName_X indicated in SECTION 4, we should expect to see missing files for the renamed columns.
+#
+# ⚠️  WARNING: EXPECTED MISSING FILES ⚠️
+# =====================================================================
+# The loaddata_postprocess.py script in SECTION 4 renames FileName_X columns
+# but DOES NOT update the actual file paths in the images directory.
+# This creates a MISMATCH between CSV references and actual file locations.
+#
+# IMPACT: Validation WILL report missing files for renamed columns.
+# TODO: Implement file path synchronization to match the renamed FileName_X values.
+# =====================================================================
 
 cd ${FIXTURE_UTILS_DIR}
 for csv_file in ${LOAD_DATA_DIR_TRIMMED}/*.csv; do

@@ -8,8 +8,8 @@ Tools for creating test fixtures from production microscopy data. These scripts 
 
 - Wells: A1, A2, B1
 - Sites per well: 4 (sites 0-3)
-- Total images: ~100
-- Size: ~5GB each
+- Total images: 48
+- Size: 37MB total
 - Usage: Downloaded from GitHub releases
 
 **FIX-L1** (Local-only fixture)
@@ -42,7 +42,7 @@ export DEST_BUCKET="your-destination-bucket"
 
 ### Step-by-Step Process
 
-1.  **Verify Configuration** (scripts are pre-configured for FIX-L1):
+1. **Verify Configuration** (scripts are pre-configured for FIX-L1):
 
    ```bash
    cd starrynight/tests/fixtures/integration/utils
@@ -60,7 +60,7 @@ export DEST_BUCKET="your-destination-bucket"
    # - Cycles: 1,2,3
    ```
 
-2.  **Run Fixture Creation** (⚠️ MANUAL PROCESS):
+2. **Run Fixture Creation** (⚠️ MANUAL PROCESS):
 
    ```bash
    # DO NOT run fixture_utils.sh directly!
@@ -74,7 +74,7 @@ export DEST_BUCKET="your-destination-bucket"
    # SECTION 6: Skip for local-only fixtures
    ```
 
-3.  **Critical Manual Adjustments**:
+3. **Critical Manual Adjustments**:
 
    ```bash
    # In fixture_utils.sh, update these dataset-specific variables in SECTION 1:
@@ -83,7 +83,7 @@ export DEST_BUCKET="your-destination-bucket"
    TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
    ```
 
-4.  **Deploy to Test Environment**:
+4. **Deploy to Test Environment**:
 
    ```bash
    export STARRYNIGHT_TEST_FIXTURE_DIR=/path/to/test/fixtures
@@ -97,7 +97,7 @@ export DEST_BUCKET="your-destination-bucket"
 
 ### Small Remote Fixtures (S1, S2)
 
-1.  Edit configuration in both scripts:
+1. Edit configuration in both scripts:
 
    ```python
    # create_starrynight_download_list.py
@@ -106,7 +106,7 @@ export DEST_BUCKET="your-destination-bucket"
    SITES = [0, 1, 2, 3]
    ```
 
-2.  Update fixture_utils.sh to match:
+2. Update fixture_utils.sh to match:
 
    ```bash
    FIXTURE_ID="s1"  # or "s2"
@@ -114,7 +114,7 @@ export DEST_BUCKET="your-destination-bucket"
    # The script will use the appropriate filters for s1/s2
    ```
 
-3.  Run sections manually, then upload archives to GitHub release
+3. Run sections manually, then upload archives to GitHub release
 
 ### Custom Fixtures
 
