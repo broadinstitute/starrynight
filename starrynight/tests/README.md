@@ -138,6 +138,9 @@ uv run pytest tests/algorithms/test_index_algorithm.py
 # Pattern matching
 uv run pytest tests/integration -k "fix_s1 and pregenerated"
 
+# Exclude specific fixtures (e.g., run all tests except fix_l1)
+uv run pytest tests/integration -k "not fix_l1"
+
 ```
 
 ## Adding Tests
