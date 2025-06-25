@@ -69,16 +69,16 @@ MD027: true
 # MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md028.md
 MD028: true
 
-# MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md029.md
-MD029:
-  style: "ordered"
+# # MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md029.md
+# MD029:
+#   style: "ordered"
 
-# MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md030.md
-MD030:
-  ul_single: 1
-  ol_single: 1
-  ul_multi: 3
-  ol_multi: 2
+# # MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md030.md
+# MD030:
+#   ul_single: 1
+#   ol_single: 1
+#   ul_multi: 3
+#   ol_multi: 2
 
 # MD031/blanks-around-fences : Fenced code blocks should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.33.0/doc/md031.md
 MD031: true

@@ -1,8 +1,43 @@
 # StarryNight Integration Test Fixtures Guide
 
-## Quick Start: Adding a New Fixture
+Test fixtures are standardized datasets that ensure our image processing workflows work correctly.
+Each fixture must be configured in the test system before use.
 
-### 6-Step Checklist
+**Flow**: Production Data → Filter/Package (`utils/`) → Configure Tests → Run Tests
+
+## Overview
+
+Test fixtures provide standardized data for integration tests. The system supports:
+
+- **Remote fixtures** (fix_s1, fix_s2): Downloaded from GitHub releases, cached locally
+- **Local-only fixtures** (fix_l1): Never downloaded, must exist locally
+
+Key files:
+
+- `fixtures/integration/constants.py` - Fixture configurations
+- `conftest.py` - Pytest fixture definitions
+- `integration/constants.py` - Test compatibility matrix
+- `test_getting_started_workflow.py` - Main integration tests
+
+## Before You Start
+
+You'll need:
+
+- Access to production microscopy data
+- ~1-2 hours for full setup
+- Understanding of which workflows you want to test
+
+## Adding a New Fixture
+
+### Phase 1: Create Fixture Data
+
+0. **Create fixture data from production data** (see [`utils/README.md`](utils/README.md)):
+
+- Use `fixture_utils.sh` to download, filter, and package data
+- Creates both `fix_{id}_input` and `fix_{id}_pcpip_output` directories
+- ⚠️ Output dir MUST be named `{fixture}_pcpip_output` (not just `_output`)
+
+### Phase 2: Configure Test System
 
 1. **Choose fixture type and naming**:
 
@@ -14,7 +49,7 @@
 
    ```python
    "fix_l2": {
-       "local_only": True,  # Set True for local-only fixtures
+       "local_only": True,  # ⚠️ MUST be True for local-only fixtures
        "channels": {
            "cp_nuclei_channel": "DAPI",
            "cp_cell_channel": "PhalloAF750",
@@ -29,8 +64,8 @@
            # "dir_prefix": "fix_l2_input_test",
        },
        "output": {
-           "dir_name": "fix_l2_pcpip_output",  # MUST use _pcpip_output suffix!
-           "dataset_dir_name": "Source1",
+           "dir_name": "fix_l2_pcpip_output",
+           "dataset_dir_name": "Source1",  # ⚠️ Must have Source1/ subdirectory
            # For remote fixtures, add archive fields like input
        },
    }
@@ -72,39 +107,18 @@
    }
    ```
 
+   ⚠️ Must update ALL 3 places: both constants.py files + parametrize decorator
+
 5.  **Update `test_getting_started_workflow.py`**:
 
    ```python
    @pytest.mark.parametrize("fixture_id", ["fix_s1", "fix_s2", "fix_l1", "fix_l2"])
    ```
 
-6.  **Set up fixture data**:
+6.  **Deploy fixture data**:
 
-- **Local-only**: Create directories under `$STARRYNIGHT_TEST_FIXTURE_DIR`
-- **Remote**: Create archives, upload to GitHub release, add SHA256
-
-### Common Pitfalls
-
-⚠️ **MUST FIX**:
-
-- Output dir MUST be named `{fixture}_pcpip_output` (not just `_output`)
-- Must have `Source1/` subdirectory under both input and output
-- Must update ALL 3 places: constants.py (both files) + parametrize decorator
-- Local-only fixtures MUST have `"local_only": True`
-
-## Overview
-
-Test fixtures provide standardized data for integration tests. The system supports:
-
-- **Remote fixtures** (fix_s1, fix_s2): Downloaded from GitHub releases, cached locally
-- **Local-only fixtures** (fix_l1): Never downloaded, must exist locally
-
-Key files:
-
-- `fixtures/integration/constants.py` - Fixture configurations
-- `conftest.py` - Pytest fixture definitions
-- `integration/constants.py` - Test compatibility matrix
-- `test_getting_started_workflow.py` - Main integration tests
+- **Local-only**: Move to `$STARRYNIGHT_TEST_FIXTURE_DIR`
+- **Remote**: Create archives, upload to GitHub release, add SHA256 to constants.py
 
 ## Fixture Types Explained
 
@@ -157,28 +171,29 @@ mkdir -p $STARRYNIGHT_TEST_FIXTURE_DIR/fix_l1_input/Source1
 mkdir -p $STARRYNIGHT_TEST_FIXTURE_DIR/fix_l1_pcpip_output/Source1/workspace/load_data_csv
 
 # Copy your data
-cp -r /path/to/images/* $STARRYNIGHT_TEST_FIXTURE_DIR/fix_l1_input/Source1/
+cp -r /path/to/input/* $STARRYNIGHT_TEST_FIXTURE_DIR/fix_l1_input/Source1/
 cp -r /path/to/output/* $STARRYNIGHT_TEST_FIXTURE_DIR/fix_l1_pcpip_output/Source1/
 ```
 
 ### For Remote Fixtures
 
-1.  **Prepare data** (use `utils/fixture_utils.sh` as template)
-2.  **Create archives**:
+1. **Find archives** (created by `fixture_utils.sh` in SECTION 6):
 
-   ```bash
-   tar -czf fix_s3_input.tar.gz fix_s3_input/
-   tar -czf fix_s3_output.tar.gz fix_s3_pcpip_output/
-   shasum -a 256 fix_s3_input.tar.gz > fix_s3_input.tar.gz.sha256
-   shasum -a 256 fix_s3_output.tar.gz > fix_s3_output.tar.gz.sha256
-   ```
+- Located in `starrynight/tests/fixtures/archives/`
+- Already includes `.sha256` checksum files
 
-3.  **Upload to GitHub release**
-4.  **Add SHA256 to constants.py**
+2. **Upload to GitHub release**
+3. **Add SHA256 to constants.py** (from the `.sha256` files)
 
 ### For Pregenerated Files (Remote Fixtures Only)
 
-Only needed when creating new fixtures or changing input data:
+Pregenerated files (`experiment.json` and `index.parquet`) enable fast test mode (~2s instead of ~30s).
+You need to create these files when:
+
+- Setting up a new remote fixture for the first time
+- Changing the input data of an existing fixture
+
+To generate them:
 
 1.  Add to `pregenerated_files/regenerate.py`:
 
@@ -224,3 +239,25 @@ The system checks local first, then falls back to downloading.
 - **pregenerated**: Uses pre-generated experiment.json and index.parquet (faster, ~2s)
 
 Local-only fixtures only support "generated" mode - pregenerated tests are automatically skipped.
+
+## Troubleshooting
+
+### "Fixture not found" error
+
+- Check `STARRYNIGHT_TEST_FIXTURE_DIR` is set and contains your fixture directories
+- Verify directory names match exactly (e.g., `fix_l1_input`, not `fix_l1_input_test`)
+
+### Tests skipped for local-only fixture
+
+- This is expected in CI/pregenerated mode
+- Local-only fixtures require `STARRYNIGHT_TEST_FIXTURE_DIR` to be set
+
+### SHA256 mismatch for remote fixture
+
+- Update the SHA256 in `constants.py` after creating new archives
+- Or redownload if the archive was corrupted
+
+### "Source1 directory not found"
+
+- Ensure your fixture data has the `Source1/` subdirectory structure
+- Both input and output directories need this structure
