@@ -1,0 +1,24 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: DeterminateSystems/magic-nix-cache-action@main
+    - uses: nicknovitski/nix-develop@v1
+    - run: uv sync --frozen
+    - run: |
+        cd starrynight
+        # Run all non-integration tests
+        uv run pytest tests/algorithms tests/parsers tests/modules tests/test_fixtures.py -v
+        # Run pregenerated integration tests
+        uv run pytest tests/integration/test_getting_started_workflow.py -k pregenerated -v
