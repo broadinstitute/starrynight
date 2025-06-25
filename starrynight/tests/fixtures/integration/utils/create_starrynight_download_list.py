@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 # Fixture configuration - change this for different fixture types (s1, s2, l1)
-FIXTURE_ID = "s1"
+FIXTURE_ID = "l1"
 
 # Configuration
 
@@ -32,8 +32,8 @@ PROJECT_LOCAL = "Source1"
 BATCH_LOCAL = "Batch1"
 
 # Define sample constants
-WELLS = ["A1", "A2", "B1"]
-SITES = [0, 1, 2, 3]
+WELLS = ["A1"]  # Only Well A1 for FIX-L1
+SITES = list(range(0, 1025))  # All 1025 sites (0-1024)
 CYCLES = range(1, 4)  # SBS cycles (1, 2, 3)
 PLATE = "Plate1"
 PLATE_FOLDER_SUFFIX = "20240319_122800_179"

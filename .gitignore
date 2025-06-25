@@ -160,6 +160,7 @@ cython_debug/
 #.idea/
 
 scratch
+scratch_archive
 .devenv
 .direnv
 result

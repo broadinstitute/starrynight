@@ -31,7 +31,29 @@
 ###########################################################
 
 # Common variables used across all steps
-FIXTURE_ID="s1"  # Change this for different fixtures: s1, s2, l1
+FIXTURE_ID="l1"  # Change this for different fixtures: s1, s2, l1
+
+# Define filter parameters based on FIXTURE_ID
+# IMPORTANT: These must align with the configuration in create_starrynight_download_list.py
+case "${FIXTURE_ID}" in
+    "s1"|"s2")
+        FILTER_PLATE="Plate1"
+        FILTER_WELLS="WellA1,WellA2,WellB1"
+        FILTER_SITES="0,1,2,3"
+        FILTER_CYCLES="1,2,3"
+        ;;
+    "l1")
+        FILTER_PLATE="Plate1"
+        FILTER_WELLS="WellA1"
+        FILTER_SITES=""  # Empty means no site filtering (all sites)
+        FILTER_CYCLES="1,2,3"
+        ;;
+    *)
+        echo "Unknown FIXTURE_ID: ${FIXTURE_ID}"
+        exit 1
+        ;;
+esac
+
 STARRYNIGHT_REPO_REL="$(git rev-parse --show-toplevel)" &&
 SCRATCH_DIR="${STARRYNIGHT_REPO_REL}/scratch"
 
@@ -44,6 +66,11 @@ FIXTURE_UTILS_DIR="${STARRYNIGHT_REPO_REL}/starrynight/tests/fixtures/integratio
 # NOTE: LOAD_DATA_DIR is dataset-specific and should be updated for each fixture
 LOAD_DATA_DIR="${FIX_OUTPUT_DIR}/Source1/workspace/load_data_csv/Batch1/Plate1"
 LOAD_DATA_DIR_TRIMMED="${LOAD_DATA_DIR}_trimmed"
+
+# Define source and target paths for path replacement
+# Note: SOURCE_PATH and TARGET_PATH are dataset-specific and should be updated for each fixture
+SOURCE_PATH="/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/"
+TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
 
 # Set required environment variables for S3 access
 # export BUCKET="your-source-bucket"
@@ -114,9 +141,6 @@ rm compress_if_needed.sh
 # Create the trimmed directory if it doesn't exist
 mkdir -p ${LOAD_DATA_DIR_TRIMMED}
 
-# IMPORTANT: The arguments below must align with the configuration in create_starrynight_download_list.py
-# Ensure these values match the PLATE, WELLS, SITES, and CYCLES variables in that script
-
 # Filter LoadData CSVs (now we need to iterate over files and call the script for each one)
 cd ${FIXTURE_UTILS_DIR}
 for csv_file in ${LOAD_DATA_DIR}/*.csv; do
@@ -125,21 +149,20 @@ for csv_file in ${LOAD_DATA_DIR}/*.csv; do
         echo "----------------------------------------"
         echo "Filtering $filename..."
 
-        uv run loaddata_filter.py \
-            --input-csv "$csv_file" \
-            --output-csv "${LOAD_DATA_DIR_TRIMMED}/${filename}" \
-            --plate Plate1 \
-            --well WellA1,WellA2,WellB1 \
-            --site 0,1,2,3 \
-            --cycle 1,2,3
+        # Build command dynamically, only adding non-empty filters
+        cmd="uv run loaddata_filter.py --input-csv \"$csv_file\" --output-csv \"${LOAD_DATA_DIR_TRIMMED}/${filename}\""
+
+        [ -n "${FILTER_PLATE}" ] && cmd="${cmd} --plate ${FILTER_PLATE}"
+        [ -n "${FILTER_WELLS}" ] && cmd="${cmd} --well ${FILTER_WELLS}"
+        [ -n "${FILTER_SITES}" ] && cmd="${cmd} --site ${FILTER_SITES}"
+        [ -n "${FILTER_CYCLES}" ] && cmd="${cmd} --cycle ${FILTER_CYCLES}"
+
+        # Execute the command
+        eval ${cmd}
+
         echo "----------------------------------------"
     fi
 done
-
-# Define source and target paths for path replacement
-# Note: SOURCE_PATH and TARGET_PATH are dataset-specific and should be updated for each fixture
-SOURCE_PATH="/home/ubuntu/bucket/projects/AMD_screening/20231011_batch_1/"
-TARGET_PATH="${FIX_OUTPUT_DIR}/Source1/Batch1/"
 
 # Post-process LoadData CSVs (now we need to iterate over files and call the script for each one)
 cd ${FIXTURE_UTILS_DIR}
