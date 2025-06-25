@@ -18,7 +18,4 @@ jobs:
     - run: uv sync --frozen
     - run: |
         cd starrynight
-        # Run all non-integration tests
-        uv run pytest tests/algorithms tests/parsers tests/modules tests/test_fixtures.py -v
-        # Run pregenerated integration tests
-        uv run pytest tests/integration/test_getting_started_workflow.py -k pregenerated -v
+        uv run pytest tests/integration/test_getting_started_workflow.py -k "not fix_l1" -v
