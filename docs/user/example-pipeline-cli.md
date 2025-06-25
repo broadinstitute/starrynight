@@ -27,24 +27,26 @@ flowchart TD
     subgraph "Cell Painting (CP) Track"
         CP1["CP Illumination Calculation"] -->
         CP2["CP Illumination Application"] -->
-        CP3["CP Segmentation Check"]
+        CP3["CP Segmentation Check"] -->
+        CP4["CP Stitch and Crop"]
     end
 
     subgraph "Barcoding (SBS) Track"
         SBS1["SBS Illumination Calculation"] -->
         SBS2["SBS Illumination Application and Alignment"] -->
-        SBS3["SBS Preprocessing"]
+        SBS3["SBS Preprocessing"] -->
+        SBS4["SBS Stitch and Crop"]
     end
 
-    CP3 & SBS3 --> Analysis["Combined Analysis"]
+    CP4 & SBS4 --> Analysis["Combined Analysis"]
 
     %% Styling
     classDef cpTrack fill:#e6f3ff,stroke:#0066cc
     classDef sbsTrack fill:#ffe6e6,stroke:#cc0000
     classDef analysisStep fill:#e6ffe6,stroke:#009900
 
-    class CP1,CP2,CP3 cpTrack
-    class SBS1,SBS2,SBS3 sbsTrack
+    class CP1,CP2,CP3,CP4 cpTrack
+    class SBS1,SBS2,SBS3,SBS4 sbsTrack
     class Analysis analysisStep
 ```
 
@@ -54,9 +56,11 @@ The workflow includes these key steps:
 - **CP Illumination Calculation**: Generate correction functions for CP images (completed in Getting Started)
 - **CP Illumination Application**: Apply illumination corrections to CP images
 - **CP Segmentation Check**: Verify cell segmentation quality in CP images
+- **CP Stitch and Crop**: Stitch multi-site images and crop for analysis
 - **SBS Illumination Calculation**: Generate correction functions for SBS images
 - **SBS Illumination Application and Alignment**: Apply illumination corrections and align DAPI images across cycles
 - **SBS Preprocessing**: Process SBS images, compensate channels, and perform preliminary barcode calling
+- **SBS Stitch and Crop**: Stitch multi-site SBS images and crop for analysis
 - **Analysis**: Integrate CP and SBS data, perform final barcode calling, and extract measurements
 
 This workflow follows the same processing pipeline described in the [PCPIP specifications](../developer/legacy/pcpip-specs.md), adapted for the StarryNight CLI interface.
@@ -68,7 +72,7 @@ All CellProfiler-based modules in this workflow follow a consistent three-step p
 3. **Execute CellProfiler**: Run CellProfiler with the generated files
 
 !!! note "Beyond CellProfiler"
-    While this workflow focuses on CellProfiler-based modules, StarryNight also includes other algorithm types that don't follow this three-step pattern. See [Algorithm Layer](../architecture/01_algorithm_layer.md) for details.
+    While this workflow focuses on CellProfiler-based modules, StarryNight also includes other algorithm types that don't follow this three-step pattern. For example, the Stitch and Crop steps use Fiji/ImageJ for image processing. See [Algorithm Layer](../architecture/01_algorithm_layer.md) for details.
 
 ## Starting Point
 
@@ -152,6 +156,39 @@ starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/cp/segcheck/segcheck_painting.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck \
     -o ${WKDIR}/segcheck/cp/
+```
+
+## CP Stitch and Crop
+
+!!! warning "Failing"
+    This step is currently failing, so skip it for now
+
+Stitch multi-site Cell Painting images together and crop them for analysis. This step uses Fiji/ImageJ to combine multiple fields of view from each well into a single stitched image, then crops it into tiles suitable for downstream analysis:
+
+```sh
+# Create necessary directories
+mkdir -p ${WKDIR}/fiji/pipeline/cp/stitchcrop
+mkdir -p ${WKDIR}/fiji_temp
+
+# Generate Fiji pipeline files
+# FIXME: TBD whether the uow below is needed
+# The default appears to be batch_id,plate_id,well_id,site_id, which is likely the wrong grouping for this step
+starrynight stitchcrop pipeline \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/fiji/pipeline/cp/stitchcrop \
+    -w ${WKDIR} \
+    --images ${WKDIR}/illum/cp/illum_apply \
+    --exp_config ${WKDIR}/experiment.json \
+    --use_legacy \
+    --uow batch_id,plate_id,well_id
+
+
+# Execute the stitching and cropping with Fiji
+# This will create stitched/, cropped/, and downsampled/ subdirectories
+# FIXME: This is currently failing
+starrynight stitchcrop fiji \
+    -p ${WKDIR}/fiji/pipeline/cp/stitchcrop \
+    -j 20  # Number of parallel jobs
 ```
 
 ## SBS Illumination Calculation
@@ -257,6 +294,15 @@ starrynight cp \
     --sbs
 ```
 
+## SBS Stitch and Crop
+
+!!! warning "Failing"
+    This step is currently failing, so skip it for now
+
+Stitch multi-site SBS images together and crop them for analysis. Similar to the CP track, this step combines multiple fields of view from each well into stitched images suitable for barcode calling and analysis:
+
+FIXME: Write instructions
+
 ## Analysis
 
 Extract cellular measurements and generate the final dataset by combining CP and SBS data:
@@ -275,6 +321,11 @@ starrynight analysis loaddata \
     -p ${WKDIR}/preprocess/sbs/ \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy
+
+# FIXME:
+# Once stitchcrop is fully integrated into this tutorial, the above will be changed to something like this:
+# -c ${WKDIR}/stitchcrop/cp/cropped/ \
+# -p ${WKDIR}/stitchcrop/sbs/cropped/ \
 
 # Generate CellProfiler pipelines
 starrynight analysis cppipe \
@@ -302,10 +353,13 @@ Throughout the pipeline, you'll use these common parameters:
 - `-o, --output`: Output directory for generated files
 - `-w, --workspace`: Path to the workspace directory
 - `-l, --loaddata`: Path to LoadData CSV files
-- `-p, --pipeline`: Path to CellProfiler pipeline file or directory
+- `-p, --pipeline`: Path to CellProfiler pipeline file or directory (for `stitchcrop fiji`, this is the directory containing pipeline files)
 - `-c, --corr_images`: Path to illumination-corrected images
 - `-b, --barcode`: Path to barcode CSV file for sequencing data
 - `--sbs`: Flag to process SBS images only
+- `--images`: Path to input images directory (used in stitchcrop)
+- `-j, --jobs`: Number of parallel jobs (used in stitchcrop fiji)
+- FIXME: Decide whether needed `--uow`: Unit of work hierarchy for pipeline generation (e.g., `batch_id,plate_id,well_id` for well-level processing)
 
 ## Next Steps
 
