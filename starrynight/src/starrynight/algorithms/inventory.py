@@ -72,7 +72,7 @@ def parse_prefix(
         Index of job.
 
     """
-    col_dict = {key: [] for key in FileInventory.model_construct().model_fields.keys()}
+    col_dict = {key: [] for key in FileInventory.model_fields.keys()}
     for file in tqdm(prefix_list, desc="Writing inventory: ", position=job_idx):
         if file.is_dir():
             continue
@@ -91,7 +91,9 @@ def parse_prefix(
     )
 
 
-def create_inventory(dataset_dir: Path | CloudPath, out_dir: Path | CloudPath) -> None:
+def create_inventory(
+    dataset_dir: Path | CloudPath, out_dir: Path | CloudPath
+) -> None:
     """Create inventory files from dataset.
 
     Parameters
@@ -102,7 +104,9 @@ def create_inventory(dataset_dir: Path | CloudPath, out_dir: Path | CloudPath) -
         Path to save generated inventory. Can be local or a cloud path.
 
     """
-    files = [AnyPath(file).resolve() for file in AnyPath(dataset_dir).rglob("*")]
+    files = [
+        AnyPath(file).resolve() for file in AnyPath(dataset_dir).rglob("*")
+    ]
     inv = out_dir.joinpath("inv")
     # Delete files from previous run
     if inv.exists():
