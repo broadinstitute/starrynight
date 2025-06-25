@@ -97,13 +97,13 @@ You'll need:
        return _setup_starrynight(fix_l2_workspace, fix_l2_input_dir, "fix_l2", "pregenerated")
    ```
 
-4.  **Update `integration/constants.py`** - add to all workflows:
+4.  **Update `integration/constants.py`** - ⚠️ **add ONLY to compatible workflows**:
 
    ```python
    FIXTURE_COMPATIBILITY = {
        "cp_illum_calc": ["fix_s1", "fix_s2", "fix_l1", "fix_l2"],
        "cp_illum_apply": ["fix_s1", "fix_s2", "fix_l1", "fix_l2"],
-       # ... add to all 7 workflows
+       # ... ⚠️ ONLY add to workflows that can process this fixture type!
    }
    ```
 

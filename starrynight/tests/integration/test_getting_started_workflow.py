@@ -48,6 +48,7 @@ from starrynight.cli.illum import (
 from starrynight.cli.preprocess import gen_preprocess_load_data_cli
 from starrynight.cli.segcheck import gen_segcheck_load_data_cli
 
+from ..fixtures.integration.constants import FIXTURE_CONFIGS  # noqa: TID252
 from .constants import FIXTURE_COMPATIBILITY, WORKFLOW_CONFIGS
 from .loaddata_validation import compare_csvs
 
@@ -271,8 +272,6 @@ def test_complete_workflow(
     # Check if this is a local-only fixture and enforce "generated" mode
     # NOTE: This import uses 'tests.' prefix because tests are run from starrynight/ directory
     # Pre-commit may try to change this to relative imports, but that breaks when pytest runs
-    from tests.fixtures.integration.constants import FIXTURE_CONFIGS
-
     fixture_config = FIXTURE_CONFIGS.get(fixture_id, {})
     if fixture_config.get("local_only", False) and mode == "pregenerated":
         pytest.skip(
