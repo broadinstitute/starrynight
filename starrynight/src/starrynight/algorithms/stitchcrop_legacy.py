@@ -46,7 +46,6 @@ from cellprofiler_core.modules.align import (
 from cellprofiler_core.modules.loaddata import LoadData
 from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.pipeline.io import dump as dumpit
-from cellprofiler_core.preferences import json
 from cloudpathlib import AnyPath, CloudPath
 from cpgdata.utils import parallel
 from mako.template import Template
@@ -187,18 +186,19 @@ def gen_stitchcrop_pipeline(
     ]
     images_hierarchy_dict = gen_image_hierarchy(images_df, uow_hierarchy)
     levels = flatten_all(images_hierarchy_dict)
+
     for level in levels:
         # Construct filename for the loaddata csv
         level_out_path = pipe_out_dir.joinpath(
-            f"{'^'.join(levels)}#stitchcrop.py"
+            f"{'^'.join(level)}#stitchcrop.py"
         )
 
         with level_out_path.open("w") as f:
             write_stitchcrop_pipeline(
                 f,
-                images_dir=images_path.joinpath("-".join(levels)),
+                images_dir=images_path.joinpath("-".join(level)),
                 out_dir=workspace_dir,
-                level="-".join(levels),
+                level="-".join(level),
                 exp_config_path=exp_config_path,
             )
 
