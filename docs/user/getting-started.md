@@ -117,6 +117,8 @@ cd ..
 
 Please refer to the Fiji download page [here](https://imagej.net/software/fiji/downloads)
 
+## Setup environment variables
+
 ```sh
 # Set environment variables for convenience (using absolute paths to avoid path resolution issues)
 export DATADIR="$(pwd)/scratch/fix_s1_input"
@@ -137,6 +139,7 @@ export INPUT_WKDIR="$(pwd)/scratch/fix_s1_input/Source1/workspace"
     - `WKDIR`: Points to your working directory where outputs will be generated
     - `INPUT_WKDIR`: Points to the input workspace folder, within which barcode files are located
     - `CP_PLUGINS`: Points to CellProfiler plugins needed for advanced processing
+    - `FIJI_PATH`: Points to Fiji executable needed for advanced processing
 
 ## Create Experiment Configuration
 
