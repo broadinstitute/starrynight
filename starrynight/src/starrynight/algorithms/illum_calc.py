@@ -37,6 +37,7 @@ from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.pipeline.io import dump as dumpit
 from centrosome.bg_compensate import MODE_AUTO
 from cloudpathlib import CloudPath
+from mako.template import Template
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.templates import get_templates_path
@@ -427,3 +428,52 @@ def gen_illum_calc_cppipe(
         filename = f"illum_calc_{type_suffix}.json"
         with out_dir.joinpath(filename).open("w") as f:
             dumpit(cpipe, f, version=6)
+
+
+def write_qc_notebook(
+    exp_config_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    for_sbs: bool = False,
+) -> Path | CloudPath:
+    """Write out qc notebook.
+
+    Parameters
+    ----------
+    exp_config_path : Path | CloudPath
+        Path | CloudPath to experiment.json.
+    out_path : Path | CloudPath
+        Path | CloudPath to output file.
+    for_sbs : str | Mask
+        Flag for treating as sbs images.
+
+    """
+    exp_config = json.loads(exp_config_path.read_text())
+    cp_illum_calc_notebook = Template(
+        text=get_templates_path()
+        .joinpath("notebooks/ref_9_Analysis.cppipe.mako")
+        .read_text(),
+        output_encoding="utf-8",
+    ).render(exp_config=exp_config)
+    cp_illum_calc_notebook = cp_illum_calc_notebook.decode("utf-8")
+    out_path.write_text(cp_illum_calc_notebook)
+    return out_path
+
+
+def run_illum_calc_qc(
+    exp_config_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    for_sbs: bool = False,
+) -> Path | CloudPath:
+    """Write out qc notebook.
+
+    Parameters
+    ----------
+    exp_config_path : Path | CloudPath
+        Path | CloudPath to experiment.json.
+    out_path : Path | CloudPath
+        Path | CloudPath to output file.
+    for_sbs : str | Mask
+        Flag for treating as sbs images.
+
+    """
+    write_qc_notebook(exp_config_path, out_path, for_sbs)

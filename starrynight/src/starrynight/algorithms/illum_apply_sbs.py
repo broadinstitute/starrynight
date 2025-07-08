@@ -46,6 +46,7 @@ from cellprofiler_core.pipeline import Pipeline
 from cellprofiler_core.pipeline.io import dump as dumpit
 from cellprofiler_core.preferences import json
 from cloudpathlib import AnyPath, CloudPath
+from mako.template import Template
 
 from starrynight.algorithms.index import PCPIndex
 from starrynight.modules.sbs_illum_calc.constants import (
@@ -714,13 +715,48 @@ def gen_illum_apply_sbs_cppipe(
 # ------------------------------------------------------
 # Run QC checks
 # ------------------------------------------------------
+def write_qc_notebook(
+    exp_config_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+) -> Path | CloudPath:
+    """Write out qc notebook.
+
+    Parameters
+    ----------
+    exp_config_path : Path | CloudPath
+        Path | CloudPath to experiment.json.
+    out_path : Path | CloudPath
+        Path | CloudPath to output file.
+    for_sbs : str | Mask
+        Flag for treating as sbs images.
+
+    """
+    exp_config = json.loads(exp_config_path.read_text())
+    sbs_illum_apply_notebook = Template(
+        text=get_templates_path()
+        .joinpath("notebooks/sbs_illum_apply.py.mako")
+        .read_text(),
+        output_encoding="utf-8",
+    ).render(exp_config=exp_config)
+    sbs_illum_apply_notebook = sbs_illum_apply_notebook.decode("utf-8")
+    out_path.write_text(sbs_illum_apply_notebook)
+    return out_path
 
 
-def gen_illum_apply_qc(
-    workspace_path: Path | CloudPath,
-):
-    pass
+def run_sbs_illum_apply_qc(
+    exp_config_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+) -> Path | CloudPath:
+    """Run qc.
 
+    Parameters
+    ----------
+    exp_config_path : Path | CloudPath
+        Path | CloudPath to experiment.json.
+    out_path : Path | CloudPath
+        Path | CloudPath to output file.
+    for_sbs : str | Mask
+        Flag for treating as sbs images.
 
-def run_illum_apply_qc():
-    pass
+    """
+    write_qc_notebook(exp_config_path, out_path)

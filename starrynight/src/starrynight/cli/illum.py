@@ -8,14 +8,17 @@ from cloudpathlib import AnyPath, CloudPath
 from starrynight.algorithms.illum_apply import (
     gen_illum_apply_cppipe,
     gen_illum_apply_load_data,
+    run_cp_illum_apply_qc,
 )
 from starrynight.algorithms.illum_apply_sbs import (
     gen_illum_apply_sbs_cppipe,
     gen_illum_apply_sbs_load_data,
+    run_sbs_illum_apply_qc,
 )
 from starrynight.algorithms.illum_calc import (
     gen_illum_calc_cppipe,
     gen_illum_calc_load_data,
+    run_illum_calc_qc,
 )
 
 
@@ -102,6 +105,26 @@ def gen_illum_calc_cppipe_cli(
     gen_illum_calc_cppipe(
         AnyPath(loaddata), AnyPath(out), AnyPath(workspace), sbs, use_legacy
     )
+
+
+@click.command(name="qc")
+@click.option("-e", "--exp", required=True)
+@click.option("-o", "--out", required=True)
+@click.option("--sbs", is_flag=True, default=False)
+def run_illum_calc_qc_cli(exp: str, out: str, sbs: bool) -> None:
+    """Run illum calc qc.
+
+    Parameters
+    ----------
+    exp : str
+        experiment.json path. Can be local or a cloud path.
+    out : str
+        Path to output file. Can be local or a cloud path.
+    sbs : str | Mask
+        Flag for treating as sbs images.
+
+    """
+    run_illum_calc_qc(AnyPath(exp), AnyPath(out), sbs)
 
 
 # ====== Illum Apply
@@ -246,6 +269,29 @@ def gen_illum_apply_cppipe_cli(
         )
 
 
+@click.command(name="qc")
+@click.option("-e", "--exp", required=True)
+@click.option("-o", "--out", required=True)
+@click.option("--sbs", is_flag=True, default=False)
+def run_illum_apply_qc_cli(exp: str, out: str, sbs: bool) -> None:
+    """Run illum apply qc.
+
+    Parameters
+    ----------
+    exp : str
+        experiment.json path. Can be local or a cloud path.
+    out : str
+        Path to output file. Can be local or a cloud path.
+    sbs : str | Mask
+        Flag for treating as sbs images.
+
+    """
+    if not sbs:
+        run_cp_illum_apply_qc(AnyPath(exp), AnyPath(out), sbs)
+    else:
+        run_sbs_illum_apply_qc(AnyPath(exp), AnyPath(out), sbs)
+
+
 @click.group()
 def calc() -> None:
     """Illum calc commands."""
@@ -266,8 +312,10 @@ def illum() -> None:
 
 calc.add_command(gen_illum_calc_load_data_cli)
 calc.add_command(gen_illum_calc_cppipe_cli)
+calc.add_command(run_illum_calc_qc_cli)
 apply.add_command(gen_illum_apply_load_data_cli)
 apply.add_command(gen_illum_apply_cppipe_cli)
+apply.add_command(run_illum_apply_qc_cli)
 
 illum.add_command(calc)
 illum.add_command(apply)
