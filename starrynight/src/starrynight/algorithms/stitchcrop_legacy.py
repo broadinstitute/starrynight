@@ -92,7 +92,7 @@ def write_stitchcrop_pipeline(  # noqa: C901
     images_dir: Path | CloudPath,
     out_dir: Path | CloudPath,
     level: str,
-    exp_config_path: Path | CloudPath,
+    exp_config: dict,
 ) -> None:
     mkalldirs(
         [
@@ -116,7 +116,7 @@ def write_stitchcrop_pipeline(  # noqa: C901
         .resolve()
         .__str__(),
         temp_dir=out_dir.joinpath("fiji_temp", level).resolve().__str__(),
-        exp_config=json.loads(exp_config_path.read_text()),
+        exp_config=exp_config,
     )
     ref_stitchcrop = ref_stitchcrop.decode("utf-8")
     f.write(ref_stitchcrop)
@@ -182,13 +182,19 @@ def gen_stitchcrop_pipeline(
         "batch_id",
         "plate_id",
         "well_id",
-        "site_id",
     ]
     images_hierarchy_dict = gen_image_hierarchy(images_df, uow_hierarchy)
     levels = flatten_all(images_hierarchy_dict)
 
+    # Setup exp config
+    exp_config = json.loads(exp_config_path.resolve().read_text())
+    if not for_sbs:
+        exp_config = exp_config["cp_config"]
+    else:
+        exp_config = exp_config["sbs_config"]
+
     for level in levels:
-        # Construct filename for the loaddata csv
+        # Construct filename for fiji pipeline
         level_out_path = pipe_out_dir.joinpath(
             f"{'^'.join(level)}#stitchcrop.py"
         )
@@ -199,7 +205,7 @@ def gen_stitchcrop_pipeline(
                 images_dir=images_path.joinpath("-".join(level)),
                 out_dir=workspace_dir,
                 level="-".join(level),
-                exp_config_path=exp_config_path,
+                exp_config=exp_config,
             )
 
     return pipe_out_dir

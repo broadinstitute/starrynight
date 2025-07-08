@@ -59,6 +59,8 @@ def confirm_continue(message="Continue to the next step?"):
     #response = input("Continue? (y/n): ").strip().lower()
     #return response == "y" or response == "yes"
 
+logger.info("Exp config: ${exp_config}")
+
 # Configuration parameters
 localtemp = "${temp_dir}"  # Temporary directory
 
@@ -66,7 +68,7 @@ localtemp = "${temp_dir}"  # Temporary directory
 rows = "2"  # Number of rows in the site grid
 columns = "2"  # Number of columns in the site grid
 size = "1480"  # Base size of input images (pixels)
-overlap_pct = "10"  # Percentage overlap between adjacent images
+overlap_pct = "${exp_config['img_overlap_pct']}"  # Percentage overlap between adjacent images
 
 # Tiling parameters
 tileperside = "2"  # Number of tiles to create per side when cropping
@@ -76,8 +78,6 @@ final_tile_size = "2960"  # Final tile size after scaling (pixels)
 xoffset_tiles = "0"  # X offset for tile cropping
 yoffset_tiles = "0"  # Y offset for tile cropping
 compress = "True"  # Whether to compress output TIFF files
-
-logger.info("Exp config: ${exp_config}")
 
 # Channel information
 channame = "DNA"  # Target channel name for processing
@@ -122,7 +122,7 @@ def savefile(im, imname, plugin, compress="false"):
     """
     attemptcount = 0
     imname = tiffextend(imname)
-    logger.info("Saving {imname}, width={im.width}, height={im.height}")
+    logger.info("Saving %s, width=%s, height=%s", imname, im.width, im.height)
 
     # Simple save without compression
     if compress.lower() != "true":
@@ -138,11 +138,11 @@ def savefile(im, imname, plugin, compress="false"):
                 )
                 exporter = Exporter(plugin, im)
                 exporter.run()
-                logger.info("Succeeded after attempt {attemptcount}")
+                logger.info("Succeeded after attempt %s", attemptcount)
                 return
             except:
                 attemptcount += 1
-        logger.error("Failed 5 times at saving {imname}")
+        logger.error("Failed 5 times at saving %s", imname)
 
 # STEP 1: Create directory structure for output files
 # logger.info("Top output folder: {top_outfolder}")
@@ -190,40 +190,40 @@ downsample_subdir = "${downsample_out_dir}"
 
 # STEP 2: Prepare input directory and files
 subdir = "${images_dir}"
-logger.info("Input subdirectory: {subdir}")
+logger.info("Input subdirectory: %s", subdir)
 
 # bypassed awsdownload == 'True' for test (would download files from AWS)
 
 # Check what's in the input directory
-logger.info("Checking if directory exists: {subdir}")
+logger.info("Checking if directory exists: %s", subdir)
 a = os.listdir(subdir)
-logger.info("Contents of {subdir}: {a}")
+logger.info("Contents of %s : %s", subdir, a)
 
 # Flatten any nested directories - create symlinks from subdirectories to main directory
 for x in a:
     if os.path.isdir(os.path.join(subdir, x)):
-        logger.info("Processing subdirectory: {x}")
+        logger.info("Processing subdirectory: %s", x)
         b = os.listdir(os.path.join(subdir, x))
         for c in b:
             # Skip CSV files
             if c.lower().endswith(".csv"):
-                logger.info("Skipping CSV file: {c}")
+                logger.info("Skipping CSV file: %s", c)
                 continue
 
             src = os.path.join(subdir, x, c)
             dst = os.path.join(subdir, c)
-            logger.info("Creating symlink: {src} -> {dst}")
+            logger.info("Creating symlink: %s -> %s", src, dst)
             # Check if destination exists
             if os.path.exists(dst) or os.path.islink(dst):
-                logger.info("Destination already exists, skipping: {dst}")
+                logger.info("Destination already exists, skipping: %s", dst)
             else:
                 os.symlink(src, dst)
 
 # STEP 3: Analyze input files and organize by well and channel
 if os.path.isdir(subdir):
-    logger.info("Processing directory content: {subdir}")
+    logger.info("Processing directory content: %s", subdir)
     dirlist = os.listdir(subdir)
-    logger.info("Files in directory: {dirlist}")
+    logger.info("Files in directory: %s", dirlist)
 
     # Lists to track wells and prefix/suffix combinations
     welllist = []  # List of all well IDs found
@@ -234,7 +234,7 @@ if os.path.isdir(subdir):
     # Parse each file to extract well information and channel information
     for eachfile in dirlist:
         if ".tif" in eachfile:
-            logger.info("Processing TIFF file: {eachfile}")
+            logger.info("Processing TIFF file: %s", eachfile)
             # Skip overlay files
             if "Overlay" not in eachfile:
                 try:
@@ -243,55 +243,55 @@ if os.path.isdir(subdir):
                     prefixBeforeWell, suffixWithWell = eachfile.split("_Well_")
                     Well, suffixAfterWell = suffixWithWell.split("_Site_")
                     logger.info(
-                        "File parts: Prefix={prefixBeforeWell}, Well={Well}, SuffixAfter={suffixAfterWell}"
+                        "File parts: Prefix=%s, Well=%s, SuffixAfter=%s", prefixBeforeWell, Well, suffixAfterWell
                     )
 
                     # Extract channel suffix (part after the Site_#_ portion)
                     channelSuffix = suffixAfterWell[
                         suffixAfterWell.index("_") + 1 :
                     ]
-                    logger.info("Channel suffix: {channelSuffix}")
+                    logger.info("Channel suffix: %s", channelSuffix)
 
                     # Track this prefix-channel combination if new
                     if (prefixBeforeWell, channelSuffix) not in presuflist:
                         presuflist.append((prefixBeforeWell, channelSuffix))
                         logger.info(
-                            "Added to presuflist: {(prefixBeforeWell, channelSuffix)}"
+                            "Added to presuflist: %s", (prefixBeforeWell, channelSuffix)
                         )
 
                     # Track this well if new
                     if Well not in welllist:
                         welllist.append(Well)
-                        logger.info("Added to welllist: {Well}")
+                        logger.info("Added to welllist: %s", Well)
 
                     # If this file has our target channel, note its prefix/suffix
                     if channame in channelSuffix:
                         logger.info(
-                            "Found target channel ({channame}) in {channelSuffix}"
+                            "Found target channel (%s) in %s", channame, channelSuffix
                         )
                         if permprefix is None:
                             permprefix = prefixBeforeWell
                             permsuffix = channelSuffix
                             logger.info(
-                                "Set permanent prefix: {permprefix} and suffix: {permsuffix}"
+                                "Set permanent prefix: %s and suffix: %s", permprefix, permsuffix
                             )
                 except Exception as e:
-                    logger.error("Error processing file {eachfile}: {e}")
+                    logger.error("Error processing file %s: %s", eachfile, e)
 
     # Filter out non-TIFF files from presuflist
-    logger.info("Before filtering presuflist: {presuflist}")
+    logger.info("Before filtering presuflist: %s", presuflist)
     for eachpresuf in presuflist:
         if eachpresuf[1][-4:] != ".tif":
             if eachpresuf[1][-5:] != ".tiff":
                 presuflist.remove(eachpresuf)
-                logger.info("Removed from presuflist: {eachpresuf}")
+                logger.info("Removed from presuflist: %s", eachpresuf)
 
     # Sort for consistent processing order
     presuflist.sort()
-    logger.info("Final welllist: {welllist}")
-    logger.info("Final presuflist: {presuflist}")
+    logger.info("Final welllist: %s", welllist)
+    logger.info("Final presuflist: %s", presuflist)
     logger.info(
-        "Analysis complete - wells: {welllist}, channels: {presuflist}"
+        "Analysis complete - wells: %s, channels: %s", welllist, presuflist
     )
 
     # STEP 4: Set up parameters for image stitching and cropping
@@ -313,7 +313,7 @@ if os.path.isdir(subdir):
 
         # Confirm proceeding with stitching
         if not confirm_continue(
-            "Setup complete. Ready to process {len(welllist)} wells and {len(presuflist)} channels. Proceed with stitching?"
+            "Setup complete. Ready to process %d wells and %d channels. Proceed with stitching?" % (len(welllist), len(presuflist))
         ):
             logger.info("Exiting at user request before processing wells")
             sys.exit(0)
@@ -339,10 +339,10 @@ if os.path.isdir(subdir):
             # Confirm before processing this well
             if eachwell == welllist[0]:  # Only confirm on the first well
                 if not confirm_continue(
-                    "Ready to process well {eachwell} and all its channels. Proceed?"
+                    "Ready to process well %s and all its channels. Proceed?" % eachwell
                 ):
                     logger.info(
-                        "Exiting at user request before processing well {eachwell}"
+                        "Exiting at user request before processing well %s", eachwell
                     )
                     sys.exit(0)
 
@@ -387,12 +387,12 @@ if os.path.isdir(subdir):
                 height = str(int(round(im.height * float(scalingstring))))
 
                 # Log progress of stitching
-                logger.info("Stitching complete for {eachwell} - {thissuffix}")
+                logger.info("Stitching complete for %s - %s", eachwell, thissuffix)
 
                 # STEP 8: Scale the stitched image
                 # This scales the barcoding and cell painting images to match each other
                 logger.info(
-                    "Scale... x={scalingstring} y={scalingstring} width={width} height={height} interpolation=Bilinear average create"
+                    "Scale... x=%s y=%s width=%s height=%s interpolation=Bilinear average create", scalingstring, scalingstring, width, height
                 )
                 IJ.run(
                     "Scale...",
@@ -414,7 +414,7 @@ if os.path.isdir(subdir):
                 # STEP 9: Adjust the canvas size
                 # Padding ensures tiles are all the same size (for CellProfiler later on)
                 logger.info(
-                    "Canvas Size... width={upscaledsize} height={upscaledsize} position=Top-Left zero"
+                    "Canvas Size... width=%s height=%s position=Top-Left zero", upscaledsize, upscaledsize
                 )
                 IJ.run(
                     "Canvas Size...",
@@ -444,7 +444,7 @@ if os.path.isdir(subdir):
 
                 # Log progress
                 logger.info(
-                    "Scaling and saving complete for {eachwell} - {thissuffix}"
+                    "Scaling and saving complete for %s - %s", eachwell, thissuffix
                 )
 
                 # STEP 11: Crop the stitched image into tiles
@@ -485,7 +485,7 @@ if os.path.isdir(subdir):
 
                 # STEP 12: Create downsampled version for quality control
                 logger.info(
-                    "Scale... x=0.1 y=0.1 width={im.width / 10} height={im.width / 10} interpolation=Bilinear average create"
+                    "Scale... x=0.1 y=0.1 width=%s height=%s interpolation=Bilinear average create", im.width / 10, im.width / 10
                 )
                 # Scale down to 10% of original size
                 im_10 = IJ.run(
@@ -508,7 +508,7 @@ if os.path.isdir(subdir):
 
                 # Log crop and downsample completion
                 logger.info(
-                    "Cropping and downsampling complete for {eachwell} - {thissuffix}"
+                    "Cropping and downsampling complete for %s - %s", eachwell, thissuffix
                 )
 
                 # Close all open images before next iteration
@@ -524,7 +524,7 @@ if os.path.isdir(subdir):
     else:
         logger.error("Must identify well as round or square")
 else:
-    logger.error("Could not find input directory {subdir}")
+    logger.error("Could not find input directory %s", subdir)
 
 # STEP 13: Move the TileConfiguration.txt file to the output directory
 for eachlogfile in ["TileConfiguration.txt"]:
@@ -533,14 +533,14 @@ for eachlogfile in ["TileConfiguration.txt"]:
             os.path.join(subdir, eachlogfile),
             os.path.join(out_subdir, eachlogfile),
         )
-        logger.info("Moved {eachlogfile} to output directory")
-    except FileNotFoundError:
-        logger.error("Could not find TileConfiguration.txt in {subdir}")
+        logger.info("Moved %s to output directory", eachlogfile)
+    except Exception:
+        logger.error("Could not find TileConfiguration.txt in %s", subdir)
         # Create an empty file if it doesn't exist (for testing purposes)
         if not os.path.exists(os.path.join(out_subdir, eachlogfile)):
             with open(os.path.join(out_subdir, eachlogfile), "w") as f:
                 f.write("# This is a placeholder file\n")
-            logger.info("Created empty {eachlogfile} in output directory")
+            logger.info("Created empty %s in output directory", eachlogfile)
 
 # Final confirmation
 logger.info("Processing complete")
@@ -549,12 +549,12 @@ if autorun or confirm_continue(
     "All processing is complete. Would you like to see a summary?"
 ):
     logger.info("======== PROCESSING SUMMARY =========")
-    logger.info("Input directory: {subdir}")
-    logger.info("Stitched images: {out_subdir}")
-    logger.info("Cropped tiles: {tile_subdir}")
-    logger.info("Downsampled QC images: {downsample_subdir}")
-    logger.info("Wells processed: {welllist}")
-    logger.info("Channels processed: {[s[1] for s in presuflist]}")
+    logger.info("Input directory: %s" % subdir)
+    logger.info("Stitched images: %s" % out_subdir)
+    logger.info("Cropped tiles: %s" % tile_subdir)
+    logger.info("Downsampled QC images: %s" % downsample_subdir)
+    logger.info("Wells processed: %s" % welllist)
+    logger.info("Channels processed: %s", [s[1] for s in presuflist])
     logger.info("=====================================")
 
 logger.info("Processing completed successfully")

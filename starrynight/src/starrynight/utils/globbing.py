@@ -148,7 +148,7 @@ def flatten_dict(
     return flattened
 
 
-def flatten_all(nested_dict: dict) -> list[str]:
+def flatten_all(nested_dict: dict) -> list[list[str]]:
     levels_leaves = flatten_dict(nested_dict)
     combined = []
     for level, leaves in levels_leaves:
