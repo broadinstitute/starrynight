@@ -16,8 +16,15 @@ let
     pipecraft = python3Packages.callPackage ./pipecraft.nix { };
     cpgparser = python3Packages.callPackage ./cpgparser.nix { };
     cpgdata = python3Packages.callPackage ./cpgdata.nix { inherit cpgparser; };
+    # linkml = python3Packages.callPackage ./linkml.nix { };
+    # pyimagej = python3Packages.callPackage ./pyimagej.nix { };
     starrynight = python3Packages.callPackage ./starrynight.nix {
-      inherit cpgdata pipecraft;
+      inherit
+        cpgdata
+        pipecraft
+        # linkml
+        # pyimagej
+        ;
       inherit (cp-pkgs) cellprofiler cellprofiler-core cellprofiler-library;
     };
 

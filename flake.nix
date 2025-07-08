@@ -14,7 +14,6 @@
       self,
       nixpkgs,
       flake-utils,
-      systems,
       ...
     }@inputs:
     flake-utils.lib.eachDefaultSystem (
@@ -39,17 +38,15 @@
         devShells = {
           default =
             let
-              python_with_pkgs = (
-                pkgs.python311.withPackages (pp: [
-                  (inputs.cp-flake.packages.${system}.override {
-                    python3Packages = pkgs.python311Packages;
-                  }).cellprofiler
-                  pp.mysqlclient
-                  pp.packaging
-                  pp.snakemake
-                  pp.snakemake-storage-plugin-s3
-                ])
-              );
+              python_with_pkgs = pkgs.python311.withPackages (pp: [
+                (inputs.cp-flake.packages.${system}.override {
+                  python3Packages = pkgs.python311Packages;
+                }).cellprofiler
+                pp.mysqlclient
+                pp.packaging
+                pp.snakemake
+                pp.snakemake-storage-plugin-s3
+              ]);
             in
             mkShell {
               NIX_LD = runCommand "ld.so" { } ''

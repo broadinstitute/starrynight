@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  rustPlatform,
 }:
 buildPythonPackage rec {
   pname = "linkml";
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   dependencies = [
   ];
-  pythonImportsCheck = [ "cpgparser" ];
+  pythonImportsCheck = [ "linkml" ];
 
   meta = {
     description = "CPG parser python library";
