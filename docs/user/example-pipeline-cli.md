@@ -85,6 +85,9 @@ export WKDIR="$(pwd)/scratch/fix_s1_output/workspace"
 export CP_PLUGINS="$(pwd)/scratch/CellProfiler-plugins/active_plugins/"
 # Add new environment variable needed for the complete workflow
 export INPUT_WKDIR="$(pwd)/scratch/fix_s1_input/Source1/workspace"
+
+# Add path to your fiji executable. This varies from system to system
+export FIJI_PATH=""
 ```
 
 You should already have:
@@ -295,12 +298,24 @@ starrynight cp \
 
 ## SBS Stitch and Crop
 
-!!! warning "Failing"
-    This step is currently failing, so skip it for now
-
 Stitch multi-site SBS images together and crop them for analysis. Similar to the CP track, this step combines multiple fields of view from each well into stitched images suitable for barcode calling and analysis:
 
-FIXME: Write instructions
+```sh
+# Generate fiji pipeline
+starrynight stitchcrop pipeline \
+    -i ${WKDIR}/index/index.parquet \
+    -o ${WKDIR}/fiji \
+    -w ${WKDIR}/stitchcrop \
+    --images ${WKDIR}/illum/cp/illum_apply \
+    --exp_config ${WKDIR}/experiment/experiment.json \
+    --use_legacy \
+    --uow batch_id,plate_id,well_id
+
+# Execute fiji
+starrynight stitchcrop fiji \
+    -p ${WKDIR}/fiji \
+    -f [PATH to fiji executable]
+```
 
 ## Analysis
 
