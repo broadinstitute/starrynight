@@ -146,6 +146,8 @@ export const GET_FILE_QUERY_KEY = "GET_FILE_QUERY_KEY";
 export function useGetFile(options: TUseGetFileOptions) {
   const { url, enabled } = options;
 
+  console.log("Downlaod", url);
+
   return useQuery({
     queryKey: [GET_FILE_QUERY_KEY, url],
     queryFn: () => getFile(url),

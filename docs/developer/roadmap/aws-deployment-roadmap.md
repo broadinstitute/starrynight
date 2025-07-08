@@ -69,20 +69,20 @@ flowchart TB
 ### Phase 2: Container Pipeline (Weeks 3-4)
 
 1. Select public container registry
-2. Adapt existing CI/CD pipeline for AWS containers
-3. Set up builds triggered by CellProfiler releases
-4. Test custom CellProfiler wrappers
+2. Set up automated builds triggered by CellProfiler releases
+3. Implement independent StarryNight versioning
+4. Test build pipeline
 
-**Note**: Must maintain custom StarryNight+CellProfiler containers (can't use official)
+**Note**: Automated builds minimize maintenance burden
 
 ### Phase 3: Integration Testing (Weeks 5-6)
 
 1. Test job submission pipeline
 2. Validate Snakemake → AWS Batch translation
-3. Verify OpenTelemetry/Grafana integration
-4. Test Snakemake's job recovery features
+3. Verify telemetry (using StarryNight's built-in system)
+4. Run end-to-end workflows
 
-**Key Risk**: CellProfiler error handling requires custom hooks
+**Key Risk**: CellProfiler error handling in containerized environment
 
 ### Phase 4: Production Ready (Weeks 7-8)
 
@@ -156,6 +156,14 @@ Potential areas requiring configuration:
 - Compute preferences (spot vs on-demand)
 
 StarryNight manages job execution; IT retains security/cost control.
+
+### Failure Handling
+
+Snakemake provides intelligent recovery:
+
+- Successful jobs are never re-run
+- Failed jobs can be retried with adjusted resources
+- QC steps pause for manual review via dummy modules
 
 ## Validation Checklist
 

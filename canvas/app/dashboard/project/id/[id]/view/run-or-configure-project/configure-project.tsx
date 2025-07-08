@@ -4,6 +4,7 @@ import { ActionButton } from "@/components/custom/action-button";
 import { useToast } from "@/components/ui/use-toast";
 import { useConfigureProject } from "@/services/projects";
 import { useProjectStore } from "@/stores/project";
+import { useQueryClient } from "@tanstack/react-query";
 import { PlayIcon } from "lucide-react";
 
 export function ProjectConfigureProject() {

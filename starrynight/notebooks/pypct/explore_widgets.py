@@ -13,16 +13,14 @@
 # ---
 
 # %%
-from starrynight.utils.misc import anywidgets_path
-from starrynight.schema import DataConfig
+import anywidget
+from anywidget.experimental import widget
+from psygnal import EventedModel
+
 from starrynight.modules.gen_index import GenIndexModule
 from starrynight.modules.schema import SpecContainer
-from psygnal import EventedModel
-from anywidget.experimental import widget
-
-import anywidget
-
-
+from starrynight.schema import DataConfig
+from starrynight.utils.misc import anywidgets_path
 
 # %%
 js_path = anywidgets_path().joinpath("App.js")
@@ -36,6 +34,7 @@ data_config = DataConfig(
 )
 
 gen_inv_mod = GenIndexModule(data_config)
+
 
 @widget(esm=js_path.read_text(), css=css_path.read_text())
 class CounterWidgetModel(EventedModel):

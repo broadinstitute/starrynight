@@ -182,7 +182,6 @@ starrynight stitchcrop pipeline \
     --use_legacy \
     --uow batch_id,plate_id,well_id
 
-
 # Execute the stitching and cropping with Fiji
 # This will create stitched/, cropped/, and downsampled/ subdirectories
 # FIXME: This is currently failing
