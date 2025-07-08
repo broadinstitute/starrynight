@@ -86,8 +86,7 @@ export CP_PLUGINS="$(pwd)/scratch/CellProfiler-plugins/active_plugins/"
 # Add new environment variable needed for the complete workflow
 export INPUT_WKDIR="$(pwd)/scratch/fix_s1_input/Source1/workspace"
 
-# Add path to your fiji executable. This varies from system to system
-export FIJI_PATH=""
+# FIJI_PATH will be set up later when needed for stitching
 ```
 
 You should already have:
@@ -158,7 +157,24 @@ starrynight segcheck cppipe \
 starrynight cp \
     -p ${WKDIR}/cellprofiler/cppipe/cp/segcheck/segcheck_painting.cppipe \
     -l ${WKDIR}/cellprofiler/loaddata/cp/segcheck \
-    -o ${WKDIR}/segcheck/cp/
+    -o ${WKDIR}/segcheck/cp/ \
+    --uow batch_id,plate_id,well_id
+```
+
+## Download and Setup Fiji (Required for Stitching)
+
+Before running the stitch and crop steps, you need to download and set up Fiji/ImageJ:
+
+!!! info "Fiji Installation"
+    Fiji (Fiji Is Just ImageJ) is required for the stitching and cropping steps in both the CP and SBS tracks. CellProfiler cannot handle the large image sizes from stitched 6-well plates, so Fiji is used for this memory-intensive processing.
+
+Download Fiji from the [official download page](https://imagej.net/software/fiji/downloads) and extract it. Then set the path to the executable:
+
+```sh
+# Set the path to your Fiji executable
+export FIJI_PATH="/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx"
+# Linux: export FIJI_PATH="/path/to/Fiji.app/ImageJ-linux64"
+# Windows: export FIJI_PATH="/path/to/Fiji.app/ImageJ-win64.exe"
 ```
 
 ## CP Stitch and Crop
@@ -173,24 +189,20 @@ Stitch multi-site Cell Painting images together and crop them for analysis. This
 mkdir -p ${WKDIR}/fiji/pipeline/cp/stitchcrop
 mkdir -p ${WKDIR}/fiji_temp
 
-# Generate Fiji pipeline files
-# FIXME: TBD whether the uow below is needed
-# The default appears to be batch_id,plate_id,well_id,site_id, which is likely the wrong grouping for this step
+# Generate fiji pipeline
 starrynight stitchcrop pipeline \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/fiji/pipeline/cp/stitchcrop \
-    -w ${WKDIR} \
+    -w ${WKDIR}/stitchcrop \
     --images ${WKDIR}/illum/cp/illum_apply \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy \
     --uow batch_id,plate_id,well_id
 
-# Execute the stitching and cropping with Fiji
-# This will create stitched/, cropped/, and downsampled/ subdirectories
-# FIXME: This is currently failing
+# Execute fiji
 starrynight stitchcrop fiji \
-    -p ${WKDIR}/fiji/pipeline/cp/stitchcrop \
-    -j 20  # Number of parallel jobs
+    -p ${WKDIR}/fiji \
+    -f ${FIJI_PATH}
 ```
 
 ## SBS Illumination Calculation
@@ -298,15 +310,22 @@ starrynight cp \
 
 ## SBS Stitch and Crop
 
+!!! warning "Failing"
+    This step is currently failing, so skip it for now
+
 Stitch multi-site SBS images together and crop them for analysis. Similar to the CP track, this step combines multiple fields of view from each well into stitched images suitable for barcode calling and analysis:
 
 ```sh
+# Create necessary directories
+mkdir -p ${WKDIR}/fiji/pipeline/sbs/stitchcrop
+mkdir -p ${WKDIR}/fiji_temp
+
 # Generate fiji pipeline
 starrynight stitchcrop pipeline \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/fiji \
     -w ${WKDIR}/stitchcrop \
-    --images ${WKDIR}/illum/cp/illum_apply \
+    --images ${WKDIR}/illum/sbs/illum_apply \
     --exp_config ${WKDIR}/experiment/experiment.json \
     --use_legacy \
     --uow batch_id,plate_id,well_id
