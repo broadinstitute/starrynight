@@ -49,6 +49,7 @@ class SnakeMakeBackendRun(BaseBackendRun):
 
 class SnakeMakeBackend(Backend):
     """SnakeMake backend.
+    .
 
     Attributes
     ----------

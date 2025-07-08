@@ -22,9 +22,13 @@ from anywidget.experimental import widget
 
 import anywidget
 
-js_path = anywidgets_path().joinpath("testwidget.js").read_text()
-css_path = anywidgets_path().joinpath("global.css").read_text()
 
+
+# %%
+js_path = anywidgets_path().joinpath("App.js")
+css_path = anywidgets_path().joinpath("anywidget.css")
+
+# %%
 data_config = DataConfig(
     dataset_path="",
     storage_path="",
@@ -33,7 +37,7 @@ data_config = DataConfig(
 
 gen_inv_mod = GenIndexModule(data_config)
 
-@widget(esm=js_path, css=css_path)
+@widget(esm=js_path.read_text(), css=css_path.read_text())
 class CounterWidgetModel(EventedModel):
     spec: SpecContainer
 

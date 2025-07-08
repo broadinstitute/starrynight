@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.2
+#       jupytext_version: 1.17.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -15,7 +15,7 @@
 # %% [markdown]
 # # Execute PCP generic pipeline step by step
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Imports
 
 # %%
@@ -88,9 +88,15 @@ from starrynight.modules.sbs_preprocess.preprocess_cppipe import (
 from starrynight.modules.sbs_preprocess.preprocess_load_data import (
     SBSPreprocessGenLoadDataModule,
 )
+from starrynight.modules.stitchcrop.stitchcrop_fiji import (
+    StitchcropInvokeFijiModule,
+)
+from starrynight.modules.stitchcrop.stitchcrop_pipeline import (
+    StitchcropGenPipelineModule,
+)
 from starrynight.schema import DataConfig
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Setup dataset paths
 # These paths are required for creating the `DataConfig` object and configure the execution backend.
 
@@ -104,7 +110,7 @@ exec_runs = Path("../../../scratch/fix_s1_runs")
 exec_mounts = Path("../../../scratch/fix_s1_mounts")
 
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Create data config
 
 # %%
@@ -114,7 +120,7 @@ data_config = DataConfig(
     workspace_path=workspace_path,
 )
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Create execution engine config config
 # Here we are creating a `SnakeMakeBackend` config.
 # We can also use other backends like `NextflowBackend` and `AWSBatchBackend`
@@ -125,7 +131,7 @@ backend_config = SnakeMakeConfig(
 )
 
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Configure the generate inventory module
 # This module is special and doesn't require an experiment for configuration
 
@@ -137,7 +143,7 @@ exec_backend = SnakeMakeBackend(
 run = exec_backend.run()
 run.wait()
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Configure the generate index module
 # This module is special and doesn't require an experiment for configuration
 
@@ -149,7 +155,7 @@ exec_backend = SnakeMakeBackend(
 run = exec_backend.run()
 run.wait()
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Configure the experiment with the generated index
 
 # %%
@@ -197,7 +203,7 @@ experiment_dir.joinpath("experiment.json").write_text(
 #
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 1: CP calculate illum correction
 
 # %% [markdown]
@@ -258,7 +264,7 @@ run.wait()
 
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 2: CP apply illum correction
 
 # %% [markdown]
@@ -320,7 +326,7 @@ run.wait()
 
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 3: CP segcheck
 
 # %% [markdown]
@@ -378,7 +384,7 @@ run.wait()
 
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 5: SBS calculate illum correction
 
 # %% [markdown]
@@ -440,7 +446,7 @@ run.wait()
 
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 6: SBS apply illum correction
 
 # %% [markdown]
@@ -502,7 +508,7 @@ run.wait()
 
 # ------------------------------------------------------------------
 
-# %% [markdown]
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 7: SBS preprocess
 
 # %% [markdown]
@@ -573,6 +579,49 @@ run.wait()
 # ------------------------------------------------------------------
 
 # %% [markdown]
+# ## Step 8: Stitch and crop
+
+# %% [markdown]
+# ### Gen fiji script
+
+# %%
+stitchcrop_gen_pipe_mod = StitchcropGenPipelineModule(
+    data_config, pcp_experiment
+)
+
+# Change default images path
+# stitchcrop_gen_pipe_mod.spec.inputs["images_path"].value = ""
+
+exec_backend = SnakeMakeBackend(
+    stitchcrop_gen_pipe_mod.pipe,
+    backend_config,
+    exec_runs / "run021",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+
+# %% [markdown]
+# ### Invoke fiji
+
+# %%
+stitchcrop_invoke_fiji_mod = StitchcropInvokeFijiModule(
+    data_config, pcp_experiment
+)
+# Add the fiji executable path
+stitchcrop_invoke_fiji_mod.spec.inputs["fiji_path"].value = ""
+
+exec_backend = SnakeMakeBackend(
+    stitchcrop_invoke_fiji_mod.pipe,
+    backend_config,
+    exec_runs / "run022",
+    exec_mounts,
+)
+run = exec_backend.run()
+run.wait()
+# ------------------------------------------------------------------
+
+# %% [markdown] jp-MarkdownHeadingCollapsed=true
 # ## Step 9: Analysis
 
 # %% [markdown]
@@ -587,7 +636,7 @@ analysis_load_data_mod.spec.inputs["use_legacy"].value = True
 exec_backend = SnakeMakeBackend(
     analysis_load_data_mod.pipe,
     backend_config,
-    exec_runs / "run021",
+    exec_runs / "run023",
     exec_mounts,
 )
 run = exec_backend.run()
@@ -605,7 +654,7 @@ analysis_cppipe_mod.spec.inputs["use_legacy"].value = True
 exec_backend = SnakeMakeBackend(
     analysis_cppipe_mod.pipe,
     backend_config,
-    exec_runs / "run022",
+    exec_runs / "run024",
     exec_mounts,
 )
 run = exec_backend.run()
@@ -625,7 +674,7 @@ analysis_invoke_mod.spec.inputs[
 exec_backend = SnakeMakeBackend(
     analysis_invoke_mod.pipe,
     backend_config,
-    exec_runs / "run023",
+    exec_runs / "run025",
     exec_mounts,
 )
 run = exec_backend.run()
