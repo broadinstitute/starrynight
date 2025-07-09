@@ -19,6 +19,7 @@ Usage:
 
 import os
 import time
+from glob import glob
 import logging
 import sys
 from ij import IJ
@@ -196,21 +197,24 @@ logger.info("Input subdirectory: %s", subdir)
 
 # Check what's in the input directory
 logger.info("Checking if directory exists: %s", subdir)
-a = os.listdir(subdir)
-logger.info("Contents of %s : %s", subdir, a)
+glob_path = "{0}{1}".format(subdir, "*")
+logger.info("Globbing: %s", glob_path)
+a = glob(glob_path)
+#a = [a.split("/")[-1] for a in a]
+logger.info("Contents of %s : %s", glob_path, a)
 
 # Flatten any nested directories - create symlinks from subdirectories to main directory
 for x in a:
-    if os.path.isdir(os.path.join(subdir, x)):
+    if os.path.isdir(x):
         logger.info("Processing subdirectory: %s", x)
-        b = os.listdir(os.path.join(subdir, x))
+        b = os.listdir(x)
         for c in b:
             # Skip CSV files
             if c.lower().endswith(".csv"):
                 logger.info("Skipping CSV file: %s", c)
                 continue
 
-            src = os.path.join(subdir, x, c)
+            src = os.path.join(x, c)
             dst = os.path.join(subdir, c)
             logger.info("Creating symlink: %s -> %s", src, dst)
             # Check if destination exists
