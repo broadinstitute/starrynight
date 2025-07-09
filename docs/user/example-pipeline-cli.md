@@ -179,21 +179,17 @@ export FIJI_PATH="/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx"
 
 ## CP Stitch and Crop
 
-!!! warning "Failing"
-    This step is currently failing, so skip it for now
-
 Stitch multi-site Cell Painting images together and crop them for analysis. This step uses Fiji/ImageJ to combine multiple fields of view from each well into a single stitched image, then crops it into tiles suitable for downstream analysis:
 
 ```sh
 # Create necessary directories
 mkdir -p ${WKDIR}/fiji/pipeline/cp/stitchcrop
-mkdir -p ${WKDIR}/fiji_temp
 
 # Generate fiji pipeline
 starrynight stitchcrop pipeline \
     -i ${WKDIR}/index/index.parquet \
     -o ${WKDIR}/fiji/pipeline/cp/stitchcrop \
-    -w ${WKDIR}/stitchcrop \
+    -w ${WKDIR}/stitchcrop/cp \
     --images ${WKDIR}/illum/cp/illum_apply \
     --exp_config ${WKDIR}/experiment.json \
     --use_legacy \
@@ -201,7 +197,7 @@ starrynight stitchcrop pipeline \
 
 # Execute fiji
 starrynight stitchcrop fiji \
-    -p ${WKDIR}/fiji \
+    -p ${WKDIR}/fiji/pipeline/cp \
     -f ${FIJI_PATH}
 ```
 
@@ -310,30 +306,26 @@ starrynight cp \
 
 ## SBS Stitch and Crop
 
-!!! warning "Failing"
-    This step is currently failing, so skip it for now
-
 Stitch multi-site SBS images together and crop them for analysis. Similar to the CP track, this step combines multiple fields of view from each well into stitched images suitable for barcode calling and analysis:
 
 ```sh
 # Create necessary directories
 mkdir -p ${WKDIR}/fiji/pipeline/sbs/stitchcrop
-mkdir -p ${WKDIR}/fiji_temp
 
 # Generate fiji pipeline
 starrynight stitchcrop pipeline \
     -i ${WKDIR}/index/index.parquet \
-    -o ${WKDIR}/fiji \
-    -w ${WKDIR}/stitchcrop \
-    --images ${WKDIR}/illum/sbs/illum_apply \
-    --exp_config ${WKDIR}/experiment/experiment.json \
+    -o ${WKDIR}/fiji/pipeline/sbs/stitchcrop \
+    -w ${WKDIR}/stitchcrop/sbs \
+    --images ${WKDIR}/preprocess/sbs/ \
+    --exp_config ${WKDIR}/experiment.json \
     --use_legacy \
     --uow batch_id,plate_id,well_id
 
 # Execute fiji
 starrynight stitchcrop fiji \
     -p ${WKDIR}/fiji \
-    -f [PATH to fiji executable]
+    -f ${FIJI_PATH}
 ```
 
 ## Analysis
