@@ -48,7 +48,7 @@ function CreateNewProjectForm_() {
         push(`${PROJECT_URL}/${data.id}`);
       }, 3000);
     },
-    [push, queryClient]
+    [push, queryClient],
   );
 
   const handleOnCreateProjectError = React.useCallback(() => {
@@ -59,8 +59,8 @@ function CreateNewProjectForm_() {
   const form = useForm<TCreateProjectFormData>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: "Test",
+      description: "Test description",
       dataset: "",
       workspaceURI: "",
       storageURI: "",
@@ -91,20 +91,22 @@ function CreateNewProjectForm_() {
         init_config,
       } = data;
 
+      console.log("Submit Form data", data);
       updateIsFormSubmitting(true);
-      createNewProject({
-        dataset_uri: dataset,
-        storage_uri: storageURI || dataset,
-        workspace_uri: workspaceURI || dataset,
-        description: description || "",
-        name,
-        parser_type: parser,
-        type,
-        init_config: Object.fromEntries(init_config),
-        is_configured: false,
-      });
+      // TODO: Fix this.
+      // createNewProject({
+      //   dataset_uri: dataset,
+      //   storage_uri: storageURI || dataset,
+      //   workspace_uri: workspaceURI || dataset,
+      //   description: description || "",
+      //   name,
+      //   parser_type: parser,
+      //   type,
+      //   init_config: Object.fromEntries(init_config),
+      //   is_configured: false,
+      // });
     },
-    [createNewProject, updateIsFormSubmitting]
+    [createNewProject, updateIsFormSubmitting],
   );
 
   const Steps = React.useMemo(
@@ -112,7 +114,7 @@ function CreateNewProjectForm_() {
       0: <CreateNewProjectStep1 />,
       1: <CreateNewProjectStep2 />,
     }),
-    []
+    [],
   );
 
   return (
@@ -151,7 +153,7 @@ function CreateNewProjectForm_() {
 }
 
 const CreateNewProjectForm = withCreateNewProjectProvider(
-  CreateNewProjectForm_
+  CreateNewProjectForm_,
 );
 
 export { CreateNewProjectForm };

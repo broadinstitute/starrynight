@@ -6,9 +6,8 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { TCreateProjectFormData } from "@/schema/create-project";
 import { useGetProjectInitConfigUsingProjectType } from "@/services/projects";
 import { PageSpinner } from "@/components/custom/page-spinner";
-import { FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import clsx from "clsx";
+import { Step2Field } from "./step-2-field";
 
 export function CreateNewProjectStep2() {
   const { currentStep, isFormSubmitting, updateCurrentStep } =
@@ -18,8 +17,9 @@ export function CreateNewProjectStep2() {
       updateCurrentStep: store.updateCurrentStep,
     }));
 
-  const { getValues, control, register } =
+  const { getValues, control, watch } =
     useFormContext<TCreateProjectFormData>();
+
   const projectType = getValues("type");
 
   const { data, error, isLoading } = useGetProjectInitConfigUsingProjectType({
@@ -34,9 +34,7 @@ export function CreateNewProjectStep2() {
   React.useEffect(() => {
     if (data) {
       remove();
-      Object.entries(data).forEach(([key, val]) => {
-        append([[key, "", val]]);
-      });
+      data.forEach((entry) => append(entry));
     }
   }, [data, currentStep, remove, append]);
 
@@ -69,7 +67,7 @@ export function CreateNewProjectStep2() {
     );
   }
 
-  if (fields.length === 0) {
+  if (data.length === 0) {
     return (
       <div>
         <p className="max-w-md text-sm text-gray-600">
@@ -92,10 +90,7 @@ export function CreateNewProjectStep2() {
   return (
     <div className="max-w-md space-y-4 text-left">
       {fields.map((field, index) => (
-        <FormItem key={field.id}>
-          <FormLabel>{field[2].title || field[0]}</FormLabel>
-          <Input {...register(`init_config.${index}.1`)} />
-        </FormItem>
+        <Step2Field key={field.id} field={field} index={index} />
       ))}
       <div className="flex justify-between pt-4">
         <Button

@@ -71,7 +71,7 @@ export function CreateNewProjectStep1() {
       if (!hasTriggerCalled.current) return;
       trigger(name);
     },
-    [trigger]
+    [trigger],
   );
 
   return (

@@ -42,10 +42,7 @@ const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
     return (
       <div className="dark:bg-input/30 flex flex-col gap-2 text-sm disabled:cursor-not-allowed disabled:opacity-50">
         <Input
-          className={cn(
-            "placeholder:text-muted-foreground flex-1 outline-none",
-            className,
-          )}
+          className={cn(className)}
           value={pendingDataPoint}
           onChange={(e) => setPendingDataPoint(e.target.value)}
           onKeyDown={(e) => {

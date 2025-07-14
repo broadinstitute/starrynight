@@ -3,6 +3,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 import { GET_RUNS_QUERY_KEY } from "./run";
 import { GET_JOBS_QUERY_KEY } from "./job";
+import {
+  generateMockProjectConfig,
+  TProjectInitConfig,
+} from "@/utils/project-form";
 
 // TODO: Updates once BE support sending project status as enum.
 export type TProjectStatus = "not-configured" | "configuring" | "configured";
@@ -143,6 +147,7 @@ export function useGetParserAndProjectType(
   return useQuery({
     queryKey: [GET_PARSER_AND_PROJECT_TYPE_QUERY_KEY],
     queryFn: getParserAndProjectType,
+    refetchOnWindowFocus: false,
     ...options,
   });
 }
@@ -260,14 +265,13 @@ export type TGetProjectInitConfigUsingProjectTypeOptions = {
   project_type: string;
 };
 
-export type TProjectInitConfig = Record<string, Record<string, string>>;
-
-export function getProjectInitConfigUsingProjectType(
+export async function getProjectInitConfigUsingProjectType(
   options: TGetProjectInitConfigUsingProjectTypeOptions,
 ): Promise<TProjectInitConfig> {
   const { project_type } = options;
 
-  return api.get(`/project/type/${project_type}`).json();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return generateMockProjectConfig();
 }
 
 export const GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE_KEY =
@@ -285,6 +289,7 @@ export function useGetProjectInitConfigUsingProjectType(
   return useQuery({
     queryKey: [GET_PROJECT_INIT_CONFIG_USING_PROJECT_TYPE_KEY],
     queryFn: () => getProjectInitConfigUsingProjectType({ project_type }),
+    refetchOnWindowFocus: false,
   });
 }
 
