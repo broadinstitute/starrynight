@@ -1,6 +1,7 @@
 """Common dataframe operations."""
 
 import polars as pl
+from cloudpathlib import AnyPath
 
 HIERARCHY_COLUMN_MAP_CP = {
     0: "batch_id",
@@ -507,3 +508,82 @@ def get_default_path_prefix(df: pl.LazyFrame) -> str:
         df.select(pl.col("prefix")).unique().collect().to_series().to_list()[0]
     )
     return default_path_prefix
+
+
+def get_filenames_by_channel_id(
+    df: pl.LazyFrame, channel_id: str
+) -> list[dict[str, str]]:
+    """Extract a list of filenames and pathnames for a given channel ID.
+
+    Parameters
+    ----------
+    df : pl.LazyFrame
+        The input Polars LazyFrame.
+    channel_id : str
+        The channel ID to filter by.
+
+    Returns
+    -------
+    list[dict[str, str]]
+        A list of dict with keys filename and pathname.
+
+    """
+    out = (
+        df.filter(
+            pl.col("channel_id").eq(channel_id)
+            & pl.col("filename").is_not_null()
+        )
+        .select("filename")
+        .unique()
+        .collect()
+        .to_dicts()
+    )
+    out = [
+        {
+            "filename": row["filename"],
+            "pathname": AnyPath(row["prefix"]).joinpath(row["key"]).parent,
+        }
+        for row in out
+    ]
+    return out
+
+
+def get_filenames_by_channel_id_cycle_id(
+    df: pl.LazyFrame, channel_id: str, cycle_id: str
+) -> list[dict[str, str]]:
+    """Extract a list of filenames and pathnames for a given channel and cycle ID.
+
+    Parameters
+    ----------
+    df : pl.LazyFrame
+        The input Polars LazyFrame.
+    channel_id : str
+        The channel ID to filter by.
+    cycle_id : str
+        The cycle ID to filter by.
+
+    Returns
+    -------
+    list[dict[str, str]]
+        A list of dict with keys filename and pathname.
+
+    """
+    out = (
+        df.filter(
+            pl.col("channel_id").eq(channel_id)
+            & pl.col("cycle_id").eq(cycle_id)
+            & pl.col("filename").is_not_null()
+        )
+        .select("filename", "key", "prefix")
+        .unique()
+        .collect()
+        .to_dicts()
+    )
+    out = [
+        {
+            "filename": row["filename"],
+            "pathname": AnyPath(row["prefix"]).joinpath(row["key"]).parent,
+        }
+        for row in out
+    ]
+    return out
