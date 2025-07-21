@@ -9,6 +9,10 @@ from pipecraft.pipeline import Pipeline, Seq
 
 from starrynight.experiments.common import Experiment
 from starrynight.modules.common import StarrynightModule
+from starrynight.modules.sbs_stitchcrop.constants import (
+    SBS_STITCHCROP_OUT_PATH_SUFFIX,
+    SBS_STITCHCROP_PIPELINE_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.schema import (
     ExecFunction,
     SpecContainer,
@@ -18,25 +22,21 @@ from starrynight.modules.schema import (
     TypeInput,
     TypeOutput,
 )
-from starrynight.modules.stitchcrop.constants import (
-    STITCHCROP_OUT_PATH_SUFFIX,
-    STITCHCROP_PIPELINE_OUT_PATH_SUFFIX,
-)
 from starrynight.schema import DataConfig
 
 
-class StitchcropInvokeFijiModule(StarrynightModule):
-    """Stitchcrop invoke fiji module."""
+class SBSStitchcropInvokeFijiModule(StarrynightModule):
+    """SBS Stitchcrop invoke fiji module."""
 
     @staticmethod
     def module_name() -> str:
         """Return module name."""
-        return "stitchcrop_invoke_fiji"
+        return "sbs_stitchcrop_invoke_fiji"
 
     @property
     def uid(self) -> str:
         """Return module unique id."""
-        return "stitchcrop_invoke_fiji"
+        return "sbs_stitchcrop_invoke_fiji"
 
     def _spec(self) -> SpecContainer:
         """Return module default spec."""
@@ -48,7 +48,7 @@ class StitchcropInvokeFijiModule(StarrynightModule):
                     description="Path to the python pipelines directory.",
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
-                        STITCHCROP_PIPELINE_OUT_PATH_SUFFIX
+                        SBS_STITCHCROP_PIPELINE_OUT_PATH_SUFFIX
                     )
                     .resolve()
                     .__str__(),
@@ -67,7 +67,7 @@ class StitchcropInvokeFijiModule(StarrynightModule):
                     description="Stitched images after preprocessing",
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
-                        STITCHCROP_OUT_PATH_SUFFIX
+                        SBS_STITCHCROP_OUT_PATH_SUFFIX
                     )
                     .resolve()
                     .__str__(),
@@ -93,7 +93,7 @@ class StitchcropInvokeFijiModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight Stitchcrop invoke fiji module",
+                        name="Starrynight SBS Stitchcrop invoke fiji module",
                         description="This module invoke fiji for stitching images.",
                     )
                 ]

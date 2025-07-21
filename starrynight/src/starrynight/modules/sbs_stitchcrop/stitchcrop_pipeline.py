@@ -13,6 +13,10 @@ from starrynight.modules.common import StarrynightModule
 from starrynight.modules.cp_illum_apply.constants import (
     CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
 )
+from starrynight.modules.sbs_stitchcrop.constants import (
+    SBS_STITCHCROP_OUT_PATH_SUFFIX,
+    SBS_STITCHCROP_PIPELINE_OUT_PATH_SUFFIX,
+)
 from starrynight.modules.schema import (
     ExecFunction,
     SpecContainer,
@@ -22,25 +26,21 @@ from starrynight.modules.schema import (
     TypeInput,
     TypeOutput,
 )
-from starrynight.modules.stitchcrop.constants import (
-    STITCHCROP_OUT_PATH_SUFFIX,
-    STITCHCROP_PIPELINE_OUT_PATH_SUFFIX,
-)
 from starrynight.schema import DataConfig
 
 
-class StitchcropGenPipelineModule(StarrynightModule):
-    """Stitchcrop generate pipeline module."""
+class SBSStitchcropGenPipelineModule(StarrynightModule):
+    """SBS Stitchcrop generate pipeline module."""
 
     @staticmethod
     def module_name() -> str:
         """Return module name."""
-        return "stitchcrop_gen_pipeline"
+        return "sbs_stitchcrop_gen_pipeline"
 
     @property
     def uid(self) -> str:
         """Return module unique id."""
-        return "stitchcrop_gen_pipeline"
+        return "sbs_stitchcrop_gen_pipeline"
 
     def _spec(self) -> SpecContainer:
         """Return module default spec."""
@@ -63,7 +63,7 @@ class StitchcropGenPipelineModule(StarrynightModule):
                     description="Workspace path.",
                     optional=True,
                     value=self.data_config.workspace_path.joinpath(
-                        STITCHCROP_OUT_PATH_SUFFIX
+                        SBS_STITCHCROP_OUT_PATH_SUFFIX
                     )
                     .resolve()
                     .__str__(),
@@ -117,7 +117,7 @@ class StitchcropGenPipelineModule(StarrynightModule):
                     description="Generated python pipeline files",
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
-                        STITCHCROP_PIPELINE_OUT_PATH_SUFFIX
+                        SBS_STITCHCROP_PIPELINE_OUT_PATH_SUFFIX
                     )
                     .resolve()
                     .__str__(),
@@ -143,7 +143,7 @@ class StitchcropGenPipelineModule(StarrynightModule):
             citations=TypeCitations(
                 algorithm=[
                     TypeAlgorithmFromCitation(
-                        name="Starrynight Stithcrop generate pipeline module",
+                        name="Starrynight SBS Stithcrop generate pipeline module",
                         description="This module generates pipeline files for stitchcrop module.",
                     )
                 ]
