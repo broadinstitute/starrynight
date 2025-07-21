@@ -1,5 +1,6 @@
 """Misc utilities."""
 
+import shutil
 from pathlib import Path
 
 import pyarrow as pa
@@ -107,3 +108,27 @@ def merge_pq(
                 if isinstance(file, CloudPath):
                     file = file.fspath
                 writer.write_table(pq.read_table(file, schema=schema))
+
+
+def clean_directory(directory_path: Path | str) -> None:
+    """Clean a given directory by removing all its contents.
+
+    Parameters
+    ----------
+    directory_path : Path | str
+        Path to the directory to clean.
+
+    """
+    directory = Path(directory_path)
+
+    if not directory.exists():
+        return
+
+    if not directory.is_dir():
+        raise ValueError(f"Path {directory_path} is not a directory")
+
+    for item in directory.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink()
