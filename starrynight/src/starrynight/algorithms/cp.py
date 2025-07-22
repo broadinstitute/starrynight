@@ -7,12 +7,14 @@ from cpgdata.utils import parallel
 from tqdm import tqdm
 
 from starrynight.utils.cellprofiler import CellProfilerContext
+from starrynight.utils.misc import clean_directory
 
 
 def run_cp(
     uow_list: list[tuple[Path, Path]],
     out_dir: Path,
     plugin_dir: Path | None = None,
+    clean: bool = True,
     job_idx: int = 0,
 ) -> None:
     """Run cellprofiler for a list of unit-of-work (UOW) items.
@@ -25,6 +27,8 @@ def run_cp(
         Output directory path.
     plugin_dir : Path
         Path to cellprofiler plugin directory.
+    clean : bool
+        Clean output directory before the run.
     job_idx : int, optional
         Job index for tqdm progress bar (default is 0).
 
@@ -43,6 +47,8 @@ def run_cp(
         local_out_dir = out_dir.joinpath(
             "-".join(load_data_path.name.split("#")[0].split("^"))
         )
+        if clean:
+            clean_directory(local_out_dir)
         print(local_out_dir)
         local_out_dir.mkdir(parents=True, exist_ok=True)
         with CellProfilerContext(

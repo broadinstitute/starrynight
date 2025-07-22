@@ -75,6 +75,17 @@ class AnalysisGenLoadDataModule(StarrynightModule):
                     .resolve()
                     .__str__(),
                 ),
+                "corrected_index_path": TypeInput(
+                    name="Corrected images index",
+                    type=TypeEnum.dir,
+                    description="Path to corrected images index.",
+                    optional=True,
+                    value=self.data_config.workspace_path.joinpath(
+                        "index/cp_illum_apply"
+                    )
+                    .resolve()
+                    .__str__(),
+                ),
                 "compensated_images_path": TypeInput(
                     name="Aligned and compensated images",
                     type=TypeEnum.dir,
@@ -82,6 +93,17 @@ class AnalysisGenLoadDataModule(StarrynightModule):
                     optional=False,
                     value=self.data_config.workspace_path.joinpath(
                         SBS_PREPROCESS_OUT_PATH_SUFFIX
+                    )
+                    .resolve()
+                    .__str__(),
+                ),
+                "compensated_index_path": TypeInput(
+                    name="Aligned and Compensated images index",
+                    type=TypeEnum.dir,
+                    description="Path to aligned and compensated images index.",
+                    optional=True,
+                    value=self.data_config.workspace_path.joinpath(
+                        "index/sbs_preprocess"
                     )
                     .resolve()
                     .__str__(),
@@ -182,6 +204,13 @@ class AnalysisGenLoadDataModule(StarrynightModule):
         # Use user provided parser if available
         if spec.inputs["path_mask"].value is not None:
             cmd += ["--path_mask", spec.inputs["path_mask"].value]
+        if spec.inputs["corrected_index_path"].value is not None:
+            cmd += ["--corr_index", spec.inputs["corrected_index_path"].value]
+        if spec.inputs["compensated_index_path"].value is not None:
+            cmd += [
+                "--comp_index",
+                spec.inputs["compensated_index_path"].value,
+            ]
         if spec.inputs["use_legacy"].value is True:
             assert spec.inputs["exp_config_path"].value is not None
             cmd += [

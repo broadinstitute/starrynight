@@ -66,7 +66,7 @@ from starrynight.utils.dfutils import (
     get_default_path_prefix,
 )
 from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
-from starrynight.utils.misc import resolve_path_loaddata
+from starrynight.utils.misc import clean_directory, resolve_path_loaddata
 
 ###############################
 ## Load data generation
@@ -301,6 +301,7 @@ def gen_illum_apply_sbs_load_data(
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
     uow_hierarchy: list[str] = None,
+    clean: bool = True,
 ) -> None:
     """Generate load data for segcheck pipeline.
 
@@ -322,8 +323,14 @@ def gen_illum_apply_sbs_load_data(
         Path to experiment config json path.
     uow_hierarchy : list[str] | None
         Unit of work list
+    clean: bool
+        Clean output directory.
 
     """
+    if clean:
+        # clean output directory
+        clean_directory(out_path)
+
     # Construct illum path if not given
     if not illum_path:
         illum_path = index_path.parents[1].joinpath(

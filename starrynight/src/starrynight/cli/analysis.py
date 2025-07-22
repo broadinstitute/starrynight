@@ -13,7 +13,9 @@ from starrynight.algorithms.analysis import (
 @click.option("-i", "--index", required=True)
 @click.option("-o", "--out", required=True)
 @click.option("-c", "--corr_images", default=None)
+@click.option("--corr_index", default=None)
 @click.option("-p", "--comp_images", default=None)
+@click.option("--comp_index", default=None)
 @click.option("-m", "--path_mask", default=None)
 @click.option("--use_legacy", is_flag=True, default=False)
 @click.option("--exp_config", default=None)
@@ -22,7 +24,9 @@ def gen_analysis_load_data_cli(
     index: str,
     out: str,
     corr_images: str,
+    corr_index: str,
     comp_images: str,
+    comp_index: str,
     path_mask: str | None,
     use_legacy: bool,
     exp_config: str | None,
@@ -38,8 +42,12 @@ def gen_analysis_load_data_cli(
         Output dir. Can be local or a cloud path.
     corr_images : str
         Corrected painting images dir. Can be local or a cloud path.
+    corr_index : str
+        Corrected painting index dir. Can be local or a cloud path.
     comp_images : str
         Color compensated sbs images dir. Can be local or a cloud path.
+    comp_index : str
+        Compensated images index dir. Can be local or a cloud path.
     path_mask : str | Mask
         Path prefix mask to use. Can be local or a cloud path.
     use_legacy : bool
@@ -61,7 +69,9 @@ def gen_analysis_load_data_cli(
         AnyPath(out),
         path_mask,
         AnyPath(corr_images) if corr_images else None,
+        AnyPath(corr_index) if corr_index else None,
         AnyPath(comp_images) if comp_images else None,
+        AnyPath(comp_index) if comp_index else None,
         use_legacy,
         exp_config,
         uow,

@@ -533,7 +533,7 @@ def get_filenames_by_channel_id(
             pl.col("channel_id").eq(channel_id)
             & pl.col("filename").is_not_null()
         )
-        .select("filename")
+        .select("filename", "prefix", "key")
         .unique()
         .collect()
         .to_dicts()

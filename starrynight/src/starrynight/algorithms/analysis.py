@@ -160,7 +160,7 @@ from cloudpathlib import AnyPath, CloudPath
 from mako.template import Template
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
-from starrynight.algorithms.index import PCPIndex
+from starrynight.algorithms.index import OutputIndex, PCPIndex
 from starrynight.modules.cp_illum_apply.constants import (
     CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
 )
@@ -179,6 +179,8 @@ from starrynight.utils.dfutils import (
     get_cycles_by_batch_plate,
     get_cycles_from_df,
     get_default_path_prefix,
+    get_filenames_by_channel_id,
+    get_filenames_by_channel_id_cycle_id,
 )
 from starrynight.utils.globbing import flatten_all, flatten_dict, get_files_by
 from starrynight.utils.misc import resolve_path_loaddata
@@ -186,6 +188,22 @@ from starrynight.utils.misc import resolve_path_loaddata
 ###############################
 ## Load data generation
 ###############################
+
+
+def handle_sbs_index_query(
+    sbs_comp_index_df: pl.LazyFrame,
+    legacy_channel_map: dict,
+    cycle: str,
+    ch: str,
+):
+    out = get_filenames_by_channel_id_cycle_id(
+        sbs_comp_index_df, legacy_channel_map[ch], cycle
+    )
+    if len(out) == 0:
+        out = get_filenames_by_channel_id_cycle_id(
+            sbs_comp_index_df, legacy_channel_map[ch], "1"
+        )
+    return out
 
 
 def get_header(
@@ -249,10 +267,22 @@ def write_loaddata(
     f: TextIOWrapper,
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
+    cp_corr_index_path: Path | CloudPath | None = None,
+    sbs_comp_index_path: Path | CloudPath | None = None,
 ) -> None:
     # setup csv headers and write the header first
     loaddata_writer = csv.writer(f, delimiter=",", quoting=csv.QUOTE_MINIMAL)
     legacy_channel_map = {}
+
+    # setup index dfs if avalilale
+    if cp_corr_index_path is not None:
+        cp_corr_index_df = pl.scan_parquet(
+            cp_corr_index_path.resolve().__str__()
+        )
+    if sbs_comp_index_path is not None:
+        sbs_comp_index_df = pl.scan_parquet(
+            sbs_comp_index_path.resolve().__str__()
+        )
 
     if use_legacy:
         # Load experiment config
@@ -294,8 +324,13 @@ def write_loaddata(
             *sbs_pathname_heads,
         ]
     )
-    index = cp_images_df.first().collect().to_dicts()[0]
-    index = PCPIndex(**index)
+
+    if cp_corr_index_path is not None:
+        index = cp_corr_index_df.first().collect().to_dicts()[0]
+    else:
+        index = cp_images_df.first().collect().to_dicts()[0]
+
+    index = OutputIndex(**index)
     wells_sites = (
         cp_images_df.collect()
         .group_by("well_id")
@@ -306,26 +341,53 @@ def write_loaddata(
         index.well_id = well_sites["well_id"]
         for site_id in well_sites["site_id"]:
             index.site_id = site_id
-            cp_filenames = [
-                get_cp_filename_value(index, ch, use_legacy, legacy_channel_map)
-                for ch in cp_plate_channel_list
-            ]
+            if cp_corr_index_path is None:
+                cp_filenames = [
+                    get_cp_filename_value(
+                        index, ch, use_legacy, legacy_channel_map
+                    )
+                    for ch in cp_plate_channel_list
+                ]
+                cp_pathnames = [
+                    resolve_path_loaddata(
+                        AnyPath(path_mask), cp_corr_images_path
+                    )
+                    for _ in range(len(cp_pathname_heads))
+                ]
+            else:
+                cp_ch = [
+                    get_filenames_by_channel_id(
+                        cp_corr_index_df, legacy_channel_map[ch]
+                    )[0]
+                    for ch in cp_plate_channel_list
+                ]
+                cp_filenames = [elem["filename"] for elem in cp_ch]
+                cp_pathnames = [str(elem["pathname"]) for elem in cp_ch]
             # Match the order of iteration in sbs_filename_heads to ensure correct alignment
-            sbs_filenames = [
-                get_sbs_filename_value(
-                    index, cycle, ch, use_legacy, legacy_channel_map
-                )
-                for cycle in plate_cycles_list
-                for ch in sbs_plate_channel_list
-            ]
-            cp_pathnames = [
-                resolve_path_loaddata(AnyPath(path_mask), cp_corr_images_path)
-                for _ in range(len(cp_pathname_heads))
-            ]
-            sbs_pathnames = [
-                resolve_path_loaddata(AnyPath(path_mask), sbs_comp_images_path)
-                for _ in range(len(sbs_pathname_heads))
-            ]
+            if sbs_comp_index_path is None:
+                sbs_filenames = [
+                    get_sbs_filename_value(
+                        index, cycle, ch, use_legacy, legacy_channel_map
+                    )
+                    for cycle in plate_cycles_list
+                    for ch in sbs_plate_channel_list
+                ]
+                sbs_pathnames = [
+                    resolve_path_loaddata(
+                        AnyPath(path_mask), sbs_comp_images_path
+                    )
+                    for _ in range(len(sbs_pathname_heads))
+                ]
+            else:
+                sbs_ch_cycle = [
+                    handle_sbs_index_query(
+                        sbs_comp_index_df, legacy_channel_map, cycle, ch
+                    )[0]
+                    for cycle in plate_cycles_list
+                    for ch in sbs_plate_channel_list
+                ]
+                sbs_filenames = [elem["filename"] for elem in sbs_ch_cycle]
+                sbs_pathnames = [str(elem["pathname"]) for elem in sbs_ch_cycle]
 
             well_value = (
                 index.well_id[4:]
@@ -358,7 +420,9 @@ def gen_analysis_load_data(
     out_path: Path | CloudPath,
     path_mask: str | None,
     cp_corr_images_path: Path | CloudPath | None = None,
+    cp_corr_index_dir: Path | CloudPath | None = None,
     sbs_comp_images_path: Path | CloudPath | None = None,
+    sbs_comp_index_dir: Path | CloudPath | None = None,
     use_legacy: bool = False,
     exp_config_path: Path | CloudPath | None = None,
     uow_hierarchy: list[str] = None,
@@ -375,8 +439,12 @@ def gen_analysis_load_data(
         Path prefix mask to use.
     cp_corr_images_path : Path | CloudPath
         Path | CloudPath to cp corr images directory.
+    cp_corr_index_dir : Path | CloudPath
+        Path | CloudPath to cp corr index directory.
     sbs_comp_images_path : Path | CloudPath
         Path | CloudPath to sbs compensated images directory.
+    sbs_comp_index_dir : Path | CloudPath
+        Path | CloudPath to sbs compensated index directory.
     use_legacy : bool
         Use legacy cppipe and loaddata.
     exp_config_path : Path | CloudPath
@@ -444,6 +512,21 @@ def gen_analysis_load_data(
 
         # Construct filename for the loaddata csv
         level_out_path = out_path.joinpath(f"{'^'.join(level)}#analysis.csv")
+
+        # Construct index paths
+        if cp_corr_index_dir is not None:
+            cp_corr_index_path = next(
+                cp_corr_index_dir.glob(f"{'^'.join(level)}#*.parquet")
+            )
+        else:
+            cp_corr_index_path = None
+
+        if sbs_comp_index_dir is not None:
+            sbs_comp_index_path = next(
+                sbs_comp_index_dir.glob(f"{'^'.join(level)}#*.parquet")
+            )
+        else:
+            sbs_comp_index_path = None
         with level_out_path.open("w") as f:
             write_loaddata(
                 cp_level_df,
@@ -456,6 +539,8 @@ def gen_analysis_load_data(
                 f,
                 use_legacy,
                 exp_config_path,
+                cp_corr_index_path,
+                sbs_comp_index_path,
             )
 
 
