@@ -160,7 +160,7 @@ from cloudpathlib import AnyPath, CloudPath
 from mako.template import Template
 
 from starrynight.algorithms.cp_plugin_callbarcodes import CallBarcodes
-from starrynight.algorithms.index import OutputIndex, PCPIndex
+from starrynight.algorithms.index import PCPIndex
 from starrynight.modules.cp_illum_apply.constants import (
     CP_ILLUM_APPLY_OUT_PATH_SUFFIX,
 )
@@ -330,7 +330,7 @@ def write_loaddata(
     else:
         index = cp_images_df.first().collect().to_dicts()[0]
 
-    index = OutputIndex(**index)
+    index = PCPIndex(**index)
     wells_sites = (
         cp_images_df.collect()
         .group_by("well_id")
