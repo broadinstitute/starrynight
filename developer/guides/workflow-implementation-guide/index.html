@@ -1,0 +1,2727 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="StarryNight - toolkit for optical pooled screening">
+      
+      
+      
+      
+        <link rel="prev" href="../system-maintenance-guide/">
+      
+      
+        <link rel="next" href="../../../architecture/00_architecture_overview/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Workflow Implementation - StarryNight</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workflow-implementation-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="StarryNight" class="md-header__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StarryNight
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Workflow Implementation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../user/getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../system-maintenance-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/00_architecture_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecturev2/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../validation/testing-framework/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../roadmap/requirements/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../legacy/pcpip-specs/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="StarryNight" class="md-nav__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    StarryNight
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user/example-pipeline-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user/parser-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user/operational-challenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../system-maintenance-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is a Workflow?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-as-creation-and-modification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation as Creation and Modification
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-workflow-flexibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Workflow Flexibility
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding Workflow Flexibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-changes-no-code-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Changes (No Code Required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moderate-changes-python-workflow-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Moderate Changes (Python Workflow Code)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-changes-code-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Changes (Code Required)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Changes (Code Required)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advanced-level-1-module-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Level 1 (Module Development)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-level-2-core-architecture-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Level 2 (Core Architecture Development)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference Implementations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-workflow-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Workflow Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Workflow Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution Backend
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#experiment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Experiment Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-an-implementation-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing an Implementation Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choosing an Implementation Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-by-step-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step-by-Step Approach
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-implementation-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Implementation Scenarios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Implementation Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-1-simple-changes-cellprofiler-module-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 1: Simple Changes - CellProfiler Module Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-2-moderate-changes-experiment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 2: Moderate Changes - Experiment Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-3-moderate-changes-module-arrangement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 3: Moderate Changes - Module Arrangement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scenario 3: Moderate Changes - Module Arrangement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-by-step-implementation-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step-by-Step Implementation Approach
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-this-translates-to-pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      How This Translates to Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-implementation-creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Implementation: Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-implementation-resource-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Implementation: Resource Configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guiding-structure-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guiding Structure Principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-style-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Content Style Principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminology-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminology Consistency
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/00_architecture_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/01_algorithm_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/02_cli_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/03_module_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/04_pipeline_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/05_execution_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/06_configuration_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/07_architecture_for_biologists/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/08_practical_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/09_architecture_flow_example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../architecturev2/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/00-1-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Principles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/01-algorithm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/02-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/03-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/04-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/05-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/06-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecturev2/99-0-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../validation/testing-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../validation/validation-pipeline-1-illum-calc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/pipeline-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/aws-deployment-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../legacy/pcpip-specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../legacy/pcpip-pipelines/pcpip-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is a Workflow?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-as-creation-and-modification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation as Creation and Modification
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-workflow-flexibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Workflow Flexibility
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding Workflow Flexibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-changes-no-code-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Changes (No Code Required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moderate-changes-python-workflow-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Moderate Changes (Python Workflow Code)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-changes-code-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Changes (Code Required)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Changes (Code Required)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advanced-level-1-module-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Level 1 (Module Development)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-level-2-core-architecture-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Level 2 (Core Architecture Development)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference Implementations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-workflow-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Workflow Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Workflow Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution Backend
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#experiment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Experiment Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-an-implementation-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing an Implementation Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choosing an Implementation Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-by-step-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step-by-Step Approach
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-implementation-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Implementation Scenarios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Implementation Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-1-simple-changes-cellprofiler-module-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 1: Simple Changes - CellProfiler Module Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-2-moderate-changes-experiment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 2: Moderate Changes - Experiment Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-3-moderate-changes-module-arrangement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario 3: Moderate Changes - Module Arrangement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scenario 3: Moderate Changes - Module Arrangement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-by-step-implementation-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step-by-Step Implementation Approach
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-this-translates-to-pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      How This Translates to Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-implementation-creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Implementation: Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-implementation-resource-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Implementation: Resource Configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guiding-structure-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guiding Structure Principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-style-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Content Style Principles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminology-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminology Consistency
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="workflow-implementation-guide">Workflow Implementation Guide</h1>
+<p>This guide provides step-by-step instructions for implementing new workflows in StarryNight.</p>
+<h2 id="what-is-a-workflow">What is a Workflow?</h2>
+<p>In the context of StarryNight, a <strong>workflow</strong> refers to a specific scientific image processing sequence implemented using StarryNight modules. Workflows are flexible and can be implemented in different ways:</p>
+<ol>
+<li>
+<p><strong>Step-by-step implementation</strong>: As seen in <code>exec_pcp_generic_pipe.py</code>, where modules are individually created and executed in sequence, allowing for inspection of intermediate results.</p>
+</li>
+<li>
+<p><strong>Pipeline composition</strong>: As seen in <code>exec_pcp_generic_full.py</code>, where modules are connected into a StarryNight pipeline that can be executed as a single unit, potentially with parallel operations.</p>
+</li>
+</ol>
+<p>Both approaches are valid ways to implement workflows, with the pipeline composition approach being more concise and efficient for production use, while the step-by-step approach provides more visibility and control for development and debugging.</p>
+<h2 id="implementation-as-creation-and-modification">Implementation as Creation and Modification</h2>
+<p>In practice, implementing a workflow in StarryNight rarely means starting from scratch. Most researchers begin with an existing workflow (like those in our reference implementations) and modify it to suit their specific needs. This guide addresses both aspects of implementation:</p>
+<ul>
+<li><strong>Modifying existing workflows</strong>: Making changes to established workflows, from simple parameter adjustments to significant restructuring</li>
+<li><strong>Creating new workflows</strong>: Building workflows by combining existing modules in new ways or developing entirely new modules</li>
+</ul>
+<p>The skills for both overlap significantly, and many researchers progress from making small modifications to creating entirely custom workflows as their expertise grows. Throughout this guide, we'll address both scenarios, recognizing that implementation typically involves elements of both creation and modification.</p>
+<h2 id="understanding-workflow-flexibility">Understanding Workflow Flexibility</h2>
+<p>StarryNight is designed with flexibility in mind, allowing researchers to create and modify workflows at different levels of complexity. Depending on your needs, you can:</p>
+<h3 id="simple-changes-no-code-required">Simple Changes (No Code Required)</h3>
+<p>These changes involve internal modifications to CellProfiler pipelines that are wrapped by StarryNight modules, without requiring any Python code changes:</p>
+<ul>
+<li><strong>Change CellProfiler Modules</strong>: Replace one CellProfiler module with another inside a pipeline file (e.g., switching from <code>IdentifyPrimaryObject</code> to <code>RunCellPose</code> for segmentation)</li>
+<li><strong>Adjust Module Parameters</strong>: Modify thresholds, filters, or measurement settings within the CellProfiler pipeline file</li>
+</ul>
+<h3 id="moderate-changes-python-workflow-code">Moderate Changes (Python Workflow Code)</h3>
+<p>These changes involve modifying the Python workflow code to adjust how modules are configured and connected:</p>
+<ul>
+<li><strong>Experiment Configuration Updates</strong>: Modify channel mappings, experiment parameters, and module inputs in the workflow Python script</li>
+<li><strong>Module Input/Output Connections</strong>: Change how modules' outputs are connected to other modules' inputs in the workflow code</li>
+<li><strong>Pipeline Composition</strong>: Alter the order and arrangement of modules in the pipeline definition</li>
+</ul>
+<h3 id="advanced-changes-code-required">Advanced Changes (Code Required)</h3>
+<p>Advanced changes can be divided into two levels of complexity:</p>
+<h4 id="advanced-level-1-module-development">Advanced Level 1 (Module Development)</h4>
+<p>This guide covers these changes, which involve extending the system while working within the existing architecture:</p>
+<ul>
+<li><strong>Add New Modules</strong>: Create entirely new modules for custom processing steps</li>
+<li><strong>Implement Custom Resource Configurations</strong>: Specify compute resources at the task level for performance optimization</li>
+<li><strong>Integrate External Tools</strong>: Connect new external processing tools while maintaining the module interface pattern</li>
+</ul>
+<h4 id="advanced-level-2-core-architecture-development">Advanced Level 2 (Core Architecture Development)</h4>
+<p>These changes are beyond the scope of this workflow implementation guide, as they involve modifying the core architecture itself:</p>
+<ul>
+<li><strong>Modify Execution Engine</strong>: Change how StarryNight executes workflows</li>
+<li><strong>Implement New Backends</strong>: Add support for new execution environments</li>
+<li><strong>Create New Pipeline Patterns</strong>: Develop new ways to compose and orchestrate pipelines</li>
+<li><strong>Develop Algorithm Libraries</strong>: Build new algorithm foundations that integrate with the core system</li>
+</ul>
+<h2 id="reference-implementations">Reference Implementations</h2>
+<p>Throughout this guide, we'll reference two complementary practical implementations that demonstrate different approaches to workflow creation:</p>
+<ol>
+<li>
+<p><strong>Step-by-step approach</strong>: <code>starrynight/notebooks/pypct/exec_pcp_generic_pipe.py</code> - Implements each module individually with explicit execution of each step, providing maximum visibility and control</p>
+</li>
+<li>
+<p><strong>Pipeline composition approach</strong>: <code>starrynight/notebooks/pypct/exec_pcp_generic_full.py</code> - Implements the same workflow using the pipeline composition pattern for a more concise implementation</p>
+</li>
+</ol>
+<p>Both implementations are explained in detail in the <a href="../../../architecture/08_practical_integration/">Practical Integration</a> architecture document.</p>
+<p>The step-by-step implementation demonstrates the complete PCP Generic pipeline workflow with the following steps:</p>
+<ol>
+<li>Generate inventory and index</li>
+<li>Calculate illumination correction (CP)</li>
+<li>Apply illumination and align (CP)</li>
+<li>Segmentation check (CP)</li>
+<li>Calculate illumination correction (SBS)</li>
+<li>Apply illumination and align (SBS)</li>
+<li>Preprocess (SBS)</li>
+<li>Analysis</li>
+</ol>
+<p>Each step follows a consistent three-phase pattern for CellProfiler integration:</p>
+<ul>
+<li>Generate load data (configuration data for CellProfiler)</li>
+<li>Generate pipeline file (CellProfiler pipeline definition)</li>
+<li>Execute the pipeline (running CellProfiler)</li>
+</ul>
+<p>Rather than duplicating all the code examples here, we'll focus on explaining the key concepts and scenarios for implementing and modifying workflows, with references to the existing examples where appropriate.</p>
+<h2 id="key-workflow-components">Key Workflow Components</h2>
+<p>Workflows in StarryNight are built from several key components that work together:</p>
+<h3 id="data-configuration">Data Configuration</h3>
+<p>The <code>DataConfig</code> object defines paths for input data, storage, and workspace. It configures where the pipeline will look for input data and where it will store outputs and intermediate files. This configuration is used throughout the pipeline.</p>
+<h3 id="execution-backend">Execution Backend</h3>
+<p>The execution backend (typically <code>SnakeMakeBackend</code>) handles running the pipeline. It translates module definitions into executable operations and manages their execution, including scheduling, parallelization, and resource allocation.</p>
+<h3 id="experiment-configuration">Experiment Configuration</h3>
+<p>The experiment configuration contains metadata about your dataset and processing settings, including:</p>
+<ul>
+<li>Acquisition settings (order, frame type, overlap percentage)</li>
+<li>Channel mappings (which microscope channels correspond to nucleus, cell, and mitochondria)</li>
+<li>Other experiment-specific parameters</li>
+</ul>
+<p>This configuration drives all subsequent module behavior without requiring repetitive parameter specification.</p>
+<h3 id="modules">Modules</h3>
+<p>Modules are the building blocks of workflows. Each module:</p>
+<ul>
+<li>Is configured via its <code>from_config()</code> method</li>
+<li>Produces a "pipe" that's executed by the backend</li>
+<li>Has defined inputs and outputs</li>
+<li>May require outputs from previous modules</li>
+<li>Is executed in a containerized environment</li>
+</ul>
+<h2 id="choosing-an-implementation-approach">Choosing an Implementation Approach</h2>
+<p>Both implementation approaches can create the same workflows, but they have different strengths that make them suitable for different scenarios:</p>
+<h3 id="step-by-step-approach">Step-by-Step Approach</h3>
+<p><strong>Best for development, debugging, and learning:</strong></p>
+<ul>
+<li>Provides maximum visibility into intermediate results</li>
+<li>Allows inspection of outputs between steps</li>
+<li>Simplifies debugging by isolating failures to specific modules</li>
+<li>Makes the data flow more explicit</li>
+</ul>
+<p><strong>Example use case:</strong> When implementing a new workflow for the first time or troubleshooting issues with specific modules</p>
+<h3 id="pipeline-composition-approach">Pipeline Composition Approach</h3>
+<p><strong>Best for production use and complex execution patterns:</strong></p>
+<ul>
+<li>More concise implementation with less boilerplate code</li>
+<li>Enables parallel execution of independent operations</li>
+<li>Provides a clearer view of the entire workflow structure</li>
+<li>Better represents dependencies between modules</li>
+</ul>
+<p><strong>Example use case:</strong> When implementing a proven workflow for production use or when optimizing performance with parallel execution</p>
+<h2 id="common-implementation-scenarios">Common Implementation Scenarios</h2>
+<p>The following scenarios apply to both modifying existing workflows and creating new ones. Whether you're adapting a reference implementation or building something new, these patterns will help you implement workflows effectively:</p>
+<h3 id="scenario-1-simple-changes-cellprofiler-module-settings">Scenario 1: Simple Changes - CellProfiler Module Settings</h3>
+<p>As described in the "Simple Changes" section, you can modify CellProfiler pipelines without changing Python code. When working in this scenario:</p>
+<ol>
+<li>Directly edit the CellProfiler pipeline (.cppipe) files</li>
+<li>No Python workflow code changes are needed</li>
+</ol>
+<p>For example, you can change module parameters or replace modules (such as switching from <code>IdentifyPrimaryObject</code> to <code>RunCellPose</code>) directly in the pipeline file. These changes will automatically be used the next time the workflow executes with no additional code changes required.</p>
+<h3 id="scenario-2-moderate-changes-experiment-configuration">Scenario 2: Moderate Changes - Experiment Configuration</h3>
+<p>As covered in the "Moderate Changes" section, this requires modifying the Python workflow code. For example, configuring different channels requires updating the experiment configuration in the <code>PCPGenericInitConfig</code> object:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Original experiment configuration with default channel mappings</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">pcp_exp_init</span> <span class="o">=</span> <span class="n">PCPGenericInitConfig</span><span class="p">(</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">barcode_csv_path</span><span class="o">=</span><span class="n">barcode_csv_path</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">cp_acquisition_order</span><span class="o">=</span><span class="n">AcquisitionOrderType</span><span class="o">.</span><span class="n">SNAKE</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">cp_img_frame_type</span><span class="o">=</span><span class="n">ImageFrameType</span><span class="o">.</span><span class="n">ROUND</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">cp_img_overlap_pct</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="c1"># Default channel mappings</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">cp_nuclei_channel</span><span class="o">=</span><span class="s2">&quot;DAPI&quot;</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">cp_cell_channel</span><span class="o">=</span><span class="s2">&quot;PhalloAF750&quot;</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">cp_mito_channel</span><span class="o">=</span><span class="s2">&quot;ZO1AF488&quot;</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="c1"># SBS settings omitted for brevity</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># Modified experiment configuration with different channel mappings</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">pcp_exp_init</span> <span class="o">=</span> <span class="n">PCPGenericInitConfig</span><span class="p">(</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">barcode_csv_path</span><span class="o">=</span><span class="n">barcode_csv_path</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">cp_acquisition_order</span><span class="o">=</span><span class="n">AcquisitionOrderType</span><span class="o">.</span><span class="n">SNAKE</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">cp_img_frame_type</span><span class="o">=</span><span class="n">ImageFrameType</span><span class="o">.</span><span class="n">ROUND</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">cp_img_overlap_pct</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="c1"># Updated channel mappings to match your dataset</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">cp_nuclei_channel</span><span class="o">=</span><span class="s2">&quot;Hoechst&quot;</span><span class="p">,</span>    <span class="c1"># Changed from DAPI</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="n">cp_cell_channel</span><span class="o">=</span><span class="s2">&quot;CellMask&quot;</span><span class="p">,</span>     <span class="c1"># Changed from PhalloAF750</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">cp_mito_channel</span><span class="o">=</span><span class="s2">&quot;MitoTracker&quot;</span><span class="p">,</span>  <span class="c1"># Changed from ZO1AF488</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="c1"># SBS settings omitted for brevity</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="p">)</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="c1"># Initialize experiment with updated channel mappings</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="n">pcp_experiment</span> <span class="o">=</span> <span class="n">PCPGeneric</span><span class="o">.</span><span class="n">from_index</span><span class="p">(</span><span class="n">index_path</span><span class="p">,</span> <span class="n">pcp_exp_init</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+</span></code></pre></div>
+<p>After making these changes:</p>
+<ol>
+<li>The LoadData module will automatically handle the new channel mappings when generating the LoadData CSV</li>
+<li>When using automatically generated pipelines, they will adapt to include the channels with the new names</li>
+<li>If using legacy pipelines, ensure they are designed to handle the differently named channels</li>
+</ol>
+<p>The system is designed to flexibly adapt to channel configuration changes, and these modifications are isolated to the experiment configuration while affecting the entire workflow.</p>
+<div class="admonition note">
+<p class="admonition-title">Future Enhancement</p>
+<p>This section will be updated when enhanced channel mapping capabilities are implemented. Currently, only specific channel mappings (nuclei, cell, mito) are configurable, but future versions will support more flexible mapping of any channel type.</p>
+</div>
+<h3 id="scenario-3-moderate-changes-module-arrangement">Scenario 3: Moderate Changes - Module Arrangement</h3>
+<p>Another moderate change involves modifying the arrangement of modules in the Python workflow code. Here we'll focus on the step-by-step implementation approach, while noting how these changes would translate to the pipeline composition approach.</p>
+<h4 id="step-by-step-implementation-approach">Step-by-Step Implementation Approach</h4>
+<ol>
+<li>
+<p><strong>Adding a module</strong>:</p>
+<ul>
+<li>Import the new module class</li>
+<li>Create an instance using its <code>from_config()</code> method, connecting to outputs from preceding modules
+    <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">starrynight.modules.new_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">NewModule</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Connect the new module to outputs from an existing module</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">new_module</span> <span class="o">=</span> <span class="n">NewModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">data_config</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">experiment</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">input_path</span><span class="o">=</span><span class="n">existing_module</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+</span></code></pre></div></li>
+<li>Set up execution with <code>SnakeMakeBackend(module.pipe, backend_config, run_dir, mounts)</code></li>
+<li>Run the module with <code>run = exec_backend.run()</code> and <code>run.wait()</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Removing a module</strong>:</p>
+<ul>
+<li>Remove the module import statement (if no longer needed)</li>
+<li>Remove the module creation code (<code>module = ModuleClass.from_config(...)</code>)</li>
+<li>Remove the execution code (<code>exec_backend = SnakeMakeBackend(...)</code>, <code>run = exec_backend.run()</code>, etc.)</li>
+<li>Update any dependent modules that used this module's outputs:
+    <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Before removal - module_b depends on module_a&#39;s output</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">module_b</span> <span class="o">=</span> <span class="n">ModuleB</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">input_path</span><span class="o">=</span><span class="n">module_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">])</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># After removal - module_b needs an alternative input source</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">module_b</span> <span class="o">=</span> <span class="n">ModuleB</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">input_path</span><span class="o">=</span><span class="n">alternative_input_path</span><span class="p">)</span>
+</span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Reordering modules</strong>:</p>
+<ul>
+<li>Move the entire module creation and execution block to the desired position in your code</li>
+<li>Ensure data dependencies are respected (modules must be executed after any modules they depend on)</li>
+<li>Update input/output connections if necessary:
+    <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Original order: A → B → C</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">module_a</span> <span class="o">=</span> <span class="n">ModuleA</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Execute module_a...</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">module_b</span> <span class="o">=</span> <span class="n">ModuleB</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">module_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># Execute module_b...</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">module_c</span> <span class="o">=</span> <span class="n">ModuleC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">module_b</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Execute module_c...</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Reordered to: A → C → B (assuming C doesn&#39;t depend on B)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">module_a</span> <span class="o">=</span> <span class="n">ModuleA</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">)</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># Execute module_a...</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">module_c</span> <span class="o">=</span> <span class="n">ModuleC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">module_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># Execute module_c...</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">module_b</span> <span class="o">=</span> <span class="n">ModuleB</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">module_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="c1"># Execute module_b...</span>
+</span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+<h4 id="how-this-translates-to-pipeline-composition">How This Translates to Pipeline Composition</h4>
+<p>In the pipeline composition approach, these same changes would be implemented differently. Here's a simplified example based on the pipeline composition approach used in <code>exec_pcp_generic_full.py</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Pipeline composition showing module arrangement</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_custom_pipeline</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">):</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="c1"># Define all modules in one place</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">module_list</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="c1"># Create modules with connections between them</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">module_a</span> <span class="o">:=</span> <span class="n">ModuleA</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">),</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">module_b</span> <span class="o">:=</span> <span class="n">ModuleB</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">),</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">module_c</span> <span class="o">:=</span> <span class="n">ModuleC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>                                       <span class="n">input_path</span><span class="o">=</span><span class="n">module_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]),</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="c1"># Add a new module connected to existing ones</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>        <span class="n">module_d</span> <span class="o">:=</span> <span class="n">NewModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>                                         <span class="n">input_path</span><span class="o">=</span><span class="n">module_b</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">])</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="p">]</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    <span class="c1"># Define execution pattern (sequential and parallel components)</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="k">return</span> <span class="n">module_list</span><span class="p">,</span> <span class="n">Seq</span><span class="p">([</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>        <span class="c1"># Sequential execution of A and B</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>        <span class="n">Seq</span><span class="p">([</span><span class="n">module_a</span><span class="o">.</span><span class="n">pipe</span><span class="p">,</span> <span class="n">module_b</span><span class="o">.</span><span class="n">pipe</span><span class="p">]),</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="c1"># Then parallel execution of C and D (both depend on previous modules)</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="n">Parallel</span><span class="p">([</span><span class="n">module_c</span><span class="o">.</span><span class="n">pipe</span><span class="p">,</span> <span class="n">module_d</span><span class="o">.</span><span class="n">pipe</span><span class="p">])</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    <span class="p">])</span>
+</span></code></pre></div>
+<p>Changes in the pipeline composition approach involve:</p>
+<ul>
+<li><strong>Adding or removing modules</strong>: Update both the module list and the pipeline structure that defines execution flow</li>
+<li><strong>Reordering modules</strong>: Change the arrangement in the <code>Seq</code> or <code>Parallel</code> composition structures</li>
+<li><strong>Module connections</strong>: Still configured through the <code>from_config()</code> method parameters, but execution order is defined by the pipeline structure</li>
+</ul>
+<p>The step-by-step reference implementation demonstrates these patterns throughout, with each module being configured based on the outputs of previous modules, creating a connected workflow.</p>
+<h2 id="advanced-implementation-creating-new-modules">Advanced Implementation: Creating New Modules</h2>
+<div class="admonition note">
+<p class="admonition-title">Work in Progress</p>
+<p>The detailed documentation for creating new modules is under development and will be added in a future update. This section will cover Advanced Level 1 changes including:</p>
+<ul>
+<li>Creating module classes that follow the StarryNight patterns</li>
+<li>Defining module specifications with proper inputs and outputs</li>
+<li>Implementing the required methods like <code>uid()</code> and <code>from_config()</code></li>
+<li>Registering modules in the module registry</li>
+<li>Best practices for module development and testing</li>
+</ul>
+<p>In the meantime, refer to the <a href="../../../architecture/08_practical_integration/">Practical Integration</a> document for some guidance on module structure, and examine existing modules in the codebase as reference implementations.</p>
+</div>
+<h2 id="advanced-implementation-resource-configuration">Advanced Implementation: Resource Configuration</h2>
+<div class="admonition note">
+<p class="admonition-title">Work in Progress</p>
+<p>The detailed documentation for resource configuration is under development and will be added in a future update. This feature provides ways to specify compute resources (CPU cores, memory, GPU) at the module level, allowing for more efficient execution of resource-intensive tasks.</p>
+<p>This section will be expanded when the resource configuration API is finalized.</p>
+</div>
+<h2 id="references">References</h2>
+<ul>
+<li><strong>StarryNight Architecture</strong>: For more detailed information on the layers and their interactions, see the <a href="../../../architecture/00_architecture_overview/">Architecture Overview</a></li>
+<li><strong>Practical Integration</strong>: The <a href="../../../architecture/08_practical_integration/">Practical Integration</a> document explains the <code>exec_pcp_generic_pipe.py</code> implementation in detail</li>
+<li><strong>Architecture Flow</strong>: The <a href="../../../architecture/09_architecture_flow_example/">Architecture Flow in Action</a> document shows how data flows through all architectural layers</li>
+<li><strong>Reference Implementations</strong>: Two complementary implementations:<ul>
+<li><code>starrynight/notebooks/pypct/exec_pcp_generic_pipe.py</code>: Step-by-step approach with individual module execution</li>
+<li><code>starrynight/notebooks/pypct/exec_pcp_generic_full.py</code>: Pipeline composition approach for concise implementation</li>
+</ul>
+</li>
+<li><strong>Module Registry</strong>: Central registry for modules in <code>starrynight/modules/registry.py</code></li>
+<li><strong>Pipeline Composition</strong>: Functions for creating complete pipelines in <code>starrynight/pipelines/</code></li>
+</ul>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">For Document Contributors</p>
+<p>This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.</p>
+<h3 id="guiding-structure-principles">Guiding Structure Principles</h3>
+<ol>
+<li><strong>Define the concept first</strong> - Begin each section by clearly defining what the concept means in the StarryNight context, as done with "What is a Workflow?"</li>
+<li><strong>Dual perspective approach</strong> - Present both "creating new workflows" and "modifying existing workflows" perspectives, recognizing most users start by modifying existing workflows</li>
+<li><strong>Progressive complexity levels</strong> - Organize content in increasing complexity levels:<ul>
+<li>Simple changes (no code required)</li>
+<li>Moderate changes (Python workflow code)</li>
+<li>Advanced changes (code required)</li>
+</ul>
+</li>
+<li><strong>Explicit reference implementations</strong> - Consistently reference the two implementation patterns:<ul>
+<li>Step-by-step approach (<code>exec_pcp_generic_pipe.py</code>)</li>
+<li>Pipeline composition approach (<code>exec_pcp_generic_full.py</code>)</li>
+</ul>
+</li>
+<li><strong>Scenario-based examples</strong> - Structure examples as concrete scenarios that users will encounter</li>
+</ol>
+<h3 id="content-style-principles">Content Style Principles</h3>
+<ol>
+<li><strong>Code example patterns</strong> - Include both original and modified code with explanatory comments (see channel mapping example)</li>
+<li><strong>Contrast implementation approaches</strong> - When showing how to accomplish a task, explain both approaches:<ul>
+<li>Step-by-step implementation first (more explicit)</li>
+<li>Pipeline composition second (more concise)</li>
+</ul>
+</li>
+<li><strong>Context before code</strong> - Provide contextual explanation before code examples</li>
+<li><strong>Mark future work consistently</strong> - Use <code>!!! note "Work in Progress"</code> or <code>!!! note "Future Enhancement"</code> admonitions</li>
+<li><strong>Show non-obvious consequences</strong> - Explain the downstream effects of changes (e.g., how channel mapping affects LoadData generation)</li>
+</ol>
+<h3 id="terminology-consistency">Terminology Consistency</h3>
+<ul>
+<li>"Workflow" - A specific scientific image processing sequence implemented using StarryNight modules</li>
+<li>"Module" - Building blocks with defined inputs/outputs that are executed in a containerized environment</li>
+<li>"Pipeline" - Connected arrangement of modules that can be executed as a unit</li>
+<li>"Step-by-step implementation" - Creating and executing modules individually</li>
+<li>"Pipeline composition" - Defining the entire pipeline structure with sequential and parallel components</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

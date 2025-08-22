@@ -1,0 +1,212 @@
+3c3
+< DateRevision:426
+---
+> DateRevision:413
+5c5
+< ModuleCount:17
+---
+> ModuleCount:13
+8,10c8,10
+< LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Input data file location:Default Input Folder sub-folder|Downloads
+<     Name of the file:load_data_pipeline3.csv
+---
+> LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Input data file location:Default Input Folder|
+>     Name of the file:load_data_pipeline3_local.csv
+19c19
+< IdentifyPrimaryObjects:[module_num:2|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:2|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+34a35,36
+>     Display accepted local maxima?:No
+>     Select maxima color:Blue
+65c67
+<     Name the output image:MaskedPhalloidin
+---
+>     Name the output image:MaskedAGP
+71,79c73
+< MaskImage:[module_num:5|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:ZO1
+<     Name the output image:MaskedZO1
+<     Use objects or an image as a mask?:Objects
+<     Select object for mask:ConfluentRegions
+<     Select image for mask:None
+<     Invert the mask?:Yes
+<
+< RunCellpose:[module_num:6|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> IdentifyPrimaryObjects:[module_num:5|svn_version:'Unknown'|variable_revision_number:14|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+81,116c75,91
+<     Rescale images before running Cellpose:Yes
+<     Run CellPose in docker or local python environment:Python
+<     Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:2.3.2
+<     Expected object diameter:30
+<     Detection mode:nuclei
+<     Name the output object:Nuclei
+<     Use GPU:No
+<     Use averaging:No
+<     Supply nuclei image as well?:No
+<     Select the nuclei image:None
+<     Save probability image?:No
+<     Name the probability image:Probabilities
+<     Location of the pre-trained model file:Elsewhere...|
+<     Pre-trained model file name:cyto_0
+<     Flow threshold:0.4
+<     Cell probability threshold:0.0
+<     GPU memory share for each worker:0.1
+<     Stitch Threshold:0.0
+<     Use 3D:No
+<     Minimum size:15
+<     Use Omnipose for mask reconstruction:No
+<     Invert images:No
+<     Remove objects that are touching the edge?:Yes
+<     Rescale probability map?:Yes
+<
+< IdentifySecondaryObjects:[module_num:7|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input objects:Nuclei
+<     Name the objects to be identified:PreCells
+<     Select the method to identify the secondary objects:Propagation
+<     Select the input image:MaskedZO1
+<     Number of pixels by which to expand the primary objects:10
+<     Regularization factor:0
+<     Discard secondary objects touching the border of the image?:No
+<     Discard the associated primary objects?:No
+<     Name the new primary objects:FilteredNuclei
+<     Fill holes in identified objects?:Yes
+---
+>     Name the primary objects to be identified:Nuclei
+>     Typical diameter of objects, in pixel units (Min,Max):10,80
+>     Discard objects outside the diameter range?:Yes
+>     Discard objects touching the border of the image?:Yes
+>     Method to distinguish clumped objects:Shape
+>     Method to draw dividing lines between clumped objects:Shape
+>     Size of smoothing filter:8
+>     Suppress local maxima that are closer than this minimum allowed distance:8
+>     Speed up by using lower-resolution image to find local maxima?:Yes
+>     Fill holes in identified objects?:After declumping only
+>     Automatically calculate size of smoothing filter for declumping?:No
+>     Automatically calculate minimum allowed distance between local maxima?:No
+>     Handling of objects if excessive number of objects identified:Continue
+>     Maximum number of objects:500
+>     Display accepted local maxima?:No
+>     Select maxima color:Blue
+>     Use advanced settings?:Yes
+121,122c96,97
+<     Threshold correction factor:0.7
+<     Lower and upper bounds on threshold:.000001,1
+---
+>     Threshold correction factor:1.4
+>     Lower and upper bounds on threshold:0.0,1.0
+125,127c100,102
+<     Two-class or three-class thresholding?:Three classes
+<     Log transform before thresholding?:Yes
+<     Assign pixels in the middle intensity class to the foreground or the background?:Background
+---
+>     Two-class or three-class thresholding?:Two classes
+>     Log transform before thresholding?:No
+>     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+136,137c111,112
+< IdentifySecondaryObjects:[module_num:8|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input objects:PreCells
+---
+> IdentifySecondaryObjects:[module_num:6|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input objects:Nuclei
+139,140c114,115
+<     Select the method to identify the secondary objects:Propagation
+<     Select the input image:MaskedZO1
+---
+>     Select the method to identify the secondary objects:Watershed - Image
+>     Select the input image:MaskedAGP
+142c117
+<     Regularization factor:0
+---
+>     Regularization factor:0.0001
+146c121
+<     Fill holes in identified objects?:Yes
+---
+>     Fill holes in identified objects?:No
+149,152c124,127
+<     Thresholding method:Otsu
+<     Threshold smoothing scale:5
+<     Threshold correction factor:.5
+<     Lower and upper bounds on threshold:0.0,1.0
+---
+>     Thresholding method:Minimum Cross-Entropy
+>     Threshold smoothing scale:2
+>     Threshold correction factor:0.7
+>     Lower and upper bounds on threshold:.000001,1
+157c132
+<     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+---
+>     Assign pixels in the middle intensity class to the foreground or the background?:Background
+164c139
+<     Thresholding method:Minimum Cross-Entropy
+---
+>     Thresholding method:Otsu
+166c141
+< RescaleIntensity:[module_num:9|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> RescaleIntensity:[module_num:7|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+180c155
+< RescaleIntensity:[module_num:10|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> RescaleIntensity:[module_num:8|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+194,208c169
+< RescaleIntensity:[module_num:11|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:ZO1
+<     Name the output image:RescaleZO1forvis
+<     Rescaling method:Stretch each image to use the full intensity range
+<     Method to calculate the minimum intensity:Custom
+<     Method to calculate the maximum intensity:Custom
+<     Lower intensity limit for the input image:0.0
+<     Upper intensity limit for the input image:1.0
+<     Intensity range for the input image:0.0,1.0
+<     Intensity range for the output image:0.0,1.0
+<     Select image to match in maximum intensity:None
+<     Divisor value:1.0
+<     Divisor measurement:None
+<
+< GrayToColor:[module_num:12|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> GrayToColor:[module_num:9|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+211c172
+<     Select the image to be colored red:RescaleZO1forvis
+---
+>     Select the image to be colored red:RescaleDAPIPaintingForVis
+231,245c192
+< RescaleIntensity:[module_num:13|svn_version:'Unknown'|variable_revision_number:3|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:ColorImage
+<     Name the output image:RescaleIntensity
+<     Rescaling method:Choose specific values to be reset to the full intensity range
+<     Method to calculate the minimum intensity:Custom
+<     Method to calculate the maximum intensity:Custom
+<     Lower intensity limit for the input image:0.0
+<     Upper intensity limit for the input image:1.0
+<     Intensity range for the input image:0.0,.25
+<     Intensity range for the output image:0.0,1.0
+<     Select image to match in maximum intensity:None
+<     Divisor value:1.0
+<     Divisor measurement:None
+<
+< OverlayOutlines:[module_num:14|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> OverlayOutlines:[module_num:10|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+247c194
+<     Select image on which to display outlines:RescaleIntensity
+---
+>     Select image on which to display outlines:ColorImage
+259c206
+< SaveImages:[module_num:15|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:11|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+277d223
+<     Save with lossless compression?:No
+279c225
+< ExportToSpreadsheet:[module_num:16|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> ExportToSpreadsheet:[module_num:12|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+319c265
+< CreateBatchFiles:[module_num:17|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> CreateBatchFiles:[module_num:13|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]

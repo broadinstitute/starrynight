@@ -1,0 +1,1237 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="StarryNight - toolkit for optical pooled screening" name="description"/>
+<link href="../pipeline-automation/" rel="prev"/>
+<link href="../../legacy/pcpip-specs/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.18" name="generator"/>
+<title>AWS Deployment Strategy - StarryNight</title>
+<link href="../../../assets/stylesheets/main.7e37652d.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#aws-deployment-roadmap">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="StarryNight" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="StarryNight">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            StarryNight
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              AWS Deployment Strategy
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/broadinstitute/starrynight" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4" fill="currentColor"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../user/getting-started/">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../guides/system-maintenance-guide/">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../architecture/00_architecture_overview/">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../architecturev2/">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../validation/testing-framework/">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../requirements/">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../legacy/pcpip-specs/">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="StarryNight" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="StarryNight">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    StarryNight
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/broadinstitute/starrynight" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4" fill="currentColor"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    Home
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    User Guide
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../user/getting-started/">
+<span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../user/example-pipeline-cli/">
+<span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../user/parser-configuration/">
+<span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../user/operational-challenges/">
+<span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/system-maintenance-guide/">
+<span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../guides/workflow-implementation-guide/">
+<span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/00_architecture_overview/">
+<span class="md-ellipsis">
+    Overview
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/01_algorithm_layer/">
+<span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/02_cli_layer/">
+<span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/03_module_layer/">
+<span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/04_pipeline_layer/">
+<span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/05_execution_layer/">
+<span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/06_configuration_layer/">
+<span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/07_architecture_for_biologists/">
+<span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/08_practical_integration/">
+<span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecture/09_architecture_flow_example/">
+<span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../../architecturev2/">
+<span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/00-1-principles/">
+<span class="md-ellipsis">
+    Principles
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/01-algorithm/">
+<span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/02-cli/">
+<span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/03-module/">
+<span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/04-pipeline/">
+<span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/05-execution/">
+<span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/06-configuration/">
+<span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../architecturev2/99-0-examples/">
+<span class="md-ellipsis">
+    Examples
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../validation/testing-framework/">
+<span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../validation/validation-pipeline-1-illum-calc/">
+<span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+<span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../requirements/">
+<span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../pipeline-automation/">
+<span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-deployment-architecture">
+<span class="md-ellipsis">
+      AWS Deployment Architecture
+    </span>
+</a>
+<nav aria-label="AWS Deployment Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#core-services">
+<span class="md-ellipsis">
+      Core Services
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#system-topology">
+<span class="md-ellipsis">
+      System Topology
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monthly-costs-excluding-computestorage">
+<span class="md-ellipsis">
+      Monthly Costs (excluding compute/storage)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#8-week-deployment-plan">
+<span class="md-ellipsis">
+      8-Week Deployment Plan
+    </span>
+</a>
+<nav aria-label="8-Week Deployment Plan" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-1-infrastructure-foundation-weeks-1-2">
+<span class="md-ellipsis">
+      Phase 1: Infrastructure Foundation (Weeks 1-2)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-2-container-pipeline-weeks-3-4">
+<span class="md-ellipsis">
+      Phase 2: Container Pipeline (Weeks 3-4)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-3-integration-testing-weeks-5-6">
+<span class="md-ellipsis">
+      Phase 3: Integration Testing (Weeks 5-6)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-4-production-ready-weeks-7-8">
+<span class="md-ellipsis">
+      Phase 4: Production Ready (Weeks 7-8)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration-requirements">
+<span class="md-ellipsis">
+      Configuration Requirements
+    </span>
+</a>
+<nav aria-label="Configuration Requirements" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#user-infrastructure-configuration">
+<span class="md-ellipsis">
+      User Infrastructure Configuration
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#job-failure-and-restart-procedures">
+<span class="md-ellipsis">
+      Job Failure and Restart Procedures
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#partial-failure-recovery">
+<span class="md-ellipsis">
+      Partial Failure Recovery
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#infrastructure-configuration-notes">
+<span class="md-ellipsis">
+      Infrastructure Configuration Notes
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#failure-handling">
+<span class="md-ellipsis">
+      Failure Handling
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      Validation Checklist
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-risks">
+<span class="md-ellipsis">
+      Key Risks
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stakeholder-approval-process">
+<span class="md-ellipsis">
+      Stakeholder Approval Process
+    </span>
+</a>
+<nav aria-label="Stakeholder Approval Process" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#proposed-review-structure-tbd">
+<span class="md-ellipsis">
+      Proposed Review Structure (TBD)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#open-questions-for-stakeholders">
+<span class="md-ellipsis">
+      Open Questions for Stakeholders
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../legacy/pcpip-specs/">
+<span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../legacy/pcpip-pipelines/pcpip-pipelines/">
+<span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-deployment-architecture">
+<span class="md-ellipsis">
+      AWS Deployment Architecture
+    </span>
+</a>
+<nav aria-label="AWS Deployment Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#core-services">
+<span class="md-ellipsis">
+      Core Services
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#system-topology">
+<span class="md-ellipsis">
+      System Topology
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monthly-costs-excluding-computestorage">
+<span class="md-ellipsis">
+      Monthly Costs (excluding compute/storage)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#8-week-deployment-plan">
+<span class="md-ellipsis">
+      8-Week Deployment Plan
+    </span>
+</a>
+<nav aria-label="8-Week Deployment Plan" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-1-infrastructure-foundation-weeks-1-2">
+<span class="md-ellipsis">
+      Phase 1: Infrastructure Foundation (Weeks 1-2)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-2-container-pipeline-weeks-3-4">
+<span class="md-ellipsis">
+      Phase 2: Container Pipeline (Weeks 3-4)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-3-integration-testing-weeks-5-6">
+<span class="md-ellipsis">
+      Phase 3: Integration Testing (Weeks 5-6)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-4-production-ready-weeks-7-8">
+<span class="md-ellipsis">
+      Phase 4: Production Ready (Weeks 7-8)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration-requirements">
+<span class="md-ellipsis">
+      Configuration Requirements
+    </span>
+</a>
+<nav aria-label="Configuration Requirements" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#user-infrastructure-configuration">
+<span class="md-ellipsis">
+      User Infrastructure Configuration
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#job-failure-and-restart-procedures">
+<span class="md-ellipsis">
+      Job Failure and Restart Procedures
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#partial-failure-recovery">
+<span class="md-ellipsis">
+      Partial Failure Recovery
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#infrastructure-configuration-notes">
+<span class="md-ellipsis">
+      Infrastructure Configuration Notes
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#failure-handling">
+<span class="md-ellipsis">
+      Failure Handling
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      Validation Checklist
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-risks">
+<span class="md-ellipsis">
+      Key Risks
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stakeholder-approval-process">
+<span class="md-ellipsis">
+      Stakeholder Approval Process
+    </span>
+</a>
+<nav aria-label="Stakeholder Approval Process" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#proposed-review-structure-tbd">
+<span class="md-ellipsis">
+      Proposed Review Structure (TBD)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#open-questions-for-stakeholders">
+<span class="md-ellipsis">
+      Open Questions for Stakeholders
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="aws-deployment-roadmap">AWS Deployment Roadmap</h1>
+<p>This roadmap outlines our 8-week plan to deploy StarryNight on AWS, transitioning from local servers to cloud infrastructure.</p>
+<h2 id="aws-deployment-architecture">AWS Deployment Architecture</h2>
+<h3 id="core-services">Core Services</h3>
+<ul>
+<li><strong>AWS Batch</strong>: Orchestrates containerized compute jobs</li>
+<li><strong>EC2</strong>: Hosts login node for job coordination</li>
+<li><strong>S3</strong>: Stores data and results</li>
+<li><strong>Container Registry</strong>: Public registry (GitHub or similar) for images</li>
+<li><strong>Supporting</strong>: CloudWatch (logs), IAM (access), VPC (networking)</li>
+</ul>
+<h3 id="system-topology">System Topology</h3>
+<p>The AWS deployment follows a hub-and-spoke architecture:</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph "Control Plane"
+        EC2[EC2 Login Node&lt;br/&gt;StarryNight Coordinator]
+        GRAFANA[Grafana Stack&lt;br/&gt;OpenTelemetry Collector]
+    end
+
+    subgraph "Compute Plane"
+        BATCH[AWS Batch&lt;br/&gt;Job Queue]
+        COMPUTE[Compute Environment&lt;br/&gt;EC2/Fargate]
+    end
+
+    subgraph "Storage"
+        S3[S3 Buckets&lt;br/&gt;Data Lake]
+        REG[Container Registry&lt;br/&gt;GitHub/Public]
+    end
+
+    subgraph "Infrastructure Management"
+        PULUMI[Pulumi&lt;br/&gt;IaC]
+    end
+
+    EC2 --&gt;|Submit Jobs| BATCH
+    BATCH --&gt;|Schedule| COMPUTE
+    COMPUTE --&gt;|Read/Write| S3
+    COMPUTE --&gt;|Pull Images| REG
+    COMPUTE --&gt;|Send Telemetry| GRAFANA
+    EC2 &lt;--&gt;|Monitor| GRAFANA
+    PULUMI --&gt;|Provision| EC2 &amp; BATCH &amp; S3</code></pre>
+<h3 id="monthly-costs-excluding-computestorage">Monthly Costs (excluding compute/storage)</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Cost</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC2 Login Node</td>
+<td>$30-40</td>
+<td>t3.medium, always-on</td>
+</tr>
+<tr>
+<td>CloudWatch</td>
+<td>$10-50</td>
+<td>Varies with job volume</td>
+</tr>
+<tr>
+<td>Pulumi</td>
+<td>$0-75</td>
+<td>Free tier likely sufficient</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>$40-165</strong></td>
+<td>Plus data transfer costs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-week-deployment-plan">8-Week Deployment Plan</h2>
+<h3 id="phase-1-infrastructure-foundation-weeks-1-2">Phase 1: Infrastructure Foundation (Weeks 1-2)</h3>
+<ol>
+<li>Configure Pulumi project structure (team has experience from CytoSkel)</li>
+<li>Define AWS Batch compute environments</li>
+<li>Create S3 bucket hierarchy</li>
+<li>Deploy EC2 login node (24/7 coordinator)</li>
+</ol>
+<p><strong>Key Unknown</strong>: Team has no AWS Batch experience; configuration requirements unclear</p>
+<h3 id="phase-2-container-pipeline-weeks-3-4">Phase 2: Container Pipeline (Weeks 3-4)</h3>
+<ol>
+<li>Select public container registry</li>
+<li>Set up automated builds triggered by CellProfiler releases</li>
+<li>Implement independent StarryNight versioning</li>
+<li>Test build pipeline</li>
+</ol>
+<p><strong>Note</strong>: Automated builds minimize maintenance burden</p>
+<h3 id="phase-3-integration-testing-weeks-5-6">Phase 3: Integration Testing (Weeks 5-6)</h3>
+<ol>
+<li>Test job submission pipeline</li>
+<li>Validate Snakemake → AWS Batch translation</li>
+<li>Verify telemetry (using StarryNight's built-in system)</li>
+<li>Run end-to-end workflows</li>
+</ol>
+<p><strong>Key Risk</strong>: CellProfiler error handling in containerized environment</p>
+<h3 id="phase-4-production-ready-weeks-7-8">Phase 4: Production Ready (Weeks 7-8)</h3>
+<ol>
+<li>Finalize documentation and runbooks</li>
+<li>Configure monitoring and alerts</li>
+<li>Complete VPC/security setup</li>
+<li>Optimize costs</li>
+</ol>
+<p><strong>Note</strong>: Security hardening deferred (internal users only)</p>
+<h2 id="configuration-requirements">Configuration Requirements</h2>
+<h3 id="user-infrastructure-configuration">User Infrastructure Configuration</h3>
+<p>Based on planning discussions, users configure infrastructure through the UI:</p>
+<ol>
+<li><strong>Module Parameter Exposure</strong><ul>
+<li>Module authors expose parameters like memory and compute requirements</li>
+<li>Example from discussion: inventory module exposes <code>dataset_path</code> parameter</li>
+<li><strong>Proposed</strong>: Modules could expose <code>memory</code> or similar resource parameters</li>
+<li>Backend implementation decides how to handle these parameters</li>
+<li><strong>Note</strong>: Specific parameter names and UI interface details TBD</li>
+</ul>
+</li>
+<li><strong>Configuration Flow</strong><ul>
+<li>UI → Module → Pipeline → AWS Batch job definitions</li>
+<li>Users cannot directly configure AWS Batch settings</li>
+<li>Backend determines infrastructure choices (e.g., AWS Batch vs alternatives)</li>
+</ul>
+</li>
+</ol>
+<h3 id="job-failure-and-restart-procedures">Job Failure and Restart Procedures</h3>
+<p>From the planning discussions:</p>
+<ol>
+<li><strong>Snakemake Intelligence</strong><ul>
+<li>Snakemake automatically tracks successful jobs and won't re-run them</li>
+<li>Only failed or not-yet-run jobs execute on retry</li>
+<li>Target-based execution model checks for output files</li>
+</ul>
+</li>
+<li><strong>QC Review Points</strong><ul>
+<li>QC steps implemented as modules that fail by default</li>
+<li>Human review required before marking as passed</li>
+<li>After review, job can be manually marked to proceed</li>
+<li><strong>Note</strong>: Specific UI for QC approval TBD</li>
+</ul>
+</li>
+<li><strong>Individual Module Re-execution</strong><ul>
+<li>Each module can be run independently with different parameters</li>
+<li>Users can modify parameters and re-run specific modules</li>
+<li>Logs available for each run attempt</li>
+</ul>
+</li>
+</ol>
+<h3 id="partial-failure-recovery">Partial Failure Recovery</h3>
+<p>Based on the discussion about 90% success / 10% failure scenarios:</p>
+<ol>
+<li><strong>Automatic Detection</strong><ul>
+<li>Snakemake identifies which jobs succeeded vs failed</li>
+<li>Re-running a pipeline only executes failed jobs</li>
+<li><strong>Note</strong>: Specific mechanism for failure detection not fully detailed</li>
+</ul>
+</li>
+<li><strong>Telemetry and Monitoring</strong><ul>
+<li>OpenTelemetry integration sends logs to central Grafana stack</li>
+<li>All stdout/stderr piped through telemetry system</li>
+<li><strong>Challenge</strong>: CellProfiler containers need custom wrappers for proper error reporting</li>
+</ul>
+</li>
+<li><strong>Resource Adjustment</strong><ul>
+<li>Failed jobs can be retried with adjusted resources</li>
+<li><strong>Note</strong>: UI mechanism for resource adjustment per retry TBD</li>
+</ul>
+</li>
+</ol>
+<h3 id="infrastructure-configuration-notes">Infrastructure Configuration Notes</h3>
+<p><strong>Note</strong>: Many specifics remain TBD during implementation.</p>
+<p>Potential areas requiring configuration:</p>
+<ul>
+<li>Network setup (VPC, security groups)</li>
+<li>S3 access policies</li>
+<li>IAM permissions</li>
+<li>Compute preferences (spot vs on-demand)</li>
+</ul>
+<p>StarryNight manages job execution; IT retains security/cost control.</p>
+<h3 id="failure-handling">Failure Handling</h3>
+<p>Snakemake provides intelligent recovery:</p>
+<ul>
+<li>Successful jobs are never re-run</li>
+<li>Failed jobs can be retried with adjusted resources</li>
+<li>QC steps pause for manual review via dummy modules</li>
+</ul>
+<h2 id="validation-checklist">Validation Checklist</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> 100-job pipeline test</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Partial failure recovery</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Container version switching</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Telemetry completeness</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Internal user testing</li>
+</ul>
+<h2 id="key-risks">Key Risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS Batch complexity</td>
+<td>Early proof-of-concept</td>
+</tr>
+<tr>
+<td>Container maintenance</td>
+<td>Automated builds</td>
+</tr>
+<tr>
+<td>Cost overruns</td>
+<td>Monitoring and alerts</td>
+</tr>
+<tr>
+<td>CellProfiler integration</td>
+<td>Extensive testing</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stakeholder-approval-process">Stakeholder Approval Process</h2>
+<p><strong>Note</strong>: This section requires stakeholder input to define the approval process.</p>
+<h3 id="proposed-review-structure-tbd">Proposed Review Structure (TBD)</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Technical review by engineering team</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Security review by IT/compliance</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"><span class="task-list-indicator"></span></input></label> Final approval by project sponsors</li>
+</ul>
+<h3 id="open-questions-for-stakeholders">Open Questions for Stakeholders</h3>
+<ol>
+<li>Who are the key stakeholders for approval?</li>
+<li>What are the approval criteria?</li>
+<li>What documentation is required for each review?</li>
+<li>What is the timeline for reviews?</li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">Context from Planning Discussions</p>
+<p><strong>IT Team Constraints</strong>: IT team will likely lack bandwidth to implement custom infrastructure solutions. StarryNight must provide a predefined AWS configuration that IT teams can approve with a simple "yes/no" decision, rather than requiring custom backend development.</p>
+<p><strong>AWS Batch Experience Gap</strong>: The team has no hands-on experience with AWS Batch for scientific workloads. The 8-week timeline is based on theoretical assumptions rather than practical knowledge, creating significant unknown risks.</p>
+<p><strong>Pulumi Cost Scaling Uncertainty</strong>: Unclear how Pulumi pricing scales with infrastructure complexity (10 vs 1000 compute instances). Monthly costs could exceed projections if Pulumi charges per AWS resource rather than per managed service.</p>
+<p><strong>Always-On Coordinator Requirements</strong>: StarryNight needs a persistent coordinator node for job submission and state management. Requires dedicated EC2 instance running 24/7; this may introduce infrastructure complexity.</p>
+<p><strong>Custom Container Maintenance</strong>: Cannot use official CellProfiler containers due to need for custom telemetry and error handling wrappers. StarryNight must maintain its own CellProfiler builds, requiring automated CI/CD pipeline and coordination with CellProfiler releases.</p>
+<p><strong>CellProfiler Integration Complexity</strong>: CellProfiler doesn't behave like standard command-line tools - unreliable exit codes and inconsistent error reporting in containers. Standard containerization approaches may fail; requires custom error detection and handling mechanisms.</p>
+<p><strong>Bottom Line</strong>: While the roadmap provides a structured 8-week plan, several critical unknowns could significantly impact timeline and complexity. Early proof-of-concept testing is essential before committing to full deployment.</p>
+</div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.92b07e13.min.js"></script>
+</body>
+</html>

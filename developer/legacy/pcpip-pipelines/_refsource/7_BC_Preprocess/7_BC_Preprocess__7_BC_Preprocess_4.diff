@@ -1,0 +1,1681 @@
+5c5
+< ModuleCount:86
+---
+> ModuleCount:134
+9c9
+<     Input data file location:Default Output Folder|Desktop/PROJECT/workspace/load_data_csv/BATCH/Plate4
+---
+>     Input data file location:Default Input Folder sub-folder|Desktop/PROJECT/workspace/load_data_csv/BATCH/Plate3
+368,411d367
+<     Select the input image:Cycle01_C
+<     Name the output image:Cycle01_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle02_C
+<     Name the output image:Cycle02_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle03_C
+<     Name the output image:Cycle03_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle04_C
+<     Name the output image:Cycle04_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle05_C
+<     Name the output image:Cycle05_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle06_C
+<     Name the output image:Cycle06_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle07_C
+<     Name the output image:Cycle07_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle08_C
+<     Name the output image:Cycle08_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle09_C
+<     Name the output image:Cycle09_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Select the input image:Cycle10_C
+<     Name the output image:Cycle10_C_BackSub
+<     Select the illumination function:IllumMeanC
+<     Select how the illumination function is applied:Subtract
+<     Set output image values less than 0 equal to 0?:Yes
+<     Set output image values greater than 1 equal to 1?:Yes
+<
+< CorrectIlluminationApply:[module_num:12|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+450a407,450
+>     Select how the illumination function is applied:Subtract
+>     Set output image values less than 0 equal to 0?:Yes
+>     Set output image values greater than 1 equal to 1?:Yes
+>
+> CorrectIlluminationApply:[module_num:12|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle01_C
+>     Name the output image:Cycle01_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle02_C
+>     Name the output image:Cycle02_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle03_C
+>     Name the output image:Cycle03_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle04_C
+>     Name the output image:Cycle04_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle05_C
+>     Name the output image:Cycle05_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle06_C
+>     Name the output image:Cycle06_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle07_C
+>     Name the output image:Cycle07_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle08_C
+>     Name the output image:Cycle08_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle09_C
+>     Name the output image:Cycle09_C_BackSub
+>     Select the illumination function:IllumMeanC
+>     Select how the illumination function is applied:Subtract
+>     Select the input image:Cycle10_C
+>     Name the output image:Cycle10_C_BackSub
+>     Select the illumination function:IllumMeanC
+499c499,1059
+< ImageMath:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> EnhanceOrSuppressFeatures:[module_num:14|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle01_A_BackSub
+>     Name the output image:Cycle01_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:15|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle01_C_BackSub
+>     Name the output image:Cycle01_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:16|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle01_G_BackSub
+>     Name the output image:Cycle01_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:17|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle01_T_BackSub
+>     Name the output image:Cycle01_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:18|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle02_A_BackSub
+>     Name the output image:Cycle02_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:19|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle02_C_BackSub
+>     Name the output image:Cycle02_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:20|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle02_G_BackSub
+>     Name the output image:Cycle02_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:21|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle02_T_BackSub
+>     Name the output image:Cycle02_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:22|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle03_A_BackSub
+>     Name the output image:Cycle03_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:23|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle03_C_BackSub
+>     Name the output image:Cycle03_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:24|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle03_G_BackSub
+>     Name the output image:Cycle03_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:25|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle03_T_BackSub
+>     Name the output image:Cycle03_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:26|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle04_A_BackSub
+>     Name the output image:Cycle04_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:27|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle04_C_BackSub
+>     Name the output image:Cycle04_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:28|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle04_G_BackSub
+>     Name the output image:Cycle04_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:29|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle04_T_BackSub
+>     Name the output image:Cycle04_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:30|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle05_A_BackSub
+>     Name the output image:Cycle05_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:31|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle05_C_BackSub
+>     Name the output image:Cycle05_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:32|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle05_G_BackSub
+>     Name the output image:Cycle05_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:33|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle05_T_BackSub
+>     Name the output image:Cycle05_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:34|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle06_A_BackSub
+>     Name the output image:Cycle06_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:35|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle06_C_BackSub
+>     Name the output image:Cycle06_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:36|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle06_G_BackSub
+>     Name the output image:Cycle06_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:37|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle06_T_BackSub
+>     Name the output image:Cycle06_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:38|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle07_A_BackSub
+>     Name the output image:Cycle07_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:39|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle07_C_BackSub
+>     Name the output image:Cycle07_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:40|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle07_G_BackSub
+>     Name the output image:Cycle07_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:41|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle07_T_BackSub
+>     Name the output image:Cycle07_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:42|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle08_A_BackSub
+>     Name the output image:Cycle08_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:43|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle08_C_BackSub
+>     Name the output image:Cycle08_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:44|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle08_G_BackSub
+>     Name the output image:Cycle08_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:45|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle08_T_BackSub
+>     Name the output image:Cycle08_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:46|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle09_A_BackSub
+>     Name the output image:Cycle09_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:47|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle09_C_BackSub
+>     Name the output image:Cycle09_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:48|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle09_G_BackSub
+>     Name the output image:Cycle09_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:49|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle09_T_BackSub
+>     Name the output image:Cycle09_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:50|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle10_A_BackSub
+>     Name the output image:Cycle10_A_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:51|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle10_C_BackSub
+>     Name the output image:Cycle10_C_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:52|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle10_G_BackSub
+>     Name the output image:Cycle10_G_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> EnhanceOrSuppressFeatures:[module_num:53|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:Cycle10_T_BackSub
+>     Name the output image:Cycle10_T_BackSub_Enhance
+>     Select the operation:Enhance
+>     Feature size:4
+>     Feature type:Speckles
+>     Range of hole sizes:1,10
+>     Smoothing scale:2.0
+>     Shear angle:0.0
+>     Decay:0.95
+>     Enhancement method:Tubeness
+>     Speed and accuracy:Fast
+>     Rescale result image:No
+>
+> ImageMath:[module_num:54|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+510c1070
+<     Select the first image:Cycle01_A
+---
+>     Select the first image:Cycle01_A_BackSub_Enhance
+514c1074
+<     Select the second image:Cycle02_A
+---
+>     Select the second image:Cycle02_A_BackSub_Enhance
+518c1078
+<     Select the third image:Cycle03_A
+---
+>     Select the third image:Cycle03_A_BackSub_Enhance
+522c1082
+<     Select the fourth image:Cycle04_A
+---
+>     Select the fourth image:Cycle04_A_BackSub_Enhance
+526c1086
+<     Select the fifth image:Cycle05_A
+---
+>     Select the fifth image:Cycle05_A_BackSub_Enhance
+530c1090
+<     Select the sixth image:Cycle06_A
+---
+>     Select the sixth image:Cycle06_A_BackSub_Enhance
+534c1094
+<     Select the seventh image:Cycle07_A
+---
+>     Select the seventh image:Cycle07_A_BackSub_Enhance
+538c1098
+<     Select the eighth image:Cycle08_A
+---
+>     Select the eighth image:Cycle08_A_BackSub_Enhance
+542c1102
+<     Select the ninth image:Cycle09_A
+---
+>     Select the ninth image:Cycle09_A_BackSub_Enhance
+546c1106
+<     Select the tenth image:Cycle10_A
+---
+>     Select the tenth image:Cycle10_A_BackSub_Enhance
+550c1110
+< ImageMath:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:55|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+561c1121
+<     Select the first image:Cycle01_C
+---
+>     Select the first image:Cycle01_C_BackSub_Enhance
+565c1125
+<     Select the second image:Cycle02_C
+---
+>     Select the second image:Cycle02_C_BackSub_Enhance
+569c1129
+<     Select the third image:Cycle03_C
+---
+>     Select the third image:Cycle03_C_BackSub_Enhance
+573c1133
+<     Select the fourth image:Cycle04_C
+---
+>     Select the fourth image:Cycle04_C_BackSub_Enhance
+577c1137
+<     Select the fifth image:Cycle05_C
+---
+>     Select the fifth image:Cycle05_C_BackSub_Enhance
+581c1141
+<     Select the sixth image:Cycle06_C
+---
+>     Select the sixth image:Cycle06_C_BackSub_Enhance
+585c1145
+<     Select the seventh image:Cycle07_C
+---
+>     Select the seventh image:Cycle07_C_BackSub_Enhance
+589c1149
+<     Select the eighth image:Cycle08_C
+---
+>     Select the eighth image:Cycle08_C_BackSub_Enhance
+593c1153
+<     Select the ninth image:Cycle09_C
+---
+>     Select the ninth image:Cycle09_C_BackSub_Enhance
+597c1157
+<     Select the tenth image:Cycle10_C
+---
+>     Select the tenth image:Cycle10_C_BackSub_Enhance
+601c1161
+< ImageMath:[module_num:16|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:56|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+612c1172
+<     Select the first image:Cycle01_G
+---
+>     Select the first image:Cycle01_G_BackSub_Enhance
+616c1176
+<     Select the second image:Cycle02_G
+---
+>     Select the second image:Cycle02_G_BackSub_Enhance
+620c1180
+<     Select the third image:Cycle03_G
+---
+>     Select the third image:Cycle03_G_BackSub_Enhance
+624c1184
+<     Select the fourth image:Cycle04_G
+---
+>     Select the fourth image:Cycle04_G_BackSub_Enhance
+628c1188
+<     Select the fifth image:Cycle05_G
+---
+>     Select the fifth image:Cycle05_G_BackSub_Enhance
+632c1192
+<     Select the sixth image:Cycle06_G
+---
+>     Select the sixth image:Cycle06_G_BackSub_Enhance
+636c1196
+<     Select the seventh image:Cycle07_G
+---
+>     Select the seventh image:Cycle07_G_BackSub_Enhance
+640c1200
+<     Select the eighth image:Cycle08_G
+---
+>     Select the eighth image:Cycle08_G_BackSub_Enhance
+644c1204
+<     Select the ninth image:Cycle09_G
+---
+>     Select the ninth image:Cycle09_G_BackSub_Enhance
+648c1208
+<     Select the tenth image:Cycle10_G
+---
+>     Select the tenth image:Cycle10_G_BackSub_Enhance
+652c1212
+< ImageMath:[module_num:17|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:57|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+663c1223
+<     Select the first image:Cycle01_T
+---
+>     Select the first image:Cycle01_T_BackSub_Enhance
+667c1227
+<     Select the second image:Cycle02_T
+---
+>     Select the second image:Cycle02_T_BackSub_Enhance
+671c1231
+<     Select the third image:Cycle03_T
+---
+>     Select the third image:Cycle03_T_BackSub_Enhance
+675c1235
+<     Select the fourth image:Cycle04_T
+---
+>     Select the fourth image:Cycle04_T_BackSub_Enhance
+679c1239
+<     Select the fifth image:Cycle05_T
+---
+>     Select the fifth image:Cycle05_T_BackSub_Enhance
+683c1243
+<     Select the sixth image:Cycle06_T
+---
+>     Select the sixth image:Cycle06_T_BackSub_Enhance
+687c1247
+<     Select the seventh image:Cycle07_T
+---
+>     Select the seventh image:Cycle07_T_BackSub_Enhance
+691c1251
+<     Select the eighth image:Cycle08_T
+---
+>     Select the eighth image:Cycle08_T_BackSub_Enhance
+695c1255
+<     Select the ninth image:Cycle09_T
+---
+>     Select the ninth image:Cycle09_T_BackSub_Enhance
+699c1259
+<     Select the tenth image:Cycle10_T
+---
+>     Select the tenth image:Cycle10_T_BackSub_Enhance
+703c1263
+< ImageMath:[module_num:18|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:58|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+730,732c1290,1292
+< ImageMath:[module_num:19|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+<     Operation:None
+<     Raise the power of the result by:.25
+---
+> ImageMath:[module_num:59|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Operation:Minimum
+>     Raise the power of the result by:1
+739c1299
+<     Name the output image:SqrtDAPI
+---
+>     Name the output image:MinimumAllCycles
+741c1301
+<     Select the first image:Cycle01_DAPI
+---
+>     Select the first image:Cycle01_A
+745c1305
+<     Select the second image:None
+---
+>     Select the second image:Cycle02_A
+747a1308,1339
+>     Image or measurement?:Image
+>     Select the third image:Cycle03_A
+>     Multiply the third image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fourth image:Cycle04_A
+>     Multiply the fourth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the fifth image:Cycle05_A
+>     Multiply the fifth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the sixth image:Cycle06_A
+>     Multiply the sixth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the seventh image:Cycle07_A
+>     Multiply the seventh image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the eighth image:Cycle08_A
+>     Multiply the eighth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the ninth image:Cycle09_A
+>     Multiply the ninth image by:1.0
+>     Measurement:
+>     Image or measurement?:Image
+>     Select the tenth image:Cycle10_A
+>     Multiply the tenth image by:1.0
+>     Measurement:
+749c1341,1362
+< IdentifyPrimaryObjects:[module_num:20|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> Threshold:[module_num:60|svn_version:'Unknown'|variable_revision_number:12|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:MinimumAllCycles
+>     Name the output image:EmptyEdges
+>     Threshold strategy:Global
+>     Thresholding method:Manual
+>     Threshold smoothing scale:0.0
+>     Threshold correction factor:1.0
+>     Lower and upper bounds on threshold:0.00000001,1.0
+>     Manual threshold:0.0000001
+>     Select the measurement to threshold with:None
+>     Two-class or three-class thresholding?:Two classes
+>     Log transform before thresholding?:No
+>     Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+>     Size of adaptive window:50
+>     Lower outlier fraction:0.05
+>     Upper outlier fraction:0.05
+>     Averaging method:Mean
+>     Variance method:Standard deviation
+>     # of deviations:2.0
+>     Thresholding method:Minimum Cross-Entropy
+>
+> IdentifyPrimaryObjects:[module_num:61|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+785c1398
+< RunCellpose:[module_num:21|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> RunCellpose:[module_num:62|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+789c1402
+<     Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:0.1
+---
+>     Select Cellpose docker image:cellprofiler/runcellpose_with_pretrained:2.3.2
+809a1423
+>     Rescale probability map?:No
+811c1425,1441
+< IdentifySecondaryObjects:[module_num:22|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> MaskImage:[module_num:63|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:MeanOfAllStDevs
+>     Name the output image:MaskedMeanStDevs
+>     Use objects or an image as a mask?:Objects
+>     Select object for mask:Nuclei
+>     Select image for mask:None
+>     Invert the mask?:Yes
+>
+> MaskImage:[module_num:64|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:MaskedMeanStDevs
+>     Name the output image:MaskedFoci
+>     Use objects or an image as a mask?:Image
+>     Select object for mask:None
+>     Select image for mask:EmptyEdges
+>     Invert the mask?:No
+>
+> IdentifySecondaryObjects:[module_num:65|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+841c1471
+< EnhanceOrSuppressFeatures:[module_num:23|svn_version:'Unknown'|variable_revision_number:7|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> EnhanceOrSuppressFeatures:[module_num:66|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+855,857c1485,1487
+< IdentifyPrimaryObjects:[module_num:24|svn_version:'Unknown'|variable_revision_number:15|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the input image:EnhanceOrSuppressFeatures
+<     Name the primary objects to be identified:AllFoci
+---
+> IdentifyPrimaryObjects:[module_num:67|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the input image:MaskedFoci
+>     Name the primary objects to be identified:PreFoci
+891,898c1521,1555
+< MeasureObjectOverlap:[module_num:25|svn_version:'Unknown'|variable_revision_number:2|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+<     Select the objects to be used as the ground truth basis for calculating the amount of overlap:Nuclei
+<     Select the objects to be tested for overlap against the ground truth:Foci
+<     Calculate earth mover's distance?:No
+<     Maximum # of points:250
+<     Point selection method:K Means
+<     Maximum distance:250
+<     Penalize missing pixels:No
+---
+> IdentifyPrimaryObjects:[module_num:68|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+>     Select the input image:MaskedFoci
+>     Name the primary objects to be identified:StrictFoci
+>     Typical diameter of objects, in pixel units (Min,Max):2,10
+>     Discard objects outside the diameter range?:Yes
+>     Discard objects touching the border of the image?:Yes
+>     Method to distinguish clumped objects:Intensity
+>     Method to draw dividing lines between clumped objects:Intensity
+>     Size of smoothing filter:10
+>     Suppress local maxima that are closer than this minimum allowed distance:7.0
+>     Speed up by using lower-resolution image to find local maxima?:Yes
+>     Fill holes in identified objects?:After both thresholding and declumping
+>     Automatically calculate size of smoothing filter for declumping?:Yes
+>     Automatically calculate minimum allowed distance between local maxima?:Yes
+>     Handling of objects if excessive number of objects identified:Continue
+>     Maximum number of objects:500
+>     Use advanced settings?:Yes
+>     Threshold setting version:12
+>     Threshold strategy:Global
+>     Thresholding method:Robust Background
+>     Threshold smoothing scale:1.3488
+>     Threshold correction factor:1.0
+>     Lower and upper bounds on threshold:0.0000,1.0
+>     Manual threshold:0.0
+>     Select the measurement to threshold with:None
+>     Two-class or three-class thresholding?:Three classes
+>     Log transform before thresholding?:Yes
+>     Assign pixels in the middle intensity class to the foreground or the background?:Background
+>     Size of adaptive window:50
+>     Lower outlier fraction:0.025
+>     Upper outlier fraction:0.05
+>     Averaging method:Mode
+>     Variance method:Standard deviation
+>     # of deviations:12
+>     Thresholding method:Otsu
+900,908c1557,1695
+< RelateObjects:[module_num:26|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Parent objects:Nuclei
+<     Child objects:AllFoci
+<     Calculate child-parent distances?:None
+<     Calculate per-parent means for all child measurements?:No
+<     Calculate distances to other parents?:No
+<     Do you want to save the children with parents as a new object set?:No
+<     Name the output object:RelateObjects
+<     Parent name:None
+---
+> CompensateColors:[module_num:69|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Hidden:40
+>     Hidden:1
+>     Select an image to measure:Cycle01_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle01_A
+>     Select an image to measure:Cycle02_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle02_A
+>     Select an image to measure:Cycle03_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle03_A
+>     Select an image to measure:Cycle04_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle04_A
+>     Select an image to measure:Cycle05_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle05_A
+>     Select an image to measure:Cycle06_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle06_A
+>     Select an image to measure:Cycle07_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle07_A
+>     Select an image to measure:Cycle08_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle08_A
+>     Select an image to measure:Cycle01_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle01_C
+>     Select an image to measure:Cycle02_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle02_C
+>     Select an image to measure:Cycle03_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle03_C
+>     Select an image to measure:Cycle04_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle04_C
+>     Select an image to measure:Cycle05_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle05_C
+>     Select an image to measure:Cycle06_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle06_C
+>     Select an image to measure:Cycle07_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle07_C
+>     Select an image to measure:Cycle08_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle08_C
+>     Select an image to measure:Cycle01_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle01_G
+>     Select an image to measure:Cycle02_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle02_G
+>     Select an image to measure:Cycle03_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle03_G
+>     Select an image to measure:Cycle04_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle04_G
+>     Select an image to measure:Cycle05_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle05_G
+>     Select an image to measure:Cycle06_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle06_G
+>     Select an image to measure:Cycle07_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle07_G
+>     Select an image to measure:Cycle08_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle08_G
+>     Select an image to measure:Cycle01_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle01_T
+>     Select an image to measure:Cycle02_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle02_T
+>     Select an image to measure:Cycle03_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle03_T
+>     Select an image to measure:Cycle04_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle04_T
+>     Select an image to measure:Cycle05_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle05_T
+>     Select an image to measure:Cycle06_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle06_T
+>     Select an image to measure:Cycle07_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle07_T
+>     Select an image to measure:Cycle08_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle08_T
+>     Select an image to measure:Cycle09_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle09_A
+>     Select an image to measure:Cycle09_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle09_C
+>     Select an image to measure:Cycle09_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle09_G
+>     Select an image to measure:Cycle09_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle09_T
+>     Select an image to measure:Cycle10_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:PreCycle10_A
+>     Select an image to measure:Cycle10_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:PreCycle10_C
+>     Select an image to measure:Cycle10_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:PreCycle10_G
+>     Select an image to measure:Cycle10_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:PreCycle10_T
+>     Select where to perform color compensation:Within objects
+>     Select an object to perform compensation within:PreFoci
+>     Should individual images be rescaled 0-1 before compensating pre-masking or on unmasked images?:No
+>     Should images be rescaled 0-1 before compensating but after masking to objects?:No
+>     Should histogram matching be performed between the image groups?:Yes, post-masking to objects
+>     What compensation class should serve as the template histogram?:1
+>     Should images be rescaled 0-1 after compensating?:No
+>     Should the images be divided by a scalar based on group percentiles:No
+>     What percentile should be used for multiplication:4
+>     Should the images have a tophat filter applied before correction?:No
+>     What size radius should be used for the tophat filter?:No
+>     Should the images have a Laplacian of Gaussian filter applied before correction?:Yes
+>     What size radius should be used for the LoG filter?:1
+>     Should the images have a Difference of Gaussians filter applied before correction?:No
+>     What size sigma should be used for the DoG low sigma?:Yes
+>     What size radius should be used for the DoG low sigma?:1
+910,929c1697,1699
+< FilterObjects:[module_num:27|svn_version:'Unknown'|variable_revision_number:10|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the objects to filter:AllFoci
+<     Name the output objects:Foci
+<     Select the filtering mode:Measurements
+<     Select the filtering method:Limits
+<     Select the objects that contain the filtered objects:None
+<     Select the location of the rules or classifier file:Elsewhere...|
+<     Rules or classifier file name:rules.txt
+<     Class number:1
+<     Measurement count:1
+<     Additional object count:0
+<     Assign overlapping child to:Both parents
+<     Keep removed objects as a separate set?:No
+<     Name the objects removed by the filter:RemovedObjects
+<     Select the measurement to filter by:Parent_Nuclei
+<     Filter using a minimum measurement value?:No
+<     Minimum value:0.0
+<     Filter using a maximum measurement value?:Yes
+<     Maximum value:.5
+<     Allow fuzzy feature matching?:No
+---
+> MeasureObjectIntensity:[module_num:70|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:PreCycle01_A, PreCycle01_C, PreCycle01_G, PreCycle01_T, PreCycle02_A, PreCycle02_C, PreCycle02_G, PreCycle02_T, PreCycle03_A, PreCycle03_C, PreCycle03_G, PreCycle03_T, PreCycle04_A, PreCycle04_C, PreCycle04_G, PreCycle04_T, PreCycle05_A, PreCycle05_C, PreCycle05_G, PreCycle05_T, PreCycle06_A, PreCycle06_C, PreCycle06_G, PreCycle06_T, PreCycle07_A, PreCycle07_C, PreCycle07_G, PreCycle07_T, PreCycle08_A, PreCycle08_C, PreCycle08_G, PreCycle08_T, PreCycle09_A, PreCycle09_C, PreCycle09_G, PreCycle09_T, PreCycle10_A, PreCycle10_C, PreCycle10_G, PreCycle10_T
+>     Select objects to measure:PreFoci
+931,950c1701,1714
+< FilterObjects:[module_num:28|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+<     Select the objects to filter:Foci
+<     Name the output objects:BarcodeFoci
+<     Select the filtering mode:Measurements
+<     Select the filtering method:Limits
+<     Select the objects that contain the filtered objects:None
+<     Select the location of the rules or classifier file:Elsewhere...|
+<     Rules or classifier file name:rules.txt
+<     Class number:1
+<     Measurement count:1
+<     Additional object count:0
+<     Assign overlapping child to:Both parents
+<     Keep removed objects as a separate set?:No
+<     Name the objects removed by the filter:RemovedObjects
+<     Select the measurement to filter by:Number_Object_Number
+<     Filter using a minimum measurement value?:Yes
+<     Minimum value:0.5
+<     Filter using a maximum measurement value?:No
+<     Maximum value:1.0
+<     Allow fuzzy feature matching?:No
+---
+> CallBarcodes:[module_num:71|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Number of cycles:10
+>     Input object name:PreFoci
+>     Select one of the measures from Cycle 1 to use for calling:Intensity_MaxIntensity_PreCycle01_A
+>     Input data file location:Default Input Folder|Documents/projects/PROJECT/Batch2
+>     Name of the file:Barcodes.csv
+>     Select the column containing barcodes to match against:sgRNA
+>     Select the column containing gene/transcript barcode names:gene_symbol
+>     Retain an image of the barcodes color coded by call?:No
+>     Enter the called barcode image name:Barcodes_IntValues
+>     Retain an image of the barcodes color coded by score match?:No
+>     Enter the barcode score image name:BarcodeScores_IntValues
+>     Do you have an empty vector barcode you would like to add to the barcode list?:No
+>     What is the empty vector sequence?:AAAAAAAAAAAAAAA
+952c1716,1886
+< CompensateColors:[module_num:29|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+---
+> FilterObjects_StringMatch:[module_num:72|svn_version:'Unknown'|variable_revision_number:2|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the objects to filter:PreFoci
+>     Name the output objects:Foci
+>     String to use for filter:AAAAAA
+>     Filter method:Filter out strings containing
+>     Measurement:Barcode_BarcodeCalled
+>     Additional string count:3
+>     String to use for additional filter:CCCCCC
+>     String to use for additional filter:GGGGGG
+>     String to use for additional filter:TTTTTT
+>
+> CompensateColors:[module_num:73|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+>     Hidden:40
+>     Hidden:1
+>     Select an image to measure:Cycle01_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle01_A
+>     Select an image to measure:Cycle02_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle02_A
+>     Select an image to measure:Cycle03_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle03_A
+>     Select an image to measure:Cycle04_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle04_A
+>     Select an image to measure:Cycle05_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle05_A
+>     Select an image to measure:Cycle06_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle06_A
+>     Select an image to measure:Cycle07_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle07_A
+>     Select an image to measure:Cycle08_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle08_A
+>     Select an image to measure:Cycle01_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle01_C
+>     Select an image to measure:Cycle02_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle02_C
+>     Select an image to measure:Cycle03_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle03_C
+>     Select an image to measure:Cycle04_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle04_C
+>     Select an image to measure:Cycle05_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle05_C
+>     Select an image to measure:Cycle06_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle06_C
+>     Select an image to measure:Cycle07_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle07_C
+>     Select an image to measure:Cycle08_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle08_C
+>     Select an image to measure:Cycle01_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle01_G
+>     Select an image to measure:Cycle02_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle02_G
+>     Select an image to measure:Cycle03_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle03_G
+>     Select an image to measure:Cycle04_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle04_G
+>     Select an image to measure:Cycle05_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle05_G
+>     Select an image to measure:Cycle06_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle06_G
+>     Select an image to measure:Cycle07_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle07_G
+>     Select an image to measure:Cycle08_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle08_G
+>     Select an image to measure:Cycle01_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle01_T
+>     Select an image to measure:Cycle02_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle02_T
+>     Select an image to measure:Cycle03_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle03_T
+>     Select an image to measure:Cycle04_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle04_T
+>     Select an image to measure:Cycle05_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle05_T
+>     Select an image to measure:Cycle06_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle06_T
+>     Select an image to measure:Cycle07_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle07_T
+>     Select an image to measure:Cycle08_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle08_T
+>     Select an image to measure:Cycle09_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle09_A
+>     Select an image to measure:Cycle09_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle09_C
+>     Select an image to measure:Cycle09_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle09_G
+>     Select an image to measure:Cycle09_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle09_T
+>     Select an image to measure:Cycle10_A_BackSub
+>     What compensation class does this image belong to?:1
+>     Select an output image name:CorrCycle10_A
+>     Select an image to measure:Cycle10_C_BackSub
+>     What compensation class does this image belong to?:2
+>     Select an output image name:CorrCycle10_C
+>     Select an image to measure:Cycle10_G_BackSub
+>     What compensation class does this image belong to?:3
+>     Select an output image name:CorrCycle10_G
+>     Select an image to measure:Cycle10_T_BackSub
+>     What compensation class does this image belong to?:4
+>     Select an output image name:CorrCycle10_T
+>     Select where to perform color compensation:Within objects
+>     Select an object to perform compensation within:Foci
+>     Should individual images be rescaled 0-1 before compensating pre-masking or on unmasked images?:No
+>     Should images be rescaled 0-1 before compensating but after masking to objects?:No
+>     Should histogram matching be performed between the image groups?:Yes, post-masking to objects
+>     What compensation class should serve as the template histogram?:1
+>     Should images be rescaled 0-1 after compensating?:No
+>     Should the images be divided by a scalar based on group percentiles:No
+>     What percentile should be used for multiplication:4
+>     Should the images have a tophat filter applied before correction?:No
+>     What size radius should be used for the tophat filter?:No
+>     Should the images have a Laplacian of Gaussian filter applied before correction?:Yes
+>     What size radius should be used for the LoG filter?:1
+>     Should the images have a Difference of Gaussians filter applied before correction?:No
+>     What size sigma should be used for the DoG low sigma?:Yes
+>     What size radius should be used for the DoG low sigma?:1
+>
+> MeasureObjectIntensity:[module_num:74|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select images to measure:CorrCycle01_A, CorrCycle01_C, CorrCycle01_G, CorrCycle01_T, CorrCycle02_A, CorrCycle02_C, CorrCycle02_G, CorrCycle02_T, CorrCycle03_A, CorrCycle03_C, CorrCycle03_G, CorrCycle03_T, CorrCycle04_A, CorrCycle04_C, CorrCycle04_G, CorrCycle04_T, CorrCycle05_A, CorrCycle05_C, CorrCycle05_G, CorrCycle05_T, CorrCycle06_A, CorrCycle06_C, CorrCycle06_G, CorrCycle06_T, CorrCycle07_A, CorrCycle07_C, CorrCycle07_G, CorrCycle07_T, CorrCycle08_A, CorrCycle08_C, CorrCycle08_G, CorrCycle08_T, CorrCycle09_A, CorrCycle09_C, CorrCycle09_G, CorrCycle09_T, CorrCycle10_A, CorrCycle10_C, CorrCycle10_G, CorrCycle10_T
+>     Select objects to measure:Foci
+>
+> CallBarcodes:[module_num:75|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Number of cycles:10
+>     Input object name:Foci
+>     Select one of the measures from Cycle 1 to use for calling:Intensity_MaxIntensity_CorrCycle01_A
+>     Input data file location:Default Input Folder|Documents/projects/PROJECT/Batch2
+>     Name of the file:Barcodes.csv
+>     Select the column containing barcodes to match against:sgRNA
+>     Select the column containing gene/transcript barcode names:gene_symbol
+>     Retain an image of the barcodes color coded by call?:Yes
+>     Enter the called barcode image name:Barcodes_IntValues
+>     Retain an image of the barcodes color coded by score match?:Yes
+>     Enter the barcode score image name:BarcodeScores_IntValues
+>     Do you have an empty vector barcode you would like to add to the barcode list?:No
+>     What is the empty vector sequence?:AAAAAAAAAAAAAAA
+>
+> CompensateColors:[module_num:76|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:True]
+1092c2026
+< MeasureObjectIntensity:[module_num:30|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectIntensity:[module_num:77|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+1096c2030
+< CallBarcodes:[module_num:31|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CallBarcodes:[module_num:78|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+1111c2045,2066
+< ImageMath:[module_num:32|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FilterObjects:[module_num:79|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+>     Select the objects to filter:Foci
+>     Name the output objects:BarcodeFoci
+>     Select the filtering mode:Measurements
+>     Select the filtering method:Limits
+>     Select the objects that contain the filtered objects:None
+>     Select the location of the rules or classifier file:Elsewhere...|
+>     Rules or classifier file name:rules.txt
+>     Class number:1
+>     Measurement count:1
+>     Additional object count:0
+>     Assign overlapping child to:Both parents
+>     Keep removed objects as a separate set?:No
+>     Name the objects removed by the filter:RemovedObjects
+>     Select the measurement to filter by:Number_Object_Number
+>     Filter using a minimum measurement value?:Yes
+>     Minimum value:0.5
+>     Filter using a maximum measurement value?:No
+>     Maximum value:1.0
+>     Allow fuzzy feature matching?:No
+>
+> ImageMath:[module_num:80|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1130c2085
+< ImageMath:[module_num:33|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:81|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1149c2104
+< MeasureObjectIntensity:[module_num:34|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> MeasureObjectIntensity:[module_num:82|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1153c2108
+< RelateObjects:[module_num:35|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> RelateObjects:[module_num:83|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+1241c2196
+< SaveImages:[module_num:36|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:84|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1261c2216
+< SaveImages:[module_num:37|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:85|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1281c2236
+< SaveImages:[module_num:38|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1301c2256
+< SaveImages:[module_num:39|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:87|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1321c2276
+< SaveImages:[module_num:40|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:88|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1341c2296
+< SaveImages:[module_num:41|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:89|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1361c2316
+< SaveImages:[module_num:42|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:90|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1381c2336
+< SaveImages:[module_num:43|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:91|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1401c2356
+< SaveImages:[module_num:44|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:92|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1421c2376
+< SaveImages:[module_num:45|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:93|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1441c2396
+< SaveImages:[module_num:46|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:94|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1461c2416
+< SaveImages:[module_num:47|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:95|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1481c2436
+< SaveImages:[module_num:48|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:96|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1501c2456
+< SaveImages:[module_num:49|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:97|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1521c2476
+< SaveImages:[module_num:50|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:98|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1541c2496
+< SaveImages:[module_num:51|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:99|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1561c2516
+< SaveImages:[module_num:52|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:100|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1581c2536
+< SaveImages:[module_num:53|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:101|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1601c2556
+< SaveImages:[module_num:54|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:102|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1621c2576
+< SaveImages:[module_num:55|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:103|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1641c2596
+< SaveImages:[module_num:56|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:104|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1661c2616
+< SaveImages:[module_num:57|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:105|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1681c2636
+< SaveImages:[module_num:58|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:106|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1701c2656
+< SaveImages:[module_num:59|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:107|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1721c2676
+< SaveImages:[module_num:60|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:108|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1741c2696
+< SaveImages:[module_num:61|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:109|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1761c2716
+< SaveImages:[module_num:62|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:110|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1781c2736
+< SaveImages:[module_num:63|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:111|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1801c2756
+< SaveImages:[module_num:64|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:112|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1821c2776
+< SaveImages:[module_num:65|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:113|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1841c2796
+< SaveImages:[module_num:66|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:114|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1861c2816
+< SaveImages:[module_num:67|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:115|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1881c2836
+< SaveImages:[module_num:68|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:116|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1901c2856
+< SaveImages:[module_num:69|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:117|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1921c2876
+< SaveImages:[module_num:70|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:118|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1941c2896
+< SaveImages:[module_num:71|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:119|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1961c2916
+< SaveImages:[module_num:72|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:120|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+1981c2936
+< SaveImages:[module_num:73|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:121|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+2001c2956
+< SaveImages:[module_num:74|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:122|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+2021c2976
+< SaveImages:[module_num:75|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:123|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+2041c2996
+< SaveImages:[module_num:76|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:124|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+2061c3016
+< ExportToSpreadsheet:[module_num:77|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ExportToSpreadsheet:[module_num:125|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+2085c3040
+< CalculateMath:[module_num:78|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CalculateMath:[module_num:126|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2088,2090c3043,3045
+<     Select the numerator measurement type:Image
+<     Select the numerator objects:None
+<     Select the numerator measurement:Metadata_Site
+---
+>     Select the first operand measurement type:Image
+>     Select the first operand objects:None
+>     Select the first operand measurement:Metadata_Site
+2109c3064
+< CalculateMath:[module_num:79|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CalculateMath:[module_num:127|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2112,2114c3067,3069
+<     Select the numerator measurement type:Image
+<     Select the numerator objects:None
+<     Select the numerator measurement:Metadata_Site
+---
+>     Select the first operand measurement type:Image
+>     Select the first operand objects:None
+>     Select the first operand measurement:Metadata_Site
+2133c3088
+< CalculateMath:[module_num:80|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> CalculateMath:[module_num:128|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2136,2138c3091,3093
+<     Select the minuend measurement type:Image
+<     Select the minuend objects:None
+<     Select the minuend measurement:Math_Divide20
+---
+>     Select the first operand measurement type:Image
+>     Select the first operand objects:None
+>     Select the first operand measurement:Math_Divide20
+2141,2143c3096,3098
+<     Select the subtrahend measurement type:Image
+<     Select the subtrahend objects:None
+<     Select the subtrahend measurement:Math_Divide20floor
+---
+>     Select the second operand measurement type:Image
+>     Select the second operand objects:None
+>     Select the second operand measurement:Math_Divide20floor
+2157c3112
+< FlagImage:[module_num:81|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> FlagImage:[module_num:129|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2177c3132
+< ImageMath:[module_num:82|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> ImageMath:[module_num:130|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2188,2189c3143,3144
+<     Select the first image:MeanOfAllStDevs
+<     Multiply the first image by:1.0
+---
+>     Select the image:MeanOfAllStDevs
+>     Multiply the image by:1.0
+2192,2193c3147,3148
+<     Select the second image:
+<     Multiply the second image by:1.0
+---
+>     Select the image:
+>     Multiply the image by:1.0
+2196c3151
+< RescaleIntensity:[module_num:83|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> RescaleIntensity:[module_num:131|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2210c3165
+< OverlayOutlines:[module_num:84|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> OverlayOutlines:[module_num:132|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2220c3175
+< SaveImages:[module_num:85|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:133|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+2240c3195
+< SaveImages:[module_num:86|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+---
+> SaveImages:[module_num:134|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]

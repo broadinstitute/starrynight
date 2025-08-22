@@ -1,0 +1,2909 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="StarryNight - toolkit for optical pooled screening">
+      
+      
+      
+      
+        <link rel="prev" href="../02_cli_layer/">
+      
+      
+        <link rel="next" href="../04_pipeline_layer/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Module Layer - StarryNight</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#starrynight-module-layer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="StarryNight" class="md-header__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StarryNight
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module Layer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user/getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/guides/system-maintenance-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00_architecture_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecturev2/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/validation/testing-framework/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/roadmap/requirements/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/legacy/pcpip-specs/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="StarryNight" class="md-nav__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    StarryNight
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/example-pipeline-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/parser-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/operational-challenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/guides/system-maintenance-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/guides/workflow-implementation-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_architecture_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_algorithm_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_cli_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose-and-advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose and Advantages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Purpose and Advantages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Benefits
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectural-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architectural Significance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-dual-nature-of-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dual Nature of Modules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dual Nature of Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-sets-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Sets Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-segmentation-check-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Segmentation Check Module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute-graph-generation-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graph Generation with Pipecraft
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specifications-with-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifications with Bilayers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specifications with Bilayers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Bilayers?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-starrynight-integrates-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      How StarryNight Integrates Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bilayers-specification-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Bilayers Specification Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-how-a-module-uses-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: How a Module Uses Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-using-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Using Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-graphs-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graphs with Pipecraft
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Module Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-to-adjacent-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Adjacent Layers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-registry-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Registry Mechanism
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Registry Mechanism">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Implementation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registering-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registering New Modules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_pipeline_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_execution_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_configuration_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_architecture_for_biologists/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_practical_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_architecture_flow_example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../architecturev2/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/00-1-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Principles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/01-algorithm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/02-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/03-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/04-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/05-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/06-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/99-0-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/validation/testing-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/validation/validation-pipeline-1-illum-calc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/pipeline-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/aws-deployment-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/legacy/pcpip-specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/legacy/pcpip-pipelines/pcpip-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose-and-advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose and Advantages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Purpose and Advantages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Benefits
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectural-significance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architectural Significance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-dual-nature-of-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dual Nature of Modules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dual Nature of Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-sets-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Sets Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Implementation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-segmentation-check-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Segmentation Check Module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute-graph-generation-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graph Generation with Pipecraft
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specifications-with-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifications with Bilayers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specifications with Bilayers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Bilayers?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-starrynight-integrates-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      How StarryNight Integrates Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bilayers-specification-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Bilayers Specification Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-how-a-module-uses-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: How a Module Uses Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-using-bilayers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Using Bilayers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-graphs-with-pipecraft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Graphs with Pipecraft
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-module-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Module Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline Composition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating New Modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-to-adjacent-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relationship to Adjacent Layers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-registry-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      Module Registry Mechanism
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Registry Mechanism">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Implementation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registering-new-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registering New Modules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="starrynight-module-layer">StarryNight Module Layer</h1>
+<h2 id="overview">Overview</h2>
+<p>The module layer provides a standardized abstraction that bridges the CLI layer (command-line interfaces) and the pipeline layer (complex workflows). Its architectural significance lies in separating what should be done (specifications) from how it should be structured (compute graphs) and how it should be executed (backends).</p>
+<p>Modules define both specifications and compute graphs without performing computation. This separation enables backend-agnostic execution (local, cloud) while maintaining a consistent interface for pipeline composition. The module layer integrates with Bilayers for specifications and Pipecraft for compute graphs, creating a powerful abstraction that enables containerized, reproducible execution. Importantly, modules don't directly call algorithm functions but instead invoke CLI commands that in turn execute the underlying algorithms.</p>
+<h2 id="purpose-and-advantages">Purpose and Advantages</h2>
+<p>The module layer offers significant advantages over directly using CLI commands:</p>
+<h3 id="practical-benefits">Practical Benefits</h3>
+<ul>
+<li><strong>Standardization</strong> - Consistent interfaces across different algorithm types</li>
+<li><strong>Composability</strong> - Modules can be connected into larger workflows</li>
+<li><strong>Containerization</strong> - Built-in container specification for reproducibility</li>
+<li><strong>Documentation</strong> - Structured approach to capturing metadata and citations</li>
+</ul>
+<h3 id="architectural-significance">Architectural Significance</h3>
+<ul>
+<li><strong>Backend Independence</strong> - Run the same module on different execution systems</li>
+<li><strong>Inspection</strong> - Examine inputs, outputs, and operations before execution</li>
+<li><strong>Automated UI Generation</strong> - Specifications support interface generation</li>
+<li><strong>Complex Workflow Creation</strong> - Enables automatic generation of sophisticated execution plans</li>
+</ul>
+<h2 id="the-dual-nature-of-modules">The Dual Nature of Modules</h2>
+<p>The module layer's defining characteristic is its dual focus on specifications and compute graphs:</p>
+<ol>
+<li>
+<p><strong>Specification (Spec)</strong> - Defines what a module does:</p>
+<ul>
+<li>Input ports with types, descriptions, and validation rules</li>
+<li>Output ports with types and descriptions</li>
+<li>Documentation and metadata</li>
+<li>Parameter constraints and defaults</li>
+</ul>
+</li>
+<li>
+<p><strong>Compute Graph</strong> - Defines how operations should be structured:</p>
+<ul>
+<li>Container configurations</li>
+<li>Command construction</li>
+<li>Input/output relationships</li>
+<li>Execution sequence</li>
+</ul>
+</li>
+</ol>
+<p>Crucially, modules define computation but don't perform it. This separation enables inspection and modification before execution, and allows the same module to run on different platforms without changing its definition.</p>
+<h3 id="module-sets-organization">Module Sets Organization</h3>
+<p>Just as the CLI layer is organized into command groups that map to algorithm sets, the module layer is organized into corresponding module sets. For each CLI command group, there is typically a matching module set that provides the same functionality with the added abstraction of the module layer.</p>
+<p>Each module set typically follows a consistent pattern with three types of modules:</p>
+<ol>
+<li><strong>Load Data Modules</strong> - Generate data loading configurations<ul>
+<li>Define which images to process</li>
+<li>Create CSV files for CellProfiler to locate images</li>
+<li>Organize data by batch, plate, well, and site</li>
+</ul>
+</li>
+<li><strong>Pipeline Generation Modules</strong> - Create processing pipeline definitions<ul>
+<li>Generate CellProfiler pipeline files</li>
+<li>Configure pipeline parameters based on experiment settings</li>
+<li>Define processing operations</li>
+</ul>
+</li>
+<li><strong>Execution Modules</strong> - Execute the pipeline on prepared data<ul>
+<li>Run pipelines with appropriate parallelism</li>
+<li>Manage resource allocation</li>
+<li>Organize outputs according to experimental structure</li>
+</ul>
+</li>
+</ol>
+<p>This pattern mirrors the organization of algorithms and CLI commands, but adds the standardized abstraction and container orchestration capabilities of the module layer.</p>
+<p>Common module sets include:</p>
+<ol>
+<li><strong>CP Modules</strong> - For Cell Painting workflows:<ul>
+<li><code>cp_illum_calc</code> - Illumination calculation modules</li>
+<li><code>cp_illum_apply</code> - Illumination correction modules</li>
+<li><code>cp_segcheck</code> - Segmentation check modules</li>
+</ul>
+</li>
+<li><strong>SBS Modules</strong> - For Sequencing By Synthesis workflows:<ul>
+<li><code>sbs_illum_calc</code> - SBS illumination calculation modules</li>
+<li><code>sbs_illum_apply</code> - SBS illumination correction modules</li>
+<li><code>sbs_align</code> - SBS alignment modules</li>
+<li><code>sbs_preprocess</code> - SBS preprocessing modules</li>
+</ul>
+</li>
+<li><strong>Common Modules</strong> - For general operations:<ul>
+<li><code>gen_index</code> - Index generation modules</li>
+<li><code>gen_inv</code> - Inventory management modules</li>
+<li><code>analysis</code> - Analysis modules</li>
+</ul>
+</li>
+</ol>
+<h2 id="module-implementation">Module Implementation</h2>
+<p>A module is implemented as a Python class that inherits from <code>StarryNightModule</code>. Each module implementation follows a consistent structure with several key components:</p>
+<ol>
+<li><strong>Unique Identifier</strong> - A string property that uniquely identifies the module</li>
+<li><strong>Spec Definition</strong> - A property method that defines the module's specification using Bilayers</li>
+<li><strong><code>from_config</code> Method</strong> - A class method for configuration from experiment and data configurations</li>
+<li><strong>Compute Graph Generation</strong> - A method that creates the Pipecraft pipeline defining the computation structure</li>
+</ol>
+<p>This structure ensures that all modules provide the same capabilities, making them consistent and interchangeable at the architectural level.</p>
+<h3 id="example-segmentation-check-module">Example: Segmentation Check Module</h3>
+<p>Below is an example of a module that generates a CellProfiler pipeline for segmentation check. This example illustrates all the key components of a module implementation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">CPSegcheckGenCPPipeModule</span><span class="p">(</span><span class="n">StarrynightModule</span><span class="p">):</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;CP segmentation check generate cppipe module.&quot;&quot;&quot;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="nd">@property</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return module unique id.&quot;&quot;&quot;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="k">return</span> <span class="s2">&quot;cp_segcheck_gen_cppipe&quot;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecContainer</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Return module default spec.&quot;&quot;&quot;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="k">return</span> <span class="n">SpecContainer</span><span class="p">(</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                <span class="s2">&quot;loaddata_path&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cellprofiler LoadData csvs&quot;</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to the LoadData csv.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_config</span><span class="o">.</span><span class="n">workspace_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                        <span class="n">CP_SEGCHECK_CP_LOADDATA_OUT_PATH_SUFFIX</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>                    <span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>                    <span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>                    <span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>                <span class="p">),</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>                <span class="s2">&quot;workspace_path&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Workspace&quot;</span><span class="p">,</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Workspace path.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_config</span><span class="o">.</span><span class="n">workspace_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                        <span class="n">CP_SEGCHECK_OUT_PATH_SUFFIX</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>                    <span class="p">)</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>                    <span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>                    <span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>                <span class="p">),</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>                <span class="s2">&quot;nuclei_channel&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nuclei channel&quot;</span><span class="p">,</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">textbox</span><span class="p">,</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Channel to use for nuclei segmentation.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">cp_config</span><span class="o">.</span><span class="n">nuclei_channel</span><span class="p">,</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>                <span class="p">),</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>                <span class="s2">&quot;cell_channel&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cell channel&quot;</span><span class="p">,</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">textbox</span><span class="p">,</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Channel to use for cell segmentation.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">cp_config</span><span class="o">.</span><span class="n">cell_channel</span><span class="p">,</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>                <span class="p">),</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>                <span class="s2">&quot;use_legacy&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Use legacy pipeline&quot;</span><span class="p">,</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">boolean</span><span class="p">,</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Flag for using legacy pipeline.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>                    <span class="n">value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>                <span class="p">),</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>            <span class="p">},</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>            <span class="n">outputs</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>                <span class="s2">&quot;cppipe_path&quot;</span><span class="p">:</span> <span class="n">TypeOutput</span><span class="p">(</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cellprofiler pipeline&quot;</span><span class="p">,</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">file</span><span class="p">,</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Generated pre segcheck cppipe files&quot;</span><span class="p">,</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_config</span><span class="o">.</span><span class="n">workspace_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>                        <span class="n">CP_SEGCHECK_CP_CPPIPE_OUT_PATH_SUFFIX</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>                    <span class="p">)</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>                    <span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>                    <span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>                <span class="p">),</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>                <span class="s2">&quot;notebook_path&quot;</span><span class="p">:</span> <span class="n">TypeOutput</span><span class="p">(</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;QC notebook&quot;</span><span class="p">,</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>                    <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">notebook</span><span class="p">,</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Notebook for inspecting cellprofiler pipeline files&quot;</span><span class="p">,</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>                <span class="p">),</span>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>            <span class="p">},</span>
+</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>            <span class="n">parameters</span><span class="o">=</span><span class="p">[],</span>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>            <span class="n">display_only</span><span class="o">=</span><span class="p">[],</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>            <span class="n">results</span><span class="o">=</span><span class="p">[],</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>            <span class="n">exec_function</span><span class="o">=</span><span class="n">ExecFunction</span><span class="p">(</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>                <span class="n">script</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>                <span class="n">cli_command</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>            <span class="p">),</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>            <span class="n">docker_image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>            <span class="n">algorithm_folder_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>            <span class="n">citations</span><span class="o">=</span><span class="n">TypeCitations</span><span class="p">(</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>                <span class="n">algorithm</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>                    <span class="n">TypeAlgorithmFromCitation</span><span class="p">(</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Starrynight CP segmentation check generate cppipe module&quot;</span><span class="p">,</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>                        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This module generates cppipe files for cp segmentation check module.&quot;</span><span class="p">,</span>
+</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>                    <span class="p">)</span>
+</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>                <span class="p">]</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>            <span class="p">),</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        <span class="p">)</span>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_create_uow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitOfWork</span><span class="p">]:</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create units of work for Generate Index step.</span>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a><span class="sd">        Returns</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a><span class="sd">        -------</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a><span class="sd">        list[UnitOfWork]</span>
+</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a><span class="sd">            List of unit of work.</span>
+</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>
+</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>        <span class="k">return</span> <span class="p">[]</span>
+</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>
+</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_create_pipe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pipeline</span><span class="p">:</span>
+</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create pipeline for generating cpipe.</span>
+</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>
+</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a><span class="sd">        Returns</span>
+</span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a><span class="sd">        -------</span>
+</span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a><span class="sd">        Pipeline</span>
+</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a><span class="sd">            Pipeline instance.</span>
+</span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>
+</span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span>
+</span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>            <span class="s2">&quot;starrynight&quot;</span><span class="p">,</span>
+</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>            <span class="s2">&quot;segcheck&quot;</span><span class="p">,</span>
+</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>            <span class="s2">&quot;cppipe&quot;</span><span class="p">,</span>
+</span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>            <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+</span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>            <span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;loaddata_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+</span><span id="__span-0-125"><a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>            <span class="n">spec</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cppipe_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>            <span class="s2">&quot;-w&quot;</span><span class="p">,</span>
+</span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>            <span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;workspace_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>            <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>            <span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;nuclei_channel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>            <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>            <span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;cell_channel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>        <span class="p">]</span>
+</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>
+</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>        <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;use_legacy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+</span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span>
+</span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                <span class="s2">&quot;--use_legacy&quot;</span><span class="p">,</span>
+</span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>            <span class="p">]</span>
+</span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>        <span class="n">gen_load_data_pipe</span> <span class="o">=</span> <span class="n">Seq</span><span class="p">(</span>
+</span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>            <span class="p">[</span>
+</span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                <span class="n">Container</span><span class="p">(</span>
+</span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
+</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>                    <span class="n">input_paths</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>                        <span class="s2">&quot;loaddata_path&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;loaddata_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+</span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>                    <span class="p">},</span>
+</span><span id="__span-0-145"><a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>                    <span class="n">output_paths</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-146"><a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>                        <span class="s2">&quot;cppipe_path&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cppipe_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+</span><span id="__span-0-147"><a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>                    <span class="p">},</span>
+</span><span id="__span-0-148"><a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>                    <span class="n">config</span><span class="o">=</span><span class="n">ContainerConfig</span><span class="p">(</span>
+</span><span id="__span-0-149"><a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>                        <span class="n">image</span><span class="o">=</span><span class="s2">&quot;ghrc.io/leoank/starrynight:dev&quot;</span><span class="p">,</span>
+</span><span id="__span-0-150"><a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>                        <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+</span><span id="__span-0-151"><a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>                        <span class="n">env</span><span class="o">=</span><span class="p">{},</span>
+</span><span id="__span-0-152"><a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>                    <span class="p">),</span>
+</span><span id="__span-0-153"><a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>                <span class="p">),</span>
+</span><span id="__span-0-154"><a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>            <span class="p">]</span>
+</span><span id="__span-0-155"><a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>        <span class="p">)</span>
+</span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>        <span class="k">return</span> <span class="n">gen_load_data_pipe</span>
+</span></code></pre></div>
+<p>This example illustrates several important aspects of module implementation:</p>
+<ol>
+<li><strong>Module Identity</strong> - The <code>uid()</code> method provides a unique identifier</li>
+<li><strong>Module Specification</strong> - The <code>_spec()</code> method defines inputs, outputs, and metadata and also set default values.</li>
+<li><strong>Compute Graph Creation</strong> - The module uses the <code>_create_pipe</code> function to generate a Pipecraft pipeline</li>
+<li><strong>CLI Command Construction</strong> - The module constructs a CLI command that will be executed in a container</li>
+<li><strong>Container Specification</strong> - The module defines the container image and execution environment</li>
+</ol>
+<h3 id="module-configuration">Module Configuration</h3>
+<p>A powerful feature of the module layer is automatic configuration. This enables modules to be configured with minimal manual input by inferring paths and parameters from standard configurations:</p>
+<ol>
+<li><strong>Data Configuration</strong> - Provides workspace paths, image paths, and scratch directories</li>
+<li><strong>Experiment Configuration</strong> - Provides experiment-specific parameters like channel names, algorithms, and thresholds</li>
+<li><strong>Default Path Inference</strong> - Creates conventional file paths based on workspace structure</li>
+</ol>
+<p>This automatic configuration approach has several advantages:</p>
+<ul>
+<li><strong>Consistency</strong> - Ensures consistent file organization across projects</li>
+<li><strong>Reduced Configuration</strong> - Minimizes parameters that users need to specify</li>
+<li><strong>Standardization</strong> - Enforces standard naming and path conventions</li>
+<li><strong>Modularity</strong> - Allows modules to be swapped without changing their configuration</li>
+</ul>
+<h3 id="compute-graph-generation-with-pipecraft">Compute Graph Generation with Pipecraft</h3>
+<p>The <code>_create_pipe</code> method is where modules generate their compute graphs using the Pipecraft library. This method defines the structure of the computation without actually executing it:</p>
+<ol>
+<li><strong>CLI Command Construction</strong> - The module builds a command-line invocation of the underlying algorithm</li>
+<li><strong>Container Configuration</strong> - Specifies the container image, environment, and resource requirements</li>
+<li><strong>Input/Output Mapping</strong> - Defines how inputs and outputs are mapped to the container filesystem</li>
+<li><strong>Execution Structure</strong> - Specifies the execution sequence (sequential, parallel, etc.)</li>
+</ol>
+<p>The compute graph provides a complete definition of how the operation should be executed, but remains independent of any specific execution technology. This separation allows the same module to be executed on different backends (local, cluster, cloud) without modification.</p>
+<h2 id="specifications-with-bilayers">Specifications with Bilayers</h2>
+<p>For the "specification" part of a module's dual nature, StarryNight uses Bilayers - an external schema system that standardizes how inputs, outputs, and metadata are defined.</p>
+<h3 id="what-is-bilayers">What is Bilayers?</h3>
+<p>Bilayers is an open-source specification and framework designed to make bioimage analysis algorithms accessible through auto-generated user interfaces. It bridges the gap between algorithm developers and biologists by providing:</p>
+<ul>
+<li>A standardized YAML-based configuration format for describing algorithm interfaces</li>
+<li>Automatic generation of web interfaces (Gradio) and Jupyter notebooks from these configurations</li>
+<li>A consistent way to package algorithms in Docker containers with their interfaces</li>
+<li>A schema validation system based on LinkML to ensure configurations are correct</li>
+</ul>
+<p>The Bilayers project enables algorithm developers to write a single configuration file that describes their tool's inputs, outputs, and parameters, and automatically get user-friendly interfaces without writing UI code.</p>
+<h3 id="how-starrynight-integrates-bilayers">How StarryNight Integrates Bilayers</h3>
+<p>StarryNight leverages the Bilayers specification system to standardize its module interfaces. The integration works through several mechanisms:</p>
+<ol>
+<li>
+<p><strong>Schema Download and Synchronization</strong>: StarryNight maintains a local copy of the Bilayers validation schema, which is automatically downloaded from the Bilayers repository:
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># From starrynight/modules/common.py</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">VALIDATE_SCHEMA_URL</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/bilayer-containers/bilayers/master/tests/test_config/validate_schema.yaml&quot;</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Pydantic Model Generation</strong>: The Bilayers LinkML schema is converted into Pydantic models that StarryNight uses for runtime validation:
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">update_module_schema</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Download and update the module schema from bilayers.&quot;&quot;&quot;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">schema_yaml</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;validate_schema.yaml&quot;</span><span class="p">)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">schema_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;schema.py&quot;</span><span class="p">)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="c1"># Download schema and generate Pydantic models</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>SpecContainer Integration</strong>: Each StarryNight module defines its specification using the <code>SpecContainer</code> class, which is derived from the Bilayers schema. This ensures compatibility with the broader Bilayers ecosystem.</p>
+</li>
+</ol>
+<h3 id="the-bilayers-specification-structure">The Bilayers Specification Structure</h3>
+<p>The module layer uses Bilayers to create standardized definitions of:</p>
+<ul>
+<li><strong>Input Specifications</strong>:<ul>
+<li>Type definitions (image, file, directory, array, measurement)</li>
+<li>Validation rules and constraints</li>
+<li>Default values and optional flags</li>
+<li>Descriptions for documentation</li>
+<li>CLI tag mappings for command generation</li>
+</ul>
+</li>
+<li><strong>Output Specifications</strong>:<ul>
+<li>Output types and formats</li>
+<li>File naming patterns</li>
+<li>Directory structures</li>
+<li>Relationships to inputs</li>
+</ul>
+</li>
+<li><strong>Parameter Definitions</strong>:<ul>
+<li>UI element types (checkbox, integer, float, dropdown, textbox)</li>
+<li>Value constraints and defaults</li>
+<li>Grouping for beginner/advanced modes</li>
+<li>Help text and documentation</li>
+</ul>
+</li>
+<li><strong>Algorithm Metadata</strong>:<ul>
+<li>Citations and references</li>
+<li>Docker image specifications</li>
+<li>License information</li>
+<li>Algorithm descriptions</li>
+</ul>
+</li>
+</ul>
+<h3 id="example-how-a-module-uses-bilayers">Example: How a Module Uses Bilayers</h3>
+<p>When a StarryNight module implements its <code>_spec()</code> method, it returns a <code>SpecContainer</code> that follows the Bilayers schema:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpecContainer</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">return</span> <span class="n">SpecContainer</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>            <span class="s2">&quot;input_image&quot;</span><span class="p">:</span> <span class="n">TypeInput</span><span class="p">(</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;input_image&quot;</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">image</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Input microscopy image&quot;</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                <span class="n">cli_tag</span><span class="o">=</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>            <span class="p">)</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="p">},</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="n">outputs</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>            <span class="s2">&quot;processed_image&quot;</span><span class="p">:</span> <span class="n">TypeOutput</span><span class="p">(</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;processed_image&quot;</span><span class="p">,</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>                <span class="nb">type</span><span class="o">=</span><span class="n">TypeEnum</span><span class="o">.</span><span class="n">image</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Processed output image&quot;</span><span class="p">,</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>            <span class="p">)</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="p">},</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>            <span class="c1"># Bilayers-compliant parameter definitions</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="p">],</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        <span class="n">citations</span><span class="o">=</span><span class="n">TypeCitations</span><span class="p">(</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>            <span class="n">algorithm</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>                <span class="n">TypeAlgorithmFromCitation</span><span class="p">(</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Algorithm Name&quot;</span><span class="p">,</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Algorithm description&quot;</span><span class="p">,</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>                <span class="p">)</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>            <span class="p">]</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>        <span class="p">),</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="p">)</span>
+</span></code></pre></div>
+<h3 id="benefits-of-using-bilayers">Benefits of Using Bilayers</h3>
+<ol>
+<li><strong>Standardization</strong>: All modules follow the same specification format, making them predictable and easy to understand.</li>
+<li><strong>Interoperability</strong>: Because StarryNight uses the Bilayers specification, there's potential for:<ul>
+<li>Importing Bilayers-compatible tools from other projects</li>
+<li>Exporting StarryNight modules for use in other Bilayers-compatible systems</li>
+<li>Leveraging the broader Bilayers ecosystem of tools and interfaces</li>
+</ul>
+</li>
+<li><strong>Automatic UI Generation</strong>: While StarryNight doesn't currently generate Gradio or Jupyter interfaces from these specs, the Bilayers-compliant specifications make this possible in the future.</li>
+<li><strong>Validation</strong>: The LinkML-based schema provides robust validation of module specifications, catching configuration errors early.</li>
+<li><strong>Documentation</strong>: The structured format ensures that all modules have consistent documentation for their inputs, outputs, and parameters.</li>
+</ol>
+<p>This standardized approach ensures consistent interface definitions across modules and enables potential future features like automatic UI generation from specifications.</p>
+<h2 id="compute-graphs-with-pipecraft">Compute Graphs with Pipecraft</h2>
+<p>For the "compute graph" part of a module's dual nature, StarryNight uses Pipecraft - a library that defines operations and their execution flow.</p>
+<p>Modules use Pipecraft to:</p>
+<ul>
+<li>Define operations that should be executed (typically in containers)</li>
+<li>Specify input and output paths</li>
+<li>Structure execution (sequential or parallel)</li>
+<li>Configure container environments</li>
+</ul>
+<p>A simple example of how a module creates a compute graph:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Create a pipeline with sequential execution</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Seq</span><span class="p">(</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">Container</span><span class="p">(</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;external_tool&quot;</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="n">input_paths</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>            <span class="s2">&quot;some_input&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="p">},</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">output_paths</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>            <span class="s2">&quot;some_output&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="p">},</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>        <span class="n">config</span><span class="o">=</span><span class="n">ContainerConfig</span><span class="p">(</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>            <span class="n">image</span><span class="o">=</span><span class="s2">&quot;externaltoolimage&quot;</span><span class="p">,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>            <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;externaltool&quot;</span><span class="p">],</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>            <span class="n">env</span><span class="o">=</span><span class="p">{},</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>        <span class="p">),</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="p">)</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>More detailed coverage of Pipecraft's capabilities and architecture is provided in the <a href="../04_pipeline_layer/">Pipeline Layer</a> section.</p>
+<h2 id="module-usage">Module Usage</h2>
+<p>Modules are typically used in two different contexts: direct usage for individual operations and pipeline composition for complete workflows.</p>
+<h3 id="direct-module-usage">Direct Module Usage</h3>
+<p>For individual module operations, modules can be created and executed directly:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Import necessary components</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">starrynight.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataConfig</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">starrynight.experiments.pcp_generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCPGenericExperiment</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">starrynight.modules.cp_segcheck</span><span class="w"> </span><span class="kn">import</span> <span class="n">CPSegcheckGenCPPipeModule</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pipecraft.backend.snakemake</span><span class="w"> </span><span class="kn">import</span> <span class="n">SnakeMakeBackend</span><span class="p">,</span> <span class="n">SnakeMakeConfig</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Create configurations</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">data_config</span> <span class="o">=</span> <span class="n">DataConfig</span><span class="p">(</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">workspace_path</span><span class="o">=</span><span class="s2">&quot;/path/to/workspace&quot;</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">images_path</span><span class="o">=</span><span class="s2">&quot;/path/to/images&quot;</span><span class="p">,</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">scratch_path</span><span class="o">=</span><span class="s2">&quot;/path/to/scratch&quot;</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">experiment</span> <span class="o">=</span> <span class="n">PCPGenericExperiment</span><span class="o">.</span><span class="n">from_index</span><span class="p">(</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">index_path</span><span class="o">=</span><span class="n">data_config</span><span class="o">.</span><span class="n">workspace_path</span> <span class="o">/</span> <span class="s2">&quot;index.yaml&quot;</span><span class="p">,</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="n">init_config</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="s2">&quot;nuclear_channel&quot;</span><span class="p">:</span> <span class="s2">&quot;DAPI&quot;</span><span class="p">,</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="s2">&quot;cell_channel&quot;</span><span class="p">:</span> <span class="s2">&quot;CellMask&quot;</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="p">}</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="p">)</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="c1"># Create module</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="n">segcheck_module</span> <span class="o">=</span> <span class="n">CPSegcheckGenCPPipeModule</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">)</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="c1"># Configure backend</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="n">backend_config</span> <span class="o">=</span> <span class="n">SnakeMakeConfig</span><span class="p">(</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>    <span class="n">use_fluent_bit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_exec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="p">)</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="c1"># Create backend</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="n">exec_backend</span> <span class="o">=</span> <span class="n">SnakeMakeBackend</span><span class="p">(</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>    <span class="n">segcheck_module</span><span class="o">.</span><span class="n">pipe</span><span class="p">,</span> <span class="n">backend_config</span><span class="p">,</span> <span class="n">exec_runs</span> <span class="o">/</span> <span class="s2">&quot;run001&quot;</span><span class="p">,</span> <span class="n">exec_mounts</span>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="p">)</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="c1"># Execute module</span>
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="n">run</span> <span class="o">=</span> <span class="n">exec_backend</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="n">run</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="pipeline-composition">Pipeline Composition</h3>
+<p>For complex workflows, modules are typically composed into pipelines:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Create modules</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GenIndexModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">))</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GenInvModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">))</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CPIllumCalcGenLoadDataModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">))</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CPIllumCalcGenCPipeModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">))</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CPIllumCalcRunModule</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">data_config</span><span class="p">,</span> <span class="n">experiment</span><span class="p">))</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># Create pipeline</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Seq</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1"># Execute pipeline</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="n">exec_backend</span> <span class="o">=</span> <span class="n">SnakeMakeBackend</span><span class="p">(</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">pipeline</span><span class="p">,</span> <span class="n">backend_config</span><span class="p">,</span> <span class="n">exec_runs</span> <span class="o">/</span> <span class="s2">&quot;run001&quot;</span><span class="p">,</span> <span class="n">exec_mounts</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">)</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="n">run</span> <span class="o">=</span> <span class="n">exec_backend</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="n">run</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</span></code></pre></div>
+<p>In pipeline composition, modules are created and configured individually, but their compute graphs are combined into a larger structure that defines the complete workflow. This approach is discussed in detail in <a href="../04_pipeline_layer/">Pipeline Layer</a>.</p>
+<h2 id="creating-new-modules">Creating New Modules</h2>
+<p>Creating a new module set involves implementing classes for each stage of processing:</p>
+<ol>
+<li><strong>Plan the Module Set</strong>:<ul>
+<li>Identify the algorithm set to wrap</li>
+<li>Determine inputs, outputs, and parameters</li>
+<li>Design the module structure (typically load data, pipeline generation, and execution)</li>
+</ul>
+</li>
+<li><strong>Create Module Classes</strong>:<ul>
+<li>Implement subclasses of <code>StarryNightModule</code> for each stage</li>
+<li>Define unique identifiers and specifications</li>
+<li>Implement <code>from_config</code> methods</li>
+<li>Create pipeline generation methods</li>
+</ul>
+</li>
+<li><strong>Define Specifications</strong>:<ul>
+<li>Use Bilayers to define inputs, outputs, and parameters</li>
+<li>Document parameters with clear descriptions</li>
+<li>Define validation rules</li>
+</ul>
+</li>
+<li><strong>Implement Pipeline Creation</strong>:<ul>
+<li>Use Pipecraft to define compute graphs</li>
+<li>Specify container configurations</li>
+<li>Map inputs and outputs properly</li>
+</ul>
+</li>
+<li><strong>Test the Modules</strong>:<ul>
+<li>Test individual modules</li>
+<li>Test automatic configuration</li>
+<li>Test pipeline integration</li>
+</ul>
+</li>
+</ol>
+<h2 id="relationship-to-adjacent-layers">Relationship to Adjacent Layers</h2>
+<p>The module layer connects directly with two adjacent architectural layers:</p>
+<ol>
+<li><strong>CLI Layer (below)</strong> - Modules invoke CLI commands in containers rather than directly calling algorithm functions</li>
+<li><strong>Pipeline Layer (above)</strong> - Modules provide compute graphs that are composed into complete pipelines</li>
+</ol>
+<p>The module layer translates between CLI commands and complex workflows by providing a standardized interface and containerization approach for executing CLI commands in a pipeline context.</p>
+<h2 id="module-registry-mechanism">Module Registry Mechanism</h2>
+<p>StarryNight uses registry mechanisms to organize and discover available modules throughout the system. The module registry serves as a central catalog of all available modules, making it easy to:</p>
+<ol>
+<li>Discover available modules by name or type</li>
+<li>Instantiate modules programmatically</li>
+<li>Integrate modules into pipelines</li>
+<li>Extend the system with new modules</li>
+</ol>
+<h3 id="registry-implementation">Registry Implementation</h3>
+<p>The registry is implemented in <code>starrynight/modules/registry.py</code> as a Python dictionary mapping unique module identifiers to module classes:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">MODULE_REGISTRY</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">StarrynightModule</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="c1"># Generate inventory and index for the project</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">GenInvModule</span><span class="o">.</span><span class="n">uid</span><span class="p">():</span> <span class="n">GenInvModule</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">GenIndexModule</span><span class="o">.</span><span class="n">uid</span><span class="p">():</span> <span class="n">GenIndexModule</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># CP illum calc</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">CPCalcIllumGenLoadDataModule</span><span class="o">.</span><span class="n">uid</span><span class="p">():</span> <span class="n">CPCalcIllumGenLoadDataModule</span><span class="p">,</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">CPCalcIllumGenCPPipeModule</span><span class="o">.</span><span class="n">uid</span><span class="p">():</span> <span class="n">CPCalcIllumGenCPPipeModule</span><span class="p">,</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">CPCalcIllumInvokeCPModule</span><span class="o">.</span><span class="n">uid</span><span class="p">():</span> <span class="n">CPCalcIllumInvokeCPModule</span><span class="p">,</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="c1"># Additional modules...</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Each module defines its unique identifier through a static <code>uid()</code> method, which returns a string that serves as the module's registry key.</p>
+<h3 id="registering-new-modules">Registering New Modules</h3>
+<p>To add a new module to the system:</p>
+<ol>
+<li>Implement the module class following the module pattern</li>
+<li>Define a unique ID through the <code>uid()</code> static method</li>
+<li>Add the module to the <code>MODULE_REGISTRY</code> dictionary</li>
+</ol>
+<p>The registry pattern makes it easy to extend StarryNight with new module types while maintaining a clean, discoverable architecture.</p>
+<h3 id="registry-usage">Registry Usage</h3>
+<p>The module registry is used in several contexts:</p>
+<ol>
+<li><strong>Pipeline Composition</strong> - Finding modules to include in a pipeline</li>
+<li><strong>Experiment Configuration</strong> - Determining which modules to use for an experiment type</li>
+<li><strong>Module Discovery</strong> - Listing available modules for user interfaces</li>
+<li><strong>Dynamic Loading</strong> - Loading modules at runtime based on configuration</li>
+</ol>
+<p>Similar registry mechanisms exist for experiments (<code>experiments/registry.py</code>) and pipelines (<code>pipelines/registry.py</code>), creating a unified approach to component discovery across the system.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The module layer's dual focus on specifications and compute graphs enables complex workflows to be defined simply and executed consistently across different environments. The registry mechanism provides a flexible way to organize and discover modules, facilitating extension and integration. The next section, <a href="../04_pipeline_layer/">Pipeline Layer</a>, builds upon these abstractions to compose complete workflows from individual modules.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

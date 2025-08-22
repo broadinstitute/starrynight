@@ -1,0 +1,37 @@
+23a24,31
+>     Select the input image:OrigWGA
+>     Name the output image:CorrWGA
+>     Select the illumination function:IllumWGA
+>     Select how the illumination function is applied:Divide
+>     Select the input image:OrigZEB1
+>     Name the output image:CorrZEB1
+>     Select the illumination function:IllumZEB1
+>     Select how the illumination function is applied:Divide
+40c48
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrDNA
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrDNA
+60c68
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZO1
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrZO1
+75c83
+< SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:5|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+80c88
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrZEB1
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrZEB1
+100c108
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrPhalloidin
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrPhalloidin
+115c123
+< SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+---
+> SaveImages:[module_num:7|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+120c128
+<     Enter single file name:Plate_\g<Plate>_Well_\g<Well>_Site_\g<Site>_CorrWGA
+---
+>     Enter single file name:Plate_\g<Plate>_Well_\g<Well_Value>_Site_\g<Site>_CorrWGA

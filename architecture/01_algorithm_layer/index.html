@@ -1,0 +1,2275 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="StarryNight - toolkit for optical pooled screening">
+      
+      
+      
+      
+        <link rel="prev" href="../00_architecture_overview/">
+      
+      
+        <link rel="next" href="../02_cli_layer/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Algorithm Layer - StarryNight</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#starrynight-algorithm-layer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="StarryNight" class="md-header__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StarryNight
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Algorithm Layer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user/getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/guides/system-maintenance-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00_architecture_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecturev2/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/validation/testing-framework/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/roadmap/requirements/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/legacy/pcpip-specs/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="StarryNight" class="md-nav__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    StarryNight
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/example-pipeline-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/parser-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user/operational-challenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/guides/system-maintenance-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/guides/workflow-implementation-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_architecture_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Principles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-sets-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Sets Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algorithm Sets Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-across-algorithm-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Across Algorithm Sets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Patterns
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beyond-cellprofiler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Beyond CellProfiler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-complexity-and-decision-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Complexity and Decision Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Development
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_cli_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_module_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_pipeline_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_execution_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_configuration_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_architecture_for_biologists/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_practical_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_architecture_flow_example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../architecturev2/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/00-1-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Principles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/01-algorithm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/02-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/03-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/04-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/05-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/06-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecturev2/99-0-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/validation/testing-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/validation/validation-pipeline-1-illum-calc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/pipeline-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/roadmap/aws-deployment-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/legacy/pcpip-specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/legacy/pcpip-pipelines/pcpip-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Principles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-sets-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Sets Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algorithm Sets Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-across-algorithm-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Across Algorithm Sets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Patterns
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beyond-cellprofiler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Beyond CellProfiler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-complexity-and-decision-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Complexity and Decision Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Development
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="starrynight-algorithm-layer">StarryNight Algorithm Layer</h1>
+<h2 id="overview">Overview</h2>
+<p>The algorithm layer forms the foundation of the StarryNight framework. Algorithms are pure Python functions that implement specific image processing operations and pipeline generation capabilities without dependencies on higher-level StarryNight components.</p>
+<p>This document explains the structure and organization of the algorithm layer.</p>
+<div class="admonition note">
+<p class="admonition-title">CellProfiler Context</p>
+<p>While many examples in this document reference CellProfiler-specific functions, the algorithm layer design extends beyond CellProfiler. The architecture supports various algorithm types including indexing, inventory management, and other non-CellProfiler operations as detailed in the "Beyond CellProfiler" section.</p>
+</div>
+<h2 id="purpose">Purpose</h2>
+<p>Algorithms in StarryNight serve several essential purposes:</p>
+<ol>
+<li><strong>Image Processing Logic</strong> - Implementing the core computational steps</li>
+<li><strong>Pipeline Generation</strong> - Creating CellProfiler pipeline files programmatically</li>
+<li><strong>LoadData Creation</strong> - Generating CSV files that tell CellProfiler how to load images</li>
+<li><strong>Pipeline Execution</strong> - Running processing steps on prepared data</li>
+</ol>
+<p>By focusing solely on the core computational logic without higher-level concerns, the algorithm layer maintains simplicity and testability.</p>
+<h2 id="design-principles">Design Principles</h2>
+<p>Algorithms in StarryNight follow these key design principles:</p>
+<ul>
+<li><strong>Independence</strong>: No dependencies on other StarryNight components</li>
+<li><strong>Clear Boundaries</strong>: Well-defined inputs, outputs, and side effects</li>
+<li><strong>Focused Responsibility</strong>: Each algorithm performs a specific task</li>
+<li><strong>Portability</strong>: Can be used in any context without modification</li>
+<li><strong>Explicit State</strong>: Avoid global state or implicit dependencies</li>
+</ul>
+<p>The most important characteristic of the algorithm layer is its <strong>complete independence</strong> from the rest of the system.</p>
+<h2 id="algorithm-sets-structure">Algorithm Sets Structure</h2>
+<p>Algorithms are organized into "algorithm sets" -- groups of related functions that collectively handle a specific pipeline stage.</p>
+<h3 id="common-pattern">Common Pattern</h3>
+<p>Most algorithm sets follow a consistent pattern with three key function types:</p>
+<div class="admonition abstract">
+<p class="admonition-title">Common patterns</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">1: LoadData Generation</label><label for="__tabbed_1_2">2: Pipeline Generation</label><label for="__tabbed_1_3">3: Execution</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Functions that create CSV files defining which images to process</p>
+<ul>
+<li>Typically named <code>gen_&lt;algorithm&gt;_load_data_by_batch_plate()</code></li>
+<li>These functions identify relevant images from indexes or metadata</li>
+<li>They organize images by batch, plate, well, and site</li>
+<li>They output CSV files with paths and metadata CellProfiler needs to load images</li>
+<li>LoadData files contain metadata, filenames, paths, and frame information</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Functions that create processing pipeline definitions</p>
+<ul>
+<li>Typically named <code>gen_&lt;algorithm&gt;_cppipe_by_batch_plate()</code></li>
+<li>These functions programmatically create processing pipelines</li>
+<li>They configure pipeline modules with appropriate parameters</li>
+<li>They often infer parameters from sample LoadData files</li>
+<li>They output pipeline files in formats like .cppipe or .json</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Functions that run the pipeline on the loaded data</p>
+<ul>
+<li>Often using <code>run_cp_parallel()</code> or similar functions</li>
+<li>These functions handle running the generated pipelines against the data</li>
+<li>They manage parallel execution for performance</li>
+<li>They handle resource allocation and cleanup</li>
+<li>They organize outputs according to the experimental structure</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<p>This pattern provides a clear separation of concerns even within the algorithm layer itself.</p>
+<h3 id="common-across-algorithm-sets">Common Across Algorithm Sets</h3>
+<p>While each algorithm set handles different processing stages, they share common characteristics:</p>
+<ol>
+<li><strong>Input/Output Pattern</strong> - Each algorithm expects specific inputs and produces well-defined outputs</li>
+<li><strong>Parameter Handling</strong> - Consistent parameter passing and validation</li>
+<li><strong>Path Handling</strong> - Using standard approaches for file paths</li>
+<li><strong>Error Handling</strong> - Consistent approaches to error conditions</li>
+</ol>
+<h2 id="implementation-patterns">Implementation Patterns</h2>
+<p>Algorithms employ several recurring implementation patterns:</p>
+<div class="admonition abstract">
+<p class="admonition-title">Implementation patterns</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Sample Data Inference</label><label for="__tabbed_2_2">Path Handling</label><label for="__tabbed_2_3">Processing Organization</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>This pattern primarily applies to <strong>pipeline generation algorithms</strong>. When creating pipeline definitions, these algorithms:</p>
+<ol>
+<li>Read a sample LoadData file</li>
+<li>Extract channel names, cycle counts, and other metadata</li>
+<li>Use this information to configure the pipeline appropriately</li>
+</ol>
+<p>This approach allows pipeline generation algorithms to adapt to different experimental contexts without requiring all parameters to be specified explicitly.</p>
+</div>
+<div class="tabbed-block">
+<p>This pattern applies to <strong>all algorithm types</strong>. All algorithms use the <code>cloudpathlib</code> library's <code>AnyPath</code> class, which provides a consistent interface for:</p>
+<ul>
+<li>Local file paths</li>
+<li>Cloud storage paths (S3, etc.)</li>
+<li>Relative and absolute paths</li>
+</ul>
+<p>This abstraction enables algorithms to work with data regardless of its location, which is essential for all algorithm types from LoadData generation to execution.</p>
+</div>
+<div class="tabbed-block">
+<p>This pattern applies primarily to <strong>LoadData generation and execution algorithms</strong>. These algorithms organize processing by experimental hierarchy:</p>
+<ul>
+<li>Plate - A multi-well plate containing experimental samples</li>
+<li>Well - A compartment within a plate with one experimental condition</li>
+<li>Site - A microscope field of view capturing a region of a well</li>
+<li>Batch - A group of plates</li>
+</ul>
+<p>Algorithms typically group by batch-plate, batch-plate-well, or batch-plate-well-site depending on processing needs.</p>
+</div>
+</div>
+</div>
+</div>
+<h2 id="beyond-cellprofiler">Beyond CellProfiler</h2>
+<p>While many algorithm sets focus on CellProfiler integration, others serve different purposes:</p>
+<ul>
+<li><strong>Indexing</strong> - Creating indexes of available data</li>
+<li><strong>Inventory</strong> - Managing metadata about available data</li>
+<li><strong>Quality Control</strong> - Analyzing results for quality issues</li>
+<li><strong>Feature Selection</strong> - Identifying informative features</li>
+<li><strong>Data Visualization</strong> - Creating visualizations of results</li>
+</ul>
+<p>These non-CellProfiler algorithm sets use the same architectural principles but may not follow the three-part pattern of LoadData generation, pipeline generation, and execution.</p>
+<h2 id="algorithm-complexity-and-decision-points">Algorithm Complexity and Decision Points</h2>
+<p>Pipeline generation algorithms can incorporate conditional logic based on user requirements. For example, these algorithms might add or remove specific modules based on flags that indicate:</p>
+<ul>
+<li>Whether to handle blurry images</li>
+<li>Whether to remove debris</li>
+<li>Which quality control steps to include</li>
+</ul>
+<p>This flexibility allows pipeline generation algorithms to adapt to different experimental needs while maintaining their functional structure.</p>
+<h2 id="code-examples">Code Examples</h2>
+<p>The following examples are simplified pseudocode based on actual StarryNight implementations but edited for clarity. They demonstrate the typical patterns found in algorithm sets.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Code Examples</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Example 1: LoadData Generation</label><label for="__tabbed_3_2">Example 2: Pipeline Generation</label><label for="__tabbed_3_3">Example 3: Pipeline Execution</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-text highlight"><pre><span></span><code>def gen_algorithm_load_data_by_batch_plate(
+    index_path: Path | CloudPath,
+    out_path: Path | CloudPath,
+    path_mask: str | None,
+    for_special_type: bool = False,
+) -&gt; None:
+    &quot;&quot;&quot;Generate LoadData CSV files for a specific algorithm.
+
+    Reads image metadata from an index, organizes by batch/plate structure,
+    and writes LoadData CSV files for CellProfiler.
+    &quot;&quot;&quot;
+    # Read from index file (typically parquet format)
+    df = pl.read_parquet(index_path.resolve().__str__())
+
+    # Filter for relevant images based on criteria
+    if not for_special_type:
+        images_df = df.filter(pl.col(&quot;type_flag&quot;).ne(True), pl.col(&quot;is_image&quot;).eq(True))
+    else:
+        images_df = df.filter(pl.col(&quot;type_flag&quot;).eq(True), pl.col(&quot;is_image&quot;).eq(True))
+
+    # Organize images hierarchically (by batch, plate, etc.)
+    images_hierarchy_dict = gen_image_hierarchy(images_df)
+
+    # Handle path prefix for correct file resolution
+    default_path_prefix = images_df.select(&quot;prefix&quot;).unique().to_series().to_list()[0]
+    if path_mask is None:
+        path_mask = default_path_prefix
+
+    # Generate LoadData files for each batch/plate combination
+    for batch in images_hierarchy_dict.keys():
+        for plate in images_hierarchy_dict[batch].keys():
+            if not for_special_type:
+                # Standard case
+                write_loaddata_csv_by_batch_plate(
+                    images_df, out_path, path_mask, batch, plate
+                )
+            else:
+                # Special case with cycle information
+                plate_cycles_list = get_cycles_by_batch_plate(images_df, batch, plate)
+                for cycle in plate_cycles_list:
+                    write_loaddata_csv_by_batch_plate_cycle(
+                        images_df, out_path, path_mask, batch, plate, cycle
+                    )
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-text highlight"><pre><span></span><code>def gen_algorithm_cppipe_by_batch_plate(
+    load_data_path: Path | CloudPath,
+    out_dir: Path | CloudPath,
+    workspace_path: Path | CloudPath,
+    special_option: bool = False,
+) -&gt; None:
+    &quot;&quot;&quot;Create a CellProfiler pipeline programmatically.
+
+    Reads a sample LoadData file to determine parameters,
+    then constructs a pipeline with appropriate modules.
+    &quot;&quot;&quot;
+    # Ensure output directory exists
+    out_dir.mkdir(exist_ok=True, parents=True)
+
+    # Find appropriate LoadData files to use as samples
+    if not special_option:
+        type_suffix = &quot;standard&quot;
+        files_by_hierarchy = get_files_by([&quot;batch&quot;], load_data_path, &quot;*.csv&quot;)
+    else:
+        type_suffix = &quot;special&quot;
+        files_by_hierarchy = get_files_by([&quot;batch&quot;, &quot;plate&quot;], load_data_path, &quot;*.csv&quot;)
+
+    # Get sample file for inferring parameters
+    _, files = flatten_dict(files_by_hierarchy)[0]
+
+    # Create pipeline with CellProfiler API
+    with CellProfilerContext(out_dir=workspace_path) as cpipe:
+        # Generate pipeline with appropriate modules based on options
+        cpipe = generate_specific_pipeline(cpipe, files[0], special_option)
+
+        # Save pipeline in multiple formats
+        filename = f&quot;algorithm_{type_suffix}.cppipe&quot;
+        with out_dir.joinpath(filename).open(&quot;w&quot;) as f:
+            cpipe.dump(f)
+        filename = f&quot;algorithm_{type_suffix}.json&quot;
+        with out_dir.joinpath(filename).open(&quot;w&quot;) as f:
+            json.dump(cpipe.json(), f)
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-text highlight"><pre><span></span><code>def run_cp_parallel(
+    uow_list: list[tuple[Path, Path]],
+    out_dir: Path,
+    plugin_dir: Path | None = None,
+    jobs: int = 20,
+) -&gt; None:
+    &quot;&quot;&quot;Run CellProfiler pipelines in parallel.
+
+    Takes a list of pipeline and LoadData file pairs (units of work),
+    then executes them with appropriate parallelism.
+
+    Parameters
+    ----------
+    uow_list : list of tuple of Path
+        List of tuples containing the paths to the pipeline and load data files.
+    out_dir : Path
+        Output directory path.
+    plugin_dir : Path
+        Path to cellprofiler plugin directory.
+    jobs : int, optional
+        Number of parallel jobs to use (default is 20).
+    &quot;&quot;&quot;
+    # Initialize execution environment (e.g., start Java VM for CellProfiler)
+    cellprofiler_core.utilities.java.start_java()
+
+    # Execute all units of work in parallel
+    # The &#39;parallel&#39; function is a utility that runs the specified function
+    # on each item in the list with the given parameters
+    parallel(uow_list, run_cp, [out_dir, plugin_dir], jobs)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<h2 id="algorithm-development">Algorithm Development</h2>
+<p>For CellProfiler-related algorithm sets, developers typically need to:</p>
+<ol>
+<li>Create the appropriate functions following established patterns</li>
+<li>Implement LoadData generation</li>
+<li>Implement pipeline generation</li>
+<li>Implement execution logic</li>
+</ol>
+<p>For other algorithm types (indexing, inventory, quality control, etc.), the specific functions will vary based on purpose, but the underlying principles remain the same.</p>
+<p>Regardless of algorithm type, implementations should follow the established patterns and independence principles of the algorithm layer.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The algorithm layer provides the foundational capabilities of StarryNight through pure Python functions that implement core image processing logic. This organization enables flexible and extensible scientific image processing.</p>
+<p><strong>Next: <a href="../02_cli_layer/">CLI Layer</a></strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2268 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="StarryNight - toolkit for optical pooled screening">
+      
+      
+      
+      
+        <link rel="prev" href="../../pcpip-specs/">
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>PCPIP Reference Pipelines - StarryNight</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pcpip-reference-pipelines" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="StarryNight" class="md-header__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StarryNight
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PCPIP Reference Pipelines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../user/getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guides/system-maintenance-guide/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../architecture/00_architecture_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../architecturev2/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../validation/testing-framework/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../roadmap/requirements/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../pcpip-specs/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="StarryNight" class="md-nav__button md-logo" aria-label="StarryNight" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    StarryNight
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/broadinstitute/starrynight" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../user/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../user/example-pipeline-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../user/parser-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../user/operational-challenges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/system-maintenance-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/workflow-implementation-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/00_architecture_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/01_algorithm_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/02_cli_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/03_module_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/04_pipeline_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/05_execution_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/06_configuration_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/07_architecture_for_biologists/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/08_practical_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/09_architecture_flow_example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../architecturev2/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/00-1-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Principles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/01-algorithm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/02-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/03-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/04-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/05-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/06-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecturev2/99-0-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../validation/testing-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../validation/validation-pipeline-1-illum-calc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../roadmap/requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../roadmap/pipeline-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../roadmap/aws-deployment-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pcpip-specs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory Structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-pipelines-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference Pipelines Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Pipelines Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cp_illum-ref_1_cp_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. CP_Illum (ref_1_CP_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cp_apply_illum-ref_2_cp_apply_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. CP_Apply_Illum (ref_2_CP_Apply_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cp_segmentationcheck-ref_3_cp_segmentationcheckcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. CP_SegmentationCheck (ref_3_CP_SegmentationCheck.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-bc_illum-ref_5_bc_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. BC_Illum (ref_5_BC_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-bc_apply_illum-ref_6_bc_apply_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. BC_Apply_Illum (ref_6_BC_Apply_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-bc_preprocess-ref_7_bc_preprocesscppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. BC_Preprocess (ref_7_BC_Preprocess.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-analysis-ref_9_analysiscppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Analysis (ref_9_Analysis.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specialized-pipeline-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Pipeline Variants
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Pipeline Variants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6_bc_apply_illum_debrismask" class="md-nav__link">
+    <span class="md-ellipsis">
+      6_BC_Apply_Illum_DebrisMask
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7a_bc_preprocess_troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      7A_BC_Preprocess_Troubleshooting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualization Resources
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory Structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-pipelines-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference Pipelines Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Pipelines Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cp_illum-ref_1_cp_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. CP_Illum (ref_1_CP_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cp_apply_illum-ref_2_cp_apply_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. CP_Apply_Illum (ref_2_CP_Apply_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cp_segmentationcheck-ref_3_cp_segmentationcheckcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. CP_SegmentationCheck (ref_3_CP_SegmentationCheck.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-bc_illum-ref_5_bc_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. BC_Illum (ref_5_BC_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-bc_apply_illum-ref_6_bc_apply_illumcppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. BC_Apply_Illum (ref_6_BC_Apply_Illum.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-bc_preprocess-ref_7_bc_preprocesscppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. BC_Preprocess (ref_7_BC_Preprocess.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-analysis-ref_9_analysiscppipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Analysis (ref_9_Analysis.cppipe)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specialized-pipeline-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Pipeline Variants
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Pipeline Variants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6_bc_apply_illum_debrismask" class="md-nav__link">
+    <span class="md-ellipsis">
+      6_BC_Apply_Illum_DebrisMask
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7a_bc_preprocess_troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      7A_BC_Preprocess_Troubleshooting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualization Resources
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="pcpip-reference-pipelines">PCPIP Reference Pipelines</h1>
+<div class="admonition warning">
+<p class="admonition-title">Reference Pipeline Maintenance</p>
+<p><strong>This directory contains legacy reference pipelines that are no longer actively maintained.</strong></p>
+<p>For current reference pipelines, use: <strong><code>starrynight/src/starrynight/templates/cppipe/</code></strong></p>
+<ul>
+<li>The templates directory is the single source of truth for production pipeline templates</li>
+<li>This test directory was synchronized one final time on 2025-01-06 for historical consistency</li>
+<li>Future updates will only be made to the templates directory</li>
+<li>This directory remains useful for historical reference and specialized test fixtures</li>
+</ul>
+</div>
+<p>A curated collection of CellProfiler pipelines that serve as references for the Pooled Cell Painting Image Processing (PCPIP) workflow.</p>
+<h2 id="introduction">Introduction</h2>
+<p>This repository contains carefully selected reference implementations of CellProfiler pipelines for the PCPIP workflow. These reference pipelines document standard configurations and variations for processing pooled cell painting images, and may be used as test fixtures for the StarryNight pipeline parser and validation tools.</p>
+<p>For full context, see the <a href="https://github.com/broadinstitute/pooled-cell-painting-image-processing/tree/6c34fdb1a07d85a54dbcdfb148ad3418025e6616/pipelines/12cycles">original PCPIP repository pipelines</a>.</p>
+<blockquote>
+<p><strong>Note on Pipeline Structures</strong>: These pipelines have been reviewed as suitable test fixtures by the PCPIP workflow experts. While some pipelines use <a href="https://github.com/broadinstitute/starrynight/issues/73#issuecomment-2831353285">unusual</a> approaches to object identification and handling (particularly in pipelines 3, 7, and 9), these aspects don't affect their suitability as test fixtures and reference implementations.</p>
+</blockquote>
+<h2 id="directory-structure">Directory Structure</h2>
+<p>Directory structure of <a href="https://github.com/broadinstitute/starrynight/tree/main/docs/developer/legacy/pcpip-pipelines">https://github.com/broadinstitute/starrynight/tree/main/docs/developer/legacy/pcpip-pipelines</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code> (root)</td>
+<td>Reference pipeline files (prefixed with <code>ref_</code>)</td>
+</tr>
+<tr>
+<td><code>_pcpip_12cycles/</code></td>
+<td>Original 12-cycle pipelines from PCPIP</td>
+</tr>
+<tr>
+<td><code>_refsource/</code></td>
+<td>Source pipeline variants with comparison diffs</td>
+</tr>
+<tr>
+<td><code>_ref_graph_format/</code></td>
+<td>Pipeline visualizations (JSON, DOT, SVG, PNG)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference-pipelines-overview">Reference Pipelines Overview</h2>
+<p>The PCPIP workflow consists of the following pipeline stages, represented by the reference pipelines in this repository:</p>
+<h3 id="1-cp_illum-ref_1_cp_illumcppipe">1. CP_Illum (<code>ref_1_CP_Illum.cppipe</code>)</h3>
+<p>Creates illumination correction functions for all cycles and channels. This is the first step in the workflow, which calculates illumination correction functions used in subsequent steps.</p>
+<h3 id="2-cp_apply_illum-ref_2_cp_apply_illumcppipe">2. CP_Apply_Illum (<code>ref_2_CP_Apply_Illum.cppipe</code>)</h3>
+<p>Applies illumination correction functions to all cycles and channels. This pipeline corrects for uneven illumination in the raw images.</p>
+<h3 id="3-cp_segmentationcheck-ref_3_cp_segmentationcheckcppipe">3. CP_SegmentationCheck (<code>ref_3_CP_SegmentationCheck.cppipe</code>)</h3>
+<p>Quality control step to verify cell segmentation. This pipeline identifies primary objects (nuclei) and checks segmentation quality. Note: This pipeline uses two <code>IdentifySecondaryObjects</code> modules for PreCells =&gt; Cells, which is an unusual approach but doesn't impact its effectiveness as a test fixture.</p>
+<h3 id="5-bc_illum-ref_5_bc_illumcppipe">5. BC_Illum (<code>ref_5_BC_Illum.cppipe</code>)</h3>
+<p>Creates barcode-specific illumination correction functions. This pipeline calculates illumination correction specifically for barcode images.</p>
+<h3 id="6-bc_apply_illum-ref_6_bc_apply_illumcppipe">6. BC_Apply_Illum (<code>ref_6_BC_Apply_Illum.cppipe</code>)</h3>
+<p>Applies illumination correction to barcode cycle images across all channels (DAPI, A, C, G, T). This pipeline not only corrects for uneven illumination but also performs image alignment between cycles to ensure proper barcode reading.</p>
+<h3 id="7-bc_preprocess-ref_7_bc_preprocesscppipe">7. BC_Preprocess (<code>ref_7_BC_Preprocess.cppipe</code>)</h3>
+<p>Preprocesses barcode images for analysis. This pipeline prepares barcode images for subsequent analysis steps. Note: Contains some non-standard object handling approaches that don't affect outputs.</p>
+<h3 id="9-analysis-ref_9_analysiscppipe">9. Analysis (<code>ref_9_Analysis.cppipe</code>)</h3>
+<p>Performs cellular analysis measurements. This pipeline identifies cells, measures features, and exports results. Similar to Pipeline 3, this uses some unusual object identification approaches that are appropriate for test fixtures but not necessarily representative of common workflows.</p>
+<h2 id="specialized-pipeline-variants">Specialized Pipeline Variants</h2>
+<p>Some specialized variants demonstrate specific processing requirements:</p>
+<h3 id="6_bc_apply_illum_debrismask">6_BC_Apply_Illum_DebrisMask</h3>
+<p>A specialized variant of pipeline 6 developed for datasets with significant debris that requires masking. This pipeline demonstrates the extensibility requirements for StarryNight, showing how specialized processing steps can be swapped in to address dataset-specific challenges. While valuable as a reference for extensibility design, it is not required as a standard test fixture. See PCPIP <code>12cycle</code> <a href="../_pcpip_12cycles/6_BC_Apply_Illum_DebrisMask.cppipe">version</a>.</p>
+<h3 id="7a_bc_preprocess_troubleshooting">7A_BC_Preprocess_Troubleshooting</h3>
+<p>A variant of pipeline 7 created for testing multiple CompensateColors parameter settings within a single pipeline execution. If StarryNight successfully implements module iteration capabilities, pipeline 7A becomes largely redundant. The 7A pipeline was created as a workaround for testing multiple parameters within a single pipeline execution. A truly modular system would allow iterative parameter testing without requiring specialized pipeline variants. See PCPIP <code>12cycle</code> <a href="../_pcpip_12cycles/7A_BC_Preprocess_Troubleshooting.cppipe">version</a>.</p>
+<h2 id="visualization-resources">Visualization Resources</h2>
+<p>The <code>_ref_graph_format/</code> directory contains pipeline visualizations to aid in understanding pipeline structure:</p>
+<ul>
+<li><strong>JSON files</strong>: Pipeline data exported from CellProfiler 4.2.8</li>
+<li><strong>DOT files</strong>: Graph definitions for pipeline structure</li>
+<li><strong>SVG/PNG files</strong>: Visual representations of pipeline workflows</li>
+</ul>
+<p>These visualizations help understand pipeline structure without requiring CellProfiler installation.</p>
+<div class="admonition warning">
+<p class="admonition-title">Reference Pipeline Update 2025-01-06</p>
+<p>The reference pipelines were updated to match the production template versions from <code>starrynight/src/starrynight/templates/cppipe/</code>. Key changes include:</p>
+<p><strong>Metadata tag standardization:</strong></p>
+<ul>
+<li><code>ref_5_BC_Illum.cppipe</code>: Changed from <code>SBSCycle</code> to <code>Cycle</code> metadata tag</li>
+<li><code>ref_6_BC_Apply_Illum.cppipe</code> and <code>ref_7_BC_Preprocess.cppipe</code>: Changed from <code>Well_Value</code> to <code>Well</code> metadata tag</li>
+</ul>
+<p><strong>Channel naming consistency:</strong></p>
+<ul>
+<li><code>ref_6_BC_Apply_Illum.cppipe</code> and <code>ref_7_BC_Preprocess.cppipe</code>: Changed from <code>DAPI</code> to <code>DNA</code> for DNA channel naming</li>
+</ul>
+<p>These changes ensure consistency between test fixtures and production templates, facilitating better validation and testing workflows.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Pipeline Selection Details</p>
+<p>Pipeline variants in <code>_refsource</code> are from <code>s3://BUCKET/projects/PROJECT/workspace/pipelines/BATCH</code>. These variants were compared to select the most appropriate reference implementations.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>_refsource
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>diff<span class="w"> </span>1_CP_Illum/1_CP_Illum.cppipe<span class="w"> </span>1_CP_Illum/1_Illum_Plate1_Plate2.cppipe<span class="w"> </span>&gt;<span class="w"> </span>1_CP_Illum/1_CP_Illum__1_Illum_Plate1_Plate2.diff
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>diff<span class="w"> </span>2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe<span class="w"> </span>2_CP_Apply_Illum/2_CP_Apply_Illum_Plate3_Plate4.cppipe<span class="w"> </span>&gt;<span class="w"> </span>2_CP_Apply_Illum/2_CP_Apply_Illum__2_CP_Apply_Illum_Plate3_Plate4.diff
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>diff<span class="w"> </span>3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4.cppipe<span class="w"> </span>3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe<span class="w"> </span>&gt;<span class="w"> </span>3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate3_Plate4__3_CP_SegmentationCheck_Plate1_Plate2.diff
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>diff<span class="w"> </span>5_BC_Illum/5_BC_Illum.cppipe<span class="w"> </span>5_BC_Illum/5_BC_Illum_byWell.cppipe<span class="w"> </span>&gt;<span class="w"> </span>5_BC_Illum/5_BC_Illum__5_BC_Illum_byWell.diff
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>diff<span class="w"> </span>7_BC_Preprocess/7_BC_Preprocess.cppipe<span class="w"> </span>7_BC_Preprocess/7_BC_Preprocess_4.cppipe<span class="w"> </span>&gt;<span class="w"> </span>7_BC_Preprocess/7_BC_Preprocess__7_BC_Preprocess_4.diff
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>diff<span class="w"> </span>9_Analysis/9_Analysis.cppipe<span class="w"> </span>9_Analysis/9_Analysis_Plate1_Plate2.cppipe<span class="w"> </span>&gt;<span class="w"> </span>9_Analysis/9_Analysis__9_Analysis_Plate1_Plate2.diff
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>diff<span class="w"> </span>9_Analysis/9_Analysis_foci.cppipe<span class="w"> </span>9_Analysis/9_Analysis_Plate1_Plate2.cppipe<span class="w"> </span>&gt;<span class="w"> </span>9_Analysis/9_Analysis_foci__9_Analysis_Plate1_Plate2.diff
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>diff<span class="w"> </span>9_Analysis/9_Analysis_rerun.cppipe<span class="w"> </span>9_Analysis/9_Analysis_Plate1_Plate2.cppipe<span class="w"> </span>&gt;<span class="w"> </span>9_Analysis/9_Analysis_rerun__9_Analysis_Plate1_Plate2.diff
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">cd</span><span class="w"> </span>-
+</span></code></pre></div>
+<p>After reviewing the diffs, these pipeline variants were selected:</p>
+<ul>
+<li><code>1_CP_Illum</code>: <code>1_Illum_Plate1_Plate2.cppipe</code></li>
+<li><code>2_CP_Apply_Illum</code>: <code>2_CP_Apply_Illum.cppipe</code></li>
+<li><code>3_CP_SegmentationCheck</code>: <code>3_CP_SegmentationCheck_Plate1_Plate2.cppipe</code></li>
+<li><code>5_BC_Illum</code>: <code>5_BC_Illum.cppipe</code></li>
+<li><code>6_BC_Apply_Illum</code>: <code>6_BC_Apply_Illum.cppipe</code></li>
+<li><code>7_BC_Preprocess</code>: <code>7_BC_Preprocess.cppipe</code></li>
+<li><code>9_Analysis</code>: <code>9_Analysis_Plate1_Plate2.cppipe</code></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Reference Pipelines Creation</p>
+<p>The selected pipeline variants were initially copied to create the reference pipelines:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>_refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe<span class="w"> </span>ref_1_CP_Illum.cppipe
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cp<span class="w"> </span>_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe<span class="w"> </span>ref_2_CP_Apply_Illum.cppipe
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>cp<span class="w"> </span>_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe<span class="w"> </span>ref_3_CP_SegmentationCheck.cppipe
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>cp<span class="w"> </span>_refsource/5_BC_Illum/5_BC_Illum.cppipe<span class="w"> </span>ref_5_BC_Illum.cppipe
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>cp<span class="w"> </span>_refsource/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe<span class="w"> </span>ref_6_BC_Apply_Illum.cppipe
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>cp<span class="w"> </span>_refsource/7_BC_Preprocess/7_BC_Preprocess.cppipe<span class="w"> </span>ref_7_BC_Preprocess.cppipe
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>cp<span class="w"> </span>_refsource/9_Analysis/9_Analysis_Plate1_Plate2.cppipe<span class="w"> </span>ref_9_Analysis.cppipe
+</span></code></pre></div>
+<p>The reference pipelines were modified over time to:</p>
+<ol>
+<li>Drop cycles 4-10</li>
+<li>Replace <code>RunCellPose</code> with <code>IdentifyPrimaryObjects</code></li>
+<li>Synchronize with production template versions (2025-01-06)</li>
+</ol>
+<p>You can view the commit history of specific pipeline files using GitHub, for example:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git log --follow -- tests/pcpip-pipelines/ref_1_CP_Illum.cppipe
+</span></code></pre></div></p>
+<p>Or view the history through GitHub's interface by clicking on a file and then selecting "History" or "Blame".</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Pipeline Comparison Details</p>
+<p>Comparisons between reference pipeline sources and PCPIP 12-cycle pipelines were conducted using the following commands:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>_pcpip_12cycles/diff
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nv">refsource_1</span><span class="o">=</span><span class="s2">&quot;_refsource/1_CP_Illum/1_Illum_Plate1_Plate2.cppipe&quot;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nv">pcpip_1</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/1_CP_Illum.cppipe&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nv">diff_1</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/1_CP_Illum&quot;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_1</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_1</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_1</span><span class="si">}</span>.diff
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nv">refsource_2</span><span class="o">=</span><span class="s2">&quot;_refsource/2_CP_Apply_Illum/2_CP_Apply_Illum.cppipe&quot;</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nv">pcpip_2</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/2_CP_Apply_Illum.cppipe&quot;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nv">diff_2</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/2_CP_Apply_Illum&quot;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_2</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_2</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_2</span><span class="si">}</span>.diff
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="nv">refsource_3</span><span class="o">=</span><span class="s2">&quot;_refsource/3_CP_SegmentationCheck/3_CP_SegmentationCheck_Plate1_Plate2.cppipe&quot;</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="nv">pcpip_3</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/3_CP_SegmentationCheck.cppipe&quot;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nv">diff_3</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/3_CP_SegmentationCheck&quot;</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_3</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_3</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_3</span><span class="si">}</span>.diff
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="nv">refsource_5</span><span class="o">=</span><span class="s2">&quot;_refsource/5_BC_Illum/5_BC_Illum.cppipe&quot;</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="nv">pcpip_5</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/5_BC_Illum.cppipe&quot;</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="nv">diff_5</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/5_BC_Illum&quot;</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_5</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_5</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_5</span><span class="si">}</span>.diff
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="nv">refsource_6</span><span class="o">=</span><span class="s2">&quot;_refsource/6_BC_Apply_Illum/6_BC_Apply_Illum.cppipe&quot;</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="nv">pcpip_6</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/6_BC_Apply_Illum.cppipe&quot;</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="nv">diff_6</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/6_BC_Apply_Illum&quot;</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_6</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_6</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_6</span><span class="si">}</span>.diff
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="nv">refsource_7</span><span class="o">=</span><span class="s2">&quot;_refsource/7_BC_Preprocess/7_BC_Preprocess.cppipe&quot;</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="nv">pcpip_7</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/7_BC_Preprocess.cppipe&quot;</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="nv">diff_7</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/7_BC_Preprocess&quot;</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_7</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_7</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_7</span><span class="si">}</span>.diff
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="nv">refsource_9</span><span class="o">=</span><span class="s2">&quot;_refsource/9_Analysis/9_Analysis_Plate1_Plate2.cppipe&quot;</span>
+</span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="nv">pcpip_9</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/9_Analysis.cppipe&quot;</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="nv">diff_9</span><span class="o">=</span><span class="s2">&quot;_pcpip_12cycles/diff/9_Analysis&quot;</span>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>diff<span class="w"> </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">refsource_9</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">pcpip_9</span><span class="si">}</span><span class="w"> </span>&gt;<span class="w"> </span><span class="si">${</span><span class="nv">diff_9</span><span class="si">}</span>.diff
+</span></code></pre></div>
+<p>This was discussed further in <a href="https://github.com/broadinstitute/starrynight/issues/68#issuecomment-2780020724">issue #68</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Pipeline Visualization Generation</p>
+<p>Files in <code>_ref_graph_format</code> were created using the following:</p>
+<ul>
+<li><strong>JSON files</strong>: Exported from CellProfiler 4.2.8</li>
+<li><strong>DOT files</strong>: Generated using <a href="https://github.com/shntnu/cp_graph/blob/v0.10.0/cp_graph.py">cp_graph</a> tool</li>
+<li><strong>SVG/PNG files</strong>: Generated from DOT files using Graphviz</li>
+</ul>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>_ref_graph_format/
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>dot<span class="w"> </span>dotmin<span class="w"> </span>png<span class="w"> </span>svg
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>dot<span class="w"> </span>dotmin<span class="w"> </span>png<span class="w"> </span>svg
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nv">CP_GRAPH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/Documents/GitHub/cp_graph/cp_graph.py&quot;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nv">ROOT_NODES_FILE</span><span class="o">=</span>root_nodes.txt
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nv">ROOT_NODES</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span><span class="si">${</span><span class="nv">ROOT_NODES_FILE</span><span class="si">}</span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>paste<span class="w"> </span>-sd<span class="w"> </span><span class="s2">&quot;,&quot;</span><span class="w"> </span>-<span class="k">)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>find<span class="w"> </span>json/<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.json&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>parallel<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>--script<span class="w"> </span><span class="si">${</span><span class="nv">CP_GRAPH</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="o">{}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span>dot/<span class="o">{</span>/.<span class="o">}</span>.dot<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span>--rank-nodes<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span>--remove-unused-data<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span>--exclude-module-types<span class="o">=</span>ExportToSpreadsheet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span>--rank-ignore-filtered<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span>--root-nodes<span class="o">=</span><span class="si">${</span><span class="nv">ROOT_NODES</span><span class="si">}</span><span class="w">  </span><span class="c1"># --highlight-filtered</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>find<span class="w"> </span>dot<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.dot&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>parallel<span class="w"> </span>dot<span class="w"> </span>-Gdpi<span class="o">=</span><span class="m">50</span><span class="w"> </span>-Tpng<span class="w"> </span><span class="o">{}</span><span class="w"> </span>-o<span class="w"> </span>png/<span class="o">{</span>/.<span class="o">}</span>.png
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>find<span class="w"> </span>dot<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.dot&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>parallel<span class="w"> </span>dot<span class="w"> </span>-Tsvg<span class="w"> </span><span class="o">{}</span><span class="w"> </span>-o<span class="w"> </span>svg/<span class="o">{</span>/.<span class="o">}</span>.svg
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>find<span class="w"> </span>json/<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.json&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>parallel<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>--script<span class="w"> </span><span class="si">${</span><span class="nv">CP_GRAPH</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">  </span><span class="o">{}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">  </span>dotmin/<span class="o">{</span>/.<span class="o">}</span>.dot<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">  </span>--remove-unused-data<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">  </span>--exclude-module-types<span class="o">=</span>ExportToSpreadsheet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">  </span>--root-nodes<span class="o">=</span><span class="si">${</span><span class="nv">ROOT_NODES</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">  </span>--ultra-minimal<span class="w"> </span><span class="c1"># --highlight-filtered</span>
+</span></code></pre></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

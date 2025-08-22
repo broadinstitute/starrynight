@@ -1,0 +1,1297 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="StarryNight - toolkit for optical pooled screening" name="description"/>
+<link href="../getting-started/" rel="prev"/>
+<link href="../parser-configuration/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.18" name="generator"/>
+<title>Complete Workflow Example - StarryNight</title>
+<link href="../../assets/stylesheets/main.7e37652d.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#complete-workflow-example-cli-approach">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="StarryNight" class="md-header__button md-logo" data-md-component="logo" href="../.." title="StarryNight">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            StarryNight
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Complete Workflow Example
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/broadinstitute/starrynight" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4" fill="currentColor"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../getting-started/">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../developer/guides/system-maintenance-guide/">
+          
+  
+  
+    
+  
+  Developer Guide
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../architecture/00_architecture_overview/">
+          
+  
+  
+    
+  
+  Developer Architecture
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../architecturev2/">
+          
+  
+  
+    
+  
+  Developer Architecture (v2)
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../developer/validation/testing-framework/">
+          
+  
+  
+    
+  
+  Developer Testing
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../developer/roadmap/requirements/">
+          
+  
+  
+    
+  
+  Developer Roadmap
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../developer/legacy/pcpip-specs/">
+          
+  
+  
+    
+  
+  Developer Legacy
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="StarryNight" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="StarryNight">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    StarryNight
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/broadinstitute/starrynight" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4" fill="currentColor"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Home
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    User Guide
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../getting-started/">
+<span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Complete Workflow Example
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      Prerequisites
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#workflow-overview">
+<span class="md-ellipsis">
+      Workflow Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-point">
+<span class="md-ellipsis">
+      Starting Point
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-illumination-application">
+<span class="md-ellipsis">
+      CP Illumination Application
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-segmentation-check">
+<span class="md-ellipsis">
+      CP Segmentation Check
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#download-and-setup-fiji-required-for-stitching">
+<span class="md-ellipsis">
+      Download and Setup Fiji (Required for Stitching)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-stitch-and-crop">
+<span class="md-ellipsis">
+      CP Stitch and Crop
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-illumination-calculation">
+<span class="md-ellipsis">
+      SBS Illumination Calculation
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-illumination-application-and-alignment">
+<span class="md-ellipsis">
+      SBS Illumination Application and Alignment
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-preprocessing">
+<span class="md-ellipsis">
+      SBS Preprocessing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-stitch-and-crop">
+<span class="md-ellipsis">
+      SBS Stitch and Crop
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#analysis">
+<span class="md-ellipsis">
+      Analysis
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-parameters">
+<span class="md-ellipsis">
+      Common Parameters
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#next-steps">
+<span class="md-ellipsis">
+      Next Steps
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conclusion">
+<span class="md-ellipsis">
+      Conclusion
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../parser-configuration/">
+<span class="md-ellipsis">
+    Parser Configuration
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operational-challenges/">
+<span class="md-ellipsis">
+    Operational Challenges FAQ
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            Developer Guide
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/guides/system-maintenance-guide/">
+<span class="md-ellipsis">
+    System Maintenance
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/guides/workflow-implementation-guide/">
+<span class="md-ellipsis">
+    Workflow Implementation
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Architecture
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Developer Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/00_architecture_overview/">
+<span class="md-ellipsis">
+    Overview
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/01_algorithm_layer/">
+<span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/02_cli_layer/">
+<span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/03_module_layer/">
+<span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/04_pipeline_layer/">
+<span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/05_execution_layer/">
+<span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/06_configuration_layer/">
+<span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/07_architecture_for_biologists/">
+<span class="md-ellipsis">
+    Architecture for Biologists
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/08_practical_integration/">
+<span class="md-ellipsis">
+    Practical Integration
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/09_architecture_flow_example/">
+<span class="md-ellipsis">
+    Flow Example
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<div class="md-nav__link md-nav__container">
+<a class="md-nav__link" href="../../architecturev2/">
+<span class="md-ellipsis">
+    Developer Architecture (v2)
+    
+  </span>
+</a>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-nav__icon md-icon"></span>
+</label>
+</div>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            Developer Architecture (v2)
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/00-1-principles/">
+<span class="md-ellipsis">
+    Principles
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/01-algorithm/">
+<span class="md-ellipsis">
+    Algorithm Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/02-cli/">
+<span class="md-ellipsis">
+    CLI Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/03-module/">
+<span class="md-ellipsis">
+    Module Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/04-pipeline/">
+<span class="md-ellipsis">
+    Pipeline Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/05-execution/">
+<span class="md-ellipsis">
+    Execution Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/06-configuration/">
+<span class="md-ellipsis">
+    Configuration Layer
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecturev2/99-0-examples/">
+<span class="md-ellipsis">
+    Examples
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Testing
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Developer Testing
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/validation/testing-framework/">
+<span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/validation/validation-pipeline-1-illum-calc/">
+<span class="md-ellipsis">
+    Pipeline Validation
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Roadmap
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            Developer Roadmap
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/roadmap/requirements/">
+<span class="md-ellipsis">
+    Design Requirements
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/roadmap/pipeline-automation/">
+<span class="md-ellipsis">
+    Pipeline Automation
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/roadmap/aws-deployment-roadmap/">
+<span class="md-ellipsis">
+    AWS Deployment Strategy
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Developer Legacy
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Developer Legacy
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/legacy/pcpip-specs/">
+<span class="md-ellipsis">
+    PCPIP Specifications
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../developer/legacy/pcpip-pipelines/pcpip-pipelines/">
+<span class="md-ellipsis">
+    PCPIP Reference Pipelines
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      Prerequisites
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#workflow-overview">
+<span class="md-ellipsis">
+      Workflow Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-point">
+<span class="md-ellipsis">
+      Starting Point
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-illumination-application">
+<span class="md-ellipsis">
+      CP Illumination Application
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-segmentation-check">
+<span class="md-ellipsis">
+      CP Segmentation Check
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#download-and-setup-fiji-required-for-stitching">
+<span class="md-ellipsis">
+      Download and Setup Fiji (Required for Stitching)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cp-stitch-and-crop">
+<span class="md-ellipsis">
+      CP Stitch and Crop
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-illumination-calculation">
+<span class="md-ellipsis">
+      SBS Illumination Calculation
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-illumination-application-and-alignment">
+<span class="md-ellipsis">
+      SBS Illumination Application and Alignment
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-preprocessing">
+<span class="md-ellipsis">
+      SBS Preprocessing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sbs-stitch-and-crop">
+<span class="md-ellipsis">
+      SBS Stitch and Crop
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#analysis">
+<span class="md-ellipsis">
+      Analysis
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-parameters">
+<span class="md-ellipsis">
+      Common Parameters
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#next-steps">
+<span class="md-ellipsis">
+      Next Steps
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conclusion">
+<span class="md-ellipsis">
+      Conclusion
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="complete-workflow-example-cli-approach">Complete Workflow Example (CLI Approach)</h1>
+<p>This guide walks through a complete example of processing microscopy images using StarryNight's key modules and CLI commands. It builds on the foundation established in the <a href="../getting-started/">Getting Started</a> guide, extending those concepts into a full image processing workflow.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before starting this workflow, you need:</p>
+<ul>
+<li>To complete the workflow from <a href="../getting-started/">Getting Started</a>, including:<ul>
+<li>Setting up your environment</li>
+<li>Downloading sample data</li>
+<li>Creating experiment configuration</li>
+<li>Generating inventory and index</li>
+<li>Creating <code>experiment.json</code></li>
+<li>Running illumination correction calculation</li>
+</ul>
+</li>
+<li>Sufficient disk space for intermediate and output files (at least 50GB)</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Implementation Note</p>
+<p>This guide continues to use the CLI Approach introduced in <a href="../getting-started/">Getting Started</a> to demonstrate the complete workflow step by step. For details on executing this workflow via the Python/Module Approach used in production, see <a href="../../architecture/08_practical_integration/">Practical Integration</a>, which shows the same workflow implemented with the Python API in <code>starrynight/notebooks/pypct/exec_pcp_generic_pipe.py</code>.</p>
+</div>
+<h2 id="workflow-overview">Workflow Overview</h2>
+<p>This guide demonstrates a comprehensive workflow for processing optical pooled screening (OPS) data. The workflow consists of two parallel tracks - Cell Painting (CP) and Barcoding (Sequencing by Synthesis, SBS) - followed by a combined analysis step:</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph "Cell Painting (CP) Track"
+        CP1["CP Illumination Calculation"] --&gt;
+        CP2["CP Illumination Application"] --&gt;
+        CP3["CP Segmentation Check"] --&gt;
+        CP4["CP Stitch and Crop"]
+    end
+
+    subgraph "Barcoding (SBS) Track"
+        SBS1["SBS Illumination Calculation"] --&gt;
+        SBS2["SBS Illumination Application and Alignment"] --&gt;
+        SBS3["SBS Preprocessing"] --&gt;
+        SBS4["SBS Stitch and Crop"]
+    end
+
+    CP4 &amp; SBS4 --&gt; Analysis["Combined Analysis"]
+
+    %% Styling
+    classDef cpTrack fill:#e6f3ff,stroke:#0066cc
+    classDef sbsTrack fill:#ffe6e6,stroke:#cc0000
+    classDef analysisStep fill:#e6ffe6,stroke:#009900
+
+    class CP1,CP2,CP3,CP4 cpTrack
+    class SBS1,SBS2,SBS3,SBS4 sbsTrack
+    class Analysis analysisStep</code></pre>
+<p>The workflow includes these key steps:</p>
+<ul>
+<li><strong>Setup and Preparation</strong>: Generate inventory/index and create experiment configuration (completed in Getting Started)</li>
+<li><strong>CP Illumination Calculation</strong>: Generate correction functions for CP images (completed in Getting Started)</li>
+<li><strong>CP Illumination Application</strong>: Apply illumination corrections to CP images</li>
+<li><strong>CP Segmentation Check</strong>: Verify cell segmentation quality in CP images</li>
+<li><strong>CP Stitch and Crop</strong>: Stitch multi-site images and crop for analysis</li>
+<li><strong>SBS Illumination Calculation</strong>: Generate correction functions for SBS images</li>
+<li><strong>SBS Illumination Application and Alignment</strong>: Apply illumination corrections and align DAPI images across cycles</li>
+<li><strong>SBS Preprocessing</strong>: Process SBS images, compensate channels, and perform preliminary barcode calling</li>
+<li><strong>SBS Stitch and Crop</strong>: Stitch multi-site SBS images and crop for analysis</li>
+<li><strong>Analysis</strong>: Integrate CP and SBS data, perform final barcode calling, and extract measurements</li>
+</ul>
+<p>This workflow follows the same processing pipeline described in the <a href="../../developer/legacy/pcpip-specs/">PCPIP specifications</a>, adapted for the StarryNight CLI interface.</p>
+<p>All CellProfiler-based modules in this workflow follow a consistent three-step pattern:</p>
+<ol>
+<li><strong>Generate LoadData files</strong>: Create CSV files that tell CellProfiler which images to process</li>
+<li><strong>Generate CellProfiler pipelines</strong>: Create customized or point to existing CellProfiler pipeline files (cppipe files)</li>
+<li><strong>Execute CellProfiler</strong>: Run CellProfiler with the generated files</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Beyond CellProfiler</p>
+<p>While this workflow focuses on CellProfiler-based modules, StarryNight also includes other algorithm types that don't follow this three-step pattern. For example, the Stitch and Crop steps use Fiji/ImageJ for image processing. See <a href="../../architecture/01_algorithm_layer/">Algorithm Layer</a> for details.</p>
+</div>
+<h2 id="starting-point">Starting Point</h2>
+<p>This guide assumes you have completed the <a href="../getting-started/">Getting Started</a> guide through the step "Running Illumination Correction Calculation". Before continuing, make sure you have the following environment variables set:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># Set environment variables for convenience (using absolute paths to avoid path resolution issues)</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DATADIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/scratch/fix_s1_input"</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WKDIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/scratch/fix_s1_output/workspace"</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CP_PLUGINS</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/scratch/CellProfiler-plugins/active_plugins/"</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="c1"># Add new environment variable needed for the complete workflow</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">INPUT_WKDIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/scratch/fix_s1_input/Source1/workspace"</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c1"># FIJI_PATH will be set up later when needed for stitching</span>
+</span></code></pre></div>
+<p>You should already have:</p>
+<ul>
+<li>Inventory and index generated</li>
+<li>Experiment configuration <code>(experiment.json</code>) created</li>
+<li>Illumination correction calculation completed</li>
+</ul>
+<p>We'll now expand from there to the full pipeline.</p>
+<h2 id="cp-illumination-application">CP Illumination Application</h2>
+<p>Since we've already completed the CP Illumination Calculation, we'll continue with applying those corrections:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/illum/illum_apply/
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/illum/illum_apply/
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/cp/illum_apply/
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>apply<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>apply<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-17"><a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-18"><a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-1-19"><a href="#__codelineno-1-19" id="__codelineno-1-19" name="__codelineno-1-19"></a>
+</span><span id="__span-1-20"><a href="#__codelineno-1-20" id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="c1"># Execute pipelines</span>
+</span><span id="__span-1-21"><a href="#__codelineno-1-21" id="__codelineno-1-21" name="__codelineno-1-21"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-22"><a href="#__codelineno-1-22" id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/illum/illum_apply/illum_apply_painting.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-23"><a href="#__codelineno-1-23" id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-24"><a href="#__codelineno-1-24" id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/cp/illum_apply
+</span></code></pre></div>
+<h2 id="cp-segmentation-check">CP Segmentation Check</h2>
+<p>Evaluate cell segmentation quality in CP images. This step generates quality control images that overlay the segmentation outlines on the original images, allowing you to manually inspect the segmentation accuracy. The output images will need to be reviewed to determine if the segmentation parameters need adjustment:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/segcheck/
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/segcheck/
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/segcheck/cp/
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>starrynight<span class="w"> </span>segcheck<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/segcheck<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span>-c<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/cp/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a>
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-2-15"><a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a>starrynight<span class="w"> </span>segcheck<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-16"><a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/segcheck/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-17"><a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/segcheck<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-18"><a href="#__codelineno-2-18" id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-19"><a href="#__codelineno-2-19" id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-2-20"><a href="#__codelineno-2-20" id="__codelineno-2-20" name="__codelineno-2-20"></a>
+</span><span id="__span-2-21"><a href="#__codelineno-2-21" id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="c1"># Execute pipelines</span>
+</span><span id="__span-2-22"><a href="#__codelineno-2-22" id="__codelineno-2-22" name="__codelineno-2-22"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-23"><a href="#__codelineno-2-23" id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/cp/segcheck/segcheck_painting.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-24"><a href="#__codelineno-2-24" id="__codelineno-2-24" name="__codelineno-2-24"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/cp/segcheck<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-25"><a href="#__codelineno-2-25" id="__codelineno-2-25" name="__codelineno-2-25"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/segcheck/cp/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-26"><a href="#__codelineno-2-26" id="__codelineno-2-26" name="__codelineno-2-26"></a><span class="w">    </span>--uow<span class="w"> </span>batch_id,plate_id,well_id
+</span></code></pre></div>
+<h2 id="download-and-setup-fiji-required-for-stitching">Download and Setup Fiji (Required for Stitching)</h2>
+<p>Before running the stitch and crop steps, you need to download and set up Fiji/ImageJ:</p>
+<div class="admonition info">
+<p class="admonition-title">Fiji Installation</p>
+<p>Fiji (Fiji Is Just ImageJ) is required for the stitching and cropping steps in both the CP and SBS tracks. CellProfiler cannot handle the large image sizes from stitched 6-well plates, so Fiji is used for this memory-intensive processing.</p>
+</div>
+<p>Download Fiji from the <a href="https://imagej.net/software/fiji/downloads">official download page</a> and extract it. Then set the path to the executable:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Set the path to your Fiji executable</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FIJI_PATH</span><span class="o">=</span><span class="s2">"/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx"</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="c1"># Linux: export FIJI_PATH="/path/to/Fiji.app/ImageJ-linux64"</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># Windows: export FIJI_PATH="/path/to/Fiji.app/ImageJ-win64.exe"</span>
+</span></code></pre></div>
+<h2 id="cp-stitch-and-crop">CP Stitch and Crop</h2>
+<p>Stitch multi-site Cell Painting images together and crop them for analysis. This step uses Fiji/ImageJ to combine multiple fields of view from each well into a single stitched image, then crops it into tiles suitable for downstream analysis:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji/pipeline/cp/stitchcrop
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="c1"># Generate fiji pipeline</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>starrynight<span class="w"> </span>stitchcrop<span class="w"> </span>pipeline<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji/pipeline/cp/stitchcrop<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/stitchcrop/cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span>--images<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/cp/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span>--use_legacy<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span>--uow<span class="w"> </span>batch_id,plate_id,well_id
+</span><span id="__span-4-13"><a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="c1"># Execute fiji</span>
+</span><span id="__span-4-15"><a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a>starrynight<span class="w"> </span>stitchcrop<span class="w"> </span>fiji<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-16"><a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji/pipeline/cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-17"><a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="w">    </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">FIJI_PATH</span><span class="si">}</span>
+</span></code></pre></div>
+<h2 id="sbs-illumination-calculation">SBS Illumination Calculation</h2>
+<p>Calculate illumination correction functions for SBS images:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_calc/
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_calc/
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/sbs/illum_calc/
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>calc<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_calc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-10"><a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-11"><a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">    </span>--sbs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-12"><a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-5-13"><a href="#__codelineno-5-13" id="__codelineno-5-13" name="__codelineno-5-13"></a>
+</span><span id="__span-5-14"><a href="#__codelineno-5-14" id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-5-15"><a href="#__codelineno-5-15" id="__codelineno-5-15" name="__codelineno-5-15"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>calc<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-16"><a href="#__codelineno-5-16" id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_calc/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-17"><a href="#__codelineno-5-17" id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_calc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-18"><a href="#__codelineno-5-18" id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-19"><a href="#__codelineno-5-19" id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="w">    </span>--sbs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-20"><a href="#__codelineno-5-20" id="__codelineno-5-20" name="__codelineno-5-20"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-5-21"><a href="#__codelineno-5-21" id="__codelineno-5-21" name="__codelineno-5-21"></a>
+</span><span id="__span-5-22"><a href="#__codelineno-5-22" id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="c1"># Execute pipelines</span>
+</span><span id="__span-5-23"><a href="#__codelineno-5-23" id="__codelineno-5-23" name="__codelineno-5-23"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-24"><a href="#__codelineno-5-24" id="__codelineno-5-24" name="__codelineno-5-24"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_calc/illum_calc_sbs.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-25"><a href="#__codelineno-5-25" id="__codelineno-5-25" name="__codelineno-5-25"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_calc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-26"><a href="#__codelineno-5-26" id="__codelineno-5-26" name="__codelineno-5-26"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/sbs/illum_calc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-27"><a href="#__codelineno-5-27" id="__codelineno-5-27" name="__codelineno-5-27"></a><span class="w">    </span>--sbs
+</span></code></pre></div>
+<h2 id="sbs-illumination-application-and-alignment">SBS Illumination Application and Alignment</h2>
+<p>Apply illumination correction to SBS images:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_apply/
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_apply/
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/sbs/illum_apply/
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>apply<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">    </span>--sbs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a>
+</span><span id="__span-6-14"><a href="#__codelineno-6-14" id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-6-15"><a href="#__codelineno-6-15" id="__codelineno-6-15" name="__codelineno-6-15"></a>starrynight<span class="w"> </span>illum<span class="w"> </span>apply<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-16"><a href="#__codelineno-6-16" id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-17"><a href="#__codelineno-6-17" id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-18"><a href="#__codelineno-6-18" id="__codelineno-6-18" name="__codelineno-6-18"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-19"><a href="#__codelineno-6-19" id="__codelineno-6-19" name="__codelineno-6-19"></a><span class="w">    </span>--sbs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-20"><a href="#__codelineno-6-20" id="__codelineno-6-20" name="__codelineno-6-20"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-6-21"><a href="#__codelineno-6-21" id="__codelineno-6-21" name="__codelineno-6-21"></a>
+</span><span id="__span-6-22"><a href="#__codelineno-6-22" id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="c1"># Execute pipelines</span>
+</span><span id="__span-6-23"><a href="#__codelineno-6-23" id="__codelineno-6-23" name="__codelineno-6-23"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-24"><a href="#__codelineno-6-24" id="__codelineno-6-24" name="__codelineno-6-24"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/illum/illum_apply/illum_apply_sbs.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-25"><a href="#__codelineno-6-25" id="__codelineno-6-25" name="__codelineno-6-25"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/illum/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-26"><a href="#__codelineno-6-26" id="__codelineno-6-26" name="__codelineno-6-26"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/sbs/illum_apply<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-27"><a href="#__codelineno-6-27" id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="w">    </span>--sbs
+</span></code></pre></div>
+<h2 id="sbs-preprocessing">SBS Preprocessing</h2>
+<p>Prepare SBS images for analysis, including barcode calling:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/preprocess/
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/preprocess/
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/preprocess/sbs/
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a>starrynight<span class="w"> </span>preprocess<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-9"><a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/preprocess/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-10"><a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span>-c<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/sbs/illum_apply/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-11"><a href="#__codelineno-7-11" id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-12"><a href="#__codelineno-7-12" id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-7-13"><a href="#__codelineno-7-13" id="__codelineno-7-13" name="__codelineno-7-13"></a>
+</span><span id="__span-7-14"><a href="#__codelineno-7-14" id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-7-15"><a href="#__codelineno-7-15" id="__codelineno-7-15" name="__codelineno-7-15"></a>starrynight<span class="w"> </span>preprocess<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-16"><a href="#__codelineno-7-16" id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/preprocess/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-17"><a href="#__codelineno-7-17" id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/preprocess/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-18"><a href="#__codelineno-7-18" id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/preprocess/sbs/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-19"><a href="#__codelineno-7-19" id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="w">    </span>-b<span class="w"> </span><span class="si">${</span><span class="nv">INPUT_WKDIR</span><span class="si">}</span>/metadata/Barcodes.csv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-20"><a href="#__codelineno-7-20" id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-7-21"><a href="#__codelineno-7-21" id="__codelineno-7-21" name="__codelineno-7-21"></a>
+</span><span id="__span-7-22"><a href="#__codelineno-7-22" id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="c1"># Execute preprocessing pipelines</span>
+</span><span id="__span-7-23"><a href="#__codelineno-7-23" id="__codelineno-7-23" name="__codelineno-7-23"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-24"><a href="#__codelineno-7-24" id="__codelineno-7-24" name="__codelineno-7-24"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/sbs/preprocess/preprocess_sbs.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-25"><a href="#__codelineno-7-25" id="__codelineno-7-25" name="__codelineno-7-25"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/sbs/preprocess<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-26"><a href="#__codelineno-7-26" id="__codelineno-7-26" name="__codelineno-7-26"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/preprocess/sbs/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-27"><a href="#__codelineno-7-27" id="__codelineno-7-27" name="__codelineno-7-27"></a><span class="w">    </span>-d<span class="w"> </span><span class="si">${</span><span class="nv">CP_PLUGINS</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-28"><a href="#__codelineno-7-28" id="__codelineno-7-28" name="__codelineno-7-28"></a><span class="w">    </span>--sbs
+</span></code></pre></div>
+<h2 id="sbs-stitch-and-crop">SBS Stitch and Crop</h2>
+<p>Stitch multi-site SBS images together and crop them for analysis. Similar to the CP track, this step combines multiple fields of view from each well into stitched images suitable for barcode calling and analysis:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji/pipeline/sbs/stitchcrop
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="c1"># Generate fiji pipeline</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>starrynight<span class="w"> </span>stitchcrop<span class="w"> </span>pipeline<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji/pipeline/sbs/stitchcrop<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/stitchcrop/sbs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="w">    </span>--images<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/preprocess/sbs/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">    </span>--use_legacy<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-12"><a href="#__codelineno-8-12" id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">    </span>--uow<span class="w"> </span>batch_id,plate_id,well_id
+</span><span id="__span-8-13"><a href="#__codelineno-8-13" id="__codelineno-8-13" name="__codelineno-8-13"></a>
+</span><span id="__span-8-14"><a href="#__codelineno-8-14" id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="c1"># Execute fiji</span>
+</span><span id="__span-8-15"><a href="#__codelineno-8-15" id="__codelineno-8-15" name="__codelineno-8-15"></a>starrynight<span class="w"> </span>stitchcrop<span class="w"> </span>fiji<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-16"><a href="#__codelineno-8-16" id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/fiji<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-17"><a href="#__codelineno-8-17" id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="w">    </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">FIJI_PATH</span><span class="si">}</span>
+</span></code></pre></div>
+<h2 id="analysis">Analysis</h2>
+<p>Extract cellular measurements and generate the final dataset by combining CP and SBS data:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1"># Create necessary directories</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/analysis/
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/analysis/
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/analysis/
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="c1"># Generate LoadData files</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a>starrynight<span class="w"> </span>analysis<span class="w"> </span>loaddata<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-8"><a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/index/index.parquet<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-9"><a href="#__codelineno-9-9" id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/analysis/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-10"><a href="#__codelineno-9-10" id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">    </span>-c<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/illum/cp/illum_apply/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-11"><a href="#__codelineno-9-11" id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/preprocess/sbs/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-12"><a href="#__codelineno-9-12" id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">    </span>--exp_config<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/experiment.json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-13"><a href="#__codelineno-9-13" id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-9-14"><a href="#__codelineno-9-14" id="__codelineno-9-14" name="__codelineno-9-14"></a>
+</span><span id="__span-9-15"><a href="#__codelineno-9-15" id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="c1"># FIXME:</span>
+</span><span id="__span-9-16"><a href="#__codelineno-9-16" id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="c1"># Once stitchcrop is fully integrated into this tutorial, the above will be changed to something like this:</span>
+</span><span id="__span-9-17"><a href="#__codelineno-9-17" id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="c1"># -c ${WKDIR}/stitchcrop/cp/cropped/ \</span>
+</span><span id="__span-9-18"><a href="#__codelineno-9-18" id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="c1"># -p ${WKDIR}/stitchcrop/sbs/cropped/ \</span>
+</span><span id="__span-9-19"><a href="#__codelineno-9-19" id="__codelineno-9-19" name="__codelineno-9-19"></a>
+</span><span id="__span-9-20"><a href="#__codelineno-9-20" id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="c1"># Generate CellProfiler pipelines</span>
+</span><span id="__span-9-21"><a href="#__codelineno-9-21" id="__codelineno-9-21" name="__codelineno-9-21"></a>starrynight<span class="w"> </span>analysis<span class="w"> </span>cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-22"><a href="#__codelineno-9-22" id="__codelineno-9-22" name="__codelineno-9-22"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/analysis/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-23"><a href="#__codelineno-9-23" id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/analysis/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-24"><a href="#__codelineno-9-24" id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="w">    </span>-w<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/analysis/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-25"><a href="#__codelineno-9-25" id="__codelineno-9-25" name="__codelineno-9-25"></a><span class="w">    </span>-b<span class="w"> </span><span class="si">${</span><span class="nv">INPUT_WKDIR</span><span class="si">}</span>/metadata/Barcodes.csv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-26"><a href="#__codelineno-9-26" id="__codelineno-9-26" name="__codelineno-9-26"></a><span class="w">    </span>--use_legacy
+</span><span id="__span-9-27"><a href="#__codelineno-9-27" id="__codelineno-9-27" name="__codelineno-9-27"></a>
+</span><span id="__span-9-28"><a href="#__codelineno-9-28" id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="c1"># Execute analysis pipelines</span>
+</span><span id="__span-9-29"><a href="#__codelineno-9-29" id="__codelineno-9-29" name="__codelineno-9-29"></a>starrynight<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-30"><a href="#__codelineno-9-30" id="__codelineno-9-30" name="__codelineno-9-30"></a><span class="w">    </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/cppipe/analysis/analysis.cppipe<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-31"><a href="#__codelineno-9-31" id="__codelineno-9-31" name="__codelineno-9-31"></a><span class="w">    </span>-l<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/cellprofiler/loaddata/analysis<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-32"><a href="#__codelineno-9-32" id="__codelineno-9-32" name="__codelineno-9-32"></a><span class="w">    </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">WKDIR</span><span class="si">}</span>/analysis/<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-33"><a href="#__codelineno-9-33" id="__codelineno-9-33" name="__codelineno-9-33"></a><span class="w">    </span>-d<span class="w"> </span><span class="si">${</span><span class="nv">CP_PLUGINS</span><span class="si">}</span>
+</span></code></pre></div>
+<h2 id="common-parameters">Common Parameters</h2>
+<p>Throughout the pipeline, you'll use these common parameters:</p>
+<ul>
+<li><code>--exp_config</code>: Path to the experiment configuration file</li>
+<li><code>--use_legacy</code>: Use pre-fabricated CellProfiler pipelines (recommended for stability)</li>
+<li><code>-i, --index</code>: Path to the index.parquet file</li>
+<li><code>-o, --output</code>: Output directory for generated files</li>
+<li><code>-w, --workspace</code>: Path to the workspace directory</li>
+<li><code>-l, --loaddata</code>: Path to LoadData CSV files</li>
+<li><code>-p, --pipeline</code>: Path to CellProfiler pipeline file or directory (for <code>stitchcrop fiji</code>, this is the directory containing pipeline files)</li>
+<li><code>-c, --corr_images</code>: Path to illumination-corrected images</li>
+<li><code>-b, --barcode</code>: Path to barcode CSV file for sequencing data</li>
+<li><code>--sbs</code>: Flag to process SBS images only</li>
+<li><code>--images</code>: Path to input images directory (used in stitchcrop)</li>
+<li><code>-j, --jobs</code>: Number of parallel jobs (used in stitchcrop fiji)</li>
+<li>FIXME: Decide whether needed <code>--uow</code>: Unit of work hierarchy for pipeline generation (e.g., <code>batch_id,plate_id,well_id</code> for well-level processing)</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<p>After completing this workflow, you can:</p>
+<ol>
+<li>Export the extracted data from the analysis output directories for use in downstream tools</li>
+<li>Perform statistical analysis on the extracted features using your preferred analysis framework</li>
+<li>Visualize results using tools like Python/Matplotlib or other visualization platforms</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>You've now learned how to set up and execute a complete StarryNight workflow for optical pooled screening data analysis. The modular structure of StarryNight allows for efficient processing of both CP and SBS images in parallel tracks, producing quality-controlled, normalized outputs suitable for downstream analysis. With these techniques, you can build robust image processing workflows for your own high-content screening experiments.</p>
+<p>For more detailed information on the concepts used throughout this workflow:</p>
+<ul>
+<li>See <a href="../../architecture/00_architecture_overview/">Architecture Overview</a> for details on StarryNight's modular design</li>
+<li>See <a href="../parser-configuration/">Parser Configuration</a> for customizing path parsing for different data structures</li>
+</ul>
+<hr/>
+<div class="admonition info">
+<p class="admonition-title">For Document Contributors</p>
+<p>This section contains editorial guidelines for maintaining this document. These guidelines are intended for contributors and maintainers, not end users.</p>
+<p><strong>Document Purpose and Audience</strong></p>
+<p>This document serves as a bridge between the introductory Getting Started guide and complete workflow implementation. It targets users who:</p>
+<ul>
+<li>Are familiar with basic StarryNight concepts</li>
+<li>Need to implement a complete processing pipeline</li>
+<li>Prefer using the CLI interface rather than Python API</li>
+<li>Need to understand both CP and SBS processing tracks</li>
+</ul>
+<p><strong>Guiding Structure Principles</strong></p>
+<ol>
+<li><strong>Progressive disclosure approach</strong> - Start with a clear overview before diving into implementation details</li>
+<li><strong>Parallel tracks visualization</strong> - Keep the CP and SBS tracks visually distinct in diagrams and structure</li>
+<li><strong>Complete CLI commands</strong> - Provide fully copyable command blocks with all necessary parameters</li>
+<li><strong>Directory creation consistency</strong> - Always include <code>mkdir</code> commands before operations that require directories</li>
+<li><strong>Three-step pattern emphasis</strong> - Maintain the loaddata → cppipe → execute pattern for each CellProfiler-based module</li>
+</ol>
+<p><strong>Content Style Principles</strong></p>
+<ol>
+<li><strong>Command formatting consistency</strong> - Format all CLI commands with consistent indentation and backslash line continuations</li>
+<li><strong>Abbreviation usage</strong> - Define abbreviations (CP, SBS) once, then use consistently throughout</li>
+<li><strong>Parameter explanation</strong> - Keep parameter explanations concise and grouped in the Common Parameters section</li>
+<li><strong>Lightweight diagrams</strong> - Keep mermaid diagrams focused on structure without duplicating descriptions</li>
+<li><strong>CLI vs Python differentiation</strong> - Clearly distinguish CLI-based approaches from Python API approaches</li>
+</ol>
+<p><strong>Future Documentation Enhancements</strong></p>
+<p>Consider expanding this document with:</p>
+<ul>
+<li>Troubleshooting guide for common errors and failure recovery</li>
+<li>Output verification checkpoints for each processing step</li>
+<li>Resource requirements and sizing guidelines</li>
+<li>Configuration customization examples for different experimental setups</li>
+<li>Intermediate results visualization techniques</li>
+<li>Pipeline variations for specialized use cases</li>
+</ul>
+<p><strong>Document Relationships</strong></p>
+<ul>
+<li><strong>Getting Started dependency</strong> - This document builds directly on <code>getting-started.md</code> and should stay aligned with it</li>
+<li><strong>Practical Integration complement</strong> - Serves as the CLI alternative to <code>architecture/08_practical_integration.md</code>'s Python API approach</li>
+<li><strong>Module reference complementarity</strong> - Complements module-specific documentation without duplicating it</li>
+</ul>
+<p><strong>Terminology Consistency</strong></p>
+<ul>
+<li><strong><a href="https://www.nature.com/articles/s41592-024-02528-8">Cell Painting</a> (CP)</strong> - Refers to the morphological imaging workflow track</li>
+<li><strong>Barcoding / <a href="https://data-science-sequencing.github.io/Win2018/lectures/lecture2/">Sequencing by Synthesis</a> (SBS)</strong> - Refers to the barcoding workflow track</li>
+<li><strong><a href="https://cellprofiler-manual.s3.amazonaws.com/CPmanual/LoadData.html">LoadData</a> files</strong> - CSV files that configure CellProfiler input images</li>
+<li><strong>Experiment configuration</strong> - The <code>experiment.json</code> file that defines processing parameters</li>
+</ul>
+</div>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "content.code.copy"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+</body>
+</html>
