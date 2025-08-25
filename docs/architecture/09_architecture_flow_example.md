@@ -1,7 +1,7 @@
 # Architecture Flow in Action: Detailed Code Examples
 
 !!!warning "Experimental Documentation"
-    This is an experimental document that offers a very detailed view of the architecture flow. Some readers may find this level of detail overwhelming. If you're new to StarryNight, we recommend starting with the [Architecture Overview](00_architecture_overview.md) and [Practical Integration](08_practical_integration.md) before diving into this detailed mapping.
+This is an experimental document that offers a very detailed view of the architecture flow. Some readers may find this level of detail overwhelming. If you're new to StarryNight, we recommend starting with the [Architecture Overview](00_architecture_overview.md) and [Practical Integration](08_practical_integration.md) before diving into this detailed mapping.
 
 This document provides concrete code examples showing how data flows through StarryNight's architectural layers. It complements the [Architecture Overview](00_architecture_overview.md#data-and-control-flow) by mapping the abstract sequence diagrams to actual code implementation, and builds on the foundational concepts from the [Practical Integration](08_practical_integration.md) walkthrough.
 
@@ -127,7 +127,7 @@ Container(
         "cp_illum_calc_dir": [...]
     },
     config=ContainerConfig(
-        image="ghrc.io/leoank/starrynight:dev",
+        image="ghcr.io/leoank/starrynight:dev",
         cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
         env={},
     ),
@@ -146,7 +146,7 @@ When the container executes, the CLI layer bridges between runtime containers an
 
 ```python
 # Container definition invokes the starrynight CLI command
-cmd=["starrynight", "cp", "-p", spec.inputs[0].path, "-l", spec.inputs[1].path, 
+cmd=["starrynight", "cp", "-p", spec.inputs[0].path, "-l", spec.inputs[1].path,
      "-o", spec.outputs[0].path]
 ```
 
@@ -166,12 +166,12 @@ When this container executes:
 def cp_command(pipeline, loaddata, output_dir):
     """Run CellProfiler on a pipeline with a loaddata file."""
     from starrynight.algorithms.cellprofiler import run_cellprofiler
-    
+
     # Convert string paths to standardized path objects (simplified)
     pipeline_path = AnyPath(pipeline)
     loaddata_path = AnyPath(loaddata)
     output_path = AnyPath(output_dir)
-    
+
     # CLI command translates parameters and calls algorithm function
     run_cellprofiler(
         pipeline_path=pipeline_path,
@@ -188,13 +188,13 @@ def run_cellprofiler(pipeline_path, loaddata_path, output_dir):
     """Run CellProfiler with specified pipeline and load data."""
     # Prepare environment and input files
     prepare_input_files(loaddata_path)
-    
+
     # Execute core CellProfiler functionality
     result = execute_cellprofiler_pipeline(pipeline_path, output_dir)
-    
+
     # Post-process results if needed
     post_process_results(result, output_dir)
-    
+
     return result
 ```
 
@@ -285,7 +285,7 @@ Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the comple
 **Pipeline Composition Phase steps in each CellProfiler phase:**
 
 1. Config→Module: Configuration flows into module
-2. Module→Module: Generate compute graphs 
+2. Module→Module: Generate compute graphs
 3. Module→Pipeline: Pass module specifications
 4. Pipeline→Execution: Submit workflow
 5. Execution→Execution: Translate to Snakemake rules
@@ -300,17 +300,17 @@ Each three-phase pattern (LoadData → CPipe → Invoke) demonstrates the comple
 The three CellProfiler-specific phases each execute this full cycle but with different inputs/outputs:
 
 1. **LoadData Phase**:
-    - Pipeline Composition: Configuration flows into module through to Snakemake rules
-    - Runtime Execution: Container executes, CLI generates LoadData CSV
-    - Result: CSV file written to disk
+   - Pipeline Composition: Configuration flows into module through to Snakemake rules
+   - Runtime Execution: Container executes, CLI generates LoadData CSV
+   - Result: CSV file written to disk
 2. **CPipe Phase**:
-    - Pipeline Composition: Same flow but with new module
-    - Runtime Execution: Container executes, reads LoadData CSV, CLI generates pipeline
-    - Result: Pipeline file written to disk
+   - Pipeline Composition: Same flow but with new module
+   - Runtime Execution: Container executes, reads LoadData CSV, CLI generates pipeline
+   - Result: Pipeline file written to disk
 3. **Invoke Phase**:
-    - Pipeline Composition: Same flow but with new module
-    - Runtime Execution: Container executes, reads both CSV and pipeline file, CLI invokes algorithm
-    - Result: Processed data written to disk
+   - Pipeline Composition: Same flow but with new module
+   - Runtime Execution: Container executes, reads both CSV and pipeline file, CLI invokes algorithm
+   - Result: Processed data written to disk
 
 When using the pipeline composition approach shown in the "Pipeline Composition (Alternative Approach)" section in the [Practical Integration](08_practical_integration.md) document, this flow becomes more explicit since modules are composed in advance rather than executed one by one.
 

@@ -255,6 +255,7 @@ StarryNight uses containerization for reproducible algorithm execution. This is 
 ### Container Definition
 
 The `Container` class in `pipecraft/node.py` defines execution environments with:
+
 - `image`: Docker/Singularity image reference
 - `cmd`: Command to run within the container
 - `env`: Environment variables
@@ -273,7 +274,7 @@ Container(
         "cp_illum_calc_dir": [...]
     },
     config=ContainerConfig(
-        image="ghrc.io/leoank/starrynight:dev",
+        image="ghcr.io/leoank/starrynight:dev",
         cmd=["starrynight", "cp", "-p", spec.inputs[0].path, ...],
         env={},
     ),
@@ -283,6 +284,7 @@ Container(
 ### Backend Integration
 
 The `SnakeMakeBackend` in `pipecraft/backend/snakemake.py` translates container specifications to Snakemake rules:
+
 - Container images become Snakemake container directives
 - Input/output paths define rule dependencies
 - Commands define the shell execution
@@ -303,6 +305,7 @@ rule ${container.name.replace(" ", "_").lower()}:
 ### Execution Flow
 
 The execution process follows these steps:
+
 1. Modules define containers with appropriate configurations
 2. The pipeline connects containers in sequential or parallel arrangements
 3. The backend compiles the pipeline to Snakemake rules

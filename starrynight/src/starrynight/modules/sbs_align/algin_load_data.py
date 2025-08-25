@@ -96,7 +96,7 @@ def create_pipe_gen_load_data(uid: str, spec: SpecContainer) -> Pipeline:
                 input_paths={"index": [spec.inputs[0].path]},
                 output_paths={"load_data_path": [spec.outputs[0].path]},
                 config=ContainerConfig(
-                    image="ghrc.io/leoank/starrynight:dev",
+                    image="ghcr.io/leoank/starrynight:dev",
                     cmd=cmd,
                     env={},
                 ),
