@@ -193,7 +193,7 @@ class CPApplyIllumGenLoadDataModule(StarrynightModule):
                         "loaddata_path": [spec.outputs["loaddata_path"].value]
                     },
                     config=ContainerConfig(
-                        image="ghrc.io/leoank/starrynight:dev",
+                        image="ghcr.io/leoank/starrynight:dev",
                         cmd=cmd,
                         env={},
                     ),

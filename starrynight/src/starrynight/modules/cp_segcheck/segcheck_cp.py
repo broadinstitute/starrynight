@@ -172,7 +172,7 @@ class CPSegcheckInvokeCPModule(StarrynightModule):
                         ]
                     },
                     config=ContainerConfig(
-                        image="ghrc.io/leoank/starrynight:dev",
+                        image="ghcr.io/leoank/starrynight:dev",
                         cmd=cmd,
                         env={},
                     ),
