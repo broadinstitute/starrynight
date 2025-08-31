@@ -95,7 +95,7 @@ def create_pipe_gen_cppipe(uid: str, spec: SpecContainer) -> Pipeline:
                 input_paths={"load_data_path": [spec.inputs[0].path]},
                 output_paths={"cppipe_path": [spec.outputs[0].path]},
                 config=ContainerConfig(
-                    image="ghrc.io/leoank/starrynight:dev",
+                    image="ghcr.io/leoank/starrynight:dev",
                     cmd=cmd,
                     env={},
                 ),

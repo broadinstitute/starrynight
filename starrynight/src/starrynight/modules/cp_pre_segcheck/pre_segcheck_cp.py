@@ -93,7 +93,7 @@ def create_pipe_gen_cpinvoke(uid: str, spec: SpecContainer) -> Pipeline:
                 },
                 output_paths={"corr_images_dir": [spec.outputs[0].path]},
                 config=ContainerConfig(
-                    image="ghrc.io/leoank/starrynight:dev",
+                    image="ghcr.io/leoank/starrynight:dev",
                     cmd=cmd,
                     env={},
                 ),

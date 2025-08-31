@@ -288,7 +288,7 @@ Container(
         "cp_illum_calc_dir": [...]
     },
     config=ContainerConfig(
-        image="ghrc.io/leoank/starrynight:dev",
+        image="ghcr.io/leoank/starrynight:dev",
         cmd=["starrynight", "cp", "-p", spec.inputs["cppipe_path"].value, ...],
         env={},
     ),
