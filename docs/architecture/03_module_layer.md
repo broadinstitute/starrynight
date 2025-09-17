@@ -11,12 +11,14 @@ Modules define both specifications and compute graphs without performing computa
 The module layer offers significant advantages over directly using CLI commands:
 
 ### Practical Benefits
+
 - **Standardization** - Consistent interfaces across different algorithm types
 - **Composability** - Modules can be connected into larger workflows
 - **Containerization** - Built-in container specification for reproducibility
 - **Documentation** - Structured approach to capturing metadata and citations
 
 ### Architectural Significance
+
 - **Backend Independence** - Run the same module on different execution systems
 - **Inspection** - Examine inputs, outputs, and operations before execution
 - **Automated UI Generation** - Specifications support interface generation
@@ -27,16 +29,17 @@ The module layer offers significant advantages over directly using CLI commands:
 The module layer's defining characteristic is its dual focus on specifications and compute graphs:
 
 1. **Specification (Spec)** - Defines what a module does:
-    - Input ports with types, descriptions, and validation rules
-    - Output ports with types and descriptions
-    - Documentation and metadata
-    - Parameter constraints and defaults
+
+   - Input ports with types, descriptions, and validation rules
+   - Output ports with types and descriptions
+   - Documentation and metadata
+   - Parameter constraints and defaults
 
 2. **Compute Graph** - Defines how operations should be structured:
-    - Container configurations
-    - Command construction
-    - Input/output relationships
-    - Execution sequence
+   - Container configurations
+   - Command construction
+   - Input/output relationships
+   - Execution sequence
 
 Crucially, modules define computation but don't perform it. This separation enables inspection and modification before execution, and allows the same module to run on different platforms without changing its definition.
 
@@ -47,35 +50,35 @@ Just as the CLI layer is organized into command groups that map to algorithm set
 Each module set typically follows a consistent pattern with three types of modules:
 
 1. **Load Data Modules** - Generate data loading configurations
-    - Define which images to process
-    - Create CSV files for CellProfiler to locate images
-    - Organize data by batch, plate, well, and site
+   - Define which images to process
+   - Create CSV files for CellProfiler to locate images
+   - Organize data by batch, plate, well, and site
 2. **Pipeline Generation Modules** - Create processing pipeline definitions
-    - Generate CellProfiler pipeline files
-    - Configure pipeline parameters based on experiment settings
-    - Define processing operations
+   - Generate CellProfiler pipeline files
+   - Configure pipeline parameters based on experiment settings
+   - Define processing operations
 3. **Execution Modules** - Execute the pipeline on prepared data
-    - Run pipelines with appropriate parallelism
-    - Manage resource allocation
-    - Organize outputs according to experimental structure
+   - Run pipelines with appropriate parallelism
+   - Manage resource allocation
+   - Organize outputs according to experimental structure
 
 This pattern mirrors the organization of algorithms and CLI commands, but adds the standardized abstraction and container orchestration capabilities of the module layer.
 
 Common module sets include:
 
 1. **CP Modules** - For Cell Painting workflows:
-    - `cp_illum_calc` - Illumination calculation modules
-    - `cp_illum_apply` - Illumination correction modules
-    - `cp_segcheck` - Segmentation check modules
+   - `cp_illum_calc` - Illumination calculation modules
+   - `cp_illum_apply` - Illumination correction modules
+   - `cp_segcheck` - Segmentation check modules
 2. **SBS Modules** - For Sequencing By Synthesis workflows:
-    - `sbs_illum_calc` - SBS illumination calculation modules
-    - `sbs_illum_apply` - SBS illumination correction modules
-    - `sbs_align` - SBS alignment modules
-    - `sbs_preprocess` - SBS preprocessing modules
+   - `sbs_illum_calc` - SBS illumination calculation modules
+   - `sbs_illum_apply` - SBS illumination correction modules
+   - `sbs_align` - SBS alignment modules
+   - `sbs_preprocess` - SBS preprocessing modules
 3. **Common Modules** - For general operations:
-    - `gen_index` - Index generation modules
-    - `gen_inv` - Inventory management modules
-    - `analysis` - Analysis modules
+   - `gen_index` - Index generation modules
+   - `gen_inv` - Inventory management modules
+   - `analysis` - Analysis modules
 
 ## Module Implementation
 
@@ -241,7 +244,7 @@ class CPSegcheckGenCPPipeModule(StarrynightModule):
                         "cppipe_path": [spec.outputs["cppipe_path"].value]
                     },
                     config=ContainerConfig(
-                        image="ghrc.io/leoank/starrynight:dev",
+                        image="ghcr.io/leoank/starrynight:dev",
                         cmd=cmd,
                         env={},
                     ),
@@ -255,9 +258,9 @@ This example illustrates several important aspects of module implementation:
 
 1. **Module Identity** - The `uid()` method provides a unique identifier
 2. **Module Specification** - The `_spec()` method defines inputs, outputs, and metadata and also set default values.
-4. **Compute Graph Creation** - The module uses the `_create_pipe` function to generate a Pipecraft pipeline
-5. **CLI Command Construction** - The module constructs a CLI command that will be executed in a container
-6. **Container Specification** - The module defines the container image and execution environment
+3. **Compute Graph Creation** - The module uses the `_create_pipe` function to generate a Pipecraft pipeline
+4. **CLI Command Construction** - The module constructs a CLI command that will be executed in a container
+5. **Container Specification** - The module defines the container image and execution environment
 
 ### Module Configuration
 
@@ -305,12 +308,14 @@ The Bilayers project enables algorithm developers to write a single configuratio
 StarryNight leverages the Bilayers specification system to standardize its module interfaces. The integration works through several mechanisms:
 
 1. **Schema Download and Synchronization**: StarryNight maintains a local copy of the Bilayers validation schema, which is automatically downloaded from the Bilayers repository:
+
    ```python
    # From starrynight/modules/common.py
    VALIDATE_SCHEMA_URL = "https://raw.githubusercontent.com/bilayer-containers/bilayers/master/tests/test_config/validate_schema.yaml"
    ```
 
 2. **Pydantic Model Generation**: The Bilayers LinkML schema is converted into Pydantic models that StarryNight uses for runtime validation:
+
    ```python
    def update_module_schema() -> None:
        """Download and update the module schema from bilayers."""
@@ -326,26 +331,26 @@ StarryNight leverages the Bilayers specification system to standardize its modul
 The module layer uses Bilayers to create standardized definitions of:
 
 - **Input Specifications**:
-    - Type definitions (image, file, directory, array, measurement)
-    - Validation rules and constraints
-    - Default values and optional flags
-    - Descriptions for documentation
-    - CLI tag mappings for command generation
+  - Type definitions (image, file, directory, array, measurement)
+  - Validation rules and constraints
+  - Default values and optional flags
+  - Descriptions for documentation
+  - CLI tag mappings for command generation
   - **Output Specifications**:
     - Output types and formats
     - File naming patterns
     - Directory structures
     - Relationships to inputs
 - **Parameter Definitions**:
-    - UI element types (checkbox, integer, float, dropdown, textbox)
-    - Value constraints and defaults
-    - Grouping for beginner/advanced modes
-    - Help text and documentation
+  - UI element types (checkbox, integer, float, dropdown, textbox)
+  - Value constraints and defaults
+  - Grouping for beginner/advanced modes
+  - Help text and documentation
 - **Algorithm Metadata**:
-    - Citations and references
-    - Docker image specifications
-    - License information
-    - Algorithm descriptions
+  - Citations and references
+  - Docker image specifications
+  - License information
+  - Algorithm descriptions
 
 ### Example: How a Module Uses Bilayers
 
@@ -388,9 +393,9 @@ def _spec(self) -> SpecContainer:
 
 1. **Standardization**: All modules follow the same specification format, making them predictable and easy to understand.
 2. **Interoperability**: Because StarryNight uses the Bilayers specification, there's potential for:
-      - Importing Bilayers-compatible tools from other projects
-      - Exporting StarryNight modules for use in other Bilayers-compatible systems
-      - Leveraging the broader Bilayers ecosystem of tools and interfaces
+   - Importing Bilayers-compatible tools from other projects
+   - Exporting StarryNight modules for use in other Bilayers-compatible systems
+   - Leveraging the broader Bilayers ecosystem of tools and interfaces
 3. **Automatic UI Generation**: While StarryNight doesn't currently generate Gradio or Jupyter interfaces from these specs, the Bilayers-compliant specifications make this possible in the future.
 4. **Validation**: The LinkML-based schema provides robust validation of module specifications, catching configuration errors early.
 5. **Documentation**: The structured format ensures that all modules have consistent documentation for their inputs, outputs, and parameters.
@@ -511,26 +516,26 @@ In pipeline composition, modules are created and configured individually, but th
 Creating a new module set involves implementing classes for each stage of processing:
 
 1. **Plan the Module Set**:
-    - Identify the algorithm set to wrap
-    - Determine inputs, outputs, and parameters
-    - Design the module structure (typically load data, pipeline generation, and execution)
+   - Identify the algorithm set to wrap
+   - Determine inputs, outputs, and parameters
+   - Design the module structure (typically load data, pipeline generation, and execution)
 2. **Create Module Classes**:
-    - Implement subclasses of `StarryNightModule` for each stage
-    - Define unique identifiers and specifications
-    - Implement `from_config` methods
-    - Create pipeline generation methods
+   - Implement subclasses of `StarryNightModule` for each stage
+   - Define unique identifiers and specifications
+   - Implement `from_config` methods
+   - Create pipeline generation methods
 3. **Define Specifications**:
-    - Use Bilayers to define inputs, outputs, and parameters
-    - Document parameters with clear descriptions
-    - Define validation rules
+   - Use Bilayers to define inputs, outputs, and parameters
+   - Document parameters with clear descriptions
+   - Define validation rules
 4. **Implement Pipeline Creation**:
-    - Use Pipecraft to define compute graphs
-    - Specify container configurations
-    - Map inputs and outputs properly
+   - Use Pipecraft to define compute graphs
+   - Specify container configurations
+   - Map inputs and outputs properly
 5. **Test the Modules**:
-    - Test individual modules
-    - Test automatic configuration
-    - Test pipeline integration
+   - Test individual modules
+   - Test automatic configuration
+   - Test pipeline integration
 
 ## Relationship to Adjacent Layers
 

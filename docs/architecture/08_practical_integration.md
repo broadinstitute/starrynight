@@ -3,7 +3,7 @@
 This document provides a concrete example of how StarryNight's architectural layers work together in practice by examining `exec_pcp_generic_pipe.py`, an example pipeline implementation file that demonstrates the PCP Generic workflow. While the [architecture overview](00_architecture_overview.md) and individual layer documents ([Algorithm](01_algorithm_layer.md), [CLI](02_cli_layer.md), [Module](03_module_layer.md), [Pipeline](04_pipeline_layer.md), [Execution](05_execution_layer.md), [Configuration](06_configuration_layer.md)) explain each architectural layer conceptually, this walkthrough shows how these components integrate in a real workflow.
 
 !!!note "Pedagogical Approach"
-    This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. This approach:
+This document deliberately uses the step-by-step implementation in `exec_pcp_generic_pipe.py` to clearly demonstrate individual components and their interactions. This approach:
 
     - Allows researchers to inspect intermediate results between pipeline stages
     - Matches biological research workflows where verification at each stage is crucial
@@ -151,7 +151,7 @@ pcp_experiment = PCPGeneric.from_index(index_path, pcp_exp_init.model_dump())
 ## Anatomy of a Pipeline Step
 
 !!!note "CellProfiler Integration Pattern"
-    The three-phase pattern described below (Generate Load Data → Generate Pipeline File → Execute Pipeline) is specific to how StarryNight integrates with CellProfiler. This pattern isn't a requirement of the StarryNight architecture, but rather a practical approach for this particular integration. Other tools may use different patterns while still adhering to the module abstraction.
+The three-phase pattern described below (Generate Load Data → Generate Pipeline File → Execute Pipeline) is specific to how StarryNight integrates with CellProfiler. This pattern isn't a requirement of the StarryNight architecture, but rather a practical approach for this particular integration. Other tools may use different patterns while still adhering to the module abstraction.
 
 With the experiment configured, we can now examine one complete pipeline step (CP calculate illumination). Each step follows a consistent three-phase pattern:
 
@@ -228,12 +228,14 @@ This module finds both the LoadData file and the pipeline file created in the pr
 Looking at this example, we can see how all the architecture layers work together across the two main phases:
 
 ### Pipeline Composition Phase
+
 1. **Configuration Layer**: `DataConfig` and experiment configuration drive behavior across all layers
 2. **Module Layer**: Defines standardized components (like `CPCalcIllumInvokeCPModule`) with specifications and compute graphs
 3. **Pipeline Layer**: In this example, we're executing modules one by one, but they can be composed into a complete pipeline as seen in `create_pcp_generic_pipeline`
 4. **Execution Layer (design time)**: `SnakeMakeBackend` translates module compute graphs into Snakemake rules
 
 ### Runtime Execution Phase
+
 5. **Execution Layer (runtime)**: Schedules container execution based on Snakemake rules
 6. **Container Runtime**: Executes commands in isolated environments
 7. **CLI Layer**: Provides command-line tools that parse arguments and call algorithms
@@ -257,7 +259,7 @@ MODULE_REGISTRY: dict[str, StarrynightModule] = {
 ```
 
 !!!note "Integration with Broader System"
-    The registry is not used in this example, but it serves as a critical integration point with other StarryNight components:
+The registry is not used in this example, but it serves as a critical integration point with other StarryNight components:
 
     - Enables **Conductor** to discover and invoke available modules dynamically
     - Allows **Canvas** to present available modules in its user interface
@@ -288,7 +290,7 @@ Container(
         "cp_illum_calc_dir": [...]
     },
     config=ContainerConfig(
-        image="ghrc.io/leoank/starrynight:dev",
+        image="ghcr.io/leoank/starrynight:dev",
         cmd=["starrynight", "cp", "-p", spec.inputs["cppipe_path"].value, ...],
         env={},
     ),
@@ -346,13 +348,14 @@ This approach enables complex parallel execution patterns, where CP and SBS proc
 When implementing your own modules, follow these patterns:
 
 !!!note "Module vs. Algorithm Extension"
-    This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools. To add your own algorithms to StarryNight, see the ["Adding a New Algorithm"](#adding-a-new-algorithm) section below.
+This section focuses on extending StarryNight with new **modules** rather than new algorithms. Modules provide standardized interfaces to existing algorithms, whether those algorithms are part of StarryNight's core or from external tools. To add your own algorithms to StarryNight, see the ["Adding a New Algorithm"](#adding-a-new-algorithm) section below.
 
 1. **Module Structure**: Consider your module's specific requirements:
-      - For CellProfiler integrations, use the three-phase pattern shown earlier
-      - For other tools, design appropriate module structures based on tool requirements
-      - Ensure your modules have clear inputs, outputs, and containerized execution specifications
+   - For CellProfiler integrations, use the three-phase pattern shown earlier
+   - For other tools, design appropriate module structures based on tool requirements
+   - Ensure your modules have clear inputs, outputs, and containerized execution specifications
 2. **Registry Integration**: Define a unique ID and register your module in the registry:
+
    ```python
    @staticmethod
    def uid() -> str:
