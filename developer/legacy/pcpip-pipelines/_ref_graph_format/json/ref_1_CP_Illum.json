@@ -1,0 +1,1544 @@
+{
+    "has_image_plane_details": false,
+    "date_revision": 428,
+    "module_count": 16,
+    "modules": [
+        {
+            "attributes": {
+                "module_num": 1,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 6,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "LoadData",
+                "module_path": "cellprofiler_core.modules.loaddata.LoadData"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Input data file location",
+                    "value": "Default Input Folder sub-folder|Desktop/load_data_csv/BATCH/Plate3"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._filename.Filename",
+                    "text": "Name of the file",
+                    "value": "load_data_pipeline1.csv"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Load images based on this data?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image location",
+                    "value": "None|"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Process just a range of rows?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.range.integer_range._integer_range.IntegerRange",
+                    "text": "Rows to process",
+                    "value": "1,1"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Group images by metadata?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.multichoice._multichoice.MultiChoice",
+                    "text": "Select metadata tags for grouping",
+                    "value": "Plate"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Rescale intensities?",
+                    "value": "Yes"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 2,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "OrigDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "DownsampledDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 3,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 2,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "CorrectIlluminationCalculate",
+                "module_path": "cellprofiler.modules.correctilluminationcalculate.CorrectIlluminationCalculate"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "DownsampledDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "IllumDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select how the illumination function is calculated",
+                    "value": "Regular"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Dilate objects in the final averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Dilation radius",
+                    "value": "1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Block size",
+                    "value": "60"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Rescale the illumination function?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Calculate function for each image individually, or based on all images?",
+                    "value": "All: Across cycles"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Smoothing method",
+                    "value": "Median Filter"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to calculate smoothing filter size",
+                    "value": "Manually"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Approximate object diameter",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Smoothing filter size",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the averaged image",
+                    "value": "IllumBlueAvg"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the dilated image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the dilated image",
+                    "value": "IllumBlueDilated"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Automatically calculate spline parameters?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Background mode",
+                    "value": "auto"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of spline points",
+                    "value": "5"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Background threshold",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Image resampling factor",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Maximum number of iterations",
+                    "value": "40"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Residual value for convergence",
+                    "value": "0.001"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 4,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "IllumDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "UpsampledIllumDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 5,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "OrigPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "DownsampledPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 6,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 2,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "CorrectIlluminationCalculate",
+                "module_path": "cellprofiler.modules.correctilluminationcalculate.CorrectIlluminationCalculate"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "DownsampledPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "IllumPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select how the illumination function is calculated",
+                    "value": "Regular"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Dilate objects in the final averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Dilation radius",
+                    "value": "1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Block size",
+                    "value": "60"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Rescale the illumination function?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Calculate function for each image individually, or based on all images?",
+                    "value": "All: Across cycles"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Smoothing method",
+                    "value": "Median Filter"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to calculate smoothing filter size",
+                    "value": "Manually"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Approximate object diameter",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Smoothing filter size",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the averaged image",
+                    "value": "IllumBlueAvg"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the dilated image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the dilated image",
+                    "value": "IllumBlueDilated"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Automatically calculate spline parameters?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Background mode",
+                    "value": "auto"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of spline points",
+                    "value": "5"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Background threshold",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Image resampling factor",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Maximum number of iterations",
+                    "value": "40"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Residual value for convergence",
+                    "value": "0.001"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 7,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "IllumPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "UpsampledIllumPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 8,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "OrigZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "DownsampledZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "0.25"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 9,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 2,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "CorrectIlluminationCalculate",
+                "module_path": "cellprofiler.modules.correctilluminationcalculate.CorrectIlluminationCalculate"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "DownsampledZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "IllumZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select how the illumination function is calculated",
+                    "value": "Regular"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Dilate objects in the final averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Dilation radius",
+                    "value": "1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Block size",
+                    "value": "60"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Rescale the illumination function?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Calculate function for each image individually, or based on all images?",
+                    "value": "All: Across cycles"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Smoothing method",
+                    "value": "Median Filter"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to calculate smoothing filter size",
+                    "value": "Manually"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Approximate object diameter",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Smoothing filter size",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the averaged image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the averaged image",
+                    "value": "IllumBlueAvg"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Retain the dilated image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the dilated image",
+                    "value": "IllumBlueDilated"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Automatically calculate spline parameters?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Background mode",
+                    "value": "auto"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of spline points",
+                    "value": "5"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Background threshold",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Image resampling factor",
+                    "value": "2"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Maximum number of iterations",
+                    "value": "40"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Residual value for convergence",
+                    "value": "0.001"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 10,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 5,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "Resize",
+                "module_path": "cellprofiler.modules.resize.Resize"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the input image",
+                    "value": "IllumZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.alphanumeric.name.image_name._image_name.ImageName",
+                    "text": "Name the output image",
+                    "value": "UpsampledIllumZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Resizing method",
+                    "value": "Resize by a fraction or multiple of the original size"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "X Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Y Resizing factor",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number._float.Float",
+                    "text": "Z Resizing factor",
+                    "value": "1.0"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Width (x) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Height (y) of the final image",
+                    "value": "100"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "# of planes (z) in the final image",
+                    "value": "10"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Interpolation method",
+                    "value": "Bilinear"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Method to specify the dimensions",
+                    "value": "Manual"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image with the desired dimensions",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting._hidden_count.HiddenCount",
+                    "text": "Additional image count",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 11,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 16,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "SaveImages",
+                "module_path": "cellprofiler.modules.saveimages.SaveImages"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select the type of image to save",
+                    "value": "Image"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image to save",
+                    "value": "UpsampledIllumPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select method for constructing file names",
+                    "value": "Single name"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._file_image_subscriber.FileImageSubscriber",
+                    "text": "Select image name for file prefix",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Enter single file name",
+                    "value": "\\g<Plate>_IllumPhalloidin"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of digits",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Append a suffix to the image file name?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Text to append to the image name",
+                    "value": ""
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Saved file format",
+                    "value": "npy"
+                },
+                {
+                    "name": "cellprofiler.modules.saveimages.SaveImagesDirectoryPath",
+                    "text": "Output file location",
+                    "value": "Default Output Folder|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Image bit depth",
+                    "value": "8-bit integer"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Overwrite existing files without warning?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "When to save",
+                    "value": "Last cycle"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Record the file and path information to the saved image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Create subfolders in the output folder?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image folder",
+                    "value": "Elsewhere...|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "How to save the series",
+                    "value": "T (Time)"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Save with lossless compression?",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 12,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 16,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "SaveImages",
+                "module_path": "cellprofiler.modules.saveimages.SaveImages"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select the type of image to save",
+                    "value": "Image"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image to save",
+                    "value": "UpsampledIllumDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select method for constructing file names",
+                    "value": "Single name"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._file_image_subscriber.FileImageSubscriber",
+                    "text": "Select image name for file prefix",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Enter single file name",
+                    "value": "\\g<Plate>_IllumDNA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of digits",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Append a suffix to the image file name?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Text to append to the image name",
+                    "value": ""
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Saved file format",
+                    "value": "npy"
+                },
+                {
+                    "name": "cellprofiler.modules.saveimages.SaveImagesDirectoryPath",
+                    "text": "Output file location",
+                    "value": "Default Output Folder|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Image bit depth",
+                    "value": "8-bit integer"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Overwrite existing files without warning?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "When to save",
+                    "value": "Last cycle"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Record the file and path information to the saved image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Create subfolders in the output folder?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image folder",
+                    "value": "Elsewhere...|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "How to save the series",
+                    "value": "T (Time)"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Save with lossless compression?",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 13,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": false,
+                "variable_revision_number": 16,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "SaveImages",
+                "module_path": "cellprofiler.modules.saveimages.SaveImages"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select the type of image to save",
+                    "value": "Image"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image to save",
+                    "value": "UpsampledIllumZEB1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select method for constructing file names",
+                    "value": "Single name"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._file_image_subscriber.FileImageSubscriber",
+                    "text": "Select image name for file prefix",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Enter single file name",
+                    "value": "\\g<Plate>_IllumZEB1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of digits",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Append a suffix to the image file name?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Text to append to the image name",
+                    "value": ""
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Saved file format",
+                    "value": "npy"
+                },
+                {
+                    "name": "cellprofiler.modules.saveimages.SaveImagesDirectoryPath",
+                    "text": "Output file location",
+                    "value": "Default Output Folder|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Image bit depth",
+                    "value": "8-bit integer"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Overwrite existing files without warning?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "When to save",
+                    "value": "Last cycle"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Record the file and path information to the saved image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Create subfolders in the output folder?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image folder",
+                    "value": "Elsewhere...|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "How to save the series",
+                    "value": "T (Time)"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Save with lossless compression?",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 14,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": true,
+                "variable_revision_number": 16,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "SaveImages",
+                "module_path": "cellprofiler.modules.saveimages.SaveImages"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select the type of image to save",
+                    "value": "Image"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image to save",
+                    "value": "UpsampledIllumZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select method for constructing file names",
+                    "value": "Single name"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._file_image_subscriber.FileImageSubscriber",
+                    "text": "Select image name for file prefix",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Enter single file name",
+                    "value": "\\g<Plate>_IllumZO1"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of digits",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Append a suffix to the image file name?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Text to append to the image name",
+                    "value": ""
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Saved file format",
+                    "value": "npy"
+                },
+                {
+                    "name": "cellprofiler.modules.saveimages.SaveImagesDirectoryPath",
+                    "text": "Output file location",
+                    "value": "Default Output Folder|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Image bit depth",
+                    "value": "8-bit integer"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Overwrite existing files without warning?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "When to save",
+                    "value": "Last cycle"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Record the file and path information to the saved image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Create subfolders in the output folder?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image folder",
+                    "value": "Elsewhere...|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "How to save the series",
+                    "value": "T (Time)"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Save with lossless compression?",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 15,
+                "notes": [],
+                "show_window": false,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": false,
+                "variable_revision_number": 16,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "SaveImages",
+                "module_path": "cellprofiler.modules.saveimages.SaveImages"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select the type of image to save",
+                    "value": "Image"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._image_subscriber.ImageSubscriber",
+                    "text": "Select the image to save",
+                    "value": "UpsampledIllumWGA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Select method for constructing file names",
+                    "value": "Single name"
+                },
+                {
+                    "name": "cellprofiler_core.setting.subscriber.image_subscriber._file_image_subscriber.FileImageSubscriber",
+                    "text": "Select image name for file prefix",
+                    "value": "None"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Enter single file name",
+                    "value": "\\g<Plate>_IllumWGA"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Number of digits",
+                    "value": "4"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Append a suffix to the image file name?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Text to append to the image name",
+                    "value": ""
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Saved file format",
+                    "value": "npy"
+                },
+                {
+                    "name": "cellprofiler.modules.saveimages.SaveImagesDirectoryPath",
+                    "text": "Output file location",
+                    "value": "Default Output Folder|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "Image bit depth",
+                    "value": "8-bit integer"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Overwrite existing files without warning?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "When to save",
+                    "value": "Last cycle"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Record the file and path information to the saved image?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Create subfolders in the output folder?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._directory.Directory",
+                    "text": "Base image folder",
+                    "value": "Elsewhere...|"
+                },
+                {
+                    "name": "cellprofiler_core.setting.choice._choice.Choice",
+                    "text": "How to save the series",
+                    "value": "T (Time)"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Save with lossless compression?",
+                    "value": "No"
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "module_num": 16,
+                "notes": [],
+                "show_window": true,
+                "wants_pause": false,
+                "svn_version": "Unknown",
+                "enabled": false,
+                "variable_revision_number": 8,
+                "batch_state": "array([], dtype=uint8)",
+                "module_name": "CreateBatchFiles",
+                "module_path": "cellprofiler.modules.createbatchfiles.CreateBatchFiles"
+            },
+            "settings": [
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Store batch files in default output folder?",
+                    "value": "Yes"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Output folder path",
+                    "value": "/Users/bcimini/Desktop/Nanostring"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Are the cluster computers running Windows?",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Hidden- in batch mode",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Hidden- in distributed mode",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting._setting.Setting",
+                    "text": "Hidden- default input folder at time of save",
+                    "value": "/Users/bcimini/Desktop/2018_08_14_Lysosomes_RyanTyler_Amathus"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text.number.integer._integer.Integer",
+                    "text": "Hidden- revision number",
+                    "value": "0"
+                },
+                {
+                    "name": "cellprofiler_core.setting._binary.Binary",
+                    "text": "Hidden- from old matlab",
+                    "value": "No"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Local root path",
+                    "value": "F:\\"
+                },
+                {
+                    "name": "cellprofiler_core.setting.text._text.Text",
+                    "text": "Cluster root path",
+                    "value": "/home/ubuntu/bucket/projects/2018_11_20_Periscope_Calico/"
+                }
+            ]
+        }
+    ],
+    "version": "v6"
+}
